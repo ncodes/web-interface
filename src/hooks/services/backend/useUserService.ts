@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { handleAxiosError } from '../../../libs/utils';
+import axios from "axios";
+import { handleAxiosError } from "../../../libs/utils";
 
 /**
  * useUserService provides access to api/users endpoint
@@ -11,12 +11,12 @@ export function useUserService() {
   async function getMe(): Promise<User> {
     try {
       const headers = {};
-      headers['authorization'] = `bearer ${localStorage.getItem(
-        'access_token'
+      headers["authorization"] = `bearer ${localStorage.getItem(
+        "access_token"
       )}`;
       const resp = await axios({
-        method: 'get',
-        url: `${process.env.VITE_API_URI}/users/me`,
+        method: "get",
+        url: `${import.meta.env.VITE_API_URI}/users/me`,
         headers,
       });
 
@@ -25,7 +25,6 @@ export function useUserService() {
       return Promise.reject(handleAxiosError(e));
     }
   }
-
 
   return {
     getMe,

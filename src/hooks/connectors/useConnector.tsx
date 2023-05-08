@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { BigNumberish, Contract, Signer } from 'ethers';
-import { Web3Provider } from '@ethersproject/providers';
-import { getNetworkByChainId, Nets } from './networks';
+import { useEffect, useState } from "react";
+import { BigNumberish, Contract, Signer } from "ethers";
+import { Web3Provider } from "@ethersproject/providers";
+import { getNetworkByChainId, Nets } from "./networks";
 
 import {
   Chain,
@@ -12,9 +12,9 @@ import {
   useSigner,
   useSignMessage,
   useSwitchNetwork,
-} from 'wagmi';
+} from "wagmi";
 
-type ContractNames = 'energon' | 'nft';
+type ContractNames = "energon" | "nft";
 
 export interface IConnector {
   defaultNetwork: number;
@@ -44,11 +44,11 @@ export interface IConnector {
  */
 export default function useConnector() {
   const defaultNetwork =
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Nets[process.env.VITE_NETWORK!] || Nets.localhost;
-  const [connected, setConnected] = useState<boolean|undefined>(undefined);
-  const [address, setAddress] = useState<string|undefined>(undefined);
-  const [chainId, setChainId] = useState<number|undefined>(undefined);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    Nets[import.meta.env.VITE_NETWORK!] || Nets.localhost;
+  const [connected, setConnected] = useState<boolean | undefined>(undefined);
+  const [address, setAddress] = useState<string | undefined>(undefined);
+  const [chainId, setChainId] = useState<number | undefined>(undefined);
   const { disconnectAsync } = useDisconnect();
   const { chain } = useNetwork();
   const { isConnected, address: _address } = useAccount();
@@ -104,7 +104,7 @@ export default function useConnector() {
   async function sign(msg: string): Promise<string> {
     try {
       if (!connected)
-        return Promise.reject(new Error('not connected to a wallet'));
+        return Promise.reject(new Error("not connected to a wallet"));
       const sig = await signMessageAsync({ message: msg });
       return Promise.resolve(sig);
     } catch (error) {
@@ -119,8 +119,9 @@ export default function useConnector() {
   async function switchNetwork(id: number) {
     try {
       if (!connected)
-        return Promise.reject(new Error('not connected to a wallet'));
-      if (!_switchNetwork) return Promise.reject( new Error('switch function not set'));
+        return Promise.reject(new Error("not connected to a wallet"));
+      if (!_switchNetwork)
+        return Promise.reject(new Error("switch function not set"));
       await _switchNetwork(id);
       return Promise.resolve();
     } catch (error) {
@@ -148,9 +149,9 @@ export default function useConnector() {
     name: ContractNames,
     f: (contract: Contract) => void
   ) {
-    if (!provider) throw new Error('no provider found');
+    if (!provider) throw new Error("no provider found");
     const netInfo = getNetworkByChainId(chainId as number);
-    if (!netInfo) return;
+    if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const contract = new Contract(
       netInfo.contracts[name].address,
       netInfo.contracts[name].abi,

@@ -1,2 +1,1 @@
-
-// export const mintRank = parseInt(process.env.MINT_RANK || '0');
+// export const mintRank = parseInt(import.meta.env.MINT_RANK || '0');

@@ -1,7 +1,6 @@
-import * as ethers from 'ethers';
-import TokenInfo from './token_info.ts';
-import {Networks} from "../../types/global";
-
+import * as ethers from "ethers";
+import TokenInfo from "./token_info.ts";
+import { Networks } from "../../types/global";
 
 export enum Nets {
   ethereum = 1,
@@ -14,112 +13,72 @@ export enum Nets {
  */
 export const SupportedNetworks: Networks = {
   1: {
-    name: 'Ethereum',
+    name: "Ethereum",
     chainId: ethers.utils.hexValue(1),
     eip1559: true,
-    symbol: 'ETH',
-    rpcUrl: process.env?.VITE_ETHEREUM_RPC_URL ?? "",
-    blockExplorer: 'https://etherscan.io',
-    logoPath: '/images/eth.svg',
+    symbol: "ETH",
+    rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL ?? "",
+    blockExplorer: "https://etherscan.io",
+    logoPath: "/images/eth.svg",
     tokenInfo: new TokenInfo({
-      address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-      name: 'WETH',
-      symbol: 'WETH',
+      address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      name: "WETH",
+      symbol: "WETH",
       decimals: 18,
       logoURI:
-        'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png',
+        "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
-    contracts: {
-      energon: {
-        address: process.env.VITE_ETHEREUM_ENERGON_ADDRESS ?? "",
-        abi: require('../../abi/energon.json'),
-      },
-      nft: {
-        address: process.env.VITE_ETHEREUM_NFT_ADDRESS ?? "",
-        abi: require('../../abi/nft.json'),
-      },
-    },
   },
   5: {
-    name: 'Goerli',
+    name: "Goerli",
     chainId: ethers.utils.hexValue(5),
     eip1559: true,
-    symbol: 'ETH',
-    rpcUrl: process.env.VITE_GOERLI_RPC_URL ?? "",
-    blockExplorer: 'https://goerli.etherscan.io',
-    logoPath: '/images/eth.svg',
+    symbol: "ETH",
+    rpcUrl: import.meta.env.VITE_GOERLI_RPC_URL ?? "",
+    blockExplorer: "https://goerli.etherscan.io",
+    logoPath: "/images/eth.svg",
     tokenInfo: new TokenInfo({
-      address: '0x00',
-      name: 'WETH',
-      symbol: 'WETH',
+      address: "0x00",
+      name: "WETH",
+      symbol: "WETH",
       decimals: 18,
       logoURI:
-        'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png',
+        "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
-    contracts: {
-      energon: {
-        address: process.env.VITE_GOERLI_ENERGON_ADDRESS ?? "",
-        abi: require('../../abi/energon.json'),
-      },
-      nft: {
-        address: process.env.VITE_GOERLI_NFT_ADDRESS ?? "",
-        abi: require('../../abi/nft.json'),
-      },
-    },
   },
   31337: {
-    name: 'Localhost',
+    name: "Localhost",
     chainId: ethers.utils.hexValue(31337),
     eip1559: true,
-    symbol: 'ETH',
-    rpcUrl: process.env.VITE_LOCALHOST_RPC_URL ?? "",
-    blockExplorer: 'https://etherscan.io',
-    logoPath: '/images/eth.svg',
+    symbol: "ETH",
+    rpcUrl: import.meta.env.VITE_LOCALHOST_RPC_URL ?? "",
+    blockExplorer: "https://etherscan.io",
+    logoPath: "/images/eth.svg",
     tokenInfo: new TokenInfo({
-      address: '0x000',
-      name: 'WETH',
-      symbol: 'WETH',
+      address: "0x000",
+      name: "WETH",
+      symbol: "WETH",
       decimals: 18,
       logoURI:
-        'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png',
+        "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
-    contracts: {
-      energon: {
-        address: process.env.VITE_LOCALHOST_ENERGON_ADDRESS ?? "",
-        abi: require('../../abi/energon.json'),
-      },
-      nft: {
-        address: process.env.VITE_LOCALHOST_NFT_ADDRESS ?? "",
-        abi: require('../../abi/nft.json'),
-      },
-    },
   },
   1337: {
-    name: 'Localhost',
+    name: "Localhost",
     chainId: ethers.utils.hexValue(31337),
     eip1559: true,
-    symbol: 'ETH',
-    rpcUrl: process.env.VITE_LOCALHOST_RPC_URL ?? "",
-    blockExplorer: 'https://etherscan.io',
-    logoPath: '/images/eth.svg',
+    symbol: "ETH",
+    rpcUrl: import.meta.env.VITE_LOCALHOST_RPC_URL ?? "",
+    blockExplorer: "https://etherscan.io",
+    logoPath: "/images/eth.svg",
     tokenInfo: new TokenInfo({
-      address: '0x000',
-      name: 'WETH',
-      symbol: 'WETH',
+      address: "0x000",
+      name: "WETH",
+      symbol: "WETH",
       decimals: 18,
       logoURI:
-        'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png',
+        "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
-    contracts: {
-      energon: {
-        address: process.env.VITE_LOCALHOST_ENERGON_ADDRESS ?? "",
-        abi: require('../../abi/energon.json'),
-      },
-      nft: {
-        address: process.env.VITE_LOCALHOST_NFT_ADDRESS ?? "",
-        abi: require('../../abi/nft.json'),
-      },
-    },
   },
 };
 
