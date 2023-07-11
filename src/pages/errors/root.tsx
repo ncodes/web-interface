@@ -2,6 +2,7 @@ import { useRouteError } from "react-router-dom";
 
 export function RootErrorBoundary() {
   const error = useRouteError() as { status: number } | Error;
+  console.error(error);
 
   if (error instanceof Error) {
     return <span>{error.message}</span>;

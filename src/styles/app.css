@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-    @import "fonts.css";
 
     html {
         font-family: Mitr, system-ui, sans-serif;

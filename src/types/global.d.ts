@@ -1,8 +1,9 @@
 import TokenInfo from "../hooks/connectors/token_info.ts";
+import { erc20Abi } from "../abi";
 
-interface ContractInfo {
+interface ContractInfo<ABIType> {
   address: string;
-  abi: string;
+  abi: ABIType;
 }
 
 type Contracts = {
