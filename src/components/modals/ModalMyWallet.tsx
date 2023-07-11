@@ -109,7 +109,7 @@ export default function ModalMyWallet(props: {
               </TabsList>
 
               <TabsContent value="balances" className="pr-0">
-                <div className="flex !select-none text-gray-500 items-center relative -top-1 text-[12px] font-extralight">
+                <div className="flex justify-end pr-5 !select-none text-gray-500 items-center relative -top-1 text-[12px] font-extralight">
                   <IconArrowsScrollH /> Scroll left or right
                 </div>
                 <div className="px-2 mb-5 overflow-auto scrollbar-hide">
