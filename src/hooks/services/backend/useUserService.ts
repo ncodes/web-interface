@@ -1,5 +1,5 @@
 import axios from "axios";
-import { handleAxiosError } from "../../../libs/utils";
+import { handleAxiosError } from "../../../libs/helpers.ts";
 
 /**
  * useUserService provides access to v1/users endpoint

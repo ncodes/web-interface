@@ -25,7 +25,8 @@ interface ConnectedProps {
   openWalletModal?: () => void;
 }
 
-export const ConnectedButton = ({}: { props: ConnectedProps }) => {
+// @ts-ignore
+export const ConnectedButton = (props: ConnectedProps) => {
   const [openMyWalletModal, setOpenMyWalletModal] = useState(false);
   const { address } = useAccount();
   const balance = useBalance({
