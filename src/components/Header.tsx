@@ -17,10 +17,10 @@ export function Header(props: { onClick: () => void }) {
         <NavHelpButton />
         <NavNotificationButton />
         <ConnectWalletButton className="hidden lg:block max-[300px]" />
-        {/*<ConnectWalletButton*/}
-        {/*  className="lg:hidden min-w-[120px]"*/}
-        {/*  label="Connect"*/}
-        {/*/>*/}
+        <ConnectWalletButton
+          className="lg:hidden min-w-[120px]"
+          label="Connect"
+        />
       </div>
     </header>
   );

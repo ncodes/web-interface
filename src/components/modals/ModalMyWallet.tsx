@@ -18,6 +18,7 @@ import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import IconArrowsScrollH from "../icons/IconScrollHorizontal.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import IconDisconnect from "../icons/IconDisconnect.tsx";
+import useConnector from "../../hooks/connectors/useConnector.tsx";
 
 function IconClose(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -73,6 +74,8 @@ export default function ModalMyWallet(props: {
   onOpenChange: (open: boolean) => void;
   openWalletManager: (() => void) | undefined;
 }) {
+  const { disconnect } = useConnector();
+
   return (
     <Dialog {...props}>
       <DialogContent className="w-[305px] xxs:w-[320px] xs:w-[400px] md:w-[644px] mt-[200px] border-modal-border bg-modal-background p-0 text-gray-100 shadow-[2px_2px_7px_0_rgba(27,36,48,1)]">
@@ -81,7 +84,7 @@ export default function ModalMyWallet(props: {
             <span>My Wallet</span>
             <DialogPrimitive.Close
               aria-label="Close"
-              className="text-gray-300 hover:text-gray-100 transition-all duration-300"
+              className="text-gray-300 hover:text-gray-100 transition-all duration-300 outline-0"
             >
               <IconClose />
               <span className="sr-only">Close</span>
@@ -145,7 +148,9 @@ export default function ModalMyWallet(props: {
                 <span>
                   <IconDisconnect />
                 </span>
-                <span className="select-none">Disconnect</span>
+                <span className="select-none" onClick={disconnect}>
+                  Disconnect
+                </span>
               </div>
             </div>
           </div>
