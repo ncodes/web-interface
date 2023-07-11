@@ -33,7 +33,7 @@ export default function Index() {
         />
 
         <div className="flex flex-col flex-1 pt-3">
-          <Header onClick={openMobileMenu} />
+          {/*<Header onClick={openMobileMenu} />*/}
           <div className="flex flex-1 pt-5">
             <div className="flex flex-col flex-1">
               <div className="h-full border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black"></div>
