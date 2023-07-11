@@ -2,7 +2,7 @@ import axios from "axios";
 import { handleAxiosError } from "../../../libs/utils";
 
 /**
- * useUserService provides access to api/users endpoint
+ * useUserService provides access to v1/users endpoint
  */
 export function useUserService() {
   /**

@@ -22,7 +22,7 @@ This request will not trigger a blockchain transaction or cost any gas fees.
   
 Your session will expire after ${expireTimeStr}.
 --
-Address: ${address}
+Address: "${address}"
 ${emailStr}
 Timestamp: ${moment().toISOString()}`;
 

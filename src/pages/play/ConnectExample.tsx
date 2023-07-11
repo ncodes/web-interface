@@ -1,9 +1,9 @@
-import { ConnectButton } from "./hooks/connectors/components/ConnectButton.tsx";
-import useConnector from "./hooks/connectors/useConnector.tsx";
-import { createSignatureMessage } from "./hooks/connectors/common.ts";
+import { ConnectButton } from "../../hooks/connectors/components/ConnectButton.tsx";
+import useConnector from "../../hooks/connectors/useConnector.tsx";
+import { createSignatureMessage } from "../../hooks/connectors/common.ts";
 import { useCallback } from "react";
 
-export default function Index() {
+export default function ConnectExample() {
   const { connected, sign, address } = useConnector();
 
   const signMsg = useCallback(() => {
@@ -15,9 +15,9 @@ export default function Index() {
         console.log(">>>SIG", sig);
       })
       .catch((e) => {
-        alert(e.message);
+        console.error(e.message);
       });
-  }, []);
+  }, [address, sign]);
 
   return (
     <>

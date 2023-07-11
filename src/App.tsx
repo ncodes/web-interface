@@ -1,10 +1,14 @@
 import useStore, { StoreContext } from "./hooks/store/useStore.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
-import Index from "./Index.tsx";
 import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.tsx";
+import { ReactElement } from "react";
 
-function App() {
+type AppProps = {
+  page: ReactElement;
+};
+
+function App({ page }: AppProps) {
   const store = useStore();
   const queryClient = new QueryClient();
 
@@ -16,7 +20,7 @@ function App() {
       >
         <QueryClientProvider client={queryClient}>
           <Toaster containerStyle={{ top: 80 }} />
-          <Index />
+          {page}
         </QueryClientProvider>
       </ConnectorProvider>
     </StoreContext.Provider>

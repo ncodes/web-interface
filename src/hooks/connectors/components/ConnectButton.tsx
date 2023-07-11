@@ -20,7 +20,7 @@ interface ConnectedProps {
 function Connected({ show }: ConnectedProps) {
   return (
     <div>
-      <ConnectedButton openModal={show} />
+      <ConnectedButton openWalletModal={show} />
     </div>
   );
 }
