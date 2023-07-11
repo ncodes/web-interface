@@ -47,7 +47,7 @@ export default function ConnectorProvider({
         new WalletConnectConnector({
           chains: connection.chains,
           options: {
-            projectId: import.meta.env.VITE_WALLECT_CONNECT_PROJECT_ID,
+            projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
             metadata: {
               name: appName,
               description: "Joint",

@@ -16,6 +16,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App page={<Index />} />,
+    errorElement: <RootErrorBoundary />,
   },
 ]);
 
