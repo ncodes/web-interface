@@ -58,16 +58,16 @@ function BalanceCard(props: {
   );
 }
 
-// function BalanceCardLink(props: { title: string }) {
-//   return (
-//     <a
-//       href="#"
-//       className="w-full block text-gray-400 py-2 cursor-pointer rounded-b-xl hover:bg-gray-800 hover:text-white"
-//     >
-//       {props.title}
-//     </a>
-//   );
-// }
+function BalanceCardLink(props: { title: string }) {
+  return (
+    <a
+      href="#"
+      className="w-full block text-gray-400 py-2 cursor-pointer rounded-b-xl hover:bg-gray-800 hover:text-white"
+    >
+      {props.title}
+    </a>
+  );
+}
 
 export default function ModalMyWallet(props: {
   open: boolean;
@@ -115,9 +115,11 @@ export default function ModalMyWallet(props: {
                 <div className="px-2 mb-5 mt-4 md:mt-0 overflow-auto scrollbar-hide">
                   <div className="flex gap-5 items-start box-border min-w-full float-left pr-3">
                     <BalanceCard symbol="ETH" balance="12.5">
-                      {/*<BalanceCardLink title="Convert to WETH" />*/}
+                      <BalanceCardLink title="Convert to WETH" />
                     </BalanceCard>
-                    <BalanceCard symbol="WETH" balance="345.32" />
+                    <BalanceCard symbol="WETH" balance="345.32">
+                      <BalanceCardLink title="Convert to ETH" />
+                    </BalanceCard>
                     <BalanceCard symbol="P2P" balance="34,000" />
                     <BalanceCard symbol="PURSE (P2P)" balance="34,000" />
                     <BalanceCard symbol="PURSE (P2P)" balance="34,000" />
