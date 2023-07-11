@@ -22,7 +22,6 @@
     "@types/randombytes": "^2.0.0",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.1",
-    "classnames": "^2.3.2",
     "clsx": "^1.2.1",
     "connectkit": "^1.4.0",
     "decimal.js": "^10.4.3",
