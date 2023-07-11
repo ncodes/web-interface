@@ -1,6 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { BigNumber, BigNumberish, Contract } from "ethers";
-import erc20ABI from "../../../abi/erc20.ts";
+import { erc20Abi } from "../../../abi";
 
 /**
  * useERC20 provides functions for interacting with an ERC20 contract
@@ -14,7 +14,7 @@ export default function useERC20(provider: Web3Provider) {
    * @returns BigNumber
    */
   async function balanceOf(token: string, account: string): Promise<BigNumber> {
-    const contract = new Contract(token, erc20ABI, provider);
+    const contract = new Contract(token, erc20Abi, provider);
     return Promise.resolve(await contract.balanceOf(account));
   }
 
@@ -30,7 +30,7 @@ export default function useERC20(provider: Web3Provider) {
     owner: string,
     spender: string
   ): Promise<BigNumber> {
-    const contract = new Contract(token, erc20ABI, provider);
+    const contract = new Contract(token, erc20Abi, provider);
     return Promise.resolve(await contract.allowance(owner, spender));
   }
 
@@ -40,7 +40,7 @@ export default function useERC20(provider: Web3Provider) {
    * @returns BigNumber
    */
   async function totalSupply(token: string): Promise<BigNumber> {
-    const contract = new Contract(token, erc20ABI, provider);
+    const contract = new Contract(token, erc20Abi, provider);
     return Promise.resolve(await contract.totalSupply());
   }
 
@@ -55,7 +55,7 @@ export default function useERC20(provider: Web3Provider) {
     spender: string,
     amount: BigNumberish
   ): Promise<TransactionResponse> {
-    const contract = new Contract(token, erc20ABI, provider.getSigner());
+    const contract = new Contract(token, erc20Abi, provider.getSigner());
     return Promise.resolve(await contract.approve(spender, amount));
   }
 
