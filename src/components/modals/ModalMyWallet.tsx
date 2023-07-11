@@ -80,13 +80,13 @@ export default function ModalMyWallet(props: {
     <Dialog {...props}>
       <DialogContent className="w-[310px] xxs:w-[360px] xs:w-[400px] md:w-[644px] mt-[100px] md:mt-[200px] border-modal-border bg-modal-background p-0 text-gray-100 shadow-[2px_2px_7px_0_rgba(27,36,48,1)]">
         <DialogHeader>
-          <DialogTitle className="flex justify-between text-gray-100 border-b border-modal-border p-5 tracking-wide">
+          <DialogTitle className="flex justify-between items-center text-gray-100 border-b border-modal-border p-5 tracking-wide">
             <span>My Wallet</span>
             <DialogPrimitive.Close
               aria-label="Close"
               className="text-gray-300 hover:text-gray-100 transition-all duration-300 outline-0"
             >
-              <IconClose />
+              <IconClose className="h-[24px] w-[24px]" viewBox="0 0 20 20" />
               <span className="sr-only">Close</span>
             </DialogPrimitive.Close>
           </DialogTitle>
