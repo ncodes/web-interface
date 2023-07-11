@@ -1,7 +1,6 @@
-import { Web3Provider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish, Contract } from 'ethers';
-import erc20ABI from '../../../abi/erc20.json';
-
+import { Web3Provider } from "@ethersproject/providers";
+import { BigNumber, BigNumberish, Contract } from "ethers";
+import erc20ABI from "../../../abi/erc20.ts";
 
 /**
  * useERC20 provides functions for interacting with an ERC20 contract
@@ -64,6 +63,6 @@ export default function useERC20(provider: Web3Provider) {
     balanceOf,
     allowance,
     totalSupply,
-    approve
+    approve,
   };
 }

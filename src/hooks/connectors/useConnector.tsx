@@ -1,27 +1,36 @@
 import { useEffect, useState } from "react";
-import { BigNumberish, Contract, Signer } from "ethers";
-import { Web3Provider } from "@ethersproject/providers";
+import { BigNumberish } from "ethers";
 import { getNetworkByChainId, Nets } from "./networks";
-
 import {
   Chain,
   useAccount,
   useDisconnect,
   useNetwork,
-  useProvider,
-  useSigner,
+  usePublicClient,
   useSignMessage,
   useSwitchNetwork,
+  useWalletClient,
 } from "wagmi";
+import { Address, SimulateContractReturnType } from "viem";
+import { erc20Abi } from "../../abi";
 
 type ContractNames = "energon" | "nft";
 
 export interface IConnector {
   defaultNetwork: number;
 
-  getContract(name: ContractNames, f: (contract: Contract) => void);
+  readContract(name: ContractNames, targetFunc: string, args?): Promise<never>;
+  simulateContract(
+    name: ContractNames,
+    targetFunc: string,
+    args?
+  ): Promise<SimulateContractReturnType<any, string, Chain, undefined>>;
+  writeContract(
+    name: ContractNames,
+    targetFunc: string,
+    args?
+  ): Promise<Address>;
 
-  provider: Web3Provider;
   connected: boolean;
   disconnect: () => Promise<void>;
   getBalance: () => Promise<BigNumberish>;
@@ -43,24 +52,23 @@ export interface IConnector {
  * @returns
  */
 export default function useConnector() {
-  const defaultNetwork =
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Nets[import.meta.env.VITE_NETWORK!] || Nets.localhost;
+  const defaultNetwork = Nets[import.meta.env.VITE_NETWORK] || Nets.localhost;
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [chainId, setChainId] = useState<number | undefined>(undefined);
+  const [ready, setReady] = useState(false);
+
   const { disconnectAsync } = useDisconnect();
   const { chain } = useNetwork();
   const { isConnected, address: _address } = useAccount();
-  const { data: signer } = useSigner();
+  const { data: walletClient } = useWalletClient();
   const {
     data: signedData,
     status: signStatus,
     signMessageAsync,
   } = useSignMessage();
   const { switchNetwork: _switchNetwork, chains } = useSwitchNetwork();
-  const provider = useProvider();
-  const [ready, setReady] = useState(false);
+  const publicClient = usePublicClient();
 
   useEffect(() => {
     setConnected(isConnected);
@@ -74,14 +82,14 @@ export default function useConnector() {
 
   useEffect(() => {
     setReady(
-      provider !== undefined &&
+      publicClient !== undefined &&
         connected == true &&
         address !== undefined &&
         chainId !== undefined &&
-        signer != undefined &&
+        walletClient != undefined &&
         chain !== undefined
     );
-  }, [provider, connected, address, chainId, chain, signer]);
+  }, [publicClient, connected, address, chainId, chain, walletClient]);
 
   /**
    * Disconnect from supported wallet provider
@@ -134,40 +142,90 @@ export default function useConnector() {
    */
   async function getBalance(): Promise<BigNumberish> {
     try {
-      return Promise.resolve(await provider.getBalance(address as string));
+      return Promise.resolve(
+        await publicClient.getBalance({ address: address as Address })
+      );
     } catch (e) {
       return Promise.reject(e);
     }
   }
 
   /**
-   * Initialize a contract and use it
+   * Simulate a contract call
    * @param name - The name of the contract
-   * @param f - The function that will be called with the contract as only parameter
+   * @param targetFunc - The target function to be called
+   * @param args - The arguments to be passed to the target function
    */
-  async function getContract(
+  async function simulateContract(
     name: ContractNames,
-    f: (contract: Contract) => void
+    targetFunc: string,
+    args?
   ) {
-    if (!provider) throw new Error("no provider found");
+    if (!publicClient) throw new Error("no provider found");
+    if (!walletClient) throw new Error("wallet not connected");
     const netInfo = getNetworkByChainId(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
-    const contract = new Contract(
-      netInfo.contracts[name].address,
-      netInfo.contracts[name].abi,
-      signer as Signer
-    );
-    if (f) await f(contract);
+    const [address] = await walletClient.getAddresses();
+    return publicClient.simulateContract({
+      address: netInfo.contracts[name].address as Address,
+      abi: netInfo.contracts[name].abi,
+      functionName: targetFunc,
+      args: args,
+      account: address,
+    });
+  }
+
+  /**
+   * Read a contract
+   * @param name - The name of the contract
+   * @param targetFunc - The target function to be called
+   * @param args - The arguments to be passed to the target function
+   */
+  async function readContract(name: ContractNames, targetFunc: string, args?) {
+    if (!publicClient) throw new Error("no provider found");
+    const netInfo = getNetworkByChainId(chainId as number);
+    if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
+    return publicClient.readContract({
+      address: netInfo.contracts[name].address as Address,
+      abi: erc20Abi,
+      functionName: targetFunc as never,
+      args: args,
+    });
+  }
+
+  /**
+   * Write to a contract
+   * @param name - The name of the contract
+   * @param targetFunc - The target function to be called
+   * @param args - The arguments to be passed to the target function
+   */
+  async function writeContract(
+    name: ContractNames,
+    targetFunc: string,
+    args?
+  ): Promise<Address> {
+    if (!walletClient) throw new Error("wallet not connected");
+    const netInfo = getNetworkByChainId(chainId as number);
+    if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
+    const [address] = await walletClient.getAddresses();
+    return walletClient.writeContract({
+      address: netInfo.contracts[name].address as Address,
+      abi: netInfo.contracts[name].abi,
+      functionName: targetFunc,
+      args: args,
+      account: address,
+    });
   }
 
   return {
     defaultNetwork,
     getBalance,
-    getContract,
+    readContract,
+    simulateContract,
+    writeContract,
     ready,
     connected,
     disconnect,
-    provider,
     sign,
     signedData,
     signStatus,

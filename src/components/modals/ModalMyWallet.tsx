@@ -68,7 +68,11 @@ function BalanceCard(props: {
 //   );
 // }
 
-export default function ModalMyWallet(props) {
+export default function ModalMyWallet(props: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  openWalletManager: (() => void) | undefined;
+}) {
   return (
     <Dialog {...props}>
       <DialogContent className="w-[305px] xxs:w-[320px] xs:w-[400px] md:w-[644px] mt-[200px] border-modal-border bg-modal-background p-0 text-gray-100 shadow-[2px_2px_7px_0_rgba(27,36,48,1)]">
@@ -127,7 +131,15 @@ export default function ModalMyWallet(props) {
                 <span>
                   <IconSettingsOutline />
                 </span>
-                <span className="select-none">Manage Wallet</span>
+                <span
+                  className="select-none"
+                  onClick={() => {
+                    props.onOpenChange(false);
+                    if (props.openWalletManager) props.openWalletManager();
+                  }}
+                >
+                  Manage Wallet
+                </span>
               </div>
               <div className="flex items-center text-sm font-light gap-1 text-gray-400 hover:text-gray-300 transition-all duration-500 cursor-pointer">
                 <span>

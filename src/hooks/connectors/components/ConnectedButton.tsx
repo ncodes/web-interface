@@ -7,7 +7,7 @@ import {
   shortenAddress2,
 } from "../../../libs/helpers.ts";
 import ModalMyWallet from "../../../components/modals/ModalMyWallet.tsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // Component for rendering amount and symbol
 function Amount(props: { balance: string; symbol: string }) {
@@ -25,7 +25,6 @@ interface ConnectedProps {
   openWalletModal?: () => void;
 }
 
-// @ts-ignore
 export const ConnectedButton = (props: ConnectedProps) => {
   const [openMyWalletModal, setOpenMyWalletModal] = useState(false);
   const { address } = useAccount();
@@ -33,8 +32,6 @@ export const ConnectedButton = (props: ConnectedProps) => {
     address,
     watch: true,
   });
-
-  useEffect(() => {}, [openMyWalletModal]);
 
   return (
     <div>
@@ -67,6 +64,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
       </div>
       <ModalMyWallet
         open={openMyWalletModal}
+        openWalletManager={props.openWalletModal}
         onOpenChange={(open) => {
           setOpenMyWalletModal(open);
         }}

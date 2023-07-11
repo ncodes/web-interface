@@ -1,7 +1,5 @@
-import { Chain, createClient, goerli, mainnet, WagmiConfig } from "wagmi";
-import { hardhat } from "@wagmi/chains";
-import { ConnectKitProvider, getDefaultClient } from "connectkit";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { WagmiConfig, createConfig } from "wagmi";
+import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import useConnector from "../useConnector.tsx";
 import { ConnectorContext } from "../context.tsx";
 
@@ -14,11 +12,9 @@ interface ConnectorProviderProps {
 function ConnectorContextWrapper({ children }) {
   const connector = useConnector();
   return (
-    <>
-      <ConnectorContext.Provider value={connector}>
-        {children}
-      </ConnectorContext.Provider>
-    </>
+    <ConnectorContext.Provider value={connector}>
+      {children}
+    </ConnectorContext.Provider>
   );
 }
 
@@ -27,47 +23,19 @@ export default function ConnectorProvider({
   appName,
   infuraId,
 }: ConnectorProviderProps) {
-  const chains: Chain[] = [mainnet];
-  if (import.meta.env.VITE_ENV !== "production") {
-    chains.push(...[hardhat, goerli]);
-  }
-
-  const defaultClient = getDefaultClient({
-    appName,
-    infuraId,
-    chains,
-  });
-
-  const connectors = defaultClient.connectors;
-  defaultClient.connectors = [];
-
-  connectors.forEach((connection) => {
-    if (connection.id === "walletConnect") {
-      defaultClient.connectors.push(
-        new WalletConnectConnector({
-          chains: connection.chains,
-          options: {
-            projectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
-            metadata: {
-              name: appName,
-              description: "Joint",
-              url: import.meta.env.VITE_APP_URL,
-              icons: [
-                "https://storage.googleapis.com/joint-images/thumb_joint.jpg",
-              ],
-            },
-          },
-        })
-      );
-    } else {
-      defaultClient.connectors.push(connection);
-    }
-  });
-
-  const client = createClient(defaultClient);
+  const config = createConfig(
+    getDefaultConfig({
+      walletConnectProjectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
+      appName,
+      infuraId,
+      appDescription: "Joint is a decentralized P2P exchange for tokens",
+      appUrl: import.meta.env.VITE_APP_URL,
+      appIcon: import.meta.env.VITE_APP_ICON,
+    })
+  );
 
   return (
-    <WagmiConfig client={client}>
+    <WagmiConfig config={config}>
       <ConnectKitProvider>
         <ConnectorContextWrapper>{children}</ConnectorContextWrapper>
       </ConnectKitProvider>
