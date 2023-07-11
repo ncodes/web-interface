@@ -1,9 +1,9 @@
 import { Helmet } from "react-helmet";
 import { RightSidebarStream } from "../../components/RightSidebarStream.tsx";
 import { LeftSidebar } from "../../components/LeftSidebar.tsx";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import { Header } from "../../components/Header.tsx";
+// import { Header } from "../../components/Header.tsx";
 
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(true);
@@ -13,9 +13,9 @@ export default function Index() {
     setMobileMenuOpen(isLargeLaptop);
   }, [isLargeLaptop]);
 
-  const openMobileMenu = useCallback(() => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  }, [mobileMenuOpen]);
+  // const openMobileMenu = useCallback(() => {
+  //   setMobileMenuOpen(!mobileMenuOpen);
+  // }, [mobileMenuOpen]);
 
   return (
     <>
