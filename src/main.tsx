@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./styles/fonts.css";
 import "./styles/app.css";
 import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import ConnectExample from "./pages/play/ConnectExample.tsx";
