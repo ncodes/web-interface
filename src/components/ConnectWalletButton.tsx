@@ -1,6 +1,5 @@
 import { Button } from "./ui/Button.tsx";
 import { ConnectKitButton } from "connectkit";
-import { ConnectedButton } from "../hooks/connectors/components/ConnectedButton.tsx";
 import { IconWallet } from "./icons/IconWallet.tsx";
 
 interface ConnectedProps {
@@ -20,12 +19,9 @@ function Connect(props: {
   );
 }
 
+// @ts-ignore
 function Connected({ show }: ConnectedProps) {
-  return (
-    <div>
-      <ConnectedButton openWalletModal={show} />
-    </div>
-  );
+  return <div>{/*<ConnectedButton openWalletModal={show} />*/}</div>;
 }
 
 export function ConnectWalletButton(props: {
