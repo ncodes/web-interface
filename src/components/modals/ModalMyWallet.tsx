@@ -78,7 +78,7 @@ export default function ModalMyWallet(props: {
 
   return (
     <Dialog {...props}>
-      <DialogContent className="w-[305px] xxs:w-[320px] xs:w-[400px] md:w-[644px] mt-[200px] border-modal-border bg-modal-background p-0 text-gray-100 shadow-[2px_2px_7px_0_rgba(27,36,48,1)]">
+      <DialogContent className="w-[310px] xxs:w-[360px] xs:w-[400px] md:w-[644px] mt-[100px] md:mt-[200px] border-modal-border bg-modal-background p-0 text-gray-100 shadow-[2px_2px_7px_0_rgba(27,36,48,1)]">
         <DialogHeader>
           <DialogTitle className="flex justify-between text-gray-100 border-b border-modal-border p-5 tracking-wide">
             <span>My Wallet</span>
@@ -109,10 +109,10 @@ export default function ModalMyWallet(props: {
               </TabsList>
 
               <TabsContent value="balances" className="pr-0">
-                <div className="flex justify-end pr-5 !select-none text-gray-500 items-center relative -top-1 text-[12px] font-extralight">
+                <div className="hidden md:flex justify-end pr-5 !select-none text-gray-500 items-center relative -top-1 text-[12px] font-light ">
                   <IconArrowsScrollH /> Scroll left or right
                 </div>
-                <div className="px-2 mb-5 overflow-auto scrollbar-hide">
+                <div className="px-2 mb-5 mt-4 md:mt-0 overflow-auto scrollbar-hide">
                   <div className="flex gap-5 items-start box-border min-w-full float-left pr-3">
                     <BalanceCard symbol="ETH" balance="12.5">
                       {/*<BalanceCardLink title="Convert to WETH" />*/}
