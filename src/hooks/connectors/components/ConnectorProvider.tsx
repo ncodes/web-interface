@@ -26,9 +26,8 @@ export default function ConnectorProvider({
 }: ConnectorProviderProps) {
   const chains: Chain[] = [];
 
-  switch (import.meta.env.VITE_NETWORK) {
+  switch (import.meta.env.VITE_ENV) {
     case "development":
-    case "localhost":
       chains.push(hardhat, goerli);
       break;
     case "production":
