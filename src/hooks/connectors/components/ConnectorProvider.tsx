@@ -28,7 +28,7 @@ export default function ConnectorProvider({
 
   switch (import.meta.env.VITE_ENV) {
     case "development":
-      chains.push(hardhat, goerli);
+      chains.push(goerli, hardhat);
       break;
     case "production":
       chains.push(mainnet);
