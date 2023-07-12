@@ -23,6 +23,7 @@ import { shortenAddress } from "../../libs/helpers.ts";
 import IconCopy from "../icons/IconCopy.tsx";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useToast } from "../../hooks/toast/toast.tsx";
+import { ReactElement } from "react";
 
 function IconClose(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -38,10 +39,10 @@ function IconClose(props: React.SVGProps<SVGSVGElement>) {
 function BalanceCard(props: {
   symbol?: string;
   balance: string;
-  children?: any;
+  children?: ReactElement;
 }) {
   return (
-    <Card className="w-[200px] shrink-0 border border-card-border bg-card-background shadow-gray-800  shadow-md">
+    <Card className="w-[200px] shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg">
       <CardHeader className="p-0">
         <CardTitle className="text-center p-0 text-xl tracking-wider font-normal">
           <IconInfoCircle className="float-right relative top-2 -left-2 z-10 cursor-pointer text-card-icon/80 hover:text-card-icon transition-all duration-500" />
