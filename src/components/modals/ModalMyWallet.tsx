@@ -235,7 +235,7 @@ export default function ModalMyWallet(props: {
             <span>My Wallet</span>
             <DialogPrimitive.Close
               aria-label="Close"
-              className="text-gray-300 hover:text-gray-100 transition-all duration-300 outline-0"
+              className="text-gray-300 hover:text-gray-100 transition-all duration-300 ring-0 outline-0 focus:ring-0 focus:outline-none"
             >
               <IconClose className="h-[24px] w-[24px]" viewBox="0 0 20 20" />
               <span className="sr-only">Close</span>
