@@ -24,6 +24,9 @@ import IconCopy from "../icons/IconCopy.tsx";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { ReactElement } from "react";
+import { cn } from "../../libs/utils.ts";
+import { Button } from "../ui/Button.tsx";
+import { Input } from "../ui/Input.tsx";
 
 function IconClose(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -36,16 +39,19 @@ function IconClose(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function BalanceCard(props: {
+function BalanceCard2(props: {
   symbol?: string;
   balance: string;
+  hideHelp?: boolean;
   children?: ReactElement;
 }) {
   return (
     <Card className="w-[200px] shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg">
       <CardHeader className="p-0">
         <CardTitle className="text-center p-0 text-xl tracking-wider font-normal">
-          <IconInfoCircle className="float-right relative top-2 -left-2 z-10 cursor-pointer text-card-icon/80 hover:text-card-icon transition-all duration-500" />
+          {!props.hideHelp && (
+            <IconInfoCircle className="float-right relative top-2 -left-2 z-10 cursor-pointer text-card-icon/80 hover:text-card-icon transition-all duration-500" />
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0 py-2 flex flex-col relative -top-3 text-[24px] text-center text-chinese-green tracking-wider">
@@ -63,11 +69,60 @@ function BalanceCard(props: {
   );
 }
 
-function BalanceCardLink(props: { title: string }) {
+function BalanceCardResponsive(props: {
+  symbol?: string;
+  balance: string;
+  hideHelp?: boolean;
+  children?: ReactElement;
+}) {
+  return (
+    <Card
+      className={cn(
+        "w-full md:w-[200px] shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg"
+      )}
+    >
+      <div className="flex justify-between md:justify-start md:flex-col">
+        <CardHeader
+          className={cn("hidden md:block p-0", { "pt-5": props.hideHelp })}
+        >
+          <CardTitle className="text-center p-0 text-xl tracking-wider font-normal">
+            {!props.hideHelp && (
+              <IconInfoCircle className="float-right relative top-2 -left-2 z-10 cursor-pointer text-card-icon/80 hover:text-card-icon transition-all duration-500" />
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2 px-4 py-2 md:p-0 md:py-2 relative md:-top-3 text-[24px] text-left md:text-center text-chinese-green tracking-wider">
+          <span className="relative text-gray-100 text-sm md:text-[17px]">
+            {props.symbol}
+          </span>
+          <p className="text-xs md:text-2xl">{props.balance}</p>
+        </CardContent>
+        {props.children && (
+          <CardFooter className="px-3 py-0 border-t border-card-border md:py-0 md:px-0 font-light text-sm text-center">
+            {props.children}
+          </CardFooter>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+function BalanceCardLinkResponsive(props: { title: string }) {
   return (
     <a
       href="#"
       className="w-full block text-gray-400 py-2 cursor-pointer rounded-b-xl hover:bg-gray-800 hover:text-white"
+    >
+      {props.title}
+    </a>
+  );
+}
+
+function BalanceCardLink(props: { title: string }) {
+  return (
+    <a
+      href="#"
+      className="w-full block border px-3 py-1 rounded-full md:rounded-none border-blue-300/30 md:px-0 md:border-0 text-gray-400 md:py-2 cursor-pointer md:rounded-b-xl md:hover:bg-gray-800 hover:text-white"
     >
       {props.title}
     </a>
@@ -103,6 +158,65 @@ function TabContentHeader(props: { address: string }) {
         <IconArrowsScrollH /> Scroll left or right
       </span>
     </div>
+  );
+}
+
+function BalancesTab(props: { address: string }) {
+  return (
+    <TabsContent value="balances" className="pr-0">
+      <TabContentHeader address={props.address} />
+      <div className="px-2 mb-5  overflow-auto scrollbar-hide">
+        <div className="flex gap-5 items-start box-border min-w-full float-left pr-3">
+          <BalanceCard2 symbol="ETH" balance="12.5">
+            <BalanceCardLinkResponsive title="Convert to WETH" />
+          </BalanceCard2>
+          <BalanceCard2 symbol="WETH" balance="345.32">
+            <BalanceCardLinkResponsive title="Convert to ETH" />
+          </BalanceCard2>
+          <BalanceCard2 symbol="P2P" balance="34,000" />
+          <BalanceCard2 symbol="POUCH (P2P)" balance="34,000" />
+          <BalanceCard2 symbol="POUCH (P2P)" balance="34,000" />
+          <BalanceCard2 symbol="POUCH (P2P)" balance="34,000" />
+        </div>
+      </div>
+    </TabsContent>
+  );
+}
+
+function FeePouchTab() {
+  return (
+    <TabsContent value="fee-purse" className="w-full h-full">
+      <div className="px-2 mb-5 pt-2  overflow-auto scrollbar-hide">
+        <div className="flex flex-col md:flex-row gap-5 items-start box-border min-w-full float-left pr-3">
+          <BalanceCardResponsive symbol="Pouch (P2P)" balance="34.50" hideHelp>
+            <BalanceCardLink title="Withdraw" />
+          </BalanceCardResponsive>
+          <div className="flex flex-col gap-2 pb-1 md:pb-0 pt-1 text-left">
+            <h1 className="font-normal tracking-wider text-[18px]">
+              Fund Pouch
+            </h1>
+            <p className="font-light text-[13px] text-gray-400">
+              Add P2P to your Pouch to pay trading fees for your liquidity in
+              non-ERC20 markets.
+            </p>
+            <div className="flex gap-2 mt-1">
+              <Input
+                type="number"
+                variant="primary"
+                placeholder="0.00"
+                w="sm"
+              />
+              <Button variant="secondary" rounded="md" size="sm">
+                Approve
+              </Button>
+              <Button variant="default" rounded="md" size="sm">
+                Deposit
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </TabsContent>
   );
 }
 
@@ -144,27 +258,8 @@ export default function ModalMyWallet(props: {
                   Fee Pouch
                 </TabsTrigger>
               </TabsList>
-
-              <TabsContent value="balances" className="pr-0">
-                <TabContentHeader address={address} />
-                <div className="px-2 mb-5  overflow-auto scrollbar-hide">
-                  <div className="flex gap-5 items-start box-border min-w-full float-left pr-3">
-                    <BalanceCard symbol="ETH" balance="12.5">
-                      <BalanceCardLink title="Convert to WETH" />
-                    </BalanceCard>
-                    <BalanceCard symbol="WETH" balance="345.32">
-                      <BalanceCardLink title="Convert to ETH" />
-                    </BalanceCard>
-                    <BalanceCard symbol="P2P" balance="34,000" />
-                    <BalanceCard symbol="POUCH (P2P)" balance="34,000" />
-                    <BalanceCard symbol="POUCH (P2P)" balance="34,000" />
-                    <BalanceCard symbol="POUCH (P2P)" balance="34,000" />
-                  </div>
-                </div>
-              </TabsContent>
-              <TabsContent value="fee-purse" className="px-5">
-                dsads
-              </TabsContent>
+              <BalancesTab address={address} />
+              <FeePouchTab />
             </Tabs>
             <div className="flex justify-between px-5 py-3 border-t border-modal-border/50">
               <div className="flex items-center text-sm font-light gap-1 text-gray-400 hover:text-gray-300 transition-all duration-500 cursor-pointer">
