@@ -59,8 +59,8 @@ export function LeftSidebar(props: {
           { "absolute top-0 -left-[280px] z-10 bg-background": !open }
         )}
       >
-        <header className="flex gap-4 -ml-[2px] pl-8">
-          <a href="#">
+        <header className="flex gap-4 -ml-[5px] pl-8">
+          <a href="#" className="pt-[6px]">
             <img src="/images/logo-mark-w.svg" alt="logo" />
           </a>
           <RegionSelector />
