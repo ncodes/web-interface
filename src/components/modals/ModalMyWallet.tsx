@@ -19,6 +19,10 @@ import IconArrowsScrollH from "../icons/IconScrollHorizontal.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import IconDisconnect from "../icons/IconDisconnect.tsx";
 import useConnector from "../../hooks/connectors/useConnector.tsx";
+import { shortenAddress } from "../../libs/helpers.ts";
+import IconCopy from "../icons/IconCopy.tsx";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useToast } from "../../hooks/toast/toast.tsx";
 
 function IconClose(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -69,18 +73,50 @@ function BalanceCardLink(props: { title: string }) {
   );
 }
 
+function TabContentHeader(props: { address: string }) {
+  const { notifySuccess, simpleSuccess } = useToast();
+
+  return (
+    <div className="flex pt-1  justify-between pl-2 pr-5 !select-none text-gray-500  relative -top-1 text-[12px] font-light pb-1">
+      <span className="border border-gray-700 text-chinese-green  px-2 rounded-full flex font-medium tracking-widest gap-1 items-center">
+        {shortenAddress(props.address)}
+        <CopyToClipboard
+          text={props.address}
+          onCopy={() => {
+            simpleSuccess("Copied", { position: "top-center" });
+          }}
+        >
+          <IconCopy
+            width="15px"
+            height="15px"
+            className="opacity-50 hover:opacity-100 hover:text-chinese-green cursor-pointer transition-all duration-300 active:text-white active:scale-50"
+          />
+        </CopyToClipboard>
+      </span>
+      <span
+        className="hidden xxs:flex items-center"
+        onClick={() => {
+          notifySuccess("hello", { label: "hi" });
+        }}
+      >
+        <IconArrowsScrollH /> Scroll left or right
+      </span>
+    </div>
+  );
+}
+
 export default function ModalMyWallet(props: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   openWalletManager: (() => void) | undefined;
 }) {
-  const { disconnect } = useConnector();
+  const { disconnect, address } = useConnector();
 
   return (
     <Dialog {...props}>
-      <DialogContent className="w-[310px] xxs:w-[360px] xs:w-[400px] md:w-[644px] mt-[100px] md:mt-[200px] border-modal-border bg-modal-background p-0 text-gray-100 shadow-[2px_2px_7px_0_rgba(27,36,48,1)]">
+      <DialogContent className="w-[310px] xxs:w-[360px] xs:w-[400px] md:w-[644px] mt-[100px] md:mt-[200px] border-modal-border/50 bg-modal-background p-0 text-gray-100 shadow-[2px_2px_7px_0_rgba(27,36,48,0.4)]">
         <DialogHeader>
-          <DialogTitle className="flex justify-between items-center text-gray-100 border-b border-modal-border p-5 tracking-wide">
+          <DialogTitle className="flex justify-between items-center text-gray-100 border-b border-modal-border/60 p-5 tracking-wide">
             <span>My Wallet</span>
             <DialogPrimitive.Close
               aria-label="Close"
@@ -93,7 +129,7 @@ export default function ModalMyWallet(props: {
 
           <div>
             <Tabs defaultValue="balances" className="w-full h-full">
-              <TabsList className="justify-start px-5 border-b border-modal-border">
+              <TabsList className="justify-start px-5 border-b border-modal-border/60">
                 <TabsTrigger
                   value="balances"
                   className="font-normal text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-[12px] data-[state=active]:font-normal"
@@ -104,15 +140,13 @@ export default function ModalMyWallet(props: {
                   value="fee-purse"
                   className="font-normal text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-[12px] data-[state=active]:font-normal"
                 >
-                  Fee Purse
+                  Fee Pouch
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="balances" className="pr-0">
-                <div className="hidden md:flex justify-end pr-5 !select-none text-gray-500 items-center relative -top-1 text-[12px] font-light ">
-                  <IconArrowsScrollH /> Scroll left or right
-                </div>
-                <div className="px-2 mb-5 mt-4 md:mt-0 overflow-auto scrollbar-hide">
+                <TabContentHeader address={address} />
+                <div className="px-2 mb-5  overflow-auto scrollbar-hide">
                   <div className="flex gap-5 items-start box-border min-w-full float-left pr-3">
                     <BalanceCard symbol="ETH" balance="12.5">
                       <BalanceCardLink title="Convert to WETH" />
@@ -121,9 +155,9 @@ export default function ModalMyWallet(props: {
                       <BalanceCardLink title="Convert to ETH" />
                     </BalanceCard>
                     <BalanceCard symbol="P2P" balance="34,000" />
-                    <BalanceCard symbol="PURSE (P2P)" balance="34,000" />
-                    <BalanceCard symbol="PURSE (P2P)" balance="34,000" />
-                    <BalanceCard symbol="PURSE (P2P)" balance="34,000" />
+                    <BalanceCard symbol="POUCH (P2P)" balance="34,000" />
+                    <BalanceCard symbol="POUCH (P2P)" balance="34,000" />
+                    <BalanceCard symbol="POUCH (P2P)" balance="34,000" />
                   </div>
                 </div>
               </TabsContent>
@@ -131,7 +165,7 @@ export default function ModalMyWallet(props: {
                 dsads
               </TabsContent>
             </Tabs>
-            <div className="flex justify-between px-5 py-3 border-t border-modal-border">
+            <div className="flex justify-between px-5 py-3 border-t border-modal-border/50">
               <div className="flex items-center text-sm font-light gap-1 text-gray-400 hover:text-gray-300 transition-all duration-500 cursor-pointer">
                 <span>
                   <IconSettingsOutline />

@@ -16,7 +16,7 @@ function IconNotifications(props: React.SVGProps<SVGSVGElement>) {
 
 export function NavNotificationButton() {
   return (
-    <div className="flex justify-center items-center h-[40px] w-[40px] rounded-full border border-gray-800 cursor-pointer text-gray-400 hover:border-chinese-green hover:text-chinese-green transition-all duration-300">
+    <div className="flex transition-all duration-500 hover:scale-110 justify-center items-center h-[40px] w-[40px] rounded-full border border-gray-600 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green">
       <IconNotifications />
     </div>
   );

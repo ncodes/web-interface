@@ -60,7 +60,9 @@ export function LeftSidebar(props: {
         )}
       >
         <header className="flex gap-4 -ml-[2px] pl-8">
-          <img src="/images/logo-mark-w.svg" alt="logo" />
+          <a href="#">
+            <img src="/images/logo-mark-w.svg" alt="logo" />
+          </a>
           <RegionSelector />
           <div
             className="xl:hidden flex justify items-center flex-1 border-chinese-green justify-end pr-4 -mt-1"
@@ -72,7 +74,7 @@ export function LeftSidebar(props: {
           </div>
         </header>
 
-        <div className="xs:hidden pl-8 py-3 mt-5 border-y border-gray-800">
+        <div className="md:hidden pl-8 py-3 mt-5 border-y border-gray-800">
           <NavOrdinaryLink
             href="#"
             label="Search"

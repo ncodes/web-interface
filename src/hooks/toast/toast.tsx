@@ -1,5 +1,5 @@
-import toast, {ToastPosition} from 'react-hot-toast';
-import {ToastBar} from "../../components/toast/ToastBar.tsx";
+import toast, { ToastPosition } from "react-hot-toast";
+import { ToastBar } from "../../components/toast/ToastBar.tsx";
 
 export enum ToastType {
   Default,
@@ -8,6 +8,28 @@ export enum ToastType {
 }
 
 export function useToast() {
+  /**
+   * Create an success toast (use native toast element)
+   * @param msg - The error message
+   * @param options - The toast options
+   */
+  function simpleSuccess(
+    msg: string,
+    options: {
+      label?: string;
+      position?: ToastPosition;
+      duration?: number;
+      className?: string;
+      links?: { href: string; label: string }[];
+    } = {}
+  ) {
+    toast.success(msg, {
+      position: options.position || "top-right",
+      duration: options?.duration || 0,
+      className: options.className || "bg-gray-900 text-gray-200",
+    });
+  }
+
   /**
    * Create an error toast
    * @param msg - The error message
@@ -33,7 +55,7 @@ export function useToast() {
         />
       ),
       {
-        position: options.position || 'top-right',
+        position: options.position || "top-right",
         duration: options?.duration || 0,
       }
     );
@@ -64,7 +86,7 @@ export function useToast() {
         />
       ),
       {
-        position: options.position || 'top-right',
+        position: options.position || "top-right",
         duration: options.duration,
       }
     );
@@ -95,7 +117,7 @@ export function useToast() {
         />
       ),
       {
-        position: options.position || 'top-right',
+        position: options.position || "top-right",
         duration: options.duration,
       }
     );
@@ -105,5 +127,6 @@ export function useToast() {
     notify,
     notifyError,
     notifySuccess,
+    simpleSuccess,
   };
 }

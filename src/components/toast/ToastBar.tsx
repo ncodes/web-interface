@@ -25,9 +25,9 @@ export function ToastBar(props: {
       <div className="flex-shrink-0">
         <img
           src={cn({
-            "/images/errormark.svg": props.type === ToastType.Error,
-            "/images/checkmark.svg": props.type === ToastType.Success,
-            "/images/noticemark.svg": props.type === ToastType.Default,
+            "/images/icons/errormark.svg": props.type === ToastType.Error,
+            "/images/icons/checkmark.svg": props.type === ToastType.Success,
+            "/images/icons/noticemark.svg": props.type === ToastType.Default,
           })}
           width="20px"
           height="20px"

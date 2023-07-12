@@ -77,6 +77,58 @@
     .container-x {
         @apply lg:w-full mx-auto px-5 md:px-10 ;
     }
+
+    .toast-modal {
+        @apply px-4 py-4 pb-2 w-full md:w-[400px] lg:w-[450px] md:min-w-[310px] font-bold  break-all;
+        border-radius: 10px;
+
+        .label {
+            @apply inline-block font-normal text-[18px] font-['Mitr'];
+        }
+
+        .message {
+            @apply font-['Mitr'] text-[17px] text-white font-normal;
+        }
+
+        .links {
+            a {
+                @apply hover:text-chinese-green;
+            }
+        }
+    }
+
+    .toast-modal.success {
+        background: #060c13;
+        border: 1px solid #282c1a;
+        box-shadow: 0 0 7px 2px rgba(224, 255, 134, 0.07);
+        @apply text-chinese-green/80;
+
+        .label {
+            @apply text-chinese-green;
+        }
+    }
+
+    .toast-modal.error {
+        background: #060c13;
+        border: 1px solid #3b0406;
+        box-shadow: 0 0 7px 2px rgba(62, 6, 12, 0.51);
+        @apply text-[#F32D3F]/80;
+
+        .label {
+            @apply text-[#F32D3F];
+        }
+    }
+
+    .toast-modal.default {
+        background: #060c13;
+        border: 1px solid #2e2e2e;
+        box-shadow: 0 0 7px 2px rgba(35, 62, 91, 0.45);
+        @apply text-[#FFFFFF];
+
+        .label {
+            @apply text-[#FFFFFF];
+        }
+    }
 }
 
 @layer utilities {
@@ -87,7 +139,7 @@
 
     /* For IE, Edge and Firefox */
     .scrollbar-hide {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
     }
 }
