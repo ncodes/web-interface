@@ -70,7 +70,7 @@ function RecentTradeRow(props: {
 
 export function RightSidebarStream() {
   return (
-    <div className="flex h-full flex-col justify-between">
+    <div className="flex h-full flex-col justify-between mt-5">
       <div className="border-b flex-1 pb-4 border-gray-800">
         <Tabs defaultValue="popular-market" className="w-full h-full">
           <TabsList>

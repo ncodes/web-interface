@@ -77,7 +77,7 @@ function TabContentHeader(props: { address: string }) {
   const { notifySuccess, simpleSuccess } = useToast();
 
   return (
-    <div className="flex pt-1  justify-between pl-2 pr-5 !select-none text-gray-500  relative -top-1 text-[12px] font-light pb-1">
+    <div className="flex pt-1 justify-between pl-2 pr-5 !select-none text-gray-500  relative -top-1 text-[12px] font-light pb-2">
       <span className="border border-gray-700 text-chinese-green  px-2 rounded-full flex font-medium tracking-widest gap-1 items-center">
         {shortenAddress(props.address)}
         <CopyToClipboard
