@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { RightSidebarStream } from "../../components/RightSidebarStream.tsx";
+import { ActivityStream } from "../../components/ActivityStream.tsx";
 import { LeftSidebar } from "../../components/LeftSidebar.tsx";
 import { useCallback, useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
@@ -39,7 +39,7 @@ export default function Index() {
               <div className="h-full border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black"></div>
             </div>
             <div className="w-[400px] px-5 pr-0 hidden xl:block">
-              <RightSidebarStream />
+              <ActivityStream />
             </div>
           </div>
         </div>
