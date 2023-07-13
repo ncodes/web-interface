@@ -2,7 +2,15 @@ import { WagmiConfig, createConfig, Chain } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import useConnector from "../useConnector.tsx";
 import { ConnectorContext } from "../context.tsx";
-import { goerli, hardhat, mainnet } from "viem/chains";
+import {
+  arbitrum,
+  bsc,
+  goerli,
+  hardhat,
+  mainnet,
+  optimism,
+  polygon,
+} from "viem/chains";
 
 interface ConnectorProviderProps {
   appName: string;
@@ -24,15 +32,15 @@ export default function ConnectorProvider({
   appName,
   infuraId,
 }: ConnectorProviderProps) {
-  const chains: Chain[] = [];
-
-  switch (import.meta.env.VITE_ENV) {
-    case "development":
-      chains.push(goerli, hardhat);
-      break;
-    case "production":
-      chains.push(mainnet);
-  }
+  const chains: Chain[] = [
+    mainnet,
+    polygon,
+    bsc,
+    optimism,
+    arbitrum,
+    goerli,
+    hardhat,
+  ];
 
   const config = createConfig(
     getDefaultConfig({

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BigNumberish } from "ethers";
-import { getNetworkByChainId, Nets } from "./networks";
+import { getChain, Nets } from "./networks";
 import {
   Chain,
   useAccount,
@@ -163,7 +163,7 @@ export default function useConnector() {
   ) {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
-    const netInfo = getNetworkByChainId(chainId as number);
+    const netInfo = getChain(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const [address] = await walletClient.getAddresses();
     return publicClient.simulateContract({
@@ -183,7 +183,7 @@ export default function useConnector() {
    */
   async function readContract(name: ContractNames, targetFunc: string, args?) {
     if (!publicClient) throw new Error("no provider found");
-    const netInfo = getNetworkByChainId(chainId as number);
+    const netInfo = getChain(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     return publicClient.readContract({
       address: netInfo.contracts[name].address as Address,
@@ -205,7 +205,7 @@ export default function useConnector() {
     args?
   ): Promise<Address> {
     if (!walletClient) throw new Error("wallet not connected");
-    const netInfo = getNetworkByChainId(chainId as number);
+    const netInfo = getChain(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const [address] = await walletClient.getAddresses();
     return walletClient.writeContract({
