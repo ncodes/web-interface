@@ -1,5 +1,5 @@
 import { RegionSelector } from "./RegionSelector.tsx";
-import { Navigation } from "./NavPageLink.tsx";
+import { Navigation } from "./Navigation.tsx";
 import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
 import { cn } from "../libs/utils.ts";
 import React, { useEffect, useState } from "react";
