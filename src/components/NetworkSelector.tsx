@@ -61,7 +61,7 @@ export function NetworkSelector() {
         <DropdownMenuTrigger className="outline-0 ring-0">
           <div
             className={cn(
-              "md:w-[152px] flex gap-2 justify-between border items-center transition-all duration-500 hover:cursor-pointer hover:bg-gray-800 hover:scale-105 hover:border-chinese-green p-2 px-2 pr-1 rounded-full border-gray-600",
+              "md:w-[152px] flex gap-2 justify-between border items-center transition-all duration-500 hover:cursor-pointer hover:bg-gray-800 hover:scale-x-105 hover:border-chinese-green p-2 px-2 pr-1 rounded-full border-gray-600",
               {
                 "scale-105 border-chinese-green": open,
               }

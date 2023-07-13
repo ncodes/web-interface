@@ -1,4 +1,4 @@
-import { IconSearch } from "./NavSearchBox.tsx";
+import { IconSearch } from "./IconSearch.tsx";
 
 export function NavSearchButton() {
   return (

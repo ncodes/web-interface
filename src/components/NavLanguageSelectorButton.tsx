@@ -17,7 +17,7 @@ export function IconGlobalLine(props: React.SVGProps<SVGSVGElement>) {
 
 export function NavLanguageSelectorButton() {
   return (
-    <div className="hidden md:flex justify-center items-center h-[40px] w-[40px] rounded-full border border-gray-600 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110">
+    <div className="hidden md:flex justify-center items-center h-[40px] w-[40px] rounded-full border border-gray-600 hover:bg-gray-800 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110">
       <IconGlobalLine />
     </div>
   );

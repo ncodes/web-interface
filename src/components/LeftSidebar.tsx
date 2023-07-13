@@ -6,7 +6,8 @@ import React, { useEffect, useState } from "react";
 import { IconGlobalLine } from "./NavLanguageSelectorButton.tsx";
 import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 import { IconQuestionCircle } from "./NavHelpButton.tsx";
-import { IconSearch } from "./NavSearchBox.tsx";
+
+import { IconSearch } from "./IconSearch.tsx";
 
 function IconDoubleChevronBack(props: React.SVGProps<SVGSVGElement>) {
   return (
