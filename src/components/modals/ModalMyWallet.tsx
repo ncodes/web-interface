@@ -91,7 +91,7 @@ function BalanceCardResponsive(props: {
             )}
           </CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-2 px-4 py-2 md:p-0 md:py-2 relative md:-top-3 text-[24px] text-left md:text-center text-chinese-green tracking-wider">
+        <CardContent className="flex flex-col gap-1 px-4 py-2 md:p-0 md:py-2 relative md:-top-3 text-[24px] text-left md:text-center text-chinese-green tracking-wider">
           <span className="relative text-gray-100 text-sm md:text-[17px]">
             {props.symbol}
           </span>
@@ -120,12 +120,11 @@ function BalanceCardLinkResponsive(props: { title: string }) {
 
 function BalanceCardLink(props: { title: string }) {
   return (
-    <a
-      href="#"
-      className="w-full block border px-3 py-1 rounded-full md:rounded-none border-blue-300/30 md:px-0 md:border-0 text-gray-400 md:py-2 cursor-pointer md:rounded-b-xl md:hover:bg-gray-800 hover:text-white"
-    >
-      {props.title}
-    </a>
+    <Button variant="outline" className="text-gray-200 border-gray-600" asChild>
+      <a href="#" className="">
+        {props.title}
+      </a>
+    </Button>
   );
 }
 
