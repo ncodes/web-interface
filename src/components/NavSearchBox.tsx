@@ -22,7 +22,7 @@ export function IconSearch(props: React.SVGProps<SVGSVGElement>) {
 
 export function NavSearchBox() {
   return (
-    <div className="hidden md:flex md:w-[230px] lg:w-[300px] xl:w-[500px]">
+    <div className="hidden md:flex md:w-[230px] lg:w-[300px] xl:w-[500px] transition-all duration-500 hover:scale-x-105">
       <Input
         placeholder="Search tokens, pairs or addresses"
         rounded="full"
