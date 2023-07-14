@@ -71,7 +71,7 @@ export function RegionSelectorMenu({
   return (
     <DropdownMenu onOpenChange={onOpenChange}>
       <DropdownMenuTrigger className="outline-0 ring-0">
-        {React.cloneElement(children)}
+        {children}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-0 w-[120px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-input border-gray-700/80 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[200px]" type="scroll">

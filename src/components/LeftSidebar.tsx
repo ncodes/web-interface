@@ -1,4 +1,4 @@
-import { RegionSelector, RegionSelectorMenu } from "./RegionSelector.tsx";
+import { RegionSelector } from "./RegionSelector.tsx";
 import { Navigation } from "./Navigation.tsx";
 import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
 import { cn } from "../libs/utils.ts";
@@ -7,7 +7,7 @@ import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 import { IconQuestionCircle } from "./NavHelpButton.tsx";
 
 import { IconSearch } from "./icons/IconSearch.tsx";
-import { IconGlobalLine } from "./icons/IconGlobalLine.tsx";
+import { LanguageSelectorMobile } from "./LanguageSelector.tsx";
 
 function IconDoubleChevronBack(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -86,7 +86,7 @@ export function LeftSidebar(props: {
 
         <Navigation />
         <div className="flex-1 flex flex-col justify-end pl-8">
-          <RegionSelectorMobile />
+          <LanguageSelectorMobile />
           <NavOrdinaryLink
             href="#"
             label="Settings"
@@ -102,19 +102,5 @@ export function LeftSidebar(props: {
         </div>
       </div>
     </div>
-  );
-}
-
-export function RegionSelectorMobile() {
-  const [, setOpen] = useState(false);
-  return (
-    <RegionSelectorMenu onOpenChange={setOpen}>
-      <NavOrdinaryLink
-        href="#"
-        label="Language"
-        svg={<IconGlobalLine />}
-        className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]"
-      />
-    </RegionSelectorMenu>
   );
 }

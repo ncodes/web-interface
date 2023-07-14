@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +18,7 @@ import { IconFlagIndia } from "./icons/IconFlagIndia.tsx";
 import { ScrollArea } from "./ui/scroll-area.tsx";
 import useTranslate from "../i18n/useTranslate.ts";
 import { NavLink } from "react-router-dom";
+import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
 
 function DropdownMenuItemCustom({
   children,
@@ -49,22 +50,36 @@ function DropdownMenuItemCustom({
   );
 }
 
-export function NavLanguageSelectorButton() {
+export function LanguageSelector() {
   const [open, setOpen] = useState(false);
 
   return (
-    <DropdownMenu onOpenChange={setOpen}>
+    <LanguageSelectorMenu onOpenChange={setOpen}>
+      <div
+        className={cn(
+          "hidden md:flex justify-center items-center h-[40px] w-[40px] rounded-full border border-gray-600 hover:bg-gray-800 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110",
+          {
+            "scale-110 border-chinese-green": open,
+          }
+        )}
+      >
+        <IconGlobalLine />
+      </div>
+    </LanguageSelectorMenu>
+  );
+}
+
+export function LanguageSelectorMenu({
+  children,
+  onOpenChange,
+}: {
+  children: React.ReactElement;
+  onOpenChange?: (open: boolean) => void;
+}) {
+  return (
+    <DropdownMenu onOpenChange={onOpenChange}>
       <DropdownMenuTrigger className="outline-0 ring-0">
-        <div
-          className={cn(
-            "hidden md:flex justify-center items-center h-[40px] w-[40px] rounded-full border border-gray-600 hover:bg-gray-800 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110",
-            {
-              "scale-110 border-chinese-green": open,
-            }
-          )}
-        >
-          <IconGlobalLine />
-        </div>
+        {children}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[152px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[300px]" type="scroll">
@@ -95,5 +110,22 @@ export function NavLanguageSelectorButton() {
         </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export function LanguageSelectorMobile() {
+  const [open, setOpen] = useState(false);
+  return (
+    <LanguageSelectorMenu onOpenChange={setOpen}>
+      <NavOrdinaryLink
+        href="#"
+        label="Language"
+        svg={<IconGlobalLine />}
+        className={cn(
+          "relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
+          { "text-white ml-[2px]": open }
+        )}
+      />
+    </LanguageSelectorMenu>
   );
 }
