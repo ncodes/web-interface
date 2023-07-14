@@ -31,11 +31,10 @@ function getRegionIcon(region: string) {
  * Hook for managing the region
  */
 export default function useRegion() {
-  const store = useStore();
-  const setCurrentRegion = store((state) => state.setCurrentRegion);
+  const setCurrentRegion = useStore((state) => state.setCurrentRegion);
 
   function setRegion(region: string) {
-    setCurrentRegion(region);
+    setCurrentRegion?.(region);
     localStorage.setItem("region", region);
   }
 
@@ -51,7 +50,7 @@ export default function useRegion() {
     regions,
     getRegion,
     getRegionIcon,
-    currentRegion: store((state) => state.currentRegion),
+    currentRegion: useStore((state) => state.currentRegion),
     setRegion,
   };
 }

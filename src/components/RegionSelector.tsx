@@ -55,7 +55,7 @@ export function RegionSelector() {
         )}
       >
         <span className="mt-[5px]">
-          {getRegionIcon(currentRegion)({ width: 20 })}
+          {getRegionIcon(currentRegion || "")({ width: 20 })}
         </span>
         <span className="font-normal text-lg mt-[1px]">{currentRegion}</span>
         <div className="pl-1 flex items-center border-input-separator border-l relative">
@@ -84,7 +84,7 @@ export function RegionSelectorMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-0 w-[120px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-input border-gray-700/80 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[200px]" type="scroll">
-          {getRegion([currentRegion]).map((r) => (
+          {getRegion(currentRegion ? [currentRegion] : []).map((r) => (
             <DropdownMenuItemCustom
               key={r.name}
               onSelect={() => {
