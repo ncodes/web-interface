@@ -13,9 +13,9 @@ import { IconFlagFrance } from "./icons/IconFlagFrance.tsx";
 import { IconFlagSKorea } from "./icons/IconFlagSKorea.tsx";
 import { IconFlagJapan } from "./icons/IconFlagJapan.tsx";
 import { IconFlagChina } from "./icons/IconFlagChina.tsx";
-import { IconFlagEnglish } from "./icons/IconFlagEnglish.tsx";
+import { IconFlagUK } from "./icons/IconFlagUK.tsx";
 import { IconFlagIndia } from "./icons/IconFlagIndia.tsx";
-import { ScrollArea, ScrollBar, ScrollThumb } from "./ui/scroll-area.tsx";
+import { ScrollArea } from "./ui/scroll-area.tsx";
 import useTranslate from "../i18n/useTranslate.ts";
 import { NavLink } from "react-router-dom";
 
@@ -68,10 +68,10 @@ export function NavLanguageSelectorButton() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[152px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[300px]" type="scroll">
-          <DropdownMenuItemCustom locale="en" key="1">
-            <IconFlagEnglish width="25" /> English
+          <DropdownMenuItemCustom locale="en">
+            <IconFlagUK width="25" /> English
           </DropdownMenuItemCustom>
-          <DropdownMenuItemCustom locale="es" key="2">
+          <DropdownMenuItemCustom locale="es">
             <IconFlagSpain width="25" /> Español
           </DropdownMenuItemCustom>
           <DropdownMenuItemCustom locale="it">
@@ -92,9 +92,6 @@ export function NavLanguageSelectorButton() {
           <DropdownMenuItemCustom locale="jo">
             <IconFlagJapan width="25" /> Japanese
           </DropdownMenuItemCustom>
-          <ScrollBar className="bg-transparent">
-            <ScrollThumb />
-          </ScrollBar>
         </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>

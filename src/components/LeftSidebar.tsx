@@ -1,4 +1,4 @@
-import { RegionSelector } from "./RegionSelector.tsx";
+import { RegionSelector, RegionSelectorMenu } from "./RegionSelector.tsx";
 import { Navigation } from "./Navigation.tsx";
 import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
 import { cn } from "../libs/utils.ts";
@@ -86,12 +86,7 @@ export function LeftSidebar(props: {
 
         <Navigation />
         <div className="flex-1 flex flex-col justify-end pl-8">
-          <NavOrdinaryLink
-            href="#"
-            label="Language"
-            svg={<IconGlobalLine />}
-            className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]"
-          />
+          <RegionSelectorMobile />
           <NavOrdinaryLink
             href="#"
             label="Settings"
@@ -107,5 +102,19 @@ export function LeftSidebar(props: {
         </div>
       </div>
     </div>
+  );
+}
+
+export function RegionSelectorMobile() {
+  const [, setOpen] = useState(false);
+  return (
+    <RegionSelectorMenu onOpenChange={setOpen}>
+      <NavOrdinaryLink
+        href="#"
+        label="Language"
+        svg={<IconGlobalLine />}
+        className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]"
+      />
+    </RegionSelectorMenu>
   );
 }
