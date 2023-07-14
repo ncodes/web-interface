@@ -80,7 +80,11 @@ export function NetworkSelector() {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[152px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 px-0 py-0">
-          {getChains(false, true).map((chainId) => (
+          {getChains(
+            false,
+            true,
+            curChain?.chainId ? [curChain?.chainId] : []
+          ).map((chainId) => (
             <DropdownMenuItemCustom
               key={chainId}
               onSelect={async () => {
@@ -98,7 +102,11 @@ export function NetworkSelector() {
           <DropdownMenuLabel className="font-extralight tracking-wider text-gray-300 text-xs">
             Testnets
           </DropdownMenuLabel>
-          {getChains(true).map((chainId) => (
+          {getChains(
+            true,
+            false,
+            curChain?.chainId ? [curChain?.chainId] : []
+          ).map((chainId) => (
             <DropdownMenuItemCustom
               key={chainId}
               onSelect={async () => {

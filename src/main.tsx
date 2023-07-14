@@ -7,15 +7,20 @@ import "./styles/app.css";
 import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import ConnectExample from "./pages/play/ConnectExample.tsx";
 import Index from "./pages/index/Index.tsx";
+import "./i18n/i18n.ts";
+
+function makePath(path: string) {
+  return `:locale?/${path}`;
+}
 
 const router = createBrowserRouter([
   {
-    path: "/play/connect-wallet",
+    path: makePath(`play/connect-wallet`),
     element: <App page={<ConnectExample />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: "/",
+    path: makePath(""),
     element: <App page={<Index />} />,
     errorElement: <RootErrorBoundary />,
   },

@@ -1,5 +1,5 @@
 import { Input } from "./ui/Input.tsx";
-import { IconSearch } from "./IconSearch.tsx";
+import { IconSearch } from "./icons/IconSearch.tsx";
 import { useState } from "react";
 import { cn } from "../libs/utils.ts";
 

@@ -3,11 +3,11 @@ import { Navigation } from "./Navigation.tsx";
 import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
 import { cn } from "../libs/utils.ts";
 import React, { useEffect, useState } from "react";
-import { IconGlobalLine } from "./NavLanguageSelectorButton.tsx";
 import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 import { IconQuestionCircle } from "./NavHelpButton.tsx";
 
-import { IconSearch } from "./IconSearch.tsx";
+import { IconSearch } from "./icons/IconSearch.tsx";
+import { IconGlobalLine } from "./icons/IconGlobalLine.tsx";
 
 function IconDoubleChevronBack(props: React.SVGProps<SVGSVGElement>) {
   return (
