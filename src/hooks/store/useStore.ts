@@ -1,5 +1,5 @@
 import create from "zustand";
-import { defaultRegion } from "../../components/region/useRegion.ts";
+import { defaultRegion } from "../../components/region/constants.ts";
 
 export interface IStore {
   currentRegion?: string;

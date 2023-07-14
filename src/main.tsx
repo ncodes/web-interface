@@ -8,6 +8,7 @@ import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import ConnectExample from "./pages/play/ConnectExample.tsx";
 import Index from "./pages/index/Index.tsx";
 import "./i18n/i18n.ts";
+import "./hooks/store/useStore.ts";
 
 function makePath(path: string) {
   return `:locale?/${path}`;
