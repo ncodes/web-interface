@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs.tsx";
-import { PairAvatar } from "./PairAvatar.tsx";
+import { PairAvatar } from "./region/PairAvatar.tsx";
 import moment from "moment";
 
 function PopularMarketRow(props: {
