@@ -81,7 +81,7 @@ export function LanguageSelectorMenu({
       <DropdownMenuTrigger className="outline-0 ring-0">
         {children}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[152px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 px-0 py-0">
+      <DropdownMenuContent className="w-[152px] outline-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[300px]" type="scroll">
           <DropdownMenuItemCustom locale="en">
             <IconFlagUK width="25" /> English
@@ -122,7 +122,7 @@ export function LanguageSelectorMobile() {
         label="Language"
         svg={<IconGlobalLine />}
         className={cn(
-          "relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
+          "outline-0 ring-0 relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
           { "text-white ml-[2px]": open }
         )}
       />

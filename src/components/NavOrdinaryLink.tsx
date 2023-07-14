@@ -11,7 +11,7 @@ export function NavOrdinaryLink(props: {
     <a
       href={props.href}
       className={cn(
-        "flex items-center gap-3 font-light text-[17px] py-2 text-muted-foreground hover:text-white transition-all duration-500 hover:ml-[2px]",
+        "outline-0 ring-0 flex items-center gap-3 font-light text-[17px] py-2 text-muted-foreground hover:text-white transition-all duration-500 hover:ml-[2px]",
         props.className
       )}
     >
