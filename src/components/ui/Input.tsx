@@ -2,8 +2,8 @@ import * as React from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
 
-const buttonVariants = cva(
-  "flex h-8 w-full border border-gray-800 bg-background text-sm shadow-sm transition-colors  file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-chinese-green",
+const inputVariants = cva(
+  "flex h-8 w-full border border-gray-600 bg-background text-sm shadow-sm transition-colors  file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-chinese-green",
   {
     variants: {
       variant: {
@@ -34,7 +34,7 @@ const buttonVariants = cva(
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof buttonVariants> {
+    VariantProps<typeof inputVariants> {
   asChild?: boolean;
 }
 
@@ -43,7 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const Comp = asChild ? Slot : "input";
     return (
       <Comp
-        className={buttonVariants({ variant, w, className, rounded, sz })}
+        className={inputVariants({ variant, w, className, rounded, sz })}
         ref={ref}
         {...props}
       />
@@ -52,4 +52,4 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 Input.displayName = "Input";
 
-export { Input, buttonVariants };
+export { Input, inputVariants };

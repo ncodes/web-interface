@@ -45,8 +45,8 @@ module.exports = {
         "modal-background": "#030507",
 
         // Card
-        "card-background": "#0A0E12",
-        "card-border": "#1E2E3D",
+        "card-background": "#0C1218",
+        "card-border": "#2F3F4F",
         "card-icon": "#7E8FB1",
 
         border: "hsl(var(--border))",

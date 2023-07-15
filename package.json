@@ -28,6 +28,7 @@
     "connectkit": "^1.4.0",
     "decimal.js": "^10.4.3",
     "ethers": "v5.x.x",
+    "framer-motion": "^10.12.21",
     "i18next": "^23.2.11",
     "lucide-react": "^0.259.0",
     "moment": "^2.29.4",

@@ -57,7 +57,9 @@ export function RegionSelector() {
         <span className="mt-[5px]">
           {getRegionIcon(currentRegion || "")({ width: 20 })}
         </span>
-        <span className="font-normal text-lg mt-[1px]">{currentRegion}</span>
+        <span className="font-normal text-lg mt-[1px] tracking-wider">
+          {currentRegion}
+        </span>
         <div className="pl-1 flex items-center border-input-separator border-l relative">
           {open ? <ChevronUp /> : <ChevronDown />}
         </div>
