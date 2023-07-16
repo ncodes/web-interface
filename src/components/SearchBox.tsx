@@ -14,6 +14,8 @@ import {
 import { Input } from "./ui/Input.tsx";
 import { IconSearch } from "./icons/IconSearch.tsx";
 import { useMediaQuery } from "usehooks-ts";
+import useStore from "../hooks/store/useStore.ts";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 function SearchBoxItem() {
   return (
@@ -200,12 +202,19 @@ function SearchInput(props: {
   );
 }
 
-export function ButtonActivatedSearchSheetBox(props: {
-  children: React.ReactNode;
+export function SearchSheetBox(props: {
+  children?: React.ReactNode;
+  open?: boolean;
+  onOpen?: (open: boolean) => void;
 }) {
   const isTablet = useMediaQuery("(min-width: 768px)");
   const [focus, setFocus] = useState(false);
   const [open, setOpen] = useState(false);
+  const toggleSearchSheetOpen = useStore((s) => s.toggleSearchSheetOpen);
+
+  useEffect(() => {
+    setOpen(props.open ?? false);
+  }, [props.open]);
 
   useEffect(() => {
     if (isTablet) setOpen(false);
@@ -214,8 +223,10 @@ export function ButtonActivatedSearchSheetBox(props: {
   return (
     <Sheet
       open={open}
+      modal={false}
       onOpenChange={(open) => {
         setOpen(open);
+        props.onOpen && props.onOpen(open);
       }}
     >
       <SheetTrigger>{props.children}</SheetTrigger>
@@ -237,6 +248,15 @@ export function ButtonActivatedSearchSheetBox(props: {
         </SheetHeader>
         <div className="px-1 text-white pt-2 h-full">
           <SearchContent />
+        </div>
+        <div
+          className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+          onClick={() => {
+            toggleSearchSheetOpen && toggleSearchSheetOpen();
+          }}
+        >
+          <Cross2Icon className="h-6 w-6" />
+          <span className="sr-only">Close</span>
         </div>
       </SheetContent>
     </Sheet>

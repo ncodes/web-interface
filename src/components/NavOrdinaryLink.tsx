@@ -13,11 +13,11 @@ export function NavOrdinaryLink(props: {
       onClick={props.onClick}
       href={props.href}
       className={cn(
-        "outline-0 ring-0 flex items-center gap-3 font-light text-[17px] py-2 text-muted-foreground hover:text-white transition-all duration-500 hover:ml-[2px]",
+        "outline-0 ring-0 flex items-center gap-3 font-light text-[17px] py-2 text-muted-foreground hover:text-white transition-all duration-500 md:hover:ml-[2px]",
         props.className
       )}
     >
-      {props.svg && <span className=" w-[20px] -ml-1">{props.svg}</span>}
+      {props.svg && <span>{props.svg}</span>}
       <span>{props.label}</span>
     </a>
   );

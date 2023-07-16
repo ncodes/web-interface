@@ -4,10 +4,13 @@ import { LeftSidebar } from "../../components/LeftSidebar.tsx";
 import { useCallback, useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { Header } from "../../components/Header.tsx";
+import { SearchSheetBox } from "../../components/SearchBox.tsx";
+import useStore from "../../hooks/store/useStore.ts";
 
 export default function Index() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLargeLaptop = useMediaQuery("(min-width: 1280px)");
+  const searchSheetOpen = useStore((state) => state.searchSheetOpen);
 
   useEffect(() => {
     setMobileMenuOpen(isLargeLaptop);
@@ -43,6 +46,8 @@ export default function Index() {
             </div>
           </div>
         </div>
+
+        <SearchSheetBox open={searchSheetOpen} />
       </div>
     </>
   );

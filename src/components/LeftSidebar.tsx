@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 import { IconQuestionCircle } from "./NavHelpButton.tsx";
 
-import { IconSearch } from "./icons/IconSearch.tsx";
 import { LanguageSelectorMobile } from "./LanguageSelector.tsx";
-import { ButtonActivatedSearchSheetBox } from "./SearchBox.tsx";
 import { IconDoubleChevronBack } from "./icons/IconDoubleChevronBack.tsx";
+import { IconSearch } from "./icons/IconSearch.tsx";
+import useStore from "../hooks/store/useStore.ts";
 
 function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
   return (
@@ -28,6 +28,7 @@ export function LeftSidebar(props: {
   closeRequested: () => void;
 }) {
   const [openOverlay, setOpenOverlay] = useState(props.open);
+  const toggleSearchSheetOpen = useStore((s) => s.toggleSearchSheetOpen);
 
   useEffect(() => {
     setOpenOverlay(props.open);
@@ -38,7 +39,7 @@ export function LeftSidebar(props: {
       <Overlay
         open={openOverlay}
         onClick={() => {
-          if (props.closeRequested) props.closeRequested();
+          props.closeRequested && props.closeRequested();
         }}
       />
       <div
@@ -62,15 +63,16 @@ export function LeftSidebar(props: {
           </div>
         </header>
 
-        <div className="md:hidden pl-8 py-3 mt-5 border-b border-gray-800">
-          <ButtonActivatedSearchSheetBox>
-            <NavOrdinaryLink
-              href="#"
-              label="Search"
-              svg={<IconSearch />}
-              className="py-0"
-            />
-          </ButtonActivatedSearchSheetBox>
+        <div className="md:hidden pl-7 py-3 mt-5 border-b border-gray-800">
+          <NavOrdinaryLink
+            href="#"
+            label="Search"
+            svg={<IconSearch width="20" />}
+            className="py-0"
+            onClick={() => {
+              toggleSearchSheetOpen && toggleSearchSheetOpen();
+            }}
+          />
         </div>
 
         <Navigation />
