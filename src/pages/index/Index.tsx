@@ -5,12 +5,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { Header } from "../../components/Header.tsx";
 import { SearchSheetBox } from "../../components/SearchBox.tsx";
-import useStore from "../../hooks/store/useStore.ts";
+import { NotificationSheet } from "../../components/NotificationSheet.tsx";
 
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLargeLaptop = useMediaQuery("(min-width: 1280px)");
-  const searchSheetOpen = useStore((state) => state.searchSheetOpen);
 
   useEffect(() => {
     setMobileMenuOpen(isLargeLaptop);
@@ -47,7 +46,8 @@ export default function Index() {
           </div>
         </div>
 
-        <SearchSheetBox open={searchSheetOpen} />
+        <SearchSheetBox />
+        <NotificationSheet />
       </div>
     </>
   );

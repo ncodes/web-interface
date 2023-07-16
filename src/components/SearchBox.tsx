@@ -204,17 +204,17 @@ function SearchInput(props: {
 
 export function SearchSheetBox(props: {
   children?: React.ReactNode;
-  open?: boolean;
   onOpen?: (open: boolean) => void;
 }) {
   const isTablet = useMediaQuery("(min-width: 768px)");
   const [focus, setFocus] = useState(false);
   const [open, setOpen] = useState(false);
+  const searchSheetOpen = useStore((state) => state.searchSheetOpen);
   const toggleSearchSheetOpen = useStore((s) => s.toggleSearchSheetOpen);
 
   useEffect(() => {
-    setOpen(props.open ?? false);
-  }, [props.open]);
+    setOpen(searchSheetOpen ?? open);
+  }, [searchSheetOpen]);
 
   useEffect(() => {
     if (isTablet) setOpen(false);
