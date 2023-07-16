@@ -74,7 +74,7 @@ export function NetworkSelector() {
             <span className="hidden md:inline">
               {curChain?.shortName || curChain?.name}
             </span>
-            <span className="relative -left-1 top-[2px]">
+            <span className="relative -left-1 top-[0px]">
               {open ? <ChevronUp /> : <ChevronDown />}
             </span>
           </div>
