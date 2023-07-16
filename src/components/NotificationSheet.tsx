@@ -19,9 +19,9 @@ import {
 
 function NotificationItem() {
   return (
-    <Card className="w-full shrink-0 border border-card-border bg-card-background shadow-gray-900 shadow-lg">
-      <CardHeader className="p-0">
-        <CardTitle className="text-gray-300 text-xs tracking-wide p-2 px-3 font-medium border-b border-gray-800">
+    <Card className="w-full shrink-0 border border-card-border bg-card-background shadow-gray-900 shadow-lg hover:border-gray-600 transition-all duration-500 cursor-pointer">
+      <CardHeader className="p-0 ">
+        <CardTitle className="text-gray-300 text-xs tracking-wide p-2 px-3 font-medium border-b border-gray-800 cursor-pointer">
           NEW ORDER
         </CardTitle>
       </CardHeader>
