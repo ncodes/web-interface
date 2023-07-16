@@ -28,10 +28,10 @@ function NotificationItem() {
       <CardContent className="p-2 px-3 text-white font-extralight text-sm">
         A new swap was created for your liquidity.
       </CardContent>
-      <CardFooter className="border-t border-gray-800 p-0  font-light text-sm text-center">
+      <CardFooter className="border-t border-gray-800 p-0  font-light text-xs text-center">
         <a
           href="#"
-          className="text-chinese-green block rounded-b-xl w-full py-1 px-3 hover:text-gray-800 hover:bg-chinese-green  transition-all duration-500 "
+          className="text-chinese-green block rounded-b-xl w-full py-1 px-3 hover:text-gray-200 hover:bg-gray-800  transition-all duration-500 "
         >
           View Order
         </a>
