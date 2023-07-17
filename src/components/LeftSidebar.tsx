@@ -10,6 +10,7 @@ import { LanguageSelectorMobile } from "./LanguageSelector.tsx";
 import { IconDoubleChevronBack } from "./icons/IconDoubleChevronBack.tsx";
 import { IconSearch } from "./icons/IconSearch.tsx";
 import useStore from "../hooks/store/useStore.ts";
+import { DefaultSettingsSheetTab } from "./SettingsSheet.tsx";
 
 function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
   return (
@@ -29,6 +30,7 @@ export function LeftSidebar(props: {
 }) {
   const [openOverlay, setOpenOverlay] = useState(props.open);
   const toggleSearchSheetOpen = useStore((s) => s.toggleSearchSheetOpen);
+  const toggleSettingsSheetOpen = useStore((s) => s.toggleSettingsSheetOpen);
 
   useEffect(() => {
     setOpenOverlay(props.open);
@@ -83,6 +85,10 @@ export function LeftSidebar(props: {
             label="Settings"
             svg={<IconSettingsOutline />}
             className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]"
+            onClick={() => {
+              toggleSettingsSheetOpen &&
+                toggleSettingsSheetOpen(DefaultSettingsSheetTab);
+            }}
           />
           <NavOrdinaryLink
             href="#"
