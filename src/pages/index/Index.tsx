@@ -6,6 +6,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { Header } from "../../components/Header.tsx";
 import { SearchSheetBox } from "../../components/SearchBox.tsx";
 import { NotificationSheet } from "../../components/NotificationSheet.tsx";
+import { UnlinkedAccountNotice } from "../../components/UnlinkedAccountNotice.tsx";
 
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,7 +39,9 @@ export default function Index() {
           <Header onClick={openMobileMenu} />
           <div className="flex flex-1 pt-5">
             <div className="flex flex-col flex-1">
-              <div className="h-full border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black"></div>
+              <div className="h-full border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black">
+                <UnlinkedAccountNotice />
+              </div>
             </div>
             <div className="w-[400px] px-5 pr-0 hidden xl:block">
               <ActivityStream />

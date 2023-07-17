@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "./ui/sheet.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { ScrollArea } from "./ui/scroll-area.tsx";
+import { ScrollArea, ScrollAreaHorizontal } from "./ui/scroll-area.tsx";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs.tsx";
 import {
   Card,
@@ -27,6 +27,12 @@ import useConnector from "../hooks/connectors/useConnector.tsx";
 import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 import IconDisconnect from "./icons/IconDisconnect.tsx";
 import { Input } from "./ui/Input.tsx";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion.tsx";
 
 function BalanceCard(props: {
   symbol?: string;
@@ -101,8 +107,8 @@ function TabContentHeader(props: { address: string }) {
 
 function MyWalletFooter(props: { openWalletManager: () => void }) {
   const { disconnect } = useConnector();
-  const toggleMyWalletSheetOpen = useStore(
-    (state) => state.toggleMyWalletSheetOpen
+  const toggleSettingsSheetOpen = useStore(
+    (state) => state.toggleSettingsSheetOpen
   );
 
   return (
@@ -123,7 +129,7 @@ function MyWalletFooter(props: { openWalletManager: () => void }) {
           className="select-none"
           onClick={async () => {
             await disconnect();
-            toggleMyWalletSheetOpen && toggleMyWalletSheetOpen();
+            toggleSettingsSheetOpen && toggleSettingsSheetOpen();
           }}
         >
           Disconnect
@@ -133,10 +139,7 @@ function MyWalletFooter(props: { openWalletManager: () => void }) {
   );
 }
 
-function BalancesTab(props: {
-  address: string;
-  openWalletManager: () => void;
-}) {
+function BalancesTab(props: { address: string }) {
   return (
     <TabsContent value="balances" className="p-0 mt-0 h-full">
       <TabContentHeader address={props.address} />
@@ -154,12 +157,11 @@ function BalancesTab(props: {
           </div>
         </div>
       </ScrollArea>
-      <MyWalletFooter openWalletManager={props.openWalletManager} />
     </TabsContent>
   );
 }
 
-function FeePouchTab(props: { openWalletManager: () => void }) {
+function FeePouchTab() {
   return (
     <TabsContent value="fee-purse" className="w-full h-full mt-3 px-0">
       <div className="flex flex-col px-5">
@@ -183,28 +185,74 @@ function FeePouchTab(props: { openWalletManager: () => void }) {
           </div>
         </div>
       </div>
-      <MyWalletFooter openWalletManager={props.openWalletManager} />
     </TabsContent>
   );
 }
 
-export function MyWalletSheet(props: {
+function AccountTab() {
+  return (
+    <TabsContent value="account" className="w-full h-full px-0">
+      <div className="pt-2">
+        <Accordion type="single" collapsible value="link-account">
+          <AccordionItem value="link-account">
+            <AccordionTrigger className="px-5 text-xl pb-2 tracking-wide">
+              Link Account
+            </AccordionTrigger>
+            <AccordionContent className="px-5 tracking-wide">
+              <div className="font-light text-gray-400 text-sm">
+                Link your wallet to your email account to receive trade
+                notifications and important news.
+              </div>
+              <div className="flex border border-gray-800 items-center gap-2 font-light text-xs text-gray-400 bg-gray-900 p-2 mt-3 rounded">
+                <span className="text-chinese-green">
+                  <IconInfoCircle />
+                </span>
+                <span>
+                  A signature request will be initiated. No gas fee or
+                  blockchain transaction is required.
+                </span>
+              </div>
+              <div className="flex gap-2 mt-4">
+                <Input
+                  type="email"
+                  variant="primary"
+                  placeholder="satoshi@btc.com"
+                />
+                <Button variant="default" rounded="md" size="sm">
+                  Authorize
+                </Button>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </TabsContent>
+  );
+}
+
+export type SettingsSheetTab = "balances" | "fee-purse" | "account";
+export const DefaultSettingsSheetTab = "balances";
+
+export function SettingsSheet(props: {
   children?: React.ReactNode;
   onOpen?: (open: boolean) => void;
   openWalletManager?: () => void;
 }) {
   const { address } = useConnector();
-  const myWalletSheetOpen = useStore((state) => state.myWalletSheetOpen);
-  const toggleMyWalletSheetOpen = useStore(
-    (state) => state.toggleMyWalletSheetOpen
+  const settingsSheetOpen = useStore((state) => state.settingsSheetOpen);
+  const settingsSheetActiveTab = useStore(
+    (state) => state.settingsSheetActiveTab
+  );
+  const toggleSettingsSheetOpen = useStore(
+    (state) => state.toggleSettingsSheetOpen
   );
 
   return (
     <Sheet
-      open={myWalletSheetOpen}
+      open={settingsSheetOpen}
       onOpenChange={(open) => {
         props.onOpen && props.onOpen(open);
-        toggleMyWalletSheetOpen && toggleMyWalletSheetOpen();
+        toggleSettingsSheetOpen && toggleSettingsSheetOpen();
       }}
     >
       <SheetTrigger>{props.children}</SheetTrigger>
@@ -215,39 +263,43 @@ export function MyWalletSheet(props: {
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">
             <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
-              My Wallet
+              Settings
             </SheetTitle>
           </div>
         </SheetHeader>
         <div className="px-0 text-white h-full pb-10">
           <Tabs
-            defaultValue="balances"
+            defaultValue={settingsSheetActiveTab || "balances"}
             className="w-full h-full transition-all duration-500"
           >
-            <TabsList className="justify-start px-5 pt-2 border-b border-modal-border">
-              <TabsTrigger
-                value="balances"
-                className="font-normal text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-[12px] data-[state=active]:font-normal"
-              >
-                Balances
-              </TabsTrigger>
-              <TabsTrigger
-                value="fee-purse"
-                className="font-normal text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-[12px] data-[state=active]:font-normal"
-              >
-                Fee Pouch
-              </TabsTrigger>
-            </TabsList>
-            <BalancesTab
-              address={address}
+            <ScrollAreaHorizontal type="scroll">
+              <TabsList className="justify-start px-3 pt-2 border-b border-modal-border">
+                <TabsTrigger
+                  value="balances"
+                  className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                >
+                  Balances
+                </TabsTrigger>
+                <TabsTrigger
+                  value="fee-purse"
+                  className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                >
+                  Fee Pouch
+                </TabsTrigger>
+                <TabsTrigger
+                  value="account"
+                  className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                >
+                  Account
+                </TabsTrigger>
+              </TabsList>
+            </ScrollAreaHorizontal>
+            <BalancesTab address={address} />
+            <FeePouchTab />
+            <AccountTab />
+            <MyWalletFooter
               openWalletManager={() => {
-                toggleMyWalletSheetOpen && toggleMyWalletSheetOpen();
-                props.openWalletManager && props.openWalletManager();
-              }}
-            />
-            <FeePouchTab
-              openWalletManager={() => {
-                toggleMyWalletSheetOpen && toggleMyWalletSheetOpen();
+                toggleSettingsSheetOpen && toggleSettingsSheetOpen();
                 props.openWalletManager && props.openWalletManager();
               }}
             />
@@ -256,7 +308,7 @@ export function MyWalletSheet(props: {
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {
-            toggleMyWalletSheetOpen && toggleMyWalletSheetOpen();
+            toggleSettingsSheetOpen && toggleSettingsSheetOpen();
           }}
         >
           <Cross2Icon className="h-6 w-6" />

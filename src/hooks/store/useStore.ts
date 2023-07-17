@@ -1,5 +1,9 @@
 import create from "zustand";
 import { defaultRegion } from "../../components/region/constants.ts";
+import {
+  DefaultSettingsSheetTab,
+  SettingsSheetTab,
+} from "../../components/SettingsSheet.tsx";
 
 export interface IStore {
   currentRegion?: string;
@@ -14,8 +18,9 @@ export interface IStore {
   toggleNotifSheetOpen?: () => void;
 
   // MyWallet sheet state
-  myWalletSheetOpen?: boolean;
-  toggleMyWalletSheetOpen?: () => void;
+  settingsSheetOpen?: boolean;
+  toggleSettingsSheetOpen?: (tab?: SettingsSheetTab) => void;
+  settingsSheetActiveTab?: SettingsSheetTab;
 }
 
 const useStore = create<IStore>((set, get) => ({
@@ -28,9 +33,15 @@ const useStore = create<IStore>((set, get) => ({
   notifSheetOpen: false,
   toggleNotifSheetOpen: () => set({ notifSheetOpen: !get().notifSheetOpen }),
 
-  myWalletSheetOpen: false,
-  toggleMyWalletSheetOpen: () =>
-    set({ myWalletSheetOpen: !get().myWalletSheetOpen }),
+  settingsSheetOpen: false,
+  settingsSheetActiveTab: "balances",
+  toggleSettingsSheetOpen: (tab?: SettingsSheetTab) =>
+    set({
+      settingsSheetOpen: !get().settingsSheetOpen,
+      settingsSheetActiveTab: !tab
+        ? DefaultSettingsSheetTab
+        : tab || get().settingsSheetActiveTab,
+    }),
 }));
 
 export default useStore;

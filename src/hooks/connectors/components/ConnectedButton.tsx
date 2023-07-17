@@ -6,7 +6,7 @@ import {
   shortenAddress,
   shortenAddress2,
 } from "../../../libs/helpers.ts";
-import { MyWalletSheet } from "../../../components/MyWalletSheet.tsx";
+import { SettingsSheet } from "../../../components/SettingsSheet.tsx";
 import useStore from "../../store/useStore.ts";
 
 // Component for rendering amount and symbol
@@ -31,8 +31,8 @@ export const ConnectedButton = (props: ConnectedProps) => {
     address,
     watch: true,
   });
-  const toggleMyWalletSheetOpen = useStore(
-    (state) => state.toggleMyWalletSheetOpen
+  const toggleSettingsSheetOpen = useStore(
+    (state) => state.toggleSettingsSheetOpen
   );
 
   return (
@@ -40,7 +40,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
       <div
         className="flex [&>*]:cursor-pointer items-center justify-between  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-3 xs:pr-1"
         onClick={() => {
-          toggleMyWalletSheetOpen && toggleMyWalletSheetOpen();
+          toggleSettingsSheetOpen && toggleSettingsSheetOpen();
         }}
       >
         <p
@@ -65,7 +65,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
         </div>
       </div>
       <div className="absolute">
-        <MyWalletSheet openWalletManager={props.openWalletModal} />
+        <SettingsSheet openWalletManager={props.openWalletModal} />
       </div>
     </div>
   );
