@@ -12,13 +12,13 @@ export function Header(props: { onClick: () => void }) {
     <header className="flex items-center">
       <MobileMenuActivator onClick={props.onClick} />
       <InputActivatedSearchBox />
-      <div className="flex-1 flex justify-end items-center gap-4 mt-1">
+      <div className="flex-1 flex justify-end items-center gap-4">
         <NavSearchButton />
         <LanguageSelector />
         <NavHelpButton />
         <NavNotificationButton />
         <NetworkSelector />
-        <ConnectWalletButton className="hidden lg:block max-[300px]" />
+        <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
         <ConnectWalletButton
           className="lg:hidden xs:min-w-[120px]"
           label="Connect"

@@ -12,15 +12,25 @@ export interface IStore {
   // Notification sheet state
   notifSheetOpen?: boolean;
   toggleNotifSheetOpen?: () => void;
+
+  // MyWallet sheet state
+  myWalletSheetOpen?: boolean;
+  toggleMyWalletSheetOpen?: () => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
   currentRegion: localStorage.getItem("region") || defaultRegion,
   setCurrentRegion: (region: string) => set({ currentRegion: region }),
+
   searchSheetOpen: false,
   toggleSearchSheetOpen: () => set({ searchSheetOpen: !get().searchSheetOpen }),
+
   notifSheetOpen: false,
   toggleNotifSheetOpen: () => set({ notifSheetOpen: !get().notifSheetOpen }),
+
+  myWalletSheetOpen: false,
+  toggleMyWalletSheetOpen: () =>
+    set({ myWalletSheetOpen: !get().myWalletSheetOpen }),
 }));
 
 export default useStore;

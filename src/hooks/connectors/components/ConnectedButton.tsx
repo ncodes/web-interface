@@ -6,8 +6,8 @@ import {
   shortenAddress,
   shortenAddress2,
 } from "../../../libs/helpers.ts";
-import ModalMyWallet from "../../../components/modals/ModalMyWallet.tsx";
-import { useState } from "react";
+import { MyWalletSheet } from "../../../components/MyWalletSheet.tsx";
+import useStore from "../../store/useStore.ts";
 
 // Component for rendering amount and symbol
 function Amount(props: { balance: string; symbol: string }) {
@@ -26,19 +26,21 @@ interface ConnectedProps {
 }
 
 export const ConnectedButton = (props: ConnectedProps) => {
-  const [openMyWalletModal, setOpenMyWalletModal] = useState(false);
   const { address } = useAccount();
   const balance = useBalance({
     address,
     watch: true,
   });
+  const toggleMyWalletSheetOpen = useStore(
+    (state) => state.toggleMyWalletSheetOpen
+  );
 
   return (
     <div>
       <div
         className="flex [&>*]:cursor-pointer items-center justify-between  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-3 xs:pr-1"
         onClick={() => {
-          setOpenMyWalletModal(true);
+          toggleMyWalletSheetOpen && toggleMyWalletSheetOpen();
         }}
       >
         <p
@@ -62,13 +64,9 @@ export const ConnectedButton = (props: ConnectedProps) => {
           <Avatar size={AvatarSize.Small} randomStr={address as string} />
         </div>
       </div>
-      <ModalMyWallet
-        open={openMyWalletModal}
-        openWalletManager={props.openWalletModal}
-        onOpenChange={(open) => {
-          setOpenMyWalletModal(open);
-        }}
-      />
+      <div className="absolute">
+        <MyWalletSheet openWalletManager={props.openWalletModal} />
+      </div>
     </div>
   );
 };
