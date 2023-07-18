@@ -1,219 +1,187 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/Tabs.tsx";
 import { PairAvatar } from "./region/PairAvatar.tsx";
 import moment from "moment";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card.tsx";
+import { ScrollAreaHorizontal } from "./ui/scroll-area.tsx";
 
 function PopularMarketRow(props: {
-  pair: string;
+  base: string;
+  quote: string;
   liq: string;
   price: string;
   vol: string;
 }) {
   return (
-    <div className="flex gap-x-4 mb-4 pt-4 cursor-pointer hover:opacity-80 text-[14px]">
+    <div className="flex gap-x-4 px-3 py-2 cursor-pointer hover:opacity-80 text-[14px]">
       <PairAvatar
         baseSrc="/images/icons/asset-icons/btc.svg"
         quoteSrc="/images/icons/asset-icons/uni.svg"
       />
-      <div>
-        <div className="font-medium tracking-wider text-gray-200 text-[14px]">
-          {props.pair}
-        </div>
-        <div className="text-gray-400 font-light tracking-wide">
-          Liq: <span className="text-gray-300 font-normal">{props.liq}</span>
+      <div className="flex items-center w-[70px]">
+        <div className="flex flex-col font-normal tracking-wider text-gray-200 text-[13px]">
+          <span>{props.base}</span>
+          <span>{props.quote}</span>
         </div>
       </div>
-      <div className="flex-1 text-right">
-        <div className="text-gray-400 font-light tracking-wide">
-          Price:{" "}
-          <span className="text-chinese-green font-normal">{props.price}</span>
+      <ScrollAreaHorizontal className="flex-1">
+        <div className="flex-1 flex gap-2 text-right justify-end">
+          <Card className="w-[80px] xxs:w-[100px] text-right shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg">
+            <CardHeader className="px-3 py-2 pb-0">
+              <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex justify-end gap-2">
+                <span>Price</span>
+                <span className="text-green-400 hidden xxs:inline">(+10%)</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-3 py-0 pb-2 tracking-wide text-chinese-green">
+              $1,234
+            </CardContent>
+          </Card>
+          <Card className="hidden md:inline w-[83px] shrink-0 text-right border border-card-border bg-card-background shadow-gray-900  shadow-lg">
+            <CardHeader className="px-3 py-2 pb-0">
+              <CardTitle className="text-xs tracking-wider font-light text-gray-400">
+                <span>24hr Vol.</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-white px-3 py-0 pb-2 tracking-wide">
+              $23m
+            </CardContent>
+          </Card>
         </div>
-        <div className="text-gray-400 font-light tracking-wide">
-          Vol: <span className="text-gray-300 font-normal">{props.vol}</span>
-        </div>
-      </div>
+      </ScrollAreaHorizontal>
     </div>
   );
 }
 
 function RecentTradeRow(props: {
-  pair: string;
+  base: string;
+  quote: string;
   time: string;
   price: string;
   qty: string;
 }) {
   return (
-    <div className="flex gap-x-4 mb-4 pt-4 cursor-pointer hover:opacity-80 text-[14px]">
+    <div className="flex gap-x-4 py-2 cursor-pointer hover:opacity-80 text-[14px] px-3">
       <PairAvatar
         baseSrc="/images/icons/asset-icons/btc.svg"
         quoteSrc="/images/icons/asset-icons/uni.svg"
       />
-      <div>
-        <div className="font-medium tracking-wider text-gray-200 text-[14px]">
-          {props.pair}
-        </div>
-        <div className="text-gray-400 font-light tracking-wide">
-          {moment(props.time).fromNow()}
+      <div className="flex items-center">
+        <div className="flex flex-col font-normal tracking-wider text-gray-200 text-[13px]">
+          <span>{props.base}</span>
+          <span>{props.quote}</span>
         </div>
       </div>
-      <div className="flex-1 text-right">
-        <div className="text-gray-400 font-light tracking-wide">
-          Price:{" "}
-          <span className="text-chinese-green font-normal">{props.price}</span>
+      <ScrollAreaHorizontal className="flex-1">
+        <div className="flex-1 flex gap-2 text-right justify-end">
+          <Card className="w-[80px] xxs:w-[100px] text-right shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg">
+            <CardHeader className="px-3 py-2 pb-0">
+              <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex justify-end gap-2">
+                <span>Price</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-3 py-0 pb-2 tracking-wide text-chinese-green">
+              $1,234
+            </CardContent>
+          </Card>
+          <Card className="hidden md:inline w-[83px] shrink-0 text-right border border-card-border bg-card-background shadow-gray-900  shadow-lg">
+            <CardHeader className="px-3 py-2 pb-0">
+              <CardTitle className="text-xs tracking-wider font-light text-gray-400">
+                <span>Qty.</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-white px-3 py-0 pb-2 tracking-wide">
+              3,400
+            </CardContent>
+          </Card>
         </div>
-        <div className="text-gray-400 font-light tracking-wide">
-          Qty: <span className="text-gray-300 font-normal">{props.qty}</span>
-        </div>
-      </div>
+      </ScrollAreaHorizontal>
     </div>
   );
 }
 
 export function ActivityStream() {
   return (
-    <div className="flex h-full flex-col justify-between mt-5">
-      <div className="border-b flex-1 pb-4 border-gray-800">
-        <Tabs defaultValue="popular-market" className="w-full h-full">
-          <TabsList>
-            <TabsTrigger value="popular-market">Popular Markets</TabsTrigger>
-            <TabsTrigger value="recent-trades" className="text-right">
-              Recent Trades
-            </TabsTrigger>
-          </TabsList>
+    <div className="flex flex-col justify-between mt-5 xl:mt-2">
+      <div className="border-b flex-1 border-gray-900">
+        <h1 className="text-lg md:text-xl mb-3">Top Markets</h1>
+        <div className="divide-y bg-card-background border border-gray-800 rounded-2xl divide-gray-800 ">
+          <PopularMarketRow
+            base="BTC"
+            quote="UNI"
+            liq="$3.5m"
+            price="$12.5k"
+            vol="$22.4m"
+          />
+          <PopularMarketRow
+            base="BTC"
+            quote="UNI"
+            liq="$3.5m"
+            price="$12.5k"
+            vol="$22.4m"
+          />
+          <PopularMarketRow
+            base="BTC"
+            quote="UNI"
+            liq="$3.5m"
+            price="$12.5k"
+            vol="$22.4m"
+          />
+          <PopularMarketRow
+            base="BTC"
+            quote="UNI"
+            liq="$3.5m"
+            price="$12.5k"
+            vol="$22.4m"
+          />
+          <PopularMarketRow
+            base="BTC"
+            quote="UNI"
+            liq="$3.5m"
+            price="$12.5k"
+            vol="$22.4m"
+          />
+        </div>
 
-          <TabsContent
-            value="popular-market"
-            className="space-y-4 divide-y h-full divide-gray-800"
-          >
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$3.5m"
-              price="$12.5k"
-              vol="$22.4m"
-            />
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />{" "}
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />{" "}
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />
-            <PopularMarketRow
-              pair="BTC - UNI"
-              liq="$4.32m"
-              price="$320"
-              vol="$12.2m"
-            />
-          </TabsContent>
-
-          <TabsContent value="recent-trades">
+        <div className="flex-1 pb-4 border-gray-800 mt-5">
+          <h1 className="text-lg md:text-xl mb-3">Recent Swaps</h1>
+          <div className="divide-y bg-card-background border border-gray-800 rounded-2xl divide-gray-800 ">
             <RecentTradeRow
-              pair="BTC - UNI"
+              base="BTC"
+              quote="UNI"
               time={moment().subtract(1, "hour").toISOString()}
               price="$320"
               qty="4,354"
             />
             <RecentTradeRow
-              pair="BTC - UNI"
+              base="BTC"
+              quote="UNI"
               time={moment().subtract(1, "hour").toISOString()}
               price="$320"
               qty="4,354"
             />
             <RecentTradeRow
-              pair="BTC - UNI"
+              base="BTC"
+              quote="UNI"
               time={moment().subtract(1, "hour").toISOString()}
               price="$320"
               qty="4,354"
             />
             <RecentTradeRow
-              pair="BTC - UNI"
+              base="BTC"
+              quote="UNI"
               time={moment().subtract(1, "hour").toISOString()}
               price="$320"
               qty="4,354"
             />
             <RecentTradeRow
-              pair="BTC - UNI"
+              base="BTC"
+              quote="UNI"
               time={moment().subtract(1, "hour").toISOString()}
               price="$320"
               qty="4,354"
             />
-            <RecentTradeRow
-              pair="BTC - UNI"
-              time={moment().subtract(1, "hour").toISOString()}
-              price="$320"
-              qty="4,354"
-            />
-            <RecentTradeRow
-              pair="BTC - UNI"
-              time={moment().subtract(1, "hour").toISOString()}
-              price="$320"
-              qty="4,354"
-            />
-            <RecentTradeRow
-              pair="BTC - UNI"
-              time={moment().subtract(1, "hour").toISOString()}
-              price="$320"
-              qty="4,354"
-            />
-            <RecentTradeRow
-              pair="BTC - UNI"
-              time={moment().subtract(1, "hour").toISOString()}
-              price="$320"
-              qty="4,354"
-            />
-            <RecentTradeRow
-              pair="BTC - UNI"
-              time={moment().subtract(1, "hour").toISOString()}
-              price="$320"
-              qty="4,354"
-            />
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
-
-      <footer className="flex py-10 pt-4 px-0 flex-col gap-2 ">
-        <div className="font-light text-[14px] text-gray-400 hover:[&>a]:text-gray-100 transition-all">
-          <a href="#">Terms of Service</a> - <a href="#">Privacy Policy</a> -{" "}
-          <a href="#">Protocol Disclaimer</a>
-        </div>
-        <div className="font-light text-xs text-gray-400 hover:[&>a]:text-gray-100 transition-all">
-          &copy; 2023 Joint Labs
-        </div>
-      </footer>
     </div>
   );
 }

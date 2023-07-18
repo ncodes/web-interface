@@ -130,7 +130,7 @@ export default function SearchBox(props: {
   }, [props.open]);
 
   return (
-    <div className="hidden md:block">
+    <div className="hidden md:block z-10">
       {open && (
         <div
           className="fixed w-full h-full top-0 left-0 right-0"

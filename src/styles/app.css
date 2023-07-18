@@ -75,7 +75,7 @@
     }
 
     .container-x {
-        @apply lg:w-full mx-auto px-5 md:px-10 ;
+        @apply lg:w-full mx-auto px-2 xxs:px-5 md:px-10 ;
     }
 
     .toast-modal {
