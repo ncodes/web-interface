@@ -1,0 +1,2 @@
+export const StoreAccessTokenKey = "access_token";
+export const StoreEmailKey = "email";

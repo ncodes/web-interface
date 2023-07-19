@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../libs/utils.ts";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center text-sm font-medium " +
+  "select-none inline-flex items-center justify-center text-sm font-medium " +
     "transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring " +
     "disabled:pointer-events-none disabled:opacity-50 tracking-wider",
   {
@@ -19,7 +19,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground font-light",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary hover:opacity-90",
       },
       rounded: {
         default: "rounded-full",

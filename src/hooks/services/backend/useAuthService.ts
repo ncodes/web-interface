@@ -1,21 +1,33 @@
+import { handleAxiosError } from "../../../libs/helpers.ts";
+import axios from "axios";
+
 /**
  * useAuthService provides access to v1/auth endpoint
  */
 export function useAuthService() {
-  // /**
-  //  * Get the signed state string for OAuth2 state parameter
-  //  */
-  // async function getOAuthState(): Promise<string> {
-  //   try {
-  //     const resp = await axios({
-  //       method: "get",
-  //       url: `${import.meta.env.VITE_API_URI}/v1/auth/oauth-state`,
-  //     });
-  //     return Promise.resolve(resp.data.data.state);
-  //   } catch (e) {
-  //     return Promise.reject(handleAxiosError(e));
-  //   }
-  // }
+  /**
+   * auth registers a new user and links their wallet address to their email
+   * @param message - The message that was signed
+   * @param signature - The signature derived from the message
+   */
+  async function auth(
+    message: string,
+    signature: string
+  ): Promise<{ token: string; user: User }> {
+    try {
+      const resp = await axios({
+        method: "post",
+        url: `${import.meta.env.VITE_API_URI}/v1/auth`,
+        headers: { "Content-Type": "application/json" },
+        data: JSON.stringify({ msg: message, sig: signature }),
+      });
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e));
+    }
+  }
 
-  return {};
+  return {
+    auth,
+  };
 }

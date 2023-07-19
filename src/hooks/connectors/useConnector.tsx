@@ -116,6 +116,7 @@ export default function useConnector() {
       const sig = await signMessageAsync({ message: msg });
       return Promise.resolve(sig);
     } catch (error) {
+      console.error(error);
       return Promise.reject(new Error(`User rejected the signing request`));
     }
   }

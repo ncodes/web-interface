@@ -33,6 +33,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion.tsx";
+import { LinkAccountSetting } from "./LinkAccountSetting.tsx";
 
 function BalanceCard(props: {
   symbol?: string;
@@ -112,7 +113,7 @@ function MyWalletFooter(props: { openWalletManager: () => void }) {
   );
 
   return (
-    <div className="absolute bottom-0 w-full p-5 border-t border-gray-600 bg-modal-background flex justify-between py-3 border-t border-modal-border/50">
+    <div className="absolute bottom-0 w-full p-5 border-gray-600 bg-modal-background flex justify-between py-3 border-t border-modal-border/50">
       <div className="flex items-center text-sm font-light gap-1 text-gray-400 hover:text-gray-300 transition-all duration-500 cursor-pointer">
         <span>
           <IconSettingsOutline />
@@ -199,29 +200,7 @@ function AccountTab() {
               Link Account
             </AccordionTrigger>
             <AccordionContent className="px-5 tracking-wide">
-              <div className="font-light text-gray-400 text-sm">
-                Link your wallet to your email account to receive trade
-                notifications and important news.
-              </div>
-              <div className="flex border border-gray-800 items-center gap-2 font-light text-xs text-gray-400 bg-gray-900 p-2 mt-3 rounded">
-                <span className="text-chinese-green">
-                  <IconInfoCircle />
-                </span>
-                <span>
-                  A signature request will be initiated. No gas fee or
-                  blockchain transaction is required.
-                </span>
-              </div>
-              <div className="flex gap-2 mt-4">
-                <Input
-                  type="email"
-                  variant="primary"
-                  placeholder="satoshi@btc.com"
-                />
-                <Button variant="default" rounded="md" size="sm">
-                  Authorize
-                </Button>
-              </div>
+              <LinkAccountSetting />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

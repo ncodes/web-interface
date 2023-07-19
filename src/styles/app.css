@@ -79,15 +79,15 @@
     }
 
     .toast-modal {
-        @apply px-4 py-4 pb-2 w-full md:w-[400px] lg:w-[450px] md:min-w-[310px] font-bold  break-all;
+        @apply px-4 py-4 pb-2 w-full md:w-[400px] lg:w-[450px] md:min-w-[310px] break-all;
         border-radius: 10px;
 
         .label {
-            @apply inline-block font-normal text-[18px] font-['Mitr'];
+            @apply inline-block font-normal text-[18px];
         }
 
         .message {
-            @apply font-['Mitr'] text-[17px] text-white font-normal;
+            @apply text-[17px] text-white font-light;
         }
 
         .links {

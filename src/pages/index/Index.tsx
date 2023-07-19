@@ -43,8 +43,8 @@ export default function Index() {
           <Header onClick={openMobileMenu} />
           <div className="flex flex-1 pt-5">
             <div className="flex-1 relative">
+              <UnlinkedAccountNotice />
               <div className="absolute z-0 min-h-full w-full h-auto border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black">
-                <UnlinkedAccountNotice />
                 <Tabs
                   defaultValue="home"
                   className="w-full h-full transition-all duration-500"

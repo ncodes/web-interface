@@ -17,13 +17,20 @@ export interface IStore {
   notifSheetOpen?: boolean;
   toggleNotifSheetOpen?: () => void;
 
-  // MyWallet sheet state
+  // Settings sheet state
   settingsSheetOpen?: boolean;
   toggleSettingsSheetOpen?: (tab?: SettingsSheetTab) => void;
   settingsSheetActiveTab?: SettingsSheetTab;
+
+  // LoadingBar state
+  loaderProgress?: number;
+  setLoaderProgress?: (progress: number) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
+  loaderProgress: 0,
+  setLoaderProgress: (progress: number) => set({ loaderProgress: progress }),
+
   currentRegion: localStorage.getItem("region") || defaultRegion,
   setCurrentRegion: (region: string) => set({ currentRegion: region }),
 
@@ -35,13 +42,12 @@ const useStore = create<IStore>((set, get) => ({
 
   settingsSheetOpen: false,
   settingsSheetActiveTab: "balances",
-  toggleSettingsSheetOpen: (tab?: SettingsSheetTab) =>
+  toggleSettingsSheetOpen: (tab?: SettingsSheetTab) => {
     set({
       settingsSheetOpen: !get().settingsSheetOpen,
-      settingsSheetActiveTab: !tab
-        ? DefaultSettingsSheetTab
-        : tab || get().settingsSheetActiveTab,
-    }),
+      settingsSheetActiveTab: tab || DefaultSettingsSheetTab,
+    });
+  },
 }));
 
 export default useStore;

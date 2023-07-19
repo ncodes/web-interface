@@ -26,7 +26,13 @@ interface ChainInfo {
 declare global {
   type ContractNames = "energon" | "nft";
 
-  interface User {}
+  interface User {
+    email: string;
+    address: string;
+    locale: string;
+    timezone: string;
+    role: string;
+  }
 
   interface TransactionResponse {}
 }
