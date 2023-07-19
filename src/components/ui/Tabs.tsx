@@ -11,7 +11,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "justify-between space-x-2 inline-flex h-12  p-1 w-full pr-0",
+      "justify-between space-x-2 inline-flex  w-full pr-0",
       className
     )}
     {...props}
@@ -27,7 +27,7 @@ const TabsTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       "bg-gray-900 inline-flex items-center justify-center whitespace-nowrap tracking-wider " +
-        "px-5 py-0 text-[17px] rounded-full  text-gray-200 font-medium ring-offset-background transition-all " +
+        "px-5 py-0 text-[17px] rounded-full  text-gray-300 font-medium ring-offset-background transition-all " +
         " font-normal " +
         "disabled:pointer-events-none disabled:opacity-50 " +
         "hover:scale-x-105 data-[state=active]:scale-x-105 " +
