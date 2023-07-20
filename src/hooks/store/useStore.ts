@@ -6,6 +6,9 @@ import {
 } from "../../components/SettingsSheet.tsx";
 
 export interface IStore {
+  user: User | null;
+  setUser: (user: User) => void;
+
   currentRegion?: string;
   setCurrentRegion?: (region: string) => void;
 
@@ -28,6 +31,9 @@ export interface IStore {
 }
 
 const useStore = create<IStore>((set, get) => ({
+  user: null,
+  setUser: (user: User) => set({ user }),
+
   loaderProgress: 0,
   setLoaderProgress: (progress: number) => set({ loaderProgress: progress }),
 

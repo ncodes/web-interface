@@ -1,28 +1,16 @@
 import useStore from "../hooks/store/useStore.ts";
 import IconCaution from "./icons/IconCaution.tsx";
 import { Button } from "./ui/Button.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { StoreAccessTokenKey } from "../constants.ts";
-import useConnector from "../hooks/connectors/useConnector.tsx";
-import { useUserService } from "../hooks/services/backend/useUserService.ts";
 
 export function UnlinkedAccountNotice() {
-  const { toggleSettingsSheetOpen } = useStore((state) => ({
+  const { toggleSettingsSheetOpen, user } = useStore((state) => ({
     toggleSettingsSheetOpen: state.toggleSettingsSheetOpen,
+    user: state.user,
   }));
-  const accessToken = localStorage.getItem(StoreAccessTokenKey);
-  const { address } = useConnector();
-  const { getUser } = useUserService();
-  const query = useQuery({
-    queryKey: ["user", address],
-    queryFn: getUser,
-    enabled: !!accessToken && !!address,
-    retry: 0,
-  });
 
   return (
     <>
-      {!query.isLoading && (!query.isSuccess || !query?.data?.email) && (
+      {!user && (
         <div className="select-none py-2 bg-gray-900 rounded-xl mb-4 px-3 md:px-5 border border-gray-800 flex items-center gap-3">
           <span>
             <IconCaution

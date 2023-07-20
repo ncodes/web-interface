@@ -17,6 +17,7 @@ export function LinkAccountSetting() {
   const [email, setEmail] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [linked, setLinked] = useState(false);
+  const { setUser } = useStore((state) => ({ setUser: state.setUser }));
   const { sign, address } = useConnector();
   const { simpleError } = useToast();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
@@ -41,7 +42,7 @@ export function LinkAccountSetting() {
     } else {
       setEmail(localStorage.getItem(StoreEmailKey) || "");
     }
-  }, [queryUserByAddress.isSuccess]);
+  }, [queryUserByAddress.data, queryUserByAddress.isSuccess]);
 
   const linkWallet = useCallback(async () => {
     if (!email?.trim()) {
@@ -75,8 +76,9 @@ export function LinkAccountSetting() {
     localStorage.setItem(StoreEmailKey, data.user.email);
     setEmail(data.user.email);
     setLinked(true);
+    setUser(data.user);
     setLoaderProgress && setLoaderProgress(100);
-  }, [address, email]);
+  }, [address, authMutation, email, setLoaderProgress, sign, simpleError]);
 
   return (
     <>

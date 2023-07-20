@@ -6,6 +6,11 @@ import { Header } from "../../components/Header.tsx";
 import { SearchSheetBox } from "../../components/SearchBox.tsx";
 import { NotificationSheet } from "../../components/NotificationSheet.tsx";
 import { UnlinkedAccountNotice } from "../../components/UnlinkedAccountNotice.tsx";
+import useConnector from "../../hooks/connectors/useConnector.tsx";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { useQuery } from "@tanstack/react-query";
+import { StoreAccessTokenKey } from "../../constants.ts";
+import useStore from "../../hooks/store/useStore.ts";
 
 export default function Layout({
   tab,
@@ -16,6 +21,21 @@ export default function Layout({
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLargeLaptop = useMediaQuery("(min-width: 1280px)");
+  const { address } = useConnector();
+  const setUser = useStore((state) => state.setUser);
+  const { getUser } = useUserService();
+  const accessToken = localStorage.getItem(StoreAccessTokenKey);
+  const query = useQuery({
+    queryKey: ["user", address],
+    queryFn: getUser,
+    enabled: !!accessToken && !!address,
+    refetchIntervalInBackground: false,
+  });
+
+  useEffect(() => {
+    if (!query.isSuccess) return;
+    setUser(query.data);
+  }, [query.data, query.isSuccess, setUser]);
 
   useEffect(() => {
     setMobileMenuOpen(isLargeLaptop);

@@ -17,18 +17,26 @@ import {
 } from "../../components/ui/card.tsx";
 import React from "react";
 import IconHeart from "../../components/icons/IconHeart.tsx";
+import { cn } from "../../libs/utils.ts";
 
 function MarketStat({
   title,
   title2,
   children,
+  width,
 }: {
   title: string;
   title2: React.ReactNode | string;
   children: React.ReactNode;
+  width?: string;
 }) {
   return (
-    <Card className="md:min-w-[150px] shrink-0 border border-card-border bg-card-background shadow-sm shadow-gray-900">
+    <Card
+      className={cn(
+        "w-[150px] border border-card-border bg-card-background shadow-sm shadow-gray-900",
+        width
+      )}
+    >
       <CardHeader className="px-3 py-2 pt-1 pb-[2px]">
         <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex items-center gap-2">
           <span>{title}</span>
@@ -72,7 +80,7 @@ function MarketItem() {
         </div>
         <div className="w-full overflow-hidden scroll-shadow">
           <ScrollAreaHorizontal type="scroll">
-            <div className="px-3 py-[8px] flex overflow-hidden gap-2">
+            <div className="py-[8px] flex gap-2 px-3">
               <MarketStat
                 title="Price ($)"
                 title2={
@@ -87,15 +95,18 @@ function MarketItem() {
                 50,640
               </MarketStat>
               <MarketStat title="24hrs Volume" title2="">
-                $45m
+                <span className="text-gray-200">$45m</span>
               </MarketStat>
               <MarketStat title="Total Liquidity" title2="">
-                $125m
+                <span className="text-gray-200">$125m</span>
               </MarketStat>
               <MarketStat title="Commission" title2="(%)">
-                0.5
+                <span className="text-gray-200"> 0.5</span>
               </MarketStat>
-              <MarketStat title="PUT Open" title2="">
+              <MarketStat title="Offer Only" title2="" width="w-[125px]">
+                <span className="text-gray-200">YES</span>
+              </MarketStat>
+              <MarketStat title="PUT Open" title2="" width="w-[125px]">
                 <span className="text-gray-200">YES</span>
               </MarketStat>
               <MarketStat title="SWAP Open" title2="">
@@ -105,7 +116,7 @@ function MarketItem() {
           </ScrollAreaHorizontal>
         </div>
       </div>
-      <div className="flex pr-2 justify-between  border-t border-gray-800">
+      <div className="flex pr-2 justify-between border-t border-gray-800">
         <div className="flex w-full items-center gap-2 px-3 pr-0 md:px-5 md:pr-0 overflow-hidden">
           <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
             <span className="hidden sm:inline">Badges</span>

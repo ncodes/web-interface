@@ -14,7 +14,7 @@ export default function Index() {
           className="w-full h-full transition-all duration-500"
         >
           <ScrollAreaHorizontal type="scroll">
-            <TabsList className="justify-start px-3 pt-2 border-b border-modal-border ">
+            <TabsList className="justify-start px-3 py-2 border-b border-modal-border ">
               <TabsTrigger
                 value="home"
                 className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
@@ -48,8 +48,6 @@ export default function Index() {
           <Footer />
         </div>
       }
-    >
-      hi
-    </Layout>
+    />
   );
 }
