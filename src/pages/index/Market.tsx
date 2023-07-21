@@ -42,15 +42,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../../components/ui/sheet.tsx";
+import { ToolTip } from "../../components/ToolTip.tsx";
 
 function MarketStat({
   title,
   title2,
   children,
+  tip,
   width,
 }: {
   title: string;
   title2: React.ReactNode | string;
+  tip?: React.ReactNode;
   children: React.ReactNode;
   width?: string;
 }) {
@@ -66,7 +69,9 @@ function MarketStat({
           <span>{title}</span>
           <span>{title2}</span>
           <span className="flex-1 flex justify-end cursor-pointer opacity-50 hover:opacity-100 transition-all duration-500">
-            <IconInfoCircle width="15px" />
+            <ToolTip tip={tip}>
+              <IconInfoCircle width="15px" />
+            </ToolTip>
           </span>
         </CardTitle>
       </CardHeader>
@@ -84,10 +89,12 @@ function BadgeSheetContent({ badge }: { badge?: string }) {
       <div className="p-5 flex flex-col gap-1 tracking-wide border-b border-gray-800">
         <h1 className="text-gray-200 flex items-center gap-2">
           Description{" "}
-          <IconInfoCircle
-            width="15px"
-            className="text-gray-400 hover:text-gray-200 cursor-pointer"
-          />
+          <ToolTip tip="Brief information about this badge">
+            <IconInfoCircle
+              width="15px"
+              className="text-gray-400 hover:text-gray-200 cursor-pointer"
+            />
+          </ToolTip>
         </h1>
         <p className="text-gray-400 font-light text-sm">
           This badge indicates that a user has completed Tier 1 Know Your
@@ -97,10 +104,12 @@ function BadgeSheetContent({ badge }: { badge?: string }) {
           <div>
             <h1 className="text-gray-200 flex items-center gap-2 mt-4">
               Target{" "}
-              <IconInfoCircle
-                width="15px"
-                className="text-gray-400 hover:text-gray-200 cursor-pointer"
-              />
+              <ToolTip tip="The user that is required to have this badge">
+                <IconInfoCircle
+                  width="15px"
+                  className="text-gray-400 hover:text-gray-200 cursor-pointer"
+                />
+              </ToolTip>
             </h1>
             <p className="text-gray-400 font-light text-sm">
               Liquidity Provider
@@ -109,10 +118,12 @@ function BadgeSheetContent({ badge }: { badge?: string }) {
           <div>
             <h1 className="text-gray-200 flex items-center gap-2 mt-4">
               Issuer{" "}
-              <IconInfoCircle
-                width="15px"
-                className="text-gray-400 hover:text-gray-200 cursor-pointer"
-              />
+              <ToolTip tip="The website of the badge issuer">
+                <IconInfoCircle
+                  width="15px"
+                  className="text-gray-400 hover:text-gray-200 cursor-pointer"
+                />
+              </ToolTip>
             </h1>
             <p className="text-gray-400 font-light text-sm">
               <a
@@ -183,7 +194,7 @@ function BadgePill({ name }: { name: string }) {
   );
 }
 
-function MarketItem() {
+function MarketItem({ base, quote }: { base: string; quote: string }) {
   return (
     <div className="bg-card-background border border-gray-800 transition-all hover:border-gray-700 duration-300 hover:scale-[1.002] cursor-pointer rounded-xl">
       <div className="flex h-auto">
@@ -194,7 +205,9 @@ function MarketItem() {
               quoteSrc="/images/icons/asset-icons/uni.svg"
             />
             <div className="flex flex-col">
-              <span>BTC - UNI</span>
+              <span>
+                {base} - {quote}
+              </span>
               <span className="flex items-center gap-1 text-sm font-extralight text-blue-200">
                 <span>
                   ID:<span className="hidden md:inline"> 0x83...a73b</span>
@@ -213,6 +226,7 @@ function MarketItem() {
             <div className="py-[8px] flex gap-2 px-3">
               <MarketStat
                 title="Price ($)"
+                tip={`The price of 1 ${base} in USD`}
                 title2={
                   <span className="text-green-400 hidden xxs:inline">
                     (+10%)
@@ -221,25 +235,55 @@ function MarketItem() {
               >
                 $1,234
               </MarketStat>
-              <MarketStat title="Price" title2="(UNI)">
+              <MarketStat
+                title="Price"
+                title2="(UNI)"
+                tip={`The price of 1 ${base} in ${quote}`}
+              >
                 50,640
               </MarketStat>
-              <MarketStat title="24hrs Volume" title2="">
+              <MarketStat
+                title="24hrs Volume"
+                title2=""
+                tip={`The total volume of ${base} traded in the last 24hrs`}
+              >
                 <span className="text-gray-200">$45m</span>
               </MarketStat>
-              <MarketStat title="Total Liquidity" title2="">
+              <MarketStat
+                title="Total Liquidity"
+                title2=""
+                tip={`The total amount of ${base} in the market`}
+              >
                 <span className="text-gray-200">$125m</span>
               </MarketStat>
-              <MarketStat title="Commission" title2="(%)">
+              <MarketStat
+                title="Commission"
+                title2="(%)"
+                tip={`The commission reserved for the market owner`}
+              >
                 <span className="text-gray-200"> 0.5</span>
               </MarketStat>
-              <MarketStat title="Offer Only" title2="" width="w-[125px]">
+              <MarketStat
+                title="Offer Only"
+                title2=""
+                width="w-[125px]"
+                tip={`Only offers can be made on this market. No direct swap.`}
+              >
                 <span className="text-gray-200">YES</span>
               </MarketStat>
-              <MarketStat title="PUT Open" title2="" width="w-[125px]">
+              <MarketStat
+                title="PUT Open"
+                title2=""
+                width="w-[125px]"
+                tip={`Liquidity providers must be allow-listed to provider liquidity to this market`}
+              >
                 <span className="text-gray-200">YES</span>
               </MarketStat>
-              <MarketStat title="SWAP Open" title2="">
+              <MarketStat
+                title="SWAP Open"
+                title2=""
+                tip={`Takers must be allow-listed to swap liquidity from this market`}
+              >
                 <span className="text-gray-200">NO</span>
               </MarketStat>
             </div>
@@ -250,9 +294,11 @@ function MarketItem() {
         <div className="flex w-full items-center gap-2 px-3 pr-0 md:px-5 md:pr-0 overflow-hidden">
           <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
             <span className="hidden sm:inline">Badges</span>
-            <span className="opacity-50 hover:opacity-100 hover:text-chinese-green cursor-pointer transition-all duration-300">
-              <IconInfoCircle />
-            </span>
+            <ToolTip tip="Badges required by the market creator. LP stands for 'Liquidity Provider', TK for 'Taker'">
+              <span className="opacity-50 hover:opacity-100 hover:text-chinese-green cursor-pointer transition-all duration-300">
+                <IconInfoCircle />
+              </span>
+            </ToolTip>
           </div>
           <div className="flex-1 overflow-hidden tracking-wider scroll-shadow">
             <ScrollAreaHorizontal type="scroll">
@@ -353,7 +399,7 @@ function MarketTabs() {
         </div>
       </TabsList>
       <TabsContent value="markets" className="p-3 flex flex-col gap-3">
-        <MarketItem />
+        <MarketItem base="BTC" quote="UNI" />
         {/*<MarketItem />*/}
         {/*<MarketItem />*/}
       </TabsContent>

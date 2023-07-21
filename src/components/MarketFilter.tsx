@@ -11,24 +11,29 @@ import IconInfoCircle from "./icons/IconInfoCircle.tsx";
 import React from "react";
 import { cn } from "../libs/utils.ts";
 import { Button } from "./ui/Button.tsx";
+import { ToolTip } from "./ToolTip.tsx";
 
 function FilterItem({
   title,
   children,
   className,
+  tip,
 }: {
   title: string;
   children: React.ReactNode;
   className?: string;
+  tip?: React.ReactNode;
 }) {
   return (
     <AccordionItem value={title} className={cn(className)}>
       <AccordionTrigger className="px-5 py-3 tracking-wider">
         <div className="flex items-center gap-2">
           <span>{title}</span>
-          <span className="opacity-60 hover:opacity-100 cursor-pointer">
-            <IconInfoCircle width="15" />
-          </span>
+          <ToolTip tip={tip}>
+            <span className="opacity-60 hover:opacity-100 cursor-pointer">
+              <IconInfoCircle width="15" />
+            </span>
+          </ToolTip>
         </div>
       </AccordionTrigger>
       <AccordionContent className="text-gray-200 px-5 pt-1">
@@ -44,7 +49,7 @@ export function MarketFilterContent() {
   return (
     <div>
       <Accordion defaultValue={["Price"]} type="multiple">
-        <FilterItem title="Price">
+        <FilterItem title="Price" tip="Filter by price (QUOTE)">
           <div>
             <Input
               placeholder="0.00"
@@ -70,7 +75,10 @@ export function MarketFilterContent() {
           </div>
         </FilterItem>
 
-        <FilterItem title="Available Liquidity">
+        <FilterItem
+          title="Available Liquidity"
+          tip="Find markets with certain amount of available liquidity"
+        >
           <div>
             <Input
               placeholder="0.00"
@@ -96,7 +104,10 @@ export function MarketFilterContent() {
           </div>
         </FilterItem>
 
-        <FilterItem title="Merchants Only">
+        <FilterItem
+          title="Merchants Only"
+          tip="Find markets where liquidity providers are registered merchants"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
               <RadioGroupItem value="false" id="no" />
@@ -114,7 +125,10 @@ export function MarketFilterContent() {
           </RadioGroup>
         </FilterItem>
 
-        <FilterItem title="KYC'd Liquidity Providers">
+        <FilterItem
+          title="KYC'd Liquidity Providers"
+          tip="Find markets where liquidity providers have completed KYC"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
               <RadioGroupItem value="false" id="no" />
@@ -132,7 +146,10 @@ export function MarketFilterContent() {
           </RadioGroup>
         </FilterItem>
 
-        <FilterItem title="KYC'd Takers">
+        <FilterItem
+          title="KYC'd Takers"
+          tip="Find markets where takers have completed KYC"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
               <RadioGroupItem value="false" id="no" />
@@ -150,7 +167,10 @@ export function MarketFilterContent() {
           </RadioGroup>
         </FilterItem>
 
-        <FilterItem title="Offer Only">
+        <FilterItem
+          title="Offer Only"
+          tip="Find markets where only offers are allowed (no direct swaps)"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
               <RadioGroupItem value="false" id="no" />
@@ -168,15 +188,24 @@ export function MarketFilterContent() {
           </RadioGroup>
         </FilterItem>
 
-        <FilterItem title="By Market ID">
+        <FilterItem
+          title="By Market ID"
+          tip="Find a market by its address or ID"
+        >
           <Input type="text" placeholder="e.g. 0x0..." className="pl-2" />
         </FilterItem>
 
-        <FilterItem title="By Creator">
+        <FilterItem
+          title="By Creator"
+          tip="Find a market by its creator's address"
+        >
           <Input type="text" placeholder="e.g. 0x0..." className="pl-2" />
         </FilterItem>
 
-        <FilterItem title="PUT Permissioned">
+        <FilterItem
+          title="PUT Permissioned"
+          tip="Find markets that require or don't require liquidity providers to be allowlisted before they can add liquidity"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
               <RadioGroupItem value="false" id="no" />
@@ -194,7 +223,10 @@ export function MarketFilterContent() {
           </RadioGroup>
         </FilterItem>
 
-        <FilterItem title="SWAP Permissioned">
+        <FilterItem
+          title="SWAP Permissioned"
+          tip="Find markets that require or don't require takers to be allowlisted before they can swap"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
               <RadioGroupItem value="false" id="no" />
@@ -212,7 +244,10 @@ export function MarketFilterContent() {
           </RadioGroup>
         </FilterItem>
 
-        <FilterItem title="PUT Badges">
+        <FilterItem
+          title="PUT Badges"
+          tip="Find markets that require liquidity providers to have one or more badges"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <Input
               type="text"
@@ -222,7 +257,11 @@ export function MarketFilterContent() {
           </RadioGroup>
         </FilterItem>
 
-        <FilterItem title="SWAP Badges" className="border-none">
+        <FilterItem
+          title="SWAP Badges"
+          className="border-none"
+          tip="Find markets that require takers to have one or more badges"
+        >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <Input
               type="text"
