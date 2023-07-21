@@ -1,5 +1,8 @@
 import { ActivityStream } from "../../components/ActivityStream.tsx";
-import { ScrollAreaHorizontal } from "../../components/ui/scroll-area.tsx";
+import {
+  ScrollArea,
+  ScrollAreaHorizontal,
+} from "../../components/ui/scroll-area.tsx";
 import { TabsList, TabsTrigger } from "../../components/ui/Tabs.tsx";
 import { Tabs, TabsContent } from "@radix-ui/react-tabs";
 import Layout from "./Layout.tsx";
@@ -15,9 +18,30 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card.tsx";
-import React from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import IconHeart from "../../components/icons/IconHeart.tsx";
 import { cn } from "../../libs/utils.ts";
+import {
+  MarketFilter,
+  MarketFilterContent,
+} from "../../components/MarketFilter.tsx";
+import { Footer } from "../../components/Footer.tsx";
+import IconFilterOutline from "../../components/icons/IconFilterOutline.tsx";
+import { Cross2Icon, DotsVerticalIcon } from "@radix-ui/react-icons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu.tsx";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../../components/ui/sheet.tsx";
 
 function MarketStat({
   title,
@@ -53,9 +77,115 @@ function MarketStat({
   );
 }
 
+function BadgeSheetContent({ badge }: { badge?: string }) {
+  return (
+    <div className="flex flex-col">
+      <div className="w-full h-[150px] bg-gray-900 cover"></div>
+      <div className="p-5 flex flex-col gap-1 tracking-wide border-b border-gray-800">
+        <h1 className="text-gray-200 flex items-center gap-2">
+          Description{" "}
+          <IconInfoCircle
+            width="15px"
+            className="text-gray-400 hover:text-gray-200 cursor-pointer"
+          />
+        </h1>
+        <p className="text-gray-400 font-light text-sm">
+          This badge indicates that a user has completed Tier 1 Know Your
+          Customer (KYC) registration.
+        </p>
+        <div className="flex gap-5">
+          <div>
+            <h1 className="text-gray-200 flex items-center gap-2 mt-4">
+              Target{" "}
+              <IconInfoCircle
+                width="15px"
+                className="text-gray-400 hover:text-gray-200 cursor-pointer"
+              />
+            </h1>
+            <p className="text-gray-400 font-light text-sm">
+              Liquidity Provider
+            </p>
+          </div>
+          <div>
+            <h1 className="text-gray-200 flex items-center gap-2 mt-4">
+              Issuer{" "}
+              <IconInfoCircle
+                width="15px"
+                className="text-gray-400 hover:text-gray-200 cursor-pointer"
+              />
+            </h1>
+            <p className="text-gray-400 font-light text-sm">
+              <a
+                href="http://google.com"
+                className="hover:text-gray-200 transition-all"
+              >
+                https://google.com
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="w-full">
+        <iframe
+          className="w-full h-[400px]"
+          src="https://nairaland.com"
+        ></iframe>
+      </div>
+    </div>
+  );
+}
+
+function BadgePill({ name }: { name: string }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Sheet
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+      }}
+    >
+      <SheetTrigger>
+        <Badge
+          className="font-normal tracking-wider cursor-pointer bg-gray-900 border hover:border-chinese-green rounded-full border-gray-700 text-gray-300 hover:bg-chinese-green hover:text-gray-900"
+          variant="secondary"
+        >
+          {name}
+        </Badge>
+      </SheetTrigger>
+      <SheetContent
+        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        side="right"
+      >
+        <SheetHeader className="flex pr-[50px] border-b border-gray-800">
+          <div className="text-white">
+            <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
+              Badge: {name.split(":")[1] || name}
+            </SheetTitle>
+          </div>
+        </SheetHeader>
+        <div className=" text-white h-full">
+          <ScrollArea type="scroll" className="h-full pb-10">
+            <BadgeSheetContent badge />
+          </ScrollArea>
+        </div>
+        <div
+          className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          <Cross2Icon className="h-6 w-6" />
+          <span className="sr-only">Close</span>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
 function MarketItem() {
   return (
-    <div className="bg-gray-900 border border-gray-800 transition-all hover:border-gray-700 duration-300 hover:scale-[1.002] cursor-pointer rounded-xl">
+    <div className="bg-card-background border border-gray-800 transition-all hover:border-gray-700 duration-300 hover:scale-[1.002] cursor-pointer rounded-xl">
       <div className="flex h-auto">
         <div className="h-full border-r select-none border-gray-800 shrink-0">
           <div className="flex items-center gap-3 px-3 md:px-5 py-4">
@@ -124,39 +254,20 @@ function MarketItem() {
               <IconInfoCircle />
             </span>
           </div>
-          <div className="py-2 flex-1 overflow-hidden tracking-wider scroll-shadow">
+          <div className="flex-1 overflow-hidden tracking-wider scroll-shadow">
             <ScrollAreaHorizontal type="scroll">
               <div className="flex items-center gap-2 pr-3">
-                <Badge
-                  className="cursor-pointer bg-gray-900 border rounded-full border-gray-700 text-gray-300 hover:bg-chinese-green hover:text-gray-900"
-                  variant="secondary"
-                >
-                  KYC
-                </Badge>
-                <Badge
-                  className="cursor-pointer bg-gray-900 border rounded-full border-gray-700 text-gray-300 hover:bg-chinese-green hover:text-gray-900"
-                  variant="secondary"
-                >
-                  NIGERIAN
-                </Badge>
-                <Badge
-                  className="cursor-pointer bg-gray-900 border rounded-full border-gray-700 text-gray-300 hover:bg-chinese-green hover:text-gray-900"
-                  variant="secondary"
-                >
-                  MERCHANT
-                </Badge>
-                <Badge
-                  className="cursor-pointer bg-gray-900 border rounded-full border-gray-700 text-gray-300 hover:bg-chinese-green hover:text-gray-900"
-                  variant="secondary"
-                >
-                  MERCHANT
-                </Badge>
+                <BadgePill name="LP:KYC" />
+                <BadgePill name="TK:KYC" />
+                <BadgePill name="NIGERIAN" />
+                <BadgePill name="MERCHANT" />
+                <BadgePill name="MERCHANT" />
               </div>
             </ScrollAreaHorizontal>
           </div>
         </div>
         <div className="flex items-center border-l border-gray-800 pl-2">
-          <span className="inline-block pb-0 hover:text-chinese-green text-gray-400">
+          <span className="inline-block pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
             <IconHeart />
           </span>
         </div>
@@ -166,14 +277,16 @@ function MarketItem() {
 }
 
 function MarketTabs() {
+  const [openFilterSheet, setOpenFilterSheet] = useState(false);
+
   return (
     <Tabs
       defaultValue="markets"
       className="w-full h-full transition-all duration-500"
     >
-      <TabsList className="flex justify-start w-full items-center border-b border-modal-border">
+      <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollAreaHorizontal type="scroll" className="w-full">
-          <div className="flex flex-1 w-full gap-2 items-center px-2 scroll-shadow2 py-2">
+          <div className="flex flex-1 w-full gap-2 items-center px-2 scroll-shadow py-2">
             <TabsTrigger
               value="markets"
               className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
@@ -194,16 +307,49 @@ function MarketTabs() {
             </TabsTrigger>
           </div>
         </ScrollAreaHorizontal>
-        <div className="flex shrink-0 pr-5  justify-end ">
+        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden md:flex xl:hidden gap-1 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green"
+            onClick={() => setOpenFilterSheet(true)}
+          >
+            <IconFilterOutline />
+          </Button>
           <Button
             variant="outline"
             size="sm"
-            rounded="md"
-            className="flex gap-1 items-center"
+            className="hidden md:flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
           >
             <IconPlus />
             <span className="hidden md:inline">Create Market</span>
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green"
+              >
+                <DotsVerticalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 tracking-wide">
+              <DropdownMenuItem
+                className="flex gap-2"
+                onClick={() => {
+                  setOpenFilterSheet(true);
+                }}
+              >
+                <IconFilterOutline className="text-chinese-green" /> Filter
+                Markets
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-gray-700" />
+              <DropdownMenuItem className="flex gap-2">
+                <IconPlus className="text-chinese-green" /> Create Market
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </TabsList>
       <TabsContent value="markets" className="p-3 flex flex-col gap-3">
@@ -215,10 +361,82 @@ function MarketTabs() {
       <TabsContent value="top" className="px-5">
         <ActivityStream />
       </TabsContent>
+      <MarketFilterSheet
+        active={openFilterSheet}
+        onOpen={(open) => {
+          setOpenFilterSheet(open);
+        }}
+      />
     </Tabs>
   );
 }
 
+function MarketFilterSheet({
+  active,
+  onOpen,
+  children,
+}: {
+  active?: boolean;
+  onOpen?: (open: boolean) => void;
+  children?: ReactNode;
+}) {
+  const [open, setOpen] = useState(active);
+
+  useEffect(() => {
+    setOpen(active);
+    onOpen && onOpen(active || false);
+  }, [active, onOpen]);
+
+  return (
+    <Sheet
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+        onOpen && onOpen(open);
+      }}
+    >
+      <SheetTrigger>{children}</SheetTrigger>
+      <SheetContent
+        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        side="right"
+      >
+        <SheetHeader className="flex pr-[50px] border-b border-gray-800">
+          <div className="text-white">
+            <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
+              Filter Markets
+            </SheetTitle>
+          </div>
+        </SheetHeader>
+        <div className=" text-white h-full">
+          <ScrollArea type="scroll" className="h-full pb-10">
+            <MarketFilterContent />
+          </ScrollArea>
+        </div>
+        <div
+          className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+          onClick={() => {
+            setOpen(false);
+            onOpen && onOpen(false);
+          }}
+        >
+          <Cross2Icon className="h-6 w-6" />
+          <span className="sr-only">Close</span>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
 export default function Market() {
-  return <Layout tab={<MarketTabs />} />;
+  return (
+    <Layout
+      tab={<MarketTabs />}
+      rightSide={
+        <div className="flex flex-col justify-between h-full">
+          <MarketFilter />
+          <Footer />
+        </div>
+      }
+    />
+  );
 }

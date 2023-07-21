@@ -147,8 +147,4 @@
     .scroll-shadow {
         box-shadow: -17px 4px 25px -10px rgba(3,8,10,0.84) inset;
     }
-
-    .scroll-shadow2 {
-        box-shadow: -17px 4px 25px -10px rgba(4,26,33,0.68) inset;
-    }
 }
