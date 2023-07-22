@@ -1,4 +1,4 @@
-import { PairAvatar } from "./region/PairAvatar.tsx";
+import { PairAvatar } from "./avatar/PairAvatar.tsx";
 import moment from "moment";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card.tsx";
 import { ScrollAreaHorizontal } from "./ui/scroll-area.tsx";
@@ -13,6 +13,8 @@ function PopularMarketRow(props: {
   return (
     <div className="flex gap-x-4 px-3 py-2 cursor-pointer hover:opacity-80 text-[14px]">
       <PairAvatar
+        base="BTC"
+        quote="UNI"
         baseSrc="/images/icons/asset-icons/btc.svg"
         quoteSrc="/images/icons/asset-icons/uni.svg"
       />
@@ -61,6 +63,8 @@ function RecentTradeRow(props: {
   return (
     <div className="flex gap-x-4 py-2 cursor-pointer hover:opacity-80 text-[14px] px-3">
       <PairAvatar
+        base="BTC"
+        quote="UNI"
         baseSrc="/images/icons/asset-icons/btc.svg"
         quoteSrc="/images/icons/asset-icons/uni.svg"
       />

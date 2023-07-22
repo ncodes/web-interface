@@ -1,4 +1,4 @@
-import Avatar from "../../../components/avatar/Avatar";
+import EmojiAvatar from "../../../components/avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../../../components/avatar/useAvatar";
 import { useAccount, useBalance } from "wagmi";
 import {
@@ -61,7 +61,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
           </span>
         </p>
         <div>
-          <Avatar size={AvatarSize.Small} randomStr={address as string} />
+          <EmojiAvatar size={AvatarSize.Small} randomStr={address as string} />
         </div>
       </div>
       <div className="absolute">

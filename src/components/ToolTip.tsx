@@ -9,12 +9,15 @@ import {
 export function ToolTip(props: {
   tip: React.ReactNode;
   children: React.ReactNode;
+  side?: "top" | "bottom" | "left" | "right";
 }) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>{props.children}</TooltipTrigger>
-        <TooltipContent className="font-light">{props.tip}</TooltipContent>
+        <TooltipContent side={props.side || "top"} className="font-light">
+          {props.tip}
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

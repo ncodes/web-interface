@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { cn } from "../libs/utils.ts";
 import { AnimatePresence, motion } from "framer-motion";
-import { PairAvatar } from "./region/PairAvatar.tsx";
+import { PairAvatar } from "./avatar/PairAvatar.tsx";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card.tsx";
 import { ScrollArea } from "./ui/scroll-area.tsx";
 import {
@@ -21,6 +21,8 @@ function SearchBoxItem() {
   return (
     <div className="flex py-2 px-3 gap-4 items-center hover:bg-gray-950 cursor-pointer">
       <PairAvatar
+        base="BTC"
+        quote="UNI"
         baseSrc="/images/icons/asset-icons/btc.svg"
         quoteSrc="/images/icons/asset-icons/uni.svg"
       />

@@ -12,7 +12,7 @@ import { useState } from "react";
 import {
   MarketFilter,
   MarketFilterSheet,
-} from "../../components/MarketFilter.tsx";
+} from "../../components/market/MarketFilter.tsx";
 import { Footer } from "../../components/Footer.tsx";
 import IconFilterOutline from "../../components/icons/IconFilterOutline.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
@@ -22,7 +22,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu.tsx";
-import { MarketItem } from "../../components/MarketItem.tsx";
+import { MarketItem } from "../../components/market/MarketItem.tsx";
+import { CreateMarketSheet } from "../../components/market/CreateMarketSheet.tsx";
 
 function MarketTabContent() {
   return <MarketItem base="BTC" quote="UNI" />;
@@ -38,6 +39,7 @@ function MyWatchTabContent() {
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
+  const [openCreateMarketSheet, setOpenCreateMarketSheet] = useState(false);
 
   return (
     <Tabs
@@ -80,6 +82,9 @@ function MarketTabs() {
             variant="outline"
             size="sm"
             className="hidden md:flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
+            onClick={() => {
+              setOpenCreateMarketSheet(true);
+            }}
           >
             <IconPlus />
             <span className="hidden md:inline">Create Market</span>
@@ -103,11 +108,22 @@ function MarketTabs() {
               >
                 <IconFilterOutline /> Filter Markets
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex gap-2">
+              <DropdownMenuItem
+                className="flex gap-2"
+                onClick={() => {
+                  setOpenCreateMarketSheet(true);
+                }}
+              >
                 <IconPlus /> Create Market
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <CreateMarketSheet
+            active={openCreateMarketSheet}
+            onOpen={(open) => {
+              setOpenCreateMarketSheet(open);
+            }}
+          />
         </div>
       </TabsList>
       <TabsContent value="markets" className="p-3 pt-0 flex flex-col gap-3">

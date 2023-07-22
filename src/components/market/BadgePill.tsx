@@ -5,12 +5,12 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet.tsx";
-import { Badge } from "./ui/badge.tsx";
-import { ScrollArea } from "./ui/scroll-area.tsx";
+} from "../ui/sheet.tsx";
+import { Badge } from "../ui/badge.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { ToolTip } from "./ToolTip.tsx";
-import IconInfoCircle from "./icons/IconInfoCircle.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 
 export function BadgePill({ name }: { name: string }) {
   const [open, setOpen] = useState(false);

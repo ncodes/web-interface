@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card.tsx";
-import { cn } from "../libs/utils.ts";
-import { ToolTip } from "./ToolTip.tsx";
-import IconInfoCircle from "./icons/IconInfoCircle.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card.tsx";
+import { cn } from "../../libs/utils.ts";
+import { ToolTip } from "../ToolTip.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 
 export function MarketStat({
   title,

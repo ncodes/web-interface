@@ -1,9 +1,9 @@
-import { PairAvatar } from "./region/PairAvatar.tsx";
-import IconCopyFilled from "./icons/IconCopyFilled.tsx";
-import { ScrollAreaHorizontal } from "./ui/scroll-area.tsx";
-import { ToolTip } from "./ToolTip.tsx";
-import IconInfoCircle from "./icons/IconInfoCircle.tsx";
-import IconHeart from "./icons/IconHeart.tsx";
+import { PairAvatar } from "../avatar/PairAvatar.tsx";
+import IconCopyFilled from "../icons/IconCopyFilled.tsx";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import IconHeart from "../icons/IconHeart.tsx";
 import { MarketStat } from "./MarketStat.tsx";
 import { BadgePill } from "./BadgePill.tsx";
 import {
@@ -11,12 +11,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu.tsx";
-import { Button } from "./ui/Button.tsx";
+} from "../ui/dropdown-menu.tsx";
+import { Button } from "../ui/Button.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import IconFilterOutline from "./icons/IconFilterOutline.tsx";
+import IconFilterOutline from "../icons/IconFilterOutline.tsx";
 import { useState } from "react";
-import { cn } from "../libs/utils.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function MarketItem({
   base,
@@ -35,6 +35,8 @@ export function MarketItem({
         <div className="h-full border-r select-none border-gray-800 shrink-0">
           <div className="flex items-center gap-3 px-3 md:px-5 py-4">
             <PairAvatar
+              base="BTC"
+              quote="UNI"
               baseSrc="/images/icons/asset-icons/btc.svg"
               quoteSrc="/images/icons/asset-icons/uni.svg"
             />
