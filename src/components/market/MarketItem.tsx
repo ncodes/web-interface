@@ -17,6 +17,7 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import IconFilterOutline from "../icons/IconFilterOutline.tsx";
 import { useState } from "react";
 import { cn } from "../../libs/utils.ts";
+import { EditMarketSheet } from "./EditMarketSheet.tsx";
 
 export function MarketItem({
   base,
@@ -28,6 +29,7 @@ export function MarketItem({
   ownerMode?: boolean;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [openEditMarketSheet, setOpenEditMarketSheet] = useState(false);
 
   return (
     <div className="bg-card-background border border-gray-800 transition-all hover:border-gray-700 duration-300 hover:scale-[1.002] cursor-pointer rounded-xl">
@@ -170,7 +172,12 @@ export function MarketItem({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem className="flex gap-2">
+                  <DropdownMenuItem
+                    className="flex gap-2"
+                    onClick={() => {
+                      setOpenEditMarketSheet(true);
+                    }}
+                  >
                     <IconFilterOutline /> Edit Market
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -178,6 +185,14 @@ export function MarketItem({
             )}
           </span>
         </div>
+      </div>
+      <div className="absolute">
+        <EditMarketSheet
+          active={openEditMarketSheet}
+          onOpen={(open) => {
+            setOpenEditMarketSheet(open);
+          }}
+        />
       </div>
     </div>
   );

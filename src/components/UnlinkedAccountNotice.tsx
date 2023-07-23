@@ -35,7 +35,6 @@ export function UnlinkedAccountNotice() {
           <span className="flex-1 flex justify-end">
             <Button
               variant="default"
-              rounded="md"
               size="sm"
               onClick={() => {
                 toggleSettingsSheetOpen && toggleSettingsSheetOpen("account");

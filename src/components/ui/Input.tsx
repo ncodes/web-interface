@@ -15,8 +15,9 @@ const inputVariants = cva(
       },
       w: {
         default: "w-full",
-        sm: "w-1/4",
-        lg: "w-2/4",
+        sm: "!w-1/4",
+        lg: "!w-2/4",
+        xl: "!w-2/4",
       },
       rounded: {
         default: "rounded-md",
