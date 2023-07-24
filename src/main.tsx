@@ -6,10 +6,11 @@ import "./styles/fonts.css";
 import "./styles/app.css";
 import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import ConnectExample from "./pages/play/ConnectExample.tsx";
-import Index from "./pages/index/Index.tsx";
 import "./i18n/i18n.ts";
 import "./hooks/store/useStore.ts";
-import Market from "./pages/index/Market.tsx";
+import Markets from "./pages/Markets.tsx";
+import Index from "./pages/Index.tsx";
+import Market from "./pages/Market.tsx";
 
 function makePath(path: string) {
   return `:locale?/${path}`;
@@ -28,6 +29,11 @@ const router = createBrowserRouter([
   },
   {
     path: makePath("/markets"),
+    element: <App page={<Markets />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/market/:id"),
     element: <App page={<Market />} />,
     errorElement: <RootErrorBoundary />,
   },

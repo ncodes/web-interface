@@ -22,7 +22,7 @@ import {
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
-function FilterItem({
+export function FilterItem({
   title,
   children,
   className,
@@ -54,7 +54,7 @@ function FilterItem({
   );
 }
 
-export function MarketFilterContent() {
+export function FilterContent() {
   return (
     <div>
       <Accordion defaultValue={["Price"]} type="multiple">
@@ -292,7 +292,7 @@ export function MarketFilter() {
     <div className="pt-3">
       <h1 className="text-lg md:text-xl mb-3">Filter Markets</h1>
       <div className="bg-card-background border border-gray-800 rounded-2xl w-full ">
-        <MarketFilterContent />
+        <FilterContent />
       </div>
     </div>
   );
@@ -336,7 +336,7 @@ export function MarketFilterSheet({
         </SheetHeader>
         <div className=" text-white h-full">
           <ScrollArea type="scroll" className="h-full pb-10">
-            <MarketFilterContent />
+            <FilterContent />
           </ScrollArea>
         </div>
         <div

@@ -1,16 +1,18 @@
 import { Helmet } from "react-helmet";
-import { LeftSidebar } from "../../components/LeftSidebar.tsx";
-import React, { useCallback, useEffect, useState } from "react";
+import { LeftSidebar } from "../components/LeftSidebar.tsx";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import { Header } from "../../components/Header.tsx";
-import { SearchSheetBox } from "../../components/SearchBox.tsx";
-import { NotificationSheet } from "../../components/NotificationSheet.tsx";
-import { UnlinkedAccountNotice } from "../../components/UnlinkedAccountNotice.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { Header } from "../components/Header.tsx";
+import { SearchSheetBox } from "../components/SearchBox.tsx";
+import { NotificationSheet } from "../components/NotificationSheet.tsx";
+import { UnlinkedAccountNotice } from "../components/UnlinkedAccountNotice.tsx";
+import useConnector from "../hooks/connectors/useConnector.tsx";
+import { useUserService } from "../hooks/services/backend/useUserService.ts";
 import { useQuery } from "@tanstack/react-query";
-import { StoreAccessTokenKey } from "../../constants.ts";
-import useStore from "../../hooks/store/useStore.ts";
+import { StoreAccessTokenKey } from "../constants.ts";
+import useStore from "../hooks/store/useStore.ts";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { cn } from "../libs/utils.ts";
 
 export default function Layout({
   tab,
@@ -25,6 +27,9 @@ export default function Layout({
   const setUser = useStore((state) => state.setUser);
   const { getUser } = useUserService();
   const accessToken = localStorage.getItem(StoreAccessTokenKey);
+  const ref = useRef(null);
+  const { scrollY } = useScroll();
+  const [scrollXPos, setScrollXPos] = useState(0);
   const query = useQuery({
     queryKey: ["user", address],
     queryFn: getUser,
@@ -41,18 +46,22 @@ export default function Layout({
     setMobileMenuOpen(isLargeLaptop);
   }, [isLargeLaptop]);
 
+  useMotionValueEvent(scrollY, "change", (val) => {
+    setScrollXPos(val);
+  });
+
   const openMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
   }, [mobileMenuOpen]);
 
   return (
-    <>
+    <div>
       <Helmet>
         <title>Dashboard</title>
-        <body className="bg-background" />
+        <body className="bg-background " />
       </Helmet>
 
-      <div className="container-x flex h-screen text-white text">
+      <div ref={ref} className="container-x flex h-screen text-white text">
         <LeftSidebar
           open={mobileMenuOpen}
           closeRequested={() => {
@@ -61,16 +70,20 @@ export default function Layout({
         />
 
         <div className="flex flex-col flex-1 pt-3">
-          <Header onClick={openMobileMenu} />
-          <div className="flex flex-1 pt-5">
-            <div className="flex-1 relative">
+          <div>
+            <Header onClick={openMobileMenu} />
+          </div>
+          <div className="flex flex-1 h-full">
+            <div className="flex-1 flex flex-col">
               <UnlinkedAccountNotice />
-              <div className="absolute z-0 min-h-full w-full h-auto border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black">
-                {tab}
+              <div className="relative flex-1 flex flex-col overflow-auto mt-2">
+                <div className="absolute z-0 min-h-full w-full h-auto border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black">
+                  {tab}
+                </div>
               </div>
             </div>
             {rightSide && (
-              <div className="w-[400px] px-5 pr-0 hidden xl:block">
+              <div className={cn(`w-[400px] px-5 pr-0 h-full hidden xl:flex`)}>
                 {rightSide}
               </div>
             )}
@@ -80,6 +93,6 @@ export default function Layout({
         <SearchSheetBox />
         <NotificationSheet />
       </div>
-    </>
+    </div>
   );
 }

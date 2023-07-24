@@ -9,7 +9,7 @@ import { InputActivatedSearchBox } from "./SearchBox.tsx";
 
 export function Header(props: { onClick: () => void }) {
   return (
-    <header className="flex items-center">
+    <header className="flex  h-[55px]">
       <MobileMenuActivator onClick={props.onClick} />
       <InputActivatedSearchBox />
       <div className="flex-1 flex justify-end items-center gap-4">

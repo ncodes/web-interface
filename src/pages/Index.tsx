@@ -1,8 +1,8 @@
-import { ActivityStream } from "../../components/ActivityStream.tsx";
-import { ScrollAreaHorizontal } from "../../components/ui/scroll-area.tsx";
-import { TabsList, TabsTrigger } from "../../components/ui/Tabs.tsx";
+import { ActivityStream } from "../components/ActivityStream.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import { TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { Tabs, TabsContent } from "@radix-ui/react-tabs";
-import { Footer } from "../../components/Footer.tsx";
+import { Footer } from "../components/Footer.tsx";
 import Layout from "./Layout.tsx";
 
 export default function Index() {

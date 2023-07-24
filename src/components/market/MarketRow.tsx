@@ -4,7 +4,7 @@ import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import IconHeart from "../icons/IconHeart.tsx";
-import { MarketStat } from "./MarketStat.tsx";
+import { StatCard } from "./StatCard.tsx";
 import { BadgePill } from "./BadgePill.tsx";
 import {
   DropdownMenu,
@@ -19,7 +19,7 @@ import { useState } from "react";
 import { cn } from "../../libs/utils.ts";
 import { EditMarketSheet } from "./EditMarketSheet.tsx";
 
-export function MarketItem({
+export function MarketRow({
   base,
   quote,
   ownerMode,
@@ -62,7 +62,7 @@ export function MarketItem({
         <div className="w-full overflow-hidden scroll-shadow">
           <ScrollAreaHorizontal type="scroll">
             <div className="py-[8px] flex gap-2 px-3">
-              <MarketStat
+              <StatCard
                 title="Price ($)"
                 tip={`The price of 1 ${base} in USD`}
                 title2={
@@ -72,58 +72,58 @@ export function MarketItem({
                 }
               >
                 $1,234
-              </MarketStat>
-              <MarketStat
+              </StatCard>
+              <StatCard
                 title="Price"
                 title2="(UNI)"
                 tip={`The price of 1 ${base} in ${quote}`}
               >
                 50,640
-              </MarketStat>
-              <MarketStat
+              </StatCard>
+              <StatCard
                 title="24hrs Volume"
                 title2=""
                 tip={`The total volume of ${base} traded in the last 24hrs`}
               >
                 <span className="text-gray-200">$45m</span>
-              </MarketStat>
-              <MarketStat
+              </StatCard>
+              <StatCard
                 title="Total Liquidity"
                 title2=""
                 tip={`The total amount of ${base} in the market`}
               >
                 <span className="text-gray-200">$125m</span>
-              </MarketStat>
-              <MarketStat
+              </StatCard>
+              <StatCard
                 title="Commission"
                 title2="(%)"
                 tip={`The commission reserved for the market owner`}
               >
                 <span className="text-gray-200"> 0.5</span>
-              </MarketStat>
-              <MarketStat
+              </StatCard>
+              <StatCard
                 title="Offer Only"
                 title2=""
                 width="w-[125px]"
                 tip={`Only offers can be made on this market. No direct swap.`}
               >
                 <span className="text-gray-200">YES</span>
-              </MarketStat>
-              <MarketStat
+              </StatCard>
+              <StatCard
                 title="PUT Open"
                 title2=""
                 width="w-[125px]"
                 tip={`Liquidity providers must be allow-listed to provider liquidity to this market`}
               >
                 <span className="text-gray-200">YES</span>
-              </MarketStat>
-              <MarketStat
+              </StatCard>
+              <StatCard
                 title="SWAP Open"
                 title2=""
                 tip={`Takers must be allow-listed to swap liquidity from this market`}
               >
                 <span className="text-gray-200">NO</span>
-              </MarketStat>
+              </StatCard>
             </div>
           </ScrollAreaHorizontal>
         </div>

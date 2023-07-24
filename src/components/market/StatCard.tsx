@@ -4,7 +4,7 @@ import { cn } from "../../libs/utils.ts";
 import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 
-export function MarketStat({
+export function StatCard({
   title,
   title2,
   children,
@@ -12,7 +12,7 @@ export function MarketStat({
   width,
 }: {
   title: string;
-  title2: React.ReactNode | string;
+  title2?: React.ReactNode | string;
   tip?: React.ReactNode;
   children: React.ReactNode;
   width?: string;

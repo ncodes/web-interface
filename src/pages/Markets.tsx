@@ -1,40 +1,40 @@
-import { ScrollAreaHorizontal } from "../../components/ui/scroll-area.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../components/ui/Tabs.tsx";
+} from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
-import { Button } from "../../components/ui/Button.tsx";
-import { IconPlus } from "../../components/icons/IconPlus.tsx";
+import { Button } from "../components/ui/Button.tsx";
+import { IconPlus } from "../components/icons/IconPlus.tsx";
 import { useState } from "react";
 import {
   MarketFilter,
   MarketFilterSheet,
-} from "../../components/market/MarketFilter.tsx";
-import { Footer } from "../../components/Footer.tsx";
-import IconFilterOutline from "../../components/icons/IconFilterOutline.tsx";
+} from "../components/market/MarketFilter.tsx";
+import { Footer } from "../components/Footer.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu.tsx";
-import { MarketItem } from "../../components/market/MarketItem.tsx";
-import { CreateMarketSheet } from "../../components/market/CreateMarketSheet.tsx";
+} from "../components/ui/dropdown-menu.tsx";
+import { MarketRow } from "../components/market/MarketRow.tsx";
+import { CreateMarketSheet } from "../components/market/CreateMarketSheet.tsx";
 
 function MarketTabContent() {
-  return <MarketItem base="BTC" quote="UNI" />;
+  return <MarketRow base="BTC" quote="UNI" />;
 }
 
 function MyMarketsTabContent() {
-  return <MarketItem base="BTC" quote="UNI" ownerMode={true} />;
+  return <MarketRow base="BTC" quote="UNI" ownerMode={true} />;
 }
 
 function MyWatchTabContent() {
-  return <MarketItem base="BTC" quote="UNI" />;
+  return <MarketRow base="BTC" quote="UNI" />;
 }
 
 function MarketTabs() {
@@ -145,7 +145,7 @@ function MarketTabs() {
   );
 }
 
-export default function Market() {
+export default function Markets() {
   return (
     <Layout
       tab={<MarketTabs />}
