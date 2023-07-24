@@ -44,7 +44,7 @@ export function Navigation() {
 
   return (
     <nav className="-ml-5 border-b border-b-gray-900 xl:border-b-0 pb-4 xl:pb-0 pl-8">
-      <ul className="mt-3 xl:mt-[50px] flex flex-col xl:space-y-3">
+      <ul className="mt-3 xl:mt-[15px] flex flex-col xl:space-y-3">
         <li>
           <NavPageLink
             iconFile="timeline.svg"

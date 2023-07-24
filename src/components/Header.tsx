@@ -6,10 +6,11 @@ import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import { NetworkSelector } from "./NetworkSelector.tsx";
 import { NavSearchButton } from "./NavSearchButton.tsx";
 import { InputActivatedSearchBox } from "./SearchBox.tsx";
+import { cn } from "../libs/utils.ts";
 
-export function Header(props: { onClick: () => void }) {
+export function Header(props: { onClick: () => void; height?: string }) {
   return (
-    <header className="flex  h-[55px]">
+    <header className={cn("flex", props.height)}>
       <MobileMenuActivator onClick={props.onClick} />
       <InputActivatedSearchBox />
       <div className="flex-1 flex justify-end items-center gap-4">

@@ -11,6 +11,7 @@ import { IconDoubleChevronBack } from "./icons/IconDoubleChevronBack.tsx";
 import { IconSearch } from "./icons/IconSearch.tsx";
 import useStore from "../hooks/store/useStore.ts";
 import { DefaultSettingsSheetTab } from "./SettingsSheet.tsx";
+import { motion } from "framer-motion";
 
 function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
   return (
@@ -27,6 +28,8 @@ function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
 export function LeftSidebar(props: {
   open?: boolean;
   closeRequested: () => void;
+  headerHeight: number;
+  scrollYPos: number;
 }) {
   const [openOverlay, setOpenOverlay] = useState(props.open);
   const toggleSearchSheetOpen = useStore((s) => s.toggleSearchSheetOpen);
@@ -44,7 +47,12 @@ export function LeftSidebar(props: {
           props.closeRequested && props.closeRequested();
         }}
       />
-      <div
+      <motion.div
+        animate={{
+          marginTop:
+            props.scrollYPos > props.headerHeight ? props.scrollYPos : 0,
+        }}
+        transition={{ ease: "linear", duration: 0.08 }}
         className={cn(
           "z-10 absolute border-r xl:border-r-0 border-gray-800 bg-background xl:pl-0 xl:bg-transparent xl:relative flex flex-col justify-between w-[280px] left-0 py-[28px] pt-[18px] h-screen transition-left duration-150",
           { "absolute top-0 -left-[280px] z-10 bg-background": !openOverlay }
@@ -97,7 +105,7 @@ export function LeftSidebar(props: {
             className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[2px]"
           />
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

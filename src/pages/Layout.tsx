@@ -21,6 +21,7 @@ export default function Layout({
   tab?: React.ReactNode;
   rightSide?: React.ReactNode;
 }) {
+  const headerHeight = 55;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isLargeLaptop = useMediaQuery("(min-width: 1280px)");
   const { address } = useConnector();
@@ -29,13 +30,13 @@ export default function Layout({
   const accessToken = localStorage.getItem(StoreAccessTokenKey);
   const ref = useRef(null);
   const { scrollY } = useScroll();
-  const [scrollXPos, setScrollXPos] = useState(0);
   const query = useQuery({
     queryKey: ["user", address],
     queryFn: getUser,
     enabled: !!accessToken && !!address,
     refetchIntervalInBackground: false,
   });
+  const [scrollYPos, setScrollYPos] = useState(0);
 
   useEffect(() => {
     if (!query.isSuccess) return;
@@ -47,7 +48,7 @@ export default function Layout({
   }, [isLargeLaptop]);
 
   useMotionValueEvent(scrollY, "change", (val) => {
-    setScrollXPos(val);
+    setScrollYPos(val);
   });
 
   const openMobileMenu = useCallback(() => {
@@ -64,6 +65,8 @@ export default function Layout({
       <div ref={ref} className="container-x flex h-screen text-white text">
         <LeftSidebar
           open={mobileMenuOpen}
+          headerHeight={headerHeight}
+          scrollYPos={scrollYPos}
           closeRequested={() => {
             setMobileMenuOpen(false);
           }}
@@ -71,21 +74,28 @@ export default function Layout({
 
         <div className="flex flex-col flex-1 pt-3">
           <div>
-            <Header onClick={openMobileMenu} />
+            <Header onClick={openMobileMenu} height={`h-[${headerHeight}px]`} />
           </div>
           <div className="flex flex-1 h-full">
             <div className="flex-1 flex flex-col">
               <UnlinkedAccountNotice />
-              <div className="relative flex-1 flex flex-col overflow-auto mt-2">
+              <div className="relative flex-1 flex flex-col mt-2">
                 <div className="absolute z-0 min-h-full w-full h-auto border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black">
                   {tab}
                 </div>
               </div>
             </div>
             {rightSide && (
-              <div className={cn(`w-[400px] px-5 pr-0 h-full hidden xl:flex`)}>
+              <motion.div
+                animate={{
+                  marginTop:
+                    scrollYPos > headerHeight ? scrollYPos - headerHeight : 0,
+                }}
+                transition={{ ease: "linear", duration: 0.08 }}
+                className={cn(`w-[400px] px-5 pr-0 h-full hidden xl:flex`)}
+              >
                 {rightSide}
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
