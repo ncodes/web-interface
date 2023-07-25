@@ -17,7 +17,7 @@ function IconMenu2Line(props: React.SVGProps<SVGSVGElement>) {
 
 export function MobileMenuActivator(props: { onClick: () => void }) {
   return (
-    <div className="flex gap-4 mr-5 xl:hidden">
+    <div className="flex gap-4 mr-5 mt-1 xl:hidden">
       <span className="shrink-0 cursor-pointer" onClick={props.onClick}>
         <IconMenu2Line
           className="border outline-0 select-none p-1 pb-2 pr-2 pt-1 border-gray-600 text-gray-300 rounded-xl hover:border-chinese-green hover:text-chinese-green transition-all duration-1000"

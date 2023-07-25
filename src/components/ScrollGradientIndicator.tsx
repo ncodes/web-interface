@@ -4,9 +4,11 @@ import { cn } from "../libs/utils.ts";
 export default function ScrollGradientIndicator({
   children,
   side = "right",
+  className,
 }: {
   children: ReactElement;
   side?: "bottom" | "right";
+  className?: string;
 }) {
   const [progress, setProgress] = React.useState(0);
 
@@ -26,10 +28,13 @@ export default function ScrollGradientIndicator({
 
   return (
     <div
-      className={cn({
-        "scroll-gradient-right": side == "right" && progress < 100,
-        "scroll-gradient-down": side == "bottom" && progress < 100,
-      })}
+      className={cn(
+        {
+          "scroll-gradient-right": side == "right" && progress < 100,
+          "scroll-gradient-down": side == "bottom" && progress < 100,
+        },
+        className
+      )}
     >
       {side == "bottom" && <span className="grad-indicator"></span>}
       {React.cloneElement(children, {

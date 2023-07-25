@@ -58,7 +58,7 @@ export function LeftSidebar(props: {
           { "absolute top-0 -left-[280px] z-[6] bg-background": !openOverlay }
         )}
       >
-        <header className="flex gap-4 -ml-[5px] pl-8 mt-1">
+        <header className="flex gap-4 -ml-[5px] pl-8">
           <a href="#" className="pt-[6px]">
             <img src="/images/logo-mark-w.svg" alt="logo" />
           </a>

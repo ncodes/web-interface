@@ -35,6 +35,7 @@ import IconArrowDownUp from "../components/icons/IconArrowDownUp.tsx";
 import { IconFlagVerified } from "../components/icons/IconVerifiedBadge.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { LiqAvatarHoverCard } from "../components/liquidity/LiqAvatarHoverCard.tsx";
+import IconOffer from "../components/icons/IconOffer.tsx";
 
 function MarketTabContent() {
   return <MarketRow base="BTC" quote="UNI" noFocus />;
@@ -155,7 +156,7 @@ function LiquidityRow({
         </div>
       </div>
       <div className="flex pr-2 justify-between border-t border-gray-800">
-        <div className="flex w-full items-center gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden">
+        <div className="flex items-center gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden">
           <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
             {/*<span className="hidden sm:inline">Badges</span>*/}
             <ToolTip tip="Badges required of the taker by the liquidity owner">
@@ -165,7 +166,7 @@ function LiquidityRow({
             </ToolTip>
           </div>
           <div className="flex-1 overflow-hidden tracking-wider">
-            <ScrollGradientIndicator>
+            <ScrollGradientIndicator className="[&::before]:rounded-none">
               <ScrollAreaHorizontal type="scroll">
                 <div className="flex items-center gap-2 pr-3">
                   <BadgePill name="LP:KYC" />
@@ -178,39 +179,60 @@ function LiquidityRow({
             </ScrollGradientIndicator>
           </div>
         </div>
-        <div className="flex items-center border-l border-gray-800 pl-2">
-          <span className="inline-block pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
+        <div className="flex items-center border-l border-gray-800">
+          <span className="hidden md:inline border-r border-gray-800 shrink-0">
+            <Button
+              variant="link"
+              rounded="none"
+              className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+            >
+              <IconOffer width="15px" /> Create Offer
+            </Button>
+          </span>
+          <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
             {!ownerMode && <IconHeart />}
-            {ownerMode && (
-              <DropdownMenu
-                onOpenChange={(open) => {
-                  setMoreMenuOpen(open);
-                }}
-              >
-                <DropdownMenuTrigger className="outline-0 ring-0">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={cn(
-                      "outline-0 ring-0 flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                      { "scale-x-105 text-chinese-green": moreMenuOpen }
-                    )}
-                  >
-                    <DotsVerticalIcon />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
+          </span>
+          <span className="md:hidden border-l border-gray-800">
+            <DropdownMenu
+              onOpenChange={(open) => {
+                setMoreMenuOpen(open);
+              }}
+            >
+              <DropdownMenuTrigger className="outline-0 ring-0">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
+                    { "scale-x-105 text-chinese-green": moreMenuOpen }
+                  )}
+                >
+                  <DotsVerticalIcon />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
+                {ownerMode && (
                   <DropdownMenuItem
                     className="flex gap-2"
                     onClick={() => {
                       setOpenEditLiqSheet(true);
                     }}
                   >
-                    <IconFilterOutline /> Edit Liquidity
+                    <IconFilterOutline width="15px" /> Edit Liquidity
                   </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+                )}
+                {!ownerMode && (
+                  <DropdownMenuItem
+                    className="flex gap-2"
+                    onClick={() => {
+                      setOpenEditLiqSheet(true);
+                    }}
+                  >
+                    <IconOffer width="15px" /> Create Offer
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </span>
         </div>
       </div>

@@ -152,7 +152,7 @@ export function MarketRow({
             </ToolTip>
           </div>
           <div className="flex-1 overflow-hidden tracking-wider">
-            <ScrollGradientIndicator>
+            <ScrollGradientIndicator className="[&::before]:rounded-none">
               <ScrollAreaHorizontal type="scroll">
                 <div className="flex items-center gap-2 pr-3">
                   <BadgePill name="LP:KYC" />

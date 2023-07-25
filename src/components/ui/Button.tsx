@@ -5,7 +5,7 @@ import { cn } from "../../libs/utils.ts";
 
 const buttonVariants = cva(
   "select-none inline-flex items-center justify-center text-sm font-medium " +
-    "transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring " +
+    "transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring " +
     "disabled:pointer-events-none disabled:opacity-50 tracking-wider",
   {
     variants: {
@@ -26,6 +26,7 @@ const buttonVariants = cva(
         sm: "rounded-sm",
         md: "rounded-md",
         xl: "rounded-xl",
+        none: "rounded-none",
       },
       size: {
         default: "h-9 px-4 py-2",

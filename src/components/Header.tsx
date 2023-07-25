@@ -7,18 +7,21 @@ import { NetworkSelector } from "./NetworkSelector.tsx";
 import { NavSearchButton } from "./NavSearchButton.tsx";
 import { InputActivatedSearchBox } from "./SearchBox.tsx";
 import { cn } from "../libs/utils.ts";
+import useConnector from "../hooks/connectors/useConnector.tsx";
 
 export function Header(props: { onClick: () => void; height?: string }) {
+  const { connected } = useConnector();
+
   return (
-    <header className={cn("flex", props.height)}>
+    <header className={cn("flex -mt-[1px]", props.height)}>
       <MobileMenuActivator onClick={props.onClick} />
       <InputActivatedSearchBox />
-      <div className="flex-1 flex justify-end items-center gap-4">
+      <div className="flex-1 flex justify-end items-center gap-4 ">
         <NavSearchButton />
         <LanguageSelector />
         <NavHelpButton />
         <NavNotificationButton />
-        <NetworkSelector />
+        {connected && <NetworkSelector />}
         <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
         <ConnectWalletButton
           className="lg:hidden xs:min-w-[120px]"

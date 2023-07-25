@@ -16,7 +16,7 @@ function Amount(props: { balance: string; symbol: string }) {
       <span className="font-medium text-gray-900 overflow-auto scrollbar-hide">
         {formatMoney(props.balance)}
       </span>
-      <span className="hidden md:inline">{props.symbol}</span>
+      <span className="hidden xxs:inline">{props.symbol}</span>
     </span>
   );
 }
