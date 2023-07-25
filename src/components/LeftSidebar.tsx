@@ -17,7 +17,7 @@ function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
   return (
     <div
       className={cn(
-        "xl:hidden fixed w-screen h-screen bg-black/50 left-0 top-0 z-[6]",
+        "xl:hidden fixed w-screen h-screen bg-black/50 left-0 top-0 z-[15] md:z-[6] ",
         { hidden: !props.open }
       )}
       onClick={props.onClick}
@@ -54,7 +54,7 @@ export function LeftSidebar(props: {
         }}
         transition={{ ease: "linear", duration: 0.08 }}
         className={cn(
-          "z-[6] absolute border-r xl:border-r-0 border-gray-800 bg-background xl:pl-0 xl:bg-transparent xl:relative flex flex-col justify-between w-[280px] left-0 py-[28px] pt-[18px] h-screen transition-left duration-150",
+          "z-[15] md:z-[6] absolute border-r xl:border-r-0 border-gray-800 bg-background xl:pl-0 xl:bg-transparent xl:relative flex flex-col justify-between w-[280px] left-0 py-[28px] pt-[18px] h-screen transition-left duration-150",
           { "absolute top-0 -left-[280px] z-[6] bg-background": !openOverlay }
         )}
       >

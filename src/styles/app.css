@@ -144,7 +144,7 @@
     @apply relative;
 
     &::before {
-      @apply absolute w-[30px] rounded-tr-2xl from-10% h-full -mr-1 right-0 z-[5] bg-gradient-to-l from-gray-950;
+      @apply absolute w-[30px] rounded-tr-2xl from-10% h-full right-0 z-[5] bg-gradient-to-l from-gray-950;
       content: "";
     }
   }
@@ -153,7 +153,7 @@
     @apply relative;
 
     span.grad-indicator {
-      @apply block w-full absolute bottom-0 from-10% h-[30px] bg-gradient-to-t from-gray-950;
+      @apply block w-full absolute rounded-b-2xl bottom-0 from-10% h-[30px] bg-gradient-to-t from-gray-950;
     }
   }
 }

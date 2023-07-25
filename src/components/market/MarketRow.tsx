@@ -57,7 +57,7 @@ export function MarketRow({
               <span>
                 {base} - {quote}
               </span>
-              <span className="flex items-center gap-1 text-sm font-extralight text-blue-200">
+              <span className="flex items-center gap-1 text-xs font-extralight text-blue-200">
                 <span>
                   ID:<span className="hidden md:inline"> 0x83...a73b</span>
                 </span>
@@ -146,7 +146,7 @@ export function MarketRow({
           <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
             {/*<span className="hidden sm:inline">Badges</span>*/}
             <ToolTip tip="Badges required by the market creator. LP stands for 'Liquidity Provider', TK for 'Taker'">
-              <span className="text-gray-600 hover:text-chinese-green cursor-pointer transition-all duration-300">
+              <span className="text-gray-400 hover:text-chinese-green cursor-pointer transition-all duration-300">
                 <IconInfoCircle />
               </span>
             </ToolTip>

@@ -74,7 +74,7 @@ function LiquidityRow({
                 <span>
                   <IconArrowDownUp width="12px" />
                 </span>
-                <span className="text-gray-400 text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4">
+                <span className="text-blue-200 text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4">
                   84% (256 trades)
                 </span>
               </div>
@@ -160,7 +160,7 @@ function LiquidityRow({
           <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
             {/*<span className="hidden sm:inline">Badges</span>*/}
             <ToolTip tip="Badges required of the taker by the liquidity owner">
-              <span className="text-gray-600 hover:text-chinese-green cursor-pointer transition-all duration-300">
+              <span className="text-gray-400 hover:text-chinese-green cursor-pointer transition-all duration-300">
                 <IconInfoCircle />
               </span>
             </ToolTip>
@@ -275,7 +275,7 @@ function MarketTabs() {
       <TabsContent value="markets" className="p-3 pt-0 flex flex-col gap-3">
         <MarketTabContent />
         <h1 className="p-5 py-3 text-xl">Liquidities</h1>
-        <div className="flex gap-2 flex-col">
+        <div className="flex gap-2 flex-col z-[6]">
           <LiquidityRow base="BTC" quote="UNI" />
           {/*<LiquidityRow base="BTC" quote="UNI" />*/}
           {/*<LiquidityRow base="BTC" quote="UNI" />*/}
