@@ -62,7 +62,10 @@ export default function Layout({
         <body className="bg-background " />
       </Helmet>
 
-      <div ref={ref} className="container-x flex h-screen text-white text">
+      <div
+        ref={ref}
+        className="container-x flex h-screen text-white text z-[5]"
+      >
         <LeftSidebar
           open={mobileMenuOpen}
           headerHeight={headerHeight}
@@ -72,14 +75,14 @@ export default function Layout({
           }}
         />
 
-        <div className="flex flex-col flex-1 pt-3">
+        <div className="flex flex-col flex-1 pt-3 z-10">
           <div>
             <Header onClick={openMobileMenu} height={`h-[${headerHeight}px]`} />
           </div>
           <div className="flex flex-1 h-full">
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col mt-3">
               <UnlinkedAccountNotice />
-              <div className="relative flex-1 flex flex-col mt-2">
+              <div className="relative flex-1 flex flex-col">
                 <div className="absolute z-0 min-h-full w-full h-auto border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black">
                   {tab}
                 </div>

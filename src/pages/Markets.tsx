@@ -24,6 +24,7 @@ import {
 } from "../components/ui/dropdown-menu.tsx";
 import { MarketRow } from "../components/market/MarketRow.tsx";
 import { CreateMarketSheet } from "../components/market/CreateMarketSheet.tsx";
+import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 
 function MarketTabContent() {
   return <MarketRow base="BTC" quote="UNI" />;
@@ -48,26 +49,28 @@ function MarketTabs() {
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollAreaHorizontal type="scroll" className="w-full">
-          <div className="flex flex-1 w-full gap-2 items-center px-2 scroll-shadow py-2">
-            <TabsTrigger
-              value="markets"
-              className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
-            >
-              Markets
-            </TabsTrigger>
-            <TabsTrigger
-              value="my-markets"
-              className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
-            >
-              My Markets
-            </TabsTrigger>
-            <TabsTrigger
-              value="watching"
-              className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
-            >
-              Watching
-            </TabsTrigger>
-          </div>
+          <ScrollGradientIndicator>
+            <div className="flex flex-1 w-full gap-2 items-center px-2 py-2">
+              <TabsTrigger
+                value="markets"
+                className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+              >
+                Markets
+              </TabsTrigger>
+              <TabsTrigger
+                value="my-markets"
+                className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+              >
+                My Markets
+              </TabsTrigger>
+              <TabsTrigger
+                value="watching"
+                className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+              >
+                Watching
+              </TabsTrigger>
+            </div>
+          </ScrollGradientIndicator>
         </ScrollAreaHorizontal>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <Button
@@ -150,9 +153,11 @@ export default function Markets() {
     <Layout
       tab={<MarketTabs />}
       rightSide={
-        <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col h-full mt-2">
           <MarketFilter />
-          <Footer />
+          <div className="text-gray-200">
+            <Footer />
+          </div>
         </div>
       }
     />

@@ -65,7 +65,7 @@ function SearchContent({ renderInput }: { renderInput?: boolean }) {
   return (
     <>
       {renderInput && (
-        <div className="flex lg:hidden p-2 border-b border-gray-800 drop-shadow-2xl">
+        <div className="flex lg:hidden p-2 border-b border-gray-800 ">
           <SearchInput
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
@@ -132,7 +132,7 @@ export default function SearchBox(props: {
   }, [props.open]);
 
   return (
-    <div className="hidden md:block z-[5]">
+    <div className="hidden md:block z-[5] ">
       {open && (
         <div
           className="fixed w-full h-full top-0 left-0 right-0"
@@ -161,7 +161,7 @@ export default function SearchBox(props: {
                 transition: { delay: 0, ease: "easeInOut" },
               }}
               className={cn(
-                "absolute bg-card-background md:w-[500px] xl:w-full min-h-[100px] border border-gray-700 ring-chinese-green rounded-xl mt-5  drop-shadow-2xl"
+                "overflow-hidden absolute bg-card-background md:w-[500px] xl:w-full min-h-[100px] border border-gray-700 ring-chinese-green rounded-xl mt-5  "
               )}
             >
               <SearchContent renderInput={true} />

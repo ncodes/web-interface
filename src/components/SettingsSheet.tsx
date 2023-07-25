@@ -34,6 +34,7 @@ import {
   AccordionTrigger,
 } from "./ui/accordion.tsx";
 import { LinkAccountSetting } from "./LinkAccountSetting.tsx";
+import ScrollGradientIndicator from "./ScrollGradientIndicator.tsx";
 
 function BalanceCard(props: {
   symbol?: string;
@@ -251,28 +252,30 @@ export function SettingsSheet(props: {
             defaultValue={settingsSheetActiveTab || "balances"}
             className="w-full h-full transition-all duration-500"
           >
-            <ScrollAreaHorizontal type="scroll">
-              <TabsList className="justify-start px-3 py-2 border-b border-modal-border scroll-shadow">
-                <TabsTrigger
-                  value="balances"
-                  className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
-                >
-                  Balances
-                </TabsTrigger>
-                <TabsTrigger
-                  value="fee-purse"
-                  className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
-                >
-                  Fee Pouch
-                </TabsTrigger>
-                <TabsTrigger
-                  value="account"
-                  className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
-                >
-                  Account
-                </TabsTrigger>
-              </TabsList>
-            </ScrollAreaHorizontal>
+            <ScrollGradientIndicator>
+              <ScrollAreaHorizontal type="scroll">
+                <TabsList className="justify-start px-3 py-2 border-b border-modal-border">
+                  <TabsTrigger
+                    value="balances"
+                    className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                  >
+                    Balances
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="fee-purse"
+                    className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                  >
+                    Fee Pouch
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="account"
+                    className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                  >
+                    Account
+                  </TabsTrigger>
+                </TabsList>
+              </ScrollAreaHorizontal>
+            </ScrollGradientIndicator>
             <BalancesTab address={address} />
             <FeePouchTab />
             <AccountTab />
