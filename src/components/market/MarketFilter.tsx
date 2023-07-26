@@ -1,17 +1,9 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion.tsx";
+import { Accordion } from "../ui/accordion.tsx";
 import { Input } from "../ui/Input.tsx";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group.tsx";
 import { Label } from "../ui/label.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import React, { ReactNode, useEffect, useState } from "react";
-import { cn } from "../../libs/utils.ts";
+import { ReactNode, useEffect, useState } from "react";
 import { Button } from "../ui/Button.tsx";
-import { ToolTip } from "../ToolTip.tsx";
 import {
   Sheet,
   SheetContent,
@@ -21,38 +13,7 @@ import {
 } from "../ui/sheet.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
-
-export function FilterItem({
-  title,
-  children,
-  className,
-  tip,
-}: {
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-  tip?: React.ReactNode;
-}) {
-  return (
-    <AccordionItem value={title} className={cn(className)}>
-      <AccordionTrigger className="px-5 py-3 tracking-wider">
-        <div className="flex items-center gap-2">
-          <span>{title}</span>
-          <ToolTip tip={tip}>
-            <span className="opacity-60 hover:opacity-100 cursor-pointer">
-              <IconInfoCircle width="15" />
-            </span>
-          </ToolTip>
-        </div>
-      </AccordionTrigger>
-      <AccordionContent className="text-gray-200 px-5 pt-1">
-        <div className="flex gap-2">
-          <div className="flex-1 flex">{children}</div>
-        </div>
-      </AccordionContent>
-    </AccordionItem>
-  );
-}
+import { FilterItem } from "../FilterItem.tsx";
 
 export function FilterContent() {
   return (

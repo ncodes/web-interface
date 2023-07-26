@@ -2,7 +2,6 @@ import { useState } from "react";
 import { LiqAvatarHoverCard } from "./LiqAvatarHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { IconFlagVerified } from "../icons/IconVerifiedBadge.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconArrowDownUp from "../icons/IconArrowDownUp.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
@@ -23,6 +22,7 @@ import {
 import { cn } from "../../libs/utils.ts";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { VerifiedBadge } from "./VerifiedBadge.tsx";
+import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
 
 export function LiquidityRow({
   base,
@@ -34,7 +34,8 @@ export function LiquidityRow({
   ownerMode?: boolean;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
-  const [openEditLiqSheet, setOpenEditLiqSheet] = useState(false);
+  const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
+    useState(false);
 
   return (
     <div className="border border-gray-800 transition-all hover:border-chinese-green duration-300 hover:scale-[1.002] cursor-pointer rounded-xl">
@@ -178,6 +179,7 @@ export function LiquidityRow({
                 variant="link"
                 rounded="none"
                 className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                onClick={() => setOpenManageLiquiditySheet(true)}
               >
                 <IconEdit width="15px" /> Manage
               </Button>
@@ -209,7 +211,7 @@ export function LiquidityRow({
                   <DropdownMenuItem
                     className="flex gap-2"
                     onClick={() => {
-                      setOpenEditLiqSheet(true);
+                      setOpenManageLiquiditySheet(true);
                     }}
                   >
                     <IconEdit width="15px" /> Manage Liquidity
@@ -218,9 +220,7 @@ export function LiquidityRow({
                 {!ownerMode && (
                   <DropdownMenuItem
                     className="flex gap-2"
-                    onClick={() => {
-                      setOpenEditLiqSheet(true);
-                    }}
+                    onClick={() => setOpenManageLiquiditySheet(true)}
                   >
                     <IconOffer width="15px" /> Create Offer
                   </DropdownMenuItem>
@@ -230,6 +230,12 @@ export function LiquidityRow({
           </span>
         </div>
       </div>
+      <ManageLiquiditySheet
+        open={openManageLiquiditySheet}
+        onOpenChange={(open) => {
+          setOpenManageLiquiditySheet(open);
+        }}
+      />
     </div>
   );
 }

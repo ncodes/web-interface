@@ -13,7 +13,8 @@ import {
 } from "../ui/sheet.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { FilterItem } from "./MarketFilter.tsx";
+
+import { FilterItem } from "../FilterItem.tsx";
 
 export function FilterContent() {
   return (
