@@ -128,7 +128,7 @@ export function EditMarketSheet({
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">
             <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
-              Edit Market
+              Manage Market
             </SheetTitle>
           </div>
         </SheetHeader>

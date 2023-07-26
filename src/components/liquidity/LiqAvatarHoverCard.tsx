@@ -6,11 +6,11 @@ import {
 } from "../ui/hover-card.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { IconFlagVerified } from "../icons/IconVerifiedBadge.tsx";
 import { StatCard } from "../market/StatCard.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import IconCopyFilled from "../icons/IconCopyFilled.tsx";
 import { Button } from "../ui/Button.tsx";
+import { VerifiedBadge } from "./VerifiedBadge.tsx";
 
 export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
         >
           {children}
         </HoverCardTrigger>
-        <HoverCardContent className="rounded-2xl overflow-hidden bg-modal-background border-gray-600 text-gray-200 p-0">
+        <HoverCardContent className="rounded-2xl bg-modal-background border-gray-600 text-gray-200 p-0">
           <div className="p-3 py-2 text-sm flex items-center gap-2 border-b border-gray-700">
             <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
             <div>
@@ -44,7 +44,7 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
                 </span>
               </div>
               <div className="flex gap-1 font-light text-xs text-gray-400">
-                <IconFlagVerified width="15px" />
+                <VerifiedBadge />
                 Merchant
               </div>
             </div>

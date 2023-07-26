@@ -47,7 +47,7 @@ export function FilterContent() {
 
         <FilterItem
           title="Available Liquidity"
-          tip="Find markets with certain amount of available liquidity"
+          tip="Find liquidity with certain available amount"
         >
           <div>
             <Input
@@ -76,7 +76,7 @@ export function FilterContent() {
 
         <FilterItem
           title="Merchants Only"
-          tip="Find markets where liquidity providers are registered merchants"
+          tip="Find liquidities provided by merchants"
         >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
@@ -97,7 +97,7 @@ export function FilterContent() {
 
         <FilterItem
           title="KYC'd Liquidity Providers"
-          tip="Find markets where liquidity providers have completed KYC"
+          tip="Find liquidities provided by users who have completed KYC"
         >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
@@ -118,7 +118,7 @@ export function FilterContent() {
 
         <FilterItem
           title="KYC'd Takers"
-          tip="Find markets where takers have completed KYC"
+          tip="Find liquidities only available to takers that have completed KYC"
         >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <span className="flex items-center gap-2">
@@ -138,99 +138,16 @@ export function FilterContent() {
         </FilterItem>
 
         <FilterItem
-          title="Offer Only"
-          tip="Find markets where only offers are allowed (no direct swaps)"
-        >
-          <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
-            <span className="flex items-center gap-2">
-              <RadioGroupItem value="false" id="no" />
-              <Label htmlFor="all" className="font-light tracking-wider">
-                No
-              </Label>
-            </span>
-            <span className="flex items-center gap-2">
-              {" "}
-              <RadioGroupItem value="true" id="yes" />
-              <Label htmlFor="yes" className="font-light tracking-wider">
-                Yes
-              </Label>
-            </span>
-          </RadioGroup>
-        </FilterItem>
-
-        <FilterItem
-          title="By Market ID"
-          tip="Find a market by its address or ID"
+          title="By Provider"
+          tip="Find a liquidity by its owner's address"
         >
           <Input type="text" placeholder="e.g. 0x0..." className="pl-2" />
-        </FilterItem>
-
-        <FilterItem
-          title="By Creator"
-          tip="Find a market by its creator's address"
-        >
-          <Input type="text" placeholder="e.g. 0x0..." className="pl-2" />
-        </FilterItem>
-
-        <FilterItem
-          title="PUT Permissioned"
-          tip="Find markets that require or don't require liquidity providers to be allowlisted before they can add liquidity"
-        >
-          <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
-            <span className="flex items-center gap-2">
-              <RadioGroupItem value="false" id="no" />
-              <Label htmlFor="all" className="font-light tracking-wider">
-                No
-              </Label>
-            </span>
-            <span className="flex items-center gap-2">
-              {" "}
-              <RadioGroupItem value="true" id="yes" />
-              <Label htmlFor="yes" className="font-light tracking-wider">
-                Yes
-              </Label>
-            </span>
-          </RadioGroup>
-        </FilterItem>
-
-        <FilterItem
-          title="SWAP Permissioned"
-          tip="Find markets that require or don't require takers to be allowlisted before they can swap"
-        >
-          <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
-            <span className="flex items-center gap-2">
-              <RadioGroupItem value="false" id="no" />
-              <Label htmlFor="all" className="font-light tracking-wider">
-                No
-              </Label>
-            </span>
-            <span className="flex items-center gap-2">
-              {" "}
-              <RadioGroupItem value="true" id="yes" />
-              <Label htmlFor="yes" className="font-light tracking-wider">
-                Yes
-              </Label>
-            </span>
-          </RadioGroup>
-        </FilterItem>
-
-        <FilterItem
-          title="PUT Badges"
-          tip="Find markets that require liquidity providers to have one or more badges"
-        >
-          <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
-            <Input
-              type="text"
-              placeholder="e.g merchant, bitcoiner"
-              className="pl-2"
-            />
-          </RadioGroup>
         </FilterItem>
 
         <FilterItem
           title="SWAP Badges"
           className="border-none"
-          tip="Find markets that require takers to have one or more badges"
+          tip="Find liquidities that require takers to have one or more badges"
         >
           <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
             <Input

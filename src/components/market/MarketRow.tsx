@@ -19,6 +19,8 @@ import { useState } from "react";
 import { cn } from "../../libs/utils.ts";
 import { EditMarketSheet } from "./EditMarketSheet.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import IconOffer from "../icons/IconOffer.tsx";
+import IconEdit from "../icons/IconEdit.tsx";
 
 export function MarketRow({
   base,
@@ -165,21 +167,37 @@ export function MarketRow({
             </ScrollGradientIndicator>
           </div>
         </div>
-        <div className="flex items-center border-l border-gray-800 pl-2">
-          <span className="inline-block pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
+        <div className="flex items-center border-l border-gray-800">
+          {ownerMode && (
+            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
+              <Button
+                variant="link"
+                rounded="none"
+                onClick={() => {
+                  setOpenEditMarketSheet(true);
+                }}
+                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+              >
+                <IconEdit width="15px" /> Manage
+              </Button>
+            </span>
+          )}
+          <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
             {!ownerMode && <IconHeart />}
-            {ownerMode && (
+          </span>
+          {ownerMode && (
+            <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu
                 onOpenChange={(open) => {
                   setMoreMenuOpen(open);
                 }}
               >
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger className="outline-0 ring-0">
                   <Button
                     variant="ghost"
                     size="icon"
                     className={cn(
-                      "flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
+                      "outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
                       { "scale-x-105 text-chinese-green": moreMenuOpen }
                     )}
                   >
@@ -193,12 +211,12 @@ export function MarketRow({
                       setOpenEditMarketSheet(true);
                     }}
                   >
-                    <IconFilterOutline /> Edit Market
+                    <IconEdit width="15px" /> Manage Market
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            )}
-          </span>
+            </span>
+          )}
         </div>
       </div>
       <div className="absolute">
