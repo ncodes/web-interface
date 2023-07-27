@@ -18,6 +18,7 @@ import { IconPlus } from "../components/icons/IconPlus.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
+import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
 
 function MarketTabContent() {
   return <MarketRow base="BTC" quote="UNI" noFocus />;
@@ -25,6 +26,7 @@ function MarketTabContent() {
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
+  const [openAddLiquiditySheet, setOpenAddLiquiditySheet] = useState(false);
 
   return (
     <Tabs
@@ -49,6 +51,9 @@ function MarketTabs() {
             variant="outline"
             size="sm"
             className="flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
+            onClick={() => {
+              setOpenAddLiquiditySheet(true);
+            }}
           >
             <IconPlus />
             <span>Add Liquidity</span>
@@ -97,6 +102,13 @@ function MarketTabs() {
         active={openFilterSheet}
         onOpen={(open) => {
           setOpenFilterSheet(open);
+        }}
+      />
+      <ManageLiquiditySheet
+        addMode={true}
+        open={openAddLiquiditySheet}
+        onOpenChange={(open) => {
+          setOpenAddLiquiditySheet(open);
         }}
       />
     </Tabs>

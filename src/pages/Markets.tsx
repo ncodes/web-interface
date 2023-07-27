@@ -94,13 +94,9 @@ function MarketTabs() {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green"
-              >
+              <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
                 <DotsVerticalIcon />
-              </Button>
+              </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
               <DropdownMenuItem

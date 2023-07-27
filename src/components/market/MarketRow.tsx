@@ -14,12 +14,10 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import { Button } from "../ui/Button.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import IconFilterOutline from "../icons/IconFilterOutline.tsx";
 import { useState } from "react";
 import { cn } from "../../libs/utils.ts";
 import { EditMarketSheet } from "./EditMarketSheet.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
-import IconOffer from "../icons/IconOffer.tsx";
 import IconEdit from "../icons/IconEdit.tsx";
 
 export function MarketRow({
@@ -143,13 +141,13 @@ export function MarketRow({
           </ScrollGradientIndicator>
         </div>
       </div>
-      <div className="flex pr-2 justify-between border-t border-gray-800">
+      <div className="flex justify-between border-t border-gray-800">
         <div className="flex w-full items-center gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden">
           <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
             {/*<span className="hidden sm:inline">Badges</span>*/}
             <ToolTip tip="Badges required by the market creator. LP stands for 'Liquidity Provider', TK for 'Taker'">
               <span className="text-gray-400 hover:text-chinese-green cursor-pointer transition-all duration-300">
-                <IconInfoCircle />
+                <IconInfoCircle width="22px" />
               </span>
             </ToolTip>
           </div>
@@ -193,16 +191,14 @@ export function MarketRow({
                 }}
               >
                 <DropdownMenuTrigger className="outline-0 ring-0">
-                  <Button
-                    variant="ghost"
-                    size="icon"
+                  <span
                     className={cn(
-                      "outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
+                      "outline-0 px-2 py-3 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
                       { "scale-x-105 text-chinese-green": moreMenuOpen }
                     )}
                   >
                     <DotsVerticalIcon />
-                  </Button>
+                  </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
                   <DropdownMenuItem

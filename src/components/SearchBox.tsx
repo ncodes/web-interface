@@ -16,15 +16,18 @@ import { IconSearch } from "./icons/IconSearch.tsx";
 import { useMediaQuery } from "usehooks-ts";
 import useStore from "../hooks/store/useStore.ts";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import ScrollGradientIndicator from "./ScrollGradientIndicator.tsx";
 
 function SearchBoxItem() {
   return (
-    <div className="flex py-2 px-3 gap-4 items-center hover:bg-gray-950 cursor-pointer">
+    <div className="flex py-2 px-3 gap-2 items-center hover:bg-gray-950 cursor-pointer">
       <PairAvatar
         base="BTC"
         quote="UNI"
         baseSrc="/images/icons/asset-icons/btc.svg"
         quoteSrc="/images/icons/asset-icons/uni.svg"
+        className="[&>span>img]:w-[32px]"
+        className2="[&>span>img]:w-[32px] !-ml-3"
       />
       <div>
         <div className="text-sm">BTC - UNI</div>
@@ -74,48 +77,47 @@ function SearchContent({ renderInput }: { renderInput?: boolean }) {
           />
         </div>
       )}
-      <ScrollArea
-        className="h-full pb-[40px] md:pb-0 md:h-[400px]"
-        type="scroll"
-      >
-        <div className="flex justify-between items-center p-3 py-3 ">
-          <span className="font-normal text-gray-100 tracking-wider text-xs p-1 px-3 bg-gray-700 rounded-full">
-            Recent Search
-          </span>
-          <span className="font-light text-xs text-gray-300 tracking-wider">
-            12 Results
-          </span>
-        </div>
-        <div className="divide-y divide-gray-900">
-          <SearchBoxItem />
-          <SearchBoxItem />
-        </div>
+      <ScrollGradientIndicator side="bottom" show={true}>
+        <ScrollArea className="pb-[40px] md:pb-0 md:h-[400px]" type="scroll">
+          <div className="flex justify-between items-center p-3 py-3 pb-1 ">
+            <span className="font-medium text-gray-100 tracking-wider text-sm rounded-full">
+              Recent Search
+            </span>
+            <span className="font-light text-xs text-gray-300 tracking-wider">
+              12 Results
+            </span>
+          </div>
+          <div className="divide-y divide-gray-900">
+            <SearchBoxItem />
+            <SearchBoxItem />
+          </div>
 
-        <div className="flex justify-between items-center p-3 py-3 ">
-          <span className="font-normal text-gray-100 tracking-wider text-xs p-1 px-3 bg-gray-700 rounded-full">
-            Top Markets
-          </span>
-          <span className="font-light text-xs text-gray-300 tracking-wider">
-            4 Results
-          </span>
-        </div>
-        <div className="divide-y divide-gray-900 [&>div:last-child]:rounded-b-2xl">
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-          <SearchBoxItem />
-        </div>
-      </ScrollArea>
+          <div className="flex justify-between items-center p-3 py-3 ">
+            <span className="font-medium text-gray-100 tracking-wider text-sm rounded-full">
+              Top Markets
+            </span>
+            <span className="font-light text-xs text-gray-300 tracking-wider">
+              4 Results
+            </span>
+          </div>
+          <div className="divide-y divide-gray-900 [&>div:last-child]:rounded-b-2xl">
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+            <SearchBoxItem />
+          </div>
+        </ScrollArea>
+      </ScrollGradientIndicator>
     </>
   );
 }

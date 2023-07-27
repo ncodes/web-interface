@@ -9,6 +9,8 @@ const inputVariants = cva(
       variant: {
         default: "",
         primary: "pl-2 border-blue-300/40",
+        ghost:
+          "border-transparent bg-transparent focus-visible:ring-transparent focus-visible:outline-0",
       },
       sz: {
         default: "",

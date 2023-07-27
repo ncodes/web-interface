@@ -14,7 +14,9 @@ export function ToolTip(props: {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>{props.children}</TooltipTrigger>
+        <TooltipTrigger asChild>
+          <span>{props.children}</span>
+        </TooltipTrigger>
         <TooltipContent side={props.side || "top"} className="font-light">
           {props.tip}
         </TooltipContent>

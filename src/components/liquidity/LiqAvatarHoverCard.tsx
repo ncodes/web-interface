@@ -70,6 +70,7 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
                 title="Total Swaps"
                 tip={`The total number of swaps completed across all liquidities`}
                 width="w-full"
+                noSwapTrigger
               >
                 <span className="text-gray-200">1,200</span>
               </StatCard>
@@ -77,6 +78,7 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
                 title="Volume"
                 tip={`The total volume of swaps across all liquidities`}
                 width="w-full"
+                noSwapTrigger
               >
                 <span className="text-gray-200">$140,000</span>
               </StatCard>
@@ -84,6 +86,7 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
                 title="Completion Rate"
                 tip={`The percentage of non-disputed swaps across all liquidities`}
                 width="w-full"
+                noSwapTrigger
               >
                 <span className="text-gray-200">89%</span>
               </StatCard>

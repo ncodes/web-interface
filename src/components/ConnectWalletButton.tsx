@@ -13,7 +13,7 @@ function Connect(props: {
   show: () => void;
 }) {
   return (
-    <Button size="full" onClick={props.show} {...props}>
+    <Button size="full" onClick={props.show}>
       {props.showIcon && <IconWallet className="mr-3" />}
       {props.label || "Connect Wallet"}
     </Button>

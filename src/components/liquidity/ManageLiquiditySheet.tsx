@@ -9,10 +9,12 @@ import { Slider } from "../ui/slider.tsx";
 import { Switch } from "../ui/switch.tsx";
 import { Button } from "../ui/Button.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
+import { BasicMarketInfoSheetHeader } from "../BasicMarketInfoSheetHeader.tsx";
 
 export function ManageLiquiditySheet(props: {
   open: boolean;
   onOpenChange: (open) => void;
+  addMode?: boolean;
 }) {
   const [open, setOpen] = React.useState(props.open);
 
@@ -21,24 +23,41 @@ export function ManageLiquiditySheet(props: {
   }, [props.open]);
 
   return (
-    <Sheet open={open} onOpenChange={props.onOpenChange}>
+    <Sheet key={"axs"} open={open} onOpenChange={props.onOpenChange}>
       <SheetContent
         className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
         side="right"
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">
-            <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
-              Manage Liquidity
-            </SheetTitle>
+            {!props.addMode && (
+              <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
+                Manage Liquidity
+              </SheetTitle>
+            )}
+            {props.addMode && (
+              <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
+                Add Liquidity
+              </SheetTitle>
+            )}
           </div>
         </SheetHeader>
         <ScrollArea className="h-full">
           <div className=" text-white h-full">
-            <p className="p-5 py-3 font-light text-gray-300 text-sm">
-              Manage your liquidity. You can add, remove, restrict or pause your
-              liquidity.
-            </p>
+            <BasicMarketInfoSheetHeader />
+
+            {!props.addMode && (
+              <p className="p-5 py-3 font-light text-gray-300 text-sm">
+                Manage your liquidity. You can add, remove, restrict or pause
+                your liquidity.
+              </p>
+            )}
+
+            {props.addMode && (
+              <p className="p-5 py-3 font-light text-gray-300 text-sm">
+                Add liquidity to the market.
+              </p>
+            )}
 
             <Accordion defaultValue={["Amount"]} type="multiple">
               <FilterItem
@@ -47,11 +66,19 @@ export function ManageLiquiditySheet(props: {
               >
                 <div>
                   <div className="flex gap-4 items-center">
-                    <Input value="34000" className="px-2" />
-                    <div className="flex flex-col text-gray-400 text-xs">
-                      <span className="">Current</span>
-                      <span className="text-xs text-chinese-green">34,000</span>
-                    </div>
+                    <Input
+                      value={!props.addMode ? "34000" : ""}
+                      placeholder="0.00"
+                      className="px-2"
+                    />
+                    {!props.addMode && (
+                      <div className="flex flex-col text-gray-400 text-xs">
+                        <span className="">Current</span>
+                        <span className="text-xs text-chinese-green">
+                          34,000
+                        </span>
+                      </div>
+                    )}
                   </div>
                   {/*<p className="flex text-gray-500 text-xs pt-2 items-center gap-1">*/}
                   {/*  <IconInfoCircle width="14px" /> Subtracted amount is returned*/}
@@ -69,13 +96,19 @@ export function ManageLiquiditySheet(props: {
                 tip="Update the price of your liquidity"
               >
                 <div className="flex gap-4 items-center">
-                  <Input value="35.00" className="px-2" />
-                  <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                    <span className="">Current</span>
-                    <span className="text-xs text-chinese-green">
-                      35.50 <span className="text-gray-200">UNI</span>
-                    </span>
-                  </div>
+                  <Input
+                    value={!props.addMode ? "35.00" : ""}
+                    placeholder="0.00"
+                    className="px-2"
+                  />
+                  {!props.addMode && (
+                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
+                      <span className="">Current</span>
+                      <span className="text-xs text-chinese-green">
+                        35.50 <span className="text-gray-200">UNI</span>
+                      </span>
+                    </div>
+                  )}
                 </div>
               </FilterItem>
 
@@ -84,11 +117,17 @@ export function ManageLiquiditySheet(props: {
                 tip="Update the minimum swap amount"
               >
                 <div className="flex gap-4 items-center">
-                  <Input value="200" className="px-2" />
-                  <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                    <span className="">Current</span>
-                    <span className="text-xs text-chinese-green">200</span>
-                  </div>
+                  <Input
+                    value={!props.addMode ? "200" : ""}
+                    placeholder="0.00"
+                    className="px-2"
+                  />
+                  {!props.addMode && (
+                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
+                      <span className="">Current</span>
+                      <span className="text-xs text-chinese-green">200</span>
+                    </div>
+                  )}
                 </div>
               </FilterItem>
 
@@ -97,11 +136,17 @@ export function ManageLiquiditySheet(props: {
                 tip="Update the maximum swap amount"
               >
                 <div className="flex gap-4 items-center">
-                  <Input value="530" className="px-2" />
-                  <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                    <span className="">Current</span>
-                    <span className="text-xs text-chinese-green">530</span>
-                  </div>
+                  <Input
+                    value={!props.addMode ? "530" : ""}
+                    placeholder="0.00"
+                    className="px-2"
+                  />
+                  {!props.addMode && (
+                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
+                      <span className="">Current</span>
+                      <span className="text-xs text-chinese-green">530</span>
+                    </div>
+                  )}
                 </div>
               </FilterItem>
 
@@ -111,15 +156,22 @@ export function ManageLiquiditySheet(props: {
               >
                 <div className="flex gap-4">
                   <div className="flex flex-col gap-3">
-                    <Input value="4500" type="number" className="px-2" />
+                    <Input
+                      value={!props.addMode ? "4500" : ""}
+                      placeholder="0"
+                      type="number"
+                      className="px-2"
+                    />
                     <Slider defaultValue={[1800]} min={0} max={3600} step={1} />
                   </div>
-                  <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                    <span className="">Payment Time</span>
-                    <span className="text-xs text-chinese-green">
-                      15 minutes
-                    </span>
-                  </div>
+                  {!props.addMode && (
+                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
+                      <span className="">Payment Time</span>
+                      <span className="text-xs text-chinese-green">
+                        15 minutes
+                      </span>
+                    </div>
+                  )}
                 </div>
               </FilterItem>
 
@@ -129,14 +181,21 @@ export function ManageLiquiditySheet(props: {
               >
                 <div className="flex gap-4">
                   <div className="flex flex-col gap-3">
-                    <Input value="0x1234567890" type="text" className="px-2" />
+                    <Input
+                      value={!props.addMode ? "0x1234567890" : ""}
+                      placeholder="0x00000"
+                      type="text"
+                      className="px-2"
+                    />
                   </div>
-                  <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                    <span className="">Current</span>
-                    <span className="text-xs text-chinese-green">
-                      0x123..XyZ
-                    </span>
-                  </div>
+                  {!props.addMode && (
+                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
+                      <span className="">Current</span>
+                      <span className="text-xs text-chinese-green">
+                        0x123..XyZ
+                      </span>
+                    </div>
+                  )}
                 </div>
               </FilterItem>
 
@@ -157,7 +216,7 @@ export function ManageLiquiditySheet(props: {
           {/*<Button size="full" variant="secondary">*/}
           {/*  Approve*/}
           {/*</Button>*/}
-          <Button size="full">Update</Button>
+          <Button size="full">{props.addMode ? "Add" : "Update"}</Button>
         </div>
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
