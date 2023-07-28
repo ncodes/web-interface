@@ -11,6 +11,8 @@ import "./hooks/store/useStore.ts";
 import Markets from "./pages/Markets.tsx";
 import Index from "./pages/Index.tsx";
 import Market from "./pages/Market.tsx";
+import Liquidities from "./pages/Liquidities.tsx";
+import Liquidity from "./pages/Liquidity.tsx";
 
 function makePath(path: string) {
   return `:locale?/${path}`;
@@ -35,6 +37,16 @@ const router = createBrowserRouter([
   {
     path: makePath("/market/:id"),
     element: <App page={<Market />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/liquidities"),
+    element: <App page={<Liquidities />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/liquidity/:provider/:id"),
+    element: <App page={<Liquidity />} />,
     errorElement: <RootErrorBoundary />,
   },
 ]);

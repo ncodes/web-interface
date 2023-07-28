@@ -64,7 +64,10 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
               </div>
             </div>
           </div>
-          <ScrollGradientIndicator side="bottom">
+          <ScrollGradientIndicator
+            side="bottom"
+            className="overflow-hidden rounded-b-xl"
+          >
             <div className="p-2 flex flex-col gap-2 h-[200px] overflow-auto scrollbar-hide">
               <StatCard
                 title="Total Swaps"
@@ -81,6 +84,14 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
                 noSwapTrigger
               >
                 <span className="text-gray-200">$140,000</span>
+              </StatCard>
+              <StatCard
+                title="Completion Rate"
+                tip={`The percentage of non-disputed swaps across all liquidities`}
+                width="w-full"
+                noSwapTrigger
+              >
+                <span className="text-gray-200">89%</span>
               </StatCard>
               <StatCard
                 title="Completion Rate"

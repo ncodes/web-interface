@@ -5,6 +5,7 @@ export default function IconInfoCircle(props: React.SVGProps<SVGSVGElement>) {
     <svg
       viewBox="0 0 1024 1024"
       fill="currentColor"
+      width="20"
       {...props}
       data-swap-trigger="1"
     >

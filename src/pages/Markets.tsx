@@ -82,7 +82,7 @@ function MarketTabs() {
             <IconFilterOutline />
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             className="hidden md:flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
             onClick={() => {

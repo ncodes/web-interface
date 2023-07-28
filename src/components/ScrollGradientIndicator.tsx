@@ -23,8 +23,9 @@ export default function ScrollGradientIndicator({
     const containerWidth = e.currentTarget.clientWidth;
     const scrollWidth = e.currentTarget.scrollWidth;
     const scrollLeft = e.currentTarget.scrollLeft;
-    if (scrollLeft > 0)
+    if (containerWidth != scrollWidth)
       setProgress(((scrollLeft + containerWidth) / scrollWidth) * 100);
+    else setProgress(100);
   };
 
   const onScrollY = (e: {
@@ -37,7 +38,6 @@ export default function ScrollGradientIndicator({
     const containerHeight = e.currentTarget.clientHeight;
     const scrollHeight = e.currentTarget.scrollHeight;
     const scrollTop = e.currentTarget.scrollTop;
-    console.log(e.currentTarget);
     if (containerHeight != scrollHeight)
       setProgress(((scrollTop + containerHeight) / scrollHeight) * 100);
     else setProgress(100);
@@ -45,13 +45,19 @@ export default function ScrollGradientIndicator({
 
   useEffect(() => {
     if (!ref || !ref.current) return;
+    const viewPort = ref.current.querySelector(
+      "div[data-radix-scroll-area-viewport]"
+    );
+    if (!viewPort) return;
     if (side == "right") {
-      onScrollX({ currentTarget: ref.current });
+      onScrollX({
+        currentTarget: {
+          clientWidth: viewPort.clientWidth,
+          scrollWidth: viewPort.scrollWidth,
+          scrollLeft: viewPort.scrollLeft,
+        },
+      });
     } else {
-      const viewPort = ref.current.querySelector(
-        "div[data-radix-scroll-area-viewport]"
-      );
-      if (!viewPort) return;
       onScrollY({
         currentTarget: {
           clientHeight: viewPort.clientHeight,

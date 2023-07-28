@@ -31,10 +31,12 @@ export function LiquidityRow({
   base,
   quote,
   ownerMode,
+  noFocus,
 }: {
   base: string;
   quote: string;
   ownerMode?: boolean;
+  noFocus?: boolean;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
@@ -47,14 +49,20 @@ export function LiquidityRow({
     <div
       onClick={(e: BaseSyntheticEvent) => {
         const canTrigger = e.target.getAttribute("data-swap-trigger");
-        if (canTrigger && canTrigger == "1") {
+        if (canTrigger && canTrigger == "1" && !noFocus) {
           setOpenSwapSheet(!openSwapSheet);
         }
       }}
     >
       <div
         data-swap-trigger="1"
-        className="border border-gray-800 transition-all hover:border-chinese-green duration-300 hover:scale-[1.002] cursor-pointer rounded-xl"
+        className={cn(
+          "border border-gray-800 transition-all duration-300 rounded-xl",
+          {
+            "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
+              !noFocus,
+          }
+        )}
       >
         <div className="flex" data-swap-trigger="1">
           <div
