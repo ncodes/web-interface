@@ -25,6 +25,7 @@ import { VerifiedBadge } from "./VerifiedBadge.tsx";
 import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
 import { SwapSheet } from "./SwapSheet.tsx";
 import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
+import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
 
 export function LiquidityRow({
   base,
@@ -40,6 +41,7 @@ export function LiquidityRow({
     useState(false);
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
   const [openReviewSheet, setOpenReviewSheet] = useState(false);
+  const [openCreateOfferSheet, setOpenCreateOfferSheet] = useState(false);
 
   return (
     <div
@@ -204,6 +206,7 @@ export function LiquidityRow({
                   variant="link"
                   rounded="none"
                   className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                  onClick={() => setOpenCreateOfferSheet(true)}
                 >
                   <IconOffer width="15px" /> Create Offer
                 </Button>
@@ -254,7 +257,7 @@ export function LiquidityRow({
                   {!ownerMode && (
                     <DropdownMenuItem
                       className="flex gap-2"
-                      onClick={() => setOpenManageLiquiditySheet(true)}
+                      onClick={() => setOpenCreateOfferSheet(true)}
                     >
                       <IconOffer width="15px" /> Create Offer
                     </DropdownMenuItem>
@@ -282,6 +285,12 @@ export function LiquidityRow({
         open={openReviewSheet}
         onOpenChange={(open) => {
           setOpenReviewSheet(open);
+        }}
+      />
+      <CreateOfferSheet
+        open={openCreateOfferSheet}
+        onOpenChange={(open) => {
+          setOpenCreateOfferSheet(open);
         }}
       />
     </div>
