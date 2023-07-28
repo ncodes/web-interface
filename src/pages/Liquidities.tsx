@@ -35,13 +35,13 @@ function Page() {
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2">
               <TabsTrigger
                 value="my-liquidity"
-                className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
               >
                 My Liquidity
               </TabsTrigger>
               <TabsTrigger
                 value="watching"
-                className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
               >
                 Watching
               </TabsTrigger>
