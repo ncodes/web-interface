@@ -77,7 +77,7 @@ function SearchContent({ renderInput }: { renderInput?: boolean }) {
           />
         </div>
       )}
-      <ScrollGradientIndicator side="bottom" show={true}>
+      <ScrollGradientIndicator side="bottom">
         <ScrollArea className="pb-[40px] md:pb-0 md:h-[400px]" type="scroll">
           <div className="flex justify-between items-center p-3 py-3 pb-1 ">
             <span className="font-medium text-gray-100 tracking-wider text-sm rounded-full">

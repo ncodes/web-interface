@@ -24,6 +24,7 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { VerifiedBadge } from "./VerifiedBadge.tsx";
 import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
 import { SwapSheet } from "./SwapSheet.tsx";
+import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
 
 export function LiquidityRow({
   base,
@@ -38,6 +39,7 @@ export function LiquidityRow({
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
+  const [openReviewSheet, setOpenReviewSheet] = useState(false);
 
   return (
     <div
@@ -73,9 +75,7 @@ export function LiquidityRow({
                     <IconArrowDownUp width="12px" />
                   </span>
                   <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
+                    onClick={() => setOpenReviewSheet(true)}
                     className="text-blue-200 text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4"
                   >
                     84% (256 trades)
@@ -162,7 +162,10 @@ export function LiquidityRow({
           </div>
         </div>
         <div className="flex justify-between border-t border-gray-800">
-          <div className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden">
+          <div
+            data-swap-trigger="1"
+            className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
+          >
             <div className=" flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
               {/*<span className="hidden sm:inline">Badges</span>*/}
               <ToolTip tip="Badges required of the taker by the liquidity owner">
@@ -273,6 +276,12 @@ export function LiquidityRow({
         open={openManageLiquiditySheet}
         onOpenChange={(open) => {
           setOpenManageLiquiditySheet(open);
+        }}
+      />
+      <ReviewViewerSheet
+        open={openReviewSheet}
+        onOpenChange={(open) => {
+          setOpenReviewSheet(open);
         }}
       />
     </div>

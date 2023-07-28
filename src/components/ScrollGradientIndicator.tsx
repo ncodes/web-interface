@@ -5,12 +5,10 @@ export default function ScrollGradientIndicator({
   children,
   side = "right",
   className,
-  show = false,
 }: {
   children: ReactElement;
   side?: "bottom" | "right";
   className?: string;
-  show?: boolean;
 }) {
   const [progress, setProgress] = React.useState(0);
   const ref = createRef<HTMLDivElement>();
@@ -39,17 +37,28 @@ export default function ScrollGradientIndicator({
     const containerHeight = e.currentTarget.clientHeight;
     const scrollHeight = e.currentTarget.scrollHeight;
     const scrollTop = e.currentTarget.scrollTop;
+    console.log(e.currentTarget);
     if (containerHeight != scrollHeight)
       setProgress(((scrollTop + containerHeight) / scrollHeight) * 100);
     else setProgress(100);
   };
 
   useEffect(() => {
-    if (show || !ref || !ref.current) return;
+    if (!ref || !ref.current) return;
     if (side == "right") {
       onScrollX({ currentTarget: ref.current });
     } else {
-      onScrollY({ currentTarget: ref.current });
+      const viewPort = ref.current.querySelector(
+        "div[data-radix-scroll-area-viewport]"
+      );
+      if (!viewPort) return;
+      onScrollY({
+        currentTarget: {
+          clientHeight: viewPort.clientHeight,
+          scrollHeight: viewPort.scrollHeight,
+          scrollTop: viewPort.scrollTop,
+        },
+      });
     }
   }, [side]);
 
@@ -67,7 +76,7 @@ export default function ScrollGradientIndicator({
       {side == "bottom" && (
         <span
           className={cn(
-            "select-none grad-indicator text-center font-extralight text-xs text-gray-600 pt-2",
+            "select-none grad-indicator text-center font-extralight text-xs text-gray-500 pt-2",
             { hidden: progress == 100 }
           )}
         >
