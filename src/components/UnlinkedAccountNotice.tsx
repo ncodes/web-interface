@@ -11,7 +11,7 @@ export function UnlinkedAccountNotice() {
   return (
     <>
       {!user && (
-        <div className="select-none pt-2 py-2 bg-gray-900 rounded-xl mb-2 px-3 md:px-5 border border-gray-800 flex items-center gap-3">
+        <div className="select-none pt-2 py-2 bg-gray-900 rounded-xl mb-2 px-3 md:px-5 border border-chinese-green flex items-center gap-3">
           <span>
             <IconCaution
               width="25"
@@ -36,6 +36,7 @@ export function UnlinkedAccountNotice() {
             <Button
               variant="default"
               size="sm"
+              className="w-[100px]"
               onClick={() => {
                 toggleSettingsSheetOpen && toggleSettingsSheetOpen("account");
               }}

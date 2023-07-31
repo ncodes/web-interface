@@ -37,29 +37,29 @@ export function MarketRow({
   return (
     <div
       className={cn(
-        "bg-card-background border border-gray-800 transition-all duration-300 rounded-xl overflow-hidden",
+        "border bg-card-background border-card-border transition-all duration-300 rounded-xl ",
         {
           "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
             !noFocus,
         }
       )}
     >
-      <div className="flex h-auto">
+      <div className="flex flex-col md:flex-row h-auto">
         <div className="h-full border-r select-none border-gray-800 shrink-0">
-          <div className="flex items-center gap-3 px-3 md:px-3 py-4">
+          <div className="flex items-center md:gap-3 px-3 md:px-3 md:py-4 pt-2 md:pt-4">
             <PairAvatar
               base="BTC"
               quote="UNI"
               baseSrc="/images/icons/asset-icons/btc.svg"
               quoteSrc="/images/icons/asset-icons/uni.svg"
             />
-            <div className="flex flex-col">
+            <div className="flex md:flex-col w-full justify-between md:justify-start">
               <span>
                 {base} - {quote}
               </span>
               <span className="flex items-center gap-1 text-xs font-extralight text-blue-200">
                 <span>
-                  ID:<span className="hidden md:inline"> 0x83...a73b</span>
+                  ID:<span> 0x83...a73b</span>
                 </span>
                 <IconCopyFilled
                   width="13px"
@@ -71,9 +71,9 @@ export function MarketRow({
           </div>
         </div>
         <div className="w-full overflow-hidden mr-[2px]">
-          <ScrollGradientIndicator>
-            <ScrollAreaHorizontal type="scroll">
-              <div className="py-[8px] flex gap-2 px-2">
+          <ScrollGradientIndicator className="[&::before]:rounded-r-none md:[&::before]:rounded-tr-2xl">
+            <ScrollAreaHorizontal type="scroll" className="mx-2 md:mx-0">
+              <div className="py-[8px] flex gap-2 md:px-2">
                 <StatCard
                   title="Price ($)"
                   tip={`The price of 1 ${base} in USD`}

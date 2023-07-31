@@ -3,7 +3,6 @@ import { LiqAvatarHoverCard } from "./LiqAvatarHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { ToolTip } from "../ToolTip.tsx";
-import IconArrowDownUp from "../icons/IconArrowDownUp.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { StatCard } from "../market/StatCard.tsx";
@@ -26,6 +25,7 @@ import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
 import { SwapSheet } from "./SwapSheet.tsx";
 import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
 import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
+import { IconStarSmile } from "../icons/IconStarSmile.tsx";
 
 export function LiquidityRow({
   base,
@@ -57,14 +57,14 @@ export function LiquidityRow({
       <div
         data-swap-trigger="1"
         className={cn(
-          "border border-gray-800 transition-all duration-300 rounded-xl",
+          "border bg-card-background border-card-border transition-all duration-300 rounded-xl",
           {
             "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
               !noFocus,
           }
         )}
       >
-        <div className="flex" data-swap-trigger="1">
+        <div className="flex flex-col md:flex-row" data-swap-trigger="1">
           <div
             data-swap-trigger="1"
             className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
@@ -74,15 +74,18 @@ export function LiquidityRow({
                 <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
               </LiqAvatarHoverCard>
             </div>
-            <div className="flex flex-col z-[6]" data-swap-trigger="1">
+            <div
+              className="flex py-3 md:py-0 w-full md:w-auto flex-col xxs:flex-row md:flex-col justify-start xxs:justify-between md:justify-start z-[6] xxs:items-center md:items-start"
+              data-swap-trigger="1"
+            >
               <span className="flex text-gray-100 items-center gap-1">
                 <span data-swap-trigger="1">0xAbc..xYz</span>
                 <VerifiedBadge />
               </span>
               <ToolTip tip="Click to open reviews">
-                <div className="flex items-center gap-1 text-gray-300">
+                <div className="flex items-center gap-1 text-blue-200">
                   <span>
-                    <IconArrowDownUp width="12px" />
+                    <IconStarSmile width="15px" />
                   </span>
                   <span
                     onClick={() => setOpenReviewSheet(true)}

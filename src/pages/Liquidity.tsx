@@ -62,7 +62,7 @@ function ActivityItem({
 
 function ActivityLog() {
   return (
-    <div className=" pr-0 flex-1">
+    <div className=" pr-0 flex-1 ">
       <Label className="text-xl flex items-center gap-1 px-5">
         <span>Activity Logs</span>{" "}
         <ToolTip tip="Recent events associated with this liquidity">
@@ -246,7 +246,7 @@ function Page() {
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
           <ScrollAreaHorizontal type="scroll" className="w-full">
-            <div className="flex flex-1 w-full gap-2 items-center px-2 py-2">
+            <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
                 value="liquidity"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"

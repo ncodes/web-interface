@@ -17,7 +17,7 @@ function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
   return (
     <div
       className={cn(
-        "xl:hidden fixed w-screen h-screen bg-black/50 left-0 top-0 z-[15] md:z-[6] ",
+        "xl:hidden fixed overflow-hidden w-screen h-screen bg-black/50 left-0 top-0 z-[15] md:z-[6] ",
         { hidden: !props.open }
       )}
       onClick={props.onClick}

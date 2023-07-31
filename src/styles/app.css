@@ -149,7 +149,7 @@
     @apply relative;
 
     &::before {
-      @apply absolute w-[30px] rounded-tr-2xl from-10% h-full right-0 z-[5] bg-gradient-to-l from-gray-950;
+      @apply absolute w-[30px] rounded-r-2xl from-10% h-full right-0 z-[5] bg-gradient-to-l from-gray-950;
       content: "";
     }
   }
@@ -159,6 +159,12 @@
 
     span.grad-indicator {
       @apply block w-full absolute z-[6] rounded-b-2xl  bottom-0 from-10% h-[30px] bg-gradient-to-t from-gray-950 scale-[.998];
+    }
+  }
+
+  @layer utilities {
+    .striped > div:nth-child(even) {
+      @apply bg-gray-900;
     }
   }
 }

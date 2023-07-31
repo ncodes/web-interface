@@ -22,11 +22,11 @@ export function StatCard({
   return (
     <Card
       className={cn(
-        "w-[150px] border border-card-border bg-card-background shadow-sm shadow-gray-900",
+        "w-[150px] shrink-0 border border-card-border bg-card-background shadow-sm shadow-gray-900",
         width
       )}
     >
-      <CardHeader className="px-3 py-2 pt-1 pb-[2px]">
+      <CardHeader className="px-3 py-2 pt-1 pb-[3px]">
         <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex items-center gap-2">
           <span data-swap-trigger={!noSwapTrigger ? 1 : 0}>{title}</span>
           <span data-swap-trigger={!noSwapTrigger ? 1 : 0}>{title2}</span>

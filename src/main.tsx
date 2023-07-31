@@ -13,6 +13,8 @@ import Index from "./pages/Index.tsx";
 import Market from "./pages/Market.tsx";
 import Liquidities from "./pages/Liquidities.tsx";
 import Liquidity from "./pages/Liquidity.tsx";
+import Swaps from "./pages/Swaps.tsx";
+import Swap from "./pages/Swap.tsx";
 
 function makePath(path: string) {
   return `:locale?/${path}`;
@@ -47,6 +49,16 @@ const router = createBrowserRouter([
   {
     path: makePath("/liquidity/:provider/:id"),
     element: <App page={<Liquidity />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/swaps"),
+    element: <App page={<Swaps />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/swap/:orderId"),
+    element: <App page={<Swap />} />,
     errorElement: <RootErrorBoundary />,
   },
 ]);

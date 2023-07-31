@@ -15,6 +15,7 @@ import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { Button } from "../ui/Button.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 
 function SwapInput(props: { avatar: string; avatarFallback: string }) {
   const [focus, setFocus] = useState(false);
@@ -48,8 +49,12 @@ function SwapInput(props: { avatar: string; avatarFallback: string }) {
 
 export function SwapSheetContent({ offsheet }: { offsheet?: boolean }) {
   return (
-    <>
-      <div className=" text-white h-full">
+    <ScrollArea type="scroll" className="h-full overflow-auto">
+      <div
+        className={cn("text-white h-full", {
+          "pb-[100px]": !offsheet,
+        })}
+      >
         {!offsheet && (
           <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-900">
             <span className="flex gap-2 items-center text-sm">
@@ -174,14 +179,14 @@ export function SwapSheetContent({ offsheet }: { offsheet?: boolean }) {
 
         <div
           className={cn(
-            "w-full p-3 border-t border-gray-800 flex flex-col gap-2",
-            { "absolute bottom-0": !offsheet }
+            "w-full p-3 border-t border-gray-800 bg-card-background",
+            { "fixed bottom-0": !offsheet }
           )}
         >
           <Button size="full">Swap</Button>
         </div>
       </div>
-    </>
+    </ScrollArea>
   );
 }
 
@@ -198,10 +203,10 @@ export function SwapSheet(props: {
   return (
     <Sheet open={open} onOpenChange={props.onOpenChange}>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        className="w-full h-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
         side="right"
       >
-        <SheetHeader className="flex pr-[50px] border-b border-gray-800">
+        <SheetHeader className="flex pr-[50px] border-b border-gray-800 h-[50px]">
           <div className="text-white">
             <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
               Swap

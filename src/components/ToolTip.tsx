@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -11,11 +11,20 @@ export function ToolTip(props: {
   children: React.ReactNode;
   side?: "top" | "bottom" | "left" | "right";
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip
+        open={open}
+        onOpenChange={(open) => {
+          setOpen(open);
+        }}
+      >
         <TooltipTrigger asChild>
-          <span className="cursor-pointer">{props.children}</span>
+          <span className="cursor-pointer" onClick={() => setOpen(!open)}>
+            {props.children}
+          </span>
         </TooltipTrigger>
         <TooltipContent side={props.side || "top"} className="font-light">
           {props.tip}

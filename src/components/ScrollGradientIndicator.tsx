@@ -24,7 +24,9 @@ export default function ScrollGradientIndicator({
     const scrollWidth = e.currentTarget.scrollWidth;
     const scrollLeft = e.currentTarget.scrollLeft;
     if (containerWidth != scrollWidth)
-      setProgress(((scrollLeft + containerWidth) / scrollWidth) * 100);
+      setProgress(
+        Math.ceil(((scrollLeft + containerWidth) / scrollWidth) * 100)
+      );
     else setProgress(100);
   };
 
@@ -39,7 +41,9 @@ export default function ScrollGradientIndicator({
     const scrollHeight = e.currentTarget.scrollHeight;
     const scrollTop = e.currentTarget.scrollTop;
     if (containerHeight != scrollHeight)
-      setProgress(((scrollTop + containerHeight) / scrollHeight) * 100);
+      setProgress(
+        Math.ceil(((scrollTop + containerHeight) / scrollHeight) * 100)
+      );
     else setProgress(100);
   };
 
@@ -82,7 +86,7 @@ export default function ScrollGradientIndicator({
       {side == "bottom" && (
         <span
           className={cn(
-            "select-none grad-indicator text-center font-extralight text-xs text-gray-500 pt-2",
+            "hidden select-none grad-indicator text-center font-extralight text-xs text-gray-500 pt-2",
             { hidden: progress == 100 }
           )}
         >

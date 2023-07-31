@@ -50,7 +50,7 @@ function MarketTabs() {
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollAreaHorizontal type="scroll" className="w-full">
           <ScrollGradientIndicator>
-            <div className="flex flex-1 w-full gap-2 items-center px-2 py-2">
+            <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
                 value="markets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"

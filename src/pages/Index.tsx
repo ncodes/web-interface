@@ -14,7 +14,7 @@ export default function Index() {
           className="w-full h-full transition-all duration-500"
         >
           <ScrollAreaHorizontal type="scroll">
-            <TabsList className="justify-start px-3 py-2 border-b border-modal-border ">
+            <TabsList className="justify-start px-3 py-2 border-b border-modal-border pt-0">
               <TabsTrigger
                 value="home"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"

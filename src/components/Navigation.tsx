@@ -73,7 +73,7 @@ export function Navigation() {
           <NavPageLink
             iconFile="liquidity.svg"
             label="Swaps"
-            active={pathname.match("/swap(y|ies)") != null}
+            active={pathname.match("/swap(s|)") != null}
             to="/swaps"
           />
         </li>
