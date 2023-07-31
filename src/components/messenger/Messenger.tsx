@@ -71,13 +71,13 @@ export function Messenger({ sheetMode }: { sheetMode: boolean }) {
     <div className="relative h-full">
       <div
         className={cn(
-          "absolute flex flex-col text-gray-200 w-full h-full bg-card-background",
+          "absolute overflow-hidden flex flex-col text-gray-200 w-full h-full bg-card-background",
           { "rounded-xl border-card-border border": !sheetMode }
         )}
       >
         <Label
           className={cn(
-            "flex gap-2 items-center select-none p-3 py-3 border-b border-gray-700 text-xl drop-shadow-3xl",
+            "flex gap-2 items-center select-none p-3 py-3 bg-gray-800 border-gray-700 text-xl drop-shadow-3xl",
             { "justify-between gap-0": !sheetMode }
           )}
         >
