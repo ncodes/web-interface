@@ -100,7 +100,7 @@ function Page() {
         <SwapRow
           base="BTC"
           quote="UNI"
-          className="rounded-none border-x-0"
+          className="rounded-none border-x-0 border-t-0"
           noFocus
         />
         <div className="flex flex-col md:gap-5 md:flex-row px-3">
@@ -351,7 +351,7 @@ function Page() {
 
                   <div>
                     <Label className="block p-5 py-3 pb-1 text-lg">
-                      General Instruction
+                      Provider Instruction
                     </Label>
                     <p className="px-5 font-light text-sm text-gray-300">
                       I only trade with verified users that have a good

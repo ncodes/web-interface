@@ -32,11 +32,13 @@ export function LiquidityRow({
   quote,
   ownerMode,
   noFocus,
+  className,
 }: {
   base: string;
   quote: string;
   ownerMode?: boolean;
   noFocus?: boolean;
+  className?: string;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
@@ -61,7 +63,8 @@ export function LiquidityRow({
           {
             "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
               !noFocus,
-          }
+          },
+          className
         )}
       >
         <div className="flex flex-col md:flex-row" data-swap-trigger="1">

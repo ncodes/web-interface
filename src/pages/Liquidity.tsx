@@ -225,9 +225,14 @@ function RecentReviews() {
 
 function LiquidityTabContent() {
   return (
-    <div className="">
-      <LiquidityRow base="BTC" quote="UNI" noFocus={true} />
-      <div className="flex flex-col gap-5 lg:gap-0 lg:flex-row pt-5">
+    <div>
+      <LiquidityRow
+        base="BTC"
+        quote="UNI"
+        noFocus={true}
+        className="rounded-none border-x-0 border-t-0"
+      />
+      <div className="flex flex-col gap-5 lg:gap-0 lg:flex-row pt-5 px-3">
         <ActivityLog />
         <RecentReviews />
       </div>
@@ -278,7 +283,10 @@ function Page() {
           {/*</DropdownMenu>*/}
         </div>
       </TabsList>
-      <TabsContent value="liquidity" className="p-3 pt-0 flex flex-col gap-3">
+      <TabsContent
+        value="liquidity"
+        className="p-3 pt-0 mt-0 px-0 flex flex-col gap-3"
+      >
         <LiquidityTabContent />
         <SwapSheet
           open={openSwapSheet}

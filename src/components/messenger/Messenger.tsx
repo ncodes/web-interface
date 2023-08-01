@@ -30,7 +30,7 @@ function Message({
       {!mine && (
         <div className="flex gap-2">
           <EmojiAvatar size={AvatarSize.Small} randomStr={sender} />
-          <div className="flex flex-col bg-gray-800 border border-gray-900 flex-1 rounded-xl rounded-tl-none px-2 pb-2">
+          <div className="flex flex-col bg-gray-800/50 border border-gray-700/50 flex-1 rounded-xl rounded-tl-none px-2 pb-2">
             <span className="flex justify-between text-xs pt-1 pb-1 text-chinese-green font-normal tracking-wide">
               <span className="select-none">
                 {sender} {title && `(${title})`}
@@ -48,7 +48,7 @@ function Message({
 
       {mine && (
         <div className="flex gap-2">
-          <div className="flex flex-col bg-gray-800 border border-gray-900 flex-1 rounded-xl rounded-tr-none px-2 pb-2">
+          <div className="flex flex-col bg-gray-800/50 border border-gray-700/50 flex-1 rounded-xl rounded-tr-none px-2 pb-2">
             <span className="flex justify-between text-xs pt-1 pb-1 text-chinese-green font-normal tracking-wide">
               <span className="text-gray-500 font-light">2 days ago</span>
               <span className="select-none">
@@ -77,7 +77,7 @@ export function Messenger({ sheetMode }: { sheetMode: boolean }) {
       >
         <Label
           className={cn(
-            "flex gap-2 items-center select-none p-3 py-3 bg-gray-800 border-gray-700 text-xl drop-shadow-3xl",
+            "flex gap-2 items-center select-none p-3 py-3 border-card-border bg-card-background border-b text-xl drop-shadow-3xl",
             { "justify-between gap-0": !sheetMode }
           )}
         >

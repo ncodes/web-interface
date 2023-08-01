@@ -49,7 +49,7 @@ function SwapInput(props: { avatar: string; avatarFallback: string }) {
 
 export function SwapSheetContent({ offsheet }: { offsheet?: boolean }) {
   return (
-    <ScrollArea type="scroll" className="h-full overflow-auto">
+    <ScrollArea type="scroll" className="h-full overflow-auto ">
       <div
         className={cn("text-white h-full", {
           "pb-[100px]": !offsheet,

@@ -25,9 +25,11 @@ export function MarketRow({
   quote,
   ownerMode,
   noFocus,
+  className,
 }: {
   base: string;
   quote: string;
+  className?: string;
   ownerMode?: boolean;
   noFocus?: boolean;
 }) {
@@ -41,7 +43,8 @@ export function MarketRow({
         {
           "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
             !noFocus,
-        }
+        },
+        className
       )}
     >
       <div className="flex flex-col md:flex-row h-auto">
@@ -180,7 +183,7 @@ export function MarketRow({
               </Button>
             </span>
           )}
-          <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
+          <span className="flex  cursor-pointer items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
             {!ownerMode && <IconHeart />}
           </span>
           {ownerMode && (

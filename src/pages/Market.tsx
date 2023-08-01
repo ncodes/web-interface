@@ -21,7 +21,14 @@ import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
 
 function MarketTabContent() {
-  return <MarketRow base="BTC" quote="UNI" noFocus />;
+  return (
+    <MarketRow
+      base="BTC"
+      quote="UNI"
+      className="rounded-none border-x-0 border-t-0"
+      noFocus
+    />
+  );
 }
 
 function MarketTabs() {
@@ -59,7 +66,10 @@ function MarketTabs() {
           </Button>
         </div>
       </TabsList>
-      <TabsContent value="markets" className="p-3 pt-0 flex flex-col gap-3">
+      <TabsContent
+        value="markets"
+        className="p-3 px-0 mt-0 pt-0 flex flex-col gap-3"
+      >
         <MarketTabContent />
         <div className="flex items-center justify-between">
           <h1 className="p-5 py-3 text-xl">Liquidities</h1>
@@ -79,7 +89,7 @@ function MarketTabs() {
             </Button>
           </div>
         </div>
-        <div className="flex gap-2 flex-col z-[6]">
+        <div className="flex gap-2 flex-col z-[6] px-3">
           <LiquidityRow base="BTC" quote="UNI" />
           {/*<LiquidityRow base="BTC" quote="UNI" />*/}
           {/*<LiquidityRow base="BTC" quote="UNI" />*/}
