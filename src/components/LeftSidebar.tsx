@@ -10,7 +10,6 @@ import { LanguageSelectorMobile } from "./LanguageSelector.tsx";
 import { IconDoubleChevronBack } from "./icons/IconDoubleChevronBack.tsx";
 import { IconSearch } from "./icons/IconSearch.tsx";
 import useStore from "../hooks/store/useStore.ts";
-import { DefaultSettingsSheetTab } from "./SettingsSheet.tsx";
 import { motion } from "framer-motion";
 
 function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
@@ -32,8 +31,9 @@ export function LeftSidebar(props: {
   scrollYPos: number;
 }) {
   const [openOverlay, setOpenOverlay] = useState(props.open);
-  const toggleSearchSheetOpen = useStore((s) => s.toggleSearchSheetOpen);
-  const toggleSettingsSheetOpen = useStore((s) => s.toggleSettingsSheetOpen);
+  const { toggleOpenState } = useStore((s) => ({
+    toggleOpenState: s.toggleOpenState,
+  }));
 
   useEffect(() => {
     setOpenOverlay(props.open);
@@ -80,7 +80,7 @@ export function LeftSidebar(props: {
             svg={<IconSearch width="20" />}
             className="py-0"
             onClick={() => {
-              toggleSearchSheetOpen && toggleSearchSheetOpen();
+              toggleOpenState && toggleOpenState("searchSheet");
             }}
           />
         </div>
@@ -94,8 +94,7 @@ export function LeftSidebar(props: {
             svg={<IconSettingsOutline />}
             className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]"
             onClick={() => {
-              toggleSettingsSheetOpen &&
-                toggleSettingsSheetOpen(DefaultSettingsSheetTab);
+              toggleOpenState && toggleOpenState("settingsSheet");
             }}
           />
           <NavOrdinaryLink

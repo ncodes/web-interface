@@ -47,15 +47,15 @@ function SwapInput(props: { avatar: string; avatarFallback: string }) {
   );
 }
 
-export function SwapSheetContent({ offsheet }: { offsheet?: boolean }) {
+export function SwapSheetContent({ outOfSheet }: { outOfSheet?: boolean }) {
   return (
     <ScrollArea type="scroll" className="h-full overflow-auto ">
       <div
         className={cn("text-white h-full", {
-          "pb-[100px]": !offsheet,
+          "pb-[100px]": !outOfSheet,
         })}
       >
-        {!offsheet && (
+        {!outOfSheet && (
           <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-900">
             <span className="flex gap-2 items-center text-sm">
               <span>
@@ -180,7 +180,7 @@ export function SwapSheetContent({ offsheet }: { offsheet?: boolean }) {
         <div
           className={cn(
             "w-full p-3 border-t border-gray-800 bg-card-background",
-            { "fixed bottom-0": !offsheet }
+            { "fixed bottom-0": !outOfSheet }
           )}
         >
           <Button size="full">Swap</Button>

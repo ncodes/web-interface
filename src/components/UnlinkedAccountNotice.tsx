@@ -3,9 +3,9 @@ import IconCaution from "./icons/IconCaution.tsx";
 import { Button } from "./ui/Button.tsx";
 
 export function UnlinkedAccountNotice() {
-  const { toggleSettingsSheetOpen, user } = useStore((state) => ({
-    toggleSettingsSheetOpen: state.toggleSettingsSheetOpen,
+  const { toggleOpenState, user } = useStore((state) => ({
     user: state.user,
+    toggleOpenState: state.toggleOpenState,
   }));
 
   return (
@@ -38,7 +38,7 @@ export function UnlinkedAccountNotice() {
               size="sm"
               className="w-[100px]"
               onClick={() => {
-                toggleSettingsSheetOpen && toggleSettingsSheetOpen("account");
+                toggleOpenState && toggleOpenState("settingsSheet", "account");
               }}
             >
               Link

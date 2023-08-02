@@ -45,12 +45,12 @@ export function NotificationSheet(props: {
   onOpen?: (open: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const notifSheetOpen = useStore((state) => state.notifSheetOpen);
-  const toggleNotifSheetOpen = useStore((state) => state.toggleNotifSheetOpen);
+  const openState = useStore((state) => state.openState);
+  const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   useEffect(() => {
-    setOpen(notifSheetOpen ?? open);
-  }, [notifSheetOpen]);
+    setOpen(openState.notifSheet ?? open);
+  }, [openState.notifSheet]);
 
   return (
     <Sheet
@@ -58,7 +58,7 @@ export function NotificationSheet(props: {
       onOpenChange={(open) => {
         setOpen(open);
         props.onOpen && props.onOpen(open);
-        toggleNotifSheetOpen && toggleNotifSheetOpen();
+        toggleOpenState && toggleOpenState("notifSheet");
       }}
     >
       <SheetTrigger>{props.children}</SheetTrigger>
@@ -94,7 +94,7 @@ export function NotificationSheet(props: {
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {
-            toggleNotifSheetOpen && toggleNotifSheetOpen();
+            toggleOpenState && toggleOpenState("notifSheet");
           }}
         >
           <Cross2Icon className="h-6 w-6" />

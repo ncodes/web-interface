@@ -10,11 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
 import { cn } from "../../libs/utils.ts";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { ManageLiquiditySheet } from "../liquidity/ManageLiquiditySheet.tsx";
-import { SwapSheet } from "../liquidity/SwapSheet.tsx";
-import { ReviewViewerSheet } from "../liquidity/ReviewViewerSheet.tsx";
-import { CreateOfferSheet } from "../liquidity/CreateOfferSheet.tsx";
+import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
 import { PairAvatar } from "../avatar/PairAvatar.tsx";
 import IconStatus from "../icons/IconStatus.tsx";
 import IconCoinStack from "../icons/IconCoinStack.tsx";
@@ -32,11 +28,6 @@ export function SwapRow({
   className?: string;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
-  const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
-    useState(false);
-  const [openSwapSheet, setOpenSwapSheet] = useState(false);
-  const [openReviewSheet, setOpenReviewSheet] = useState(false);
-  const [openCreateOfferSheet, setOpenCreateOfferSheet] = useState(false);
 
   return (
     <div
@@ -76,7 +67,7 @@ export function SwapRow({
                 <span>
                   {base} - {quote}
                 </span>
-                <span className="flex items-center gap-1 text-xs font-extralight text-blue-200 font-light tracking-wider text-green-400">
+                <span className="flex items-center gap-1 text-xs font-light tracking-wider text-green-400">
                   <span className="text-gray-300">
                     <IconStatus width="12px" />
                   </span>
@@ -143,9 +134,10 @@ export function SwapRow({
             data-swap-trigger="1"
             className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
           >
-            <div className="text-xs tracking-wide font-light">
-              <span className="text-gray-400 ">Date Created: </span>
-              <span className="text-gray-300">2021-09-01 12:00:00</span>
+            <div className="text-xs text-gray-500 tracking-wide font-light">
+              <span className="hidden md:flex py-1 text-xs text-gray-500 gap-1 items-center">
+                <TimerIcon /> <span className="text-gray-200">3 days ago</span>
+              </span>
             </div>
           </div>
           <div
@@ -157,7 +149,6 @@ export function SwapRow({
                 variant="link"
                 rounded="none"
                 className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
-                onClick={() => setOpenCreateOfferSheet(true)}
               >
                 <IconCoinStack width="20px" /> View Liquidity
               </Button>
@@ -167,7 +158,6 @@ export function SwapRow({
                 variant="link"
                 rounded="none"
                 className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
-                onClick={() => setOpenCreateOfferSheet(true)}
               >
                 <IconMarket width="20px" /> View Market
               </Button>
@@ -190,20 +180,10 @@ export function SwapRow({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem
-                    className="flex gap-2"
-                    onClick={() => {
-                      setOpenManageLiquiditySheet(true);
-                    }}
-                  >
+                  <DropdownMenuItem className="flex gap-2">
                     <IconCoinStack width="20px" /> View Liquidity
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className="flex gap-2"
-                    onClick={() => {
-                      setOpenManageLiquiditySheet(true);
-                    }}
-                  >
+                  <DropdownMenuItem className="flex gap-2">
                     <IconMarket width="20px" /> View Market
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -212,31 +192,6 @@ export function SwapRow({
           </div>
         </div>
       </div>
-
-      <SwapSheet
-        open={openSwapSheet}
-        onOpenChange={(open) => {
-          setOpenSwapSheet(open);
-        }}
-      />
-      <ManageLiquiditySheet
-        open={openManageLiquiditySheet}
-        onOpenChange={(open) => {
-          setOpenManageLiquiditySheet(open);
-        }}
-      />
-      <ReviewViewerSheet
-        open={openReviewSheet}
-        onOpenChange={(open) => {
-          setOpenReviewSheet(open);
-        }}
-      />
-      <CreateOfferSheet
-        open={openCreateOfferSheet}
-        onOpenChange={(open) => {
-          setOpenCreateOfferSheet(open);
-        }}
-      />
     </div>
   );
 }

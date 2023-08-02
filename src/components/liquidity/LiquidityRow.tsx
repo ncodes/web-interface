@@ -26,6 +26,7 @@ import { SwapSheet } from "./SwapSheet.tsx";
 import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
 import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
 import { IconStarSmile } from "../icons/IconStarSmile.tsx";
+import useStore from "../../hooks/store/useStore.ts";
 
 export function LiquidityRow({
   base,
@@ -44,8 +45,10 @@ export function LiquidityRow({
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
-  const [openReviewSheet, setOpenReviewSheet] = useState(false);
-  const [openCreateOfferSheet, setOpenCreateOfferSheet] = useState(false);
+  const { openState, toggleOpenState } = useStore((state) => ({
+    openState: state.openState,
+    toggleOpenState: state.toggleOpenState,
+  }));
 
   return (
     <div
@@ -91,7 +94,9 @@ export function LiquidityRow({
                     <IconStarSmile width="15px" />
                   </span>
                   <span
-                    onClick={() => setOpenReviewSheet(true)}
+                    onClick={() => {
+                      toggleOpenState("reviewSheet");
+                    }}
                     className="text-blue-200 text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4"
                   >
                     84% (256 trades)
@@ -214,18 +219,6 @@ export function LiquidityRow({
             data-swap-trigger="1"
             className="flex items-center border-l border-gray-800 shrink-0"
           >
-            {!ownerMode && (
-              <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-                <Button
-                  variant="link"
-                  rounded="none"
-                  className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
-                  onClick={() => setOpenCreateOfferSheet(true)}
-                >
-                  <IconOffer width="15px" /> Create Offer
-                </Button>
-              </span>
-            )}
             {ownerMode && (
               <span className="hidden lg:inline border-r border-gray-800 shrink-0">
                 <Button
@@ -271,7 +264,9 @@ export function LiquidityRow({
                   {!ownerMode && (
                     <DropdownMenuItem
                       className="flex gap-2"
-                      onClick={() => setOpenCreateOfferSheet(true)}
+                      onClick={() => {
+                        toggleOpenState && toggleOpenState("createOfferSheet");
+                      }}
                     >
                       <IconOffer width="15px" /> Create Offer
                     </DropdownMenuItem>
@@ -296,17 +291,12 @@ export function LiquidityRow({
         }}
       />
       <ReviewViewerSheet
-        open={openReviewSheet}
-        onOpenChange={(open) => {
-          setOpenReviewSheet(open);
+        open={openState.reviewSheet || false}
+        onOpenChange={() => {
+          toggleOpenState && toggleOpenState("reviewSheet");
         }}
       />
-      <CreateOfferSheet
-        open={openCreateOfferSheet}
-        onOpenChange={(open) => {
-          setOpenCreateOfferSheet(open);
-        }}
-      />
+      <CreateOfferSheet />
     </div>
   );
 }

@@ -109,9 +109,7 @@ function TabContentHeader(props: { address: string }) {
 
 function MyWalletFooter(props: { openWalletManager: () => void }) {
   const { disconnect } = useConnector();
-  const toggleSettingsSheetOpen = useStore(
-    (state) => state.toggleSettingsSheetOpen
-  );
+  const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   return (
     <div className="absolute bottom-0 w-full p-5 border-gray-600 bg-modal-background flex justify-between py-3 border-t border-modal-border/50">
@@ -131,7 +129,7 @@ function MyWalletFooter(props: { openWalletManager: () => void }) {
           className="select-none"
           onClick={async () => {
             await disconnect();
-            toggleSettingsSheetOpen && toggleSettingsSheetOpen();
+            toggleOpenState && toggleOpenState("settingsSheet");
           }}
         >
           Disconnect
@@ -211,7 +209,6 @@ function AccountTab() {
 }
 
 export type SettingsSheetTab = "balances" | "fee-purse" | "account";
-export const DefaultSettingsSheetTab = "balances";
 
 export function SettingsSheet(props: {
   children?: React.ReactNode;
@@ -219,20 +216,16 @@ export function SettingsSheet(props: {
   openWalletManager?: () => void;
 }) {
   const { address } = useConnector();
-  const settingsSheetOpen = useStore((state) => state.settingsSheetOpen);
-  const settingsSheetActiveTab = useStore(
-    (state) => state.settingsSheetActiveTab
-  );
-  const toggleSettingsSheetOpen = useStore(
-    (state) => state.toggleSettingsSheetOpen
-  );
+  const openState = useStore((state) => state.openState);
+  const toggleOpenState = useStore((state) => state.toggleOpenState);
+  const currentTab = useStore((state) => state.currentTab);
 
   return (
     <Sheet
-      open={settingsSheetOpen}
+      open={openState.settingsSheet}
       onOpenChange={(open) => {
         props.onOpen && props.onOpen(open);
-        toggleSettingsSheetOpen && toggleSettingsSheetOpen();
+        toggleOpenState && toggleOpenState("settingsSheet");
       }}
     >
       <SheetTrigger>{props.children}</SheetTrigger>
@@ -249,7 +242,7 @@ export function SettingsSheet(props: {
         </SheetHeader>
         <div className="px-0 text-white h-full pb-10">
           <Tabs
-            defaultValue={settingsSheetActiveTab || "balances"}
+            defaultValue={currentTab || "balances"}
             className="w-full h-full transition-all duration-500"
           >
             <ScrollGradientIndicator>
@@ -281,7 +274,7 @@ export function SettingsSheet(props: {
             <AccountTab />
             <MyWalletFooter
               openWalletManager={() => {
-                toggleSettingsSheetOpen && toggleSettingsSheetOpen();
+                toggleOpenState && toggleOpenState("settingsSheet");
                 props.openWalletManager && props.openWalletManager();
               }}
             />
@@ -290,7 +283,7 @@ export function SettingsSheet(props: {
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {
-            toggleSettingsSheetOpen && toggleSettingsSheetOpen();
+            toggleOpenState && toggleOpenState("settingsSheet");
           }}
         >
           <Cross2Icon className="h-6 w-6" />

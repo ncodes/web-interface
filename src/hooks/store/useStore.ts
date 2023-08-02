@@ -1,36 +1,38 @@
 import create from "zustand";
 import { defaultRegion } from "../../components/region/constants.ts";
-import {
-  DefaultSettingsSheetTab,
-  SettingsSheetTab,
-} from "../../components/SettingsSheet.tsx";
+
+type OpenStateKey =
+  | "createOfferSheet"
+  | "searchSheet"
+  | "notifSheet"
+  | "reviewSheet"
+  | "settingsSheet";
 
 export interface IStore {
+  // Authenticated user state
   user: User | null;
   setUser: (user: User) => void;
 
+  // Region state
   currentRegion?: string;
   setCurrentRegion?: (region: string) => void;
-
-  // Search sheet state
-  searchSheetOpen?: boolean;
-  toggleSearchSheetOpen?: () => void;
-
-  // Notification sheet state
-  notifSheetOpen?: boolean;
-  toggleNotifSheetOpen?: () => void;
-
-  // Settings sheet state
-  settingsSheetOpen?: boolean;
-  toggleSettingsSheetOpen?: (tab?: SettingsSheetTab) => void;
-  settingsSheetActiveTab?: SettingsSheetTab;
 
   // LoadingBar state
   loaderProgress?: number;
   setLoaderProgress?: (progress: number) => void;
+
+  // Current tab
+  currentTab?: string;
+  setCurrentTab?: (tab: string) => void;
+
+  // Open state toggling for sheets and modals
+  openState: {
+    [key in OpenStateKey]: boolean;
+  };
+  toggleOpenState: (key: OpenStateKey, activeTab?: string) => void;
 }
 
-const useStore = create<IStore>((set, get) => ({
+const useStore = create<IStore>((set) => ({
   user: null,
   setUser: (user: User) => set({ user }),
 
@@ -40,19 +42,24 @@ const useStore = create<IStore>((set, get) => ({
   currentRegion: localStorage.getItem("region") || defaultRegion,
   setCurrentRegion: (region: string) => set({ currentRegion: region }),
 
-  searchSheetOpen: false,
-  toggleSearchSheetOpen: () => set({ searchSheetOpen: !get().searchSheetOpen }),
+  currentTab: "",
+  setCurrentTab: (tab: string) => set({ currentTab: tab }),
 
-  notifSheetOpen: false,
-  toggleNotifSheetOpen: () => set({ notifSheetOpen: !get().notifSheetOpen }),
-
-  settingsSheetOpen: false,
-  settingsSheetActiveTab: "balances",
-  toggleSettingsSheetOpen: (tab?: SettingsSheetTab) => {
-    set({
-      settingsSheetOpen: !get().settingsSheetOpen,
-      settingsSheetActiveTab: tab || DefaultSettingsSheetTab,
-    });
+  openState: {
+    createOfferSheet: false,
+    searchSheet: false,
+    notifSheet: false,
+    reviewSheet: false,
+    settingsSheet: false,
+  },
+  toggleOpenState: (key: OpenStateKey, activeTab?: string) => {
+    set((state) => ({
+      currentTab: activeTab || "",
+      openState: {
+        ...state.openState,
+        [key]: !state.openState[key],
+      },
+    }));
   },
 }));
 

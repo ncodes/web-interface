@@ -24,7 +24,11 @@ import {
   SwapSheetContent,
 } from "../components/liquidity/SwapSheet.tsx";
 import { Button } from "../components/ui/Button.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useStore from "../hooks/store/useStore.ts";
+import { OfferRow } from "../components/liquidity/OfferRow.tsx";
+import { CreateOfferContent } from "../components/liquidity/CreateOfferSheet.tsx";
+import IconOffer from "../components/icons/IconOffer.tsx";
 
 type ActivityType = "add-liquidity" | "remove-liquidity" | "swap";
 
@@ -64,9 +68,9 @@ function ActivityLog() {
   return (
     <div className=" pr-0 flex-1 ">
       <Label className="text-xl flex items-center gap-1 px-5">
-        <span>Activity Logs</span>{" "}
+        <span>Events</span>{" "}
         <ToolTip tip="Recent events associated with this liquidity">
-          <InfoCircledIcon width="20px" />
+          <InfoCircledIcon width="20px" className="relative top-[2px]" />
         </ToolTip>
       </Label>
       <div className="bg-card-background divide-y divide-gray-800 border rounded-2xl mt-5 border-card-border w-full min-h-[300px]">
@@ -170,15 +174,33 @@ function ReviewItem({
 }
 
 function RecentReviews() {
+  const { toggleOpenState } = useStore((state) => ({
+    toggleOpenState: state.toggleOpenState,
+  }));
+
   return (
     <div className="lg:px-5 flex-1 flex flex-col">
-      <Label className="text-xl flex items-center gap-1">
-        <span>Recent Reviews</span>{" "}
-        <ToolTip tip="Recent reviews posted by takers of this liquidity">
-          <InfoCircledIcon width="20px" />
-        </ToolTip>
+      <Label className="px-3 text-xl flex items-center gap-1 justify-between">
+        <div className="flex items-center gap-2">
+          <span>Recent Reviews</span>{" "}
+          <ToolTip tip="Recent reviews posted by takers of this liquidity">
+            <InfoCircledIcon width="20px" className="relative top-[2px]" />
+          </ToolTip>
+        </div>
+        <div>
+          <Button
+            variant="link"
+            size="sm"
+            className="px-0"
+            onClick={() => {
+              toggleOpenState && toggleOpenState("reviewSheet");
+            }}
+          >
+            View All
+          </Button>
+        </div>
       </Label>
-      <div className="flex-1 bg-card-background divide-y divide-gray-800 border rounded-2xl mt-5 border-card-border w-full">
+      <div className="flex-1 bg-card-background divide-y divide-gray-800 border rounded-2xl mt-4 border-card-border w-full">
         <ScrollGradientIndicator side="bottom">
           <ScrollArea type="scroll" className="h-[400px]">
             <ReviewItem
@@ -242,6 +264,12 @@ function LiquidityTabContent() {
 
 function Page() {
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
+  const setCurrentTab = useStore((state) => state.setCurrentTab);
+  const toggleOpenState = useStore((state) => state.toggleOpenState);
+
+  useEffect(() => {
+    setCurrentTab && setCurrentTab("liquidity");
+  }, [setCurrentTab]);
 
   return (
     <Tabs
@@ -255,21 +283,33 @@ function Page() {
               <TabsTrigger
                 value="liquidity"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={() => {
+                  setCurrentTab && setCurrentTab("liquidity");
+                }}
               >
                 Liquidity
+              </TabsTrigger>
+              <TabsTrigger
+                value="offers"
+                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={() => {
+                  setCurrentTab && setCurrentTab("offers");
+                }}
+              >
+                Offers
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
         </ScrollGradientIndicator>
-        <div>
+        <div className="hidden xs:inline xl:hidden">
           <Button
             size="sm"
-            className="xl:hidden w-[100px]"
+            className="w-[150px] gap-2 items-center"
             onClick={() => {
-              setOpenSwapSheet(true);
+              toggleOpenState && toggleOpenState("createOfferSheet");
             }}
           >
-            Swap
+            <IconOffer width="20px" /> Create Offer
           </Button>
         </div>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
@@ -295,6 +335,16 @@ function Page() {
           }}
         />
       </TabsContent>
+      <TabsContent
+        value="offers"
+        className="p-3 pt-0 mt-0 px-0 flex flex-col gap-3"
+      >
+        <div className="px-3 py-3">
+          <div className=" pr-0 flex-1 ">
+            <OfferRow base={"BTC"} quote={"UNI"} />
+          </div>
+        </div>
+      </TabsContent>
     </Tabs>
   );
 }
@@ -304,22 +354,44 @@ function SwapSheetWrapper() {
     <div className="flex flex-col pt-3">
       <Label className="text-xl">Swap</Label>
       <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
-        <SwapSheetContent offsheet={true} />
+        <SwapSheetContent outOfSheet={true} />
+      </div>
+    </div>
+  );
+}
+
+function CreateOfferWrapper() {
+  return (
+    <div className="flex flex-col pt-3">
+      <Label className="text-xl">Create Offer</Label>
+      <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
+        <CreateOfferContent outOfSheet={true} />
       </div>
     </div>
   );
 }
 
 export default function Liquidity() {
+  const currentTab = useStore((state) => state.currentTab);
+
   return (
     <Layout
       tab={<Page />}
       rightSide={
-        <div className="flex w-full flex-col h-full mt-2">
-          <SwapSheetWrapper />
-          <div className="absolute bottom-0">
-            <Footer />
-          </div>
+        <div className="flex w-full flex-col h-full pt-2">
+          {currentTab == "liquidity" && (
+            <>
+              <SwapSheetWrapper />
+              <div className="absolute bottom-0">{<Footer />}</div>
+            </>
+          )}
+
+          {currentTab == "offers" && (
+            <>
+              <CreateOfferWrapper />
+              <div className="absolute bottom-0">{<Footer />}</div>
+            </>
+          )}
         </div>
       }
     />

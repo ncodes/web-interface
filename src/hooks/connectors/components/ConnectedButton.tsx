@@ -31,16 +31,14 @@ export const ConnectedButton = (props: ConnectedProps) => {
     address,
     watch: true,
   });
-  const toggleSettingsSheetOpen = useStore(
-    (state) => state.toggleSettingsSheetOpen
-  );
+  const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   return (
     <div>
       <div
         className="flex [&>*]:cursor-pointer items-center justify-between  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-3 xs:pr-1"
         onClick={() => {
-          toggleSettingsSheetOpen && toggleSettingsSheetOpen();
+          toggleOpenState && toggleOpenState("settingsSheet");
         }}
       >
         <p

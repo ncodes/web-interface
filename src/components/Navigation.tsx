@@ -79,22 +79,6 @@ export function Navigation() {
         </li>
         <li>
           <NavPageLink
-            iconFile="offers.svg"
-            label="Offers"
-            active={pathname.match("/offer") != null}
-            to="/offers"
-          />
-        </li>
-        <li>
-          <NavPageLink
-            iconFile="messages.svg"
-            label="Messages"
-            active={pathname.match("/message") != null}
-            to="/messages"
-          />
-        </li>
-        <li>
-          <NavPageLink
             iconFile="disputes.svg"
             label="Disputes"
             active={pathname.match("/dispute") != null}
