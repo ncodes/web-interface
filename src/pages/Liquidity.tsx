@@ -19,10 +19,7 @@ import EmojiAvatar from "../components/avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../components/avatar/useAvatar.tsx";
 import { shortenAddress } from "../libs/helpers.ts";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
-import {
-  SwapSheet,
-  SwapSheetContent,
-} from "../components/liquidity/SwapSheet.tsx";
+import { SwapSheet, SwapSheetContent } from "../components/swap/SwapSheet.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { useEffect, useState } from "react";
 import useStore from "../hooks/store/useStore.ts";

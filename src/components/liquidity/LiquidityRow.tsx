@@ -22,7 +22,7 @@ import { cn } from "../../libs/utils.ts";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { VerifiedBadge } from "./VerifiedBadge.tsx";
 import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
-import { SwapSheet } from "./SwapSheet.tsx";
+import { SwapSheet } from "../swap/SwapSheet.tsx";
 import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
 import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
 import { IconStarSmile } from "../icons/IconStarSmile.tsx";

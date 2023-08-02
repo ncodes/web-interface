@@ -33,7 +33,7 @@ function Page() {
                 value="my-swaps"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
               >
-                My Swaps
+                Swaps
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>

@@ -2,9 +2,11 @@ import { cn } from "../libs/helpers.ts";
 import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import useConnector from "../hooks/connectors/useConnector.tsx";
 import { Link, useLocation } from "react-router-dom";
+import { IconExchange } from "./icons/IconExchange.tsx";
 
 type NavPageLinkProps = {
-  iconFile: string;
+  iconFile?: string;
+  icon?: React.ReactNode;
   label: string;
   alt?: string;
   active?: boolean;
@@ -24,11 +26,14 @@ function NavPageLink(props: NavPageLinkProps) {
         )}
       >
         <span className="w-[24px] flex justify-center items-center">
-          <img
-            src={`/images/icons/${props.iconFile}`}
-            alt={props.alt || props.label}
-            className=""
-          />
+          {!props.icon && (
+            <img
+              src={`/images/icons/${props.iconFile}`}
+              alt={props.alt || props.label}
+              className=""
+            />
+          )}
+          {props.icon && props.icon}
         </span>
         <span className={cn("text-[20px] xl:text-[21px] tracking-wide", {})}>
           {props.label}
@@ -71,7 +76,7 @@ export function Navigation() {
         </li>
         <li>
           <NavPageLink
-            iconFile="liquidity.svg"
+            icon={<IconExchange />}
             label="Swaps"
             active={pathname.match("/swap(s|)") != null}
             to="/swaps"
