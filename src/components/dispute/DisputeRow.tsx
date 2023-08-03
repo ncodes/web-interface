@@ -38,14 +38,14 @@ export function DisputeRow({
   return (
     <div
       onClick={(e: BaseSyntheticEvent) => {
-        const canTrigger = e.target.getAttribute("data-swap-trigger");
+        const canTrigger = e.target.getAttribute("data-click-trigger");
         if (canTrigger && canTrigger == "1" && !noFocus) {
           // do something
         }
       }}
     >
       <div
-        data-swap-trigger="1"
+        data-click-trigger="1"
         className={cn(
           "border bg-card-background border-card-border transition-all duration-300 rounded-xl",
           {
@@ -55,9 +55,9 @@ export function DisputeRow({
           className
         )}
       >
-        <div className="flex flex-col md:flex-row" data-swap-trigger="1">
+        <div className="flex flex-col md:flex-row" data-click-trigger="1">
           <div
-            data-swap-trigger="1"
+            data-click-trigger="1"
             className="flex gap-2 p-5 px-3 md:px-5 py-0 items-center shrink-0 md:border-r border-gray-800"
           >
             <div className="flex w-full items-center gap-2 md:gap-1 md:px-0 md:py-4 pt-2 md:pt-4">
@@ -93,7 +93,7 @@ export function DisputeRow({
               <ScrollAreaHorizontal className="flex mr-[1px]">
                 <div
                   className="flex-1 flex py-2 px-2 gap-2"
-                  data-swap-trigger="1"
+                  data-click-trigger="1"
                 >
                   <StatCard
                     title={`No. of Mediators`}
@@ -144,7 +144,7 @@ export function DisputeRow({
         </div>
         <div className="flex justify-between border-t border-card-border">
           <div
-            data-swap-trigger="1"
+            data-click-trigger="1"
             className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
           >
             <div className="text-xs text-gray-500 tracking-wide font-light">
@@ -154,7 +154,7 @@ export function DisputeRow({
             </div>
           </div>
           <div
-            data-swap-trigger="1"
+            data-click-trigger="1"
             className="flex items-center border-l border-gray-800 shrink-0 px-2"
           >
             <span className="hidden lg:inline border-r border-gray-800 shrink-0">

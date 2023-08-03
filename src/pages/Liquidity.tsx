@@ -9,7 +9,7 @@ import {
   TabsTrigger,
 } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 import { Footer } from "../components/Footer.tsx";
@@ -24,8 +24,17 @@ import { Button } from "../components/ui/Button.tsx";
 import { useEffect, useState } from "react";
 import useStore from "../hooks/store/useStore.ts";
 import { OfferRow } from "../components/liquidity/OfferRow.tsx";
-import { CreateOfferContent } from "../components/liquidity/CreateOfferSheet.tsx";
+import {
+  CreateOfferContent,
+  CreateOfferSheet,
+} from "../components/liquidity/CreateOfferSheet.tsx";
 import IconOffer from "../components/icons/IconOffer.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu.tsx";
 
 type ActivityType = "add-liquidity" | "remove-liquidity" | "swap";
 
@@ -177,7 +186,7 @@ function RecentReviews() {
 
   return (
     <div className="lg:px-5 flex-1 flex flex-col">
-      <Label className="px-3 text-xl flex items-center gap-1 justify-between">
+      <span className="px-3 text-xl flex items-center gap-1 justify-between font-medium">
         <div className="flex items-center gap-2">
           <span>Recent Reviews</span>{" "}
           <ToolTip tip="Recent reviews posted by takers of this liquidity">
@@ -196,7 +205,7 @@ function RecentReviews() {
             View All
           </Button>
         </div>
-      </Label>
+      </span>
       <div className="flex-1 bg-card-background divide-y divide-gray-800 border rounded-2xl mt-4 border-card-border w-full">
         <ScrollGradientIndicator side="bottom">
           <ScrollArea type="scroll" className="h-[400px]">
@@ -288,17 +297,20 @@ function Page() {
               </TabsTrigger>
               <TabsTrigger
                 value="offers"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className="font-light gap-1 relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
                   setCurrentTab && setCurrentTab("offers");
                 }}
               >
-                Offers
+                <span>Offers</span>
+                <div className="rounded-full h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center  bg-red-600 text-[10px]">
+                  2
+                </div>
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
         </ScrollGradientIndicator>
-        <div className="hidden xs:inline xl:hidden">
+        <div className="hidden md:inline xl:hidden">
           <Button
             size="sm"
             className="w-[150px] gap-2 items-center"
@@ -310,14 +322,23 @@ function Page() {
           </Button>
         </div>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
-          {/*<DropdownMenu>*/}
-          {/*  <DropdownMenuTrigger>*/}
-          {/*    <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">*/}
-          {/*      <DotsVerticalIcon />*/}
-          {/*    </span>*/}
-          {/*  </DropdownMenuTrigger>*/}
-          {/*  <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0"></DropdownMenuContent>*/}
-          {/*</DropdownMenu>*/}
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
+                <DotsVerticalIcon />
+              </span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
+              <DropdownMenuItem
+                className="gap-1"
+                onClick={() => {
+                  toggleOpenState && toggleOpenState("createOfferSheet");
+                }}
+              >
+                <IconOffer width="20px" /> Create Offer
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </TabsList>
       <TabsContent
@@ -342,6 +363,7 @@ function Page() {
           </div>
         </div>
       </TabsContent>
+      <CreateOfferSheet />
     </Tabs>
   );
 }
@@ -370,13 +392,12 @@ function CreateOfferWrapper() {
 
 export default function Liquidity() {
   const currentTab = useStore((state) => state.currentTab);
-
   return (
     <Layout
       tab={<Page />}
       rightSide={
         <div className="flex w-full flex-col h-full pt-2">
-          {currentTab == "liquidity" && (
+          {(currentTab == "liquidity" || !currentTab) && (
             <>
               <SwapSheetWrapper />
               <div className="absolute bottom-0">{<Footer />}</div>

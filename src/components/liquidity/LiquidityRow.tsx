@@ -27,6 +27,7 @@ import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
 import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
 import { IconStarSmile } from "../icons/IconStarSmile.tsx";
 import useStore from "../../hooks/store/useStore.ts";
+import { IconExchange } from "../icons/IconExchange.tsx";
 
 export function LiquidityRow({
   base,
@@ -53,14 +54,14 @@ export function LiquidityRow({
   return (
     <div
       onClick={(e: BaseSyntheticEvent) => {
-        const canTrigger = e.target.getAttribute("data-swap-trigger");
+        const canTrigger = e.target.getAttribute("data-click-trigger");
         if (canTrigger && canTrigger == "1" && !noFocus) {
           setOpenSwapSheet(!openSwapSheet);
         }
       }}
     >
       <div
-        data-swap-trigger="1"
+        data-click-trigger="1"
         className={cn(
           "border bg-card-background border-card-border transition-all duration-300 rounded-xl",
           {
@@ -70,9 +71,9 @@ export function LiquidityRow({
           className
         )}
       >
-        <div className="flex flex-col md:flex-row" data-swap-trigger="1">
+        <div className="flex flex-col md:flex-row" data-click-trigger="1">
           <div
-            data-swap-trigger="1"
+            data-click-trigger="1"
             className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
             <div>
@@ -82,10 +83,10 @@ export function LiquidityRow({
             </div>
             <div
               className="flex py-3 md:py-0 w-full md:w-auto flex-col xxs:flex-row md:flex-col justify-start xxs:justify-between md:justify-start z-[6] xxs:items-center md:items-start"
-              data-swap-trigger="1"
+              data-click-trigger="1"
             >
               <span className="flex text-gray-100 items-center gap-1">
-                <span data-swap-trigger="1">0xAbc..xYz</span>
+                <span data-click-trigger="1">0xAbc..xYz</span>
                 <VerifiedBadge />
               </span>
               <ToolTip tip="Click to open reviews">
@@ -110,7 +111,7 @@ export function LiquidityRow({
               <ScrollAreaHorizontal className="flex mr-[1px]">
                 <div
                   className="flex-1 flex py-2 px-2 gap-2"
-                  data-swap-trigger="1"
+                  data-click-trigger="1"
                 >
                   <StatCard
                     title="Price ($)"
@@ -184,14 +185,14 @@ export function LiquidityRow({
         </div>
         <div className="flex justify-between border-t border-gray-800">
           <div
-            data-swap-trigger="1"
+            data-click-trigger="1"
             className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
           >
             <div className=" flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
               {/*<span className="hidden sm:inline">Badges</span>*/}
               <ToolTip tip="Badges required of the taker by the liquidity owner">
                 <span
-                  data-swap-trigger="1"
+                  data-click-trigger="1"
                   className="block text-gray-400 hover:text-chinese-green cursor-pointer transition-all duration-300"
                 >
                   <IconInfoCircle width="22px" />
@@ -203,7 +204,7 @@ export function LiquidityRow({
                 <ScrollAreaHorizontal type="scroll">
                   <div
                     className="flex items-center gap-2 pr-3"
-                    data-swap-trigger="1"
+                    data-click-trigger="1"
                   >
                     <BadgePill name="LP:KYC" />
                     <BadgePill name="TK:KYC" />
@@ -216,7 +217,7 @@ export function LiquidityRow({
             </div>
           </div>
           <div
-            data-swap-trigger="1"
+            data-click-trigger="1"
             className="flex items-center border-l border-gray-800 shrink-0"
           >
             {ownerMode && (
@@ -234,6 +235,14 @@ export function LiquidityRow({
             <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
               {!ownerMode && <IconHeart />}
             </span>
+            <Button
+              variant="link"
+              rounded="none"
+              className="text-sm px-2 text-gray-900 flex items-center gap-1 bg-chinese-green lg:rounded-br-xl"
+              onClick={() => setOpenSwapSheet(true)}
+            >
+              <IconExchange width="20px" /> SWAP
+            </Button>
             <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu
                 onOpenChange={(open) => {

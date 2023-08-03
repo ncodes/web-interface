@@ -104,7 +104,7 @@ function RecentTradeRow(props: {
 
 export function ActivityStream() {
   return (
-    <div className="flex flex-col justify-between mt-5 xl:mt-2">
+    <div className="flex flex-col justify-between pt-5 xl:pt-5">
       <div className="border-b flex-1 border-gray-900">
         <h1 className="text-lg md:text-xl mb-3">Top Markets</h1>
         <div className="divide-y bg-card-background border border-gray-800 rounded-2xl divide-gray-800 ">

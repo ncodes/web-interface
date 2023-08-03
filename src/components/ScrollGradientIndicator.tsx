@@ -74,7 +74,7 @@ export default function ScrollGradientIndicator({
 
   return (
     <div
-      data-swap-trigger="1"
+      data-click-trigger="1"
       className={cn(
         {
           "scroll-gradient-right": side == "right" && progress < 100,

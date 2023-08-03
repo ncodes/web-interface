@@ -110,7 +110,7 @@ function AssetSelector({
           >
             <div
               className={cn(
-                "flex items-center min-w-[120px] max-w-[170px] pl-3 pr-2 justify-between rounded-full bg-gray-700 border border-gray-600 cursor-pointer hover:bg-gray-600 hover:scale-105",
+                "flex items-center min-w-[120px] max-w-[170px] pl-3 pr-2 justify-between rounded-full bg-card-background border border-gray-600 cursor-pointer hover:bg-gray-600 hover:scale-105",
                 { "bg-gray-600 scale-105 border-gray-500": open }
               )}
             >

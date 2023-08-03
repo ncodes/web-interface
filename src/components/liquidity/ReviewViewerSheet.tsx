@@ -21,7 +21,7 @@ function ReviewItem({
   return (
     <div className="px-5 flex items-center gap-2 border-b border-gray-800 pb-3">
       <EmojiAvatar size={AvatarSize.Small} randomStr={address} />
-      <div className="flex-1 bg-gray-900 text-sm text-gray-100 font-light border border-gray-700 p-1 px-3 rounded-xl rounded-tl-none">
+      <div className="flex-1 text-sm text-gray-100 font-light p-1 px-3 rounded-xl rounded-tl-none">
         {msg}
       </div>
       <div className="shrink-0">

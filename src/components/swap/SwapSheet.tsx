@@ -15,7 +15,6 @@ import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { Button } from "../ui/Button.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
 
 function SwapInput(props: { avatar: string; avatarFallback: string }) {
   const [focus, setFocus] = useState(false);
@@ -49,12 +48,12 @@ function SwapInput(props: { avatar: string; avatarFallback: string }) {
 
 export function SwapSheetContent({ outOfSheet }: { outOfSheet?: boolean }) {
   return (
-    <ScrollArea type="scroll" className="h-full overflow-auto ">
-      <div
-        className={cn("text-white h-full", {
-          "pb-[100px]": !outOfSheet,
-        })}
-      >
+    <div
+      className={cn("text-white flex flex-col justify-between", {
+        "overflow-auto h-full pb-[100px]": !outOfSheet,
+      })}
+    >
+      <div className="flex-1">
         {!outOfSheet && (
           <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-900">
             <span className="flex gap-2 items-center text-sm">
@@ -68,7 +67,6 @@ export function SwapSheetContent({ outOfSheet }: { outOfSheet?: boolean }) {
             </span>
           </div>
         )}
-
         <div className="px-4 pt-5 mb-5">
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
@@ -112,7 +110,6 @@ export function SwapSheetContent({ outOfSheet }: { outOfSheet?: boolean }) {
             </div>
           </div>
         </div>
-
         <div className="m-5 mt-0  rounded-2xl pb-3 bg-gray-900">
           <div className="flex pt-2 pb-2 px-3 justify-between text-xs text-blue-200 border-b border-gray-800">
             <span className="text-gray-400">Network Fees</span>
@@ -132,7 +129,6 @@ export function SwapSheetContent({ outOfSheet }: { outOfSheet?: boolean }) {
             </div>
           </div>
         </div>
-
         <div className="p-5 pt-0 px-3">
           <Accordion type="single" collapsible>
             <AccordionItem value="advanced" className="border-none p-1">
@@ -176,17 +172,19 @@ export function SwapSheetContent({ outOfSheet }: { outOfSheet?: boolean }) {
             </AccordionItem>
           </Accordion>
         </div>
-
-        <div
-          className={cn(
-            "w-full p-3 border-t border-gray-800 bg-card-background",
-            { "fixed bottom-0": !outOfSheet }
-          )}
-        >
-          <Button size="full">Swap</Button>
-        </div>
       </div>
-    </ScrollArea>
+
+      <div
+        className={cn(
+          "p-3 w-full border-t border-gray-800 bg-card-background",
+          {
+            "absolute bottom-0 w-full": !outOfSheet,
+          }
+        )}
+      >
+        <Button size="full">Swap</Button>
+      </div>
+    </div>
   );
 }
 
