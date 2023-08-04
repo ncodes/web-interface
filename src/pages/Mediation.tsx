@@ -13,6 +13,7 @@ import { DotsVerticalIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
@@ -23,6 +24,8 @@ import { ToolTip } from "../components/ToolTip.tsx";
 import { ReactNode } from "react";
 import { BuyTicketSheet } from "../components/mediation/BuyTicketSheet.tsx";
 import useStore from "../hooks/store/useStore.ts";
+import { Paginator } from "../components/Paginator.tsx";
+import { TicketIcon } from "lucide-react";
 
 function MyTicketTabContent() {
   return <TicketRow ticket={{ index: 1 }} />;
@@ -174,14 +177,15 @@ function Page() {
           </ScrollAreaHorizontal>
         </ScrollGradientIndicator>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
-          <div>
+          <div className="hidden md:inline">
             <Button
               size="sm"
               onClick={() => {
                 toggleOpenState("buyTicketSheet");
               }}
+              className="gap-2 transition-all duration-500 hover:scale-x-105"
             >
-              Buy Ticket
+              <TicketIcon width="20px" /> Buy Ticket
             </Button>
           </div>
           <DropdownMenu>
@@ -190,12 +194,27 @@ function Page() {
                 <DotsVerticalIcon />
               </span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0"></DropdownMenuContent>
+            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
+              <DropdownMenuItem
+                className="gap-2"
+                onClick={() => {
+                  toggleOpenState("buyTicketSheet");
+                }}
+              >
+                <TicketIcon width="20px" /> Buy Ticket
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent value="my-disputes" className="p-3 pt-0 flex flex-col gap-3">
-        <MyTicketTabContent />
+      <TabsContent
+        value="my-disputes"
+        className="pt-0 flex flex-col gap-3 p-0 m-0"
+      >
+        <Paginator />
+        <div className="px-3">
+          <MyTicketTabContent />
+        </div>
       </TabsContent>
       <TabsContent value="mediation" className="p-3 pt-0 flex flex-col gap-3">
         <MediationTabContent />

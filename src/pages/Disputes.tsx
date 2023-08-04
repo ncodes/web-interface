@@ -14,6 +14,7 @@ import {
 } from "../components/ui/dropdown-menu.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { DisputeRow } from "../components/dispute/DisputeRow.tsx";
+import { Paginator } from "../components/Paginator.tsx";
 
 function DisputesContent() {
   return (
@@ -56,8 +57,11 @@ function Page() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent value="my-disputes" className="p-3 pt-0 flex flex-col gap-3">
-        <DisputesContent />
+      <TabsContent value="my-disputes" className="p-0 m-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
+          <DisputesContent />
+        </div>
       </TabsContent>
     </Tabs>
   );

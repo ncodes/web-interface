@@ -14,6 +14,7 @@ import {
 } from "../components/ui/dropdown-menu.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
+import { Paginator } from "../components/Paginator.tsx";
 
 function MyLiquidityTabContent() {
   return <LiquidityRow base="BTC" quote="UNI" />;
@@ -59,14 +60,17 @@ function Page() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent
-        value="my-liquidity"
-        className="p-3 pt-0 flex flex-col gap-3"
-      >
-        <MyLiquidityTabContent />
+      <TabsContent value="my-liquidity" className="p-0 m-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
+          <MyLiquidityTabContent />
+        </div>
       </TabsContent>
-      <TabsContent value="watching" className="p-3 pt-0 flex flex-col gap-3">
-        <MyWatchTabContent />
+      <TabsContent value="watching" className="p-0 m-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
+          <MyWatchTabContent />
+        </div>
       </TabsContent>
     </Tabs>
   );

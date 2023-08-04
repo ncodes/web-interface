@@ -25,6 +25,7 @@ import {
 import { MarketRow } from "../components/market/MarketRow.tsx";
 import { CreateMarketSheet } from "../components/market/CreateMarketSheet.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
+import { Paginator } from "../components/Paginator.tsx";
 
 function MarketTabContent() {
   return <MarketRow base="BTC" quote="UNI" />;
@@ -124,14 +125,23 @@ function MarketTabs() {
           />
         </div>
       </TabsList>
-      <TabsContent value="markets" className="p-3 pt-0 flex flex-col gap-3">
-        <MarketTabContent />
+      <TabsContent value="markets" className="p-0 m-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
+          <MarketTabContent />
+        </div>
       </TabsContent>
-      <TabsContent value="my-markets" className="p-3 pt-0 flex flex-col gap-3">
-        <MyMarketsTabContent />
+      <TabsContent value="my-markets" className="p-0 m-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
+          <MyMarketsTabContent />
+        </div>
       </TabsContent>
-      <TabsContent value="watching" className="p-3 pt-0 flex flex-col gap-3">
-        <MyWatchTabContent />
+      <TabsContent value="watching" className="p-0 m-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
+          <MyWatchTabContent />
+        </div>
       </TabsContent>
       <MarketFilterSheet
         active={openFilterSheet}

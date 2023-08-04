@@ -14,6 +14,7 @@ import {
 } from "../components/ui/dropdown-menu.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { SwapRow } from "../components/swap/SwapRow.tsx";
+import { Paginator } from "../components/Paginator.tsx";
 
 function MySwaps() {
   return <SwapRow base="BTC" quote="UNI" />;
@@ -33,7 +34,7 @@ function Page() {
                 value="my-swaps"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
               >
-                Swaps
+                My Swaps
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
@@ -49,8 +50,11 @@ function Page() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent value="my-swaps" className="p-3 pt-0 flex flex-col gap-3">
-        <MySwaps />
+      <TabsContent value="my-swaps" className="p-0 m-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
+          <MySwaps />
+        </div>
       </TabsContent>
     </Tabs>
   );
