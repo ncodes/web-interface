@@ -18,6 +18,7 @@ import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { TicketIcon } from "lucide-react";
 import { IconExchange } from "../icons/IconExchange.tsx";
 import { StatCard } from "../market/StatCard.tsx";
+import { UserHoverCard } from "../liquidity/UserHoverCard.tsx";
 
 interface Dispute {
   creator: string;
@@ -62,15 +63,19 @@ export function DisputeRow({
           >
             <div className="flex w-full items-center gap-2 md:gap-1 md:px-0 md:py-4 pt-2 md:pt-4">
               <div className="flex ">
-                <EmojiAvatar
-                  size={AvatarSize.Small}
-                  randomStr={dispute.creator}
-                />
-                <span className="-ml-1">
+                <UserHoverCard>
                   <EmojiAvatar
                     size={AvatarSize.Small}
-                    randomStr={dispute.defendant}
+                    randomStr={dispute.creator}
                   />
+                </UserHoverCard>
+                <span className="-ml-1">
+                  <UserHoverCard>
+                    <EmojiAvatar
+                      size={AvatarSize.Small}
+                      randomStr={dispute.defendant}
+                    />
+                  </UserHoverCard>
                 </span>
               </div>
               <div className="flex md:flex-col w-full justify-between md:justify-start">
@@ -105,7 +110,7 @@ export function DisputeRow({
                   <StatCard
                     title={`No. Drafted`}
                     tip={`The number of mediators that have drafted the dispute`}
-                    width="min-w-[160px]"
+                    width="w-[80px]"
                   >
                     <span className="text-gray-200">2</span>
                   </StatCard>
@@ -133,9 +138,9 @@ export function DisputeRow({
                   <StatCard
                     title={`Evidence Phase`}
                     tip={`The outcome the dispute creator is seeking (release or cancel)`}
-                    width="w-auto"
+                    width="w-[150px]"
                   >
-                    <span className="text-gray-200">Starts in:</span> 72:00:00
+                    72:00:00
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>

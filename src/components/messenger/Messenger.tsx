@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
 import { Upload } from "lucide-react";
+import { UserHoverCard } from "../liquidity/UserHoverCard.tsx";
 
 function Message({
   mine,
@@ -29,7 +30,9 @@ function Message({
     <>
       {!mine && (
         <div className="flex gap-2">
-          <EmojiAvatar size={AvatarSize.Small} randomStr={sender} />
+          <UserHoverCard>
+            <EmojiAvatar size={AvatarSize.Small} randomStr={sender} />
+          </UserHoverCard>
           <div className="flex flex-col bg-gray-800/50 border border-gray-700/50 flex-1 rounded-xl rounded-tl-none px-2 pb-2">
             <span className="flex justify-between text-xs pt-1 pb-1 text-chinese-green font-normal tracking-wide">
               <span className="select-none">
@@ -59,7 +62,9 @@ function Message({
               {msg}
             </span>
           </div>
-          <EmojiAvatar size={AvatarSize.Small} randomStr={sender} />
+          <UserHoverCard>
+            <EmojiAvatar size={AvatarSize.Small} randomStr={sender} />
+          </UserHoverCard>
         </div>
       )}
     </>

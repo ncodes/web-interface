@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, useState } from "react";
-import { LiqAvatarHoverCard } from "./LiqAvatarHoverCard.tsx";
+import { UserHoverCard } from "./UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { ToolTip } from "../ToolTip.tsx";
@@ -77,9 +77,9 @@ export function LiquidityRow({
             className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
             <div>
-              <LiqAvatarHoverCard>
+              <UserHoverCard>
                 <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
-              </LiqAvatarHoverCard>
+              </UserHoverCard>
             </div>
             <div
               className="flex py-3 md:py-0 w-full md:w-auto flex-col xxs:flex-row md:flex-col justify-start xxs:justify-between md:justify-start z-[6] xxs:items-center md:items-start"

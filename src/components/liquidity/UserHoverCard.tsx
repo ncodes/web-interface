@@ -11,12 +11,19 @@ import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import IconCopyFilled from "../icons/IconCopyFilled.tsx";
 import { Button } from "../ui/Button.tsx";
 import { VerifiedBadge } from "./VerifiedBadge.tsx";
+import { cn } from "../../libs/utils.ts";
 
-export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
+export function UserHoverCard({
+  children,
+  className,
+}: {
+  children?: ReactNode;
+  className?: string;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="z-10">
+    <div className={cn(className)}>
       <HoverCard
         open={open}
         onOpenChange={(open) => {
@@ -24,11 +31,12 @@ export function LiqAvatarHoverCard({ children }: { children?: ReactNode }) {
         }}
       >
         <HoverCardTrigger
+          className="cursor-pointer"
           onClick={() => {
             setOpen(true);
           }}
         >
-          {children}
+          <span className="z-[5]">{children}</span>
         </HoverCardTrigger>
         <HoverCardContent className="rounded-2xl bg-modal-background border-gray-600 text-gray-200 p-0">
           <div className="p-3 py-2 text-sm flex items-center gap-2 border-b border-gray-700">

@@ -35,6 +35,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
+import { Paginator } from "../components/Paginator.tsx";
+import { UserHoverCard } from "../components/liquidity/UserHoverCard.tsx";
 
 type ActivityType = "add-liquidity" | "remove-liquidity" | "swap";
 
@@ -48,22 +50,28 @@ function ActivityItem({
   return (
     <div className="flex gap-2 tracking-wider items-center px-3 py-3 text-gray-200 font-light text-sm">
       <span className="shrink-0">
-        <EmojiAvatar size={AvatarSize.Small} randomStr={initiator} />
+        <UserHoverCard>
+          <EmojiAvatar size={AvatarSize.Small} randomStr={initiator} />
+        </UserHoverCard>
       </span>
       <div className="w-full">
         <div className="flex flex-col flex-1">
           <div className="flex justify-between">
             {type === "add-liquidity" && (
-              <div>
-                <span className="text-white font-normal">
-                  {shortenAddress(initiator)}
-                </span>{" "}
-                added <span className="text-chinese-green">45 BTC</span>{" "}
-                liquidity
+              <div className="flex flex-col gap-1">
+                <div className="flex gap-1 items-center">
+                  <span className="text-gray-500 font-medium text-xs">
+                    <UserHoverCard>@{shortenAddress(initiator)}</UserHoverCard>
+                  </span>
+                  <span className="text-xs text-gray-400">2 days ago</span>
+                </div>
+                <span>
+                  Added <span className="text-chinese-green">45 BTC</span>{" "}
+                  liquidity
+                </span>
               </div>
             )}
           </div>
-          <span className="text-xs text-gray-400">2 days ago</span>
         </div>
       </div>
     </div>
@@ -139,7 +147,7 @@ function ReviewItem({
   msg?: string;
 }) {
   return (
-    <div className="flex gap-2 tracking-wider items-center px-3 py-3 text-gray-200 font-light text-sm">
+    <div className="flex items-center gap-2 tracking-wider px-3 py-3 text-gray-200 font-light text-sm">
       <span className="shrink-0">
         {!good && (
           <span className="bg-red-600 block rounded-full p-[5px]">
@@ -155,24 +163,18 @@ function ReviewItem({
       <div className="w-full">
         <div className="flex flex-col flex-1">
           <div className="flex justify-between">
-            {!good && (
-              <div>
-                <span className="text-white font-normal">
-                  {shortenAddress(initiator)}:
-                </span>{" "}
-                {msg}
+            <div className="flex flex-col w-full">
+              <div className="flex gap-2 items-center">
+                <span className="text-gray-500 text-xs font-medium">
+                  <UserHoverCard>@{shortenAddress(initiator)}:</UserHoverCard>
+                </span>
+                <span>
+                  <span className="text-xs text-gray-400">2 days ago</span>
+                </span>
               </div>
-            )}
-            {good && (
-              <div>
-                <span className="text-white font-normal">
-                  {shortenAddress(initiator)}:
-                </span>{" "}
-                {msg}
-              </div>
-            )}
+              <span>{msg}</span>
+            </div>
           </div>
-          <span className="text-xs text-gray-400">2 days ago</span>
         </div>
       </div>
     </div>
@@ -242,7 +244,7 @@ function RecentReviews() {
             <ReviewItem
               good={true}
               initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg=""
+              msg="hi"
             />
           </ScrollArea>
         </ScrollGradientIndicator>
@@ -353,11 +355,9 @@ function Page() {
           }}
         />
       </TabsContent>
-      <TabsContent
-        value="offers"
-        className="p-3 pt-0 mt-0 px-0 flex flex-col gap-3"
-      >
-        <div className="px-3 py-3">
+      <TabsContent value="offers" className="p-0 m-0 px-0 flex flex-col gap-3">
+        <Paginator />
+        <div className="p-3 pt-0">
           <div className=" pr-0 flex-1 ">
             <OfferRow base={"BTC"} quote={"UNI"} />
           </div>

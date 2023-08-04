@@ -7,7 +7,7 @@ import { StatCard } from "../market/StatCard.tsx";
 import { cn } from "../../libs/utils.ts";
 import { Button } from "../ui/Button.tsx";
 import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
-import { MessageCircle, PlayCircle } from "lucide-react";
+import { MessageCircle, Play } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +16,7 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import IconCoinStack from "../icons/IconCoinStack.tsx";
 import { IconMarket } from "../icons/IconMarket.tsx";
+import { UserHoverCard } from "./UserHoverCard.tsx";
 
 export function OfferRow({
   base,
@@ -51,7 +52,9 @@ export function OfferRow({
             className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
             <div>
-              <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
+              <UserHoverCard>
+                <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
+              </UserHoverCard>
             </div>
             <div
               className="flex py-3 md:py-0 w-full md:w-auto  md:flex-col justify-start xxs:justify-between md:justify-start z-[6] xxs:items-center md:items-start gap-1"
@@ -129,7 +132,7 @@ export function OfferRow({
                 rounded="none"
                 className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
-                <PlayCircle width="20px" /> Execute
+                <Play width="20px" /> Execute
               </Button>
             </span>
 

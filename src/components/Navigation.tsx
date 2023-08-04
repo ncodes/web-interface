@@ -3,6 +3,7 @@ import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import useConnector from "../hooks/connectors/useConnector.tsx";
 import { Link, useLocation } from "react-router-dom";
 import { IconExchange } from "./icons/IconExchange.tsx";
+import IconOffer from "./icons/IconOffer.tsx";
 
 type NavPageLinkProps = {
   iconFile?: string;
@@ -80,6 +81,14 @@ export function Navigation() {
             label="Swaps"
             active={pathname.match("/swap(s|)") != null}
             to="/swaps"
+          />
+        </li>
+        <li>
+          <NavPageLink
+            icon={<IconOffer />}
+            label="Offers"
+            active={pathname.match("/offer(s|)") != null}
+            to="/offers"
           />
         </li>
         <li>

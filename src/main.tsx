@@ -17,6 +17,8 @@ import Swaps from "./pages/Swaps.tsx";
 import Swap from "./pages/Swap.tsx";
 import Disputes from "./pages/Disputes.tsx";
 import Mediation from "./pages/Mediation.tsx";
+import Offers from "./pages/Offers.tsx";
+import Offer from "./pages/Offer.tsx";
 
 function makePath(path: string) {
   return `:locale?/${path}`;
@@ -71,6 +73,16 @@ const router = createBrowserRouter([
   {
     path: makePath("/mediation"),
     element: <App page={<Mediation />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/offers"),
+    element: <App page={<Offers />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/offer/:id"),
+    element: <App page={<Offer />} />,
     errorElement: <RootErrorBoundary />,
   },
 ]);
