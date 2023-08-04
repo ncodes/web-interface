@@ -11,18 +11,21 @@ export function StatCard({
   tip,
   width,
   noSwapTrigger,
+  className,
 }: {
   title: string;
   title2?: React.ReactNode | string;
   tip?: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
   width?: string;
   noSwapTrigger?: boolean;
 }) {
   return (
     <Card
       className={cn(
-        "w-[150px] shrink-0 border border-card-border bg-card-background shadow-sm shadow-gray-900",
+        "w-[150px] flex-1 shrink-0 border border-card-border bg-card-background shadow-sm shadow-gray-900",
+        className,
         width
       )}
     >

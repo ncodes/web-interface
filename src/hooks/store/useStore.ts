@@ -6,7 +6,8 @@ type OpenStateKey =
   | "searchSheet"
   | "notifSheet"
   | "reviewSheet"
-  | "settingsSheet";
+  | "settingsSheet"
+  | "buyTicketSheet";
 
 export interface IStore {
   // Authenticated user state
@@ -51,6 +52,7 @@ const useStore = create<IStore>((set) => ({
     notifSheet: false,
     reviewSheet: false,
     settingsSheet: false,
+    buyTicketSheet: false,
   },
   toggleOpenState: (key: OpenStateKey, activeTab?: string) => {
     set((state) => ({
