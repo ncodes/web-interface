@@ -19,6 +19,7 @@ import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
+import { Paginator } from "../components/Paginator.tsx";
 
 function MarketTabContent() {
   return (
@@ -72,7 +73,7 @@ function MarketTabs() {
       >
         <MarketTabContent />
         <div className="flex items-center justify-between">
-          <h1 className="p-5 py-3 text-xl">Liquidities</h1>
+          <h1 className="p-5 py-3 pb-0 text-xl">Liquidities</h1>
           <div className="md:hidden">
             <Button
               variant="link"
@@ -89,22 +90,11 @@ function MarketTabs() {
             </Button>
           </div>
         </div>
-        <div className="flex gap-2 flex-col z-[6] px-3">
-          <LiquidityRow base="BTC" quote="UNI" />
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
-          {/*<LiquidityRow base="BTC" quote="UNI" />*/}
+        <div>
+          <Paginator className="border-b-0" />
+          <div className="flex gap-2 flex-col z-[6] px-3 mt-3">
+            <LiquidityRow base="BTC" quote="UNI" />
+          </div>
         </div>
       </TabsContent>
       <LiquidityFilterSheet

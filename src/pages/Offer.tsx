@@ -95,7 +95,7 @@ function Page() {
             <OfferRow
               base={"BTC"}
               quote={"UNI"}
-              className="rounded-none border-r-0 border-l-0 border-t-0 border-b"
+              className="rounded-none border-r-0 border-l-0 border-t-0 border-b hover:border-b-card-border"
             />
             <div className="flex flex-col md:items-center gap-5 px-3 md:px-5 py-5">
               <Label className="text-xl tracking-wide">Offer Events</Label>
