@@ -1,8 +1,10 @@
 import useStore from "../hooks/store/useStore.ts";
 import IconCaution from "./icons/IconCaution.tsx";
 import { Button } from "./ui/Button.tsx";
+import useConnector from "../hooks/connectors/useConnector.tsx";
 
 export function UnlinkedAccountNotice() {
+  const { connected } = useConnector();
   const { toggleOpenState, user } = useStore((state) => ({
     user: state.user,
     toggleOpenState: state.toggleOpenState,
@@ -10,8 +12,8 @@ export function UnlinkedAccountNotice() {
 
   return (
     <>
-      {!user && (
-        <div className="select-none pt-2 py-2 bg-gray-900 rounded-xl mb-2 px-3 md:px-5 border border-chinese-green flex items-center gap-3">
+      {!user && connected && (
+        <div className="select-none pt-2 py-2 bg-gray-900 rounded-3xl mb-2 px-3 md:px-3 border border-chinese-green flex items-center gap-3">
           <span>
             <IconCaution
               width="25"

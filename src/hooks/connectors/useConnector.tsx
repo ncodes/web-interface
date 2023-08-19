@@ -13,6 +13,7 @@ import {
 } from "wagmi";
 import { Address, SimulateContractReturnType } from "viem";
 import { erc20Abi } from "../../abi";
+import { ChainInfo } from "../../types/global";
 
 type ContractNames = "energon" | "nft";
 
@@ -45,6 +46,8 @@ export interface IConnector {
   chainId: number;
   chains: Chain[];
   chain: Chain;
+  network: string;
+  getChainInfo(): ChainInfo;
 }
 
 /**
@@ -52,11 +55,14 @@ export interface IConnector {
  * @returns
  */
 export default function useConnector() {
-  const defaultNetwork = Nets[import.meta.env.VITE_NETWORK] || Nets.localhost;
+  const defaultNetwork = Nets[import.meta.env.VITE_DEFAULT_NETWORK]
+    ? parseInt(Nets[import.meta.env.VITE_DEFAULT_NETWORK])
+    : Nets.localhost;
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [chainId, setChainId] = useState<number | undefined>(undefined);
   const [ready, setReady] = useState(false);
+  const [network, setNetwork] = useState<string | undefined>(undefined);
 
   const { disconnectAsync } = useDisconnect();
   const { chain } = useNetwork();
@@ -78,6 +84,7 @@ export default function useConnector() {
   useEffect(() => {
     if (!chain) return;
     setChainId(connected ? chain.id : undefined);
+    setNetwork(getChain(chain.id)?.queryName);
   }, [connected, chain]);
 
   useEffect(() => {
@@ -203,7 +210,7 @@ export default function useConnector() {
   async function writeContract(
     name: ContractNames,
     targetFunc: string,
-    args?
+    args?: any
   ): Promise<Address> {
     if (!walletClient) throw new Error("wallet not connected");
     const netInfo = getChain(chainId as number);
@@ -216,6 +223,20 @@ export default function useConnector() {
       args: args,
       account: address,
     });
+  }
+
+  // Get the current chain info.
+  // If wallet is not connected, the chain info of the default network is returned.
+  // @throws Error if default network is not set
+  // @throws Error if chainId is unknown
+  function getChainInfo(): ChainInfo {
+    if (!chainId) {
+      if (!defaultNetwork) throw new Error("default network not set");
+      return getChain(defaultNetwork) as ChainInfo;
+    }
+    const chain = getChain(chainId);
+    if (!chain) throw new Error("unknown chain");
+    return chain;
   }
 
   return {
@@ -235,5 +256,7 @@ export default function useConnector() {
     switchNetwork,
     chains,
     chain,
+    network,
+    getChainInfo,
   } as IConnector;
 }

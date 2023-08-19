@@ -72,7 +72,7 @@ export function NetworkSelector() {
               height: 25,
             })}
             <span className="hidden md:inline">
-              {curChain?.shortName || curChain?.name}
+              {curChain?.altDisplayName || curChain?.displayName}
             </span>
             <span className="relative -left-1 top-[0px]">
               {open ? <ChevronUp /> : <ChevronDown />}
@@ -95,7 +95,7 @@ export function NetworkSelector() {
                 width: 25,
                 height: 25,
               })}
-              {getChain(chainId)?.name}
+              {getChain(chainId)?.displayName}
             </DropdownMenuItemCustom>
           ))}
           <DropdownMenuSeparator className="bg-gray-800" />
@@ -117,7 +117,7 @@ export function NetworkSelector() {
                 width: 25,
                 height: 25,
               })}
-              {getChain(chainId)?.name}
+              {getChain(chainId)?.displayName}
             </DropdownMenuItemCustom>
           ))}
           <DropdownArrow className="fill-white" />

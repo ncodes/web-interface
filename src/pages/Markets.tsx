@@ -1,10 +1,5 @@
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../components/ui/Tabs.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { IconPlus } from "../components/icons/IconPlus.tsx";
@@ -22,30 +17,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { MarketRow } from "../components/market/MarketRow.tsx";
 import { CreateMarketSheet } from "../components/market/CreateMarketSheet.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
-import { Paginator } from "../components/Paginator.tsx";
+import { MarketsTabContent } from "../components/market/MarketsTabContent.tsx";
+import { MyMarketsTabContent } from "../components/market/MyMarketsTabContent.tsx";
+import { WatchedMarketContent } from "../components/market/WatchedMarketContent.tsx";
+import { useNavigate } from "react-router-dom";
 
-function MarketTabContent() {
-  return <MarketRow base="BTC" quote="UNI" />;
-}
-
-function MyMarketsTabContent() {
-  return <MarketRow base="BTC" quote="UNI" ownerMode={true} />;
-}
-
-function MyWatchTabContent() {
-  return <MarketRow base="BTC" quote="UNI" />;
-}
-
-function MarketTabs() {
+function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openCreateMarketSheet, setOpenCreateMarketSheet] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Tabs
-      defaultValue="markets"
+      defaultValue={defaultTab || "markets"}
       className="w-full h-full transition-all duration-500"
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
@@ -55,12 +41,18 @@ function MarketTabs() {
               <TabsTrigger
                 value="markets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={() => {
+                  navigate("/markets");
+                }}
               >
                 Markets
               </TabsTrigger>
               <TabsTrigger
                 value="my-markets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/markets/owned");
+                }}
               >
                 My Markets
               </TabsTrigger>
@@ -125,24 +117,9 @@ function MarketTabs() {
           />
         </div>
       </TabsList>
-      <TabsContent value="markets" className="p-0 m-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <MarketTabContent />
-        </div>
-      </TabsContent>
-      <TabsContent value="my-markets" className="p-0 m-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <MyMarketsTabContent />
-        </div>
-      </TabsContent>
-      <TabsContent value="watching" className="p-0 m-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <MyWatchTabContent />
-        </div>
-      </TabsContent>
+      <MarketsTabContent />
+      <MyMarketsTabContent />
+      <WatchedMarketContent />
       <MarketFilterSheet
         active={openFilterSheet}
         onOpen={(open) => {
@@ -153,10 +130,10 @@ function MarketTabs() {
   );
 }
 
-export default function Markets() {
+export default function Markets({ defaultTab }: { defaultTab?: string }) {
   return (
     <Layout
-      tab={<MarketTabs />}
+      tab={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
         <div className="flex flex-col h-full mt-2">
           <MarketFilter />

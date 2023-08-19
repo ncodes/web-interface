@@ -9,6 +9,27 @@ type OpenStateKey =
   | "settingsSheet"
   | "buyTicketSheet";
 
+type OpenState = {
+  [key in OpenStateKey]: boolean;
+};
+
+export interface MarketFilter {
+  price?: string;
+  priceUsd?: string;
+  liquidity?: string;
+  liquidityUsd?: string;
+  merchantLp?: boolean;
+  kycLp?: boolean;
+  kycTaker?: boolean;
+  offer?: boolean;
+  address?: string;
+  creator?: string;
+  permSwap?: boolean;
+  permPut?: boolean;
+  putBadges?: string;
+  swapBadges?: string;
+}
+
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -27,10 +48,12 @@ export interface IStore {
   setCurrentTab?: (tab: string) => void;
 
   // Open state toggling for sheets and modals
-  openState: {
-    [key in OpenStateKey]: boolean;
-  };
+  openState: OpenState;
   toggleOpenState: (key: OpenStateKey, activeTab?: string) => void;
+
+  // Market filter
+  marketFilter: MarketFilter;
+  setMarketFilter: (filter: Partial<MarketFilter>) => void;
 }
 
 const useStore = create<IStore>((set) => ({
@@ -60,6 +83,16 @@ const useStore = create<IStore>((set) => ({
       openState: {
         ...state.openState,
         [key]: !state.openState[key],
+      },
+    }));
+  },
+
+  marketFilter: {},
+  setMarketFilter: (filter: Partial<MarketFilter>) => {
+    set((state) => ({
+      marketFilter: {
+        ...state.marketFilter,
+        ...filter,
       },
     }));
   },

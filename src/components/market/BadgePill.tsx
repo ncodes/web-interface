@@ -12,7 +12,15 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 
-export function BadgePill({ name }: { name: string }) {
+export function BadgePill({
+  name,
+  prefix,
+  tip,
+}: {
+  name: string;
+  prefix?: string;
+  tip?: string;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -23,12 +31,15 @@ export function BadgePill({ name }: { name: string }) {
       }}
     >
       <SheetTrigger>
-        <Badge
-          className="font-normal tracking-wider cursor-pointer bg-gray-900 border hover:border-chinese-green rounded-full border-gray-700 text-gray-300 hover:bg-chinese-green hover:text-gray-900"
-          variant="secondary"
-        >
-          {name}
-        </Badge>
+        <ToolTip tip={tip}>
+          <Badge
+            className="font-normal tracking-wider cursor-pointer rounded-full bg-gray-800  text-gray-300 hover:bg-chinese-green hover:text-gray-900 flex items-center gap-2"
+            variant="secondary"
+          >
+            <span className="text-gray-500">{prefix ? prefix + ":" : ""}</span>
+            <span className="font-semibold tracking-widest">{name}</span>
+          </Badge>
+        </ToolTip>
       </SheetTrigger>
       <SheetContent
         className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"

@@ -37,7 +37,12 @@ const router = createBrowserRouter([
   },
   {
     path: makePath("/markets"),
-    element: <App page={<Markets />} />,
+    element: <App page={<Markets defaultTab="markets" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/markets/owned"),
+    element: <App page={<Markets defaultTab="my-markets" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {

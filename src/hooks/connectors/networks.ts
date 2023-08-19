@@ -17,7 +17,8 @@ export enum Nets {
  */
 export const SupportedNetworks: ChainInfo[] = [
   {
-    name: "Ethereum",
+    displayName: "Ethereum",
+    queryName: "ethereum",
     chainId: 1,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL ?? "",
@@ -33,7 +34,8 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
-    name: "Polygon",
+    displayName: "Polygon",
+    queryName: "polygon",
     chainId: 137,
     symbol: "MATIC",
     rpcUrl: import.meta.env.VITE_POLYGON_RPC_URL ?? "",
@@ -49,7 +51,8 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
-    name: "Optimism",
+    displayName: "Optimism",
+    queryName: "optimism",
     chainId: 10,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_OPTIMISM_RPC_URL ?? "",
@@ -65,8 +68,9 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
-    name: "Binance Chain",
-    shortName: "BSC",
+    displayName: "Binance Chain",
+    altDisplayName: "BSC",
+    queryName: "binance-chain",
     chainId: 56,
     symbol: "BNB",
     rpcUrl: import.meta.env.VITE_BINANCE_RPC_URL ?? "",
@@ -82,7 +86,8 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
-    name: "Arbitrum",
+    displayName: "Arbitrum",
+    queryName: "arbitrum",
     chainId: 42161,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_ARBITRUM_RPC_URL ?? "",
@@ -98,7 +103,8 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
-    name: "Goerli",
+    displayName: "Goerli",
+    queryName: "goerli",
     testnet: true,
     chainId: 5,
     symbol: "ETH",
@@ -115,7 +121,8 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
-    name: "Hardhat",
+    displayName: "Hardhat",
+    queryName: "localhost",
     testnet: true,
     chainId: 31337,
     symbol: "ETH",
