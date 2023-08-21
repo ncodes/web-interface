@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useState } from "react";
 import { UserHoverCard } from "./UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
@@ -28,19 +28,41 @@ import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
 import { IconStarSmile } from "../icons/IconStarSmile.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { IconExchange } from "../icons/IconExchange.tsx";
+import {
+  approxNumber,
+  formatToMoney,
+  formatToHighDenom,
+  humanizeDur,
+  shortenAddress,
+  isMerchant,
+} from "../../libs/helpers.ts";
+import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { Skeleton } from "../ui/skeleton.tsx";
+import IconCaution from "../icons/IconCaution.tsx";
+import { PairAvatar } from "../avatar/PairAvatar.tsx";
+import { PauseCircle, PlayCircle } from "lucide-react";
+
+function ProviderInfoSkeleton() {
+  return (
+    <div className="flex flex-col gap-1">
+      <Skeleton className="w-full h-5"></Skeleton>
+      <Skeleton className="w-8/12 h-5"></Skeleton>
+    </div>
+  );
+}
 
 export function LiquidityRow({
-  base,
-  quote,
   ownerMode,
   noFocus,
   className,
+  liquidity,
 }: {
-  base: string;
-  quote: string;
   ownerMode?: boolean;
   noFocus?: boolean;
   className?: string;
+  liquidity: Liquidity;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
@@ -50,6 +72,21 @@ export function LiquidityRow({
     openState: state.openState,
     toggleOpenState: state.toggleOpenState,
   }));
+  const { getUser } = useUserService();
+  const getProvider = useQuery({
+    queryKey: ["getUser", { address: liquidity.provider, noAuth: true }],
+    queryFn: getUser,
+    enabled: !!liquidity.provider,
+  });
+
+  useEffect(() => {
+    console.log(getProvider.data);
+  }, [
+    getProvider.isLoading,
+    getProvider.isError,
+    getProvider.data,
+    getProvider.fetchStatus,
+  ]);
 
   return (
     <div
@@ -77,33 +114,101 @@ export function LiquidityRow({
             className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
             <div>
-              <UserHoverCard>
-                <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
-              </UserHoverCard>
+              {!ownerMode && (
+                <UserHoverCard user={getProvider.data as User}>
+                  <EmojiAvatar
+                    size={AvatarSize.Small}
+                    randomStr={liquidity.provider}
+                  />
+                </UserHoverCard>
+              )}
+
+              {ownerMode && (
+                <PairAvatar
+                  base={liquidity?.market?.base}
+                  quote={liquidity?.market.quote}
+                  baseSrc={liquidity?.market.baseLogo}
+                  quoteSrc={liquidity?.market.quoteLogo}
+                />
+              )}
             </div>
             <div
               className="flex py-3 md:py-0 w-full md:w-auto flex-col xxs:flex-row md:flex-col justify-start xxs:justify-between md:justify-start z-[6] xxs:items-center md:items-start"
               data-click-trigger="1"
             >
-              <span className="flex text-gray-100 items-center gap-1">
-                <span data-click-trigger="1">0xAbc..xYz</span>
-                <VerifiedBadge />
-              </span>
-              <ToolTip tip="Click to open reviews">
-                <div className="flex items-center gap-1 text-blue-200">
-                  <span>
-                    <IconStarSmile width="15px" />
-                  </span>
-                  <span
-                    onClick={() => {
-                      toggleOpenState("reviewSheet");
-                    }}
-                    className="text-blue-200 text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4"
-                  >
-                    84% (256 trades)
-                  </span>
+              {getProvider.isError && (
+                <div className="w-[130px]">
+                  <div className="flex text-xs items-center gap-1 text-red-500">
+                    <IconCaution
+                      width="20"
+                      height="20"
+                      fillA="#ed3d2d"
+                      fillB="#000000"
+                    />
+                    <span>Error</span>
+                  </div>
                 </div>
-              </ToolTip>
+              )}
+
+              {getProvider.isLoading && (
+                <div className="w-[130px]">
+                  <ProviderInfoSkeleton />
+                </div>
+              )}
+
+              {!ownerMode && !getProvider.isLoading && !getProvider.isError && (
+                <div className="w-[130px]">
+                  <span className="flex text-gray-100 items-center gap-1">
+                    <span data-click-trigger="1">
+                      {shortenAddress(liquidity.provider)}
+                    </span>
+                    {isMerchant(getProvider.data?.badges || []) && (
+                      <VerifiedBadge />
+                    )}
+                  </span>
+                  <ToolTip tip="Click to open reviews">
+                    <div className="flex items-center gap-1 text-yellow-200">
+                      <span>
+                        <IconStarSmile width="15px" />
+                      </span>
+                      <span
+                        onClick={() => {
+                          toggleOpenState("reviewSheet");
+                        }}
+                        className="text-blue-200 text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4"
+                      >
+                        {getProvider.data?.completionRate}% (
+                        {getProvider.data?.totalSwaps} trade
+                        {(getProvider.data?.totalSwaps as number) > 1
+                          ? "s"
+                          : ""}
+                        )
+                      </span>
+                    </div>
+                  </ToolTip>
+                </div>
+              )}
+
+              {ownerMode && (
+                <div className="w-full md:w-[100px] flex justify-between md:justify-start md:flex-col">
+                  <span>BTC/ETH</span>
+                  {liquidity.paused && (
+                    <span className="flex text-xs items-center gap-1 font-light text-yellow-500">
+                      <PauseCircle width="15px" /> Paused
+                    </span>
+                  )}
+                  {!liquidity.paused && (
+                    <span className="flex text-xs items-center gap-1 font-light text-green-500">
+                      <PlayCircle width="15px" /> Active
+                    </span>
+                  )}
+                  {liquidity.amount == "0" && (
+                    <span className="flex text-xs items-center gap-1 font-light text-gray-500">
+                      No Liquidity
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <div className="flex-1 overflow-hidden">
@@ -115,68 +220,99 @@ export function LiquidityRow({
                 >
                   <StatCard
                     title="Price ($)"
-                    tip={`The price of 1 ${base} in USD`}
+                    tip={`The price of 1 ${liquidity.base} in USD`}
                     title2={
                       <span className="text-green-400 hidden xxs:inline">
                         (+10%)
                       </span>
                     }
                   >
-                    $1,234
+                    ${formatToMoney(liquidity.priceUsd)}
                   </StatCard>
                   <StatCard
-                    title={`Price (${quote})`}
-                    tip={`The price of 1 ${base} in ${quote}`}
+                    title={`Price`}
+                    title2={`(${liquidity.quote})`}
+                    tip={`The price of 1 ${liquidity.base} in ${liquidity.quote}`}
                   >
-                    $1,234
+                    {formatToHighDenom(
+                      liquidity.price,
+                      liquidity.market.quoteDecimals
+                    )}
                   </StatCard>
                   <StatCard
                     title={`Available`}
-                    tip={`The amount ${base} available for swap`}
+                    tip={`The amount ${liquidity.base} available for swap`}
                   >
-                    <span className="text-gray-200">1,300</span>
+                    <span className="text-gray-200">
+                      {formatToHighDenom(
+                        liquidity.amount,
+                        liquidity.market.baseDecimals
+                      )}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Min. Amount`}
-                    tip={`The minimum amount ${base} you can swap`}
+                    title2={`(${liquidity.base})`}
+                    tip={`The minimum amount ${liquidity.base} you can swap`}
                   >
-                    <span className="text-gray-200">100</span>
+                    <span className="text-gray-200">
+                      {formatToHighDenom(
+                        liquidity.minSwap,
+                        liquidity.market.baseDecimals
+                      )}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Max. Amount`}
-                    tip={`The maximum amount ${base} you can swap`}
+                    title2={`(${liquidity.base})`}
+                    tip={`The maximum amount ${liquidity.base} you can swap`}
                   >
-                    <span className="text-gray-200">1,500</span>
+                    <span className="text-gray-200">
+                      {formatToHighDenom(
+                        liquidity.maxSwap,
+                        liquidity.market.baseDecimals
+                      )}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Payment Time`}
                     tip={`The duration payment is expected to be made`}
                   >
-                    <span className="text-gray-200">30 mins</span>
+                    <span className="text-gray-200">
+                      {humanizeDur(liquidity.timeToPay)}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`24hrs Volume`}
-                    tip={`The volume of ${base} traded in the last 24hrs`}
+                    tip={`The volume of ${liquidity.base} traded in the last 24hrs`}
                   >
-                    <span className="text-gray-200">$3.5m</span>
+                    <span className="text-gray-200">
+                      ${approxNumber(parseFloat(liquidity.volume24h), 3)}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Open Disputes`}
                     tip={`The number of open disputes for this liquidity`}
                   >
-                    <span className="text-gray-200">2</span>
+                    <span className="text-gray-200">
+                      {liquidity.openDisputes}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Total Disputes`}
                     tip={`The total number of disputes started for this liquidity`}
                   >
-                    <span className="text-gray-200">100</span>
+                    <span className="text-gray-200">
+                      {liquidity.totalDisputes}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Total Swaps`}
                     tip={`The total number of swaps this liquidity has completed`}
                   >
-                    <span className="text-gray-200">345</span>
+                    <span className="text-gray-200">
+                      {liquidity.totalSwaps}
+                    </span>
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
@@ -186,10 +322,9 @@ export function LiquidityRow({
         <div className="flex justify-between border-t border-gray-800">
           <div
             data-click-trigger="1"
-            className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
+            className="flex items-center w-full  px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
           >
-            <div className=" flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
-              {/*<span className="hidden sm:inline">Badges</span>*/}
+            <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
               <ToolTip tip="Badges required of the taker by the liquidity owner">
                 <span
                   data-click-trigger="1"
@@ -203,14 +338,22 @@ export function LiquidityRow({
               <ScrollGradientIndicator className="[&::before]:rounded-none">
                 <ScrollAreaHorizontal type="scroll">
                   <div
-                    className="flex items-center gap-2 pr-3"
+                    className="flex items-center gap-2 px-2"
                     data-click-trigger="1"
                   >
-                    <BadgePill name="LP:KYC" />
-                    <BadgePill name="TK:KYC" />
-                    <BadgePill name="NIGERIAN" />
-                    <BadgePill name="MERCHANT" />
-                    <BadgePill name="MERCHANT" />
+                    {liquidity.requiredSwapBadges.map((badge) => (
+                      <BadgePill
+                        key={badge}
+                        name={badge.toUpperCase()}
+                        prefix="TK"
+                        tip={`Takers must have "${badge}" badge to be allowed to swap this liquidity`}
+                      />
+                    ))}
+                    {liquidity.requiredSwapBadges.length == 0 && (
+                      <span className="hidden xs:inline text-xs text-gray-500 font-light">
+                        No badge required
+                      </span>
+                    )}
                   </div>
                 </ScrollAreaHorizontal>
               </ScrollGradientIndicator>
@@ -228,13 +371,15 @@ export function LiquidityRow({
                   className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
                   onClick={() => setOpenManageLiquiditySheet(true)}
                 >
-                  <IconEdit width="15px" /> Manage
+                  <IconSettingsOutline width="15px" /> Manage
                 </Button>
               </span>
             )}
-            <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
-              {!ownerMode && <IconHeart />}
-            </span>
+            {!ownerMode && (
+              <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
+                <IconHeart />
+              </span>
+            )}
             <Button
               variant="link"
               rounded="none"

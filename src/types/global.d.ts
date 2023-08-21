@@ -33,6 +33,13 @@ declare global {
     locale: string;
     timezone: string;
     role: string;
+
+    totalSwaps: number;
+    completionRate: number;
+    badges: string[];
+    volume: string;
+    volumeUsd: number;
+    lastActiveAt: string;
   }
 
   interface TransactionResponse {}
@@ -100,5 +107,48 @@ declare global {
     volume24h: string;
     amountSwappedUsd: string;
     totalLiquidityUsd: string;
+  }
+
+  interface Liquidity {
+    network: string;
+    provider: string;
+    lid: number;
+    marketAddress: string;
+    base: string;
+    baseAddress: string;
+    baseType: AssetType;
+    quote: string;
+    quoteAddress: string;
+    quoteType: AssetType;
+    amount: string;
+    amountSwapped: string;
+    price: string;
+    minSwap: string;
+    maxSwap: string;
+    target: string;
+    ids: number[];
+    wantOrIds: number[];
+    wantAndIds: number[];
+    timeToPay: number;
+    manager: string;
+    paused: boolean;
+    swapDisabled: boolean;
+    openOrders: number;
+    lastSwapAt: string;
+    completionRate: number;
+    openDisputes: number;
+    totalDisputes: number;
+    totalSwaps: number;
+    disputeRate: number;
+    satisfactoryRate: number;
+    requiredSwapBadges: string[];
+    avgFinalizeDur: number;
+    avgPaymentDur: number;
+    avgReleaseDur: number;
+    totalSwaps24h: string;
+    volume24h: string;
+    priceChange: number;
+    priceUsd: number;
+    market: Market;
   }
 }

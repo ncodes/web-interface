@@ -2,7 +2,7 @@ import EmojiAvatar from "../../../components/avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../../../components/avatar/useAvatar";
 import { useAccount, useBalance } from "wagmi";
 import {
-  formatMoney,
+  formatToMoney,
   shortenAddress,
   shortenAddress2,
 } from "../../../libs/helpers.ts";
@@ -14,7 +14,7 @@ function Amount(props: { balance: string; symbol: string }) {
   return (
     <span className="flex gap-2">
       <span className="font-medium text-gray-900 overflow-auto scrollbar-hide">
-        {formatMoney(props.balance)}
+        {formatToMoney(props.balance)}
       </span>
       <span className="hidden xxs:inline">{props.symbol}</span>
     </span>

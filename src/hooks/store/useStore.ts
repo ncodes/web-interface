@@ -14,6 +14,8 @@ type OpenState = {
 };
 
 export interface MarketFilter {
+  base?: string;
+  quote?: string;
   price?: string;
   priceUsd?: string;
   liquidity?: string;

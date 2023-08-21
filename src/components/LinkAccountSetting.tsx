@@ -24,7 +24,7 @@ export function LinkAccountSetting() {
   const { auth } = useAuthService();
   const { getUser } = useUserService();
   const queryUserByAddress = useQuery({
-    queryKey: ["user", address],
+    queryKey: ["getUser", { address }],
     queryFn: getUser,
     enabled: !!address,
   });

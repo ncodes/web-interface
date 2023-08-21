@@ -22,7 +22,7 @@ import IconEdit from "../icons/IconEdit.tsx";
 import {
   approxNumber,
   formatToHighDenom,
-  formatMoney,
+  formatToMoney,
   shortenAddress,
 } from "../../libs/helpers.ts";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -103,11 +103,11 @@ export function MarketRow({
                     </span>
                   }
                 >
-                  ${formatMoney(market.lowestPriceUsd)}
+                  ${formatToMoney(market.lowestPriceUsd)}
                 </StatCard>
                 <StatCard
                   title="Price"
-                  title2="(UNI)"
+                  title2="(${market.quote})"
                   tip={`The price of 1 ${market.base} in ${market.quote}`}
                 >
                   {formatToHighDenom(market.lowestPrice, market.quoteDecimals)}
@@ -192,7 +192,7 @@ export function MarketRow({
                       key={badge}
                       name={badge.toUpperCase()}
                       prefix="LP"
-                      tip={`Liquidity providers must have "${badge}" badge to add liquidity`}
+                      tip={`Liquidity providers must have "${badge}" badge to be allowed to add liquidity`}
                     />
                   ))}
                   {market.requiredSwapBadges.map((badge) => (
@@ -200,7 +200,7 @@ export function MarketRow({
                       key={badge}
                       name={badge.toUpperCase()}
                       prefix="TK"
-                      tip={`Takers must have "${badge}" badge to be able to swap`}
+                      tip={`Takers must have "${badge}" badge to be allowed to swap this liquidity`}
                     />
                   ))}
                   {market.requiredPutBadges.length == 0 &&

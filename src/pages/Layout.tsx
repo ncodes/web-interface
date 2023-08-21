@@ -31,7 +31,7 @@ export default function Layout({
   const ref = useRef(null);
   const { scrollY } = useScroll();
   const query = useQuery({
-    queryKey: ["user", address],
+    queryKey: ["getUser", { address }],
     queryFn: getUser,
     enabled: !!accessToken && !!address,
     refetchIntervalInBackground: false,

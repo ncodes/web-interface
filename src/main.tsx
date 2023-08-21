@@ -51,7 +51,7 @@ const router = createBrowserRouter([
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/liquidities"),
+    path: makePath("/liquidity/owned"),
     element: <App page={<Liquidities />} />,
     errorElement: <RootErrorBoundary />,
   },

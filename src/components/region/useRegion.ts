@@ -1,14 +1,27 @@
 import useStore from "../../hooks/store/useStore.ts";
-import { regions } from "./constants.ts";
+import { Region, regions } from "./constants.ts";
+import { ReactElement, SVGProps } from "react";
 
 /**
  * Get the icon for a region
  * @param region
  */
-function getRegionIcon(region: string) {
+function getRegionIcon(
+  region: string
+): (props: SVGProps<SVGSVGElement>) => ReactElement {
   const found = regions.find((r) => r.name === region);
   if (!found) throw new Error(`Region ${region} not found`);
   return found.icon;
+}
+
+/**
+ * Get the icon for a region
+ * @param region
+ */
+function getRegion(region: string): Region {
+  const found = regions.find((r) => r.name === region);
+  if (!found) throw new Error(`Region ${region} not found`);
+  return found;
 }
 
 /**
@@ -26,15 +39,16 @@ export default function useRegion() {
    * Get the regions excluding the ones in ignore
    * @param ignore The regions to ignore
    */
-  function getRegion(ignore: string[]) {
+  function getRegions(ignore: string[]): Region[] {
     return regions.filter((r) => !ignore.includes(r.name));
   }
 
   return {
     regions,
-    getRegion,
+    getRegions,
     getRegionIcon,
     currentRegion: useStore((state) => state.currentRegion),
     setRegion,
+    getRegion,
   };
 }

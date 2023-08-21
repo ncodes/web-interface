@@ -28,11 +28,15 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openCreateMarketSheet, setOpenCreateMarketSheet] = useState(false);
   const navigate = useNavigate();
+  const [currentTab, setCurrentTab] = useState(defaultTab || "markets");
 
   return (
     <Tabs
       defaultValue={defaultTab || "markets"}
       className="w-full h-full transition-all duration-500"
+      onValueChange={(value) => {
+        setCurrentTab(value);
+      }}
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollAreaHorizontal type="scroll" className="w-full">
@@ -117,8 +121,8 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
           />
         </div>
       </TabsList>
-      <MarketsTabContent />
-      <MyMarketsTabContent />
+      {currentTab == "markets" && <MarketsTabContent />}
+      {currentTab == "my-markets" && <MyMarketsTabContent />}
       <WatchedMarketContent />
       <MarketFilterSheet
         active={openFilterSheet}

@@ -6,26 +6,29 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { AxiosResponse } from "axios";
 import * as approx from "approximate-number";
+import * as humanizeDuration from "humanize-duration";
+import { RequestError } from "./RequestError.ts";
 
+/**
+ * Generate and merge css classes
+ * @param inputs - The css classes
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export class RequestError extends Error {
-  constructor(public code: number, public message: string) {
-    super(message);
-    Object.setPrototypeOf(this, RequestError.prototype);
-  }
-
-  public toString = (): string => {
-    return `RequestError: ${this.message}`;
-  };
-}
-
+/**
+ * Convert a number to a Decimal
+ * @param val - The value to convert
+ */
 export function toDec(val: string | number) {
   return new Decimal(val);
 }
 
+/**
+ * Convert a number to a BigNumber
+ * @param val - The value to convert
+ */
 export function toBN(val: BigNumberish) {
   return BigNumber.from(val);
 }
@@ -65,7 +68,7 @@ export function formatToHighDenom(
   decimals = 18,
   format = undefined
 ) {
-  return formatMoney(formatUnits(v, decimals), format);
+  return formatToMoney(formatUnits(v, decimals), format);
 }
 
 /**
@@ -73,7 +76,7 @@ export function formatToHighDenom(
  * @param v - The value to format
  * @param format - The format to use
  */
-export function formatMoney(v: string | number, format = undefined) {
+export function formatToMoney(v: string | number, format = undefined) {
   if (!v) return;
   const param = typeof v === "number" ? v.toLocaleString() : v;
   const fmt = format || (typeof v === "number" ? "0,0.[00]" : "0,0.[0000]");
@@ -81,7 +84,7 @@ export function formatMoney(v: string | number, format = undefined) {
 }
 
 /**
- * Shorten an address
+ * Shorten an address and include ellipsis at the middle
  * @param address - The address
  */
 export function shortenAddress(address: string) {
@@ -92,11 +95,20 @@ export function shortenAddress(address: string) {
   )}`;
 }
 
+/**
+ * Shorten an address and end it with ellipsis
+ * @param address
+ */
 export function shortenAddress2(address: string) {
   if (!address) return address;
   return `${address.substring(0, 6)}...`;
 }
 
+/**
+ * Approximate a number to human-readable format
+ * @param num - The number to approximate
+ * @param precision - The precision to use
+ */
 export function approxNumber(num: number | string, precision?: number) {
   return approx(num, { precision: precision });
 }
@@ -118,10 +130,19 @@ export function toHighDenomAndApprox(
   );
 }
 
+/**
+ * Check if a value is true
+ * @param val - The value
+ */
 export function isTrue(val: string | boolean) {
   return val === true || val === "true" || val === "1";
 }
 
+/**
+ * Remove undefined and null values from an object.
+ * @param obj - The object
+ * @param includeEmptyString - Whether to remove empty string
+ */
 export function rmUndefinedAndNull(
   obj: { [key: string]: any },
   includeEmptyString = false
@@ -136,4 +157,42 @@ export function rmUndefinedAndNull(
     }
   });
   return obj;
+}
+
+/**
+ * Humanize a duration
+ * @param sec - The duration in seconds
+ */
+export function humanizeDur(sec: number) {
+  let units: humanizeDuration.Unit[] | undefined = [];
+  if (sec < 3600) units = ["m", "s"];
+  else if (sec < 86400) units = ["h", "m"];
+  else if (sec > 86400) units = ["d", "h"];
+
+  const humanizer = humanizeDuration.humanizer({
+    units,
+    maxDecimalPoints: 0,
+    language: "shortEn",
+    languages: {
+      shortEn: {
+        y: () => "y",
+        mo: (v) => (v && v <= 1 ? "mo" : "mos"),
+        d: (v) => (v && v <= 1 ? "day" : "days"),
+        h: (v) => (v && v <= 1 ? "hr" : "hrs"),
+        m: (v) => (v && v <= 1 ? "min" : "mins"),
+        s: (v) => (v && v <= 1 ? "sec" : "secs"),
+        ms: () => "ms",
+      },
+    },
+  });
+
+  return humanizer(sec * 1000);
+}
+
+/**
+ * Check if a list of badges include a merchant badge
+ * @param badges - The badges
+ */
+export function isMerchant(badges: string[]) {
+  return badges.includes(import.meta.env.VITE_MERCHANT_BADGE);
 }

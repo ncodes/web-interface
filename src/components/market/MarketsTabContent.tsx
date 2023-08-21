@@ -5,30 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { Skeleton } from "../ui/skeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../../libs/helpers.ts";
 import { useEffect, useState } from "react";
-
-function RowSkeleton() {
-  return (
-    <div className="flex p-5">
-      <div className="flex gap-2 overflow-hidden">
-        <Skeleton className="w-10 h-10 rounded-full shrink-0" />
-        <Skeleton className="w-10 h-10 rounded-full shrink-0 -ml-4" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-        <Skeleton className="w-32 h-10 rounded-xl shrink-0" />
-      </div>
-    </div>
-  );
-}
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { RequestError } from "../../libs/RequestError.ts";
 
 export function MarketsTabContent() {
   const { getChainInfo } = useConnector();
@@ -36,6 +16,7 @@ export function MarketsTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
   const [limit] = useState(1);
   const {
     isLoading,
@@ -56,7 +37,12 @@ export function MarketsTabContent() {
       },
     ],
     queryFn: listMarkets,
+    enabled: isMounted,
   });
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     setOffset(0);

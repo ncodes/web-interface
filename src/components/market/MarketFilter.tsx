@@ -27,6 +27,7 @@ import { ToolTip } from "../ToolTip.tsx";
 import { useQuery } from "../../hooks/useQuery.ts";
 import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { useNavigate } from "react-router-dom";
+import { cn } from "../../libs/utils.ts";
 
 interface Errors {
   price?: string;
@@ -34,6 +35,8 @@ interface Errors {
 }
 
 interface Values {
+  base?: string;
+  quote?: string;
   price_cur?: string;
   price?: string;
   price_lte?: string;
@@ -106,6 +109,8 @@ export function FilterContent() {
 
     update = {
       ...update,
+      base: marketFilter?.base || "",
+      quote: marketFilter?.quote || "",
       merchant_lp: marketFilter?.merchantLp?.toString() || "",
       kyc_lp: marketFilter?.kycLp?.toString() || "",
       kyc_taker: marketFilter?.kycTaker?.toString() || "",
@@ -171,18 +176,46 @@ export function FilterContent() {
       : undefined;
 
     filter.putBadges = query.get("put_badges") as string;
+
     filter.swapBadges = query.get("swap_badges") as string;
+
+    filter.base = query.get("base") as string;
+
+    filter.quote = query.get("quote") as string;
 
     setMarketFilter && setMarketFilter(filter);
   }, [query, setMarketFilter]);
 
   return (
     <div>
-      <Accordion defaultValue={["Price"]} type="multiple">
+      <Accordion type="multiple">
+        <FilterItem title="Base" tip="Find markets with a certain base token">
+          <Input
+            type="text"
+            placeholder="e.g. 0x0..."
+            className="pl-2"
+            value={values.base || ""}
+            onChange={(e) => {
+              setValues({ ...values, base: e.target.value });
+            }}
+          />
+        </FilterItem>
+        <FilterItem title="Quote" tip="Find markets with a certain quote token">
+          <Input
+            type="text"
+            placeholder="e.g. 0x0..."
+            className="pl-2"
+            value={values.quote || ""}
+            onChange={(e) => {
+              setValues({ ...values, quote: e.target.value });
+            }}
+          />
+        </FilterItem>
         <FilterItem
-          title="Price"
+          title="Quote Price"
           tip="Filter by price (QUOTE)"
           error={errors.price}
+          className={cn({ hidden: !values.quote })}
         >
           <div className="mr-1">
             <Select
@@ -250,6 +283,7 @@ export function FilterContent() {
           title="Available Liquidity"
           tip="Find markets with certain amount of available liquidity"
           error={errors.liquidity}
+          className={cn({ hidden: !values.base })}
         >
           <div className="mr-1">
             <Select

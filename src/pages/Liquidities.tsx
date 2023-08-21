@@ -1,10 +1,5 @@
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../components/ui/Tabs.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import {
@@ -13,21 +8,16 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
-import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
-import { Paginator } from "../components/Paginator.tsx";
+import { MyWatchedLiquidityTabContent } from "../components/liquidity/MyWatchedLiquidityTabContent.tsx";
+import { MyLiquidityTabContent } from "../components/liquidity/MyLiquidityTabContent.tsx";
+import { useNavigate } from "react-router-dom";
 
-function MyLiquidityTabContent() {
-  return <LiquidityRow base="BTC" quote="UNI" />;
-}
+function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
+  const navigate = useNavigate();
 
-function MyWatchTabContent() {
-  return <LiquidityRow base="BTC" quote="UNI" />;
-}
-
-function Page() {
   return (
     <Tabs
-      defaultValue="my-liquidity"
+      defaultValue={defaultTab || "my-liquidity"}
       className="w-full h-full transition-all duration-500"
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
@@ -37,6 +27,9 @@ function Page() {
               <TabsTrigger
                 value="my-liquidity"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/liquidity/owned");
+                }}
               >
                 My Liquidity
               </TabsTrigger>
@@ -60,33 +53,12 @@ function Page() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent value="my-liquidity" className="p-0 m-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <MyLiquidityTabContent />
-        </div>
-      </TabsContent>
-      <TabsContent value="watching" className="p-0 m-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <MyWatchTabContent />
-        </div>
-      </TabsContent>
+      <MyLiquidityTabContent />
+      <MyWatchedLiquidityTabContent />
     </Tabs>
   );
 }
 
-export default function Liquidities() {
-  return (
-    <Layout
-      tab={<Page />}
-      // rightSide={
-      //   <div className="flex flex-col h-full mt-2">
-      //     <div className="text-gray-200">
-      //       <Footer />
-      //     </div>
-      //   </div>
-      // }
-    />
-  );
+export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
+  return <Layout tab={<LiquidityTabs defaultTab={defaultTab} />} />;
 }

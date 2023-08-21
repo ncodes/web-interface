@@ -1,13 +1,21 @@
-import { IconGlobeColor } from "../icons/IconGlobeColor.tsx";
+import { IconGlobe } from "../icons/IconGlobe.tsx";
 import { IconFlagUSA } from "../icons/IconFlagUSA.tsx";
 import { IconFlagUK } from "../icons/IconFlagUK.tsx";
 import { IconFlagNigeria } from "../icons/IconFlagNigeria.tsx";
 import { IconFlagFrance } from "../icons/IconFlagFrance.tsx";
 import { IconFlagChina } from "../icons/IconFlagChina.tsx";
+import { ReactElement, SVGProps } from "react";
+
+export interface Region {
+  name: string;
+  icon: (props: SVGProps<SVGSVGElement>) => ReactElement;
+  className?: string;
+}
 
 export const defaultRegion = "ALL";
-export const regions = [
-  { name: "ALL", icon: IconGlobeColor },
+
+export const regions: Region[] = [
+  { name: "ALL", icon: IconGlobe, className: "text-chinese-green" },
   { name: "US", icon: IconFlagUSA },
   { name: "UK", icon: IconFlagUK },
   { name: "NG", icon: IconFlagNigeria },

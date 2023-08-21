@@ -36,7 +36,7 @@ function DropdownMenuItemCustom({
 }
 
 export function RegionSelector() {
-  const { currentRegion, getRegionIcon, setRegion } = useRegion();
+  const { currentRegion, getRegionIcon, setRegion, getRegion } = useRegion();
   const [open, setOpen] = useState(false);
 
   return (
@@ -48,19 +48,20 @@ export function RegionSelector() {
     >
       <div
         className={cn(
-          "pr-2 text-lg  bg-input rounded-full flex pl-2 space-x-2 hover:cursor-pointer hover:bg-input/90 transition-all hover:scale-x-105 duration-150 [&>span]:py-1",
-          {
-            "scale-105 border-chinese-green": open,
-          }
+          "pr-2 text-lg border border-gray-600 rounded-full flex pl-2 space-x-2 hover:cursor-pointer hover:bg-gray-800 transition-all hover:scale-x-105 duration-500 [&>span]:py-1",
+          { "scale-105 border-chinese-green bg-gray-800": open }
         )}
       >
         <span className="mt-[5px]">
-          {getRegionIcon(currentRegion || "")({ width: 20 })}
+          {getRegionIcon(currentRegion || "")({
+            width: 20,
+            className: getRegion(currentRegion || "")?.className,
+          })}
         </span>
         <span className="font-normal text-lg mt-[1px] tracking-wider">
           {currentRegion}
         </span>
-        <div className="pl-1 flex items-center border-input-separator border-l relative">
+        <div className="pl-1 flex items-center relative">
           {open ? <ChevronUp /> : <ChevronDown />}
         </div>
       </div>
@@ -77,7 +78,7 @@ export function RegionSelectorMenu({
   onOpenChange?: (open: boolean) => void;
   onSelect?: (region: string) => void;
 }) {
-  const { getRegion, currentRegion } = useRegion();
+  const { getRegions, currentRegion } = useRegion();
 
   return (
     <DropdownMenu onOpenChange={onOpenChange}>
@@ -86,7 +87,7 @@ export function RegionSelectorMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-0 w-[120px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-input border-gray-700/80 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[200px]" type="scroll">
-          {getRegion(currentRegion ? [currentRegion] : []).map((r) => (
+          {getRegions(currentRegion ? [currentRegion] : []).map((r) => (
             <DropdownMenuItemCustom
               key={r.name}
               onSelect={() => {
