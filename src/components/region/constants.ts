@@ -8,14 +8,20 @@ import { ReactElement, SVGProps } from "react";
 
 export interface Region {
   name: string;
+  selectName?: string;
   icon: (props: SVGProps<SVGSVGElement>) => ReactElement;
   className?: string;
 }
 
-export const defaultRegion = "ALL";
+export const defaultRegion = "";
 
 export const regions: Region[] = [
-  { name: "ALL", icon: IconGlobe, className: "text-chinese-green" },
+  {
+    name: "",
+    selectName: "ALL",
+    icon: IconGlobe,
+    className: "text-chinese-green",
+  },
   { name: "US", icon: IconFlagUSA },
   { name: "UK", icon: IconFlagUK },
   { name: "NG", icon: IconFlagNigeria },

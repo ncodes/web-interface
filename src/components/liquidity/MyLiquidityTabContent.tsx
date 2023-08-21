@@ -14,6 +14,7 @@ import { RequestError } from "../../libs/RequestError.ts";
 export function MyLiquidityTabContent() {
   const { getChainInfo, address } = useConnector();
   const { listLiquidities } = useLiquidityService();
+  const liquidityFilter = useStore((state) => state.liquidityFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(1);
@@ -34,6 +35,7 @@ export function MyLiquidityTabContent() {
         limit,
         offset,
         connectedAddress: address,
+        liquidityFilter,
       },
     ],
     queryFn: listLiquidities,

@@ -48,11 +48,11 @@ export function RegionSelector() {
     >
       <div
         className={cn(
-          "pr-2 text-lg border border-gray-600 rounded-full flex pl-2 space-x-2 hover:cursor-pointer hover:bg-gray-800 transition-all hover:scale-x-105 duration-500 [&>span]:py-1",
+          "pr-2 h-[40px] text-lg border border-gray-600 rounded-full flex items-center pl-2 space-x-2 hover:cursor-pointer hover:bg-gray-800 transition-all hover:scale-x-105 duration-500 [&>span]:py-1",
           { "scale-105 border-chinese-green bg-gray-800": open }
         )}
       >
-        <span className="mt-[5px]">
+        <span className="">
           {getRegionIcon(currentRegion || "")({
             width: 20,
             className: getRegion(currentRegion || "")?.className,
@@ -85,16 +85,17 @@ export function RegionSelectorMenu({
       <DropdownMenuTrigger className="outline-0 ring-0">
         {children}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="min-w-0 w-[120px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-input border-gray-700/80 text-gray-200 px-0 py-0">
+      <DropdownMenuContent className="DropdownMenuContent min-w-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-input border-gray-700/80 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[200px]" type="scroll">
           {getRegions(currentRegion ? [currentRegion] : []).map((r) => (
             <DropdownMenuItemCustom
-              key={r.name}
+              key={r.name || r.selectName}
               onSelect={() => {
                 onSelect && onSelect(r.name);
               }}
             >
-              {r.icon({ width: 25 })} {r.name}
+              {r.icon({ width: 25, className: r.className })}{" "}
+              {r.name || r.selectName}
             </DropdownMenuItemCustom>
           ))}
         </ScrollArea>

@@ -222,8 +222,18 @@ export function LiquidityRow({
                     title="Price ($)"
                     tip={`The price of 1 ${liquidity.base} in USD`}
                     title2={
-                      <span className="text-green-400 hidden xxs:inline">
-                        (+10%)
+                      <span
+                        className={cn("hidden xxs:inline text-[10px]", {
+                          "text-green-400": liquidity?.priceChange > 0,
+                          "text-red-400": liquidity?.priceChange < 0,
+                          "text-gray-200": liquidity?.priceChange == 0,
+                        })}
+                      >
+                        ({liquidity?.priceChange < 0 && "-"}
+                        {liquidity?.priceChange == 0 && ""}
+                        {liquidity?.priceChange > 0 && "+"}
+                        {liquidity?.priceChange.toString().replace("-", "")}
+                        %)
                       </span>
                     }
                   >
@@ -238,6 +248,15 @@ export function LiquidityRow({
                       liquidity.price,
                       liquidity.market.quoteDecimals
                     )}
+                  </StatCard>
+                  <StatCard
+                    title={`Available`}
+                    title2={"($)"}
+                    tip={`The amount ${liquidity.base} available for swap`}
+                  >
+                    <span className="text-gray-200">
+                      ${formatToMoney(liquidity.amountUsd)}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Available`}
@@ -375,19 +394,22 @@ export function LiquidityRow({
                 </Button>
               </span>
             )}
+
             {!ownerMode && (
               <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
                 <IconHeart />
               </span>
             )}
+
             <Button
               variant="link"
               rounded="none"
-              className="text-sm px-2 text-gray-900 flex items-center gap-1 bg-chinese-green lg:rounded-br-xl"
+              className="text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green rounded h-8 mx-1 lg:rounded-br-lg"
               onClick={() => setOpenSwapSheet(true)}
             >
               <IconExchange width="20px" /> SWAP
             </Button>
+
             <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu
                 onOpenChange={(open) => {

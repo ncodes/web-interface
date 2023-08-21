@@ -9,10 +9,6 @@ import Layout from "./Layout.tsx";
 import { useState } from "react";
 import { Footer } from "../components/Footer.tsx";
 import { MarketRow } from "../components/market/MarketRow.tsx";
-import {
-  LiquidityFilter,
-  LiquidityFilterSheet,
-} from "../components/market/LiquidityFilter.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { IconPlus } from "../components/icons/IconPlus.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
@@ -20,6 +16,8 @@ import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
 import { Paginator } from "../components/Paginator.tsx";
+import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
+import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
 
 function MarketTabContent() {
   return (

@@ -149,6 +149,7 @@ declare global {
     volume24h: string;
     priceChange: number;
     priceUsd: number;
+    amountUsd: number;
     market: Market;
   }
 }

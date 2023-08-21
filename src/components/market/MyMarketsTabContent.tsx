@@ -32,7 +32,7 @@ export function MyMarketsTabContent() {
       "getMarketsByCreator",
       {
         network: getChainInfo().queryName,
-        marketFilter: marketFilter,
+        marketFilter,
         limit,
         offset,
         connectedAddress: address,

@@ -32,6 +32,20 @@ export interface MarketFilter {
   swapBadges?: string;
 }
 
+export interface LiquidityFilter {
+  base?: string;
+  quote?: string;
+  market?: string;
+  provider?: string;
+  price?: string;
+  priceUsd?: string;
+  amount?: string;
+  amountUsd?: string;
+  kycLp?: boolean;
+  kycTaker?: boolean;
+  swapBadges?: string;
+}
+
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -56,6 +70,10 @@ export interface IStore {
   // Market filter
   marketFilter: MarketFilter;
   setMarketFilter: (filter: Partial<MarketFilter>) => void;
+
+  // Liquidity filter
+  liquidityFilter: LiquidityFilter;
+  setLiquidityFilter: (filter: Partial<LiquidityFilter>) => void;
 }
 
 const useStore = create<IStore>((set) => ({
@@ -94,6 +112,16 @@ const useStore = create<IStore>((set) => ({
     set((state) => ({
       marketFilter: {
         ...state.marketFilter,
+        ...filter,
+      },
+    }));
+  },
+
+  liquidityFilter: {},
+  setLiquidityFilter: (filter: Partial<LiquidityFilter>) => {
+    set((state) => ({
+      liquidityFilter: {
+        ...state.liquidityFilter,
         ...filter,
       },
     }));

@@ -4,10 +4,7 @@ import Layout from "./Layout.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { IconPlus } from "../components/icons/IconPlus.tsx";
 import { useState } from "react";
-import {
-  MarketFilter,
-  MarketFilterSheet,
-} from "../components/market/MarketFilter.tsx";
+import { MarketFilter } from "../components/market/MarketFilter.tsx";
 import { Footer } from "../components/Footer.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
@@ -23,6 +20,7 @@ import { MarketsTabContent } from "../components/market/MarketsTabContent.tsx";
 import { MyMarketsTabContent } from "../components/market/MyMarketsTabContent.tsx";
 import { WatchedMarketContent } from "../components/market/WatchedMarketContent.tsx";
 import { useNavigate } from "react-router-dom";
+import { MarketFilterSheet } from "../components/market/MarketFilterSheet.tsx";
 
 function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
@@ -139,10 +137,12 @@ export default function Markets({ defaultTab }: { defaultTab?: string }) {
     <Layout
       tab={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
-        <div className="flex flex-col h-full mt-2">
+        <div className="flex w-full h-full flex-col pt-2">
           <MarketFilter />
-          <div className="text-gray-200">
-            <Footer />
+          <div className="relative h-full">
+            <div className="text-gray-200 absolute bottom-0 w-full">
+              <Footer />
+            </div>
           </div>
         </div>
       }
