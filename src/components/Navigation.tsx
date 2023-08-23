@@ -80,7 +80,7 @@ export function Navigation() {
             icon={<IconExchange />}
             label="Swaps"
             active={pathname.match("/swap(s|)") != null}
-            to="/swaps"
+            to="/swaps/owned"
           />
         </li>
         <li>

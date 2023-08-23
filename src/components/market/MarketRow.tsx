@@ -22,10 +22,10 @@ import IconEdit from "../icons/IconEdit.tsx";
 import {
   approxNumber,
   formatToHighDenom,
-  formatToMoney,
   shortenAddress,
 } from "../../libs/helpers.ts";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 
 export function MarketRow({
   market,
@@ -44,7 +44,7 @@ export function MarketRow({
   return (
     <div
       className={cn(
-        "border bg-card-background border-card-border transition-all duration-300 rounded-xl ",
+        "border select-none bg-card-background border-card-border transition-all duration-300 rounded-xl ",
         {
           "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
             !noFocus,
@@ -61,9 +61,11 @@ export function MarketRow({
               baseSrc={market.baseLogo}
               quoteSrc={market.quoteLogo}
             />
-            <div className="flex md:flex-col w-full justify-between md:justify-start text-xs xs:text-sm">
-              <span>
-                {market.base} - {market.quote}
+            <div className="flex md:flex-col w-full justify-between md:justify-start">
+              <span className="flex ">
+                {market.base}
+                <span className="text-gray-500 inline-block mx-1">/</span>
+                {market.quote}
               </span>
               <span className="flex items-center gap-1 text-[11px] font-light text-blue-200">
                 <span>
@@ -85,7 +87,7 @@ export function MarketRow({
             <ScrollAreaHorizontal type="scroll" className="mx-2 md:mx-0">
               <div className="py-[8px] flex gap-2 md:px-2">
                 <StatCard
-                  title="Price ($)"
+                  title={`Price (${market.base})`}
                   width="w-auto"
                   tip={`The price of 1 ${market.base} in USD`}
                   title2={
@@ -103,14 +105,33 @@ export function MarketRow({
                     </span>
                   }
                 >
-                  ${formatToMoney(market.lowestPriceUsd)}
+                  <span className="flex gap-1">
+                    <span>
+                      {formatToHighDenom(
+                        market.lowestPrice,
+                        market.quoteDecimals
+                      )}
+                    </span>
+                    <USDAmountToolTip v={parseFloat(market.lowestPriceUsd)} />
+                  </span>
                 </StatCard>
+
                 <StatCard
-                  title="Price"
-                  title2="(${market.quote})"
-                  tip={`The price of 1 ${market.base} in ${market.quote}`}
+                  title="Total Liquidity"
+                  title2=""
+                  tip={`The total amount of ${market.base} in the market`}
                 >
-                  {formatToHighDenom(market.lowestPrice, market.quoteDecimals)}
+                  <span className="flex gap-1">
+                    <span className="text-gray-200">
+                      {formatToHighDenom(
+                        market.totalLiquidity,
+                        market.baseDecimals
+                      )}
+                    </span>
+                    <USDAmountToolTip
+                      v={parseFloat(market.totalLiquidityUsd)}
+                    />
+                  </span>
                 </StatCard>
                 <StatCard
                   title="24hrs Volume"
@@ -119,15 +140,6 @@ export function MarketRow({
                 >
                   <span className="text-gray-200">
                     ${approxNumber(parseFloat(market.volume24h), 3)}
-                  </span>
-                </StatCard>
-                <StatCard
-                  title="Total Liquidity"
-                  title2=""
-                  tip={`The total amount of ${market.base} in the market`}
-                >
-                  <span className="text-gray-200">
-                    ${approxNumber(parseFloat(market.totalLiquidityUsd), 3)}
                   </span>
                 </StatCard>
                 <StatCard

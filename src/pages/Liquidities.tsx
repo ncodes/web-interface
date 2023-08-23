@@ -87,7 +87,6 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
 
 export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
   const loc = useLocation();
-  console.log(loc.pathname);
   return (
     <Layout
       tab={<LiquidityTabs defaultTab={defaultTab} />}

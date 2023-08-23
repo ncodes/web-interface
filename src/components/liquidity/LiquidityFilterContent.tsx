@@ -153,7 +153,10 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
   return (
     <div>
       <Accordion type="multiple">
-        <FilterItem title="Base" tip="Find markets with a certain base token">
+        <FilterItem
+          title="Base"
+          tip="Find liquidities matching the base token address or symbol"
+        >
           <Input
             type="text"
             placeholder="e.g. 0x0..."
@@ -164,7 +167,10 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
             }}
           />
         </FilterItem>
-        <FilterItem title="Quote" tip="Find markets with a certain quote token">
+        <FilterItem
+          title="Quote"
+          tip="Find liquidities matching the quote token address or symbol"
+        >
           <Input
             type="text"
             placeholder="e.g. 0x0..."

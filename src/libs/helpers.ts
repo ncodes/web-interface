@@ -196,3 +196,15 @@ export function humanizeDur(sec: number) {
 export function isMerchant(badges: string[]) {
   return badges.includes(import.meta.env.VITE_MERCHANT_BADGE);
 }
+
+/**
+ * Check if a string is equal to another string, ignoring case.
+ * @param a - The first string
+ * @param b - The second string
+ * @return false if either string is undefined
+ * @return true if the strings are equal
+ */
+export function isEqlStr(a: string, b: string) {
+  if (a == undefined || b == undefined) return false;
+  return a.toLowerCase() === b.toLowerCase();
+}

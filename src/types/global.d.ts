@@ -44,7 +44,7 @@ declare global {
 
   interface TransactionResponse {}
 
-  enum AssetType {
+  export enum AssetType {
     SYNTH,
     ERC20,
     ERC721,
@@ -150,6 +150,78 @@ declare global {
     priceChange: number;
     priceUsd: number;
     amountUsd: number;
+    minSwapUsd: number;
+    maxSwapUsd: number;
     market: Market;
+  }
+
+  interface Swap {
+    network: string;
+    marketAddress: string;
+    base: string;
+    baseAddress: string;
+    quote: string;
+    quoteAddress: string;
+    orderId: number;
+    lid: number;
+    provider: string;
+    taker: string;
+    offerId: number;
+    amount: string;
+    valueUsd: string;
+    price: string;
+    instant: boolean;
+    paid: boolean;
+    payer: string;
+    cancelled: boolean;
+    released: boolean;
+    finalizer: string;
+    byDispute: boolean;
+    providerIds: number[];
+    takerIds: number[];
+    protocolFee: string;
+    marketCreatorFee: string;
+    operator: number;
+    cancelAt: string;
+    disputeFrom: string;
+    txHash: string;
+    finalizedAt: string;
+    paidAt: string;
+    priceUsd: number;
+    cost: number;
+    costUsd: number;
+    amountUsd: number;
+    fee: string;
+    feeUsd: number;
+    feeSymbol: string;
+    market: Market;
+    liquidity: Liquidity;
+    disputes: Dispute[];
+    createdAt: string;
+  }
+
+  interface Dispute {
+    network: string;
+    creator: string;
+    defendant: string;
+    marketAddress: string;
+    orderId: number;
+    disputeId: number;
+    numMediators: number;
+    numMediatorsDrafted: number;
+    wantRelease: boolean;
+    redispute: boolean;
+    evidenceEndAt: string;
+    commitEndAt: string;
+    revealEndAt: string;
+    predictEndAt: string;
+    executed: boolean;
+    released: boolean;
+    abandoned: boolean;
+    orderReleased: boolean;
+    notifiedOnEvidenceEndAt: boolean;
+    notifiedOnCommitEndAt: boolean;
+    notifiedOnRevealEndAt: boolean;
+    swap: Swap;
   }
 }

@@ -29,7 +29,7 @@ export function FilterItem({
         <div className="flex items-center gap-2">
           <span>{title}</span>
           <ToolTip tip={tip}>
-            <span className="opacity-60 hover:opacity-100 cursor-pointer relative top-[2px]">
+            <span className="opacity-60 hover:opacity-100 cursor-pointer relative">
               <IconInfoCircle width="15" />
             </span>
           </ToolTip>

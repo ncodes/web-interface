@@ -61,7 +61,7 @@ const router = createBrowserRouter([
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/swaps"),
+    path: makePath("/swaps/owned"),
     element: <App page={<Swaps />} />,
     errorElement: <RootErrorBoundary />,
   },
