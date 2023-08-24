@@ -38,9 +38,12 @@ export function CountDown({
     return () => clearInterval(intervalId);
   }, [onDone, timeLeft]);
 
-  return (
-    <>
-      {timeLeft != undefined && timeLeft > 0 && `(${prefix || ""}${timeLeft}s)`}
-    </>
-  );
+  function renderTimeLeft() {
+    if (!timeLeft) return "";
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft - minutes * 60;
+    return `(${prefix || ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds})`;
+  }
+
+  return <>{timeLeft != undefined && timeLeft > 0 && renderTimeLeft()}</>;
 }

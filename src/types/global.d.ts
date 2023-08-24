@@ -224,4 +224,27 @@ declare global {
     notifiedOnRevealEndAt: boolean;
     swap: Swap;
   }
+
+  interface Offer {
+    network: string;
+    marketAddress: string;
+    provider: string;
+    lid: number;
+    offerId: number;
+    creator: string;
+    amount: string;
+    price: string;
+    priceUsd: number;
+    amountUsd: number;
+    ids: number[];
+    accepted: boolean;
+    cancelled: boolean;
+    executed: boolean;
+    execAt: string;
+    deadline: string;
+    createdAt: string;
+    updatedAt: string;
+    market: Market;
+    liquidity: Liquidity;
+  }
 }

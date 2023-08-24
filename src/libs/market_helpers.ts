@@ -1,3 +1,6 @@
+import moment from "moment";
+import { isEqlStr } from "./helpers.ts";
+
 enum AssetType {
   SYNTH,
   ERC20,
@@ -67,4 +70,25 @@ export function isDisputed(swap: Swap) {
 
 export function isDisputeAbandoned(swap: Swap) {
   return swap.disputes.length > 0 && swap.disputes[0].abandoned;
+}
+
+export function isOfferPending(offer: Offer) {
+  return (
+    !offer.accepted &&
+    !offer.cancelled &&
+    !offer.executed &&
+    moment(offer.deadline).isAfter(moment())
+  );
+}
+
+export function isOfferExpired(offer: Offer) {
+  return (
+    !offer.cancelled &&
+    !offer.executed &&
+    moment().isAfter(moment(offer.deadline))
+  );
+}
+
+export function isOfferer(offer: Offer, address: string) {
+  return isEqlStr(offer.creator, address);
 }

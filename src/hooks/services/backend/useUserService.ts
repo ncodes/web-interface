@@ -36,6 +36,8 @@ export function useUserService() {
         headers,
       });
 
+      // resp.data.data.badges = ["merchant"];
+
       return Promise.resolve(resp.data.data);
     } catch (e) {
       return Promise.reject(handleAxiosError(e as never));

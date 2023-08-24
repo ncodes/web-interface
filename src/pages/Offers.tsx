@@ -1,34 +1,34 @@
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../components/ui/Tabs.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
-import { useEffect } from "react";
-import useStore from "../hooks/store/useStore.ts";
-import { OfferRow } from "../components/liquidity/OfferRow.tsx";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { Paginator } from "../components/Paginator.tsx";
+import { useNavigate } from "react-router-dom";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { MyOffersTabContent } from "../components/offer/MyOffersTabContent.tsx";
+import { Footer } from "../components/Footer.tsx";
+import { OfferFilter } from "../components/offer/OfferFilter.tsx";
+import { OfferFilterSheet } from "../components/offer/OfferFilterSheet.tsx";
 
-function Page() {
-  const setCurrentTab = useStore((state) => state.setCurrentTab);
-
-  useEffect(() => {
-    setCurrentTab && setCurrentTab("liquidity");
-  }, [setCurrentTab]);
+function OfferTabs({ defaultTab }: { defaultTab?: string }) {
+  const navigate = useNavigate();
+  const [currentTab, setCurrentTab] = useState(defaultTab || "offers");
+  const [openFilterSheet, setOpenFilterSheet] = useState(false);
 
   return (
     <Tabs
-      defaultValue="offers"
+      defaultValue={defaultTab || "offers"}
       className="w-full h-full transition-all duration-500"
+      onValueChange={(value) => {
+        setCurrentTab(value);
+      }}
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
@@ -37,6 +37,9 @@ function Page() {
               <TabsTrigger
                 value="offers"
                 className="font-light gap-1 relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/offers");
+                }}
               >
                 Offers
               </TabsTrigger>
@@ -46,22 +49,30 @@ function Page() {
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
+              <span className="xl:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
                 <DotsVerticalIcon />
               </span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0"></DropdownMenuContent>
+            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
+              <DropdownMenuItem
+                className="flex gap-2"
+                onClick={() => {
+                  setOpenFilterSheet(true);
+                }}
+              >
+                <IconFilterOutline /> Filter Offers
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent value="offers" className="p-0 m-0 px-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <div className=" pr-0 flex-1 ">
-            <OfferRow base={"BTC"} quote={"UNI"} />
-          </div>
-        </div>
-      </TabsContent>
+      {currentTab == "offers" && <MyOffersTabContent />}
+      <OfferFilterSheet
+        active={openFilterSheet}
+        onOpen={(open) => {
+          setOpenFilterSheet(open);
+        }}
+      />
     </Tabs>
   );
 }
@@ -69,8 +80,17 @@ function Page() {
 export default function Offers() {
   return (
     <Layout
-      tab={<Page />}
-      // rightSide={<div className="flex w-full flex-col h-full pt-2"></div>}
+      tab={<OfferTabs />}
+      rightSide={
+        <div className="flex w-full h-full flex-col pt-2">
+          <OfferFilter />
+          <div className="relative h-full">
+            <div className="text-gray-200 absolute bottom-0 w-full">
+              <Footer />
+            </div>
+          </div>
+        </div>
+      }
     />
   );
 }

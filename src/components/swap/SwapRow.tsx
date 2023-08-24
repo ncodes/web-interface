@@ -279,7 +279,7 @@ export function SwapRow({
         </div>
 
         {/* Layer 2 */}
-        <div className="border-t border-gray-800/60 px-3 py-1 flex flex-col md:flex-row md:justify-between">
+        <div className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between">
           {/* If releaser and payer has not paid */}
           {address &&
             !swap.paid &&

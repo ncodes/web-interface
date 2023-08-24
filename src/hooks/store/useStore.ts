@@ -56,6 +56,14 @@ export interface SwapFilter {
   toDate?: string;
 }
 
+export interface OfferFilter {
+  marketAddress?: string;
+  creator?: string;
+  status?: string;
+  fromDate?: string;
+  toDate?: string;
+}
+
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -88,6 +96,9 @@ export interface IStore {
   // SwapFilter filter
   swapFilter: SwapFilter;
   setSwapFilter: (filter: Partial<SwapFilter>) => void;
+
+  offerFilter: OfferFilter;
+  setOfferFilter: (filter: Partial<OfferFilter>) => void;
 }
 
 const useStore = create<IStore>((set) => ({
@@ -146,6 +157,16 @@ const useStore = create<IStore>((set) => ({
     set((state) => ({
       swapFilter: {
         ...state.swapFilter,
+        ...filter,
+      },
+    }));
+  },
+
+  offerFilter: {},
+  setOfferFilter: (filter: Partial<OfferFilter>) => {
+    set((state) => ({
+      offerFilter: {
+        ...state.offerFilter,
         ...filter,
       },
     }));

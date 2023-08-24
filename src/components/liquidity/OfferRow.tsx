@@ -7,28 +7,68 @@ import { StatCard } from "../market/StatCard.tsx";
 import { cn } from "../../libs/utils.ts";
 import { Button } from "../ui/Button.tsx";
 import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
-import { MessageCircle, Play } from "lucide-react";
+import {
+  CheckCircle,
+  Clock2Icon,
+  LucideTimerOff,
+  MessageCircle,
+  XCircle,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
-import IconCoinStack from "../icons/IconCoinStack.tsx";
-import { IconMarket } from "../icons/IconMarket.tsx";
 import { UserHoverCard } from "./UserHoverCard.tsx";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { useQuery } from "@tanstack/react-query";
+import { ToolTip } from "../ToolTip.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import {
+  formatToHighDenom,
+  isMerchant,
+  shortenAddress,
+} from "../../libs/helpers.ts";
+import { VerifiedBadge } from "./VerifiedBadge.tsx";
+import IconCopyFilled from "../icons/IconCopyFilled.tsx";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import {
+  isOfferer,
+  isOfferExpired,
+  isOfferPending,
+} from "../../libs/market_helpers.ts";
+import moment from "moment/moment";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import useConnector from "../../hooks/connectors/useConnector.tsx";
+import { CountDown } from "../Countdown.tsx";
+import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
+
+interface ButtonEnableState {
+  accept: boolean;
+  execute: boolean;
+}
 
 export function OfferRow({
-  base,
-  quote,
   className,
+  offer,
 }: {
-  base: string;
-  quote: string;
+  offer: Offer;
   ownerMode?: boolean;
   className?: string;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const { getUser } = useUserService();
+  const { address } = useConnector();
+  const [disableButtons, setDisableButtons] = useState<ButtonEnableState>({
+    accept: false,
+    execute: false,
+  });
+  const getProvider = useQuery({
+    queryKey: ["getUser", { address: offer.creator, noAuth: true }],
+    queryFn: getUser,
+    enabled: !!offer.creator,
+  });
 
   return (
     <div
@@ -46,13 +86,14 @@ export function OfferRow({
           className
         )}
       >
+        {/* Level 1 */}
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
           <div
             data-click-trigger="1"
             className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
             <div>
-              <UserHoverCard>
+              <UserHoverCard user={getProvider.data as User}>
                 <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
               </UserHoverCard>
             </div>
@@ -60,11 +101,101 @@ export function OfferRow({
               className="flex py-3 md:py-0 w-full md:w-auto  md:flex-col justify-start xxs:justify-between md:justify-start z-[6] xxs:items-center md:items-start gap-1"
               data-click-trigger="1"
             >
-              <span data-click-trigger="1">0xAbc..xYz</span>
-              {/*<a className="bg-gray-700">Update</a>*/}
-              {/*<a className="bg-red-600">Unaccept</a>*/}
-              <span className="md:hidden flex-1 text-xs text-gray-500 flex items-center justify-end gap-1">
-                <TimerIcon /> <span className="text-gray-200">3 days ago</span>
+              <span data-click-trigger="1" className="flex gap-1 text-sm">
+                {shortenAddress(offer.creator)}
+                {isMerchant(getProvider?.data?.badges || []) && (
+                  <div className="flex gap-1 font-light text-xs text-gray-400">
+                    <VerifiedBadge />
+                  </div>
+                )}
+                <span>
+                  <CopyToClipboard text={offer.creator}>
+                    <IconCopyFilled
+                      width="13px"
+                      className="text-gray-400 cursor-pointer hover:text-chinese-green transition-all duration-300 active:scale-90"
+                    />
+                  </CopyToClipboard>
+                </span>
+              </span>
+
+              {/* STATUS */}
+              <span className="flex items-center gap-1 text-xs font-light tracking-wider text-green-400">
+                {isOfferPending(offer) && (
+                  <span className="flex bg-gray-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-gray-300">
+                    <ToolTip className="flex items-center gap-1" tip="">
+                      <Clock2Icon width="15" />{" "}
+                      <span className="hidden xs:inline">Pending</span>
+                      <IconInfoCircle
+                        width="15"
+                        className="hidden xs:inline text-gray-300"
+                      />
+                    </ToolTip>
+                  </span>
+                )}
+
+                {offer.accepted && !offer.cancelled && !isOfferExpired(offer) && (
+                  <span className="flex bg-yellow-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-yellow-300">
+                    <ToolTip
+                      className="flex items-center gap-1"
+                      tip="The offer was accepted"
+                    >
+                      <CheckCircle width="15" />{" "}
+                      <span className="hidden xs:inline">Accepted</span>
+                      <IconInfoCircle
+                        width="15"
+                        className="hidden xs:inline text-yellow-300"
+                      />
+                    </ToolTip>
+                  </span>
+                )}
+
+                {offer.cancelled && (
+                  <span className="flex bg-red-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-red-300">
+                    <ToolTip
+                      className="flex items-center gap-1"
+                      tip="The offer was cancelled"
+                    >
+                      <XCircle width="15" />{" "}
+                      <span className="hidden xs:inline">Cancelled</span>
+                      <IconInfoCircle
+                        width="15"
+                        className="hidden xs:inline text-red-300"
+                      />
+                    </ToolTip>
+                  </span>
+                )}
+
+                {offer.executed && (
+                  <span className="flex bg-green-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-green-300">
+                    <ToolTip
+                      className="flex items-center gap-1"
+                      tip="The offer was executed"
+                    >
+                      <CheckCircle width="15" />{" "}
+                      <span className="hidden xs:inline">Executed</span>
+                      <IconInfoCircle
+                        width="15"
+                        className="hidden xs:inline text-green-300"
+                      />
+                    </ToolTip>
+                  </span>
+                )}
+
+                {isOfferExpired(offer) && (
+                  <span className="flex bg-red-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-red-300">
+                    <ToolTip
+                      className="flex items-center gap-1"
+                      tip="The offer has expired"
+                    >
+                      <LucideTimerOff width="15" />{" "}
+                      <span className="hidden xs:inline">Expired</span>
+                      <IconInfoCircle
+                        width="15"
+                        className="hidden xs:inline text-red-300"
+                      />
+                    </ToolTip>
+                  </span>
+                )}
               </span>
             </div>
           </div>
@@ -76,73 +207,308 @@ export function OfferRow({
                   data-click-trigger="1"
                 >
                   <StatCard
-                    title="Price ($)"
-                    tip={`The offer price for 1 ${base} in USD`}
-                    title2=""
+                    title={`Price (${offer.market.quote})`}
+                    tip={`The offer price for 1 ${offer.market.base} in ${offer.market.quote}`}
                   >
-                    $1,234
-                  </StatCard>
-                  <StatCard
-                    title={`Price (${quote})`}
-                    tip={`The offer price for 1 ${base} in ${quote}`}
-                  >
-                    $1,234
+                    <span className="flex gap-1">
+                      {formatToHighDenom(
+                        offer.price,
+                        offer.market.quoteDecimals
+                      )}
+                      <USDAmountToolTip v={offer.priceUsd} />
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Amount`}
-                    tip={`The amount of ${base} being requested`}
+                    tip={`The amount of ${offer.market.base} being requested`}
                   >
-                    <span className="text-gray-200">100</span>
-                  </StatCard>
-                  <StatCard
-                    title={`Status`}
-                    tip={`The current status of the offer`}
-                  >
-                    <span className="text-gray-200">Pending</span>
+                    <span className="text-gray-200 flex gap-1">
+                      {formatToHighDenom(
+                        offer.amount,
+                        offer.market.baseDecimals
+                      )}
+                      <USDAmountToolTip v={offer.amountUsd} />
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Expires In`}
                     tip={`When the offer will expire`}
                   >
-                    <span className="text-gray-200">24:00:00:34</span>
+                    <ToolTip
+                      tip={moment(offer.deadline).format(
+                        "DD MMM YYYY, h:mm:ss a"
+                      )}
+                    >
+                      <span className="text-gray-200 flex gap-1 items-center">
+                        <span>{moment(offer.deadline).fromNow()}</span>
+                        <span>
+                          <IconInfoCircle width="15" />
+                        </span>
+                      </span>
+                    </ToolTip>
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
             </ScrollGradientIndicator>
           </div>
         </div>
+
+        {/* Level 2 */}
+        <div className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between">
+          {address && isOfferPending(offer) && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <IconSpinner width="15" className="animate-spin" />{" "}
+              <ToolTip
+                className="flex gap-1 w-full justify-between md:justify-start"
+                tip={
+                  !isOfferer(offer, address)
+                    ? "Accept the offer to start a swap only if you like the terms."
+                    : "Waiting for the liquidity provider to accept your offer."
+                }
+              >
+                <span className="animate-pulse duration-[5000]">
+                  {!isOfferer(offer, address)
+                    ? "Waiting for your acceptance"
+                    : "Waiting for acceptance"}
+                  .
+                </span>
+                <IconInfoCircle width="15" />
+              </ToolTip>
+            </span>
+          )}
+
+          {offer.accepted && !offer.cancelled && !isOfferExpired(offer) && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <IconSpinner width="15" className="animate-spin" />{" "}
+              <ToolTip
+                className="flex gap-1 w-full justify-between md:justify-start"
+                tip={
+                  !isOfferer(offer, address)
+                    ? "You accepted the offer. Now waiting for the offer creator to execute the offer which will start a new swap."
+                    : "The liquidity provider accepted the offer. You can now execute the offer to start a swap."
+                }
+              >
+                <span className="animate-pulse duration-[5000]">
+                  {!isOfferer(offer, address)
+                    ? "Waiting for offer execution"
+                    : "Waiting for you to execute the offer"}
+                  .
+                </span>
+                <IconInfoCircle width="15" />
+              </ToolTip>
+            </span>
+          )}
+
+          {offer.cancelled && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <XCircle width="15" />{" "}
+              <ToolTip
+                className="flex gap-1 w-full justify-between md:justify-start"
+                tip={
+                  !isOfferer(offer, address)
+                    ? "The offer creator cancelled the offer."
+                    : "You cancelled the offer."
+                }
+              >
+                <span className="duration-[5000]">
+                  {!isOfferer(offer, address)
+                    ? "Offer was cancelled"
+                    : "You cancelled the offer"}
+                  .
+                </span>
+                <IconInfoCircle width="15" />
+              </ToolTip>
+            </span>
+          )}
+
+          {offer.executed && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <CheckCircle width="15" />{" "}
+              <ToolTip
+                className="flex gap-1 w-full justify-between md:justify-start"
+                tip={
+                  !isOfferer(offer, address)
+                    ? "The offer creator executed the offer. A new swap has been created."
+                    : "You executed the offer. A new swap has been created."
+                }
+              >
+                <span className="duration-[5000]">
+                  {!isOfferer(offer, address)
+                    ? "Offer was executed"
+                    : "You executed the offer"}
+                  .
+                </span>
+                <IconInfoCircle width="15" />
+              </ToolTip>
+            </span>
+          )}
+
+          {isOfferExpired(offer) && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <LucideTimerOff width="15" />{" "}
+              <ToolTip
+                className="flex gap-1 w-full justify-between md:justify-start"
+                tip={"The offer expired"}
+              >
+                <span className="duration-[5000]">
+                  The offer exceeded the deadline.
+                </span>
+                <IconInfoCircle width="15" />
+              </ToolTip>
+            </span>
+          )}
+
+          <span
+            data-click-trigger="1"
+            className="flex py-1 text-[12px] text-gray-400 gap-1 items-center tracking-wide font-light"
+          >
+            <span className="text-gray-500">
+              <ToolTip
+                tip={"Updated: " + moment(offer.updatedAt).fromNow()}
+                className="flex gap-1 items-center"
+              >
+                <span>
+                  <TimerIcon />
+                </span>
+                <span>
+                  {moment(offer.updatedAt)
+                    .format("DD MMM YYYY, h:mm:ss a")
+                    .toUpperCase()}
+                </span>
+              </ToolTip>
+            </span>
+          </span>
+        </div>
+
+        {/* Level 3 */}
         <div className="flex justify-between border-t border-card-border">
           <div
             data-click-trigger="1"
-            className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
+            className="flex items-center w-full gap-2 px-1 overflow-hidden pr-1"
           >
-            <div className="text-xs text-gray-500 tracking-wide font-light">
-              <span className="flex py-1 text-xs text-gray-500 gap-1 items-center">
-                <TimerIcon /> <span className="text-gray-200">3 days ago</span>
-              </span>
-            </div>
+            {/* offer is pending */}
+            {address && isOfferPending(offer) && (
+              <>
+                {!isOfferer(offer, address) && (
+                  <Button
+                    size="sm"
+                    rounded="lg"
+                    className="rounded-tl-none text-xs md:text-sm"
+                    scale="sm"
+                    disabled={disableButtons.accept}
+                  >
+                    Accept{" "}
+                    <CountDown
+                      isoDate={offer.deadline}
+                      onDone={() => {
+                        setDisableButtons({ ...disableButtons, accept: true });
+                      }}
+                    />
+                  </Button>
+                )}
+                {isOfferer(offer, address) && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    rounded="lg"
+                    className="text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
+                    scale="sm"
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </>
+            )}
+
+            {/* offer is accepted */}
+            {offer.accepted && !offer.cancelled && !isOfferExpired(offer) && (
+              <>
+                {!isOfferer(offer, address) && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    rounded="lg"
+                    className="text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
+                    scale="sm"
+                  >
+                    Unaccept
+                  </Button>
+                )}
+                {isOfferer(offer, address) && (
+                  <div className="flex gap-1">
+                    <Button
+                      size="sm"
+                      rounded="lg"
+                      className="rounded-tl-none text-xs md:text-sm"
+                      scale="sm"
+                      disabled={disableButtons.execute}
+                    >
+                      Execute{" "}
+                      <CountDown
+                        isoDate={offer.deadline}
+                        onDone={() => {
+                          setDisableButtons({
+                            ...disableButtons,
+                            accept: true,
+                          });
+                        }}
+                      />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      rounded="lg"
+                      className="text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
+                      scale="sm"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
+
           <div
             data-click-trigger="1"
             className="flex items-center border-l border-gray-800 shrink-0 px-2"
           >
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
+            <span className="hidden md:inline border-r border-gray-800 shrink-0">
               <Button
                 variant="link"
                 rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
-                <Play width="20px" /> Execute
+                View Swap
               </Button>
             </span>
-
+            <span className="hidden md:inline border-r border-gray-800 shrink-0">
+              <Button
+                variant="link"
+                rounded="none"
+                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+              >
+                View Liquidity
+              </Button>
+            </span>
             <span className="hidden lg:inline border-r border-gray-800 shrink-0">
+              <Button
+                variant="link"
+                rounded="none"
+                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+              >
+                View Market
+              </Button>
+            </span>
+            <span className="border-gray-800 shrink-0">
               <Button
                 variant="link"
                 rounded="none"
                 className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
-                <MessageCircle width="20px" /> Messages{" "}
+                <MessageCircle width="20px" />{" "}
+                <span className="hidden md:inline">Message</span>
+                <span className="hidden xs:inline md:hidden">Chat </span>
                 <div className="rounded-full h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center bg-red-600 text-[10px] text-white">
                   2
                 </div>
@@ -166,11 +532,14 @@ export function OfferRow({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem className="flex gap-2">
-                    <IconCoinStack width="20px" /> View Liquidity
+                  <DropdownMenuItem className="flex md:hidden gap-2">
+                    View Swap
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="flex md:hidden gap-2">
+                    View Liquidity
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex gap-2">
-                    <IconMarket width="20px" /> View Market
+                    View Market
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

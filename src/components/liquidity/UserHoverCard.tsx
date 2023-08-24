@@ -20,6 +20,7 @@ import {
   shortenAddress,
 } from "../../libs/helpers.ts";
 import moment from "moment";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export function UserHoverCard({
   children,
@@ -56,10 +57,12 @@ export function UserHoverCard({
                 <div className="flex items-center gap-1">
                   <span>{shortenAddress(user?.address)}</span>
                   <span>
-                    <IconCopyFilled
-                      width="13px"
-                      className="text-gray-400 cursor-pointer hover:text-chinese-green transition-all duration-300 active:scale-90"
-                    />
+                    <CopyToClipboard text={user?.address}>
+                      <IconCopyFilled
+                        width="13px"
+                        className="text-gray-400 cursor-pointer hover:text-chinese-green transition-all duration-300 active:scale-90"
+                      />
+                    </CopyToClipboard>
                   </span>
                 </div>
                 {isMerchant(user?.badges || []) && (
