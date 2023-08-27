@@ -50,10 +50,8 @@ export function handleAxiosError(error: {
   } else if (error.request) {
     return new RequestError(500, "request error");
   } else {
-    return new RequestError(
-      500,
-      "network error: check your internet connection"
-    );
+    console.error(error);
+    return new RequestError(500, "something went wrong");
   }
 }
 

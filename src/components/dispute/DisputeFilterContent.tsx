@@ -1,12 +1,13 @@
 import { useQuery } from "../../hooks/useQuery.ts";
 import { useNavigate } from "react-router-dom";
-import useStore, { LiquidityFilter } from "../../hooks/store/useStore.ts";
+import useStore, { DisputeFilter } from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
-import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
+import { rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { Accordion } from "../ui/accordion.tsx";
 import { FilterItem } from "../FilterItem.tsx";
 import { Input } from "../ui/Input.tsx";
-import { cn } from "../../libs/utils.ts";
+import { Button } from "../ui/Button.tsx";
+import { CalendarInput } from "../swap/CalendarInput.tsx";
 import {
   Select,
   SelectContent,
@@ -14,176 +15,98 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select.tsx";
-import { validators } from "tailwind-merge";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group.tsx";
-import { ToolTip } from "../ToolTip.tsx";
-import { Label } from "../ui/label.tsx";
-import { Button } from "../ui/Button.tsx";
-
-interface Errors {
-  price?: string;
-  liquidity?: string;
-}
+import moment from "moment/moment";
 
 interface Values {
-  base?: string;
-  quote?: string;
   market?: string;
-  price_cur?: string;
-  price?: string;
-  price_lte?: string;
-  amt_cur?: string;
-  amt?: string;
-  amt_lte?: string;
-  provider?: string;
-  kyc_lp?: string;
-  kyc_taker?: string;
-  swap_badges?: string;
+  creator?: string;
+  order?: string;
+  dispute?: string;
+  status?: string;
+  from_date?: string;
+  to_date?: string;
 }
 
-export function DisputeFilterContent({ ownerMode }: { ownerMode?: boolean }) {
+export function DisputeFilterContent() {
   const query = useQuery();
   const navigate = useNavigate();
-  const { setLiquidityFilter, liquidityFilter } = useStore((state) => ({
-    setLiquidityFilter: state.setLiquidityFilter,
-    liquidityFilter: state.liquidityFilter,
+  const { setDisputeFilter, disputeFilter } = useStore((state) => ({
+    setDisputeFilter: state.setDisputeFilter,
+    disputeFilter: state.disputeFilter,
   }));
-  const [values, setValues] = useState<Values>({});
-  const [errors, setErrors] = useState<Errors>({});
+  const [values, setValues] = useState<Values>({
+    order: "",
+  });
 
   // Load filter fields default values from market filter in store
   useEffect(() => {
-    if (Object.keys(liquidityFilter).length === 0) return;
+    if (Object.keys(disputeFilter).length === 0) return;
 
     let update = { ...values };
 
-    if (liquidityFilter.priceUsd) {
-      const op = liquidityFilter.priceUsd.startsWith(">") ? ">" : "<";
-      const price = liquidityFilter.priceUsd.replace(">", "").replace("<", "");
-      update = {
-        ...update,
-        price_cur: "USD",
-        price: price,
-        price_lte: op == "<" ? "lower" : "higher",
-      };
-    } else {
-      update = {
-        ...update,
-        price_cur: "USD",
-        price: "",
-        price_lte: "lower",
-      };
-    }
-
-    if (liquidityFilter.amountUsd) {
-      const op = liquidityFilter.amountUsd.startsWith(">") ? ">" : "<";
-      const liq = liquidityFilter.amountUsd.replace(">", "").replace("<", "");
-      update = {
-        ...update,
-        amt_cur: "USD",
-        amt: liq,
-        amt_lte: op == "<" ? "lower" : "higher",
-      };
-    } else {
-      update = {
-        ...update,
-        amt_cur: "USD",
-        amt: "",
-        amt_lte: "lower",
-      };
-    }
-
     update = {
       ...update,
-      base: liquidityFilter?.base || "",
-      quote: liquidityFilter?.quote || "",
-      kyc_lp: liquidityFilter?.kycLp?.toString() || "",
-      kyc_taker: liquidityFilter?.kycTaker?.toString() || "",
-      provider: liquidityFilter?.provider?.toString() || "",
-      market: liquidityFilter?.market || "",
-      swap_badges: liquidityFilter?.swapBadges || "",
+      market: disputeFilter?.marketAddress || "",
+      creator: disputeFilter?.creator || "",
+      order: disputeFilter?.orderId?.toString() || "",
+      dispute: disputeFilter?.disputeId?.toString() || "",
+      status: disputeFilter?.status || "",
+      from_date: disputeFilter?.fromDate
+        ? moment(disputeFilter.fromDate).toDate().toLocaleDateString("en-US")
+        : "",
+      to_date: disputeFilter?.toDate
+        ? moment(disputeFilter.toDate).toDate().toLocaleDateString("en-US")
+        : "",
     };
 
     setValues(update);
-  }, [liquidityFilter]);
+  }, [disputeFilter]);
 
   // Build filter from query params
   useEffect(() => {
-    const filter: Partial<LiquidityFilter> = {};
-
-    const priceCur = query.get("price_cur") || "USD";
-    const price = query.get("price");
-    const priceLTE = query.get("price_lte") || "lower";
-    if (price && priceCur == "USD") {
-      filter.priceUsd = price;
-      const op = priceLTE == "lower" ? "<" : ">";
-      filter.priceUsd = op + filter.priceUsd;
-    } else filter.priceUsd = undefined;
-
-    const amtCur = query.get("amt_cur") || "USD";
-    const amt = query.get("amt");
-    const liqLTE = query.get("amt_lte") || "lower";
-    if (amt && amtCur == "USD") {
-      filter.amountUsd = amt;
-      const op = liqLTE == "lower" ? "<" : ">";
-      filter.amountUsd = op + filter.amountUsd;
-    } else filter.amountUsd = undefined;
-
-    filter.kycLp = query.get("kyc_lp")
-      ? isTrue(query.get("kyc_lp") as string)
+    const filter: Partial<DisputeFilter> = {};
+    filter.marketAddress = query.get("market") as string;
+    filter.creator = query.get("creator") as string;
+    filter.orderId = query.get("order")
+      ? parseInt(query.get("order") || "")
       : undefined;
-
-    filter.kycTaker = query.get("kyc_taker")
-      ? isTrue(query.get("kyc_taker") as string)
+    filter.disputeId = query.get("dispute")
+      ? parseInt(query.get("dispute") || "")
       : undefined;
+    filter.status = query.get("status") as string;
+    filter.fromDate = moment(
+      query.get("from_date") as string,
+      "MM/DD/YYYY"
+    ).toISOString();
+    filter.toDate = moment(
+      query.get("to_date") as string,
+      "MM/DD/YYYY"
+    ).toISOString();
 
-    filter.market = query.get("market") as string;
-
-    filter.provider = query.get("creator") as string;
-
-    filter.swapBadges = query.get("swap_badges") as string;
-
-    filter.base = query.get("base") as string;
-
-    filter.quote = query.get("quote") as string;
-
-    setLiquidityFilter && setLiquidityFilter(filter);
-  }, [query, setLiquidityFilter]);
+    setDisputeFilter && setDisputeFilter(filter);
+  }, [query, setDisputeFilter]);
 
   return (
     <div>
       <Accordion type="multiple">
         <FilterItem
-          title="Base"
-          tip="Find liquidities matching the base token address or symbol"
+          title="By Creator"
+          tip="Find disputes created by an address"
         >
           <Input
             type="text"
             placeholder="e.g. 0x0..."
             className="pl-2"
-            value={values.base || ""}
+            value={values.creator || ""}
             onChange={(e) => {
-              setValues({ ...values, base: e.target.value });
+              setValues({ ...values, creator: e.target.value });
             }}
           />
         </FilterItem>
-        <FilterItem
-          title="Quote"
-          tip="Find liquidities matching the quote token address or symbol"
-        >
-          <Input
-            type="text"
-            placeholder="e.g. 0x0..."
-            className="pl-2"
-            value={values.quote || ""}
-            onChange={(e) => {
-              setValues({ ...values, quote: e.target.value });
-            }}
-          />
-        </FilterItem>
+
         <FilterItem
           title="By Market ID"
-          tip="Find a market by its address or ID"
+          tip="Find disputes by their market address or ID"
         >
           <Input
             type="text"
@@ -196,235 +119,103 @@ export function DisputeFilterContent({ ownerMode }: { ownerMode?: boolean }) {
           />
         </FilterItem>
 
-        <FilterItem
-          title="By Creator"
-          tip="Find a market by its creator's address"
-          className={cn({ hidden: ownerMode })}
-        >
+        <FilterItem title="By Order ID" tip="Find disputes by their order ID">
           <Input
-            type="text"
-            placeholder="e.g. 0x0..."
-            className="pl-2"
-            value={values.provider || ""}
+            type="number"
+            placeholder="e.g. 1234"
+            className="pl-2 !w-6/12"
+            value={values.order}
             onChange={(e) => {
-              setValues({ ...values, provider: e.target.value });
+              setValues({
+                ...values,
+                order: e.target.value,
+              });
             }}
           />
         </FilterItem>
+
+        <FilterItem title="By Dispute ID" tip="Find a dispute by its ID">
+          <Input
+            type="number"
+            placeholder="e.g. 323"
+            className="pl-2 !w-6/12"
+            value={values.dispute}
+            onChange={(e) => {
+              setValues({
+                ...values,
+                dispute: e.target.value,
+              });
+            }}
+          />
+        </FilterItem>
+
         <FilterItem
-          title="Quote Price"
-          tip="Filter by price (QUOTE)"
-          error={errors.price}
-          className={cn({ hidden: !values.market })}
+          title="Status"
+          tip="Find disputes based on their current status"
         >
-          <div className="mr-1">
+          <div className="mr-1 w-full">
             <Select
-              value={values.price_cur || "USD"}
-              onValueChange={(cur) => {
-                setValues({ ...values, price_cur: cur });
+              value={values.status || ""}
+              onValueChange={(val) => {
+                setValues({ ...values, status: val });
               }}
             >
-              <SelectTrigger className="hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
-                <SelectValue placeholder="$" />
+              <SelectTrigger className="!w-6/12 transition-all duration-500 hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
+                <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="USD">$</SelectItem>
+                <SelectItem value="">All</SelectItem>
+                <SelectItem value="draft">Draft Phase</SelectItem>
+                <SelectItem value="undraft">Undraft Phase</SelectItem>
+                <SelectItem value="evidence">Evidence Phase</SelectItem>
+                <SelectItem value="commit">Commit Phase</SelectItem>
+                <SelectItem value="reveal">Reveal Phase</SelectItem>
+                <SelectItem value="released">Released</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="stalled">Stalled</SelectItem>
+                <SelectItem value="redispute">Redisputed</SelectItem>
+                <SelectItem value="executed">Executed</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="">
-            <Input
-              placeholder="0.00"
-              className="w-[100px] px-2 hover:border-chinese-green "
-              value={values.price || ""}
-              onChange={(e) => {
-                setValues({ ...values, price: e.target.value });
-                if (validators.isNumber(e.target.value)) {
-                  setErrors({ price: "" });
-                } else {
-                  setErrors({ price: "Amount must be a number" });
+        </FilterItem>
+
+        <FilterItem
+          title="Date Range"
+          tip="Find disputes created within a certain date range"
+        >
+          <div className="flex w-full gap-3">
+            <div className="flex flex-1 flex-col gap-2 tracking-wide">
+              <div className="text-xs text-gray-400 font-light">From Date:</div>
+              <CalendarInput
+                className="w-full"
+                defaultValue={
+                  values.from_date ? new Date(values.from_date) : undefined
                 }
-              }}
-            />
-          </div>
-          <div className="flex-1 px-3 flex">
-            <RadioGroup
-              className="flex flex-1 items-center gap-3"
-              value={values.price_lte}
-              onValueChange={(value) => {
-                setValues({
-                  ...values,
-                  price_lte: value,
-                });
-              }}
-            >
-              <ToolTip tip={"Less than or equal to the amount"}>
-                <span className="flex items-center gap-2">
-                  <RadioGroupItem value="lower" id="lower" />
-                  <Label htmlFor="lower" className="font-light tracking-wider">
-                    {"<="}
-                  </Label>
-                </span>
-              </ToolTip>
-              <ToolTip tip={"Greater than or equal to the amount"}>
-                <span className="flex items-center gap-2">
-                  {" "}
-                  <RadioGroupItem value="higher" id="higher" />
-                  <Label htmlFor="higher" className="font-light tracking-wider">
-                    {">="}
-                  </Label>
-                </span>
-              </ToolTip>
-            </RadioGroup>
-          </div>
-        </FilterItem>
-
-        <FilterItem
-          title="Available Liquidity"
-          tip="Find markets with certain amount of available liquidity"
-          error={errors.liquidity}
-          className={cn({ hidden: !values.market })}
-        >
-          <div className="mr-1">
-            <Select
-              value={values.amt_cur || "USD"}
-              onValueChange={(cur) => {
-                setValues({ ...values, amt_cur: cur });
-              }}
-            >
-              <SelectTrigger className="hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
-                <SelectValue placeholder="$" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="USD">$</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Input
-              className="w-[121px] px-2 hover:border-chinese-green"
-              placeholder="0.00"
-              value={values.amt || ""}
-              onChange={(e) => {
-                setValues({ ...values, amt: e.target.value });
-                if (validators.isNumber(e.target.value)) {
-                  setErrors({ liquidity: "" });
-                } else {
-                  setErrors({ liquidity: "Amount must be a number" });
+                onSelect={(date) => {
+                  setValues({
+                    ...values,
+                    from_date: date.toLocaleDateString("en-US"),
+                  });
+                }}
+              />
+            </div>
+            <div className="flex flex-1 flex-col gap-2 tracking-wide">
+              <div className="text-xs text-gray-400 font-light">To Date:</div>
+              <CalendarInput
+                className="w-full"
+                defaultValue={
+                  values.to_date ? new Date(values.to_date) : undefined
                 }
-              }}
-            />
+                onSelect={(date) => {
+                  setValues({
+                    ...values,
+                    to_date: date.toLocaleDateString("en-US"),
+                  });
+                }}
+              />
+            </div>
           </div>
-          <div className="flex-1 px-3 flex">
-            <RadioGroup
-              className="flex flex-1 items-center gap-3"
-              value={values.amt_lte}
-              onValueChange={(value) => {
-                setValues({
-                  ...values,
-                  amt_lte: value,
-                });
-              }}
-            >
-              <ToolTip tip={"Less than or equal to the amount"}>
-                <span className="flex items-center gap-2">
-                  <RadioGroupItem value="lower" id="lower" />
-                  <Label htmlFor="lower" className="font-light tracking-wider">
-                    {"<="}
-                  </Label>
-                </span>
-              </ToolTip>
-              <ToolTip tip={"Greater than or equal to the amount"}>
-                <span className="flex items-center gap-2">
-                  {" "}
-                  <RadioGroupItem value="higher" id="higher" />
-                  <Label htmlFor="higher" className="font-light tracking-wider">
-                    {">="}
-                  </Label>
-                </span>
-              </ToolTip>
-            </RadioGroup>
-          </div>
-        </FilterItem>
-
-        <FilterItem
-          title="Doxxed LP"
-          tip="Find markets where liquidity providers have completed KYC"
-          className={cn({ hidden: ownerMode })}
-        >
-          <RadioGroup
-            value={values.kyc_lp || "false"}
-            className="flex flex-1 gap-3"
-            onValueChange={(value) => {
-              setValues({
-                ...values,
-                kyc_lp: (value === "true").toString(),
-              });
-            }}
-          >
-            <span className="flex items-center gap-2">
-              <RadioGroupItem value="false" id="no" />
-              <Label htmlFor="all" className="font-light tracking-wider">
-                No
-              </Label>
-            </span>
-            <span className="flex items-center gap-2">
-              {" "}
-              <RadioGroupItem value="true" id="yes" />
-              <Label htmlFor="yes" className="font-light tracking-wider">
-                Yes
-              </Label>
-            </span>
-          </RadioGroup>
-        </FilterItem>
-
-        <FilterItem
-          title="Doxxed Takers"
-          tip="Find markets where takers have completed KYC"
-          className={cn({ hidden: ownerMode })}
-        >
-          <RadioGroup
-            value={values.kyc_taker || "false"}
-            className="flex flex-1 gap-3"
-            onValueChange={(value) => {
-              setValues({
-                ...values,
-                kyc_taker: (value === "true").toString(),
-              });
-            }}
-          >
-            <span className="flex items-center gap-2">
-              <RadioGroupItem value="false" id="no" />
-              <Label htmlFor="all" className="font-light tracking-wider">
-                No
-              </Label>
-            </span>
-            <span className="flex items-center gap-2">
-              {" "}
-              <RadioGroupItem value="true" id="yes" />
-              <Label htmlFor="yes" className="font-light tracking-wider">
-                Yes
-              </Label>
-            </span>
-          </RadioGroup>
-        </FilterItem>
-
-        <FilterItem
-          title="SWAP Badges"
-          className="border-none"
-          tip="Find markets that require takers to have one or more badges"
-        >
-          <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
-            <Input
-              type="text"
-              placeholder="e.g kyc, bitcoiner"
-              className="pl-2"
-              value={values.swap_badges || ""}
-              onChange={(e) => {
-                setValues({ ...values, swap_badges: e.target.value });
-              }}
-            />
-          </RadioGroup>
         </FilterItem>
       </Accordion>
       <div className="px-5 py-5">
@@ -432,18 +223,8 @@ export function DisputeFilterContent({ ownerMode }: { ownerMode?: boolean }) {
           size="full"
           onClick={() => {
             const cloned = { ...values };
-            if (!cloned.price) {
-              delete cloned.price_lte;
-              delete cloned.price_cur;
-            }
-
-            if (!cloned.amt) {
-              delete cloned.amt_lte;
-              delete cloned.amt_cur;
-            }
-
             navigate({
-              pathname: "/liquidity/owned",
+              pathname: "/disputes",
               search: new URLSearchParams(
                 rmUndefinedAndNull(cloned, true)
               ).toString(),
