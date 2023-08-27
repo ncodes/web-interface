@@ -64,6 +64,18 @@ export interface OfferFilter {
   toDate?: string;
 }
 
+export interface DisputeFilter {
+  marketAddress?: string;
+  participant?: string;
+  creator?: string;
+  defendant?: string;
+  orderId?: number;
+  disputeId?: number;
+  status?: string;
+  fromDate?: string;
+  toDate?: string;
+}
+
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -93,12 +105,17 @@ export interface IStore {
   liquidityFilter: LiquidityFilter;
   setLiquidityFilter: (filter: Partial<LiquidityFilter>) => void;
 
-  // SwapFilter filter
+  // Swap filter
   swapFilter: SwapFilter;
   setSwapFilter: (filter: Partial<SwapFilter>) => void;
 
+  // Offer filter
   offerFilter: OfferFilter;
   setOfferFilter: (filter: Partial<OfferFilter>) => void;
+
+  // Dispute filter
+  disputeFilter: DisputeFilter;
+  setDisputeFilter: (filter: Partial<DisputeFilter>) => void;
 }
 
 const useStore = create<IStore>((set) => ({
@@ -167,6 +184,16 @@ const useStore = create<IStore>((set) => ({
     set((state) => ({
       offerFilter: {
         ...state.offerFilter,
+        ...filter,
+      },
+    }));
+  },
+
+  disputeFilter: {},
+  setDisputeFilter: (filter: Partial<DisputeFilter>) => {
+    set((state) => ({
+      disputeFilter: {
+        ...state.disputeFilter,
         ...filter,
       },
     }));

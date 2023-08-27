@@ -32,6 +32,7 @@ export function useUserService() {
 
       const resp = await axios({
         method: "get",
+        params: { no404: true },
         url: `${import.meta.env.VITE_API_URI}/v1/users/${params.address}`,
         headers,
       });

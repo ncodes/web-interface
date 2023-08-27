@@ -5,10 +5,12 @@ export function CountDown({
   isoDate,
   onDone,
   prefix,
+  full,
 }: {
   isoDate: string;
   onDone?: () => void;
   prefix?: string;
+  full?: boolean;
 }) {
   const [timeLeft, setTimeLeft] = useState<number>();
 
@@ -44,6 +46,20 @@ export function CountDown({
     const seconds = timeLeft - minutes * 60;
     return `(${prefix || ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds})`;
   }
+
+  // render for hours, minutes, seconds
+  function renderFullTimeLeft() {
+    if (!timeLeft) return "";
+    const hours = Math.floor(timeLeft / 3600);
+    const minutes = Math.floor((timeLeft - hours * 3600) / 60);
+    const seconds = timeLeft - hours * 3600 - minutes * 60;
+    return `${prefix || ""}${hours < 10 ? "0" : ""}${hours}:${
+      minutes < 10 ? "0" : ""
+    }${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  }
+
+  if (full)
+    return <>{timeLeft != undefined && timeLeft > 0 && renderFullTimeLeft()}</>;
 
   return <>{timeLeft != undefined && timeLeft > 0 && renderTimeLeft()}</>;
 }

@@ -8,13 +8,15 @@ import {
 import { cn } from "../libs/utils.ts";
 
 export function ToolTip(props: {
-  tip: React.ReactNode;
+  tip?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   className2?: string;
   side?: "top" | "bottom" | "left" | "right";
 }) {
   const [open, setOpen] = useState(false);
+
+  if (!props.tip) return <>{props.children}</>;
 
   return (
     <TooltipProvider>

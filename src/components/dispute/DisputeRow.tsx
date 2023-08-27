@@ -9,20 +9,52 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
 import { cn } from "../../libs/utils.ts";
-import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
-import IconStatus from "../icons/IconStatus.tsx";
-import IconCoinStack from "../icons/IconCoinStack.tsx";
-import { IconMarket } from "../icons/IconMarket.tsx";
+import {
+  DotsVerticalIcon,
+  LockOpen1Icon,
+  TimerIcon,
+} from "@radix-ui/react-icons";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { TicketIcon } from "lucide-react";
-import { IconExchange } from "../icons/IconExchange.tsx";
+import {
+  CheckCircle,
+  FileLock,
+  FilePlus,
+  FileQuestion,
+  Gavel,
+  UserPlus2,
+  XCircle,
+} from "lucide-react";
 import { StatCard } from "../market/StatCard.tsx";
 import { UserHoverCard } from "../liquidity/UserHoverCard.tsx";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { useQuery } from "@tanstack/react-query";
+import { ToolTip } from "../ToolTip.tsx";
+import moment from "moment/moment";
+import {
+  getDisputeOutcome,
+  getDisputeStatus,
+  isDisputeDraftee,
+} from "../../libs/api_utils.ts";
+import useConnector from "../../hooks/connectors/useConnector.tsx";
+import {
+  DisputeStatusBadge,
+  DisputeTipAbandoned,
+  DisputeTipAwaitExec,
+  DisputeTipCancelled,
+  DisputeTipCommit,
+  DisputeTipDraft,
+  DisputeTipEvidence,
+  DisputeTipReleased,
+  DisputeTipReveal,
+  DisputeTipStalled,
+} from "./DisputeStatusBadge.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { CountDown } from "../Countdown.tsx";
 
-interface Dispute {
-  creator: string;
-  defendant: string;
+interface ButtonEnableState {
+  commit: boolean;
+  reveal: boolean;
 }
 
 export function DisputeRow({
@@ -34,7 +66,23 @@ export function DisputeRow({
   noFocus?: boolean;
   className?: string;
 }) {
+  const { address } = useConnector();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const { getUser } = useUserService();
+  const getDefendant = useQuery({
+    queryKey: ["getUser", { address: dispute.defendant, noAuth: true }],
+    queryFn: getUser,
+    enabled: !!dispute.defendant,
+  });
+  const getCreator = useQuery({
+    queryKey: ["getUser", { address: dispute.creator, noAuth: true }],
+    queryFn: getUser,
+    enabled: !!dispute.creator,
+  });
+  const [enableButtons, setEnableButtons] = useState<ButtonEnableState>({
+    commit: false,
+    reveal: false,
+  });
 
   return (
     <div
@@ -56,21 +104,22 @@ export function DisputeRow({
           className
         )}
       >
+        {/* Level 1 */}
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
           <div
             data-click-trigger="1"
-            className="flex gap-2 p-5 px-3 md:px-5 py-0 items-center shrink-0 md:border-r border-gray-800"
+            className="flex gap-2 p-5 px-3 md:px-3 py-0 items-center shrink-0 md:border-r border-gray-800"
           >
-            <div className="flex w-full items-center gap-2 md:gap-1 md:px-0 md:py-4 pt-2 md:pt-4">
+            <div className="flex w-full items-center gap-2 md:gap-2 md:px-0 md:py-2 pt-2 md:pt-2">
               <div className="flex ">
-                <UserHoverCard>
+                <UserHoverCard user={getCreator?.data as User}>
                   <EmojiAvatar
                     size={AvatarSize.Small}
                     randomStr={dispute.creator}
                   />
                 </UserHoverCard>
                 <span className="-ml-1">
-                  <UserHoverCard>
+                  <UserHoverCard user={getDefendant?.data as User}>
                     <EmojiAvatar
                       size={AvatarSize.Small}
                       randomStr={dispute.defendant}
@@ -78,17 +127,14 @@ export function DisputeRow({
                   </UserHoverCard>
                 </span>
               </div>
-              <div className="flex md:flex-col w-full justify-between md:justify-start">
+              <div className="flex md:flex-col text-sm gap-1 w-full justify-between md:justify-start">
                 <span>
-                  {dispute.creator.substring(0, 6)} vs{" "}
+                  {dispute.creator.substring(0, 6)}{" "}
+                  <span className="text-gray-400">vs</span>{" "}
                   {dispute.defendant.substring(0, 6)}
                 </span>
-                <span className="flex items-center gap-1 text-xs font-light tracking-wider">
-                  <span className="text-gray-300">
-                    <IconStatus width="12px" />
-                  </span>
-                  <span>Drafting</span>
-                </span>
+                {/* STATUS */}
+                <DisputeStatusBadge address={address} dispute={dispute} />
               </div>
             </div>
           </div>
@@ -105,79 +151,360 @@ export function DisputeRow({
                     tip={`The total number of mediators required for this dispute`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">3</span>
+                    <span className="text-gray-200">
+                      {dispute.numMediators}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`No. Drafted`}
                     tip={`The number of mediators that have drafted the dispute`}
-                    width="w-[80px]"
+                    width="min-w-[120px]"
                   >
-                    <span className="text-gray-200">2</span>
+                    <span className="text-gray-200">
+                      {dispute.numMediatorsDrafted}
+                    </span>
                   </StatCard>
                   <StatCard
-                    title={`Prayer`}
+                    title={`Disputer Request`}
                     tip={`The outcome the dispute creator is seeking (release or cancel)`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">Release</span>
+                    <span className="text-gray-200">
+                      {dispute.wantRelease ? "RELEASE" : "CANCEL"}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Current Phase`}
                     tip={`The current phase of the dispute`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">Drafting</span>
+                    <span className="text-gray-200">
+                      {getDisputeStatus(dispute) == "draft" && <>Drafting</>}
+                      {getDisputeStatus(dispute) == "evidence" && <>Evidence</>}
+                      {getDisputeStatus(dispute) == "commit" && <>Commit</>}
+                      {getDisputeStatus(dispute) == "reveal" && <>Reveal</>}
+                      {getDisputeStatus(dispute) == "awaiting_exec" && (
+                        <>Execution</>
+                      )}
+                      {getDisputeStatus(dispute) == "executed" && <>-</>}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Next Phase`}
                     tip={`The next phase of the dispute`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200 ">Evidence Phase</span>
+                    <span className="text-gray-200">
+                      {getDisputeStatus(dispute) == "draft" && <>Evidence</>}
+                      {getDisputeStatus(dispute) == "evidence" && <>Commit</>}
+                      {getDisputeStatus(dispute) == "commit" && <>Reveal</>}
+                      {getDisputeStatus(dispute) == "reveal" && <>Execution</>}
+                      {getDisputeStatus(dispute) == "awaiting_exec" && <>-</>}
+                      {getDisputeStatus(dispute) == "executed" && <>-</>}
+                    </span>
                   </StatCard>
                   <StatCard
-                    title={`Evidence Phase`}
-                    tip={`The outcome the dispute creator is seeking (release or cancel)`}
+                    title={`Next Phase In`}
+                    tip={`The countdown to the next phase of the dispute`}
                     width="w-[150px]"
                   >
-                    72:00:00
+                    {getDisputeStatus(dispute) == "draft" && <span>-</span>}
+                    {getDisputeStatus(dispute) == "evidence" && (
+                      <span>
+                        <CountDown isoDate={dispute.evidenceEndAt} full />
+                      </span>
+                    )}
+                    {getDisputeStatus(dispute) == "commit" && (
+                      <span>
+                        <CountDown isoDate={dispute.commitEndAt} full />
+                      </span>
+                    )}
+                    {getDisputeStatus(dispute) == "reveal" && (
+                      <span>
+                        <CountDown isoDate={dispute.revealEndAt} full />
+                      </span>
+                    )}
+                    {["awaiting_exec", "executed"].includes(
+                      getDisputeStatus(dispute) || ""
+                    ) && <span className="text-gray-200">-</span>}
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
             </ScrollGradientIndicator>
           </div>
         </div>
-        <div className="flex justify-between border-t border-card-border">
-          <div
+
+        {/* Level 2 */}
+        <div className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between">
+          {address && getDisputeStatus(dispute) == "abandoned" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <CheckCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={
+                  <DisputeTipAbandoned dispute={dispute} address={address} />
+                }
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>Swap released by counterpart.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "released" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <CheckCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={<DisputeTipReleased />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>Swap released by mediators.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "cancelled" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <XCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={<DisputeTipCancelled />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>Swap was cancelled by mediators.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "stalled" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <FileQuestion width="15" className="" />{" "}
+              <ToolTip
+                tip={<DisputeTipStalled dispute={dispute} address={address} />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>No verdict reached. Start new dispute.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "draft" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <UserPlus2 width="15" className="" />{" "}
+              <ToolTip
+                tip={<DisputeTipDraft dispute={dispute} />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>Mediators are being drafted</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "evidence" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <FilePlus width="15" className="" />{" "}
+              <ToolTip
+                tip={<DisputeTipEvidence dispute={dispute} address={address} />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                {isDisputeDraftee(dispute, address) ? (
+                  <span>Ask swap counterparts for evidence</span>
+                ) : (
+                  <span>Send evidence to mediators</span>
+                )}
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "commit" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <FileLock width="15" className="" />{" "}
+              <ToolTip
+                tip={<DisputeTipCommit dispute={dispute} address={address} />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                {isDisputeDraftee(dispute, address) ? (
+                  <span>Time to issue your verdict</span>
+                ) : (
+                  <span>Time for mediators to submit their decision</span>
+                )}
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "reveal" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <LockOpen1Icon width="15" className="" />{" "}
+              <ToolTip
+                tip={<DisputeTipReveal dispute={dispute} address={address} />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                {isDisputeDraftee(dispute, address) ? (
+                  <span>Reveal your verdict</span>
+                ) : (
+                  <span>Time for mediators to reveal their decision</span>
+                )}
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getDisputeStatus(dispute) == "awaiting_exec" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <Gavel width="15" className="" />{" "}
+              <ToolTip
+                tip={
+                  <DisputeTipAwaitExec dispute={dispute} address={address} />
+                }
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>
+                  Awaiting verdict execution (
+                  <span className="font-semibold tracking-wider">
+                    {getDisputeOutcome(dispute).toUpperCase()})
+                  </span>
+                </span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          <span
             data-click-trigger="1"
-            className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
+            className="flex py-1 text-[12px] text-gray-400 gap-1 items-center tracking-wide font-light"
           >
-            <div className="text-xs text-gray-500 tracking-wide font-light">
-              <span className="hidden md:flex py-1 text-xs text-gray-500 gap-1 items-center">
-                <TimerIcon /> <span className="text-gray-200">3 days ago</span>
-              </span>
-            </div>
+            <span className="text-gray-500">
+              <ToolTip
+                tip={moment(dispute.createdAt).fromNow()}
+                className="flex gap-1 items-center"
+              >
+                <span>
+                  <TimerIcon />
+                </span>
+                <span>
+                  {moment(dispute.createdAt)
+                    .format("DD MMM YYYY, h:mm:ss a")
+                    .toUpperCase()}
+                </span>
+              </ToolTip>
+            </span>
+          </span>
+        </div>
+
+        {/* Level 3 */}
+        <div className="flex justify-between border-t border-card-border">
+          <div data-click-trigger="1" className="pt-1 pl-1 flex gap-1">
+            {["evidence", "commit"].includes(getDisputeStatus(dispute) || "") &&
+              isDisputeDraftee(dispute, address) && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  rounded="lg"
+                  className="text-xs md:text-sm"
+                  scale="sm"
+                  disabled={!enableButtons.commit}
+                >
+                  Commit{" "}
+                  <CountDown
+                    isoDate={dispute.evidenceEndAt}
+                    onDone={() => {
+                      setEnableButtons({ ...enableButtons, commit: true });
+                    }}
+                  />
+                  {enableButtons.commit && (
+                    <CountDown
+                      isoDate={dispute.commitEndAt}
+                      onDone={() => {
+                        setEnableButtons({ ...enableButtons, commit: false });
+                      }}
+                    />
+                  )}
+                </Button>
+              )}
+
+            {["commit", "reveal"].includes(getDisputeStatus(dispute) || "") &&
+              isDisputeDraftee(dispute, address) && (
+                <Button
+                  size="sm"
+                  rounded="lg"
+                  className="text-xs md:text-sm"
+                  scale="sm"
+                  disabled={
+                    !enableButtons.reveal &&
+                    getDisputeStatus(dispute) != "reveal"
+                  }
+                >
+                  Reveal{" "}
+                  <CountDown
+                    isoDate={dispute.commitEndAt}
+                    onDone={() => {
+                      setEnableButtons({ ...enableButtons, reveal: true });
+                    }}
+                  />
+                  {enableButtons.reveal && (
+                    <CountDown
+                      isoDate={dispute.revealEndAt}
+                      onDone={() => {
+                        setEnableButtons({ ...enableButtons, reveal: false });
+                      }}
+                    />
+                  )}
+                </Button>
+              )}
           </div>
+
           <div
             data-click-trigger="1"
-            className="flex items-center border-l border-gray-800 shrink-0 px-2"
+            className="flex items-center lg:border-l border-gray-800 shrink-0 px-2"
           >
             <span className="hidden lg:inline border-r border-gray-800 shrink-0">
               <Button
                 variant="link"
                 rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
-                <IconExchange width="20px" /> View Swap
+                View Swap
               </Button>
             </span>
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
+            <span className="hidden lg:inline border-gray-800 shrink-0">
               <Button
                 variant="link"
                 rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
-                <TicketIcon width="20px" /> View Ticket
+                View Ticket
               </Button>
             </span>
 
@@ -199,10 +526,10 @@ export function DisputeRow({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
                   <DropdownMenuItem className="flex gap-2">
-                    <IconCoinStack width="20px" /> View Swap
+                    View Swap
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex gap-2">
-                    <IconMarket width="20px" /> View Ticket
+                    View Ticket
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

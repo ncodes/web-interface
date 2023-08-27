@@ -53,7 +53,6 @@
     "randombytes": "^2.1.0",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
-    "react-countdown": "^2.3.5",
     "react-day-picker": "^8.8.1",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",

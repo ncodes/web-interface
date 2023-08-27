@@ -1,37 +1,34 @@
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../components/ui/Tabs.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
-import { DisputeRow } from "../components/dispute/DisputeRow.tsx";
-import { Paginator } from "../components/Paginator.tsx";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { MyDisputeTabContent } from "../components/dispute/MyDisputeTabContent.tsx";
+import { DisputeFilterSheet } from "../components/dispute/DisputeFilterSheet.tsx";
+import { Footer } from "../components/Footer.tsx";
+import { DisputeFilter } from "../components/dispute/DisputeFilter.tsx";
 
-function DisputesContent() {
-  return (
-    <DisputeRow
-      dispute={{
-        creator: "0x1787BaB2743467E874ee133ADd46884e0A32ccB5",
-        defendant: "0xEB892e4300bA60442e0f5c3605F82002157a488F",
-      }}
-    />
-  );
-}
+function DisputeTabs({ defaultTab }: { defaultTab?: string }) {
+  const navigate = useNavigate();
+  const [currentTab, setCurrentTab] = useState(defaultTab || "my-disputes");
+  const [openFilterSheet, setOpenFilterSheet] = useState(false);
 
-function Page() {
   return (
     <Tabs
-      defaultValue="my-disputes"
+      defaultValue={defaultTab || "my-disputes"}
       className="w-full h-full transition-all duration-500"
+      onValueChange={(value) => {
+        setCurrentTab(value);
+      }}
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
@@ -40,6 +37,9 @@ function Page() {
               <TabsTrigger
                 value="my-disputes"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/disputes");
+                }}
               >
                 Disputes
               </TabsTrigger>
@@ -53,29 +53,45 @@ function Page() {
                 <DotsVerticalIcon />
               </span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0"></DropdownMenuContent>
+            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
+              <DropdownMenuItem
+                className="flex gap-2"
+                onClick={() => {
+                  setOpenFilterSheet(true);
+                }}
+              >
+                <IconFilterOutline /> Filter Disputes
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent value="my-disputes" className="p-0 m-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <DisputesContent />
-        </div>
-      </TabsContent>
+      {currentTab == "my-disputes" && <MyDisputeTabContent />}
+      <DisputeFilterSheet
+        active={openFilterSheet}
+        onOpen={(open) => {
+          setOpenFilterSheet(open);
+        }}
+      />
     </Tabs>
   );
 }
 
 export default function Disputes() {
+  const loc = useLocation();
   return (
     <Layout
-      tab={<Page />}
-      // rightSide={
-      //   <div className="flex flex-col h-full mt-2">
-      //     <div className="text-gray-200">{/*<Footer />*/}</div>
-      //   </div>
-      // }
+      tab={<DisputeTabs />}
+      rightSide={
+        <div className="flex w-full h-full flex-col pt-2">
+          <DisputeFilter ownerMode={loc.pathname == "/liquidity/owned"} />
+          <div className="relative h-full">
+            <div className="text-gray-200 absolute bottom-0 w-full">
+              <Footer />
+            </div>
+          </div>
+        </div>
+      }
     />
   );
 }

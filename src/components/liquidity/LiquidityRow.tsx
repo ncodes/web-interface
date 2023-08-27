@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, useEffect, useState } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import { UserHoverCard } from "./UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
@@ -77,15 +77,6 @@ export function LiquidityRow({
     queryFn: getUser,
     enabled: !!liquidity.provider,
   });
-
-  useEffect(() => {
-    // console.log(getProvider.data);
-  }, [
-    getProvider.isLoading,
-    getProvider.isError,
-    getProvider.data,
-    getProvider.fetchStatus,
-  ]);
 
   return (
     <div

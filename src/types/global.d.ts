@@ -200,31 +200,6 @@ declare global {
     createdAt: string;
   }
 
-  interface Dispute {
-    network: string;
-    creator: string;
-    defendant: string;
-    marketAddress: string;
-    orderId: number;
-    disputeId: number;
-    numMediators: number;
-    numMediatorsDrafted: number;
-    wantRelease: boolean;
-    redispute: boolean;
-    evidenceEndAt: string;
-    commitEndAt: string;
-    revealEndAt: string;
-    predictEndAt: string;
-    executed: boolean;
-    released: boolean;
-    abandoned: boolean;
-    orderReleased: boolean;
-    notifiedOnEvidenceEndAt: boolean;
-    notifiedOnCommitEndAt: boolean;
-    notifiedOnRevealEndAt: boolean;
-    swap: Swap;
-  }
-
   interface Offer {
     network: string;
     marketAddress: string;
@@ -246,5 +221,56 @@ declare global {
     updatedAt: string;
     market: Market;
     liquidity: Liquidity;
+  }
+
+  interface Dispute {
+    network: string;
+    creator: string;
+    defendant: string;
+    marketAddress: string;
+    orderId: number;
+    disputeId: number;
+    numMediators: number;
+    numMediatorsDrafted: number;
+    numMediatorsUndrafted: number;
+    wantRelease: boolean;
+    redispute: boolean;
+    evidenceEndAt: string;
+    commitEndAt: string;
+    revealEndAt: string;
+    predictEndAt: string;
+    executed: boolean;
+    released: boolean;
+    abandoned: boolean;
+    orderReleased: boolean;
+    notifiedOnEvidenceEndAt: boolean;
+    notifiedOnCommitEndAt: boolean;
+    notifiedOnRevealEndAt: boolean;
+    createdAt: string;
+    updatedAt: string;
+    draftees: Draft[];
+    swap: Swap;
+    reveals: Reveal[];
+  }
+
+  interface Draft {
+    network: string;
+    owner: string;
+    index: number;
+    marketAddress: string;
+    ticketId: string;
+    orderId: number;
+    disputeIndex: number;
+    disputeId: string;
+  }
+
+  interface Reveal {
+    network: string;
+    revealer: string;
+    marketAddress: string;
+    orderId: number;
+    disputeId: number;
+    vote: string;
+    drafted: boolean;
   }
 }

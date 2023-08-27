@@ -37,7 +37,7 @@ import {
   isOfferer,
   isOfferExpired,
   isOfferPending,
-} from "../../libs/market_helpers.ts";
+} from "../../libs/api_utils.ts";
 import moment from "moment/moment";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import useConnector from "../../hooks/connectors/useConnector.tsx";

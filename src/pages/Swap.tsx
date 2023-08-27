@@ -139,7 +139,7 @@ function Page() {
                 {/*  Awaiting Payment*/}
                 {/*</Label>*/}
                 {/*<div className="px-5 font-light text-gray-300 text-sm">*/}
-                {/*  Waiting for the other party to send payment. This swap will be*/}
+                {/*  Waiting for the counterpart to send payment. This swap will be*/}
                 {/*  eligible for cancellation when the waiting time is over.*/}
                 {/*</div>*/}
                 {/*<div className="px-5 text-2xl py-2 mt-3 mb-3 flex flex-col">*/}
@@ -156,7 +156,7 @@ function Page() {
                 {/* ---- when payment was made -- */}
                 {/*<Label className="block p-5 py-3 pb-1 text-lg">Release</Label>*/}
                 {/*<div className="px-5 font-light text-gray-300 text-sm">*/}
-                {/*  The other party has made payment.{" "}*/}
+                {/*  The counterpart has made payment.{" "}*/}
                 {/*  <b className="text-white tracking-wider">*/}
                 {/*    Release the asset after you have verified the payment with*/}
                 {/*    your payment method provider*/}
@@ -188,7 +188,7 @@ function Page() {
                 {/*    </span>*/}
                 {/*    <span>*/}
                 {/*      Dispute may lock the liquidity for extended period of*/}
-                {/*      time, so attempt to resolve any issue with the other party*/}
+                {/*      time, so attempt to resolve any issue with the counterpart*/}
                 {/*      using the messaging system first.*/}
                 {/*    </span>*/}
                 {/*  </span>*/}
@@ -218,9 +218,9 @@ function Page() {
                 {/*  Send Payment*/}
                 {/*</Label>*/}
                 {/*<div className="px-5 font-light text-gray-300 text-sm">*/}
-                {/*  The other party requires payment.{" "}*/}
+                {/*  The counterpart requires payment.{" "}*/}
                 {/*  <b className="text-white tracking-wider">*/}
-                {/*    Send payment to the other party using the payment method*/}
+                {/*    Send payment to the counterpart using the payment method*/}
                 {/*    they shared with you in the chat.*/}
                 {/*  </b>*/}
                 {/*  .*/}
@@ -269,7 +269,7 @@ function Page() {
                   Awaiting Release
                 </Label>
                 <div className="px-5 font-light text-gray-300 text-sm">
-                  The other party must verify your payment and is expected to
+                  The counterpart must verify your payment and is expected to
                   release the swap once your payment is confirmed.
                   <br />
                   <br />
@@ -278,7 +278,7 @@ function Page() {
                       <IconInfoCircle className="text-yellow-500" />
                     </span>
                     <span>
-                      If the other party does not release the swap before the
+                      If the counterpart does not release the swap before the
                       timer below expires, you can start a dispute.
                     </span>
                   </span>
@@ -289,7 +289,7 @@ function Page() {
                     </span>
                     <span>
                       You are encouraged to use the messaging system to resolve
-                      issues with the other party before initiating a dispute.
+                      issues with the counterpart before initiating a dispute.
                     </span>
                   </span>
                 </div>

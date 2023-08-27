@@ -21,7 +21,7 @@ import {
   isDisputeAbandoned,
   isDisputed,
   isDisputer,
-} from "../../libs/market_helpers.ts";
+} from "../../libs/api_utils.ts";
 import useConnector from "../../hooks/connectors/useConnector.tsx";
 import IconPaySent from "../icons/IconPaySent.tsx";
 import { CheckCircle, XCircle } from "lucide-react";
@@ -105,7 +105,7 @@ export function SwapRow({
                         tip={
                           getPayer(swap) == address
                             ? "You have not made payment"
-                            : "The other party has not made payment"
+                            : "The counterpart has not made payment"
                         }
                       >
                         <IconNoPay width="15" />{" "}
@@ -124,8 +124,8 @@ export function SwapRow({
                         className="flex items-center gap-1"
                         tip={
                           getPayer(swap) == address
-                            ? "You have made payment. Now waiting for the other party to release the asset"
-                            : "The other party has made payment. Verify the payment and only release the asset if you have received the payment"
+                            ? "You have made payment. Now waiting for the counterpart to release the asset"
+                            : "The counterpart has made payment. Verify the payment and only release the asset if you have received the payment"
                         }
                       >
                         <IconPaySent width="15" />
@@ -168,7 +168,7 @@ export function SwapRow({
                                     ? `"release" the asset`
                                     : `"cancel" the swap`
                                 }`
-                              : `The other party initiated a dispute to ${
+                              : `The counterpart initiated a dispute to ${
                                   swap.disputes[0].wantRelease
                                     ? `"release" the asset`
                                     : `"cancel" the swap`
@@ -398,7 +398,7 @@ export function SwapRow({
                   <span>
                     {isDisputer(swap, address)
                       ? "You started a dispute"
-                      : "The other party started a dispute"}
+                      : "The counterpart started a dispute"}
                     {swap.disputes[0].wantRelease
                       ? " to release the swap."
                       : " to cancel the swap."}
@@ -442,7 +442,7 @@ export function SwapRow({
                 <IconSpinner width="15" className="animate-spin" />{" "}
                 <ToolTip
                   className="flex gap-1 w-full justify-between md:justify-start"
-                  tip="Waiting for you to make the payment and click 'I Have Paid'. The other party or protocol may cancel the trade if you fail to pay within the time limit."
+                  tip="Waiting for you to make the payment and click 'I Have Paid'. The counterpart or protocol may cancel the trade if you fail to pay within the time limit."
                 >
                   <span>Awaiting your payment {""}</span>
                   <IconInfoCircle width="15" />
@@ -462,12 +462,12 @@ export function SwapRow({
                   className="flex gap-1 w-full justify-between md:justify-start"
                   tip={
                     <span>
-                      Waiting for other party to release the swap. You may start
-                      a dispute ("Appeal") if the other party fails to release
+                      Waiting for counterpart to release the swap. You may start
+                      a dispute ("Appeal") if the counterpart fails to release
                       the swap within the time limit.
                       <br />
                       <br />
-                      The other party may also start a dispute ("Appeal") if
+                      The counterpart may also start a dispute ("Appeal") if
                       there is an issue with your payment.
                     </span>
                   }
@@ -542,7 +542,7 @@ export function SwapRow({
                   <span>
                     {isDisputer(swap, address)
                       ? "You started a dispute"
-                      : "The other party started a dispute"}
+                      : "The counterpart started a dispute"}
                     {swap.disputes[0].wantRelease
                       ? " to release the swap."
                       : " to cancel the swap."}
