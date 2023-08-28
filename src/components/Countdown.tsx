@@ -5,12 +5,18 @@ export function CountDown({
   isoDate,
   onDone,
   prefix,
+  wrapL,
+  wrapR,
   full,
+  className,
 }: {
   isoDate: string;
   onDone?: () => void;
   prefix?: string;
   full?: boolean;
+  className?: string;
+  wrapL?: string;
+  wrapR?: string;
 }) {
   const [timeLeft, setTimeLeft] = useState<number>();
 
@@ -44,7 +50,16 @@ export function CountDown({
     if (!timeLeft) return "";
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft - minutes * 60;
-    return `(${prefix || ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds})`;
+    return (
+      <span className={className}>
+        {wrapL || `(`}
+        <span className="prefix">{`${prefix || ""}`}</span>
+        <span className="time">{`${minutes}:${
+          seconds < 10 ? "0" : ""
+        }${seconds}`}</span>
+        {wrapR || `)`}
+      </span>
+    );
   }
 
   // render for hours, minutes, seconds
@@ -53,9 +68,14 @@ export function CountDown({
     const hours = Math.floor(timeLeft / 3600);
     const minutes = Math.floor((timeLeft - hours * 3600) / 60);
     const seconds = timeLeft - hours * 3600 - minutes * 60;
-    return `${prefix || ""}${hours < 10 ? "0" : ""}${hours}:${
-      minutes < 10 ? "0" : ""
-    }${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    return (
+      <span className={className}>
+        <span className="prefix">{prefix || ""}</span>
+        <span className="time">{`${hours < 10 ? "0" : ""}${hours}:${
+          minutes < 10 ? "0" : ""
+        }${minutes}:${seconds < 10 ? "0" : ""}${seconds}`}</span>
+      </span>
+    );
   }
 
   if (full)

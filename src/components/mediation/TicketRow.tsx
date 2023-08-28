@@ -10,17 +10,34 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import { cn } from "../../libs/utils.ts";
 import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
-import IconStatus from "../icons/IconStatus.tsx";
-import IconCoinStack from "../icons/IconCoinStack.tsx";
-import { IconMarket } from "../icons/IconMarket.tsx";
-import { PlusCircle, TicketIcon, XIcon } from "lucide-react";
-import { IconExchange } from "../icons/IconExchange.tsx";
+import {
+  CheckCircle,
+  Circle,
+  CircleDashed,
+  HashIcon,
+  MinusCircle,
+  Users2,
+  XCircle,
+} from "lucide-react";
 import { StatCard } from "../market/StatCard.tsx";
-import IconRequestMoney from "../icons/IconRequestMoney.tsx";
-
-interface Ticket {
-  index: number;
-}
+import { ToolTip } from "../ToolTip.tsx";
+import moment from "moment";
+import {
+  TicketStatusBadge,
+  TicketTipCancelled,
+  TicketTipCancelling,
+  TicketTipDrafted,
+  TicketTipDrained,
+  TicketTipExpired,
+  TicketTipJoined,
+  TicketTipMatured,
+  TicketTipMaturing,
+} from "./TicketStatusBadge.tsx";
+import { getTicketStatus } from "../../libs/api_utils.ts";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { CountDown } from "../Countdown.tsx";
+import { formatToHighDenom } from "../../libs/helpers.ts";
+import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 
 export function TicketRow({
   ticket,
@@ -56,23 +73,16 @@ export function TicketRow({
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
           <div
             data-click-trigger="1"
-            className="flex gap-2 p-5 px-3 md:px-5 py-0 items-center shrink-0 md:border-r border-gray-800"
+            className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 md:border-r border-gray-800"
           >
-            <div className="flex md:flex-col w-full md:px-0 md:py-4 pt-2 md:pt-4">
-              <div className="flex gap-2">
+            <div className="flex md:flex-col gap-1 w-full md:px-0 md:py-4 pt-2 md:pt-1 relative md:top-1">
+              <div className="flex gap-1">
                 <span>
-                  <TicketIcon className="text-orange-500" width="20px" />
+                  <HashIcon className="text-gray-400" width="20px" />
                 </span>
                 <span>{ticket.index}</span>
               </div>
-              <div className="flex w-full justify-end md:justify-start">
-                <span className="flex items-center gap-1 text-xs font-light tracking-wider">
-                  <span className="text-gray-300">
-                    <IconStatus width="20px" />
-                  </span>
-                  <span>Maturing</span>
-                </span>
-              </div>
+              <TicketStatusBadge ticket={ticket} />
             </div>
           </div>
 
@@ -88,108 +98,328 @@ export function TicketRow({
                     tip={`The total amount of security deposit locked in the ticket`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">5,503</span>
+                    <span className="text-gray-200 flex gap-1">
+                      <span>{formatToHighDenom(ticket.bond, 18)}</span>
+                      <USDAmountToolTip v={ticket.bondUsd} />
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Pool ID`}
                     tip={`The pool where the ticket is currently staked`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">1</span>
+                    <span className="text-gray-200">{ticket.poolId}</span>
                   </StatCard>
                   <StatCard
                     title={`Draft Count`}
                     tip={`The number of times this ticket has been drafted`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">10</span>
+                    <span className="text-gray-200">
+                      {ticket.drafts.length}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Current Phase`}
-                    tip={`The current state of the ticket`}
+                    tip={`The current phase of the ticket`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">Maturation</span>
-                  </StatCard>
-                  <StatCard
-                    title={`Mature By`}
-                    tip={`The time the ticket is expected to reach maturity`}
-                    width="w-auto"
-                  >
-                    72:00:00
+                    <span className="text-gray-200">
+                      {getTicketStatus(ticket) == "maturing" && <>Maturing</>}
+                      {getTicketStatus(ticket) == "matured" && <>Matured</>}
+                      {getTicketStatus(ticket) == "joined" && <>Joined</>}
+                      {getTicketStatus(ticket) == "drafted" && <>Drafted</>}
+                      {getTicketStatus(ticket) == "expired" && <>Expired</>}
+                      {getTicketStatus(ticket) == "cancelling" && (
+                        <>Cancelling</>
+                      )}
+                      {getTicketStatus(ticket) == "cancelled" && <>Cancelled</>}
+                      {getTicketStatus(ticket) == "drained" && <>Drained</>}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Next Phase`}
-                    tip={`The next phase of the dispute`}
+                    tip={`The next phase of the ticket`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200 ">Join Pool</span>
-                  </StatCard>
-                  <StatCard
-                    title={`Cancel Time`}
-                    tip={`The time the ticket can be cancelled`}
-                    width="min-w-[160px]"
-                  >
-                    <span className="text-gray-200 ">00:00.01</span>
+                    <span className="text-gray-200 ">
+                      {getTicketStatus(ticket) == "maturing" && <>Maturation</>}
+                      {getTicketStatus(ticket) == "matured" && <>Join Pool</>}
+                      {getTicketStatus(ticket) == "joined" && <>Drafting</>}
+                      {getTicketStatus(ticket) == "drafted" && <>Mediate</>}
+                      {getTicketStatus(ticket) == "expired" && (
+                        <>Cancellation</>
+                      )}
+                    </span>
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
             </ScrollGradientIndicator>
           </div>
         </div>
-        <div className="flex justify-between border-t border-card-border">
+
+        {/* Layer 2 */}
+        <div className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between">
+          {getTicketStatus(ticket) == "drained" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <MinusCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipDrained />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>This ticket has been drained of its security bond.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getTicketStatus(ticket) == "maturing" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <CircleDashed width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipMaturing />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>
+                  This ticket is maturing{" "}
+                  <span className="font-medium">
+                    (
+                    <CountDown
+                      isoDate={ticket.matureAt}
+                      className="[&>span.time]:text-chinese-green"
+                      full
+                    />
+                    )
+                  </span>
+                </span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getTicketStatus(ticket) == "matured" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <Circle width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipMatured />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>
+                  This ticket has matured. Join a pool{" "}
+                  <CountDown
+                    prefix=" before "
+                    isoDate={moment().add(1, "h").toISOString()}
+                    className="[&>span.time]:text-chinese-green"
+                    full
+                  />
+                </span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getTicketStatus(ticket) == "joined" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <CheckCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipJoined />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>This ticket has joined a pool.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getTicketStatus(ticket) == "drafted" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <Users2 width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipDrafted />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>This ticket has been drafted.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getTicketStatus(ticket) == "expired" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <XCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipExpired />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>This ticket has expired.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getTicketStatus(ticket) == "cancelling" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <XCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipCancelling />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>
+                  This ticket will be cancelled in&nbsp;{" "}
+                  <span className="font-medium">
+                    <CountDown
+                      isoDate={ticket.cancelAt}
+                      className="[&>span.time]:text-chinese-green"
+                      full
+                    />
+                  </span>
+                  .
+                </span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          {getTicketStatus(ticket) == "cancelled" && (
+            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+              <XCircle width="15" className="" />{" "}
+              <ToolTip
+                tip={<TicketTipCancelled />}
+                className="flex gap-1 w-full justify-between md:justify-start"
+              >
+                <span>This ticket has been cancelled.</span>
+                <IconInfoCircle
+                  width="15"
+                  className="hidden xs:inline text-gray-300"
+                />
+              </ToolTip>
+            </span>
+          )}
+
+          <span
+            data-click-trigger="1"
+            className="flex py-1 text-[12px] text-gray-400 gap-1 items-center tracking-wide font-light"
+          >
+            <span className="text-gray-500">
+              <ToolTip
+                tip={moment(ticket.createdAt).fromNow()}
+                className="flex gap-1 items-center"
+              >
+                <span>
+                  <TimerIcon />
+                </span>
+                <span>
+                  {moment(ticket.createdAt)
+                    .format("DD MMM YYYY, h:mm:ss a")
+                    .toUpperCase()}
+                </span>
+              </ToolTip>
+            </span>
+          </span>
+        </div>
+
+        {/* Layer 3 */}
+        <div
+          className={cn("flex justify-between border-t border-card-border", {
+            hidden: ["drained", "maturing", "cancelling"].includes(
+              getTicketStatus(ticket) || ""
+            ),
+          })}
+        >
           <div
             data-click-trigger="1"
-            className="flex items-center w-full gap-2 px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
+            className="flex items-center w-full gap-2 px-3 pr-0 md:px-1 md:pr-0 overflow-hidden py-1"
           >
-            <div className="text-xs text-gray-500 tracking-wide font-light">
-              <span className="flex py-1 text-xs text-gray-500 gap-1 items-center">
-                <TimerIcon /> <span className="text-gray-200">3 days ago</span>
-              </span>
-            </div>
+            {["matured"].includes(getTicketStatus(ticket) || "") && (
+              <Button
+                variant="default"
+                size="sm"
+                rounded="lg"
+                className="text-xs md:text-sm"
+                scale="sm"
+              >
+                Join Pool
+              </Button>
+            )}
+
+            {["matured", "expired", "joined"].includes(
+              getTicketStatus(ticket) || ""
+            ) && (
+              <Button
+                variant="outline"
+                size="sm"
+                rounded="lg"
+                className="text-xs md:text-sm"
+                scale="sm"
+              >
+                Cancel
+              </Button>
+            )}
+
+            {["cancelled"].includes(getTicketStatus(ticket) || "") && (
+              <Button
+                variant="outline"
+                size="sm"
+                rounded="lg"
+                className="text-xs md:text-sm"
+                scale="sm"
+              >
+                Drain
+              </Button>
+            )}
           </div>
           <div
             data-click-trigger="1"
-            className="flex items-center border-l border-gray-800 shrink-0 px-2"
+            className={cn(
+              "flex items-center border-l border-gray-800 shrink-0 px-2"
+            )}
           >
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                <XIcon width="20px" /> Cancel
-              </Button>
-            </span>
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                <IconRequestMoney width="20px" /> Drain Bond
-              </Button>
-            </span>
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                <PlusCircle width="20px" /> Join Pool
-              </Button>
-            </span>
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                <IconExchange width="20px" /> View Swap
-              </Button>
-            </span>
+            {getTicketStatus(ticket) == "drafted" && (
+              <>
+                <span className=" lg:inline border-r border-gray-800 shrink-0">
+                  <Button
+                    variant="link"
+                    rounded="none"
+                    className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                  >
+                    View Swap
+                  </Button>
+                </span>
 
-            <span className="lg:hidden ">
+                <span className=" lg:inline border-gray-800 shrink-0">
+                  <Button
+                    variant="link"
+                    rounded="none"
+                    className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                  >
+                    View Dispute
+                  </Button>
+                </span>
+              </>
+            )}
+
+            <span className="hidden ">
               <DropdownMenu
                 onOpenChange={(open) => {
                   setMoreMenuOpen(open);
@@ -206,12 +436,16 @@ export function TicketRow({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem className="flex gap-2">
-                    <IconCoinStack width="20px" /> View Liquidity
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="flex gap-2">
-                    <IconMarket width="20px" /> View Market
-                  </DropdownMenuItem>
+                  {getTicketStatus(ticket) == "drafted" && (
+                    <>
+                      <DropdownMenuItem className="flex gap-2">
+                        View Swap
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="flex gap-2">
+                        View Dispute
+                      </DropdownMenuItem>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </span>

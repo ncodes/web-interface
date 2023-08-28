@@ -40,7 +40,6 @@ export function MyDisputeTabContent() {
     ],
     queryFn: listDisputes,
     enabled: !!address,
-    refetchInterval: false,
   });
 
   useEffect(() => {

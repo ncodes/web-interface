@@ -185,3 +185,36 @@ export function getDisputeOutcome(dispute: Dispute) {
 
   return DisputeState.Stalled;
 }
+
+enum TicketState {
+  Maturing = "maturing",
+  Matured = "matured",
+  Joined = "joined",
+  Expired = "expired",
+  Drafted = "drafted",
+  Cancelled = "cancelled",
+  Cancelling = "cancelling",
+  Drained = "drained",
+}
+
+export function getTicketStatus(ticket: Ticket) {
+  const {
+    matureAt,
+    joined,
+    expired,
+    matured,
+    drained,
+    drafted,
+    cancelling,
+    cancelled,
+  } = ticket;
+  if (!joined && drained) return TicketState.Drained;
+  if (!joined && moment(matureAt).isAfter(moment()))
+    return TicketState.Maturing;
+  if (!joined && matured) return TicketState.Matured;
+  if (joined && !drafted) return TicketState.Joined;
+  if (joined && drafted) return TicketState.Drafted;
+  if (!joined && expired) return TicketState.Expired;
+  if (!joined && cancelling) return TicketState.Cancelling;
+  if (!joined && cancelled) return TicketState.Cancelled;
+}

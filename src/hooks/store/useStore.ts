@@ -76,6 +76,14 @@ export interface DisputeFilter {
   toDate?: string;
 }
 
+export interface TicketFilter {
+  poolId?: number;
+  orderId?: number;
+  disputeId?: number;
+  owner?: string;
+  status?: string;
+}
+
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -116,6 +124,10 @@ export interface IStore {
   // Dispute filter
   disputeFilter: DisputeFilter;
   setDisputeFilter: (filter: Partial<DisputeFilter>) => void;
+
+  // Ticket Filter
+  ticketFilter: TicketFilter;
+  setTicketFilter: (filter: Partial<TicketFilter>) => void;
 }
 
 const useStore = create<IStore>((set) => ({
@@ -194,6 +206,16 @@ const useStore = create<IStore>((set) => ({
     set((state) => ({
       disputeFilter: {
         ...state.disputeFilter,
+        ...filter,
+      },
+    }));
+  },
+
+  ticketFilter: {},
+  setTicketFilter: (filter: Partial<TicketFilter>) => {
+    set((state) => ({
+      ticketFilter: {
+        ...state.ticketFilter,
         ...filter,
       },
     }));

@@ -273,4 +273,35 @@ declare global {
     vote: string;
     drafted: boolean;
   }
+
+  interface Ticket {
+    network: string;
+    owner: string;
+    index: number;
+    orderId: number;
+    poolId: number;
+    disputeId: number;
+    bond: string;
+    matureAt: string;
+    joinBy: string;
+    txHash: string;
+    joined: boolean;
+    drained: boolean;
+    drafted: boolean;
+    slashed: boolean;
+    cancelAt: string;
+    drainedAt: string;
+    draftedAt: string;
+    matured: boolean;
+    expired: boolean;
+    cancelling: boolean;
+    cancelled: boolean;
+    bondUsd: number;
+    slashedAmt: string;
+    slashedAmtUsd: number;
+    createdAt: string;
+    updatedAt: string;
+    market: Market;
+    drafts: Draft[];
+  }
 }

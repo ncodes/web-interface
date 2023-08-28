@@ -335,6 +335,7 @@ export function SwapRow({
                     </span>
                     <CountDown
                       prefix="Disputable in: "
+                      className="[&>span.time]:text-chinese-green"
                       isoDate={swap.disputeFrom}
                     />
                   </span>
@@ -476,6 +477,7 @@ export function SwapRow({
                     Waiting for release {""}
                     <CountDown
                       prefix="Dispute in: "
+                      className="[&>span.time]:text-chinese-green"
                       isoDate={swap.disputeFrom}
                     />
                   </span>

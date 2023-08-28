@@ -9,6 +9,7 @@ import {
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { OfferFilterContent } from "./OfferFilterContent.tsx";
+import { useLocation } from "react-router-dom";
 
 export function OfferFilterSheet({
   active,
@@ -20,11 +21,17 @@ export function OfferFilterSheet({
   children?: ReactNode;
 }) {
   const [open, setOpen] = useState(active);
+  const loc = useLocation();
 
   useEffect(() => {
     setOpen(active);
     onOpen && onOpen(active || false);
   }, [active, onOpen]);
+
+  useEffect(() => {
+    setOpen(false);
+    onOpen && onOpen(false);
+  }, [loc]);
 
   return (
     <Sheet
