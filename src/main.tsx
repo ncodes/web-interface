@@ -77,12 +77,17 @@ const router = createBrowserRouter([
   },
   {
     path: makePath("/mediation"),
-    element: <App page={<Mediation defaultTab="mediation" />} />,
+    element: <App page={<Mediation defaultTab="my-tickets" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
     path: makePath("/tickets/owned"),
     element: <App page={<Mediation defaultTab="my-tickets" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/tickets/stats"),
+    element: <App page={<Mediation defaultTab="ticket-stats" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {

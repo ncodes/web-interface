@@ -275,15 +275,6 @@ export function LiquidityRow({
                       <USDAmountToolTip v={liquidity.priceUsd} />
                     </span>
                   </StatCard>
-                  {/*<StatCard*/}
-                  {/*  title={`Available`}*/}
-                  {/*  title2={"($)"}*/}
-                  {/*  tip={`The amount ${liquidity.base} available for swap`}*/}
-                  {/*>*/}
-                  {/*  <span className="text-gray-200">*/}
-                  {/*    ${formatToMoney(liquidity.amountUsd)}*/}
-                  {/*  </span>*/}
-                  {/*</StatCard>*/}
                   <StatCard
                     title={`Available`}
                     title2={`(${liquidity.base})`}

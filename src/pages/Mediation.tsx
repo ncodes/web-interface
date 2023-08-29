@@ -14,13 +14,16 @@ import { BuyTicketSheet } from "../components/mediation/BuyTicketSheet.tsx";
 import useStore from "../hooks/store/useStore.ts";
 import { TicketIcon } from "lucide-react";
 import { MyTicketsTabContent } from "../components/mediation/MyTicketsTabContent.tsx";
-import { MediationInfoTabContent } from "../components/mediation/MediationInfoTabContent.tsx";
+import { TicketsStatsTabContent } from "../components/mediation/TicketsStatsTabContent.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TicketFilterSheet } from "../components/mediation/TicketFilterSheet.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { TicketFilter } from "../components/mediation/TicketFilter.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { useTicketService } from "../hooks/services/backend/useTicketService.ts";
+import useConnector from "../hooks/connectors/useConnector.tsx";
 
 function MediationTabs({ defaultTab }: { defaultTab?: string }) {
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -30,7 +33,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
 
   return (
     <Tabs
-      defaultValue={defaultTab || "mediation"}
+      defaultValue={defaultTab || "my-tickets"}
       className="w-full h-full transition-all duration-500"
       onValueChange={(value) => {
         setCurrentTab(value);
@@ -41,15 +44,6 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
           <ScrollAreaHorizontal type="scroll" className="w-full">
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
-                value="mediation"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={async () => {
-                  navigate("/mediation");
-                }}
-              >
-                Mediation
-              </TabsTrigger>
-              <TabsTrigger
                 value="my-tickets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
@@ -57,6 +51,15 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
                 }}
               >
                 My Tickets
+              </TabsTrigger>
+              <TabsTrigger
+                value="ticket-stats"
+                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/tickets/stats");
+                }}
+              >
+                Ticket Stats
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
@@ -103,7 +106,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
         </div>
       </TabsList>
       {currentTab == "my-tickets" && <MyTicketsTabContent />}
-      {currentTab == "mediation" && <MediationInfoTabContent />}
+      {currentTab == "ticket-stats" && <TicketsStatsTabContent />}
       <BuyTicketSheet />
       <TicketFilterSheet
         active={openFilterSheet}

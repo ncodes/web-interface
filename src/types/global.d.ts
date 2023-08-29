@@ -304,4 +304,18 @@ declare global {
     market: Market;
     drafts: Draft[];
   }
+
+  interface TicketStats {
+    totalBonds: string;
+    totalBondsUsd: number;
+    price: string;
+    priceUsd: number;
+    ticketSupply: number;
+    ticketAvailable: number;
+    owner?: {
+      totalBonds?: string;
+      totalBondsUsd?: number;
+      total?: string;
+    };
+  }
 }

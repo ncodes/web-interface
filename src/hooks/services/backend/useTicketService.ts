@@ -2,7 +2,6 @@ import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { QueryFunctionContext } from "@tanstack/react-query";
 import { TicketFilter } from "../../store/useStore.ts";
-import moment from "moment";
 
 export interface ListTicketParams {
   network: string;
@@ -13,6 +12,17 @@ export interface ListTicketParams {
 }
 
 export type ListTicketIDs = "getTicketsOwned";
+export type GetStatIDs = "getStats";
+
+export interface GetStats {
+  net: string;
+  owner?: string;
+}
+
+export interface GetStatParams {
+  net: string;
+  owner?: string;
+}
 
 /**
  * useTicketService provides access to v1/tickets endpoints
@@ -62,7 +72,34 @@ export function useTicketService() {
     }
   }
 
+  /**
+   * Get ticket stats
+   * @param ctx The query object
+   */
+  async function getStats(
+    ctx: QueryFunctionContext<[GetStatIDs, GetStatParams]>
+  ): Promise<TicketStats> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { net, owner } = params;
+      const headers = {};
+      const resp = await axios({
+        method: "get",
+        url: `${import.meta.env.VITE_API_URI}/v1/tickets/stats`,
+        headers,
+        params: {
+          net,
+          owner,
+        },
+      });
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     listTickets,
+    getStats,
   };
 }
