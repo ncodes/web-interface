@@ -58,6 +58,8 @@ export interface SwapFilter {
 
 export interface OfferFilter {
   marketAddress?: string;
+  provider?: string;
+  lid?: number;
   creator?: string;
   status?: string;
   fromDate?: string;

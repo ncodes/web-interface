@@ -2,17 +2,24 @@ import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { QueryFunctionContext } from "@tanstack/react-query";
 import { OfferFilter } from "../../store/useStore.ts";
-import moment from "moment";
+import { StoreAccessTokenKey } from "../../../constants.ts";
 
 export interface ListOfferParams {
   network: string;
   limit: number;
   offset: number;
   connectedAddress?: string;
-  offerFilter: OfferFilter;
+  offerFilter?: OfferFilter;
 }
 
-export type ListOfferIDs = "getOffersAsParticipant";
+interface OfferReadStatusParams {
+  network: string;
+  marketAddress?: string;
+  provider?: string;
+  lid?: number;
+}
+
+export type ListOfferIDs = "getOffersAsParticipant" | "getOffers";
 
 /**
  * useOfferService provides access to v1/offers endpoints
@@ -58,7 +65,70 @@ export function useOfferService() {
     }
   }
 
+  /**
+   * Count unread offers
+   * @param ctx
+   */
+  async function countUnread(
+    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>
+  ): Promise<{ asProvider: number; asOfferer: number }> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { network, marketAddress, provider, lid } = params;
+      const headers = {};
+      const token = localStorage.getItem(StoreAccessTokenKey);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+      const resp = await axios({
+        method: "get",
+        url: `${import.meta.env.VITE_API_URI}/v1/offers/count-unread`,
+        params: {
+          net: network,
+          marketAddress,
+          provider,
+          lid,
+        },
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
+   * Mark unread offers as read
+   * @param ctx
+   */
+  async function markAsRead(
+    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>
+  ): Promise<void> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { network, marketAddress, provider, lid } = params;
+      const headers = {};
+      const token = localStorage.getItem(StoreAccessTokenKey);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+      const resp = await axios({
+        method: "put",
+        url: `${import.meta.env.VITE_API_URI}/v1/offers/mark-read`,
+        params: {
+          net: network,
+          marketAddress,
+          provider,
+          lid,
+        },
+        headers,
+      });
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     listOffers,
+    countUnread,
+    markAsRead,
   };
 }

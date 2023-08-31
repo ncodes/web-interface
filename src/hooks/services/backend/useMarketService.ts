@@ -3,6 +3,7 @@ import { handleAxiosError } from "../../../libs/helpers.ts";
 import { QueryFunctionContext } from "@tanstack/react-query";
 import { MarketFilter } from "../../store/useStore.ts";
 
+export type ListMarketsIDs = "getMarkets" | "getMarketsByCreator";
 export interface ListMarketsParams {
   network: string;
   marketFilter: MarketFilter;
@@ -11,7 +12,11 @@ export interface ListMarketsParams {
   connectedAddress?: string;
 }
 
-export type ListMarketsIDs = "getMarkets" | "getMarketsByCreator";
+type GetMarketID = "getMarket";
+export interface GetMarketParams {
+  network: string;
+  market: string;
+}
 
 /**
  * useMarketService provides access to v1/markets endpoints
@@ -49,7 +54,33 @@ export function useMarketService() {
     }
   }
 
+  /**
+   * Get market
+   */
+  async function getMarket(
+    ctx: QueryFunctionContext<[GetMarketID, GetMarketParams]>
+  ): Promise<Market> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { network, market } = params;
+      const headers = {};
+      const resp = await axios({
+        method: "get",
+        url: `${import.meta.env.VITE_API_URI}/v1/markets/${market}`,
+        params: {
+          net: network,
+        },
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     listMarkets,
+    getMarket,
   };
 }

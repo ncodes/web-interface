@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { PlugZapIcon } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { RequestError } from "../../libs/RequestError.ts";
 import { OfferRow } from "../liquidity/OfferRow.tsx";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
@@ -18,16 +18,9 @@ export function MyOffersTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(1);
-  const {
-    isLoading,
-    isSuccess,
-    isRefetching,
-    isError,
-    fetchStatus,
-    isRefetchError,
-    data,
-    error,
-  } = useQuery({
+  const { markAsRead } = useOfferService();
+  const queryClient = useQueryClient();
+  const offers = useQuery({
     queryKey: [
       "getOffersAsParticipant",
       {
@@ -42,26 +35,38 @@ export function MyOffersTabContent() {
     enabled: !!address,
   });
 
+  useQuery({
+    queryKey: ["markAsRead", { network: getChainInfo().queryName }],
+    queryFn: markAsRead,
+    enabled: !!address,
+    onSuccess: async () => {
+      await queryClient.refetchQueries(["countUnreadOffer"]);
+    },
+  });
+
   useEffect(() => {
-    if ((fetchStatus != "idle" && isLoading) || isRefetching)
+    if (
+      (offers.fetchStatus != "idle" && offers.isLoading) ||
+      offers.isRefetching
+    )
       setLoaderProgress && setLoaderProgress(50);
     else setLoaderProgress && setLoaderProgress(100);
   }, [
-    isError,
-    isLoading,
-    setLoaderProgress,
-    isRefetching,
-    isRefetchError,
-    fetchStatus,
+    offers.isError,
+    offers.isLoading,
+    offers.isRefetching,
+    offers.isRefetchError,
+    offers.fetchStatus,
   ]);
 
   return (
     <TabsContent value="offers" className="p-0 m-0 flex flex-col gap-3">
-      {isLoading && fetchStatus != "idle" && <RowSkeleton />}
+      {offers.isLoading && offers.fetchStatus != "idle" && <RowSkeleton />}
 
-      {isError && (
+      {offers.isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
-          <ErrorIcon className="w-[20px]" /> {(error as RequestError)?.message}
+          <ErrorIcon className="w-[20px]" />{" "}
+          {(offers.error as RequestError)?.message}
         </div>
       )}
 
@@ -71,24 +76,24 @@ export function MyOffersTabContent() {
         </div>
       )}
 
-      {!isLoading && isSuccess && (
+      {!offers.isLoading && offers.isSuccess && (
         <>
           <Paginator
             curPage={offset}
-            total={data?.meta?.queryCount}
+            total={offers.data?.meta?.queryCount}
             limit={limit}
             onNext={() => setOffset(offset + 1)}
             onPrev={() => setOffset(offset - 1)}
           />
           <div className="flex flex-col gap-3 p-3 pt-0">
-            {data?.offers.map((offer: Offer) => (
+            {offers.data?.offers.map((offer: Offer) => (
               <OfferRow offer={offer} />
             ))}
           </div>
           <Paginator
             className="border-t"
             curPage={offset}
-            total={data?.meta?.queryCount}
+            total={offers.data?.meta?.queryCount}
             limit={limit}
             onNext={() => setOffset(offset + 1)}
             onPrev={() => setOffset(offset - 1)}
@@ -96,7 +101,7 @@ export function MyOffersTabContent() {
         </>
       )}
 
-      {!isLoading && data?.offers?.length == 0 && (
+      {!offers.isLoading && offers.data?.offers?.length == 0 && (
         <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
           No offer found
         </div>

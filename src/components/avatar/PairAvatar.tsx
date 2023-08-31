@@ -8,13 +8,21 @@ export function PairAvatar(props: {
   quote: string;
   className?: string;
   className2?: string;
+  dataClickTrigger?: string;
 }) {
   return (
     <div className="flex">
       <span className={cn("z-[2] ", props.className)}>
         <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]">
-          <AvatarImage src={props.baseSrc} className="" />
-          <AvatarFallback className="text-sm text-gray-800">
+          <AvatarImage
+            src={props.baseSrc}
+            className=""
+            data-click-trigger={props.dataClickTrigger}
+          />
+          <AvatarFallback
+            className="text-sm text-gray-800"
+            data-click-trigger={props.dataClickTrigger}
+          >
             {props.base}
           </AvatarFallback>
         </Avatar>
@@ -27,8 +35,15 @@ export function PairAvatar(props: {
         )}
       >
         <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]">
-          <AvatarImage src={props.quoteSrc} className="" />
-          <AvatarFallback className="text-sm text-gray-800">
+          <AvatarImage
+            src={props.quoteSrc}
+            className=""
+            data-click-trigger={props.dataClickTrigger}
+          />
+          <AvatarFallback
+            className="text-sm text-gray-800"
+            data-click-trigger={props.dataClickTrigger}
+          >
             {props.quote}
           </AvatarFallback>
         </Avatar>

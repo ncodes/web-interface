@@ -19,6 +19,8 @@ import Disputes from "./pages/Disputes.tsx";
 import Mediation from "./pages/Mediation.tsx";
 import Offers from "./pages/Offers.tsx";
 import Offer from "./pages/Offer.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.tsx";
 
 function makePath(path: string) {
   return `:locale?/${path}`;
@@ -56,8 +58,13 @@ const router = createBrowserRouter([
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/liquidity/:provider/:id"),
+    path: makePath("/liquidity/:market/:provider/:lid"),
     element: <App page={<Liquidity />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/liquidity/:market/:provider/:lid/offers"),
+    element: <App page={<Liquidity defaultTab="offers" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
@@ -102,8 +109,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <ConnectorProvider
+        appName={import.meta.env.NEXT_PUBLIC_APP_NAME}
+        infuraId={import.meta.env.NEXT_PUBLIC_INFURA_ID}
+      >
+        <RouterProvider router={router} />
+      </ConnectorProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

@@ -10,7 +10,7 @@ export function StatCard({
   children,
   tip,
   width,
-  noSwapTrigger,
+  rmDataClickTrigger,
   className,
 }: {
   title: string;
@@ -19,7 +19,7 @@ export function StatCard({
   children: React.ReactNode;
   className?: string;
   width?: string;
-  noSwapTrigger?: boolean;
+  rmDataClickTrigger?: boolean;
 }) {
   return (
     <Card
@@ -33,15 +33,15 @@ export function StatCard({
         <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex items-center gap-2">
           <span
             className="shrink-0"
-            data-click-trigger={!noSwapTrigger ? 1 : 0}
+            data-click-trigger={!rmDataClickTrigger ? 1 : 0}
           >
             {title}
           </span>
-          <span className="" data-click-trigger={!noSwapTrigger ? 1 : 0}>
+          <span className="" data-click-trigger={!rmDataClickTrigger ? 1 : 0}>
             {title2}
           </span>
           <div
-            data-click-trigger={!noSwapTrigger ? 1 : 0}
+            data-click-trigger={!rmDataClickTrigger ? 1 : 0}
             className="flex-1 shrink-0 w-[30px] flex justify-end cursor-pointer opacity-50 hover:opacity-100 transition-all duration-500"
           >
             <ToolTip tip={tip}>
@@ -51,7 +51,7 @@ export function StatCard({
         </CardTitle>
       </CardHeader>
       <CardContent
-        data-click-trigger={!noSwapTrigger ? 1 : 0}
+        data-click-trigger={!rmDataClickTrigger ? 1 : 0}
         className="px-3 py-0 pb-2 tracking-wide text-chinese-green"
       >
         {children}

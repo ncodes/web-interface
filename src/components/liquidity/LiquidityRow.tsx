@@ -42,6 +42,7 @@ import IconCaution from "../icons/IconCaution.tsx";
 import { PairAvatar } from "../avatar/PairAvatar.tsx";
 import { PlayCircle } from "lucide-react";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
+import { useNavigate } from "react-router-dom";
 
 function ProviderInfoSkeleton() {
   return (
@@ -63,6 +64,7 @@ export function LiquidityRow({
   className?: string;
   liquidity: Liquidity;
 }) {
+  const navigate = useNavigate();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
@@ -84,7 +86,9 @@ export function LiquidityRow({
       onClick={(e: BaseSyntheticEvent) => {
         const canTrigger = e.target.getAttribute("data-click-trigger");
         if (canTrigger && canTrigger == "1" && !noFocus) {
-          setOpenSwapSheet(!openSwapSheet);
+          navigate(
+            `/liquidity/${liquidity.marketAddress}/${liquidity.provider}/${liquidity.lid}`
+          );
         }
       }}
     >
@@ -148,7 +152,7 @@ export function LiquidityRow({
               )}
 
               {!ownerMode && !getProvider.isLoading && !getProvider.isError && (
-                <div className="w-[130px]">
+                <div className="w-full md:w-[130px] flex items-center md:items-start md:flex-col justify-between md:justify-start">
                   <span className="flex text-gray-100 items-center gap-1">
                     <span data-click-trigger="1">
                       {shortenAddress(liquidity.provider)}
@@ -432,7 +436,7 @@ export function LiquidityRow({
               variant="link"
               rounded="none"
               scale="sm"
-              className="text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green rounded-lg h-8 mx-1 lg:rounded-br-lg"
+              className="xl:hidden text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green rounded-lg h-8 mx-1 lg:rounded-br-lg"
               onClick={() => setOpenSwapSheet(true)}
             >
               Swap

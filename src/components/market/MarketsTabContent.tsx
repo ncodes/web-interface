@@ -72,7 +72,7 @@ export function MarketsTabContent() {
             onNext={() => setOffset(offset + 1)}
             onPrev={() => setOffset(offset - 1)}
           />
-          <div className="flex flex-col gap-3 p-3 pt-0">
+          <div className="flex flex-col gap-3 p-3 pt-0 pb-0">
             {data?.markets.map((market: Market) => (
               <MarketRow market={market} key={market.address} />
             ))}

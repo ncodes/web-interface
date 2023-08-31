@@ -1,5 +1,5 @@
 import { useQuery } from "../../hooks/useQuery.ts";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useStore, { LiquidityFilter } from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
 import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
@@ -44,6 +44,7 @@ interface Values {
 export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
   const query = useQuery();
   const navigate = useNavigate();
+  const location = useLocation();
   const { setLiquidityFilter, liquidityFilter } = useStore((state) => ({
     setLiquidityFilter: state.setLiquidityFilter,
     liquidityFilter: state.liquidityFilter,
@@ -139,7 +140,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
 
     filter.market = query.get("market") as string;
 
-    filter.provider = query.get("creator") as string;
+    filter.provider = query.get("provider") as string;
 
     filter.swapBadges = query.get("swap_badges") as string;
 
@@ -156,6 +157,9 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
         <FilterItem
           title="Base"
           tip="Find liquidities matching the base token address or symbol"
+          className={cn({
+            hidden: location.pathname.includes("/market/"),
+          })}
         >
           <Input
             type="text"
@@ -170,6 +174,9 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
         <FilterItem
           title="Quote"
           tip="Find liquidities matching the quote token address or symbol"
+          className={cn({
+            hidden: location.pathname.includes("/market/"),
+          })}
         >
           <Input
             type="text"
@@ -184,6 +191,9 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
         <FilterItem
           title="By Market ID"
           tip="Find a market by its address or ID"
+          className={cn({
+            hidden: location.pathname.includes("/market/"),
+          })}
         >
           <Input
             type="text"
@@ -443,7 +453,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
             }
 
             navigate({
-              pathname: "/liquidity/owned",
+              pathname: location.pathname,
               search: new URLSearchParams(
                 rmUndefinedAndNull(cloned, true)
               ).toString(),

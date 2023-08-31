@@ -14,11 +14,10 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import { Button } from "../ui/Button.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import { cn } from "../../libs/utils.ts";
 import { EditMarketSheet } from "./EditMarketSheet.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
-import IconEdit from "../icons/IconEdit.tsx";
 import {
   approxNumber,
   formatToHighDenom,
@@ -26,6 +25,8 @@ import {
 } from "../../libs/helpers.ts";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
+import { useNavigate } from "react-router-dom";
+import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 
 export function MarketRow({
   market,
@@ -40,6 +41,7 @@ export function MarketRow({
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openEditMarketSheet, setOpenEditMarketSheet] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div
@@ -51,25 +53,38 @@ export function MarketRow({
         },
         className
       )}
+      onClick={(e: BaseSyntheticEvent) => {
+        const canTrigger = e.target.getAttribute("data-click-trigger");
+        if (canTrigger && canTrigger == "1" && !noFocus) {
+          navigate(`/market/${market.address}`);
+        }
+      }}
     >
       <div className="flex flex-col md:flex-row h-auto">
         <div className="h-full border-r select-none border-gray-800 shrink-0">
-          <div className="flex items-center gap-2 md:gap-3 px-3 md:px-3 md:py-4 pt-2 md:pt-4">
+          <div
+            data-click-trigger="1"
+            className="flex items-center gap-2 md:gap-3 px-3 md:px-3 md:py-4 pt-2 md:pt-4"
+          >
             <PairAvatar
               base={market.base}
               quote={market.quote}
               baseSrc={market.baseLogo}
               quoteSrc={market.quoteLogo}
+              dataClickTrigger={"1"}
             />
             <div className="flex md:flex-col w-full justify-between md:justify-start">
-              <span className="flex ">
+              <span className="flex" data-click-trigger="1">
                 {market.base}
                 <span className="text-gray-500 inline-block mx-1">/</span>
                 {market.quote}
               </span>
               <span className="flex items-center gap-1 text-[11px] font-light text-blue-200">
-                <span>
-                  ID:<span> {shortenAddress(market.address)}</span>
+                <span data-click-trigger="1">
+                  ID: &nbsp;
+                  <span data-click-trigger="1">
+                    {shortenAddress(market.address)}
+                  </span>
                 </span>
                 <CopyToClipboard text={market.address}>
                   <IconCopyFilled
@@ -82,10 +97,13 @@ export function MarketRow({
             </div>
           </div>
         </div>
-        <div className="w-full overflow-hidden mr-[2px]">
+        <div className="w-full overflow-hidden mr-[2px]" data-click-trigger="1">
           <ScrollGradientIndicator className="[&::before]:rounded-r-none md:[&::before]:rounded-tr-2xl">
             <ScrollAreaHorizontal type="scroll" className="mx-2 md:mx-0">
-              <div className="py-[8px] flex gap-2 md:px-2">
+              <div
+                data-click-trigger="1"
+                className="py-[8px] flex gap-2 md:px-2"
+              >
                 <StatCard
                   title={`Price (${market.base})`}
                   width="w-auto"
@@ -105,8 +123,8 @@ export function MarketRow({
                     </span>
                   }
                 >
-                  <span className="flex gap-1">
-                    <span>
+                  <span className="flex gap-1" data-click-trigger="1">
+                    <span data-click-trigger="1">
                       {formatToHighDenom(
                         market.lowestPrice,
                         market.quoteDecimals
@@ -121,8 +139,8 @@ export function MarketRow({
                   title2=""
                   tip={`The total amount of ${market.base} in the market`}
                 >
-                  <span className="flex gap-1">
-                    <span className="text-gray-200">
+                  <span className="flex gap-1" data-click-trigger="1">
+                    <span className="text-gray-200" data-click-trigger="1">
                       {formatToHighDenom(
                         market.totalLiquidity,
                         market.baseDecimals
@@ -138,7 +156,7 @@ export function MarketRow({
                   title2=""
                   tip={`The total volume of ${market.base} traded in the last 24hrs`}
                 >
-                  <span className="text-gray-200">
+                  <span className="text-gray-200" data-click-trigger="1">
                     ${approxNumber(parseFloat(market.volume24h), 3)}
                   </span>
                 </StatCard>
@@ -147,7 +165,7 @@ export function MarketRow({
                   title2="(%)"
                   tip={`The commission reserved for the market owner`}
                 >
-                  <span className="text-gray-200">
+                  <span className="text-gray-200" data-click-trigger="1">
                     {market.commission / 100}
                   </span>
                 </StatCard>
@@ -157,7 +175,7 @@ export function MarketRow({
                   width="w-[125px]"
                   tip={`Only offers can be made on this market. No direct swap.`}
                 >
-                  <span className="text-gray-200">
+                  <span className="text-gray-200" data-click-trigger="1">
                     {market.offerOnly ? "YES" : "NO"}
                   </span>
                 </StatCard>
@@ -167,7 +185,7 @@ export function MarketRow({
                   width="w-[125px]"
                   tip={`Is the market open to the public for adding liquidity?`}
                 >
-                  <span className="text-gray-200">
+                  <span className="text-gray-200" data-click-trigger="1">
                     {market.permPut ? "NO" : "YES"}
                   </span>
                 </StatCard>
@@ -176,7 +194,7 @@ export function MarketRow({
                   title2=""
                   tip={`Is the market open to the public for swapping liquidity?`}
                 >
-                  <span className="text-gray-200">
+                  <span className="text-gray-200" data-click-trigger="1">
                     {market.permSwap ? "NO" : "YES"}
                   </span>
                 </StatCard>
@@ -226,9 +244,12 @@ export function MarketRow({
             </ScrollGradientIndicator>
           </div>
         </div>
-        <div className="flex items-center border-l border-gray-800">
+        <div
+          className="flex items-center border-l border-gray-800"
+          data-click-trigger="1"
+        >
           {ownerMode && (
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
+            <span className="hidden lg:inline border-gray-800 shrink-0">
               <Button
                 variant="link"
                 rounded="none"
@@ -237,13 +258,15 @@ export function MarketRow({
                 }}
                 className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
-                <IconEdit width="15px" /> Manage
+                <IconSettingsOutline width="15px" /> Manage
               </Button>
             </span>
           )}
-          <span className="flex  cursor-pointer items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
-            {!ownerMode && <IconHeart />}
-          </span>
+          {!ownerMode && (
+            <span className="flex cursor-pointer items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
+              <IconHeart />
+            </span>
+          )}
           {ownerMode && (
             <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu
@@ -268,7 +291,7 @@ export function MarketRow({
                       setOpenEditMarketSheet(true);
                     }}
                   >
-                    <IconEdit width="15px" /> Manage Market
+                    <IconSettingsOutline width="15px" /> Manage Market
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

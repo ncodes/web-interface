@@ -1,5 +1,6 @@
 import TokenInfo from "../hooks/connectors/token_info.ts";
 import React from "react";
+import { Events } from "./enums.ts";
 
 interface ContractInfo<ABIType> {
   address: string;
@@ -221,6 +222,7 @@ declare global {
     updatedAt: string;
     market: Market;
     liquidity: Liquidity;
+    swap: Swap;
   }
 
   interface Dispute {
@@ -317,5 +319,32 @@ declare global {
       totalBondsUsd?: number;
       total?: string;
     };
+  }
+
+  interface Event {
+    network: string;
+    marketAddress: string;
+    orderId: number;
+    action: Events;
+    creator: string;
+    offerId: number;
+    amount: string;
+    price: string;
+    provider: string;
+    lid: number;
+    minSwap: string;
+    maxSwap: string;
+    target: string;
+    timeToPay: number;
+    manager: string;
+    paused: boolean;
+    disputeId: number;
+    draftee: string;
+    vote: string;
+    ids: number[];
+    createdAt: string;
+    offer: Offer;
+    swap: Swap;
+    dispute: Dispute;
   }
 }

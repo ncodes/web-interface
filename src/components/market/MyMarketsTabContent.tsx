@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { PlugZapIcon } from "lucide-react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { RequestError } from "../../libs/RequestError.ts";
+import { isEqlStr } from "../../libs/helpers.ts";
 
 export function MyMarketsTabContent() {
   const { getChainInfo, address } = useConnector();
@@ -86,7 +87,11 @@ export function MyMarketsTabContent() {
           />
           <div className="flex flex-col gap-3 p-3 pt-0">
             {data?.markets.map((market: Market) => (
-              <MarketRow market={market} key={market.address} />
+              <MarketRow
+                market={market}
+                key={market.address}
+                ownerMode={isEqlStr(market.creator, address)}
+              />
             ))}
           </div>
           <Paginator

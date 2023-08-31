@@ -4,6 +4,8 @@ import useConnector from "../hooks/connectors/useConnector.tsx";
 import { Link, useLocation } from "react-router-dom";
 import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 
 type NavPageLinkProps = {
   iconFile?: string;
@@ -12,6 +14,7 @@ type NavPageLinkProps = {
   alt?: string;
   active?: boolean;
   to?: string;
+  countBadge?: number;
 };
 
 function NavPageLink(props: NavPageLinkProps) {
@@ -19,7 +22,7 @@ function NavPageLink(props: NavPageLinkProps) {
     <Link to={props.to || "#"}>
       <div
         className={cn(
-          "flex w-[200px] space-x-3 hover:bg-gray-900 transition-all delay-100 duration-300 hover:cursor-pointer hover:rounded-full p-2 xl:p-3 px-4 pr-8 hover:scale-x-105",
+          "flex w-[200px] space-x-3 items-center hover:bg-gray-900 transition-all delay-100 duration-300 hover:cursor-pointer hover:rounded-full p-2 xl:p-3 px-4 pr-8 hover:scale-x-105",
           {
             "font-light text-gray-300 hover:text-gray-200": !props.active,
             "text-white scale-x-105": props.active,
@@ -39,6 +42,11 @@ function NavPageLink(props: NavPageLinkProps) {
         <span className={cn("text-[20px] xl:text-[21px] tracking-wide", {})}>
           {props.label}
         </span>
+        {props.countBadge != undefined && props.countBadge > 0 && (
+          <span className="rounded-full relative top-[1px] h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center  bg-red-600 text-[10px]">
+            {props.countBadge}
+          </span>
+        )}
       </div>
     </Link>
   );
@@ -47,6 +55,13 @@ function NavPageLink(props: NavPageLinkProps) {
 export function Navigation() {
   const { connected } = useConnector();
   const { pathname } = useLocation();
+  const { address, getChainInfo } = useConnector();
+  const { countUnread } = useOfferService();
+  const unreadOfferCount = useQuery({
+    queryKey: ["countUnreadOffer", { network: getChainInfo().queryName }],
+    queryFn: countUnread,
+    enabled: !!address,
+  });
 
   return (
     <nav className="-ml-5 border-b border-b-gray-900 xl:border-b-0 pb-4 xl:pb-0 pl-8">
@@ -63,7 +78,7 @@ export function Navigation() {
           <NavPageLink
             iconFile="market.svg"
             label="Markets"
-            active={pathname.match("/market") != null}
+            active={pathname.match("^/market") != null}
             to="/markets"
           />
         </li>
@@ -71,7 +86,7 @@ export function Navigation() {
           <NavPageLink
             iconFile="liquidity.svg"
             label="Liquidity"
-            active={pathname.match("/liquidity") != null}
+            active={pathname.match("^/liquidity") != null}
             to="/liquidity/owned"
           />
         </li>
@@ -79,7 +94,7 @@ export function Navigation() {
           <NavPageLink
             icon={<IconExchange />}
             label="Swaps"
-            active={pathname.match("/swap(s|)") != null}
+            active={pathname.match("^/swap(s|)") != null}
             to="/swaps/owned"
           />
         </li>
@@ -87,15 +102,24 @@ export function Navigation() {
           <NavPageLink
             icon={<IconOffer />}
             label="Offers"
-            active={pathname.match("/offer(s|)") != null}
+            active={pathname.match("^/offer(s|)") != null}
             to="/offers"
+            countBadge={
+              unreadOfferCount.data &&
+              unreadOfferCount.data.asOfferer +
+                unreadOfferCount.data.asProvider >
+                0
+                ? unreadOfferCount.data.asOfferer +
+                  unreadOfferCount.data.asProvider
+                : 0
+            }
           />
         </li>
         <li>
           <NavPageLink
             iconFile="disputes.svg"
             label="Disputes"
-            active={pathname.match("/dispute") != null}
+            active={pathname.match("^/dispute") != null}
             to="/disputes"
           />
         </li>
@@ -103,7 +127,7 @@ export function Navigation() {
           <NavPageLink
             iconFile="mediation.svg"
             label="Mediation"
-            active={pathname.match("/mediation") != null}
+            active={pathname.match("^/mediation") != null}
             to="/mediation"
           />
         </li>

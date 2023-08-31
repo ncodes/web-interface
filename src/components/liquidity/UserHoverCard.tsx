@@ -97,7 +97,7 @@ export function UserHoverCard({
                   title="Total Swaps"
                   tip={`The total number of swaps completed across all liquidities`}
                   width="w-full"
-                  noSwapTrigger
+                  rmDataClickTrigger
                 >
                   <span className="text-gray-200">
                     {formatToMoney(user?.totalSwaps)}
@@ -107,7 +107,7 @@ export function UserHoverCard({
                   title="Completion Rate"
                   tip={`The percentage of non-disputed swaps across all liquidities`}
                   width="w-full"
-                  noSwapTrigger
+                  rmDataClickTrigger
                 >
                   <span className="text-gray-200">{user?.completionRate}%</span>
                 </StatCard>
@@ -115,7 +115,7 @@ export function UserHoverCard({
                   title="Volume"
                   tip={`The total volume of swaps across all liquidities`}
                   width="w-full"
-                  noSwapTrigger
+                  rmDataClickTrigger
                 >
                   <span className="text-gray-200">
                     ${user?.volumeUsd ? approxNumber(user?.volumeUsd, 3) : ""}
@@ -125,7 +125,7 @@ export function UserHoverCard({
                   title="Last Active"
                   tip={`The last time the user participated in a swap`}
                   width="w-full"
-                  noSwapTrigger
+                  rmDataClickTrigger
                 >
                   <span className="text-gray-200">
                     {moment(user?.lastActiveAt).fromNow()}

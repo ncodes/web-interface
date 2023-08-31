@@ -43,6 +43,7 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { CountDown } from "../Countdown.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
+import { useLocation } from "react-router-dom";
 
 interface ButtonEnableState {
   accept: boolean;
@@ -60,6 +61,7 @@ export function OfferRow({
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { getUser } = useUserService();
   const { address } = useConnector();
+  const location = useLocation();
   const [disableButtons, setDisableButtons] = useState<ButtonEnableState>({
     accept: false,
     execute: false,
@@ -473,7 +475,12 @@ export function OfferRow({
             data-click-trigger="1"
             className="flex items-center border-l border-gray-800 shrink-0 px-2"
           >
-            <span className="hidden md:inline border-r border-gray-800 shrink-0">
+            <span
+              className={cn(
+                "hidden md:inline border-r border-gray-800 shrink-0",
+                { "!hidden": !offer.swap }
+              )}
+            >
               <Button
                 variant="link"
                 rounded="none"
@@ -482,22 +489,18 @@ export function OfferRow({
                 View Swap
               </Button>
             </span>
-            <span className="hidden md:inline border-r border-gray-800 shrink-0">
+            <span
+              className={cn(
+                "hidden md:inline border-r border-gray-800 shrink-0",
+                { "!hidden": location.pathname.match("^/liquidity") }
+              )}
+            >
               <Button
                 variant="link"
                 rounded="none"
                 className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
                 View Liquidity
-              </Button>
-            </span>
-            <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                View Market
               </Button>
             </span>
             <span className="border-gray-800 shrink-0">
@@ -532,14 +535,19 @@ export function OfferRow({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem className="flex md:hidden gap-2">
+                  <DropdownMenuItem
+                    className={cn("flex md:hidden gap-2", {
+                      "!hidden": !offer.swap,
+                    })}
+                  >
                     View Swap
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="flex md:hidden gap-2">
+                  <DropdownMenuItem
+                    className={cn("flex md:hidden gap-2", {
+                      "!hidden": location.pathname.match("^/liquidity"),
+                    })}
+                  >
                     View Liquidity
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="flex gap-2">
-                    View Market
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

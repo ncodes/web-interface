@@ -9,6 +9,24 @@ import * as approx from "approximate-number";
 import * as humanizeDuration from "humanize-duration";
 import { RequestError } from "./RequestError.ts";
 
+// pow10 returns 10^decimals
+export function pow10(decimals: number) {
+  return BigNumber.from(10).pow(decimals);
+}
+
+// pow10D returns 10^decimals as a Decimal object
+export function pow10D(decimals: number) {
+  return toDec(10).pow(decimals);
+}
+
+// powOf returns n * 10^power
+export function powOf(n: BigNumberish, power: number) {
+  return toBN(
+    toDec(n.toString())
+      .mul(toDec(pow10(power).toString()))
+      .toFixed(0)
+  );
+}
 /**
  * Generate and merge css classes
  * @param inputs - The css classes

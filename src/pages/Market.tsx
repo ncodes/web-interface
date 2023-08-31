@@ -6,33 +6,74 @@ import {
   TabsTrigger,
 } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Footer } from "../components/Footer.tsx";
-import { MarketRow } from "../components/market/MarketRow.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { IconPlus } from "../components/icons/IconPlus.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
-import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
-import { Paginator } from "../components/Paginator.tsx";
 import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
 import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
-
-function MarketTabContent() {
-  return (
-    <MarketRow
-      base="BTC"
-      quote="UNI"
-      className="rounded-none border-x-0 border-t-0"
-      noFocus
-    />
-  );
-}
+import { useQuery } from "@tanstack/react-query";
+import useConnector from "../hooks/connectors/useConnector.tsx";
+import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
+import { useParams } from "react-router-dom";
+import { MarketRow } from "../components/market/MarketRow.tsx";
+import useStore from "../hooks/store/useStore.ts";
+import { RowSkeleton } from "../components/RowSkeleton.tsx";
+import { ErrorIcon } from "react-hot-toast";
+import { RequestError } from "../libs/RequestError.ts";
+import { cn } from "../libs/utils.ts";
+import { useLiquidityService } from "../hooks/services/backend/useLiquidityService.ts";
+import { Paginator } from "../components/Paginator.tsx";
+import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openAddLiquiditySheet, setOpenAddLiquiditySheet] = useState(false);
+  const setLoaderProgress = useStore((state) => state.setLoaderProgress);
+  const liquidityFilter = useStore((state) => state.liquidityFilter);
+  const { getChainInfo } = useConnector();
+  const { getMarket } = useMarketService();
+  const { listLiquidities } = useLiquidityService();
+  const { id } = useParams();
+  const [offset, setOffset] = useState(0);
+  const [limit] = useState(1);
+
+  const market = useQuery({
+    queryKey: [
+      "getMarket",
+      { network: getChainInfo().queryName, market: id as string },
+    ],
+    queryFn: getMarket,
+    enabled: !!id,
+  });
+
+  const liquidities = useQuery({
+    queryKey: [
+      "getLiquidities",
+      {
+        network: getChainInfo().queryName,
+        limit,
+        offset,
+        liquidityFilter: { ...liquidityFilter, market: id as string },
+      },
+    ],
+    queryFn: listLiquidities,
+    enabled: market.data != undefined,
+  });
+
+  useEffect(() => {
+    if (market.isLoading || market.isRefetching)
+      setLoaderProgress && setLoaderProgress(50);
+    else setLoaderProgress && setLoaderProgress(100);
+  }, [
+    market.isError,
+    market.isLoading,
+    market.isRefetching,
+    market.isRefetchError,
+  ]);
 
   return (
     <Tabs
@@ -65,42 +106,109 @@ function MarketTabs() {
           </Button>
         </div>
       </TabsList>
+
+      {/* Tab Content */}
       <TabsContent
         value="markets"
         className="p-3 px-0 mt-0 pt-0 flex flex-col gap-3"
       >
-        <MarketTabContent />
-        <div className="flex items-center justify-between">
+        {/* MARKET INFO */}
+
+        {market.isLoading && <RowSkeleton />}
+        {market.isError && (
+          <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+            <ErrorIcon className="w-[20px]" />{" "}
+            {(market.error as RequestError)?.message}
+          </div>
+        )}
+        {!market.isLoading && market.isSuccess && (
+          <MarketRow
+            market={market.data}
+            className="rounded-none border-x-0 border-t-0"
+            noFocus
+          />
+        )}
+
+        {/* LIQUIDITIES */}
+
+        <div
+          className={cn("flex items-center justify-between", {
+            hidden: !market.data,
+          })}
+        >
           <h1 className="p-5 py-3 pb-0 text-xl">Liquidities</h1>
-          <div className="md:hidden">
-            <Button
-              variant="link"
-              className="gap-2"
-              rounded="none"
-              onClick={() => {
-                setOpenFilterSheet(true);
-              }}
-            >
-              <span>
-                <IconFilterOutline width="15px" />
-              </span>
-              <span>Filter</span>
-            </Button>
-          </div>
+          {!liquidities?.isLoading &&
+            liquidities.data?.liquidities &&
+            liquidities.data?.liquidities?.length > 0 && (
+              <div className="md:hidden">
+                <Button
+                  variant="link"
+                  className="gap-2"
+                  rounded="none"
+                  onClick={() => {
+                    setOpenFilterSheet(true);
+                  }}
+                >
+                  <span>
+                    <IconFilterOutline width="15px" />
+                  </span>
+                  <span>Filter</span>
+                </Button>
+              </div>
+            )}
         </div>
+
         <div>
-          <Paginator className="border-b-0" />
-          <div className="flex gap-2 flex-col z-[6] px-3 mt-3">
-            <LiquidityRow base="BTC" quote="UNI" />
-          </div>
+          {liquidities.isLoading && !market.isLoading && <RowSkeleton />}
+          {liquidities.isError && (
+            <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+              <ErrorIcon className="w-[20px]" />{" "}
+              {(liquidities.error as RequestError)?.message}
+            </div>
+          )}
+          {!liquidities.isLoading &&
+            liquidities.data?.liquidities?.length == 0 && (
+              <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+                No liquidity found
+              </div>
+            )}
+          {!liquidities.isLoading && liquidities.isSuccess && (
+            <>
+              <Paginator
+                curPage={offset}
+                total={liquidities.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + 1)}
+                onPrev={() => setOffset(offset - 1)}
+              />
+              <div className="flex gap-2 flex-col z-[6] px-3 mt-3">
+                {liquidities.data?.liquidities.map((liquidity) => (
+                  <LiquidityRow
+                    liquidity={liquidity}
+                    key={`${liquidity.provider}:${liquidity.lid}`}
+                  />
+                ))}
+              </div>
+              <Paginator
+                className="border-t mt-3"
+                curPage={offset}
+                total={liquidities.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + 1)}
+                onPrev={() => setOffset(offset - 1)}
+              />
+            </>
+          )}
         </div>
       </TabsContent>
+
       <LiquidityFilterSheet
         active={openFilterSheet}
         onOpen={(open) => {
           setOpenFilterSheet(open);
         }}
       />
+
       <ManageLiquiditySheet
         addMode={true}
         open={openAddLiquiditySheet}
@@ -117,10 +225,12 @@ export default function Market() {
     <Layout
       tab={<MarketTabs />}
       rightSide={
-        <div className="flex flex-col h-full mt-2">
+        <div className="flex w-full h-full flex-col pt-2">
           <LiquidityFilter />
-          <div className="text-gray-200">
-            <Footer />
+          <div className="relative h-full">
+            <div className="text-gray-200 absolute bottom-0 w-full">
+              <Footer />
+            </div>
           </div>
         </div>
       }

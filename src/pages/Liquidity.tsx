@@ -1,29 +1,14 @@
-import {
-  ScrollArea,
-  ScrollAreaHorizontal,
-} from "../components/ui/scroll-area.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../components/ui/Tabs.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
-import { DotsVerticalIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
-import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { Label } from "../components/ui/label.tsx";
-import { ToolTip } from "../components/ToolTip.tsx";
-import EmojiAvatar from "../components/avatar/EmojiAvatar.tsx";
-import { AvatarSize } from "../components/avatar/useAvatar.tsx";
-import { shortenAddress } from "../libs/helpers.ts";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
-import { SwapSheet, SwapSheetContent } from "../components/swap/SwapSheet.tsx";
+import { SwapSheetContent } from "../components/swap/SwapSheet.tsx";
 import { Button } from "../components/ui/Button.tsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useStore from "../hooks/store/useStore.ts";
-import { OfferRow } from "../components/liquidity/OfferRow.tsx";
 import {
   CreateOfferContent,
   CreateOfferSheet,
@@ -35,254 +20,48 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { Paginator } from "../components/Paginator.tsx";
-import { UserHoverCard } from "../components/liquidity/UserHoverCard.tsx";
+import { LiquidityTabContent } from "../components/liquidity/LiquidityTabContent.tsx";
+import { OffersTabContent } from "../components/liquidity/OffersTabContent.tsx";
+import { useNavigate, useParams } from "react-router-dom";
+import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
+import { useQuery } from "@tanstack/react-query";
+import useConnector from "../hooks/connectors/useConnector.tsx";
 
-type ActivityType = "add-liquidity" | "remove-liquidity" | "swap";
-
-function ActivityItem({
-  initiator,
-  type,
+function LiquidityPage({
+  defaultTab,
+  onTabChanged,
 }: {
-  initiator: string;
-  type: ActivityType;
+  defaultTab?: string;
+  onTabChanged?: (tab: string) => void;
 }) {
-  return (
-    <div className="flex gap-2 tracking-wider items-center px-3 py-3 text-gray-200 font-light text-sm">
-      <span className="shrink-0">
-        <UserHoverCard>
-          <EmojiAvatar size={AvatarSize.Small} randomStr={initiator} />
-        </UserHoverCard>
-      </span>
-      <div className="w-full">
-        <div className="flex flex-col flex-1">
-          <div className="flex justify-between">
-            {type === "add-liquidity" && (
-              <div className="flex flex-col gap-1">
-                <div className="flex gap-1 items-center">
-                  <span className="text-gray-500 font-medium text-xs">
-                    <UserHoverCard>@{shortenAddress(initiator)}</UserHoverCard>
-                  </span>
-                  <span className="text-xs text-gray-400">2 days ago</span>
-                </div>
-                <span>
-                  Added <span className="text-chinese-green">45 BTC</span>{" "}
-                  liquidity
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ActivityLog() {
-  return (
-    <div className=" pr-0 flex-1 ">
-      <Label className="text-xl flex items-center gap-1 px-5">
-        <span>Events</span>{" "}
-        <ToolTip tip="Recent events associated with this liquidity">
-          <InfoCircledIcon width="20px" className="relative top-[2px]" />
-        </ToolTip>
-      </Label>
-      <div className="bg-card-background divide-y divide-gray-800 border rounded-2xl mt-5 border-card-border w-full min-h-[300px]">
-        <ScrollGradientIndicator side="bottom">
-          <ScrollArea type="scroll" className="h-[400px]">
-            <ActivityItem
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xf39Fd6e51aad88F6F5ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xf39Fd6e51aad88A6F5ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xA39Fd6e51aad88A6F5ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xA39FdXe51aad88A6F5ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xA39Fd6e5Oaad88A6F5ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xA39Fd6e5Oaad88A6F5ce6aBA827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xA39Fd6e5Oaad88O6F5ce6aB8827279cffFb92266"
-              type="add-liquidity"
-            />
-            <ActivityItem
-              initiator="0xA39Fd6e5Oaad88A6F5ce6aB8827279cffFb92268"
-              type="add-liquidity"
-            />
-          </ScrollArea>
-        </ScrollGradientIndicator>
-      </div>
-    </div>
-  );
-}
-
-function ReviewItem({
-  initiator,
-  good,
-  msg,
-}: {
-  initiator: string;
-  good?: boolean;
-  msg?: string;
-}) {
-  return (
-    <div className="flex items-center gap-2 tracking-wider px-3 py-3 text-gray-200 font-light text-sm">
-      <span className="shrink-0">
-        {!good && (
-          <span className="bg-red-600 block rounded-full p-[5px]">
-            <ThumbsDown size={20} className="text-red-200" />
-          </span>
-        )}
-        {good && (
-          <span className="bg-green-600 block rounded-full p-[5px]">
-            <ThumbsUp size={20} className="text-green-200" />
-          </span>
-        )}
-      </span>
-      <div className="w-full">
-        <div className="flex flex-col flex-1">
-          <div className="flex justify-between">
-            <div className="flex flex-col w-full">
-              <div className="flex gap-2 items-center">
-                <span className="text-gray-500 text-xs font-medium">
-                  <UserHoverCard>@{shortenAddress(initiator)}:</UserHoverCard>
-                </span>
-                <span>
-                  <span className="text-xs text-gray-400">2 days ago</span>
-                </span>
-              </div>
-              <span>{msg}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function RecentReviews() {
-  const { toggleOpenState } = useStore((state) => ({
-    toggleOpenState: state.toggleOpenState,
-  }));
-
-  return (
-    <div className="lg:px-5 flex-1 flex flex-col">
-      <span className="px-3 text-xl flex items-center gap-1 justify-between font-medium">
-        <div className="flex items-center gap-2">
-          <span>Recent Reviews</span>{" "}
-          <ToolTip tip="Recent reviews posted by takers of this liquidity">
-            <InfoCircledIcon width="20px" className="relative top-[2px]" />
-          </ToolTip>
-        </div>
-        <div>
-          <Button
-            variant="link"
-            size="sm"
-            className="px-0"
-            onClick={() => {
-              toggleOpenState && toggleOpenState("reviewSheet");
-            }}
-          >
-            View All
-          </Button>
-        </div>
-      </span>
-      <div className="flex-1 bg-card-background divide-y divide-gray-800 border rounded-2xl mt-4 border-card-border w-full">
-        <ScrollGradientIndicator side="bottom">
-          <ScrollArea type="scroll" className="h-[400px]">
-            <ReviewItem
-              good={true}
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg="This person is fast and a good communicator"
-            />
-            <ReviewItem
-              good={false}
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg="I wish i never selected you"
-            />
-            <ReviewItem
-              good={false}
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg="He held my money for 2 days"
-            />
-            <ReviewItem
-              good={true}
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg="Best price ever. I will be coming back."
-            />
-            <ReviewItem
-              good={true}
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg="Patient seller. Could be more quicker though"
-            />
-            <ReviewItem
-              good={false}
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg="He yelled at me for no reason. I will never come back"
-            />
-            <ReviewItem
-              good={true}
-              initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-              msg="hi"
-            />
-          </ScrollArea>
-        </ScrollGradientIndicator>
-      </div>
-    </div>
-  );
-}
-
-function LiquidityTabContent() {
-  return (
-    <div>
-      <LiquidityRow
-        base="BTC"
-        quote="UNI"
-        noFocus={true}
-        className="rounded-none border-x-0 border-t-0"
-      />
-      <div className="flex flex-col gap-5 lg:gap-0 lg:flex-row pt-5 px-3">
-        <ActivityLog />
-        <RecentReviews />
-      </div>
-    </div>
-  );
-}
-
-function Page() {
-  const [openSwapSheet, setOpenSwapSheet] = useState(false);
-  const setCurrentTab = useStore((state) => state.setCurrentTab);
+  const navigate = useNavigate();
+  const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
   const toggleOpenState = useStore((state) => state.toggleOpenState);
-
-  useEffect(() => {
-    setCurrentTab && setCurrentTab("liquidity");
-  }, [setCurrentTab]);
+  const { market, provider, lid } = useParams();
+  const { address, getChainInfo } = useConnector();
+  const { countUnread } = useOfferService();
+  const unreadOfferCount = useQuery({
+    queryKey: [
+      "countUnreadOffer",
+      {
+        network: getChainInfo().queryName,
+        marketAddress: market,
+        provider: provider,
+        lid: parseInt(lid || "0"),
+      },
+    ],
+    queryFn: countUnread,
+    enabled: !!address,
+  });
 
   return (
     <Tabs
-      defaultValue="liquidity"
+      defaultValue={defaultTab || "liquidity"}
       className="w-full h-full transition-all duration-500"
+      onValueChange={(value) => {
+        setCurrentTab(value);
+        onTabChanged && onTabChanged(value);
+      }}
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
@@ -291,8 +70,8 @@ function Page() {
               <TabsTrigger
                 value="liquidity"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={() => {
-                  setCurrentTab && setCurrentTab("liquidity");
+                onClick={async () => {
+                  navigate(`/liquidity/${market}/${provider}/${lid}`);
                 }}
               >
                 Liquidity
@@ -300,14 +79,20 @@ function Page() {
               <TabsTrigger
                 value="offers"
                 className="font-light gap-1 relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={() => {
-                  setCurrentTab && setCurrentTab("offers");
+                onClick={async () => {
+                  navigate(`/liquidity/${market}/${provider}/${lid}/offers`);
                 }}
               >
                 <span>Offers</span>
-                <div className="rounded-full h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center  bg-red-600 text-[10px]">
-                  2
-                </div>
+                {unreadOfferCount.data &&
+                  unreadOfferCount.data.asOfferer +
+                    unreadOfferCount.data.asProvider >
+                    0 && (
+                    <div className="rounded-full h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center  bg-red-600 text-[10px]">
+                      {unreadOfferCount.data.asOfferer +
+                        unreadOfferCount.data.asProvider}
+                    </div>
+                  )}
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
@@ -343,26 +128,8 @@ function Page() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent
-        value="liquidity"
-        className="p-3 pt-0 mt-0 px-0 flex flex-col gap-3"
-      >
-        <LiquidityTabContent />
-        <SwapSheet
-          open={openSwapSheet}
-          onOpenChange={(open) => {
-            setOpenSwapSheet(open);
-          }}
-        />
-      </TabsContent>
-      <TabsContent value="offers" className="p-0 m-0 px-0 flex flex-col gap-3">
-        <Paginator />
-        <div className="p-3 pt-0">
-          <div className=" pr-0 flex-1 ">
-            <OfferRow base={"BTC"} quote={"UNI"} />
-          </div>
-        </div>
-      </TabsContent>
+      {currentTab == "liquidity" && <LiquidityTabContent />}
+      {currentTab == "offers" && <OffersTabContent />}
       <CreateOfferSheet />
     </Tabs>
   );
@@ -390,11 +157,18 @@ function CreateOfferWrapper() {
   );
 }
 
-export default function Liquidity() {
-  const currentTab = useStore((state) => state.currentTab);
+export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
+  const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
   return (
     <Layout
-      tab={<Page />}
+      tab={
+        <LiquidityPage
+          defaultTab={currentTab}
+          onTabChanged={(val) => {
+            setCurrentTab(val);
+          }}
+        />
+      }
       rightSide={
         <div className="flex w-full flex-col h-full pt-2">
           {(currentTab == "liquidity" || !currentTab) && (
