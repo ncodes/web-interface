@@ -11,7 +11,7 @@ import { Skeleton } from "../ui/skeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 
-function ActivityLogSkeleton() {
+export function ActivityLogSkeleton() {
   return (
     <div className="w-full flex gap-1 p-3 items-center">
       <Skeleton className="w-[30px] h-[30px] rounded-full" />

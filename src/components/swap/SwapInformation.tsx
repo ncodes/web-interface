@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Label } from "../ui/label.tsx";
-import { EventItem } from "./EventItem.tsx";
+import { SwapEventLogs } from "./SwapEventLogs.tsx";
 
 export function SwapInformation({ swap }: { swap: Swap }) {
   return (
@@ -54,59 +54,7 @@ export function SwapInformation({ swap }: { swap: Swap }) {
           </div>
         </TabsContent>
 
-        <TabsContent value="logs">
-          <ScrollGradientIndicator
-            side="bottom"
-            className="[&>span.grad-indicator]:mb-[1px]"
-          >
-            <div className="bg-card-background striped scrollbar-hide divide-y divide-gray-900 border rounded-2xl border-card-border w-full min-h-[200px] max-h-[400px] overflow-y-auto mt-4">
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />{" "}
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />{" "}
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />{" "}
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />{" "}
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />{" "}
-              <EventItem
-                initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"
-                type="mark-paid"
-              />{" "}
-              {/*<EventItem*/}
-              {/*  initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"*/}
-              {/*  type="mark-paid"*/}
-              {/*/>{" "}*/}
-              {/*<EventItem*/}
-              {/*  initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"*/}
-              {/*  type="mark-paid"*/}
-              {/*/>{" "}*/}
-              {/*<EventItem*/}
-              {/*  initiator="0xf39Fd6e51aad88F6F6ce6aB8827279cffFb92266"*/}
-              {/*  type="mark-paid"*/}
-              {/*/>*/}
-            </div>
-          </ScrollGradientIndicator>
-        </TabsContent>
+        <SwapEventLogs swap={swap} />
       </Tabs>
     </div>
   );

@@ -2,6 +2,7 @@ import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { QueryFunctionContext } from "@tanstack/react-query";
 import { SwapFilter } from "../../store/useStore.ts";
+import { Events } from "../../../types/enums.ts";
 import moment from "moment";
 
 export type ListSwapIDs = "getSwapsAsParticipant";
@@ -16,6 +17,13 @@ export interface ListSwapParams {
 interface GetSwapParams {
   network: string;
   orderId: string;
+}
+
+type GetSwapEventsIDs = "getSwapEvents";
+
+interface GetSwapEventParams {
+  network: string;
+  orderId: number;
 }
 
 /**
@@ -89,13 +97,14 @@ export function useSwapService() {
         headers,
       });
 
-      const swap = resp.data.data;
+      // TODO remove example
+      // const swap = resp.data.data;
       // swap.cancelled = true;
       // swap.paid = true;
       // swap.released = true;
-      swap.cancelAt = moment().add(10, "d").toISOString();
+      // swap.cancelAt = moment().add(10, "d").toISOString();
       // swap.disputeFrom = moment().add(10, "s").toISOString();
-      swap.disputes = [];
+      // swap.disputes = [];
       // swap.disputes[0].creator = "0x123";
       // swap.disputes[0].draftees[0].owner = "0x123";
       // swap.disputes[0].wantRelease = false;
@@ -129,8 +138,82 @@ export function useSwapService() {
     }
   }
 
+  /**
+   * Get liquidity events
+   */
+  async function getEvents(
+    ctx: QueryFunctionContext<[GetSwapEventsIDs, GetSwapEventParams]>
+  ): Promise<Event[]> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { network, orderId } = params;
+      const headers = {};
+      const resp = await axios<{ data: Event[] }>({
+        method: "get",
+        url: `${import.meta.env.VITE_API_URI}/v1/swaps/${orderId}/events`,
+        params: {
+          net: network,
+        },
+        headers,
+      });
+
+      // TODO: delete mocks
+      resp.data.data = [] as Event[];
+      resp.data.data[0] = {
+        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        action: Events.SwapPaid,
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+      resp.data.data[1] = {
+        creator: "0x1787BaB2743467E874ee133ADd46884e0A32ccB5",
+        action: Events.SwapReleased,
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+      resp.data.data[2] = {
+        creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92263",
+        action: Events.SwapCancelled,
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+      resp.data.data[3] = {
+        creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92343",
+        action: Events.SwapDisputed,
+        dispute: { disputeId: 1 },
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+      resp.data.data[4] = {
+        creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92343",
+        action: Events.SwapDrafted,
+        dispute: { disputeId: 1 },
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+      resp.data.data[5] = {
+        creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92345",
+        action: Events.SwapCommitted,
+        dispute: { disputeId: 1 },
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+      resp.data.data[6] = {
+        creator: "0x349Fd6e51axd88F6F4ce6aB8827279cffFb92345",
+        action: Events.SwapRevealed,
+        dispute: { disputeId: 1 },
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+      resp.data.data[7] = {
+        creator: "0x349Fd6e51axd88F6F4ce6aB8827279cffFb92349",
+        action: Events.SwapUndrafted,
+        dispute: { disputeId: 1 },
+        createdAt: moment().subtract(1, "day").toISOString(),
+      } as unknown as Event;
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     listSwaps,
     getSwap,
+    getEvents,
   };
 }

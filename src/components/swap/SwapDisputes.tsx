@@ -8,7 +8,7 @@ export function SwapDisputes({ swap }: { swap: Swap }) {
   const [showOtherDisputes, setShowOtherDisputes] = useState(false);
 
   return (
-    <div className="px-1 md:px-2 bg-gray-900 mx-1 rounded-xl border border-gray-800/80 py-2">
+    <div className="px-1 md:px-2 bg-gray-900/70 mx-1 rounded-xl py-2">
       <div className="flex flex-col gap-2">
         <div>
           <div className="p-2 pt-0">

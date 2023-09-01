@@ -11,6 +11,8 @@ import {
   shortenAddress,
 } from "../../libs/helpers.ts";
 import moment from "moment";
+import { ToolTip } from "../ToolTip.tsx";
+import useConnector from "../../hooks/connectors/useConnector.tsx";
 
 export function ActivityItem({
   event,
@@ -22,6 +24,7 @@ export function ActivityItem({
   market: Market;
 }) {
   const { getUser } = useUserService();
+  const { address } = useConnector();
   const creator = useQuery({
     queryKey: ["getUser", { address: event.creator, noAuth: true }],
     queryFn: getUser,
@@ -44,10 +47,19 @@ export function ActivityItem({
                   <UserHoverCard user={creator.data as User}>
                     @{shortenAddress(event.creator)}
                   </UserHoverCard>
+                  {isEqlStr(address, event.creator) && (
+                    <ToolTip tip="You">
+                      <span className="bg-gray-700 rounded-sm px-[4px] pr-[2px] font-medium text-gray-400 text-[9px]">
+                        YOU
+                      </span>
+                    </ToolTip>
+                  )}
                   {isEqlStr(liquidity?.provider, event.creator) && (
-                    <span className="bg-chinese-green rounded-sm px-[4px] pr-[2px] font-medium text-gray-900 text-[9px]">
-                      LP
-                    </span>
+                    <ToolTip tip="Liquidity Provider">
+                      <span className="bg-chinese-green rounded-sm px-[4px] pr-[2px] font-medium text-gray-900 text-[9px]">
+                        LP
+                      </span>
+                    </ToolTip>
                   )}
                 </span>
                 <span className="text-xs text-gray-500">
@@ -70,7 +82,7 @@ export function ActivityItem({
                     <span>liquidity</span>
                   </span>
                   <div>
-                    <span className="text-xs relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
+                    <span className="text-[10px] relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
                       Price:{" "}
                       {formatToHighDenom(
                         event.price || "0",
@@ -118,7 +130,7 @@ export function ActivityItem({
                     </span>
                   </span>
                   <div>
-                    <span className="text-xs relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
+                    <span className="text-[10px] relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
                       Price:{" "}
                       {formatToHighDenom(
                         event.swap.price || "0",
@@ -152,7 +164,7 @@ export function ActivityItem({
                     </span>
                   </span>
                   <div>
-                    <span className="text-xs relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
+                    <span className="text-[10px] relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
                       {moment(event.offer.deadline).isAfter(moment()) ? (
                         <span>
                           Expiring: {moment(event.offer.deadline).fromNow()}
@@ -224,7 +236,7 @@ export function ActivityItem({
                     <span>Updated the swap amount limit</span>
                   </span>
                   <div>
-                    <span className="text-xs relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
+                    <span className="text-[10px] relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
                       Min:{" "}
                       {formatToHighDenom(
                         event.minSwap || "0",
@@ -233,7 +245,7 @@ export function ActivityItem({
                       {market.base}
                     </span>
                     &nbsp;
-                    <span className="text-xs relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
+                    <span className="text-[10px] relative -left-[8px] text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
                       Max:{" "}
                       {formatToHighDenom(
                         event.maxSwap || "0",

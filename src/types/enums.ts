@@ -9,6 +9,7 @@ export enum Events {
   LiquidityPriceUpdate = "liq_price_update",
   LiquiditySwapLimitUpdate = "liq_swap_limit_update",
   LiquidityTimeToPayUpdate = "liq_time_to_pay_update",
+  SwapNew = "swap_new",
   SwapPaid = "swap_paid",
   SwapReleased = "swap_released",
   SwapCancelled = "swap_cancelled",
