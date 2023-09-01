@@ -6,8 +6,8 @@ import {
   shortenAddress,
   shortenAddress2,
 } from "../../../libs/helpers.ts";
-import { SettingsSheet } from "../../../components/SettingsSheet.tsx";
 import useStore from "../../store/useStore.ts";
+import { SettingsSheet } from "../../../components/settings/SettingsSheet.tsx";
 
 // Component for rendering amount and symbol
 function Amount(props: { balance: string; symbol: string }) {
