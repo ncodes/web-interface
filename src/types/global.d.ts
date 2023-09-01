@@ -175,7 +175,7 @@ declare global {
     paid: boolean;
     payer: string;
     cancelled: boolean;
-    released: boolean;
+    released?: boolean | undefined;
     finalizer: string;
     byDispute: boolean;
     providerIds: number[];
@@ -199,6 +199,7 @@ declare global {
     liquidity: Liquidity;
     disputes: Dispute[];
     createdAt: string;
+    nonce: number;
   }
 
   interface Offer {
@@ -242,7 +243,7 @@ declare global {
     revealEndAt: string;
     predictEndAt: string;
     executed: boolean;
-    released: boolean;
+    released?: boolean | undefined;
     abandoned: boolean;
     orderReleased: boolean;
     notifiedOnEvidenceEndAt: boolean;

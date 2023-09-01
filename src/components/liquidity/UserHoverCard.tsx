@@ -100,7 +100,7 @@ export function UserHoverCard({
                   rmDataClickTrigger
                 >
                   <span className="text-gray-200">
-                    {formatToMoney(user?.totalSwaps)}
+                    {formatToMoney(user?.totalSwaps || "0")}
                   </span>
                 </StatCard>
                 <StatCard
@@ -109,7 +109,9 @@ export function UserHoverCard({
                   width="w-full"
                   rmDataClickTrigger
                 >
-                  <span className="text-gray-200">{user?.completionRate}%</span>
+                  <span className="text-gray-200">
+                    {user?.completionRate || 0}%
+                  </span>
                 </StatCard>
                 <StatCard
                   title="Volume"
@@ -118,7 +120,10 @@ export function UserHoverCard({
                   rmDataClickTrigger
                 >
                   <span className="text-gray-200">
-                    ${user?.volumeUsd ? approxNumber(user?.volumeUsd, 3) : ""}
+                    $
+                    {user?.volumeUsd
+                      ? approxNumber(user?.volumeUsd || 0, 3)
+                      : "0"}
                   </span>
                 </StatCard>
                 <StatCard

@@ -51,6 +51,8 @@ import {
 } from "./DisputeStatusBadge.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { CountDown } from "../Countdown.tsx";
+import { useLocation } from "react-router-dom";
+import useStore from "../../hooks/store/useStore.ts";
 
 interface ButtonEnableState {
   commit: boolean;
@@ -69,6 +71,8 @@ export function DisputeRow({
   const { address } = useConnector();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { getUser } = useUserService();
+  const location = useLocation();
+  const setPageSwapState = useStore((state) => state.setPageSwapState);
   const getDefendant = useQuery({
     queryKey: ["getUser", { address: dispute.defendant, noAuth: true }],
     queryFn: getUser,
@@ -186,7 +190,9 @@ export function DisputeRow({
                       {getDisputeStatus(dispute) == "awaiting_exec" && (
                         <>Execution</>
                       )}
-                      {getDisputeStatus(dispute) == "executed" && <>-</>}
+                      {["released", "stalled", "cancelled"].includes(
+                        getDisputeStatus(dispute)
+                      ) && <>-</>}
                     </span>
                   </StatCard>
                   <StatCard
@@ -200,7 +206,6 @@ export function DisputeRow({
                       {getDisputeStatus(dispute) == "commit" && <>Reveal</>}
                       {getDisputeStatus(dispute) == "reveal" && <>Execution</>}
                       {getDisputeStatus(dispute) == "awaiting_exec" && <>-</>}
-                      {getDisputeStatus(dispute) == "executed" && <>-</>}
                     </span>
                   </StatCard>
                   <StatCard
@@ -269,7 +274,6 @@ export function DisputeRow({
               </ToolTip>
             </span>
           )}
-
           {getDisputeStatus(dispute) == "cancelled" && (
             <span className="flex gap-1 text-xs items-center font-light tracking-wide">
               <XCircle width="15" className="" />{" "}
@@ -293,7 +297,7 @@ export function DisputeRow({
                 tip={<DisputeTipStalled dispute={dispute} address={address} />}
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
-                <span>No verdict reached. Start new dispute.</span>
+                <span>No verdict reached</span>
                 <IconInfoCircle
                   width="15"
                   className="hidden xs:inline text-gray-300"
@@ -436,8 +440,9 @@ export function DisputeRow({
                   scale="sm"
                   disabled={!enableButtons.commit}
                 >
-                  Commit{" "}
+                  Commit
                   <CountDown
+                    wrapL="&nbsp;("
                     isoDate={dispute.evidenceEndAt}
                     onDone={() => {
                       setEnableButtons({ ...enableButtons, commit: true });
@@ -445,6 +450,7 @@ export function DisputeRow({
                   />
                   {enableButtons.commit && (
                     <CountDown
+                      wrapL="&nbsp;("
                       isoDate={dispute.commitEndAt}
                       onDone={() => {
                         setEnableButtons({ ...enableButtons, commit: false });
@@ -466,8 +472,10 @@ export function DisputeRow({
                     getDisputeStatus(dispute) != "reveal"
                   }
                 >
-                  Reveal{" "}
+                  Reveal
                   <CountDown
+                    wrapL="&nbsp;("
+                    headless={true}
                     isoDate={dispute.commitEndAt}
                     onDone={() => {
                       setEnableButtons({ ...enableButtons, reveal: true });
@@ -475,9 +483,11 @@ export function DisputeRow({
                   />
                   {enableButtons.reveal && (
                     <CountDown
+                      wrapL="&nbsp;("
                       isoDate={dispute.revealEndAt}
                       onDone={() => {
                         setEnableButtons({ ...enableButtons, reveal: false });
+                        setPageSwapState({ revealPhaseEnded: true });
                       }}
                     />
                   )}
@@ -493,7 +503,10 @@ export function DisputeRow({
               <Button
                 variant="link"
                 rounded="none"
-                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                className={cn(
+                  "text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1",
+                  { hidden: location.pathname.match("^/swap") }
+                )}
               >
                 View Swap
               </Button>
@@ -525,7 +538,11 @@ export function DisputeRow({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem className="flex gap-2">
+                  <DropdownMenuItem
+                    className={cn("flex gap-2", {
+                      hidden: location.pathname.match("^/swap"),
+                    })}
+                  >
                     View Swap
                   </DropdownMenuItem>
                   <DropdownMenuItem className="flex gap-2">

@@ -86,6 +86,10 @@ export interface TicketFilter {
   status?: string;
 }
 
+export interface SwapPageState {
+  revealPhaseEnded?: boolean;
+}
+
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -106,6 +110,10 @@ export interface IStore {
   // Open state toggling for sheets and modals
   openState: OpenState;
   toggleOpenState: (key: OpenStateKey, activeTab?: string) => void;
+
+  // Swap page state
+  swapPageState: SwapPageState;
+  setPageSwapState: (state: SwapPageState) => void;
 
   // Market filter
   marketFilter: MarketFilter;
@@ -169,6 +177,16 @@ const useStore = create<IStore>((set) => ({
       marketFilter: {
         ...state.marketFilter,
         ...filter,
+      },
+    }));
+  },
+
+  swapPageState: {},
+  setPageSwapState: (updates: Partial<SwapPageState>) => {
+    set((state) => ({
+      swapPageState: {
+        ...state.swapPageState,
+        ...updates,
       },
     }));
   },

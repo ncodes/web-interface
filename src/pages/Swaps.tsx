@@ -60,7 +60,7 @@ function SwapTabs({ defaultTab }: { defaultTab?: string }) {
                   setOpenFilterSheet(true);
                 }}
               >
-                <IconFilterOutline /> Filter Liquidities
+                <IconFilterOutline /> Filter Swaps
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

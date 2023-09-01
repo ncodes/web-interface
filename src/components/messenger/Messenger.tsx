@@ -117,12 +117,12 @@ export function Messenger({ sheetMode }: { sheetMode: boolean }) {
                   <Message
                     sender="0x1234..345"
                     msg="This is the evidence of payment. How can I release the coins?"
-                    title="Counterparty"
+                    title="Counterpart"
                   />
                   <Message
                     sender="0x1234..345"
                     msg="This is the evidence of payment. How can I release the coins?"
-                    title="Counterparty"
+                    title="Counterpart"
                   />
                   <Message
                     sender="0x8394..345"

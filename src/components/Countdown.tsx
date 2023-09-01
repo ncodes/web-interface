@@ -9,6 +9,7 @@ export function CountDown({
   wrapR,
   full,
   className,
+  headless,
 }: {
   isoDate: string;
   onDone?: () => void;
@@ -17,13 +18,14 @@ export function CountDown({
   className?: string;
   wrapL?: string;
   wrapR?: string;
+  headless?: boolean;
 }) {
   const [timeLeft, setTimeLeft] = useState<number>();
 
   useEffect(() => {
     const m = moment(isoDate);
     const sec = m.diff(moment(), "seconds");
-    if (sec <= 0) onDone && onDone();
+    if (sec <= 0) callDone();
     setTimeLeft(sec > 0 ? sec : 0);
   }, [isoDate, onDone]);
 
@@ -38,13 +40,20 @@ export function CountDown({
       const cur = timeLeft - 1;
       setTimeLeft(cur);
       if (cur == 0) {
-        onDone && onDone();
+        callDone();
         clearInterval(intervalId);
       }
     }, 1000);
 
     return () => clearInterval(intervalId);
   }, [onDone, timeLeft]);
+
+  function callDone() {
+    if (!onDone) return;
+    setTimeout(() => {
+      onDone && onDone();
+    }, 300);
+  }
 
   function renderTimeLeft() {
     if (!timeLeft) return "";
@@ -77,6 +86,8 @@ export function CountDown({
       </span>
     );
   }
+
+  if (headless) return null;
 
   if (full)
     return <>{timeLeft != undefined && timeLeft > 0 && renderFullTimeLeft()}</>;
