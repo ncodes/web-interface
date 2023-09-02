@@ -36,7 +36,6 @@ import {
   getDisputeStatus,
   isDisputeDraftee,
 } from "../../libs/api_utils.ts";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import {
   DisputeStatusBadge,
   DisputeTipAbandoned,
@@ -53,6 +52,7 @@ import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { CountDown } from "../Countdown.tsx";
 import { useLocation } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 interface ButtonEnableState {
   commit: boolean;
@@ -68,7 +68,7 @@ export function DisputeRow({
   noFocus?: boolean;
   className?: string;
 }) {
-  const { address } = useConnector();
+  const { address } = useConnectorContext();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { getUser } = useUserService();
   const location = useLocation();

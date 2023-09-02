@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BigNumberish } from "ethers";
-import { getChain, Nets } from "./networks";
+import { getChain, ChainID } from "./networks";
 import {
   Chain,
   useAccount,
@@ -12,15 +12,12 @@ import {
   useWalletClient,
 } from "wagmi";
 import { Address, SimulateContractReturnType } from "viem";
-import { erc20Abi } from "../../abi";
 import { ChainInfo } from "../../types/global";
-
-type ContractNames = "energon" | "nft";
 
 export interface IConnector {
   defaultNetwork: number;
 
-  readContract(name: ContractNames, targetFunc: string, args?): Promise<never>;
+  readContract<T>(name: ContractNames, targetFunc: string, args?): Promise<T>;
   simulateContract(
     name: ContractNames,
     targetFunc: string,
@@ -55,9 +52,9 @@ export interface IConnector {
  * @returns
  */
 export default function useConnector() {
-  const defaultNetwork = Nets[import.meta.env.VITE_DEFAULT_NETWORK]
-    ? parseInt(Nets[import.meta.env.VITE_DEFAULT_NETWORK])
-    : Nets.localhost;
+  const defaultNetwork = ChainID[import.meta.env.VITE_DEFAULT_NETWORK]
+    ? parseInt(ChainID[import.meta.env.VITE_DEFAULT_NETWORK])
+    : ChainID.Hardhat;
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [chainId, setChainId] = useState<number | undefined>(undefined);
@@ -167,7 +164,7 @@ export default function useConnector() {
   async function simulateContract(
     name: ContractNames,
     targetFunc: string,
-    args?
+    args: unknown[] = []
   ) {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
@@ -189,16 +186,20 @@ export default function useConnector() {
    * @param targetFunc - The target function to be called
    * @param args - The arguments to be passed to the target function
    */
-  async function readContract(name: ContractNames, targetFunc: string, args?) {
+  async function readContract<T>(
+    name: ContractNames,
+    targetFunc: string,
+    args: unknown[] = []
+  ): Promise<T> {
     if (!publicClient) throw new Error("no provider found");
     const netInfo = getChain(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     return publicClient.readContract({
       address: netInfo.contracts[name].address as Address,
-      abi: erc20Abi,
+      abi: netInfo.contracts[name].abi,
       functionName: targetFunc as never,
       args: args,
-    });
+    }) as Promise<T>;
   }
 
   /**
@@ -210,7 +211,7 @@ export default function useConnector() {
   async function writeContract(
     name: ContractNames,
     targetFunc: string,
-    args?: any
+    args: unknown[] = []
   ): Promise<Address> {
     if (!walletClient) throw new Error("wallet not connected");
     const netInfo = getChain(chainId as number);

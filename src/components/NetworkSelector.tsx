@@ -11,8 +11,8 @@ import {
 import { cn } from "../libs/utils.ts";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { getChain, getChains } from "../hooks/connectors/networks.ts";
-import useConnector from "../hooks/connectors/useConnector.tsx";
 import { ChainInfo } from "../types/global";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function DropdownMenuItemCustom({
   children,
@@ -38,7 +38,7 @@ function DropdownMenuItemCustom({
 
 export function NetworkSelector() {
   const [open, setOpen] = useState(false);
-  const { switchNetwork, chainId, defaultNetwork } = useConnector();
+  const { switchNetwork, chainId, defaultNetwork } = useConnectorContext();
   const [curChain, setCurChain] = useState<ChainInfo | undefined>(
     getChain(defaultNetwork)
   );

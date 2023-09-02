@@ -5,11 +5,11 @@ import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { ActivityItem } from "./ActivityItem.tsx";
 import { useQuery } from "@tanstack/react-query";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { Skeleton } from "../ui/skeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function ActivityLogSkeleton() {
   return (
@@ -24,7 +24,7 @@ export function ActivityLogSkeleton() {
 }
 
 export function ActivityLog({ liquidity }: { liquidity: Liquidity }) {
-  const { getChainInfo } = useConnector();
+  const { getChainInfo } = useConnectorContext();
   const { getEvents } = useLiquidityService();
   const events = useQuery({
     queryKey: [

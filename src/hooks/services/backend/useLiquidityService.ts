@@ -42,7 +42,7 @@ export function useLiquidityService() {
 
       const payload = {
         ...liquidityFilter,
-        net: network,
+        net: "ethereum" || network, // TODO: remove mock
         offset,
         limit,
       };
@@ -83,7 +83,7 @@ export function useLiquidityService() {
           import.meta.env.VITE_API_URI
         }/v1/liquidities/${market}/${provider}/${lid}`,
         params: {
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
         },
         headers,
       });
@@ -110,7 +110,7 @@ export function useLiquidityService() {
           import.meta.env.VITE_API_URI
         }/v1/liquidities/${market}/${provider}/${lid}/events`,
         params: {
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
         },
         headers,
       });

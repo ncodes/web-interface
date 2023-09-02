@@ -8,11 +8,11 @@ import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { ToolTip } from "../ToolTip.tsx";
 import { isDisputed, isDisputeDraftee } from "../../libs/api_utils.ts";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
   const { getUser } = useUserService();
-  const { address } = useConnector();
+  const { address } = useConnectorContext();
   const creator = useQuery({
     queryKey: ["getUser", { address: event.creator, noAuth: true }],
     queryFn: getUser,

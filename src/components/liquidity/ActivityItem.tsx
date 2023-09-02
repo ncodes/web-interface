@@ -12,7 +12,7 @@ import {
 } from "../../libs/helpers.ts";
 import moment from "moment";
 import { ToolTip } from "../ToolTip.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function ActivityItem({
   event,
@@ -24,7 +24,7 @@ export function ActivityItem({
   market: Market;
 }) {
   const { getUser } = useUserService();
-  const { address } = useConnector();
+  const { address } = useConnectorContext();
   const creator = useQuery({
     queryKey: ["getUser", { address: event.creator, noAuth: true }],
     queryFn: getUser,

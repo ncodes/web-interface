@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useAuthService } from "../../hooks/services/backend/useAuthService.ts";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
@@ -12,13 +11,14 @@ import { Button } from "../ui/Button.tsx";
 import IconCheckCircle from "../icons/IconCheckCircle.tsx";
 import { StoreAccessTokenKey, StoreEmailKey } from "../../constants.ts";
 import useStore from "../../hooks/store/useStore.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function LinkAccountSetting() {
   const [email, setEmail] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [linked, setLinked] = useState(false);
   const { setUser } = useStore((state) => ({ setUser: state.setUser }));
-  const { sign, address } = useConnector();
+  const { sign, address } = useConnectorContext();
   const { simpleError } = useToast();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { auth } = useAuthService();
@@ -82,7 +82,7 @@ export function LinkAccountSetting() {
 
   return (
     <>
-      <div className="font-light text-gray-400 text-sm">
+      <div className="font-light text-gray-300 text-sm">
         Use Joint's Account server to link your wallet to your email account to
         receive trade notifications and important news.
       </div>

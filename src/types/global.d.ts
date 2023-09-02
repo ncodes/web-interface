@@ -26,7 +26,7 @@ interface ChainInfo {
 }
 
 declare global {
-  type ContractNames = "energon" | "nft";
+  type ContractNames = "energon" | "nft" | "badgeManager";
 
   interface User {
     email: string;
@@ -348,4 +348,9 @@ declare global {
     swap: Swap;
     dispute: Dispute;
   }
+
+  type Instructions = {
+    global: string;
+    liquidity: { [key: string]: string };
+  };
 }

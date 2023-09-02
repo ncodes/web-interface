@@ -17,12 +17,12 @@ import {
   getDisputeOutcome,
   isSwapDisputeExecuted,
 } from "../../libs/api_utils.ts";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { CountDown } from "../Countdown.tsx";
 import { cn } from "../../libs/utils.ts";
 import { useState } from "react";
 import IconConflict from "../icons/IconConflict.tsx";
 import useStore from "../../hooks/store/useStore.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function SwapProgress({
   swap,
@@ -31,7 +31,7 @@ export function SwapProgress({
   swap: Swap;
   onRequestOpenChat: () => void;
 }) {
-  const { address } = useConnector();
+  const { address } = useConnectorContext();
   const [canCancel, setCanCancel] = useState(false);
   const [canDispute, setCanDispute] = useState(false);
   const { swapPageState } = useStore((s) => ({

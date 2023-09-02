@@ -2,7 +2,6 @@ import { TabsContent } from "../ui/Tabs.tsx";
 import { Paginator } from "../Paginator.tsx";
 import { MarketRow } from "./MarketRow.tsx";
 import { useQuery } from "@tanstack/react-query";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { ErrorIcon } from "react-hot-toast";
@@ -11,9 +10,10 @@ import { PlugZapIcon } from "lucide-react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function MyMarketsTabContent() {
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { listMarkets } = useMarketService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const marketFilter = useStore((state) => state.marketFilter);

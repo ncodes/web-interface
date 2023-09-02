@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import useStore from "../../hooks/store/useStore.ts";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useParams } from "react-router-dom";
 import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
 import { useQuery } from "@tanstack/react-query";
@@ -15,12 +14,13 @@ import { SwapInformation } from "./SwapInformation.tsx";
 import { MessengerSheet } from "../messenger/MessengerSheet.tsx";
 import { isSwapParticipant } from "../../libs/api_utils.ts";
 import { SwapDisputes } from "./SwapDisputes.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function SwapPageTabContent() {
   const [openMessengerSheet, setOpenMessengerSheet] = useState(false);
   const isLg = useMediaQuery("(min-width: 1024px)");
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { orderId } = useParams<{ orderId: string }>();
   const { getSwap } = useSwapService();
   const swap = useQuery({

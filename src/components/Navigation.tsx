@@ -6,6 +6,7 @@ import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 type NavPageLinkProps = {
   iconFile?: string;
@@ -53,9 +54,8 @@ function NavPageLink(props: NavPageLinkProps) {
 }
 
 export function Navigation() {
-  const { connected } = useConnector();
+  const { connected, address, getChainInfo } = useConnectorContext();
   const { pathname } = useLocation();
-  const { address, getChainInfo } = useConnector();
   const { countUnread } = useOfferService();
   const unreadOfferCount = useQuery({
     queryKey: ["countUnreadOffer", { network: getChainInfo().queryName }],

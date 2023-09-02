@@ -1,6 +1,5 @@
 import { TabsContent } from "../ui/Tabs.tsx";
 import { Paginator } from "../Paginator.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
@@ -10,9 +9,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { RequestError } from "../../libs/RequestError.ts";
 import { OfferRow } from "../liquidity/OfferRow.tsx";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function MyOffersTabContent() {
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { listOffers } = useOfferService();
   const offerFilter = useStore((state) => state.offerFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

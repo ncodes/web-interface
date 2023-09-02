@@ -1,7 +1,6 @@
 import { TabsContent } from "../ui/Tabs.tsx";
 import { Paginator } from "../Paginator.tsx";
 import { TicketRow } from "./TicketRow.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -10,9 +9,10 @@ import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { PlugZapIcon } from "lucide-react";
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function MyTicketsTabContent() {
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { listTickets } = useTicketService();
   const ticketFilter = useStore((state) => state.ticketFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

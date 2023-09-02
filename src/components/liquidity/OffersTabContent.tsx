@@ -1,5 +1,4 @@
 import { TabsContent } from "../ui/Tabs.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
@@ -10,9 +9,10 @@ import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { Paginator } from "../Paginator.tsx";
 import { OfferRow } from "./OfferRow.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function OffersTabContent() {
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { market, provider, lid } = useParams();
   const { listOffers } = useOfferService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

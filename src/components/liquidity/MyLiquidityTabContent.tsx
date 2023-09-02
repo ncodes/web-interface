@@ -1,7 +1,6 @@
 import { TabsContent } from "../ui/Tabs.tsx";
 import { LiquidityRow } from "./LiquidityRow.tsx";
 import { Paginator } from "../Paginator.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
@@ -10,9 +9,10 @@ import { PlugZapIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { RequestError } from "../../libs/RequestError.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function MyLiquidityTabContent() {
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { listLiquidities } = useLiquidityService();
   const liquidityFilter = useStore((state) => state.liquidityFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

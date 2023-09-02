@@ -4,7 +4,6 @@ import { ActivityLog } from "./ActivityLog.tsx";
 import { RecentReviews } from "./RecentReviews.tsx";
 import { SwapSheet } from "../swap/SwapSheet.tsx";
 import { useQuery } from "@tanstack/react-query";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { useParams } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
@@ -12,10 +11,11 @@ import { RowSkeleton } from "../RowSkeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { LiquidityRow } from "./LiquidityRow.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function LiquidityTabContent() {
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
-  const { getChainInfo } = useConnector();
+  const { getChainInfo } = useConnectorContext();
   const { getLiquidity } = useLiquidityService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { market, provider, lid } = useParams();

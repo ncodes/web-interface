@@ -1,7 +1,6 @@
 import { TabsContent } from "../ui/Tabs.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import { EventItem } from "./EventItem.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
 import { ErrorIcon } from "react-hot-toast";
@@ -9,9 +8,10 @@ import { RequestError } from "../../libs/RequestError.ts";
 import { ActivityLogSkeleton } from "../liquidity/ActivityLog.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Events } from "../../types/enums.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function SwapEventLogs({ swap }: { swap: Swap }) {
-  const { getChainInfo } = useConnector();
+  const { getChainInfo } = useConnectorContext();
   const { getEvents } = useSwapService();
   const events = useQuery({
     queryKey: [

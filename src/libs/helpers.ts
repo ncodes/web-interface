@@ -9,6 +9,10 @@ import * as approx from "approximate-number";
 import * as humanizeDuration from "humanize-duration";
 import { RequestError } from "./RequestError.ts";
 
+export function isDev() {
+  return import.meta.env.VITE_ENV === "development";
+}
+
 // pow10 returns 10^decimals
 export function pow10(decimals: number) {
   return BigNumber.from(10).pow(decimals);

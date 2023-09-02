@@ -1,5 +1,6 @@
 import { ToastType } from "../../hooks/toast/toast.tsx";
 import { cn } from "../../libs/utils.ts";
+import { ReactNode } from "react";
 
 /**
  * The toast content
@@ -8,7 +9,7 @@ import { cn } from "../../libs/utils.ts";
 export function ToastBar(props: {
   type?: number;
   label?: string;
-  message: string;
+  message: ReactNode;
   links?: { href: string; label: string }[];
 }) {
   return (

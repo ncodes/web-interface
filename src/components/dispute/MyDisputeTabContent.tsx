@@ -4,15 +4,15 @@ import { RowSkeleton } from "../RowSkeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { PlugZapIcon } from "lucide-react";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DisputeRow } from "./DisputeRow.tsx";
 import { useDisputeService } from "../../hooks/services/backend/useDisputeService.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function MyDisputeTabContent() {
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { listDisputes } = useDisputeService();
   const disputeFilter = useStore((state) => state.disputeFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

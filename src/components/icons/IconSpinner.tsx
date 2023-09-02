@@ -23,8 +23,8 @@ export default function IconSpinner(props: React.SVGProps<SVGSVGElement>) {
         y2="32.654"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0" stopColor="#d7fa6e"></stop>
-        <stop offset="1" stopColor="#d7fa6e"></stop>
+        <stop offset="0" stopColor={props.stopColor || "#d7fa6e"}></stop>
+        <stop offset="1" stopColor={props.stopColor || "#d7fa6e"}></stop>
       </linearGradient>
       <path
         fill="url(#ymZTTHHCsqAuBTSb78~Hsb_Z4lBdSu2GAl2_gr2)"

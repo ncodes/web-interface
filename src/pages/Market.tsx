@@ -16,7 +16,6 @@ import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquidityShe
 import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
 import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
 import { useQuery } from "@tanstack/react-query";
-import useConnector from "../hooks/connectors/useConnector.tsx";
 import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
 import { useParams } from "react-router-dom";
 import { MarketRow } from "../components/market/MarketRow.tsx";
@@ -28,13 +27,14 @@ import { cn } from "../libs/utils.ts";
 import { useLiquidityService } from "../hooks/services/backend/useLiquidityService.ts";
 import { Paginator } from "../components/Paginator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openAddLiquiditySheet, setOpenAddLiquiditySheet] = useState(false);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const liquidityFilter = useStore((state) => state.liquidityFilter);
-  const { getChainInfo } = useConnector();
+  const { getChainInfo } = useConnectorContext();
   const { getMarket } = useMarketService();
   const { listLiquidities } = useLiquidityService();
   const { id } = useParams();

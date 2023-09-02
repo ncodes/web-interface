@@ -5,14 +5,14 @@ import { RowSkeleton } from "../RowSkeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { PlugZapIcon } from "lucide-react";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function MySwapTabContent() {
-  const { getChainInfo, address } = useConnector();
+  const { getChainInfo, address } = useConnectorContext();
   const { listSwaps } = useSwapService();
   const swapFilter = useStore((state) => state.swapFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

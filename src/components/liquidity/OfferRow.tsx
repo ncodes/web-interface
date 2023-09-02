@@ -40,10 +40,10 @@ import {
 } from "../../libs/api_utils.ts";
 import moment from "moment/moment";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import { CountDown } from "../Countdown.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { useLocation } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 interface ButtonEnableState {
   accept: boolean;
@@ -60,7 +60,7 @@ export function OfferRow({
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { getUser } = useUserService();
-  const { address } = useConnector();
+  const { address } = useConnectorContext();
   const location = useLocation();
   const [disableButtons, setDisableButtons] = useState<ButtonEnableState>({
     accept: false,

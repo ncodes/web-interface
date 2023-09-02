@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
 import { IConnector } from "./useConnector";
 
-export const ConnectorContext = createContext<IConnector | null>(null);
+export const ConnectorContext = createContext<IConnector>({} as IConnector);
 
 export function useConnectorContext() {
-  return useContext<IConnector | null>(ConnectorContext);
+  return useContext<IConnector>(ConnectorContext);
 }

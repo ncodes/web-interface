@@ -25,7 +25,7 @@ import { OffersTabContent } from "../components/liquidity/OffersTabContent.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import { useQuery } from "@tanstack/react-query";
-import useConnector from "../hooks/connectors/useConnector.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function LiquidityPage({
   defaultTab,
@@ -38,7 +38,7 @@ function LiquidityPage({
   const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const { market, provider, lid } = useParams();
-  const { address, getChainInfo } = useConnector();
+  const { address, getChainInfo } = useConnectorContext();
   const { countUnread } = useOfferService();
   const unreadOfferCount = useQuery({
     queryKey: [

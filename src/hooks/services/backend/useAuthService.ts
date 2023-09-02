@@ -23,7 +23,7 @@ export function useAuthService() {
       });
       return Promise.resolve(resp.data.data);
     } catch (e) {
-      return Promise.reject(handleAxiosError(e));
+      return Promise.reject(handleAxiosError(e as never));
     }
   }
 

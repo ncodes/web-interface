@@ -7,10 +7,10 @@ import { ScrollArea } from "../ui/scroll-area.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
 import { useQuery } from "@tanstack/react-query";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { Skeleton } from "../ui/skeleton.tsx";
 import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 function InfoCard({
   title,
@@ -50,7 +50,7 @@ function InfoSkeleton() {
 
 export function TicketsStatsTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
-  const { address, network } = useConnector();
+  const { address, network } = useConnectorContext();
   const { getStats } = useTicketService();
   const {
     isLoading,

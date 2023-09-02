@@ -29,7 +29,6 @@ import {
   isSwapDisputeEnded,
   isSwapDisputeExecuted,
 } from "../../libs/api_utils.ts";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import IconPaySent from "../icons/IconPaySent.tsx";
 import { CheckCircle, XCircle } from "lucide-react";
 import IconConflict from "../icons/IconConflict.tsx";
@@ -44,6 +43,7 @@ import { CountDown } from "../Countdown.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 interface ButtonEnableState {
   appeal: boolean;
@@ -113,7 +113,7 @@ export function SwapRow({
   swap: Swap;
 }) {
   const navigate = useNavigate();
-  const { address } = useConnector();
+  const { address } = useConnectorContext();
   const { swapPageState } = useStore((s) => ({
     swapPageState: s.swapPageState,
   }));

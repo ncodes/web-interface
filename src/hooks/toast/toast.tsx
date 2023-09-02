@@ -1,5 +1,6 @@
 import toast, { ToastPosition } from "react-hot-toast";
 import { ToastBar } from "../../components/toast/ToastBar.tsx";
+import { ReactNode } from "react";
 
 export enum ToastType {
   Default,
@@ -58,7 +59,7 @@ export function useToast() {
    * @param options - The toast options
    */
   function notifyError(
-    msg: string,
+    msg: ReactNode,
     options: {
       label?: string;
       position?: ToastPosition;
@@ -69,7 +70,6 @@ export function useToast() {
     toast.custom(
       () => (
         <ToastBar
-          key={msg}
           type={ToastType.Error}
           label={options.label}
           message={msg}
@@ -89,7 +89,7 @@ export function useToast() {
    * @param options - The toast options
    */
   function notifySuccess(
-    msg: string,
+    msg: ReactNode,
     options: {
       label?: string;
       position?: ToastPosition;
@@ -100,7 +100,6 @@ export function useToast() {
     toast.custom(
       () => (
         <ToastBar
-          key={msg}
           type={ToastType.Success}
           label={options.label}
           message={msg}
@@ -120,7 +119,7 @@ export function useToast() {
    * @param options - The toast options
    */
   function notify(
-    msg: string,
+    msg: ReactNode,
     options: {
       label?: string;
       position?: ToastPosition;
@@ -131,7 +130,6 @@ export function useToast() {
     toast.custom(
       () => (
         <ToastBar
-          key={msg}
           type={ToastType.Default}
           label={options.label}
           message={msg}

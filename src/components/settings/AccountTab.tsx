@@ -6,22 +6,30 @@ import {
   AccordionTrigger,
 } from "../ui/accordion.tsx";
 import { LinkAccountSetting } from "./LinkAccountSetting.tsx";
+import { LiquidityInstruction } from "./LiquidityInstruction.tsx";
 
 export function AccountTab() {
   return (
     <TabsContent value="account" className="w-full h-full px-0">
-      <div className="pt-2">
-        <Accordion type="single" collapsible value="link-account">
-          <AccordionItem value="link-account">
-            <AccordionTrigger className="px-5 text-xl pb-2 tracking-wide">
-              Link Account
-            </AccordionTrigger>
-            <AccordionContent className="px-5 tracking-wide">
-              <LinkAccountSetting />
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+      <Accordion type="single" collapsible defaultValue="link-account">
+        <AccordionItem value="link-account">
+          <AccordionTrigger className="px-5 text-lg pb-2 tracking-wide mt-2">
+            Link Account
+          </AccordionTrigger>
+          <AccordionContent className="px-5 tracking-wide">
+            <LinkAccountSetting />
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem className="mt-3" value="liq-instructions">
+          <AccordionTrigger className="px-5 text-lg pb-2 tracking-wide">
+            Liquidity Instruction
+          </AccordionTrigger>
+          <AccordionContent className="px-5 tracking-wide">
+            <LiquidityInstruction />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </TabsContent>
   );
 }

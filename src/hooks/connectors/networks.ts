@@ -5,11 +5,18 @@ import IconPolygon from "../../components/icons/IconPolygon.tsx";
 import IconOptimism from "../../components/icons/IconOptimism.tsx";
 import IconBSC from "../../components/icons/BSC.tsx";
 import IconArbitrum from "../../components/icons/IconArbitrum.tsx";
+import BadgeManagerABI from "../../abi/BadgeManager.json";
+import EnergonABI from "../../abi/Energon.json";
+import NFTABI from "../../abi/NFT.json";
 
-export enum Nets {
-  ethereum = 1,
-  goerli = 5,
-  localhost = 31337,
+export enum ChainID {
+  Ethereum = 1,
+  Goerli = 5,
+  Hardhat = 31337,
+  Polygon = 137,
+  Optimism = 10,
+  Arbitrum = 42161,
+  Binance = 56,
 }
 
 /**
@@ -19,7 +26,7 @@ export const SupportedNetworks: ChainInfo[] = [
   {
     displayName: "Ethereum",
     queryName: "ethereum",
-    chainId: 1,
+    chainId: ChainID.Ethereum,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL ?? "",
     blockExplorer: "https://etherscan.io",
@@ -32,11 +39,25 @@ export const SupportedNetworks: ChainInfo[] = [
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/optimism/assets/0x4200000000000000000000000000000000000006/logo.png",
     }),
+    contracts: {
+      badgeManager: {
+        address: import.meta.env.VITE_ETHEREUM_BADGE_MGR_ADDRESS,
+        abi: BadgeManagerABI,
+      },
+      energon: {
+        address: import.meta.env.VITE_ETHEREUM_ENERGON_ADDRESS,
+        abi: EnergonABI,
+      },
+      nft: {
+        address: import.meta.env.VITE_ETHEREUM_NFT_ADDRESS,
+        abi: NFTABI,
+      },
+    },
   },
   {
     displayName: "Polygon",
     queryName: "polygon",
-    chainId: 137,
+    chainId: ChainID.Polygon,
     symbol: "MATIC",
     rpcUrl: import.meta.env.VITE_POLYGON_RPC_URL ?? "",
     blockExplorer: "https://polygonscan.com",
@@ -53,7 +74,7 @@ export const SupportedNetworks: ChainInfo[] = [
   {
     displayName: "Optimism",
     queryName: "optimism",
-    chainId: 10,
+    chainId: ChainID.Optimism,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_OPTIMISM_RPC_URL ?? "",
     blockExplorer: "https://optimistic.etherscan.io",
@@ -71,7 +92,7 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Binance Chain",
     altDisplayName: "BSC",
     queryName: "binance-chain",
-    chainId: 56,
+    chainId: ChainID.Binance,
     symbol: "BNB",
     rpcUrl: import.meta.env.VITE_BINANCE_RPC_URL ?? "",
     blockExplorer: "https://bscscan.com",
@@ -88,7 +109,7 @@ export const SupportedNetworks: ChainInfo[] = [
   {
     displayName: "Arbitrum",
     queryName: "arbitrum",
-    chainId: 42161,
+    chainId: ChainID.Arbitrum,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_ARBITRUM_RPC_URL ?? "",
     blockExplorer: "https://arbiscan.io",
@@ -106,7 +127,7 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Goerli",
     queryName: "goerli",
     testnet: true,
-    chainId: 5,
+    chainId: ChainID.Goerli,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_GOERLI_RPC_URL ?? "",
     blockExplorer: "https://goerli.etherscan.io",
@@ -124,7 +145,7 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Hardhat",
     queryName: "localhost",
     testnet: true,
-    chainId: 31337,
+    chainId: ChainID.Hardhat,
     symbol: "ETH",
     rpcUrl: import.meta.env.VITE_LOCALHOST_RPC_URL ?? "",
     blockExplorer: "https://etherscan.io",
@@ -137,6 +158,20 @@ export const SupportedNetworks: ChainInfo[] = [
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
+    contracts: {
+      badgeManager: {
+        address: import.meta.env.VITE_LOCALHOST_BADGE_MGR_ADDRESS,
+        abi: BadgeManagerABI,
+      },
+      energon: {
+        address: import.meta.env.VITE_LOCALHOST_ENERGON_ADDRESS,
+        abi: EnergonABI,
+      },
+      nft: {
+        address: import.meta.env.VITE_LOCALHOST_NFT_ADDRESS,
+        abi: NFTABI,
+      },
+    },
   },
 ];
 

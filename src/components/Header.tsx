@@ -7,10 +7,10 @@ import { NetworkSelector } from "./NetworkSelector.tsx";
 import { NavSearchButton } from "./NavSearchButton.tsx";
 import { InputActivatedSearchBox } from "./SearchBox.tsx";
 import { cn } from "../libs/utils.ts";
-import useConnector from "../hooks/connectors/useConnector.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 export function Header(props: { onClick: () => void; height?: string }) {
-  const { connected } = useConnector();
+  const { connected } = useConnectorContext();
 
   return (
     <header className={cn("flex -mt-[1px]", props.height)}>

@@ -10,19 +10,19 @@ import {
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
-import useConnector from "../../hooks/connectors/useConnector.tsx";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import { AccountTab } from "./AccountTab.tsx";
 import { FeePouchTab } from "./FeePouchTab.tsx";
 import { BalancesTab } from "./BalancesTab.tsx";
 import { SettingsFooter } from "./SettingsFooter.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 export function SettingsSheet(props: {
   children?: React.ReactNode;
   onOpen?: (open: boolean) => void;
   openWalletManager?: () => void;
 }) {
-  const { address } = useConnector();
+  const { address } = useConnectorContext();
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const currentTab = useStore((state) => state.currentTab);
