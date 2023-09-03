@@ -493,6 +493,7 @@ export function LiquidityRow({
         }}
       />
       <ManageLiquiditySheet
+        liquidity={liquidity}
         open={openManageLiquiditySheet}
         onOpenChange={(open) => {
           setOpenManageLiquiditySheet(open);

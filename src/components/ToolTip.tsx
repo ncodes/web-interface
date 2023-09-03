@@ -27,7 +27,13 @@ export function ToolTip(props: {
         }}
       >
         <TooltipTrigger className={props.className} asChild>
-          <span className="cursor-pointer" onClick={() => setOpen(!open)}>
+          <span
+            className="cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(!open);
+            }}
+          >
             {props.children}
           </span>
         </TooltipTrigger>
