@@ -83,7 +83,7 @@ export default function ManageLiquidityInstructionsTab({
   );
 
   return (
-    <TabsContent value="instructions" className="p-0 mt-0 h-full">
+    <TabsContent value="instructions" className="p-0 mt-0 h-full overflow-auto">
       <div className="px-5 pt-3">
         <div className="font-light text-gray-100 text-sm">
           Provide takers with essential instructions for engaging with this

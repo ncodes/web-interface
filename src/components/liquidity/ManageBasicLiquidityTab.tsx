@@ -14,9 +14,9 @@ export function ManageBasicLiquidityTab(props: {
   liquidity: Liquidity;
 }) {
   return (
-    <TabsContent value="basic" className="p-0 mt-0 h-full">
+    <TabsContent value="basic" className="p-0 mt-0 h-full overflow-auto">
       <div>
-        <ScrollArea className="h-full">
+        <ScrollArea className="h-full pb-[200px]">
           <div className=" text-white h-full">
             {!props.addMode && (
               <p className="p-5 py-3 font-light text-gray-300 text-sm">
@@ -184,7 +184,7 @@ export function ManageBasicLiquidityTab(props: {
             </Accordion>
           </div>
         </ScrollArea>
-        <div className="bottom-0 absolute w-full p-3 border-t border-gray-800 flex flex-col gap-2">
+        <div className="bottom-0 bg-background absolute w-full p-3 border-t border-gray-800 flex flex-col gap-2">
           {/*<Button size="full" variant="secondary">*/}
           {/*  Approve*/}
           {/*</Button>*/}
