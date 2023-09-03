@@ -46,7 +46,7 @@ export function useSwapService() {
         url: `${import.meta.env.VITE_API_URI}/v1/swaps`,
         params: {
           ...swapFilter,
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
           offset,
           limit,
           address:
@@ -92,7 +92,7 @@ export function useSwapService() {
         method: "get",
         url: `${import.meta.env.VITE_API_URI}/v1/swaps/${orderId}`,
         params: {
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
         },
         headers,
       });
@@ -152,7 +152,7 @@ export function useSwapService() {
         method: "get",
         url: `${import.meta.env.VITE_API_URI}/v1/swaps/${orderId}/events`,
         params: {
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
         },
         headers,
       });

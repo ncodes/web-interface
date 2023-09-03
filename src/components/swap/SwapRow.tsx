@@ -790,7 +790,7 @@ export function SwapRow({
         {address && isSwapCounterparty(swap, address) && (
           <div
             data-click-trigger="1"
-            className="flex pl-2 justify-between border-t border-card-border"
+            className="flex  justify-between border-t border-card-border"
           >
             <div data-click-trigger="1" className="pt-1 pl-1 flex gap-1">
               {/* Buttons for swap counterparties  */}

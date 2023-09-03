@@ -62,9 +62,11 @@ export function SwapEventLogs({ swap }: { swap: Swap }) {
                   />
 
                   {events.data?.map((event: Event) => (
-                    <>
-                      <EventItem swap={swap} event={event} />
-                    </>
+                    <EventItem
+                      swap={swap}
+                      event={event}
+                      key={`${event.creator}:${event.action}`}
+                    />
                   ))}
                 </>
               )}
