@@ -42,7 +42,7 @@ import moment from "moment/moment";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { CountDown } from "../Countdown.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
 interface ButtonEnableState {
@@ -58,6 +58,7 @@ export function OfferRow({
   ownerMode?: boolean;
   className?: string;
 }) {
+  const navigate = useNavigate();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { getUser } = useUserService();
   const { address } = useConnectorContext();
@@ -77,7 +78,7 @@ export function OfferRow({
       onClick={(e: BaseSyntheticEvent) => {
         const canTrigger = e.target.getAttribute("data-click-trigger");
         if (canTrigger && canTrigger == "1") {
-          // setOpenSwapSheet(!openSwapSheet);
+          navigate(`/offer/${offer.offerId}`);
         }
       }}
     >
@@ -94,7 +95,7 @@ export function OfferRow({
             data-click-trigger="1"
             className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
-            <div>
+            <div data-click-trigger="1">
               <UserHoverCard user={getProvider.data as User}>
                 <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
               </UserHoverCard>
@@ -212,7 +213,7 @@ export function OfferRow({
                     title={`Price (${offer.market.quote})`}
                     tip={`The offer price for 1 ${offer.market.base} in ${offer.market.quote}`}
                   >
-                    <span className="flex gap-1">
+                    <span className="flex gap-1" data-click-trigger="1">
                       {formatToHighDenom(
                         offer.price,
                         offer.market.quoteDecimals
@@ -224,7 +225,10 @@ export function OfferRow({
                     title={`Amount`}
                     tip={`The amount of ${offer.market.base} being requested`}
                   >
-                    <span className="text-gray-200 flex gap-1">
+                    <span
+                      className="text-gray-200 flex gap-1"
+                      data-click-trigger="1"
+                    >
                       {formatToHighDenom(
                         offer.amount,
                         offer.market.baseDecimals
@@ -241,7 +245,10 @@ export function OfferRow({
                         "DD MMM YYYY, h:mm:ss a"
                       )}
                     >
-                      <span className="text-gray-200 flex gap-1 items-center">
+                      <span
+                        className="text-gray-200 flex gap-1 items-center"
+                        data-click-trigger="1"
+                      >
                         <span>{moment(offer.deadline).fromNow()}</span>
                         <span>
                           <IconInfoCircle width="15" />
@@ -256,9 +263,15 @@ export function OfferRow({
         </div>
 
         {/* Level 2 */}
-        <div className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between">
+        <div
+          data-click-trigger="1"
+          className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between"
+        >
           {address && isOfferPending(offer) && (
-            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+            <span
+              data-click-trigger="1"
+              className="flex gap-1 text-xs items-center font-light tracking-wide"
+            >
               <IconSpinner width="15" className="animate-spin" />{" "}
               <ToolTip
                 className="flex gap-1 w-full justify-between md:justify-start"
@@ -383,7 +396,10 @@ export function OfferRow({
         </div>
 
         {/* Level 3 */}
-        <div className="flex justify-between border-t border-card-border">
+        <div
+          data-click-trigger="1"
+          className="flex justify-between border-t border-card-border"
+        >
           <div
             data-click-trigger="1"
             className="flex items-center w-full gap-2 px-1 overflow-hidden pr-1"

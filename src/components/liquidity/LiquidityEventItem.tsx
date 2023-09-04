@@ -14,7 +14,7 @@ import moment from "moment";
 import { ToolTip } from "../ToolTip.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
-export function ActivityItem({
+export function LiquidityEventItem({
   event,
   market,
   liquidity,

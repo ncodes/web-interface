@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
-import { ActivityLogSkeleton } from "../liquidity/ActivityLog.tsx";
+import { ActivityLogSkeleton } from "../liquidity/LiquidityEventLog.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Events } from "../../types/enums.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";

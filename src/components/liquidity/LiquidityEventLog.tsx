@@ -3,7 +3,7 @@ import { ToolTip } from "../ToolTip.tsx";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
-import { ActivityItem } from "./ActivityItem.tsx";
+import { LiquidityEventItem } from "./LiquidityEventItem.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { Skeleton } from "../ui/skeleton.tsx";
@@ -23,7 +23,7 @@ export function ActivityLogSkeleton() {
   );
 }
 
-export function ActivityLog({ liquidity }: { liquidity: Liquidity }) {
+export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
   const { getChainInfo } = useConnectorContext();
   const { getEvents } = useLiquidityService();
   const events = useQuery({
@@ -68,7 +68,7 @@ export function ActivityLog({ liquidity }: { liquidity: Liquidity }) {
             {!events.isLoading && events.isSuccess && (
               <>
                 {events.data?.map((event: Event) => (
-                  <ActivityItem
+                  <LiquidityEventItem
                     event={event}
                     liquidity={liquidity}
                     market={liquidity?.market}

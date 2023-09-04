@@ -347,6 +347,7 @@ declare global {
     offer: Offer;
     swap: Swap;
     dispute: Dispute;
+    market: Market;
   }
 
   type Instructions = {

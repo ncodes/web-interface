@@ -1,65 +1,17 @@
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../components/ui/Tabs.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
-import { useEffect } from "react";
-import useStore from "../hooks/store/useStore.ts";
-import { OfferRow } from "../components/liquidity/OfferRow.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
 import { Messenger } from "../components/messenger/Messenger.tsx";
-import { Button } from "../components/ui/Button.tsx";
-import { UserHoverCard } from "../components/liquidity/UserHoverCard.tsx";
-import EmojiAvatar from "../components/avatar/EmojiAvatar.tsx";
-import { AvatarSize } from "../components/avatar/useAvatar.tsx";
-import { shortenAddress } from "../libs/helpers.ts";
-import { Label } from "../components/ui/label.tsx";
-
-function Event({
-  address,
-  children,
-  time,
-}: {
-  address: string;
-  children?: React.ReactNode;
-  time?: string;
-}) {
-  return (
-    <div className="flex gap-2 w-full md:w-[500px]">
-      <div>
-        <UserHoverCard>
-          <EmojiAvatar size={AvatarSize.Medium} randomStr="0x1234" />
-        </UserHoverCard>
-      </div>
-      <div className="flex flex-1 flex-col gap-1 bg-card-background rounded-xl rounded-tl-none border border-gray-800">
-        <div className="flex justify-between border-b border-gray-800 p-2">
-          <span className="text-gray-500 text-sm font-light">
-            @{shortenAddress(address)}
-          </span>
-          <span className="text-gray-400 font-light text-xs">{time}</span>
-        </div>
-        <div className="p-2 text-sm">{children}</div>
-      </div>
-    </div>
-  );
-}
+import { OfferTabContent } from "../components/offer/OfferTabContent.tsx";
 
 function Page() {
-  const setCurrentTab = useStore((state) => state.setCurrentTab);
-
-  useEffect(() => {
-    setCurrentTab && setCurrentTab("liquidity");
-  }, [setCurrentTab]);
-
   return (
     <Tabs
       defaultValue="offers"
@@ -89,71 +41,7 @@ function Page() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <TabsContent value="offers" className="p-0 m-0 px-0 flex flex-col gap-3">
-        <div className="p-0 m-0">
-          <div className=" pr-0 flex-1 ">
-            <OfferRow
-              base={"BTC"}
-              quote={"UNI"}
-              className="rounded-none border-r-0 border-l-0 border-t-0 border-b hover:border-b-card-border"
-            />
-            <div className="flex flex-col md:items-center gap-5 px-3 md:px-5 py-5">
-              <Label className="text-xl tracking-wide">Offer Events</Label>
-              <Event
-                address="0xEB892e4300bA60442e0f5c3605F82002157a488F"
-                time="2 days ago"
-              >
-                <div className=" items-center text-gray-200 font-light">
-                  Proposed a new offer (Amount: 10 BTC, Price: 1 UNI)
-                </div>
-                <div className="mt-4">
-                  <Button
-                    variant="outline"
-                    size="full"
-                    className="border-gray-800 text-sm"
-                  >
-                    Accept
-                  </Button>
-                </div>
-              </Event>
-              <Event
-                address="0xEB892e4300bA60442e0f5c3605F82002157a488F"
-                time="2 days ago"
-              >
-                <div className=" items-center text-gray-200 font-light">
-                  Updated the offer (Amount: 10 BTC, Price: 1 UNI)
-                </div>
-                <div className="mt-4">
-                  <Button
-                    variant="outline"
-                    size="full"
-                    className="border-gray-800 text-sm"
-                  >
-                    Accept
-                  </Button>
-                </div>
-              </Event>
-              <Event
-                address="0xEB892e4300bA60442e0f5c3605F82002157a488F"
-                time="2 days ago"
-              >
-                <div className=" items-center text-gray-200 font-light">
-                  Accepted the offer
-                </div>
-                <div className="mt-4">
-                  <Button
-                    variant="outline"
-                    size="full"
-                    className="border-gray-800 text-sm"
-                  >
-                    Execute
-                  </Button>
-                </div>
-              </Event>
-            </div>
-          </div>
-        </div>
-      </TabsContent>
+      <OfferTabContent />
     </Tabs>
   );
 }

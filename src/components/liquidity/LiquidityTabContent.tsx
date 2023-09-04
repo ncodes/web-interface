@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TabsContent } from "../ui/Tabs.tsx";
-import { ActivityLog } from "./ActivityLog.tsx";
+import { LiquidityEventLog } from "./LiquidityEventLog.tsx";
 import { RecentReviews } from "./RecentReviews.tsx";
 import { SwapSheet } from "../swap/SwapSheet.tsx";
 import { useQuery } from "@tanstack/react-query";
@@ -70,7 +70,7 @@ export function LiquidityTabContent() {
             />
 
             <div className="flex flex-col gap-5 lg:gap-0 lg:flex-row pt-5 px-3">
-              <ActivityLog liquidity={liquidity.data as Liquidity} />
+              <LiquidityEventLog liquidity={liquidity.data as Liquidity} />
               <RecentReviews />
             </div>
           </>
