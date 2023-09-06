@@ -20,7 +20,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
-import { UserHoverCard } from "./UserHoverCard.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { ToolTip } from "../ToolTip.tsx";
@@ -44,6 +43,7 @@ import { CountDown } from "../Countdown.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 
 interface ButtonEnableState {
   accept: boolean;

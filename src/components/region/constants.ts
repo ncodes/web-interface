@@ -20,7 +20,7 @@ export const regions: Region[] = [
     name: "",
     selectName: "ALL",
     icon: IconGlobe,
-    className: "text-chinese-green",
+    className: "text-white",
   },
   { name: "US", icon: IconFlagUSA },
   { name: "UK", icon: IconFlagUK },

@@ -39,6 +39,7 @@ export function MySwapTabContent() {
       },
     ],
     queryFn: listSwaps,
+    keepPreviousData: true,
     enabled: !!address,
   });
 

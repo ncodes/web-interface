@@ -38,6 +38,7 @@ export function MyDisputeTabContent() {
         disputeFilter,
       },
     ],
+    keepPreviousData: true,
     queryFn: listDisputes,
     enabled: !!address,
   });

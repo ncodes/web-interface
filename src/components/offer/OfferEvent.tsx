@@ -1,11 +1,16 @@
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { formatToHighDenom, shortenAddress } from "../../libs/helpers.ts";
+import { shortenAddress } from "../../libs/helpers.ts";
 import moment from "moment";
 import { useQuery } from "@tanstack/react-query";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { UserHoverCard } from "../liquidity/UserHoverCard.tsx";
 import { Events } from "../../types/enums.ts";
+import { EventContentOfferCreate } from "./event/EventContentOfferCreate.tsx";
+import { EventContentOfferUpdate } from "./event/EventContentOfferUpdate.tsx";
+import { EventContentOfferAccept } from "./event/EventContentOfferAccept.tsx";
+import { EventContentOfferUnaccept } from "./event/EventContentOfferUnaccept.tsx";
+import { EventContentOfferCancel } from "./event/EventContentOfferCancel.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 
 export default function OfferEvent({ event }: { event: Event }) {
   const { getUser } = useUserService();
@@ -35,127 +40,47 @@ export default function OfferEvent({ event }: { event: Event }) {
           <div className=" items-center text-gray-200 font-normal">
             {/* Offer: Create */}
             {event.action == Events.OfferCreate && (
-              <>
-                <span className="block mb-2">Created the offer to swap</span>
-                <div className="flex flex-col xs:flex-row gap-1">
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Amount:{" "}
-                    {formatToHighDenom(
-                      event.amount || "0",
-                      event.market.baseDecimals
-                    )}{" "}
-                    {event.market.base}
-                  </span>
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Price:{" "}
-                    {formatToHighDenom(
-                      event.price || "0",
-                      event.market.quoteDecimals
-                    )}{" "}
-                    {event.market.quote} / {event.market.base}
-                  </span>
-                </div>
-              </>
+              <EventContentOfferCreate
+                amount={event.amount}
+                market={event.market}
+                price={event.price}
+              />
             )}
 
             {/* Offer: Update */}
             {event.action == Events.OfferUpdate && (
-              <>
-                <span className="block mb-2">Updated the offer</span>
-                <div className="flex flex-col xs:flex-row gap-1">
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Amount:{" "}
-                    {formatToHighDenom(
-                      event.amount || "0",
-                      event.market.baseDecimals
-                    )}{" "}
-                    {event.market.base}
-                  </span>
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Price:{" "}
-                    {formatToHighDenom(
-                      event.price || "0",
-                      event.market.quoteDecimals
-                    )}{" "}
-                    {event.market.quote} / {event.market.base}
-                  </span>
-                </div>
-              </>
+              <EventContentOfferUpdate
+                amount={event.amount}
+                market={event.market}
+                price={event.price}
+              />
             )}
 
             {/* Offer: Accepted */}
             {event.action == Events.OfferAccept && (
-              <>
-                <span className="block mb-2">Accepted the offer to swap</span>
-                <div className="flex flex-col xs:flex-row gap-1">
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Amount:{" "}
-                    {formatToHighDenom(
-                      event.amount || "0",
-                      event.market.baseDecimals
-                    )}{" "}
-                    {event.market.base}
-                  </span>
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Price:{" "}
-                    {formatToHighDenom(
-                      event.price || "0",
-                      event.market.quoteDecimals
-                    )}{" "}
-                    {event.market.quote} / {event.market.base}
-                  </span>
-                </div>
-              </>
+              <EventContentOfferAccept
+                amount={event.amount}
+                market={event.market}
+                price={event.price}
+              />
             )}
 
             {/* Offer: Unaccepted */}
             {event.action == Events.OfferUnaccept && (
-              <>
-                <span className="block mb-2">Rejected the offer to swap</span>
-                <div className="flex flex-col xs:flex-row gap-1">
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Amount:{" "}
-                    {formatToHighDenom(
-                      event.amount || "0",
-                      event.market.baseDecimals
-                    )}{" "}
-                    {event.market.base}
-                  </span>
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Price:{" "}
-                    {formatToHighDenom(
-                      event.price || "0",
-                      event.market.quoteDecimals
-                    )}{" "}
-                    {event.market.quote} / {event.market.base}
-                  </span>
-                </div>
-              </>
+              <EventContentOfferUnaccept
+                amount={event.amount}
+                market={event.market}
+                price={event.price}
+              />
             )}
 
             {/* Offer: Cancelled */}
             {event.action == Events.OfferCancel && (
-              <>
-                <span className="block mb-2">Cancelled the offer</span>
-                <div className="flex flex-col xs:flex-row gap-1">
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Amount:{" "}
-                    {formatToHighDenom(
-                      event.amount || "0",
-                      event.market.baseDecimals
-                    )}{" "}
-                    {event.market.base}
-                  </span>
-                  <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
-                    Price:{" "}
-                    {formatToHighDenom(
-                      event.price || "0",
-                      event.market.quoteDecimals
-                    )}{" "}
-                    {event.market.quote} / {event.market.base}
-                  </span>
-                </div>
-              </>
+              <EventContentOfferCancel
+                amount={event.amount}
+                market={event.market}
+                price={event.price}
+              />
             )}
           </div>
           {/*<div className="mt-4">*/}

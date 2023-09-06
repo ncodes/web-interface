@@ -167,9 +167,7 @@
     }
   }
 
-  @layer utilities {
-    .striped > div:nth-child(even) {
-      @apply bg-gray-900;
-    }
+  .address-mention-decoration {
+    @apply text-gray-300 underline decoration-dashed decoration-gray-500;
   }
 }

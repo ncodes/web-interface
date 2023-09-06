@@ -61,6 +61,7 @@ function MarketTabs() {
       },
     ],
     queryFn: listLiquidities,
+    keepPreviousData: true,
     enabled: market.data != undefined,
   });
 

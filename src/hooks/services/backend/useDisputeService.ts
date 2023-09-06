@@ -33,7 +33,7 @@ export function useDisputeService() {
         url: `${import.meta.env.VITE_API_URI}/v1/disputes`,
         params: {
           ...disputeFilter,
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
           offset,
           limit,
           participant:

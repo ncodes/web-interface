@@ -13,7 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
 import { Upload } from "lucide-react";
-import { UserHoverCard } from "../liquidity/UserHoverCard.tsx";
+
+import { UserHoverCard } from "../UserHoverCard.tsx";
 
 function Message({
   mine,

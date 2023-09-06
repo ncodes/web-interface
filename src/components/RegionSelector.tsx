@@ -85,7 +85,7 @@ export function RegionSelectorMenu({
       <DropdownMenuTrigger className="outline-0 ring-0">
         {children}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="DropdownMenuContent min-w-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-input border-gray-700/80 text-gray-200 px-0 py-0">
+      <DropdownMenuContent className="DropdownMenuContent min-w-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-700/80 text-gray-200 px-0 py-0">
         <ScrollArea className="h-[200px]" type="scroll">
           {getRegions(currentRegion ? [currentRegion] : []).map((r) => (
             <DropdownMenuItemCustom

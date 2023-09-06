@@ -323,6 +323,7 @@ declare global {
   }
 
   interface Event {
+    sn: number;
     network: string;
     marketAddress: string;
     orderId: number;
@@ -348,6 +349,7 @@ declare global {
     swap: Swap;
     dispute: Dispute;
     market: Market;
+    liquidity: Liquidity;
   }
 
   type Instructions = {

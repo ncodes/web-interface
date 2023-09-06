@@ -14,11 +14,6 @@ export interface ListTicketParams {
 export type ListTicketIDs = "getTicketsOwned";
 export type GetStatIDs = "getStats";
 
-export interface GetStats {
-  net: string;
-  owner?: string;
-}
-
 export interface GetStatParams {
   net: string;
   owner?: string;
@@ -44,7 +39,7 @@ export function useTicketService() {
         url: `${import.meta.env.VITE_API_URI}/v1/tickets`,
         params: {
           ...ticketFilter,
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
           offset,
           limit,
           owner:
@@ -88,7 +83,7 @@ export function useTicketService() {
         url: `${import.meta.env.VITE_API_URI}/v1/tickets/stats`,
         headers,
         params: {
-          net,
+          net: "ethereum" || net, // TODO: remove mock
           owner,
         },
       });

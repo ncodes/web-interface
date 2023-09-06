@@ -32,6 +32,7 @@ export function MyOffersTabContent() {
       },
     ],
     queryFn: listOffers,
+    keepPreviousData: true,
     enabled: !!address,
   });
 

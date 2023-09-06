@@ -40,6 +40,7 @@ export function MyMarketsTabContent() {
       },
     ],
     queryFn: listMarkets,
+    keepPreviousData: true,
     enabled: !!address,
   });
 

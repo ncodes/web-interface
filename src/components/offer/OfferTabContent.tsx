@@ -109,7 +109,10 @@ export function OfferTabContent() {
                     </Label>
                     <div className="flex flex-col gap-5">
                       {events.data?.events?.map((event) => (
-                        <OfferEvent event={event} />
+                        <OfferEvent
+                          event={event}
+                          key={`${event.creator}:${event.action}`}
+                        />
                       ))}
                     </div>
                   </>

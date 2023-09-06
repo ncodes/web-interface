@@ -102,8 +102,6 @@ export function useOfferService() {
         headers,
       });
 
-      console.log(resp.data);
-
       // TODO: remove mock
       resp.data.data[0] = {
         action: Events.OfferCreate,

@@ -34,6 +34,7 @@ export function OffersTabContent() {
       },
     ],
     queryFn: listOffers,
+    keepPreviousData: true,
     enabled: !!market && !!provider && !!lid,
   });
 

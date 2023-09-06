@@ -26,7 +26,6 @@ import {
   XCircle,
 } from "lucide-react";
 import { StatCard } from "../market/StatCard.tsx";
-import { UserHoverCard } from "../liquidity/UserHoverCard.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { ToolTip } from "../ToolTip.tsx";
@@ -53,6 +52,7 @@ import { CountDown } from "../Countdown.tsx";
 import { useLocation } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 
 interface ButtonEnableState {
   commit: boolean;

@@ -1,6 +1,5 @@
 import { cn } from "../libs/helpers.ts";
 import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
-import useConnector from "../hooks/connectors/useConnector.tsx";
 import { Link, useLocation } from "react-router-dom";
 import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
@@ -70,7 +69,7 @@ export function Navigation() {
           <NavPageLink
             iconFile="timeline.svg"
             label="Timeline"
-            active={pathname == ""}
+            active={pathname.match("^/$") != null}
             to="/"
           />
         </li>

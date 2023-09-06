@@ -1,5 +1,4 @@
 import { BaseSyntheticEvent, useState } from "react";
-import { UserHoverCard } from "./UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { ToolTip } from "../ToolTip.tsx";
@@ -43,6 +42,7 @@ import { PairAvatar } from "../avatar/PairAvatar.tsx";
 import { PlayCircle } from "lucide-react";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { useNavigate } from "react-router-dom";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 
 function ProviderInfoSkeleton() {
   return (

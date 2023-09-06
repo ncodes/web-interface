@@ -1,7 +1,6 @@
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
-import { UserHoverCard } from "../liquidity/UserHoverCard.tsx";
 import moment from "moment/moment";
 import { Events } from "../../types/enums.ts";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
@@ -9,6 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import { ToolTip } from "../ToolTip.tsx";
 import { isDisputed, isDisputeDraftee } from "../../libs/api_utils.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { EventContentSwapNew } from "./event/EventContentSwapNew.tsx";
+import { EventContentSwapPaid } from "./event/EventContentSwapPaid.tsx";
+import { EventContentSwapReleased } from "./event/EventContentSwapReleased.tsx";
+import { EventContentSwapCancelled } from "./event/EventContentSwapCancelled.tsx";
+import { EventContentSwapDisputed } from "./event/EventContentSwapDisputed.tsx";
+import { EventContentSwapDrafted } from "./event/EventContentSwapDrafted.tsx";
+import { EventContentSwapCommitted } from "./event/EventContentSwapCommitted.tsx";
+import { EventContentSwapRevealed } from "./event/EventContentSwapRevealed.tsx";
+import { EventContentSwapExecuted } from "./event/EventContentSwapExecuted.tsx";
+import { EventContentSwapUndrafted } from "./event/EventContentSwapUndrafted.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 
 export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
   const { getUser } = useUserService();
@@ -29,7 +39,7 @@ export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
       <div className="w-full">
         <div className="flex flex-col flex-1">
           <div className="flex justify-between">
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col gap-1 w-full font-normal">
               <div className="flex gap-1 justify-between items-center">
                 <span className="flex  gap-1 text-gray-400 font-light text-xs">
                   <UserHoverCard user={creator.data as User}>
@@ -64,87 +74,49 @@ export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
               </div>
 
               {/* Swap: New */}
-              {event.action == Events.SwapNew && (
-                <span className="text-xs flex gap-1">Started the swap.</span>
-              )}
+              {event.action == Events.SwapNew && <EventContentSwapNew />}
 
               {/* Swap: Paid */}
-              {event.action == Events.SwapPaid && (
-                <span className="text-xs flex gap-1">
-                  Marked swap as <b className="text-chinese-green">paid</b>.
-                </span>
-              )}
+              {event.action == Events.SwapPaid && <EventContentSwapPaid />}
 
               {/* Swap: Released */}
               {event.action == Events.SwapReleased && (
-                <span className="text-xs flex gap-1">
-                  <b className="text-chinese-green">Released</b> the swap.
-                </span>
+                <EventContentSwapReleased />
               )}
 
               {/* Swap: Cancelled */}
               {event.action == Events.SwapCancelled && (
-                <>
-                  <span className="text-xs flex gap-1">
-                    <b className="text-red-300">Cancelled</b> the swap.
-                  </span>
-                </>
+                <EventContentSwapCancelled />
               )}
 
               {/* Swap: Disputed */}
               {event.action == Events.SwapDisputed && (
-                <>
-                  <span className="text-xs flex gap-1">
-                    Started a new dispute#{event.dispute.disputeId}.
-                  </span>
-                </>
+                <EventContentSwapDisputed dispute={event.dispute} />
               )}
 
               {/* Swap: Drafted */}
               {event.action == Events.SwapDrafted && (
-                <>
-                  <span className="text-xs flex gap-1">
-                    Drafted as a mediator to dispute#{event.dispute.disputeId}.
-                  </span>
-                </>
+                <EventContentSwapDrafted dispute={event.dispute} />
               )}
 
               {/* Swap: Committed */}
               {event.action == Events.SwapCommitted && (
-                <>
-                  <span className="text-xs flex gap-1">
-                    Committed their verdict for dispute#
-                    {event.dispute.disputeId}.
-                  </span>
-                </>
+                <EventContentSwapCommitted dispute={event.dispute} />
               )}
 
               {/* Swap: Reveal */}
               {event.action == Events.SwapRevealed && (
-                <>
-                  <span className="text-xs flex gap-1">
-                    Revealed their verdict for dispute#
-                    {event.dispute.disputeId}.
-                  </span>
-                </>
+                <EventContentSwapRevealed dispute={event.dispute} />
               )}
 
               {/* Swap: Executed */}
               {event.action == Events.SwapExecuted && (
-                <>
-                  <span className="text-xs flex gap-1">
-                    Dispute#{event.dispute.disputeId} has been executed.
-                  </span>
-                </>
+                <EventContentSwapExecuted dispute={event.dispute} />
               )}
 
               {/* Swap: Undrafted */}
               {event.action == Events.SwapUndrafted && (
-                <>
-                  <span className="text-xs flex gap-1">
-                    Undrafted a mediator from dispute#{event.dispute.disputeId}.
-                  </span>
-                </>
+                <EventContentSwapUndrafted dispute={event.dispute} />
               )}
             </div>
           </div>

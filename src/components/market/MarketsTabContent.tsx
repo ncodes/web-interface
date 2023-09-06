@@ -37,6 +37,7 @@ export function MarketsTabContent() {
       },
     ],
     queryFn: listMarkets,
+    keepPreviousData: true,
     enabled: isMounted,
   });
 

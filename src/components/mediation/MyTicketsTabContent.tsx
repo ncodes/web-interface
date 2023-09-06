@@ -39,6 +39,7 @@ export function MyTicketsTabContent() {
       },
     ],
     queryFn: listTickets,
+    keepPreviousData: true,
     enabled: !!address,
   });
 

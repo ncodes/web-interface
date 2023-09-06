@@ -39,6 +39,7 @@ export function MyLiquidityTabContent() {
       },
     ],
     queryFn: listLiquidities,
+    keepPreviousData: true,
     enabled: !!address,
   });
 
