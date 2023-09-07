@@ -3,7 +3,6 @@ import { LeftSidebar } from "../components/LeftSidebar.tsx";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { Header } from "../components/Header.tsx";
-import { SearchSheetBox } from "../components/SearchBox.tsx";
 import { NotificationSheet } from "../components/NotificationSheet.tsx";
 import { UnlinkedAccountNotice } from "../components/UnlinkedAccountNotice.tsx";
 import { useUserService } from "../hooks/services/backend/useUserService.ts";
@@ -13,6 +12,7 @@ import useStore from "../hooks/store/useStore.ts";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { cn } from "../libs/utils.ts";
 import { useConnectorContext } from "../hooks/connectors/context.tsx";
+import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 
 export default function Layout({
   tab,

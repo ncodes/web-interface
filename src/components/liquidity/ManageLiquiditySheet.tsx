@@ -7,7 +7,7 @@ import { ManageBasicLiquidityTab } from "./ManageBasicLiquidityTab.tsx";
 import ManageLiquidityInstructionsTab from "./ManageLiquidityInstructionsTab.tsx";
 
 export function ManageLiquiditySheet(props: {
-  liquidity: Liquidity;
+  liquidity?: Liquidity;
   open: boolean;
   onOpenChange: (open) => void;
   addMode?: boolean;
@@ -78,7 +78,9 @@ export function ManageLiquiditySheet(props: {
             }}
           />
 
-          <ManageLiquidityInstructionsTab liquidity={props.liquidity} />
+          <ManageLiquidityInstructionsTab
+            liquidity={props.liquidity as Liquidity}
+          />
         </Tabs>
       </SheetContent>
     </Sheet>

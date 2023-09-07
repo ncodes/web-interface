@@ -11,7 +11,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 export function ManageBasicLiquidityTab(props: {
   addMode: undefined | boolean;
   onClick: () => void;
-  liquidity: Liquidity;
+  liquidity?: Liquidity;
 }) {
   return (
     <TabsContent value="basic" className="p-0 mt-0 h-full overflow-auto">
