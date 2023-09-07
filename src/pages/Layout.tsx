@@ -94,7 +94,7 @@ export default function Layout({
                   marginTop:
                     scrollYPos > headerHeight ? scrollYPos - headerHeight : 0,
                 }}
-                transition={{ ease: "linear", duration: 0.08 }}
+                transition={{ ease: "linear", duration: 0.5 }}
                 className={cn(`w-[400px] px-5 pr-0 h-full hidden xl:flex`)}
               >
                 {rightSide}

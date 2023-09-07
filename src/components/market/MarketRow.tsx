@@ -27,6 +27,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { useNavigate } from "react-router-dom";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
+import { PriceChange } from "./PriceChange.tsx";
 
 export function MarketRow({
   market,
@@ -108,20 +109,7 @@ export function MarketRow({
                   title={`Price (${market.base})`}
                   width="w-auto"
                   tip={`The price of 1 ${market.base} in USD`}
-                  title2={
-                    <span
-                      className={cn("hidden xxs:inline text-[10px]", {
-                        "text-green-400": market.priceChange > 0,
-                        "text-red-400": market.priceChange < 0,
-                        "text-gray-200": market.priceChange == 0,
-                      })}
-                    >
-                      ({market.priceChange < 0 && "-"}
-                      {market.priceChange == 0 && ""}
-                      {market.priceChange > 0 && "+"}
-                      {market.priceChange.toString().replace("-", "")}%)
-                    </span>
-                  }
+                  title2={<PriceChange priceChange={market.priceChange} />}
                 >
                   <span className="flex gap-1" data-click-trigger="1">
                     <span data-click-trigger="1">

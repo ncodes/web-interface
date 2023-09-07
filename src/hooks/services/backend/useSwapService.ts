@@ -5,13 +5,13 @@ import { SwapFilter } from "../../store/useStore.ts";
 import { Events } from "../../../types/enums.ts";
 import moment from "moment";
 
-export type ListSwapIDs = "getSwapsAsParticipant";
+export type ListSwapIDs = "getSwapsAsParticipant" | "getRecentSwaps";
 export interface ListSwapParams {
   network: string;
   limit: number;
-  offset: number;
+  offset?: number;
   connectedAddress?: string;
-  swapFilter: SwapFilter;
+  swapFilter?: SwapFilter;
 }
 
 interface GetSwapParams {

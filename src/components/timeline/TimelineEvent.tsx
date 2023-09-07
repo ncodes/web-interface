@@ -41,7 +41,7 @@ export default function TimelineEvent({ event }: { event: Event }) {
   });
 
   return (
-    <div className="flex gap-2 w-full md:w-[500px]">
+    <div className="flex gap-2 w-full md:w-[600px]">
       <div>
         <UserHoverCard user={creator.data as User}>
           <EmojiAvatar size={AvatarSize.Medium} randomStr={event.creator} />

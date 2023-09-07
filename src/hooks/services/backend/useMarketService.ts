@@ -18,6 +18,11 @@ export interface GetMarketParams {
   market: string;
 }
 
+interface GetTopMarketsParams {
+  network: string;
+  limit: number;
+}
+
 /**
  * useMarketService provides access to v1/markets endpoints
  */
@@ -79,8 +84,35 @@ export function useMarketService() {
     }
   }
 
+  /**
+   * Get top markets
+   */
+  async function getTopMarkets(
+    ctx: QueryFunctionContext<[string, GetTopMarketsParams]>
+  ): Promise<Market[]> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { network, limit } = params;
+      const headers = {};
+      const resp = await axios<{ data: Market[] }>({
+        method: "get",
+        url: `${import.meta.env.VITE_API_URI}/v1/markets/top`,
+        params: {
+          net: "ethereum" || network, // TODO: remove mock
+          limit,
+        },
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     listMarkets,
     getMarket,
+    getTopMarkets,
   };
 }
