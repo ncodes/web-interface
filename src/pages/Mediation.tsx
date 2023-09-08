@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { BuyTicketSheet } from "../components/mediation/BuyTicketSheet.tsx";
 import useStore from "../hooks/store/useStore.ts";
@@ -40,7 +40,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
       }}
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
-        <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
+        <ScrollOverflowIndicator className="[&::before]:rounded-tr-none w-full">
           <ScrollAreaHorizontal type="scroll" className="w-full">
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
@@ -63,7 +63,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <div className="hidden md:inline">
             <Button

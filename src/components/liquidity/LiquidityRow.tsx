@@ -2,7 +2,7 @@ import { BaseSyntheticEvent, useState } from "react";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { ToolTip } from "../ToolTip.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { StatCard } from "../market/StatCard.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
@@ -95,7 +95,7 @@ export function LiquidityRow({
       <div
         data-click-trigger="1"
         className={cn(
-          "border bg-card-background border-card-border transition-all duration-300 rounded-xl",
+          "border bg-card-background border-card-border transition-all duration-300 border-b-gray-600 rounded-xl",
           {
             "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
               !noFocus,
@@ -244,7 +244,7 @@ export function LiquidityRow({
             </div>
           </div>
           <div className="flex-1 overflow-hidden">
-            <ScrollGradientIndicator>
+            <ScrollOverflowIndicator>
               <ScrollAreaHorizontal className="flex mr-[1px]">
                 <div
                   className="flex-1 flex py-2 px-2 gap-2"
@@ -366,7 +366,7 @@ export function LiquidityRow({
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </div>
         </div>
         <div className="flex justify-between border-t border-gray-800">
@@ -385,7 +385,7 @@ export function LiquidityRow({
               </ToolTip>
             </div>
             <div className="flex-1 overflow-hidden tracking-wider">
-              <ScrollGradientIndicator className="[&::before]:rounded-none">
+              <ScrollOverflowIndicator className="[&::before]:rounded-none">
                 <ScrollAreaHorizontal type="scroll">
                   <div
                     className="flex items-center gap-2 px-2"
@@ -406,7 +406,7 @@ export function LiquidityRow({
                     )}
                   </div>
                 </ScrollAreaHorizontal>
-              </ScrollGradientIndicator>
+              </ScrollOverflowIndicator>
             </div>
           </div>
           <div

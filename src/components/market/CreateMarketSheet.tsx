@@ -6,194 +6,22 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet.tsx";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon, InfoCircledIcon } from "@radix-ui/react-icons";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Avatar } from "../avatar/Avatar.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Switch } from "../ui/switch.tsx";
 import { Button } from "../ui/Button.tsx";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
-import { cn } from "../../libs/utils.ts";
-import { ScrollArea } from "../ui/scroll-area.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { useAssetService } from "../../hooks/services/backend/useAssetService.ts";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { AssetSelector } from "./AssetSelector.tsx";
 import { ToolTip } from "../ToolTip.tsx";
-
-function AssetSelectorItem({
-  avatarUrl,
-  symbol,
-  name,
-  type,
-  tip,
-}: {
-  avatarUrl: string;
-  symbol: string;
-  name: string;
-  type: string;
-  tip?: ReactNode;
-}) {
-  const [hover, setHover] = useState(false);
-
-  return (
-    <div
-      onMouseEnter={() => {
-        setHover(true);
-      }}
-      onMouseLeave={() => {
-        setHover(false);
-      }}
-      className={cn(
-        "asset-item flex py-2 gap-3 px-3 transition-all duration-150 border-gray-900 items-center cursor-pointer",
-        { "bg-chinese-green scale-x-[1.03]": hover }
-      )}
-    >
-      <div>
-        <Avatar src={avatarUrl} fallback={symbol} className="w-[35px]" />
-      </div>
-      <div className="flex flex-col select-none">
-        <span className={cn("text-[16px]", { "text-gray-800": hover })}>
-          {name} ({symbol})
-        </span>
-        <span
-          className={cn("subtitle text-xs text-gray-400", {
-            "text-gray-600": hover,
-          })}
-        >
-          {type}
-        </span>
-      </div>
-      <div
-        className={cn(
-          "flex-1 flex justify-end text-gray-500 cursor-pointer transition-all duration-300",
-          { "text-gray-800": hover }
-        )}
-      >
-        <ToolTip tip={tip} side="left">
-          <IconInfoCircle />
-        </ToolTip>
-      </div>
-    </div>
-  );
-}
-
-function AssetSelector({
-  side,
-  symbol,
-  image,
-}: {
-  side: string;
-  symbol: string;
-  image: string;
-}) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <Popover
-      modal={true}
-      onOpenChange={(open) => {
-        setOpen(open);
-      }}
-    >
-      <PopoverTrigger>
-        <div className="flex gap-2 flex-col">
-          <div className="flex items-center gap-2">
-            <span className="tracking-wide text-sm xxs:text-[16px]">
-              {side}
-            </span>
-            <IconInfoCircle
-              width="15px"
-              className="opacity-70 hover:opacity-100 transition-all duration-300 cursor-pointer"
-            />
-          </div>
-          <Button
-            variant="ghost"
-            className="p-0 h-auto hover:text-gray-100 transition-all hover:border-gray-500 duration-300"
-            asChild
-          >
-            <div
-              className={cn(
-                "flex items-center min-w-[120px] max-w-[170px] pl-3 pr-2 justify-between rounded-full bg-card-background border border-gray-600 cursor-pointer hover:bg-gray-600 hover:scale-105",
-                { "bg-gray-600 scale-105 border-gray-500": open }
-              )}
-            >
-              <div className="text-xl font-medium overflow-auto scrollbar-hide tracking-wide">
-                {symbol}
-              </div>
-              <div className="shrink-0">
-                <Avatar src={image} fallback={symbol} />
-              </div>
-            </div>
-          </Button>
-        </div>
-      </PopoverTrigger>
-      <PopoverContent className="p-0 rounded-3xl bg-modal-background border-modal-border drop-shadow shadow-xl overflow-hidden">
-        <div className="h-[400px] relative flex flex-col overflow-auto scroll-auto">
-          <div className="px-3 py-3">
-            <Input
-              type="text"
-              className="py-5 px-3 text-gray-200"
-              placeholder="Search token (ex: WETH, 0xAbC)"
-            />
-          </div>
-          <ScrollArea
-            type="scroll"
-            className="text-gray-200 border-t border-gray-700"
-          >
-            <div className="divide-y">
-              <AssetSelectorItem
-                name="Bitcoin"
-                symbol="BTC"
-                type="ERC20"
-                avatarUrl="/images/icons/asset-icons/btc.svg"
-                tip="An ERC20 asset"
-              />
-              <AssetSelectorItem
-                name="Uniswap"
-                symbol="UNI"
-                type="SYNTHETIC"
-                avatarUrl="/images/icons/asset-icons/uni.svg"
-              />
-              <AssetSelectorItem
-                name="Bitcoin"
-                symbol="BTC"
-                type="ERC20"
-                avatarUrl="/images/icons/asset-icons/btc.svg"
-              />
-              <AssetSelectorItem
-                name="Bitcoin"
-                symbol="BTC"
-                type="ERC20"
-                avatarUrl="/images/icons/asset-icons/btc.svg"
-              />
-              <AssetSelectorItem
-                name="Bitcoin"
-                symbol="BTC"
-                type="ERC20"
-                avatarUrl="/images/icons/asset-icons/btc.svg"
-              />
-              <AssetSelectorItem
-                name="Bitcoin"
-                symbol="BTC"
-                type="ERC20"
-                avatarUrl="/images/icons/asset-icons/btc.svg"
-              />
-              <AssetSelectorItem
-                name="Bitcoin"
-                symbol="BTC"
-                type="ERC20"
-                avatarUrl="/images/icons/asset-icons/btc.svg"
-              />
-              <AssetSelectorItem
-                name="Bitcoin"
-                symbol="BTC"
-                type="ERC20"
-                avatarUrl="/images/icons/asset-icons/btc.svg"
-              />
-            </div>
-          </ScrollArea>
-        </div>
-      </PopoverContent>
-    </Popover>
-  );
-}
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import { isDev } from "../../libs/helpers.ts";
+import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
+import { AssetType } from "../../types/enums.ts";
+import _ from "lodash";
 
 export function CreateMarketSheet({
   children,
@@ -204,18 +32,87 @@ export function CreateMarketSheet({
   active: boolean;
   onOpen: (open: boolean) => void;
 }) {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const [baseAsset, setBaseAsset] = useState<AssetInfo>();
+  const [quoteAsset, setQuoteAsset] = useState<AssetInfo>();
+  const [commission, setCommission] = useState<number | undefined>(undefined);
+  const [commissionErr, setCommissionErr] = useState("");
+  const [permissions, setPermissions] = useState({
+    permPut: false,
+    permSwap: false,
+  });
+  const { notifySuccess, notifyError } = useToast();
+  const { createMarket, humanizeErrors } = useMarketContract();
+  const [loading, setLoading] = useState(false);
+  const { getChainInfo, connected } = useConnectorContext();
+  const { getList } = useAssetService();
+  const assets = useQuery({
+    queryKey: ["getList", { network: getChainInfo().queryName }],
+    queryFn: getList,
+    enabled: connected,
+  });
+
+  useEffect(() => {
+    if (!assets.isSuccess || !assets.data) return;
+    const base = _.shuffle(assets.data)[0];
+    let quote: AssetInfo;
+    do {
+      quote = _.shuffle(assets.data)[0];
+    } while (base.address == quote.address);
+    setBaseAsset(base);
+    setQuoteAsset(quote);
+  }, [assets.isSuccess, assets.data]);
 
   useEffect(() => {
     setOpen(active);
     onOpen && onOpen(active);
   }, [active, onOpen]);
 
+  const doCreateMarket = async () => {
+    if (!baseAsset || !quoteAsset) return;
+    try {
+      setLoading(true);
+      const txHash = await createMarket(
+        baseAsset.address,
+        quoteAsset.address,
+        baseAsset.type == "ERC20" ? AssetType.ERC20 : AssetType.ERC721,
+        quoteAsset.type == "ERC20" ? AssetType.ERC20 : AssetType.ERC721,
+        permissions.permPut,
+        permissions.permSwap,
+        (commission || 0) * 100,
+        1
+      );
+      const blockExplorer = getChainInfo().blockExplorer;
+      notifySuccess("Successfully created a market", {
+        duration: 10000,
+        links: [
+          {
+            label: "View Transaction",
+            href: `${blockExplorer}/tx/${txHash}`,
+          },
+        ],
+      });
+      queryClient.refetchQueries(["getMarkets"]).catch(console.error);
+      close();
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  function close() {
+    setOpen(false);
+    onOpen && onOpen(false);
+  }
+
   return (
     <Sheet
       open={open}
       onOpenChange={(open) => {
-        setOpen(open);
         onOpen && onOpen(open);
       }}
     >
@@ -235,17 +132,31 @@ export function CreateMarketSheet({
           <div className="flex">
             <div className="p-5 pb-0 flex-1">
               <AssetSelector
+                assetsQuery={assets}
                 side="Base Asset"
-                symbol="BTC"
-                image="/images/icons/asset-icons/btc.svg"
+                symbol={baseAsset?.symbol as string}
+                image={baseAsset?.logoURI as string}
+                disabled={loading}
+                tip={
+                  "The base asset refers to the currency or asset in which the liquidity is denominated."
+                }
+                onSelected={(asset) => {
+                  setBaseAsset(asset);
+                }}
               />
             </div>
 
             <div className="p-5 pb-0 flex-1">
               <AssetSelector
+                assetsQuery={assets}
                 side="Quote Asset"
-                symbol="UNI"
-                image="/images/icons/asset-icons/uni.svg"
+                symbol={quoteAsset?.symbol || "-"}
+                image={quoteAsset?.logoURI || ""}
+                disabled={loading}
+                tip="The quote asset refers to the currency or asset in which the price of the base asset is denominated."
+                onSelected={(asset) => {
+                  setQuoteAsset(asset);
+                }}
               />
             </div>
           </div>
@@ -254,17 +165,35 @@ export function CreateMarketSheet({
             <div className="flex gap-2 flex-col p-5 pb-0">
               <div className="flex items-center gap-2">
                 <span className="tracking-wide">Commission</span>
-                <IconInfoCircle
-                  width="15px"
-                  className="opacity-70 hover:opacity-100 transition-all duration-300 cursor-pointer"
-                />
+                <ToolTip tip="The percentage of commission that the market creator deducts from each swap">
+                  <IconInfoCircle
+                    width="15px"
+                    className="opacity-70 hover:opacity-100 transition-all duration-300 cursor-pointer"
+                  />
+                </ToolTip>
               </div>
               <div>
                 <Input
                   type="number"
+                  value={commission == undefined ? "" : commission}
+                  disabled={loading}
+                  onChange={(e) => {
+                    setCommission(parseFloat(e.target.value || ""));
+                    if (e.target.value == undefined) return;
+                    if (parseFloat(e.target.value) > 30) {
+                      setCommissionErr("Commission must be less than 30%");
+                    } else {
+                      setCommissionErr("");
+                    }
+                  }}
                   className="px-3 p-5 !w-[150px]"
                   placeholder="0.1"
                 />
+                {commissionErr != "" && (
+                  <span className="text-xs font-light text-red-500 tracking-wide">
+                    {commissionErr}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -273,22 +202,46 @@ export function CreateMarketSheet({
             <div className="flex gap-2 flex-col p-5 pb-0">
               <div className="flex items-center gap-2">
                 <span className="tracking-wide">Permissions</span>
-                <IconInfoCircle
-                  width="15px"
-                  className="opacity-70 hover:opacity-100 transition-all duration-300 cursor-pointer"
-                />
+                <ToolTip tip="The permissions that the market creator grants to the market">
+                  <IconInfoCircle
+                    width="15px"
+                    className="opacity-70 hover:opacity-100 transition-all duration-300 cursor-pointer"
+                  />
+                </ToolTip>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex font-light text-sm text-gray-400 justify-between">
-                  <span>Anyone can add liquidity</span>
+                  <span className="flex items-center gap-1">
+                    <span>Anyone can add liquidity</span>
+                    <ToolTip tip="By enabling this option, anyone can provide liquidity to the market">
+                      <InfoCircledIcon className="text-gray-500" />
+                    </ToolTip>
+                  </span>
                   <span>
-                    <Switch checked={true} />
+                    <Switch
+                      disabled={loading}
+                      checked={!permissions.permPut}
+                      onCheckedChange={(v) => {
+                        setPermissions({ ...permissions, permPut: !v });
+                      }}
+                    />
                   </span>
                 </div>
                 <div className="flex font-light text-sm text-gray-400 justify-between">
-                  <span>Anyone can swap</span>
+                  <span className="flex items-center gap-1">
+                    <span>Anyone can swap</span>
+                    <ToolTip tip="By enabling this option, anyone can swap in the market">
+                      <InfoCircledIcon className="text-gray-500" />
+                    </ToolTip>
+                  </span>
                   <span>
-                    <Switch checked={true} />
+                    <Switch
+                      disabled={loading}
+                      checked={!permissions.permSwap}
+                      onCheckedChange={(v) => {
+                        setPermissions({ ...permissions, permSwap: !v });
+                      }}
+                    />
                   </span>
                 </div>
               </div>
@@ -296,14 +249,24 @@ export function CreateMarketSheet({
           </div>
 
           <div className="px-3 mb-4 pt-4 border-t border-gray-800 absolute w-full bottom-0">
-            <Button size="full">Create</Button>
+            <Button size="full" onClick={doCreateMarket} disabled={loading}>
+              {!loading && <>Create</>}
+              {loading && (
+                <>
+                  <IconSpinner
+                    width="20"
+                    stopColor="#06060c"
+                    className="animate-spin"
+                  />
+                </>
+              )}
+            </Button>
           </div>
         </div>
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {
-            setOpen(false);
-            onOpen && onOpen(false);
+            close();
           }}
         >
           <Cross2Icon className="h-6 w-6" />

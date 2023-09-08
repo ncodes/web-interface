@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { ToolTip } from "../ToolTip.tsx";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { NavLink } from "react-router-dom";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
@@ -90,7 +90,7 @@ export function TicketsStatsTabContent() {
             </span>
           </div>
           <div className="px-5 py-3  text-gray-300 font-light text-sm">
-            <ScrollGradientIndicator
+            <ScrollOverflowIndicator
               side="bottom"
               className="[&>span.grad-indicator]:rounded-none"
             >
@@ -102,7 +102,7 @@ export function TicketsStatsTabContent() {
                 dispute and vote on the outcome. Joint Protocol rewards
                 successful mediators.
               </ScrollArea>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </div>
         </div>
         <InfoCard

@@ -1,7 +1,7 @@
 import { Label } from "../ui/label.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { LiquidityEventItem } from "./LiquidityEventItem.tsx";
 import { useQuery } from "@tanstack/react-query";
@@ -63,7 +63,7 @@ export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
           </div>
         )}
 
-        <ScrollGradientIndicator side="bottom">
+        <ScrollOverflowIndicator side="bottom">
           <ScrollArea type="scroll" className="h-[400px]">
             {!events.isLoading && events.isSuccess && (
               <>
@@ -78,7 +78,7 @@ export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
               </>
             )}
           </ScrollArea>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { Label } from "../components/ui/label.tsx";
 import { SwapSheetContent } from "../components/swap/SwapSheet.tsx";
@@ -64,7 +64,7 @@ function LiquidityPage({
       }}
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
-        <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
+        <ScrollOverflowIndicator className="[&::before]:rounded-tr-none w-full">
           <ScrollAreaHorizontal type="scroll" className="w-full">
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
@@ -96,7 +96,7 @@ function LiquidityPage({
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
         <div className="hidden md:inline xl:hidden">
           <Button
             size="sm"

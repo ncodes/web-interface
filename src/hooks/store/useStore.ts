@@ -100,8 +100,9 @@ export interface IStore {
   setCurrentRegion?: (region: string) => void;
 
   // LoadingBar state
-  loaderProgress?: number;
-  setLoaderProgress?: (progress: number) => void;
+  loaderProgress: number;
+  fullLoadCount: number;
+  setLoaderProgress: (progress: number) => void;
 
   // Current tab
   currentTab?: string;
@@ -140,12 +141,19 @@ export interface IStore {
   setTicketFilter: (filter: Partial<TicketFilter>) => void;
 }
 
-const useStore = create<IStore>((set) => ({
+const useStore = create<IStore>((set, get) => ({
   user: null,
   setUser: (user: User) => set({ user }),
 
   loaderProgress: 0,
-  setLoaderProgress: (progress: number) => set({ loaderProgress: progress }),
+  fullLoadCount: 0,
+  setLoaderProgress: (progress: number) => {
+    set({
+      loaderProgress: progress,
+      fullLoadCount:
+        progress == 100 ? get().fullLoadCount + 1 : get().fullLoadCount,
+    });
+  },
 
   currentRegion: localStorage.getItem("region") || defaultRegion,
   setCurrentRegion: (region: string) => set({ currentRegion: region }),

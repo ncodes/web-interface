@@ -1,15 +1,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Label } from "../ui/label.tsx";
 import { SwapEventLogs } from "./SwapEventLogs.tsx";
 import { useEffect, useState } from "react";
-import useInstructions from "../../hooks/instructions/useInstructions.ts";
+import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
 export function SwapInformation({ swap }: { swap: Swap }) {
-  const { load } = useInstructions();
+  const { loadInstruction } = useBadgeMgrContract();
   const { address } = useConnectorContext();
   const [globalLiqInstruction, setGlobalLiqInstruction] = useState("");
   const [liquidityInstruction, setLiquidityInstruction] = useState("");
@@ -17,7 +17,7 @@ export function SwapInformation({ swap }: { swap: Swap }) {
 
   useEffect(() => {
     setIsFetchingInstructions(true);
-    load(address)
+    loadInstruction(address)
       .then((data) => {
         if (!data) return;
         const liqKey =
@@ -36,7 +36,7 @@ export function SwapInformation({ swap }: { swap: Swap }) {
         defaultValue={swap?.disputes.length > 0 ? "logs" : "instructions"}
         className="w-full h-full  transition-all duration-500"
       >
-        <ScrollGradientIndicator>
+        <ScrollOverflowIndicator>
           <ScrollAreaHorizontal type="scroll">
             <TabsList className="justify-start px-3 py-2 pb-1 gap-2">
               <TabsTrigger
@@ -53,7 +53,7 @@ export function SwapInformation({ swap }: { swap: Swap }) {
               </TabsTrigger>
             </TabsList>
           </ScrollAreaHorizontal>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
         <TabsContent value="instructions" className="px-0 mt-4">
           <div className="bg-card-background border flex flex-col gap-2 rounded-2xl border-card-border w-full pb-3">
             {isFetchingInstructions && (

@@ -1,6 +1,6 @@
 import TokenInfo from "../hooks/connectors/token_info.ts";
 import React from "react";
-import { Events } from "./enums.ts";
+import { AssetType, Events } from "./enums.ts";
 
 interface ContractInfo<ABIType> {
   address: string;
@@ -26,7 +26,7 @@ interface ChainInfo {
 }
 
 declare global {
-  type ContractNames = "energon" | "nft" | "badgeManager";
+  type ContractNames = "energon" | "nft" | "badgeManager" | "marketCore";
 
   interface User {
     email: string;
@@ -44,13 +44,6 @@ declare global {
   }
 
   interface TransactionResponse {}
-
-  export enum AssetType {
-    SYNTH,
-    ERC20,
-    ERC721,
-    ERC1155,
-  }
 
   export interface Asset {
     asset: string;
@@ -356,4 +349,16 @@ declare global {
     global: string;
     liquidity: { [key: string]: string };
   };
+
+  interface AssetInfo {
+    asset?: string;
+    type: "ERC20" | "SYNTHETIC";
+    address: string;
+    name: string;
+    symbol: string;
+    decimals: number;
+    logoURI: string;
+    price: number; // Used in dev mode only
+    isSynthetic: boolean; // Used to identify synthetic tokens
+  }
 }

@@ -10,7 +10,7 @@ import {
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { AccountTab } from "./AccountTab.tsx";
 import { FeePouchTab } from "./FeePouchTab.tsx";
 import { BalancesTab } from "./BalancesTab.tsx";
@@ -52,7 +52,7 @@ export function SettingsSheet(props: {
             defaultValue={currentTab || "balances"}
             className="w-full h-full transition-all duration-500"
           >
-            <ScrollGradientIndicator>
+            <ScrollOverflowIndicator>
               <ScrollAreaHorizontal type="scroll">
                 <TabsList className="justify-start px-3 py-2 border-b border-modal-border">
                   <TabsTrigger
@@ -75,7 +75,7 @@ export function SettingsSheet(props: {
                   </TabsTrigger>
                 </TabsList>
               </ScrollAreaHorizontal>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
             <BalancesTab address={address} />
             <FeePouchTab />
             <AccountTab />

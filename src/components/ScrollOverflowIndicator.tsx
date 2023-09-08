@@ -1,17 +1,48 @@
 import React, { createRef, ReactElement, useEffect } from "react";
 import { cn } from "../libs/utils.ts";
 
-export default function ScrollGradientIndicator({
+export default function ScrollOverflowIndicator({
   children,
   side = "right",
   className,
+  onScroll,
 }: {
   children: ReactElement;
   side?: "bottom" | "right";
   className?: string;
+  onScroll?: (progress: number) => void;
 }) {
   const [progress, setProgress] = React.useState(0);
   const ref = createRef<HTMLDivElement>();
+
+  useEffect(() => {
+    if (!ref || !ref.current) return;
+    const viewPort = ref.current.querySelector(
+      "div[data-radix-scroll-area-viewport]"
+    );
+    if (!viewPort) return;
+    if (side == "right") {
+      onScrollX({
+        currentTarget: {
+          clientWidth: viewPort.clientWidth,
+          scrollWidth: viewPort.scrollWidth,
+          scrollLeft: viewPort.scrollLeft,
+        },
+      });
+    } else {
+      onScrollY({
+        currentTarget: {
+          clientHeight: viewPort.clientHeight,
+          scrollHeight: viewPort.scrollHeight,
+          scrollTop: viewPort.scrollTop,
+        },
+      });
+    }
+  }, [side]);
+
+  useEffect(() => {
+    onScroll && onScroll(progress);
+  }, [progress]);
 
   const onScrollX = (e: {
     currentTarget: {
@@ -46,31 +77,6 @@ export default function ScrollGradientIndicator({
       );
     else setProgress(100);
   };
-
-  useEffect(() => {
-    if (!ref || !ref.current) return;
-    const viewPort = ref.current.querySelector(
-      "div[data-radix-scroll-area-viewport]"
-    );
-    if (!viewPort) return;
-    if (side == "right") {
-      onScrollX({
-        currentTarget: {
-          clientWidth: viewPort.clientWidth,
-          scrollWidth: viewPort.scrollWidth,
-          scrollLeft: viewPort.scrollLeft,
-        },
-      });
-    } else {
-      onScrollY({
-        currentTarget: {
-          clientHeight: viewPort.clientHeight,
-          scrollHeight: viewPort.scrollHeight,
-          scrollTop: viewPort.scrollTop,
-        },
-      });
-    }
-  }, [side]);
 
   return (
     <div

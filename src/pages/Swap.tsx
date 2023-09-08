@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { Messenger } from "../components/messenger/Messenger.tsx";
 import { SwapPageTabContent } from "../components/swap/SwapPageTabContent.tsx";
 
@@ -18,7 +18,7 @@ function SwapPage() {
       className="w-full h-full transition-all duration-500"
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
-        <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
+        <ScrollOverflowIndicator className="[&::before]:rounded-tr-none w-full">
           <ScrollAreaHorizontal type="scroll" className="w-full">
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
@@ -29,7 +29,7 @@ function SwapPage() {
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger>

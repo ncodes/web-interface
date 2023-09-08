@@ -7,7 +7,7 @@ import { ToolTip } from "../ToolTip.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 
 function ReviewItem({
   address,
@@ -77,7 +77,7 @@ export function ReviewViewerSheet(props: {
             </ToolTip>
           </div>
           <div className="relative overflow-hidden pb-10 h-full">
-            <ScrollGradientIndicator side="bottom" className="h-full">
+            <ScrollOverflowIndicator side="bottom" className="h-full">
               <ScrollArea type="scroll" className="w-full h-full">
                 <div className="pt-5 flex flex-col gap-3 h-full">
                   <ReviewItem
@@ -156,7 +156,7 @@ export function ReviewViewerSheet(props: {
                   />
                 </div>
               </ScrollArea>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </div>
         </div>
         <div

@@ -1,5 +1,5 @@
 import { TabsContent } from "../ui/Tabs.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { EventItem } from "./EventItem.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
@@ -28,7 +28,7 @@ export function SwapEventLogs({ swap }: { swap: Swap }) {
   return (
     <TabsContent value="logs" className="mt-0 px-0">
       <div className="bg-card-background scrollbar-hide  border rounded-2xl border-card-border w-full overflow-y-auto mt-4">
-        <ScrollGradientIndicator
+        <ScrollOverflowIndicator
           side="bottom"
           className="[&>span.grad-indicator]:mb-[0px]"
         >
@@ -72,7 +72,7 @@ export function SwapEventLogs({ swap }: { swap: Swap }) {
               )}
             </div>
           </ScrollArea>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
       </div>
     </TabsContent>
   );

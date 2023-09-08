@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { MyWatchedLiquidityTabContent } from "../components/liquidity/MyWatchedLiquidityTabContent.tsx";
 import { MyLiquidityTabContent } from "../components/liquidity/MyLiquidityTabContent.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
       }}
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
-        <ScrollGradientIndicator className="[&::before]:rounded-tr-none w-full">
+        <ScrollOverflowIndicator className="[&::before]:rounded-tr-none w-full">
           <ScrollAreaHorizontal type="scroll" className="w-full">
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
@@ -52,7 +52,7 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
               </TabsTrigger>
             </div>
           </ScrollAreaHorizontal>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger>

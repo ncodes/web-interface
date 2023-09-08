@@ -8,6 +8,7 @@ import IconArbitrum from "../../components/icons/IconArbitrum.tsx";
 import BadgeManagerABI from "../../abi/BadgeManager.json";
 import EnergonABI from "../../abi/Energon.json";
 import NFTABI from "../../abi/NFT.json";
+import MarketCoreABI from "../../abi/MarketCore.json";
 
 export enum ChainID {
   Ethereum = 1,
@@ -43,6 +44,10 @@ export const SupportedNetworks: ChainInfo[] = [
       badgeManager: {
         address: import.meta.env.VITE_ETHEREUM_BADGE_MGR_ADDRESS,
         abi: BadgeManagerABI,
+      },
+      marketCore: {
+        address: import.meta.env.VITE_ETHEREUM_MARKET_CORE_ADDRESS,
+        abi: MarketCoreABI,
       },
       energon: {
         address: import.meta.env.VITE_ETHEREUM_ENERGON_ADDRESS,
@@ -162,6 +167,10 @@ export const SupportedNetworks: ChainInfo[] = [
       badgeManager: {
         address: import.meta.env.VITE_LOCALHOST_BADGE_MGR_ADDRESS,
         abi: BadgeManagerABI,
+      },
+      marketCore: {
+        address: import.meta.env.VITE_LOCALHOST_MARKET_CORE_ADDRESS,
+        abi: MarketCoreABI,
       },
       energon: {
         address: import.meta.env.VITE_LOCALHOST_ENERGON_ADDRESS,

@@ -2,7 +2,7 @@ import useStore from "../../hooks/store/useStore.ts";
 import { ToolTip } from "../ToolTip.tsx";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/Button.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { ReviewItem } from "./ReviewItem.tsx";
 
@@ -34,7 +34,7 @@ export function RecentReviews() {
         </div>
       </span>
       <div className="flex-1 bg-card-background divide-y divide-gray-800 border rounded-2xl mt-4 border-card-border w-full">
-        <ScrollGradientIndicator side="bottom">
+        <ScrollOverflowIndicator side="bottom">
           <ScrollArea type="scroll" className="h-[400px]">
             <ReviewItem
               good={true}
@@ -72,7 +72,7 @@ export function RecentReviews() {
               msg="hi"
             />
           </ScrollArea>
-        </ScrollGradientIndicator>
+        </ScrollOverflowIndicator>
       </div>
     </div>
   );

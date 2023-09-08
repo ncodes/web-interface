@@ -17,7 +17,7 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { BaseSyntheticEvent, useState } from "react";
 import { cn } from "../../libs/utils.ts";
 import { EditMarketSheet } from "./EditMarketSheet.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import {
   approxNumber,
   formatToHighDenom,
@@ -47,7 +47,7 @@ export function MarketRow({
   return (
     <div
       className={cn(
-        "border select-none bg-card-background border-card-border transition-all duration-300 rounded-xl ",
+        "border select-none bg-card-background border-card-border border-b-gray-600 transition-all duration-300 rounded-xl ",
         {
           "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
             !noFocus,
@@ -99,7 +99,7 @@ export function MarketRow({
           </div>
         </div>
         <div className="w-full overflow-hidden mr-[2px]" data-click-trigger="1">
-          <ScrollGradientIndicator className="[&::before]:rounded-r-none md:[&::before]:rounded-tr-2xl">
+          <ScrollOverflowIndicator className="[&::before]:rounded-r-none md:[&::before]:rounded-tr-2xl">
             <ScrollAreaHorizontal type="scroll" className="mx-2 md:mx-0">
               <div
                 data-click-trigger="1"
@@ -188,7 +188,7 @@ export function MarketRow({
                 </StatCard>
               </div>
             </ScrollAreaHorizontal>
-          </ScrollGradientIndicator>
+          </ScrollOverflowIndicator>
         </div>
       </div>
       <div className="flex justify-between border-t border-gray-800">
@@ -202,7 +202,7 @@ export function MarketRow({
             </ToolTip>
           </div>
           <div className="flex-1 overflow-hidden items-center tracking-wider">
-            <ScrollGradientIndicator className="[&::before]:rounded-none h-full flex items-center -mt-[1px]">
+            <ScrollOverflowIndicator className="[&::before]:rounded-none h-full flex items-center -mt-[1px]">
               <ScrollAreaHorizontal type="scroll">
                 <div className="flex items-center gap-2 px-2">
                   {market.requiredPutBadges.map((badge) => (
@@ -229,7 +229,7 @@ export function MarketRow({
                     )}
                 </div>
               </ScrollAreaHorizontal>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </div>
         </div>
         <div

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SearchInput } from "./SearchInput.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { SearchBoxItem } from "./SearchBoxItem.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
@@ -32,7 +32,7 @@ export function SearchContent({ renderInput }: { renderInput?: boolean }) {
           />
         </div>
       )}
-      <ScrollGradientIndicator side="bottom">
+      <ScrollOverflowIndicator side="bottom">
         <ScrollArea className="pb-[40px] md:pb-0 md:h-[400px]" type="scroll">
           <div className="flex justify-between items-center p-3 py-3 pb-1 ">
             <span className="font-medium text-gray-100 tracking-wider text-sm rounded-full">
@@ -92,7 +92,7 @@ export function SearchContent({ renderInput }: { renderInput?: boolean }) {
             )}
           </>
         </ScrollArea>
-      </ScrollGradientIndicator>
+      </ScrollOverflowIndicator>
     </>
   );
 }

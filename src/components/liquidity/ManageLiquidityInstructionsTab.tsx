@@ -12,7 +12,7 @@ import {
 } from "../../hooks/services/backend/useInstructionsService.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import useInstructions from "../../hooks/instructions/useInstructions.ts";
+import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { isDev } from "../../libs/helpers.ts";
 
 export default function ManageLiquidityInstructionsTab({
@@ -21,7 +21,8 @@ export default function ManageLiquidityInstructionsTab({
   liquidity: Liquidity;
 }) {
   const { notifySuccess, notifyError } = useToast();
-  const { load, update: updateInstruction, parseError } = useInstructions();
+  const { loadInstruction, updateInstruction, humanizeErrors } =
+    useBadgeMgrContract();
   const { updateInstructions } = useInstructionsService();
   const { getChainInfo, address } = useConnectorContext();
   const [originalContent, setOriginalContent] = useState("");
@@ -42,7 +43,7 @@ export default function ManageLiquidityInstructionsTab({
 
   useEffect(() => {
     setTxLoading(true);
-    load(address)
+    loadInstruction(address)
       .then((data) => {
         if (!data) return;
         const liqKey = `${liquidity.marketAddress}:${liquidity.provider}:${liquidity.lid}`;
@@ -72,7 +73,7 @@ export default function ManageLiquidityInstructionsTab({
           ],
         });
       } catch (error) {
-        const msg = parseError(error);
+        const msg = humanizeErrors(error);
         notifyError(msg);
         if (isDev()) console.error(error);
       } finally {

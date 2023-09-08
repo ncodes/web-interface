@@ -11,12 +11,16 @@ import { useMutation } from "@tanstack/react-query";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
-import useInstructions from "../../hooks/instructions/useInstructions.ts";
+import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { isDev } from "../../libs/helpers.ts";
 
 export function LiquidityInstruction() {
   const { updateInstructions } = useInstructionsService();
-  const { load, update: updateInstruction, parseError } = useInstructions();
+  const {
+    loadInstruction,
+    updateInstruction: updateInstruction,
+    humanizeErrors,
+  } = useBadgeMgrContract();
   const { getChainInfo, address } = useConnectorContext();
   const { notifySuccess, notifyError } = useToast();
   const [originalContent, setOriginalContent] = useState("");
@@ -34,7 +38,7 @@ export function LiquidityInstruction() {
 
   useEffect(() => {
     setTxLoading(true);
-    load(address)
+    loadInstruction(address)
       .then((data) => {
         if (!data) return;
         setContent(data.global);
@@ -61,7 +65,7 @@ export function LiquidityInstruction() {
           ],
         });
       } catch (error) {
-        const msg = parseError(error);
+        const msg = humanizeErrors(error);
         notifyError(msg);
         if (isDev()) console.error(error);
       } finally {

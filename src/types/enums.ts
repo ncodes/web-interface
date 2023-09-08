@@ -26,3 +26,10 @@ export enum Events {
   OfferCancel = "offer_cancel",
   OfferExecute = "offer_execute",
 }
+
+export enum AssetType {
+  SYNTH,
+  ERC20,
+  ERC721,
+  ERC1155,
+}

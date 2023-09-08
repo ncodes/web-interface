@@ -1,5 +1,5 @@
 import { BaseSyntheticEvent, useState } from "react";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Button } from "../ui/Button.tsx";
 import {
@@ -62,7 +62,7 @@ export function TicketRow({
       <div
         data-click-trigger="1"
         className={cn(
-          "border bg-card-background border-card-border transition-all duration-300 rounded-xl",
+          "border bg-card-background border-card-border transition-all duration-300 rounded-xl border-b-gray-600",
           {
             "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
               !noFocus,
@@ -87,7 +87,7 @@ export function TicketRow({
           </div>
 
           <div className="flex-1 overflow-hidden shrink-0">
-            <ScrollGradientIndicator>
+            <ScrollOverflowIndicator>
               <ScrollAreaHorizontal className="flex mr-[1px]">
                 <div
                   className="flex-1 flex py-2 px-2 gap-2"
@@ -154,7 +154,7 @@ export function TicketRow({
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </div>
         </div>
 

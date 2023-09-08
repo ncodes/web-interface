@@ -11,7 +11,7 @@ import { Footer } from "../components/Footer.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { IconPlus } from "../components/icons/IconPlus.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
 import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
 import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
@@ -83,7 +83,7 @@ function MarketTabs() {
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollAreaHorizontal type="scroll" className="w-full">
-          <ScrollGradientIndicator>
+          <ScrollOverflowIndicator>
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
                 value="markets"
@@ -92,7 +92,7 @@ function MarketTabs() {
                 Market
               </TabsTrigger>
             </div>
-          </ScrollGradientIndicator>
+          </ScrollOverflowIndicator>
         </ScrollAreaHorizontal>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <Button

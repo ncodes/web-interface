@@ -14,10 +14,11 @@ export function MarketsTabContent() {
   const { getChainInfo } = useConnectorContext();
   const { listMarkets } = useMarketService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
+  const fullLoadCount = useStore((state) => state.fullLoadCount);
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
-  const [limit] = useState(1);
+  const [limit] = useState(60);
   const {
     isLoading,
     isRefetching,
@@ -39,6 +40,7 @@ export function MarketsTabContent() {
     queryFn: listMarkets,
     keepPreviousData: true,
     enabled: isMounted,
+    refetchInterval: 10000,
   });
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export function MarketsTabContent() {
   }, [marketFilter]);
 
   useEffect(() => {
+    if (fullLoadCount > 0) return; // no need to show loader if data is already cached
     if (isLoading || isRefetching) setLoaderProgress && setLoaderProgress(50);
     else setLoaderProgress && setLoaderProgress(100);
   }, [isError, isLoading, setLoaderProgress, isRefetching, isRefetchError]);

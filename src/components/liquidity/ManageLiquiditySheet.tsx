@@ -1,7 +1,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet.tsx";
 import React, { useEffect } from "react";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
 import { ManageBasicLiquidityTab } from "./ManageBasicLiquidityTab.tsx";
 import ManageLiquidityInstructionsTab from "./ManageLiquidityInstructionsTab.tsx";
@@ -48,7 +48,7 @@ export function ManageLiquiditySheet(props: {
           defaultValue={"basic"}
           className="w-full h-full transition-all duration-500"
         >
-          <ScrollGradientIndicator>
+          <ScrollOverflowIndicator>
             <ScrollAreaHorizontal type="scroll">
               {!props.addMode && (
                 <TabsList className="justify-start px-3 py-2 border-b border-modal-border">
@@ -67,7 +67,7 @@ export function ManageLiquiditySheet(props: {
                 </TabsList>
               )}
             </ScrollAreaHorizontal>
-          </ScrollGradientIndicator>
+          </ScrollOverflowIndicator>
 
           <ManageBasicLiquidityTab
             liquidity={props.liquidity}

@@ -1,7 +1,7 @@
 import { BaseSyntheticEvent, useState } from "react";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { StatCard } from "../market/StatCard.tsx";
 import { cn } from "../../libs/utils.ts";
@@ -85,7 +85,7 @@ export function OfferRow({
       <div
         data-click-trigger="1"
         className={cn(
-          "border bg-card-background border-card-border transition-all duration-300 rounded-xl hover:scale-[1.002] hover:border-chinese-green cursor-pointer",
+          "border bg-card-background border-card-border transition-all duration-300 rounded-xl hover:scale-[1.002] hover:border-chinese-green cursor-pointer border-b-gray-600",
           className
         )}
       >
@@ -203,7 +203,7 @@ export function OfferRow({
             </div>
           </div>
           <div className="flex-1 overflow-hidden">
-            <ScrollGradientIndicator>
+            <ScrollOverflowIndicator>
               <ScrollAreaHorizontal className="flex mr-[1px]">
                 <div
                   className="flex-1 flex py-2 px-2 gap-2"
@@ -258,7 +258,7 @@ export function OfferRow({
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </div>
         </div>
 

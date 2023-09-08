@@ -10,15 +10,21 @@ export function Avatar({
   src,
   fallback,
   className,
+  fallbackClassName,
 }: {
   src: string;
-  fallback: ReactNode;
+  fallback?: ReactNode;
   className?: string;
+  fallbackClassName?: string;
 }) {
   return (
-    <UIAvatar className="w-auto">
+    <UIAvatar className="w-auto flex items-center">
       <AvatarImage src={src} className={cn("w-[30px]", className)} />
-      <AvatarFallback>{fallback}</AvatarFallback>
+      {fallback && (
+        <AvatarFallback className={cn("w-[30px]", fallbackClassName)}>
+          {fallback}
+        </AvatarFallback>
+      )}
     </UIAvatar>
   );
 }

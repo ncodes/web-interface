@@ -4,7 +4,7 @@ import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { IconPlus } from "../icons/IconPlus.tsx";
 import { Input } from "../ui/Input.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
-import ScrollGradientIndicator from "../ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { cn } from "../../libs/utils.ts";
 import {
   DropdownMenu,
@@ -96,7 +96,7 @@ export function Messenger({ sheetMode }: { sheetMode: boolean }) {
         </Label>
         <div className="flex max-h-full  justify-between flex-col h-full overflow-hidden">
           <div className="flex-1 overflow-hidden">
-            <ScrollGradientIndicator side="bottom" className="h-full">
+            <ScrollOverflowIndicator side="bottom" className="h-full">
               <ScrollArea type="scroll" className="h-full">
                 <div className="px-3 py-3 flex flex-col gap-4">
                   <Message
@@ -163,7 +163,7 @@ export function Messenger({ sheetMode }: { sheetMode: boolean }) {
                   />
                 </div>
               </ScrollArea>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </div>
           <div
             className={cn(

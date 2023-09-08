@@ -28,6 +28,11 @@ export interface IConnector {
     targetFunc: string,
     args?
   ): Promise<Address>;
+  simulateAndWriteContract(
+    name: ContractNames,
+    targetFunc: string,
+    args?
+  ): Promise<Address>;
 
   connected: boolean;
   disconnect: () => Promise<void>;
@@ -226,6 +231,32 @@ export default function useConnector() {
     });
   }
 
+  /**
+   * Simulate a contract call
+   * @param name - The name of the contract
+   * @param targetFunc - The target function to be called
+   * @param args - The arguments to be passed to the target function
+   */
+  async function simulateAndWriteContract(
+    name: ContractNames,
+    targetFunc: string,
+    args: unknown[] = []
+  ) {
+    if (!publicClient) throw new Error("no provider found");
+    if (!walletClient) throw new Error("wallet not connected");
+    const netInfo = getChain(chainId as number);
+    if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
+    const [address] = await walletClient.getAddresses();
+    const { request } = await publicClient.simulateContract({
+      address: netInfo.contracts[name].address as Address,
+      abi: netInfo.contracts[name].abi,
+      functionName: targetFunc,
+      args: args,
+      account: address,
+    });
+    return walletClient.writeContract(request);
+  }
+
   // Get the current chain info.
   // If wallet is not connected, the chain info of the default network is returned.
   // @throws Error if default network is not set
@@ -245,6 +276,7 @@ export default function useConnector() {
     getBalance,
     readContract,
     simulateContract,
+    simulateAndWriteContract,
     writeContract,
     ready,
     connected,

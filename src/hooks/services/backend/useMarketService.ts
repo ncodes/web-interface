@@ -42,7 +42,7 @@ export function useMarketService() {
         url: `${import.meta.env.VITE_API_URI}/v1/markets`,
         params: {
           ...marketFilter,
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock
           offset,
           limit,
           creator:
@@ -73,7 +73,7 @@ export function useMarketService() {
         method: "get",
         url: `${import.meta.env.VITE_API_URI}/v1/markets/${market}`,
         params: {
-          net: network,
+          net: "ethereum" || network, // TODO: remove mock,
         },
         headers,
       });

@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
 import { CreateMarketSheet } from "../components/market/CreateMarketSheet.tsx";
-import ScrollGradientIndicator from "../components/ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { MarketsTabContent } from "../components/market/MarketsTabContent.tsx";
 import { MyMarketsTabContent } from "../components/market/MyMarketsTabContent.tsx";
 import { WatchedMarketContent } from "../components/market/WatchedMarketContent.tsx";
@@ -38,7 +38,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollAreaHorizontal type="scroll" className="w-full">
-          <ScrollGradientIndicator>
+          <ScrollOverflowIndicator>
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
                 value="markets"
@@ -65,7 +65,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
                 Watching
               </TabsTrigger>
             </div>
-          </ScrollGradientIndicator>
+          </ScrollOverflowIndicator>
         </ScrollAreaHorizontal>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <Button
@@ -111,12 +111,14 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <CreateMarketSheet
-            active={openCreateMarketSheet}
-            onOpen={(open) => {
-              setOpenCreateMarketSheet(open);
-            }}
-          />
+          {openCreateMarketSheet && (
+            <CreateMarketSheet
+              active={openCreateMarketSheet}
+              onOpen={(open) => {
+                setOpenCreateMarketSheet(open);
+              }}
+            />
+          )}
         </div>
       </TabsList>
       {currentTab == "markets" && <MarketsTabContent />}

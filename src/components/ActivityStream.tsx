@@ -193,7 +193,12 @@ export function ActivityStream() {
             {swaps.isSuccess && swaps.data.swaps.length > 0 && (
               <>
                 {swaps.data.swaps.map((swap) => {
-                  return <RecentTradeRow swap={swap} />;
+                  return (
+                    <RecentTradeRow
+                      swap={swap}
+                      key={`${swap.provider}:${swap.taker}:${swap.createdAt}`}
+                    />
+                  );
                 })}
                 {Array.from(Array(limit - swaps.data.swaps.length).keys()).map(
                   (i) => (

@@ -18,7 +18,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import IconCopyFilled from "./icons/IconCopyFilled.tsx";
 import { VerifiedBadge } from "./liquidity/VerifiedBadge.tsx";
 import { Button } from "./ui/Button.tsx";
-import ScrollGradientIndicator from "./ScrollGradientIndicator.tsx";
+import ScrollOverflowIndicator from "./ScrollOverflowIndicator.tsx";
 import { StatCard } from "./market/StatCard.tsx";
 import moment from "moment/moment";
 
@@ -88,7 +88,7 @@ export function UserHoverCard({
                 </div>
               </div>
             </div>
-            <ScrollGradientIndicator
+            <ScrollOverflowIndicator
               side="bottom"
               className="overflow-hidden rounded-b-xl"
             >
@@ -137,7 +137,7 @@ export function UserHoverCard({
                   </span>
                 </StatCard>
               </div>
-            </ScrollGradientIndicator>
+            </ScrollOverflowIndicator>
           </HoverCardContent>
         </HoverCardPortal>
       </HoverCard>

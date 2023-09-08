@@ -14,7 +14,7 @@ export function PairAvatar(props: {
   return (
     <div className={cn("flex", props.containerClassName)}>
       <span className={cn("z-[2] ", props.className)}>
-        <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]">
+        <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-gray-700 border">
           <AvatarImage
             src={props.baseSrc}
             className=""
@@ -35,7 +35,7 @@ export function PairAvatar(props: {
           props.className2
         )}
       >
-        <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]">
+        <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-gray-700 border">
           <AvatarImage
             src={props.quoteSrc}
             className=""
