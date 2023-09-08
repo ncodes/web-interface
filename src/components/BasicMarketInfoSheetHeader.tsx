@@ -1,7 +1,9 @@
 import { PairAvatar } from "./avatar/PairAvatar.tsx";
 import IconCopyFilled from "./icons/IconCopyFilled.tsx";
+import { shortenAddress } from "../libs/helpers.ts";
+import CopyToClipboard from "react-copy-to-clipboard";
 
-export function BasicMarketInfoSheetHeader() {
+export function BasicMarketInfoSheetHeader({ market }: { market: Market }) {
   return (
     <div className="flex w-full px-5 py-2 items-center bg-card-background border-b border-gray-800">
       <PairAvatar
@@ -9,17 +11,23 @@ export function BasicMarketInfoSheetHeader() {
         quote="UNI"
         baseSrc="/images/icons/asset-icons/btc.svg"
         quoteSrc="/images/icons/asset-icons/uni.svg"
-        className="[&>span>img]:w-[25px]"
-        className2="[&>span>img]:w-[25px] !-ml-5"
+        size="sm"
+        noBorder={true}
       />
-      <span className="-ml-1">BTC-UNI</span>
+      <span className="flex ml-1">
+        {market.base}
+        <span className="text-gray-500 inline-block mx-1">/</span>
+        {market.quote}
+      </span>
       <span className="flex-1 font-light gap-2 text-xs items-center text-gray-400 flex justify-end">
-        <span>ID: 0xAbC</span>
-        <span>
-          <IconCopyFilled
-            width="12"
-            className="hover:text-chinese-green cursor-pointer transition-all duration-300"
-          />
+        <span>ID: {shortenAddress(market.address)}</span>
+        <span className="active:animate-ping">
+          <CopyToClipboard text={market.address}>
+            <IconCopyFilled
+              width="12"
+              className="hover:text-chinese-green cursor-pointer transition-all duration-300"
+            />
+          </CopyToClipboard>
         </span>
       </span>
     </div>

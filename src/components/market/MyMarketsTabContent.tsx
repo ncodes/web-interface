@@ -18,7 +18,7 @@ export function MyMarketsTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
-  const [limit] = useState(1);
+  const [limit] = useState(10);
   const {
     isLoading,
     isSuccess,

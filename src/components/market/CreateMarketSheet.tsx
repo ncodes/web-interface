@@ -22,6 +22,7 @@ import { isDev } from "../../libs/helpers.ts";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { AssetType } from "../../types/enums.ts";
 import _ from "lodash";
+import IconCaution from "../icons/IconCaution.tsx";
 
 export function CreateMarketSheet({
   children,
@@ -87,10 +88,7 @@ export function CreateMarketSheet({
       notifySuccess("Successfully created a market", {
         duration: 10000,
         links: [
-          {
-            label: "View Transaction",
-            href: `${blockExplorer}/tx/${txHash}`,
-          },
+          { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
       queryClient.refetchQueries(["getMarkets"]).catch(console.error);
@@ -190,8 +188,8 @@ export function CreateMarketSheet({
                   placeholder="0.1"
                 />
                 {commissionErr != "" && (
-                  <span className="text-xs font-light text-red-500 tracking-wide">
-                    {commissionErr}
+                  <span className="text-xs mt-2 font-light text-red-500 tracking-wide flex gap-1">
+                    <IconCaution width="15px" fillA="#ed4f41" /> {commissionErr}
                   </span>
                 )}
               </div>
@@ -249,7 +247,11 @@ export function CreateMarketSheet({
           </div>
 
           <div className="px-3 mb-4 pt-4 border-t border-gray-800 absolute w-full bottom-0">
-            <Button size="full" onClick={doCreateMarket} disabled={loading}>
+            <Button
+              size="full"
+              onClick={doCreateMarket}
+              disabled={loading || commissionErr.length > 0}
+            >
               {!loading && <>Create</>}
               {loading && (
                 <>

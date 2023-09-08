@@ -289,6 +289,7 @@ export function MarketRow({
       </div>
       <div className="absolute">
         <EditMarketSheet
+          market={market}
           active={openEditMarketSheet}
           onOpen={(open) => {
             setOpenEditMarketSheet(open);

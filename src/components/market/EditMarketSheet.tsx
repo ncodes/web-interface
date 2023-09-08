@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -7,99 +7,23 @@ import {
   SheetTrigger,
 } from "../ui/sheet.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion.tsx";
-import { cn } from "../../libs/utils.ts";
-import { ToolTip } from "../ToolTip.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { Accordion } from "../ui/accordion.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Switch } from "../ui/switch.tsx";
 import { BasicMarketInfoSheetHeader } from "../BasicMarketInfoSheetHeader.tsx";
-
-function EditRow({
-  title,
-  children,
-  className,
-  tip,
-}: {
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-  tip?: React.ReactNode;
-}) {
-  return (
-    <AccordionItem value={title} className={cn(className)}>
-      <AccordionTrigger className="px-5 py-3 tracking-wider ">
-        <div className="flex items-center gap-2 text-[16px]">
-          <span>{title}</span>
-          <ToolTip tip={tip}>
-            <span className="opacity-60 hover:opacity-100 cursor-pointer">
-              <IconInfoCircle width="16" />
-            </span>
-          </ToolTip>
-        </div>
-      </AccordionTrigger>
-      <AccordionContent className="text-gray-200 px-5 pt-1">
-        {children}
-      </AccordionContent>
-    </AccordionItem>
-  );
-}
-
-function EditFieldWithLabel({
-  label,
-  tip,
-  value: val,
-  children,
-  placeholder,
-}: {
-  label: ReactNode;
-  placeholder?: string;
-  tip?: ReactNode;
-  value?: string;
-  children?: ReactNode;
-}) {
-  const [value, setValue] = useState(val);
-
-  return (
-    <div className="flex items-center gap-4">
-      <div className="flex gap-2 shrink-0 text-gray-400">
-        <div>{label}</div>
-        <div className="text-gray-400 hover:text-gray-200 cursor-pointer transition-all duration-500">
-          <ToolTip tip={tip}>
-            <IconInfoCircle width="15px" />
-          </ToolTip>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        {!children && (
-          <Input
-            type="text"
-            value={value}
-            className="px-3"
-            placeholder={placeholder}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-          />
-        )}
-
-        {children && children}
-      </div>
-    </div>
-  );
-}
+import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
+import { EditRow } from "./EditRow.tsx";
+import { EditCommission } from "./EditCommission.tsx";
+import { EditDisputeDurations } from "./EditDisputeDurations.tsx";
 
 export function EditMarketSheet({
+  market,
   children,
   active,
   onOpen,
 }: {
+  market: Market;
   children?: ReactNode;
   active?: boolean;
   onOpen?: (open: boolean) => void;
@@ -132,39 +56,12 @@ export function EditMarketSheet({
           </div>
         </SheetHeader>
         <div className="flex flex-col text-gray-200 ">
-          <BasicMarketInfoSheetHeader />
+          <BasicMarketInfoSheetHeader market={market} />
 
           <Accordion type="single" className="mt-0">
-            <EditRow title="Commission" tip="Update the market's commission">
-              <div className="w-full flex gap-4">
-                <Input type="text" className="px-3 py-4" value="0.2" />
-                <Button>Update</Button>
-              </div>
-            </EditRow>
+            <EditCommission market={market} />
 
-            <EditRow
-              title="Dispute"
-              tip="Update the market's dispute parameters"
-            >
-              <div className="flex flex-col gap-2">
-                <EditFieldWithLabel
-                  label={<div className={"w-[150px]"}>Dispute Delay</div>}
-                  tip="The duration to wait before initiating a dispute after a trade is marked as paid."
-                  value="86400"
-                />
-                <EditFieldWithLabel
-                  label={<div className={"w-[150px]"}>Evidence Duration</div>}
-                  tip="The time frame for submitting and analyzing evidence in a dispute."
-                  value="86400"
-                />
-                <EditFieldWithLabel
-                  label={<div className={"w-[150px]"}>Voting Duration</div>}
-                  tip="The time frame for voting in a dispute. Half of the time is for vote committing and the other half is for vote revealing."
-                  value="86400"
-                />
-                <Button className="mt-2">Update</Button>
-              </div>
-            </EditRow>
+            <EditDisputeDurations market={market} />
 
             <EditRow
               title="Market Manager"
@@ -176,7 +73,7 @@ export function EditMarketSheet({
                   className="px-3 py-4"
                   placeholder="Enter an address (ex: 0xAbC...)"
                 />
-                <Button>Update</Button>
+                <Button size="sm">Update</Button>
               </div>
             </EditRow>
 
@@ -222,7 +119,9 @@ export function EditMarketSheet({
                   tip="Specify up to 8 badges that takers must have to trade in this market. Separate badges with a comma."
                   placeholder="ex: kyc, merchant"
                 />
-                <Button className="mt-2">Update</Button>
+                <Button size="sm" className="mt-2">
+                  Update
+                </Button>
               </div>
             </EditRow>
 
@@ -236,7 +135,9 @@ export function EditMarketSheet({
                   className="px-3 py-4"
                   placeholder="ex: 0xAbC..."
                 />
-                <Button variant="destructive">Transfer</Button>
+                <Button size="sm" variant="destructive">
+                  Transfer
+                </Button>
               </div>
             </EditRow>
 
@@ -245,7 +146,9 @@ export function EditMarketSheet({
               tip="Renounce the right to modify this market. Future commisions will still be sent to the market creator. This cannot be undone."
             >
               <div className="w-full flex gap-4">
-                <Button variant="destructive">Renounce</Button>
+                <Button size="sm" variant="destructive">
+                  Renounce
+                </Button>
               </div>
             </EditRow>
           </Accordion>

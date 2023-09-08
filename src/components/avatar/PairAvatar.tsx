@@ -6,6 +6,8 @@ export function PairAvatar(props: {
   quoteSrc: string;
   base: string;
   quote: string;
+  size?: "sm" | "default";
+  noBorder?: boolean;
   containerClassName?: string;
   className?: string;
   className2?: string;
@@ -14,10 +16,15 @@ export function PairAvatar(props: {
   return (
     <div className={cn("flex", props.containerClassName)}>
       <span className={cn("z-[2] ", props.className)}>
-        <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-gray-700 border">
+        <Avatar
+          className={cn("img1 w-[30px] h-[30px] md:w-[40px] md:h-[40px]", {
+            "md:w-[40px] md:h-[40px]": props.size == "default" || !props.size,
+            "md:w-[25px] md:h-[25px]": props.size == "sm",
+            "border-gray-700 border": !props.noBorder,
+          })}
+        >
           <AvatarImage
             src={props.baseSrc}
-            className=""
             data-click-trigger={props.dataClickTrigger}
           />
           <AvatarFallback
@@ -35,10 +42,18 @@ export function PairAvatar(props: {
           props.className2
         )}
       >
-        <Avatar className="w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-gray-700 border">
+        <Avatar
+          className={cn(
+            "img1 w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-gray-700 border",
+            {
+              "md:w-[40px] md:h-[40px]": props.size == "default" || !props.size,
+              "md:w-[25px] md:h-[25px]": props.size == "sm",
+              "border-gray-700 border": !props.noBorder,
+            }
+          )}
+        >
           <AvatarImage
             src={props.quoteSrc}
-            className=""
             data-click-trigger={props.dataClickTrigger}
           />
           <AvatarFallback

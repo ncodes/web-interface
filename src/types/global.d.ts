@@ -78,7 +78,7 @@ declare global {
     disputeRate: number;
     permPut: boolean;
     permSwap: boolean;
-    disputeDelayTime: number;
+    disputeDelayDur: number;
     evidenceDur: number;
     predictDur: number;
     manager: string;

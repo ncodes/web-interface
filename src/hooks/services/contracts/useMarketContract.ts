@@ -42,17 +42,62 @@ export default function useMarketContract() {
   }
 
   /**
+   * Set the commission rate
+   * @param market The market address
+   * @param commission The commission rate
+   */
+  async function setCommission(market: string, commission: number) {
+    return await simulateAndWriteContract("marketCore", "setCommission", [
+      market,
+      toBN(commission),
+    ]);
+  }
+
+  /**
+   * Set the dispute durations
+   * @param market The market address
+   * @param disputeDelayDur The dispute delay duration
+   * @param evidenceDur The evidence duration
+   * @param predictDur The prediction duration
+   */
+  async function setDisputeDurations(
+    market: string,
+    disputeDelayDur: number,
+    evidenceDur: number,
+    predictDur: number
+  ) {
+    console.log(disputeDelayDur, evidenceDur, predictDur);
+    return await simulateAndWriteContract("marketCore", "setDisputeDurations", [
+      market,
+      toBN(disputeDelayDur),
+      toBN(evidenceDur),
+      toBN(predictDur),
+    ]);
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
   function humanizeErrors(error: { message: string } | unknown) {
     if (error instanceof Error) {
-      if (error.message.includes("MARKET_EXIST"))
+      // Create market errors
+      if (error.message.includes("MC: MARKET_EXIST"))
         return "Market already exists";
-      if (error.message.includes("ZERO_BASE"))
+      if (error.message.includes("MC: ZERO_BASE"))
         return "Base asset cannot be zero address";
-      if (error.message.includes("ZERO_QUOTE"))
+      if (error.message.includes("MC: ZERO_QUOTE"))
         return "Quote asset cannot be zero address";
+
+      // Set commission errors
+      if (error.message.includes("MC: UNKNOWN_MARKET"))
+        return "Market does not exist";
+      if (error.message.includes("MC: INVALID"))
+        return "Invalid commission rate";
+
+      // Common errors
+      if (error.message.includes("MC: NOT_CREATOR"))
+        return "Not permitted; User is not the owner";
       if (error.message.includes("User denied transaction signature"))
         return "User denied transaction signature";
     }
@@ -62,5 +107,7 @@ export default function useMarketContract() {
   return {
     createMarket,
     humanizeErrors,
+    setCommission,
+    setDisputeDurations,
   };
 }
