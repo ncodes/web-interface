@@ -31,7 +31,7 @@ export function EditDisputeDurations({ market }: { market: Market }) {
         votingDur
       );
       const blockExplorer = getChainInfo().blockExplorer;
-      notifySuccess("Successfully created a market", {
+      notifySuccess("Successfully updated durations", {
         duration: 10000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },

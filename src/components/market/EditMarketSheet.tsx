@@ -16,6 +16,7 @@ import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
 import { EditRow } from "./EditRow.tsx";
 import { EditCommission } from "./EditCommission.tsx";
 import { EditDisputeDurations } from "./EditDisputeDurations.tsx";
+import { EditMarketManager } from "./EditMarketManager.tsx";
 
 export function EditMarketSheet({
   market,
@@ -63,19 +64,7 @@ export function EditMarketSheet({
 
             <EditDisputeDurations market={market} />
 
-            <EditRow
-              title="Market Manager"
-              tip="Market managers can force trades to be released or cancelled. Setting a manager disables on-chain dispute resolution."
-            >
-              <div className="w-full flex gap-4">
-                <Input
-                  type="text"
-                  className="px-3 py-4"
-                  placeholder="Enter an address (ex: 0xAbC...)"
-                />
-                <Button size="sm">Update</Button>
-              </div>
-            </EditRow>
+            <EditMarketManager market={market} />
 
             <EditRow title="Offer" tip="Update the market's dispute parameters">
               <div className="flex flex-col gap-2">

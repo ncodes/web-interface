@@ -66,12 +66,18 @@ export default function useMarketContract() {
     evidenceDur: number,
     predictDur: number
   ) {
-    console.log(disputeDelayDur, evidenceDur, predictDur);
     return await simulateAndWriteContract("marketCore", "setDisputeDurations", [
       market,
       toBN(disputeDelayDur),
       toBN(evidenceDur),
       toBN(predictDur),
+    ]);
+  }
+
+  async function setManager(market: string, newMgr: string) {
+    return await simulateAndWriteContract("marketCore", "setManager", [
+      market,
+      newMgr,
     ]);
   }
 
@@ -109,5 +115,6 @@ export default function useMarketContract() {
     humanizeErrors,
     setCommission,
     setDisputeDurations,
+    setManager,
   };
 }

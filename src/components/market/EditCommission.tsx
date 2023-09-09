@@ -17,7 +17,7 @@ export function EditCommission(props: { market: Market }) {
   const [commission, setCommission] = useState(
     (props.market.commission || 0) / 100
   );
-  const [commissionErr, setCommissionErr] = useState("");
+  const [err, setErr] = useState("");
   const { notifySuccess, notifyError } = useToast();
   const queryClient = useQueryClient();
 
@@ -54,16 +54,16 @@ export function EditCommission(props: { market: Market }) {
             setCommission(parseFloat(e.target.value || ""));
             if (e.target.value == undefined) return;
             if (parseFloat(e.target.value) > 30) {
-              setCommissionErr("Commission must be less than 30%");
+              setErr("Commission must be less than 30%");
             } else {
-              setCommissionErr("");
+              setErr("");
             }
           }}
         />
         <Button
           size="sm"
           onClick={doWrite}
-          disabled={loading || commissionErr.length > 0}
+          disabled={loading || err.length > 0}
         >
           {!loading && <>Update</>}
           {loading && (
@@ -77,9 +77,9 @@ export function EditCommission(props: { market: Market }) {
           )}
         </Button>
       </div>
-      {commissionErr.length > 0 && (
+      {err.length > 0 && (
         <div className="text-xs font-light mt-2 tracking-wide text-red-500 flex gap-1">
-          <IconCaution width="15px" fillA="#ed4f41" /> {commissionErr}
+          <IconCaution width="15px" fillA="#ed4f41" /> {err}
         </div>
       )}
     </EditRow>
