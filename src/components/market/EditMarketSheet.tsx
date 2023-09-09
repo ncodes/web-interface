@@ -8,7 +8,6 @@ import {
 } from "../ui/sheet.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Accordion } from "../ui/accordion.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Button } from "../ui/Button.tsx";
 import { BasicMarketInfoSheetHeader } from "../BasicMarketInfoSheetHeader.tsx";
 import { EditRow } from "./EditRow.tsx";
@@ -18,6 +17,7 @@ import { EditMarketManager } from "./EditMarketManager.tsx";
 import { EditOfferOnlyMode } from "./EditOfferOnlyMode.tsx";
 import { EditZeroPricedLiquidity } from "./EditZeroPricedLiquidity.tsx";
 import { EditBadgeRequirements } from "./EditBadgeRequirements.tsx";
+import { EditTransferOwnership } from "./EditTransferOwnership.tsx";
 
 export function EditMarketSheet({
   market,
@@ -78,21 +78,7 @@ export function EditMarketSheet({
 
             <EditBadgeRequirements market={market} close={close} />
 
-            <EditRow
-              title="Transfer Ownership"
-              tip="Transfer ownership of the market to another account. Future commisions will be sent to the new owner. This cannot be undone."
-            >
-              <div className="w-full flex gap-4">
-                <Input
-                  type="text"
-                  className="px-3 py-4"
-                  placeholder="ex: 0xAbC..."
-                />
-                <Button size="sm" variant="destructive">
-                  Transfer
-                </Button>
-              </div>
-            </EditRow>
+            <EditTransferOwnership market={market} close={close} />
 
             <EditRow
               title="Renounce Ownership"

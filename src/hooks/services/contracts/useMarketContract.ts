@@ -123,6 +123,18 @@ export default function useMarketContract() {
   }
 
   /**
+   * Transfer ownership
+   * @param market The market address
+   * @param newOwner The new owner address
+   */
+  async function transferOwnership(market: string, newOwner: string) {
+    return simulateAndWriteContract("marketCore", "transferOwnership", [
+      market,
+      newOwner,
+    ]);
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
@@ -160,5 +172,6 @@ export default function useMarketContract() {
     markAsOfferOnly,
     allowZeroOfferPrice,
     setRequiredBadges,
+    transferOwnership,
   };
 }

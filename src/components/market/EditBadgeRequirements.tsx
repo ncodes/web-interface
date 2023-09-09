@@ -55,7 +55,7 @@ export function EditBadgeRequirements({
         splitBadgeFromPath(splitAndCleanBadges(swapBadges))
       );
       const blockExplorer = getChainInfo().blockExplorer;
-      notifySuccess("Successfully updated required badges", {
+      notifySuccess("Successfully updated badge requirement", {
         duration: 10000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
