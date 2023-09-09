@@ -1,3 +1,3 @@
 export function EventContentSwapNew() {
-  return <span className="flex gap-1">Started the swap</span>;
+  return <span className="flex gap-1 flex-wrap">Started the swap</span>;
 }

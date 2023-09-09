@@ -16,7 +16,7 @@ export function EventContentOfferCancel(props: {
         {!props.inTimeline ? (
           <>Cancelled the offer</>
         ) : (
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap">
             Cancelled an offer they proposed for{" "}
             <FetchedUserHoverCard
               address={props.liquidity.provider}

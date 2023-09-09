@@ -14,7 +14,7 @@ export function EventContentLiquidityNewOffer(props: {
 }) {
   return (
     <div className={cn("flex flex-col gap-1", props.className)}>
-      <span className="flex gap-1">
+      <span className="flex gap-1 flex-wrap">
         <span>Offered</span>
         <span className="text-chinese-green">
           {formatToHighDenom(

@@ -6,7 +6,7 @@ export function EventContentLiquidityPause(props: {
 }) {
   return (
     <div className={props.className}>
-      <span className="flex gap-1">
+      <span className="flex gap-1 flex-wrap">
         {props.event.paused ? <span>Paused</span> : <span>Unpaused</span>}{" "}
         {!props.inTimeline ? "the" : "their"} liquidity
       </span>

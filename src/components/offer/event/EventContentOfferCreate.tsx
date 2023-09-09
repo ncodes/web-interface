@@ -16,7 +16,7 @@ export function EventContentOfferCreate(props: {
         {!props.inTimeline ? (
           <>Created the offer for liquidity</>
         ) : (
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap">
             Created an offer to swap{" "}
             <FetchedUserHoverCard
               address={props.liquidity.provider}

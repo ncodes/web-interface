@@ -1,6 +1,6 @@
 export function EventContentSwapCancelled(props: { inTimeline?: boolean }) {
   return (
-    <span className="flex gap-1">
+    <span className="flex gap-1 flex-wrap">
       {!props.inTimeline && (
         <>
           <b className="text-chinese-green">Cancelled</b> the swap

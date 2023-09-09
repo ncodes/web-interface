@@ -17,7 +17,7 @@ export function EventContentOfferUnaccept(props: {
         {!props.inTimeline ? (
           <>Rejected the offer to swap</>
         ) : (
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap">
             Rejected an offer proposed by{" "}
             <FetchedUserHoverCard
               address={props.liquidity.provider}

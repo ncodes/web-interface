@@ -10,7 +10,7 @@ export function EventContentLiquidityTimeToPayUpdate(props: {
 }) {
   return (
     <div className={cn("flex flex-col gap-1", props.className)}>
-      <span className="flex gap-1">
+      <span className="flex gap-1 flex-wrap">
         {!props.inTimeline ? (
           "Updated the payment time to"
         ) : (

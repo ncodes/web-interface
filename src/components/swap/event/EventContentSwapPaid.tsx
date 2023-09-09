@@ -1,6 +1,6 @@
 export function EventContentSwapPaid(props: { inTimeline?: boolean }) {
   return (
-    <span className="flex gap-1">
+    <span className="flex gap-1 flex-wrap">
       {!props.inTimeline && (
         <>
           Marked swap as <b className="text-chinese-green">paid</b>

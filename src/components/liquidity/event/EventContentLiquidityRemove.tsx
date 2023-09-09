@@ -10,7 +10,7 @@ export function EventContentLiquidityRemove(props: {
 }) {
   return (
     <div className={props.className}>
-      <span className="flex gap-1">
+      <span className="flex gap-1 flex-wrap">
         {!props.inTimeline && (
           <>
             <span>Removed</span>
