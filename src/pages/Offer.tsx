@@ -10,6 +10,7 @@ import {
 } from "../components/ui/dropdown-menu.tsx";
 import { Messenger } from "../components/messenger/Messenger.tsx";
 import { OfferTabContent } from "../components/offer/OfferTabContent.tsx";
+import { Footer } from "../components/Footer.tsx";
 
 function Page() {
   return (
@@ -51,9 +52,13 @@ export default function Offer() {
     <Layout
       tab={<Page />}
       rightSide={
-        <div className="flex flex-col w-full h-full py-3">
+        <div className="flex w-full h-full justify-between flex-col pt-2">
           <Messenger sheetMode={false} />
-          {/*<Footer />*/}
+          <div className="relative">
+            <div className="text-gray-200 bottom-0 w-full">
+              <Footer />
+            </div>
+          </div>
         </div>
       }
     />

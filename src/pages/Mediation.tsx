@@ -21,9 +21,6 @@ import { TicketFilterSheet } from "../components/mediation/TicketFilterSheet.tsx
 import { Footer } from "../components/Footer.tsx";
 import { TicketFilter } from "../components/mediation/TicketFilter.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { useTicketService } from "../hooks/services/backend/useTicketService.ts";
-import useConnector from "../hooks/connectors/useConnector.tsx";
 
 function MediationTabs({ defaultTab }: { defaultTab?: string }) {
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -126,10 +123,10 @@ export default function Mediation({ defaultTab }: { defaultTab?: string }) {
       tab={<MediationTabs defaultTab={defaultTab} />}
       rightSide={
         loc.pathname.startsWith("/tickets/owned") && (
-          <div className="flex w-full h-full flex-col pt-2">
+          <div className="flex w-full h-full justify-between flex-col pt-2">
             <TicketFilter />
-            <div className="relative h-full">
-              <div className="text-gray-200 absolute bottom-0 w-full">
+            <div className="relative">
+              <div className="text-gray-200 bottom-0 w-full">
                 <Footer />
               </div>
             </div>

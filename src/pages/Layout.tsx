@@ -95,7 +95,9 @@ export default function Layout({
                     scrollYPos > headerHeight ? scrollYPos - headerHeight : 0,
                 }}
                 transition={{ ease: "linear", duration: 0.5 }}
-                className={cn(`w-[400px] px-5 pr-0 h-full hidden xl:flex`)}
+                className={cn(
+                  `w-[400px] px-5 pr-0 h-full overflow-auto hidden xl:flex`
+                )}
               >
                 {rightSide}
               </motion.div>

@@ -96,7 +96,7 @@ export function MyMarketsTabContent() {
             ))}
           </div>
           <Paginator
-            className="border-t"
+            className="border-t mb-0"
             curPage={offset}
             total={data?.meta?.queryCount}
             limit={limit}

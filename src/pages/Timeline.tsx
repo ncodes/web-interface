@@ -43,9 +43,13 @@ export default function Timeline() {
         </Tabs>
       }
       rightSide={
-        <div>
+        <div className="flex w-full h-full justify-between flex-col pt-2">
           <ActivityStream />
-          <Footer />
+          <div className="relative">
+            <div className="text-gray-200 bottom-0 w-full">
+              <Footer />
+            </div>
+          </div>
         </div>
       }
     />

@@ -82,10 +82,10 @@ export default function Offers() {
     <Layout
       tab={<OfferTabs />}
       rightSide={
-        <div className="flex w-full h-full flex-col pt-2">
+        <div className="flex w-full h-full justify-between flex-col pt-2">
           <OfferFilter />
-          <div className="relative h-full">
-            <div className="text-gray-200 absolute bottom-0 w-full">
+          <div className="relative">
+            <div className="text-gray-200 bottom-0 w-full">
               <Footer />
             </div>
           </div>

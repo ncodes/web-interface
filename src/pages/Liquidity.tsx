@@ -170,20 +170,14 @@ export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
         />
       }
       rightSide={
-        <div className="flex w-full flex-col h-full pt-2">
-          {(currentTab == "liquidity" || !currentTab) && (
-            <>
-              <SwapSheetWrapper />
-              <div className="absolute bottom-0">{<Footer />}</div>
-            </>
-          )}
-
-          {currentTab == "offers" && (
-            <>
-              <CreateOfferWrapper />
-              <div className="absolute bottom-0">{<Footer />}</div>
-            </>
-          )}
+        <div className="flex w-full h-full justify-between flex-col pt-2">
+          {(currentTab == "liquidity" || !currentTab) && <SwapSheetWrapper />}
+          {currentTab == "offers" && <CreateOfferWrapper />}
+          <div className="relative">
+            <div className="text-gray-200 bottom-0 w-full">
+              <Footer />
+            </div>
+          </div>
         </div>
       }
     />
