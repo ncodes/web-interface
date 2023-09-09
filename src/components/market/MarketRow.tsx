@@ -28,6 +28,7 @@ import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { useNavigate } from "react-router-dom";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { PriceChange } from "./PriceChange.tsx";
+import { AssetTip } from "./AssetTip.tsx";
 
 export function MarketRow({
   market,
@@ -72,13 +73,19 @@ export function MarketRow({
               quote={market.quote}
               baseSrc={market.baseLogo}
               quoteSrc={market.quoteLogo}
+              baseTip={<AssetTip address={market.baseAddress} />}
+              quoteTip={<AssetTip address={market.quoteAddress} />}
               dataClickTrigger={"1"}
             />
             <div className="flex md:flex-col w-full justify-between md:justify-start">
               <span className="flex" data-click-trigger="1">
-                {market.base}
+                <ToolTip tip={<AssetTip address={market.baseAddress} />}>
+                  {market.base}
+                </ToolTip>
                 <span className="text-gray-500 inline-block mx-1">/</span>
-                {market.quote}
+                <ToolTip tip={<AssetTip address={market.quoteAddress} />}>
+                  {market.quote}
+                </ToolTip>
               </span>
               <span className="flex items-center gap-1 text-[11px] font-light text-blue-200">
                 <span data-click-trigger="1">

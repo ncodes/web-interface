@@ -78,6 +78,7 @@ declare global {
     disputeRate: number;
     permPut: boolean;
     permSwap: boolean;
+    renounced: boolean;
     disputeDelayDur: number;
     evidenceDur: number;
     predictDur: number;

@@ -1,0 +1,72 @@
+import { EditRow } from "./EditRow.tsx";
+import { Button } from "../ui/Button.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
+import { useState } from "react";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import { useQueryClient } from "@tanstack/react-query";
+import { isDev } from "../../libs/helpers.ts";
+import IconSpinner from "../icons/IconSpinner.tsx";
+
+export function EditRenounceOwnership({
+  market,
+  close,
+}: {
+  market: Market;
+  close?: () => void;
+}) {
+  const { getChainInfo } = useConnectorContext();
+  const { renounceOwnership, humanizeErrors } = useMarketContract();
+  const [loading, setLoading] = useState(false);
+  const { notifySuccess, notifyError } = useToast();
+  const queryClient = useQueryClient();
+
+  const doWrite = async () => {
+    try {
+      setLoading(true);
+      const txHash = await renounceOwnership(market.address);
+      const blockExplorer = getChainInfo().blockExplorer;
+      notifySuccess("Successfully renounced ownership", {
+        duration: 10000,
+        links: [
+          { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
+        ],
+      });
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      close && close();
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <EditRow
+      title="Renounce Ownership"
+      tip="Renounce your right to configure this market (ossification). Future commisions will still be sent to the market creator. This cannot be undone."
+    >
+      <div className="w-full flex gap-4">
+        <Button
+          size="sm"
+          onClick={doWrite}
+          disabled={loading || market.renounced}
+          variant="destructive"
+        >
+          {!loading && <>Renounce</>}
+          {loading && (
+            <>
+              <IconSpinner
+                width="20"
+                stopColor="#FFFFFF"
+                className="animate-spin"
+              />
+            </>
+          )}
+        </Button>
+      </div>
+    </EditRow>
+  );
+}

@@ -8,9 +8,7 @@ import {
 } from "../ui/sheet.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Accordion } from "../ui/accordion.tsx";
-import { Button } from "../ui/Button.tsx";
 import { BasicMarketInfoSheetHeader } from "../BasicMarketInfoSheetHeader.tsx";
-import { EditRow } from "./EditRow.tsx";
 import { EditCommission } from "./EditCommission.tsx";
 import { EditDisputeDurations } from "./EditDisputeDurations.tsx";
 import { EditMarketManager } from "./EditMarketManager.tsx";
@@ -18,6 +16,7 @@ import { EditOfferOnlyMode } from "./EditOfferOnlyMode.tsx";
 import { EditZeroPricedLiquidity } from "./EditZeroPricedLiquidity.tsx";
 import { EditBadgeRequirements } from "./EditBadgeRequirements.tsx";
 import { EditTransferOwnership } from "./EditTransferOwnership.tsx";
+import { EditRenounceOwnership } from "./EditRenounceOwnership.tsx";
 
 export function EditMarketSheet({
   market,
@@ -80,16 +79,7 @@ export function EditMarketSheet({
 
             <EditTransferOwnership market={market} close={close} />
 
-            <EditRow
-              title="Renounce Ownership"
-              tip="Renounce the right to modify this market. Future commisions will still be sent to the market creator. This cannot be undone."
-            >
-              <div className="w-full flex gap-4">
-                <Button size="sm" variant="destructive">
-                  Renounce
-                </Button>
-              </div>
-            </EditRow>
+            <EditRenounceOwnership market={market} close={close} />
           </Accordion>
         </div>
         <div

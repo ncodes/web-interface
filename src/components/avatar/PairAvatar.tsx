@@ -1,5 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.tsx";
 import { cn } from "../../libs/utils.ts";
+import { ToolTip } from "../ToolTip.tsx";
+import { ReactNode } from "react";
 
 export function PairAvatar(props: {
   baseSrc: string;
@@ -11,29 +13,33 @@ export function PairAvatar(props: {
   containerClassName?: string;
   className?: string;
   className2?: string;
+  baseTip?: ReactNode;
+  quoteTip?: ReactNode;
   dataClickTrigger?: string;
 }) {
   return (
     <div className={cn("flex", props.containerClassName)}>
       <span className={cn("z-[2] ", props.className)}>
-        <Avatar
-          className={cn("img1 w-[30px] h-[30px] md:w-[40px] md:h-[40px]", {
-            "md:w-[40px] md:h-[40px]": props.size == "default" || !props.size,
-            "md:w-[25px] md:h-[25px]": props.size == "sm",
-            "border-gray-700 border": !props.noBorder,
-          })}
-        >
-          <AvatarImage
-            src={props.baseSrc}
-            data-click-trigger={props.dataClickTrigger}
-          />
-          <AvatarFallback
-            className="text-sm text-gray-800"
-            data-click-trigger={props.dataClickTrigger}
+        <ToolTip tip={props.baseTip}>
+          <Avatar
+            className={cn("img1 w-[30px] h-[30px] md:w-[40px] md:h-[40px]", {
+              "md:w-[40px] md:h-[40px]": props.size == "default" || !props.size,
+              "md:w-[25px] md:h-[25px]": props.size == "sm",
+              "border-gray-700 border": !props.noBorder,
+            })}
           >
-            {props.base}
-          </AvatarFallback>
-        </Avatar>
+            <AvatarImage
+              src={props.baseSrc}
+              data-click-trigger={props.dataClickTrigger}
+            />
+            <AvatarFallback
+              className="text-sm text-gray-800"
+              data-click-trigger={props.dataClickTrigger}
+            >
+              {props.base}
+            </AvatarFallback>
+          </Avatar>
+        </ToolTip>
       </span>
 
       <span
@@ -42,27 +48,30 @@ export function PairAvatar(props: {
           props.className2
         )}
       >
-        <Avatar
-          className={cn(
-            "img1 w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-gray-700 border",
-            {
-              "md:w-[40px] md:h-[40px]": props.size == "default" || !props.size,
-              "md:w-[25px] md:h-[25px]": props.size == "sm",
-              "border-gray-700 border": !props.noBorder,
-            }
-          )}
-        >
-          <AvatarImage
-            src={props.quoteSrc}
-            data-click-trigger={props.dataClickTrigger}
-          />
-          <AvatarFallback
-            className="text-sm text-gray-800"
-            data-click-trigger={props.dataClickTrigger}
+        <ToolTip tip={props.quoteTip}>
+          <Avatar
+            className={cn(
+              "img1 w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-gray-700 border",
+              {
+                "md:w-[40px] md:h-[40px]":
+                  props.size == "default" || !props.size,
+                "md:w-[25px] md:h-[25px]": props.size == "sm",
+                "border-gray-700 border": !props.noBorder,
+              }
+            )}
           >
-            {props.quote}
-          </AvatarFallback>
-        </Avatar>
+            <AvatarImage
+              src={props.quoteSrc}
+              data-click-trigger={props.dataClickTrigger}
+            />
+            <AvatarFallback
+              className="text-sm text-gray-800"
+              data-click-trigger={props.dataClickTrigger}
+            >
+              {props.quote}
+            </AvatarFallback>
+          </Avatar>
+        </ToolTip>
       </span>
     </div>
   );

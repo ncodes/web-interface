@@ -135,6 +135,16 @@ export default function useMarketContract() {
   }
 
   /**
+   * Renounce ownership of a market
+   * @param market The market address
+   */
+  async function renounceOwnership(market: string) {
+    return simulateAndWriteContract("marketCore", "renounceOwnership", [
+      market,
+    ]);
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
@@ -173,5 +183,6 @@ export default function useMarketContract() {
     allowZeroOfferPrice,
     setRequiredBadges,
     transferOwnership,
+    renounceOwnership,
   };
 }
