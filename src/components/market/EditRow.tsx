@@ -24,7 +24,7 @@ export function EditRow({
       <AccordionTrigger className="px-5 py-3 tracking-wider ">
         <div className="flex items-center gap-2 text-[16px]">
           <span>{title}</span>
-          <ToolTip tip={tip}>
+          <ToolTip tip={tip} className2="border border-gray-700">
             <span className="opacity-60 hover:opacity-100 cursor-pointer">
               <IconInfoCircle width="16" />
             </span>

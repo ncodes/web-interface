@@ -33,7 +33,7 @@ export function BadgePill({
       <SheetTrigger>
         <ToolTip tip={tip}>
           <Badge
-            className="font-normal tracking-wider cursor-pointer rounded-full bg-gray-800  text-gray-300 hover:bg-chinese-green hover:text-gray-900 flex items-center gap-2"
+            className="w-auto font-normal tracking-wider whitespace-nowrap  cursor-pointer rounded-full bg-gray-800  text-gray-300 hover:bg-chinese-green hover:text-gray-900 flex items-center gap-2"
             variant="secondary"
           >
             <span className="text-gray-500">{prefix ? prefix + ":" : ""}</span>

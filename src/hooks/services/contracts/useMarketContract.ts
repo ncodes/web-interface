@@ -29,7 +29,7 @@ export default function useMarketContract() {
     commission: number,
     poolId: number
   ) {
-    return await simulateAndWriteContract("marketCore", "createMarket", [
+    return simulateAndWriteContract("marketCore", "createMarket", [
       baseAddress,
       quoteAddress,
       baseType,
@@ -47,7 +47,7 @@ export default function useMarketContract() {
    * @param commission The commission rate
    */
   async function setCommission(market: string, commission: number) {
-    return await simulateAndWriteContract("marketCore", "setCommission", [
+    return simulateAndWriteContract("marketCore", "setCommission", [
       market,
       toBN(commission),
     ]);
@@ -66,7 +66,7 @@ export default function useMarketContract() {
     evidenceDur: number,
     predictDur: number
   ) {
-    return await simulateAndWriteContract("marketCore", "setDisputeDurations", [
+    return simulateAndWriteContract("marketCore", "setDisputeDurations", [
       market,
       toBN(disputeDelayDur),
       toBN(evidenceDur),
@@ -74,10 +74,51 @@ export default function useMarketContract() {
     ]);
   }
 
+  /**
+   * Set the manager
+   * @param market The market address
+   * @param newMgr The new manager address
+   */
   async function setManager(market: string, newMgr: string) {
-    return await simulateAndWriteContract("marketCore", "setManager", [
+    return simulateAndWriteContract("marketCore", "setManager", [
       market,
       newMgr,
+    ]);
+  }
+
+  /**
+   * Mark a market as offer-only
+   * @param market The market address
+   */
+  async function markAsOfferOnly(market: string) {
+    return simulateAndWriteContract("marketCore", "markAsOfferOnly", [market]);
+  }
+
+  /**
+   * Allow zero liquidity price
+   * @param market
+   */
+  async function allowZeroOfferPrice(market: string) {
+    return simulateAndWriteContract("marketCore", "allowZeroOfferPrice", [
+      market,
+    ]);
+  }
+
+  /**
+   * Set required badges
+   * @param market The market address
+   * @param put The required PUT badges
+   * @param swap The required SWAP badges
+   */
+  async function setRequiredBadges(
+    market: string,
+    put: string[][],
+    swap: string[][]
+  ) {
+    return simulateAndWriteContract("marketCore", "setRequiredBadges", [
+      market,
+      put,
+      swap,
     ]);
   }
 
@@ -116,5 +157,8 @@ export default function useMarketContract() {
     setCommission,
     setDisputeDurations,
     setManager,
+    markAsOfferOnly,
+    allowZeroOfferPrice,
+    setRequiredBadges,
   };
 }

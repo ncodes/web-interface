@@ -10,13 +10,14 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Accordion } from "../ui/accordion.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Button } from "../ui/Button.tsx";
-import { Switch } from "../ui/switch.tsx";
 import { BasicMarketInfoSheetHeader } from "../BasicMarketInfoSheetHeader.tsx";
-import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
 import { EditRow } from "./EditRow.tsx";
 import { EditCommission } from "./EditCommission.tsx";
 import { EditDisputeDurations } from "./EditDisputeDurations.tsx";
 import { EditMarketManager } from "./EditMarketManager.tsx";
+import { EditOfferOnlyMode } from "./EditOfferOnlyMode.tsx";
+import { EditZeroPricedLiquidity } from "./EditZeroPricedLiquidity.tsx";
+import { EditBadgeRequirements } from "./EditBadgeRequirements.tsx";
 
 export function EditMarketSheet({
   market,
@@ -35,6 +36,11 @@ export function EditMarketSheet({
     setOpen(active || false);
     onOpen && onOpen(active || false);
   }, [active, onOpen]);
+
+  function close() {
+    setOpen(false);
+    onOpen && onOpen(false);
+  }
 
   return (
     <Sheet
@@ -60,59 +66,17 @@ export function EditMarketSheet({
           <BasicMarketInfoSheetHeader market={market} />
 
           <Accordion type="single" className="mt-0">
-            <EditCommission market={market} />
+            <EditCommission market={market} close={close} />
 
-            <EditDisputeDurations market={market} />
+            <EditDisputeDurations market={market} close={close} />
 
-            <EditMarketManager market={market} />
+            <EditMarketManager market={market} close={close} />
 
-            <EditRow title="Offer" tip="Update the market's dispute parameters">
-              <div className="flex flex-col gap-2">
-                <EditFieldWithLabel
-                  label={<div className={"w-auto"}>Enable Offer Only mode</div>}
-                  tip="Make the market offer-only. This means swaps can only be initiated through offers to liquidity providers. Note: This cannot be undone."
-                >
-                  <Switch />
-                </EditFieldWithLabel>
-              </div>
-            </EditRow>
+            <EditOfferOnlyMode market={market} close={close} />
 
-            <EditRow
-              title="Zero Pricing"
-              tip="Update the market's dispute parameters"
-            >
-              <div className="flex flex-col gap-2">
-                <EditFieldWithLabel
-                  label={
-                    <div className={"w-auto"}>Allow Zero Price Liquidity</div>
-                  }
-                  tip="Allow liquidity providers to add liquidity with zero price. This is useful for offer-only markets where price is determined after a bargaining process."
-                >
-                  <Switch />
-                </EditFieldWithLabel>
-              </div>
-            </EditRow>
+            <EditZeroPricedLiquidity market={market} close={close} />
 
-            <EditRow
-              title="Badge Limits"
-              tip="Specify required badges liquidity providers or takers must have to trade in this market. Up to 8 badges can be specified."
-            >
-              <div className="flex flex-col gap-2">
-                <EditFieldWithLabel
-                  label={<div className={"w-[130px]"}>Liquidity Provider</div>}
-                  tip="Specify up to 8 badges that liquidity providers must have to trade in this market. Separate badges with a comma."
-                  placeholder="ex: kyc, merchant"
-                />
-                <EditFieldWithLabel
-                  label={<div className={"w-[130px]"}>Taker</div>}
-                  tip="Specify up to 8 badges that takers must have to trade in this market. Separate badges with a comma."
-                  placeholder="ex: kyc, merchant"
-                />
-                <Button size="sm" className="mt-2">
-                  Update
-                </Button>
-              </div>
-            </EditRow>
+            <EditBadgeRequirements market={market} close={close} />
 
             <EditRow
               title="Transfer Ownership"

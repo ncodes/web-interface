@@ -11,6 +11,7 @@ export function EditFieldWithLabel({
   value,
   onChange,
   children,
+  disabled,
   placeholder,
   className,
 }: {
@@ -20,6 +21,7 @@ export function EditFieldWithLabel({
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   children?: ReactNode;
+  disabled?: boolean;
   placeholder?: string;
   className?: string;
 }) {
@@ -38,7 +40,9 @@ export function EditFieldWithLabel({
           <Input
             type={type || "text"}
             value={value}
-            className="px-3"
+            disabled={disabled}
+            spellCheck={false}
+            className="px-3 !w-[180px]"
             placeholder={placeholder}
             onChange={onChange}
           />

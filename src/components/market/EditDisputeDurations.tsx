@@ -9,7 +9,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { isDev } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
-export function EditDisputeDurations({ market }: { market: Market }) {
+export function EditDisputeDurations({
+  market,
+  close,
+}: {
+  market: Market;
+  close?: () => void;
+}) {
   const [disputeDelayDur, setDisputeDelayDur] = useState(
     market.disputeDelayDur
   );
@@ -37,7 +43,8 @@ export function EditDisputeDurations({ market }: { market: Market }) {
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
-      queryClient.refetchQueries(["getMarkets"]).catch(console.error);
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      close && close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);

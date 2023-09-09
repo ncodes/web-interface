@@ -10,7 +10,7 @@ import { isDev } from "../../libs/helpers.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
-export function EditCommission(props: { market: Market }) {
+export function EditCommission(props: { market: Market; close?: () => void }) {
   const { getChainInfo } = useConnectorContext();
   const { setCommission: write, humanizeErrors } = useMarketContract();
   const [loading, setLoading] = useState(false);
@@ -32,7 +32,8 @@ export function EditCommission(props: { market: Market }) {
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
-      queryClient.refetchQueries(["getMarkets"]).catch(console.error);
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      props.close && props.close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);

@@ -13,6 +13,7 @@ import {
 } from "wagmi";
 import { Address, SimulateContractReturnType } from "viem";
 import { ChainInfo } from "../../types/global";
+import { isDev } from "../../libs/helpers.ts";
 
 export interface IConnector {
   defaultNetwork: number;
@@ -31,7 +32,8 @@ export interface IConnector {
   simulateAndWriteContract(
     name: ContractNames,
     targetFunc: string,
-    args?
+    args?,
+    noWait?: boolean
   ): Promise<Address>;
 
   connected: boolean;
@@ -236,11 +238,15 @@ export default function useConnector() {
    * @param name - The name of the contract
    * @param targetFunc - The target function to be called
    * @param args - The arguments to be passed to the target function
+   * @param noWait - If true, the function will not wait for the transaction to be mined
+   * @param confirmations - The number of confirmations to wait for
    */
   async function simulateAndWriteContract(
     name: ContractNames,
     targetFunc: string,
-    args: unknown[] = []
+    args: unknown[] = [],
+    noWait = false,
+    confirmations = 2
   ) {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
@@ -254,7 +260,14 @@ export default function useConnector() {
       args: args,
       account: address,
     });
-    return walletClient.writeContract(request);
+    const txHash = await walletClient.writeContract(request);
+    if (!noWait) {
+      await publicClient.waitForTransactionReceipt({
+        hash: txHash,
+        confirmations: isDev() ? 1 : confirmations,
+      });
+    }
+    return txHash;
   }
 
   // Get the current chain info.

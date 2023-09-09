@@ -11,7 +11,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { isAddress } from "viem";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
-export function EditMarketManager({ market }: { market: Market }) {
+export function EditMarketManager({
+  market,
+  close,
+}: {
+  market: Market;
+  close?: () => void;
+}) {
   const { getChainInfo } = useConnectorContext();
   const { setManager, humanizeErrors } = useMarketContract();
   const [address, setAddress] = useState(market.manager || "");
@@ -31,7 +37,8 @@ export function EditMarketManager({ market }: { market: Market }) {
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
-      queryClient.refetchQueries(["getMarkets"]).catch(console.error);
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      close && close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);

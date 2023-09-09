@@ -1,0 +1,139 @@
+import { EditRow } from "./EditRow.tsx";
+import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
+import { Button } from "../ui/Button.tsx";
+import { useState } from "react";
+import IconCaution from "../icons/IconCaution.tsx";
+import _ from "lodash";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import { useQueryClient } from "@tanstack/react-query";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { isDev } from "../../libs/helpers.ts";
+import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
+import IconSpinner from "../icons/IconSpinner.tsx";
+
+export function EditBadgeRequirements({
+  market,
+  close,
+}: {
+  market: Market;
+  close?: () => void;
+}) {
+  const { getChainInfo } = useConnectorContext();
+  const { notifySuccess, notifyError } = useToast();
+  const queryClient = useQueryClient();
+  const { setRequiredBadges, humanizeErrors } = useMarketContract();
+  const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [putBadges, setPutBadges] = useState(
+    market.requiredPutBadges.join(",")
+  );
+  const [swapBadges, setSwapBadges] = useState(
+    market.requiredSwapBadges.join(",")
+  );
+
+  function splitAndCleanBadges(badges: string) {
+    return _.map(
+      _.filter(badges.split(","), (v) => v != ""),
+      (v) => v.trim().replaceAll(" ", "")
+    );
+  }
+
+  function splitBadgeFromPath(badges: string[]) {
+    return badges.map((badge) => {
+      const parts = badge.split("/");
+      if (parts.length > 1) return [parts[0], parts[1]];
+      return [parts[0], ""];
+    });
+  }
+
+  const doWrite = async () => {
+    try {
+      setLoading(true);
+      const txHash = await setRequiredBadges(
+        market.address,
+        splitBadgeFromPath(splitAndCleanBadges(putBadges)),
+        splitBadgeFromPath(splitAndCleanBadges(swapBadges))
+      );
+      const blockExplorer = getChainInfo().blockExplorer;
+      notifySuccess("Successfully updated required badges", {
+        duration: 10000,
+        links: [
+          { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
+        ],
+      });
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      close && close();
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <EditRow
+      title="Badge Rules"
+      tip="Specify required badges liquidity providers or takers must have to trade in this market. Up to 8 badges can be specified."
+    >
+      <div className="flex flex-col gap-2">
+        <EditFieldWithLabel
+          value={putBadges}
+          disabled={loading}
+          label={<div>Liquidity Provider</div>}
+          tip="Specify up to 8 badges that liquidity providers must have to trade in this market. Separate badges with a comma."
+          placeholder="ex: kyc, merchant"
+          onChange={(e) => {
+            const val = e.target.value;
+            if (splitAndCleanBadges(val).length > 8)
+              setErr("Too many badges specified (max: 8)");
+            else setErr("");
+            setPutBadges(val);
+          }}
+        />
+        <EditFieldWithLabel
+          value={swapBadges}
+          disabled={loading}
+          label={<div>Taker</div>}
+          tip="Specify up to 8 badges that takers must have to trade in this market. Separate badges with a comma."
+          placeholder="ex: kyc, merchant"
+          onChange={(e) => {
+            const val = e.target.value;
+            if (splitAndCleanBadges(val).length > 8)
+              setErr("Too many badges specified (max: 8)");
+            else setErr("");
+            setSwapBadges(val);
+          }}
+        />
+        {err.length > 0 && (
+          <div className="text-xs font-light mt-2 tracking-wide text-red-500 flex gap-1">
+            <IconCaution width="15px" fillA="#ed4f41" /> {err}
+          </div>
+        )}
+        <Button
+          size="sm"
+          className="mt-2"
+          onClick={doWrite}
+          disabled={
+            loading ||
+            err.length > 0 ||
+            (market.requiredPutBadges.join(",") == putBadges &&
+              market.requiredSwapBadges.join(",") == swapBadges)
+          }
+        >
+          {!loading && <>Update</>}
+          {loading && (
+            <>
+              <IconSpinner
+                width="20"
+                stopColor="#06060c"
+                className="animate-spin"
+              />
+            </>
+          )}
+        </Button>
+      </div>
+    </EditRow>
+  );
+}

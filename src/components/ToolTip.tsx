@@ -39,7 +39,7 @@ export function ToolTip(props: {
         </TooltipTrigger>
         <TooltipContent
           side={props.side || "top"}
-          className={cn("font-light", props.className2)}
+          className={cn("font-light border border-gray-600", props.className2)}
         >
           {props.tip}
         </TooltipContent>
