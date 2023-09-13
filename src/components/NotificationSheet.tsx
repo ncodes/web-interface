@@ -16,6 +16,8 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card.tsx";
+import { useSheetInfo } from "../hooks/useSheetInfo.ts";
+import { cn } from "../libs/utils.ts";
 
 function NotificationItem() {
   return (
@@ -44,6 +46,7 @@ export function NotificationSheet(props: {
   children?: React.ReactNode;
   onOpen?: (open: boolean) => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = useState(false);
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -63,8 +66,11 @@ export function NotificationSheet(props: {
     >
       <SheetTrigger>{props.children}</SheetTrigger>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

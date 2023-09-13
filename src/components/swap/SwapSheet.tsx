@@ -15,6 +15,7 @@ import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { Button } from "../ui/Button.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 function SwapInput(props: { avatar: string; avatarFallback: string }) {
   const [focus, setFocus] = useState(false);
@@ -192,6 +193,7 @@ export function SwapSheet(props: {
   open: boolean;
   onOpenChange?: (open) => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = React.useState(props.open);
 
   useEffect(() => {
@@ -201,8 +203,11 @@ export function SwapSheet(props: {
   return (
     <Sheet open={open} onOpenChange={props.onOpenChange}>
       <SheetContent
-        className="w-full h-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800 h-[50px]">
           <div className="text-white">

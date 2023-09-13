@@ -30,6 +30,7 @@ import { useToast } from "../../hooks/toast/toast.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { ethers } from "ethers";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 interface InputState {
   value?: string | number;
@@ -48,6 +49,7 @@ export function ManageBasicLiquidityTab({
   market: Market;
   close: () => void;
 }) {
+  const [sheetHeight] = useSheetInfo();
   const { getCryptoRate } = useMiscService();
   const { updateFungibleLiquidity, humanizeErrors } = useCoreContract();
   const {
@@ -259,7 +261,10 @@ export function ManageBasicLiquidityTab({
   }
 
   return (
-    <TabsContent value="basic" className="p-0 mt-0 h-full overflow-auto">
+    <TabsContent
+      value="basic"
+      className={`p-0 mt-0 overflow-auto ${sheetHeight}`}
+    >
       <div>
         <ScrollArea className="h-full pb-[200px]">
           <div className=" text-white h-full">

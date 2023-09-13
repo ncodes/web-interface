@@ -16,12 +16,15 @@ import { FeePouchTab } from "./FeePouchTab.tsx";
 import { BalancesTab } from "./BalancesTab.tsx";
 import { SettingsFooter } from "./SettingsFooter.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function SettingsSheet(props: {
   children?: React.ReactNode;
   onOpen?: (open: boolean) => void;
   openWalletManager?: () => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const { address } = useConnectorContext();
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -37,8 +40,11 @@ export function SettingsSheet(props: {
     >
       <SheetTrigger>{props.children}</SheetTrigger>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0 border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

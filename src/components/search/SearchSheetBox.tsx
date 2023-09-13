@@ -11,11 +11,14 @@ import {
 import { SearchInput } from "./SearchInput.tsx";
 import { SearchContent } from "./SearchContent.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function SearchSheetBox(props: {
   children?: React.ReactNode;
   onOpen?: (open: boolean) => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const isTablet = useMediaQuery("(min-width: 768px)");
   const [focus, setFocus] = useState(false);
   const [open, setOpen] = useState(false);
@@ -41,8 +44,8 @@ export function SearchSheetBox(props: {
     >
       <SheetTrigger>{props.children}</SheetTrigger>
       <SheetContent
-        className="md:hidden w-full border-r-0 pt-0 px-0"
-        side="left"
+        className={cn(styles, "md:hidden w-full border-r-0 pt-0 px-0")}
+        side={sheetSide}
       >
         <SheetHeader className="flex pl-3 pt-2 pr-[50px]">
           <div className="text-white">

@@ -17,6 +17,8 @@ import { EditZeroPricedLiquidity } from "./EditZeroPricedLiquidity.tsx";
 import { EditBadgeRequirements } from "./EditBadgeRequirements.tsx";
 import { EditTransferOwnership } from "./EditTransferOwnership.tsx";
 import { EditRenounceOwnership } from "./EditRenounceOwnership.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function EditMarketSheet({
   market,
@@ -29,6 +31,7 @@ export function EditMarketSheet({
   active?: boolean;
   onOpen?: (open: boolean) => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -51,8 +54,11 @@ export function EditMarketSheet({
     >
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

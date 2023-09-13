@@ -20,9 +20,10 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { isDev, tokenTypeToAssetType } from "../../libs/helpers.ts";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
-import { AssetType } from "../../types/enums.ts";
 import _ from "lodash";
 import IconCaution from "../icons/IconCaution.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function CreateMarketSheet({
   children,
@@ -33,6 +34,7 @@ export function CreateMarketSheet({
   active: boolean;
   onOpen: (open: boolean) => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [baseAsset, setBaseAsset] = useState<AssetInfo>();
@@ -116,8 +118,11 @@ export function CreateMarketSheet({
     >
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

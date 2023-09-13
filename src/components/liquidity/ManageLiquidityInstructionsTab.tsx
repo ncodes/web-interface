@@ -14,12 +14,14 @@ import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { isDev } from "../../libs/helpers.ts";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 export default function ManageLiquidityInstructionsTab({
   liquidity,
 }: {
   liquidity: Liquidity;
 }) {
+  const [sheetHeight] = useSheetInfo();
   const { notifySuccess, notifyError } = useToast();
   const { loadInstruction, updateInstruction, humanizeErrors } =
     useBadgeMgrContract();
@@ -84,7 +86,10 @@ export default function ManageLiquidityInstructionsTab({
   );
 
   return (
-    <TabsContent value="instructions" className="p-0 mt-0 h-full overflow-auto">
+    <TabsContent
+      value="instructions"
+      className={`p-0 mt-0 h-full overflow-auto ${sheetHeight}`}
+    >
       <div className="px-5 pt-3">
         <div className="font-light text-gray-100 text-sm">
           Provide takers with essential instructions for engaging with this

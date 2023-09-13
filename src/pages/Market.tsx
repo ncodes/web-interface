@@ -221,7 +221,6 @@ function MarketTabs() {
 
       {market.data && (
         <ManageLiquiditySheet
-          addMode={true}
           market={market.data}
           open={openAddLiquiditySheet}
           onOpenChange={(open) => {

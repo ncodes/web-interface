@@ -5,6 +5,8 @@ import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
 import { ManageBasicLiquidityTab } from "./ManageBasicLiquidityTab.tsx";
 import ManageLiquidityInstructionsTab from "./ManageLiquidityInstructionsTab.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function ManageLiquiditySheet(props: {
   liquidity?: Liquidity;
@@ -12,6 +14,7 @@ export function ManageLiquiditySheet(props: {
   open: boolean;
   onOpenChange: (open) => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = React.useState(props.open);
 
   useEffect(() => {
@@ -21,8 +24,11 @@ export function ManageLiquiditySheet(props: {
   return (
     <Sheet open={open} onOpenChange={props.onOpenChange} modal={true}>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">
@@ -38,7 +44,7 @@ export function ManageLiquiditySheet(props: {
             )}
           </div>
         </SheetHeader>
-
+        x
         <Tabs
           defaultValue={"basic"}
           className="w-full h-full transition-all duration-500"

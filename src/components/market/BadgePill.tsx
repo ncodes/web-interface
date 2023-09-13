@@ -11,6 +11,8 @@ import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function BadgePill({
   name,
@@ -21,6 +23,7 @@ export function BadgePill({
   prefix?: string;
   tip?: string;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = useState(false);
 
   return (
@@ -42,8 +45,11 @@ export function BadgePill({
         </ToolTip>
       </SheetTrigger>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

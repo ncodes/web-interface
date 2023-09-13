@@ -8,6 +8,8 @@ import { ScrollArea } from "../ui/scroll-area.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 function ReviewItem({
   address,
@@ -37,6 +39,7 @@ export function ReviewViewerSheet(props: {
   onOpenChange: (open) => void;
 }) {
   const [open, setOpen] = React.useState(props.open);
+  const [, sheetSide, styles] = useSheetInfo();
 
   useEffect(() => {
     setOpen(props.open);
@@ -45,8 +48,11 @@ export function ReviewViewerSheet(props: {
   return (
     <Sheet open={open} onOpenChange={props.onOpenChange}>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

@@ -16,6 +16,7 @@ import { ToolTip } from "../ToolTip.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { Button } from "../ui/Button.tsx";
 import useStore from "../../hooks/store/useStore.ts";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 function SwapInput(props: { avatar: string; avatarFallback: string }) {
   const [focus, setFocus] = useState(false);
@@ -155,6 +156,7 @@ export function CreateOfferContent({ outOfSheet }: { outOfSheet?: boolean }) {
 }
 
 export function CreateOfferSheet(props: { onOpenChange?: (open) => void }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = React.useState(false);
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -172,8 +174,11 @@ export function CreateOfferSheet(props: { onOpenChange?: (open) => void }) {
       }}
     >
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

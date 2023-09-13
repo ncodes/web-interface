@@ -2,11 +2,14 @@ import { Sheet, SheetContent } from "../ui/sheet.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import React, { useEffect } from "react";
 import { Messenger } from "./Messenger.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function MessengerSheet(props: {
   open: boolean;
   onOpenChange?: (open) => void;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = React.useState(props.open);
 
   useEffect(() => {
@@ -16,8 +19,11 @@ export function MessengerSheet(props: {
   return (
     <Sheet open={open} onOpenChange={props.onOpenChange}>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0"
+        )}
+        side={sheetSide}
       >
         <Messenger sheetMode />
         <div

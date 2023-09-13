@@ -10,6 +10,8 @@ import { ScrollArea } from "../ui/scroll-area.tsx";
 import { MarketFilterContent } from "./MarketFilterContent.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useLocation } from "react-router-dom";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 
 export function MarketFilterSheet({
   active,
@@ -20,6 +22,7 @@ export function MarketFilterSheet({
   onOpen?: (open: boolean) => void;
   children?: ReactNode;
 }) {
+  const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = useState(active);
   const loc = useLocation();
 
@@ -43,8 +46,11 @@ export function MarketFilterSheet({
     >
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent
-        className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
-        side="right"
+        className={cn(
+          styles,
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+        )}
+        side={sheetSide}
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">

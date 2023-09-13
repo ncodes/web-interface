@@ -7,10 +7,16 @@ import {
 } from "../ui/accordion.tsx";
 import { LinkAccountSetting } from "./LinkAccountSetting.tsx";
 import { LiquidityInstruction } from "./LiquidityInstruction.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 export function AccountTab() {
+  const [sheetHeight] = useSheetInfo();
+
   return (
-    <TabsContent value="account" className="w-full h-full px-0">
+    <TabsContent
+      value="account"
+      className={`w-full h-full px-0 ${sheetHeight}`}
+    >
       <Accordion type="single" collapsible defaultValue="link-account">
         <AccordionItem value="link-account">
           <AccordionTrigger className="px-5 text-lg pb-2 tracking-wide mt-2">

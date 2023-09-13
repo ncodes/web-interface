@@ -1,12 +1,17 @@
 import { TabsContent } from "../ui/Tabs.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Button } from "../ui/Button.tsx";
-import React from "react";
 import { BalanceCard, BalanceCardLink } from "./BalanceCard.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 export function FeePouchTab() {
+  const [sheetHeight] = useSheetInfo();
+
   return (
-    <TabsContent value="fee-purse" className="w-full h-full mt-3 px-0">
+    <TabsContent
+      value="fee-purse"
+      className={`w-full h-full mt-3 px-0 ${sheetHeight}`}
+    >
       <div className="flex flex-col px-5">
         <BalanceCard symbol="Pouch (P2P)" balance="34.50" hideHelp>
           <BalanceCardLink title="Withdraw" />

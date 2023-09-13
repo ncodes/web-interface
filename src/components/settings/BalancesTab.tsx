@@ -2,10 +2,13 @@ import { TabsContent } from "../ui/Tabs.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { BalanceCard, BalanceCardLink } from "./BalanceCard.tsx";
 import { TabContentHeader } from "./TabContentHeader.tsx";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 export function BalancesTab(props: { address: string }) {
+  const [sheetHeight] = useSheetInfo();
+
   return (
-    <TabsContent value="balances" className="p-0 mt-0 h-full">
+    <TabsContent value="balances" className={`p-0 mt-0 ${sheetHeight}`}>
       <TabContentHeader address={props.address} />
       <ScrollArea type="scroll" className="h-full pb-[100px]">
         <div className="mb-5 overflow-auto scrollbar-hide px-5 pt-3">
