@@ -6,7 +6,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 import { LiquidityFilterContent } from "./LiquidityFilterContent.tsx";
@@ -40,6 +39,7 @@ export function LiquidityFilterSheet({
   return (
     <Sheet
       open={open}
+      modal={true}
       onOpenChange={(open) => {
         setOpen(open);
         onOpen && onOpen(open);
@@ -49,7 +49,7 @@ export function LiquidityFilterSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0"
         )}
         side={sheetSide}
       >
@@ -60,10 +60,8 @@ export function LiquidityFilterSheet({
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className=" text-white h-full">
-          <ScrollArea type="scroll" className="h-full pb-10">
-            <LiquidityFilterContent />
-          </ScrollArea>
+        <div className="text-white">
+          <LiquidityFilterContent />
         </div>
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"

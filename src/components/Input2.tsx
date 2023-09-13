@@ -16,6 +16,7 @@ export default function Input2(props: {
   onFocus?: (e: FocusEvent<HTMLInputElement, Element>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void;
   afterInput?: ReactNode;
+  beforeInput?: ReactNode;
   after?: ReactNode;
   err?: string;
 }) {
@@ -37,6 +38,7 @@ export default function Input2(props: {
       )}
     >
       <div className="flex pt-1 w-full">
+        {props.beforeInput && props.beforeInput}
         <div className="flex-1">
           <Input
             value={props.value}

@@ -6,7 +6,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
 import { MarketFilterContent } from "./MarketFilterContent.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useLocation } from "react-router-dom";
@@ -48,7 +47,7 @@ export function MarketFilterSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "w-full border-l focus-visible:outline-0  border-gray-800 py-0 px-0"
         )}
         side={sheetSide}
       >
@@ -59,10 +58,8 @@ export function MarketFilterSheet({
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className=" text-white h-full">
-          <ScrollArea type="scroll" className="h-full pb-10">
-            <MarketFilterContent />
-          </ScrollArea>
+        <div className="text-white">
+          <MarketFilterContent />
         </div>
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
