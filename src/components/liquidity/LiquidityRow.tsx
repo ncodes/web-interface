@@ -328,7 +328,7 @@ export function LiquidityRow({
                     title={`Payment Time`}
                     tip={`The duration payment is expected to be made`}
                   >
-                    <span className="text-gray-200">
+                    <span className="text-gray-200 text-sm">
                       {humanizeDur(liquidity.timeToPay)}
                     </span>
                   </StatCard>
