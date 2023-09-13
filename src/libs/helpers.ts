@@ -8,6 +8,7 @@ import { AxiosResponse } from "axios";
 import * as approx from "approximate-number";
 import * as humanizeDuration from "humanize-duration";
 import { RequestError } from "./RequestError.ts";
+import { AssetType } from "../types/enums.ts";
 
 export function isDev() {
   return import.meta.env.VITE_ENV === "development";
@@ -31,6 +32,38 @@ export function powOf(n: BigNumberish, power: number) {
       .toFixed(0)
   );
 }
+
+export function powOfD(n: BigNumberish, power: number) {
+  return toDec(pow10(power).mul(n));
+}
+
+/**
+ * Convert amount to high denomination
+ * @param amount The target amount (in low denomination like wei)
+ * @param decimals The decimal of the asset
+ * @param places The amount of places
+ * @param stripZeros If true, strips trailing zeros
+ */
+export function toHD(
+  amount: BigNumberish,
+  decimals = 18,
+  places = 8,
+  stripZeros = true
+) {
+  let val: Decimal = toDec(amount.toString()).div(toDec(10).pow(decimals));
+  if (places > 0) val = val.toDecimalPlaces(places);
+  return !stripZeros ? val.toFixed() : parseFloat(val.toFixed()).toString();
+}
+
+/**
+ * Convert amount to low denomination
+ * @param amount The target amount (in high denomination like eth)
+ * @param decimals The decimal of the asset
+ */
+export function toLD(amount: BigNumberish, decimals = 18) {
+  return toDec(amount.toString()).mul(toDec(10).pow(decimals)).toFixed(0);
+}
+
 /**
  * Generate and merge css classes
  * @param inputs - The css classes
@@ -43,8 +76,8 @@ export function cn(...inputs: ClassValue[]) {
  * Convert a number to a Decimal
  * @param val - The value to convert
  */
-export function toDec(val: string | number) {
-  return new Decimal(val);
+export function toDec(val: string | number | BigNumber | bigint) {
+  return new Decimal(val.toString());
 }
 
 /**
@@ -180,7 +213,7 @@ export function rmUndefinedAndNull(
 }
 
 /**
- * Humanize a duration
+ * Humanize a duration. Returns output like 1day, 1hr, 1min, 1sec
  * @param sec - The duration in seconds
  */
 export function humanizeDur(sec: number) {
@@ -210,6 +243,36 @@ export function humanizeDur(sec: number) {
 }
 
 /**
+ * Humanize a duration. Returns output like 1d, 1h, 1m, 1s
+ * @param seconds - The duration in seconds
+ */
+export function humanizeDur2(seconds: number) {
+  const minute = 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  const month = day * 30; // Approximate months as 30 days
+  const year = day * 365; // Approximate years as 365 days
+
+  let time: string;
+
+  if (seconds < minute) {
+    time = Math.round(seconds) + "s";
+  } else if (seconds < hour) {
+    time = Math.round(seconds / minute) + "m";
+  } else if (seconds < day) {
+    time = Math.round(seconds / hour) + "h";
+  } else if (seconds < month) {
+    time = Math.round(seconds / day) + "d";
+  } else if (seconds < year) {
+    time = Math.round(seconds / month) + "mo";
+  } else {
+    time = Math.round(seconds / year) + "y";
+  }
+
+  return time;
+}
+
+/**
  * Check if a list of badges include a merchant badge
  * @param badges - The badges
  */
@@ -227,4 +290,39 @@ export function isMerchant(badges: string[]) {
 export function isEqlStr(a: string, b: string) {
   if (a == undefined || b == undefined) return false;
   return a.toLowerCase() === b.toLowerCase();
+}
+
+/**
+ * Check if an amount is '0', 0 or undefined
+ * @param amt - The amount
+ */
+export function isZero(amt: string | number | undefined) {
+  return !amt || amt === "0";
+}
+
+/**
+ * Check if an amount is an empty string or undefined
+ * @param amt - The amount
+ */
+export function isEmpty(amt: string | number | undefined) {
+  return amt === "" || amt == undefined;
+}
+
+/**
+ * Return AssetType equivalent of a token type
+ * @param tokenType
+ */
+export function tokenTypeToAssetType(
+  tokenType: "ERC20" | "SYNTHETIC" | "ERC721" | "ERC1155"
+) {
+  if (tokenType == "ERC20") return AssetType.ERC20;
+  if (tokenType == "SYNTHETIC") return AssetType.SYNTH;
+  if (tokenType == "ERC721") return AssetType.ERC721;
+  if (tokenType == "ERC1155") return AssetType.ERC1155;
+  throw new Error("unknown token type");
+}
+
+// Delay for a number of milliseconds
+export function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

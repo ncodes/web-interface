@@ -6,7 +6,7 @@ import { EditFieldWithLabelAndSlider } from "./EditFieldWithLabelAndSlider.tsx";
 import { Button } from "../ui/Button.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { isDev } from "../../libs/helpers.ts";
+import { humanizeDur2, isDev } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
 export function EditDisputeDurations({
@@ -54,32 +54,6 @@ export function EditDisputeDurations({
     }
   };
 
-  function formatSec(seconds: number) {
-    const minute = 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-    const month = day * 30; // Approximate months as 30 days
-    const year = day * 365; // Approximate years as 365 days
-
-    let time: string;
-
-    if (seconds < minute) {
-      time = Math.round(seconds) + "s";
-    } else if (seconds < hour) {
-      time = Math.round(seconds / minute) + "m";
-    } else if (seconds < day) {
-      time = Math.round(seconds / hour) + "h";
-    } else if (seconds < month) {
-      time = Math.round(seconds / day) + "d";
-    } else if (seconds < year) {
-      time = Math.round(seconds / month) + "mo";
-    } else {
-      time = Math.round(seconds / year) + "y";
-    }
-
-    return time;
-  }
-
   return (
     <EditRow
       title="Dispute Durations"
@@ -94,7 +68,7 @@ export function EditDisputeDurations({
           value={disputeDelayDur}
           slideMin={300}
           slideMax={86400}
-          suffix={formatSec(disputeDelayDur)}
+          suffix={humanizeDur2(disputeDelayDur)}
           onChange={(value) => {
             setDisputeDelayDur(parseFloat(value) || 0);
           }}
@@ -108,7 +82,7 @@ export function EditDisputeDurations({
           value={evidenceDur}
           slideMin={1800}
           slideMax={172800}
-          suffix={formatSec(evidenceDur)}
+          suffix={humanizeDur2(evidenceDur)}
           onChange={(value) => {
             setEvidenceDur(parseFloat(value) || 0);
           }}
@@ -122,7 +96,7 @@ export function EditDisputeDurations({
           value={votingDur}
           slideMin={1800}
           slideMax={172800}
-          suffix={formatSec(votingDur)}
+          suffix={humanizeDur2(votingDur)}
           onChange={(value) => {
             setVotingDur(parseFloat(value) || 0);
           }}

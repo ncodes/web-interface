@@ -17,7 +17,7 @@ export function MyLiquidityTabContent() {
   const liquidityFilter = useStore((state) => state.liquidityFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
-  const [limit] = useState(1);
+  const [limit] = useState(10);
   const {
     isLoading,
     isSuccess,
@@ -85,7 +85,7 @@ export function MyLiquidityTabContent() {
             {data?.liquidities.map((liq: Liquidity) => (
               <LiquidityRow
                 liquidity={liq}
-                key={`${liq.market}:${liq.lid}`}
+                key={`${liq.marketAddress}:${liq.lid}`}
                 ownerMode
               />
             ))}

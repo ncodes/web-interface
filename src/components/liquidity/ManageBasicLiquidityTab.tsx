@@ -1,198 +1,400 @@
 import { TabsContent } from "../ui/Tabs.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Accordion } from "../ui/accordion.tsx";
-import { FilterItem } from "../FilterItem.tsx";
-import { Input } from "../ui/Input.tsx";
-import { Slider } from "../ui/slider.tsx";
-import { Switch } from "../ui/switch.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { ManageLiqEditAmount } from "./ManageLiqEditAmount.tsx";
+import { ManageLiqEditPrice } from "./ManageLiqEditPrice.tsx";
+import { ManageLiqEditMinSwapAmount } from "./ManageLiqEditMinSwapAmount.tsx";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ManageLiqEditMaxSwapAmount } from "./ManageLiqEditMaxSwapAmount.tsx";
+import { ManageLiqEditPaymentTime } from "./ManageLiqEditPaymentTime.tsx";
+import { ManageLiqEditTarget } from "./ManageLiqEditTarget.tsx";
+import { ManageLiqEditPause } from "./ManageLiqEditPause.tsx";
+import { useMiscService } from "../../hooks/services/backend/useMiscService.ts";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Address } from "viem";
+import _ from "lodash";
+import {
+  delay,
+  isDev,
+  isEmpty,
+  isZero,
+  powOfD,
+  toBN,
+  toDec,
+  toLD,
+} from "../../libs/helpers.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import { ethers } from "ethers";
 
-export function ManageBasicLiquidityTab(props: {
-  addMode: undefined | boolean;
+interface InputState {
+  value?: string | number;
+  err?: string;
+  setErr?: Dispatch<SetStateAction<string>>;
+}
+
+export function ManageBasicLiquidityTab({
+  onClick,
+  liquidity,
+  market,
+  close,
+}: {
   onClick: () => void;
-  liquidity?: Liquidity;
+  liquidity: Liquidity;
+  market: Market;
+  close: () => void;
 }) {
+  const { getCryptoRate } = useMiscService();
+  const { updateFungibleLiquidity, humanizeErrors } = useCoreContract();
+  const {
+    getChainInfo,
+    getTokenAllowance,
+    getTokenSupply,
+    approveAllowance,
+    humanizeErc20Errors,
+    address,
+  } = useConnectorContext();
+  const { notifyError, notifySuccess } = useToast();
+  const [addLoading, setAddLoading] = useState(false);
+  const [allowLoading, setAllowLoading] = useState(false);
+  const [amount, setAmount] = useState<InputState>({});
+  const [price, setPrice] = useState<InputState>({});
+  const [minSwapAmount, setMinSwapAmount] = useState<InputState>({});
+  const [maxSwapAmount, setMaxSwapAmount] = useState<InputState>({});
+  const [paymentTime, setPaymentTime] = useState<InputState>({});
+  const [target, setTarget] = useState<InputState>({ value: "", err: "" });
+  const [pause, setPause] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [allowance, setAllowance] = useState(0n);
+  const [hasAllowance, setHasAllowance] = useState(false);
+  const queryClient = useQueryClient();
+  const [accordionToOpen, setAccordionToOpen] = useState<string[]>([
+    "Amount",
+    "Price",
+  ]);
+
+  const baseUsdRate = useQuery({
+    queryKey: [
+      "getBaseRate",
+      { net: getChainInfo().queryName, symbolOrAddress: market.base }, // TODO: use baseAddress
+    ],
+    queryFn: getCryptoRate,
+    refetchInterval: 60000,
+  });
+
+  const quoteUsdRate = useQuery({
+    queryKey: [
+      "getQuoteRate",
+      { net: getChainInfo().queryName, symbolOrAddress: market.quote }, // TODO: use quoteAddress
+    ],
+    queryFn: getCryptoRate,
+    refetchInterval: 60000,
+  });
+
+  useEffect(() => {
+    (async () => {
+      setAllowance(
+        await getTokenAllowance(
+          market.baseAddress as Address,
+          address as Address,
+          getChainInfo().contracts?.core.address as Address
+        )
+      );
+    })();
+  }, [amount, allowLoading]);
+
+  useEffect(() => {
+    validate();
+  }, [amount, price, minSwapAmount, maxSwapAmount, paymentTime, target, pause]);
+
+  useEffect(() => {
+    setHasAllowance(hasEnoughAllowance());
+  }, [ready, allowLoading, amount, allowance]);
+
+  // Checks if there is enough allowance to cover the amount
+  function hasEnoughAllowance() {
+    return toDec(allowance).gte(
+      toDec((amount.value as string) || "0").mul(powOfD(1, market.baseDecimals))
+    );
+  }
+
+  // Gets the field values.
+  function getValues() {
+    const { baseDecimals, quoteDecimals } = market;
+    return {
+      amount: toLD((amount?.value as string) || "0", baseDecimals),
+      price: toLD(price?.value || "0", quoteDecimals),
+      minSwap: toLD(minSwapAmount?.value || "0", baseDecimals),
+      maxSwap: toLD(maxSwapAmount?.value || "0", baseDecimals),
+      target: (target.value as string) || ethers.constants.AddressZero,
+      paymentTime: !market.instant ? (paymentTime.value as string) : "0",
+      paused: pause ? 1 : 0,
+    };
+  }
+
+  // Validate checks if fields are correct and ready to be submitted.
+  function validate() {
+    let ready = true;
+
+    if (
+      amount.err ||
+      price.err ||
+      minSwapAmount.err ||
+      maxSwapAmount.err ||
+      paymentTime.err ||
+      target.err
+    ) {
+      setReady(false);
+      const openAccordions: string[] = [];
+      if (minSwapAmount.err) openAccordions.push("Minimum Swap Amount");
+      if (maxSwapAmount.err) openAccordions.push("Maximum Swap Amount");
+      if (target.err) openAccordions.push("Target");
+      setAccordionToOpen([...accordionToOpen, ...openAccordions]);
+    }
+
+    if (isEmpty(amount.value) || (isZero(amount.value) && !liquidity)) {
+      ready = false;
+      amount.setErr && amount.setErr("Amount is required");
+    } else {
+      amount.setErr && amount.setErr("");
+    }
+
+    if (isZero(price.value)) {
+      ready = false;
+      price.setErr && price.setErr("Price is required");
+    } else {
+      price.setErr && price.setErr("");
+    }
+
+    if (liquidity) {
+      const values = getValues();
+      if (
+        values.amount == liquidity.amount &&
+        values.price == liquidity.price &&
+        values.minSwap == liquidity.minSwap &&
+        values.maxSwap == liquidity.maxSwap &&
+        values.target == liquidity.target &&
+        !!values.paused == liquidity.paused
+      ) {
+        ready = false;
+      }
+    }
+
+    setReady(ready);
+  }
+
+  // Request and execute token allowance
+  async function doRequestAllowance() {
+    try {
+      setAllowLoading(true);
+      await approveAllowance(
+        market.baseAddress as Address,
+        getChainInfo().contracts?.core.address as Address,
+        await getTokenSupply(market.baseAddress as Address)
+      );
+      notifySuccess("Allowance successfully approved", { duration: 5000 });
+    } catch (error) {
+      const msg = humanizeErc20Errors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setAllowLoading(false);
+    }
+  }
+
+  // Add or modify a liquidity
+  async function doAddOrUpdate() {
+    try {
+      setAddLoading(true);
+
+      const values = getValues();
+      let deduct = false;
+      let newAmt = values.amount;
+      if (liquidity) {
+        if (toBN(newAmt).eq(liquidity.amount)) {
+          newAmt = "0";
+        } else if (toBN(newAmt).lt(liquidity.amount)) {
+          deduct = true;
+          newAmt = toBN(liquidity.amount).sub(newAmt).toString();
+        } else {
+          deduct = false;
+          newAmt = toBN(newAmt).sub(liquidity.amount).toString();
+        }
+      }
+
+      await updateFungibleLiquidity(
+        market.address,
+        !liquidity ? 100000 : liquidity.lid,
+        deduct,
+        values.target as Address,
+        newAmt,
+        values.price,
+        [],
+        [],
+        [values.minSwap, values.maxSwap, values.paymentTime, 0, values.paused]
+      );
+
+      await delay(5000);
+      await queryClient.refetchQueries(["getLiquidityByCreator"]);
+
+      notifySuccess(
+        !liquidity
+          ? "Liquidity successfully added"
+          : "Liquidity successfully updated",
+        { duration: 5000 }
+      );
+
+      close && close();
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setAddLoading(false);
+    }
+  }
+
   return (
     <TabsContent value="basic" className="p-0 mt-0 h-full overflow-auto">
       <div>
         <ScrollArea className="h-full pb-[200px]">
           <div className=" text-white h-full">
-            {!props.addMode && (
+            {liquidity && (
               <p className="p-5 py-3 font-light text-gray-300 text-sm">
                 Manage your liquidity. You can add, remove, restrict or pause
                 your liquidity.
               </p>
             )}
-
-            {props.addMode && (
+            {!liquidity && (
               <p className="p-5 py-3 font-light text-gray-300 text-sm">
                 Add liquidity to the market.
               </p>
             )}
+            <Accordion
+              value={_.uniq(accordionToOpen)}
+              onValueChange={(values) => {
+                setAccordionToOpen(_.uniq([...values]));
+              }}
+              type="multiple"
+            >
+              <ManageLiqEditAmount
+                market={market}
+                liquidity={liquidity}
+                baseUsdRate={baseUsdRate.data as number}
+                onValueChanged={(value, err, setErr) => {
+                  setAmount({ value, err, setErr });
+                  validate();
+                }}
+              />
 
-            <Accordion defaultValue={["Amount"]} type="multiple">
-              <FilterItem
-                title="Amount"
-                tip="Increase or reduce the amount of liquidity"
-              >
-                <div>
-                  <div className="flex gap-4 items-center">
-                    <Input
-                      value={!props.addMode ? "34000" : ""}
-                      placeholder="0.00"
-                      className="px-2"
-                    />
-                    {!props.addMode && (
-                      <div className="flex flex-col text-gray-400 text-xs">
-                        <span className="">Current</span>
-                        <span className="text-xs text-chinese-green">
-                          34,000
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  {/*<p className="flex text-gray-500 text-xs pt-2 items-center gap-1">*/}
-                  {/*  <IconInfoCircle width="14px" /> Subtracted amount is returned*/}
-                  {/*  to the wallet.*/}
-                  {/*</p>*/}
-                  {/*<p className="flex text-gray-500 text-xs pt-2 items-center gap-1">*/}
-                  {/*  <IconInfoCircle width="14px" /> Additional amount may require*/}
-                  {/*  approval.*/}
-                  {/*</p>*/}
-                </div>
-              </FilterItem>
+              <ManageLiqEditPrice
+                liquidity={liquidity}
+                market={market}
+                baseUsdRate={baseUsdRate.data as number}
+                quoteUsdRate={quoteUsdRate.data as number}
+                onValueChanged={(value, err, setErr) => {
+                  setPrice({ value, err, setErr });
+                  validate();
+                }}
+              />
 
-              <FilterItem
-                title="Price"
-                tip="Update the price of your liquidity"
-              >
-                <div className="flex gap-4 items-center">
-                  <Input
-                    value={!props.addMode ? "35.00" : ""}
-                    placeholder="0.00"
-                    className="px-2"
-                  />
-                  {!props.addMode && (
-                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                      <span className="">Current</span>
-                      <span className="text-xs text-chinese-green">
-                        35.50 <span className="text-gray-200">UNI</span>
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </FilterItem>
+              <ManageLiqEditMinSwapAmount
+                market={market}
+                baseUsdRate={baseUsdRate.data as number}
+                liquidity={liquidity}
+                liquidityEdits={{ amount: amount?.value as string }}
+                onValueChanged={(value, err, setErr) => {
+                  setMinSwapAmount({ value, err, setErr });
+                  validate();
+                }}
+              />
 
-              <FilterItem
-                title="Minimum Swap Amount"
-                tip="Update the minimum swap amount"
-              >
-                <div className="flex gap-4 items-center">
-                  <Input
-                    value={!props.addMode ? "200" : ""}
-                    placeholder="0.00"
-                    className="px-2"
-                  />
-                  {!props.addMode && (
-                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                      <span className="">Current</span>
-                      <span className="text-xs text-chinese-green">200</span>
-                    </div>
-                  )}
-                </div>
-              </FilterItem>
+              <ManageLiqEditMaxSwapAmount
+                market={market}
+                baseUsdRate={baseUsdRate.data as number}
+                liquidity={liquidity}
+                liquidityEdits={{
+                  amount: amount?.value as string,
+                  minSwap: minSwapAmount.value as string,
+                }}
+                onValueChanged={(value, err, setErr) => {
+                  setMaxSwapAmount({ value, err, setErr });
+                  validate();
+                }}
+              />
 
-              <FilterItem
-                title="Maximum Swap Amount"
-                tip="Update the maximum swap amount"
-              >
-                <div className="flex gap-4 items-center">
-                  <Input
-                    value={!props.addMode ? "530" : ""}
-                    placeholder="0.00"
-                    className="px-2"
-                  />
-                  {!props.addMode && (
-                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                      <span className="">Current</span>
-                      <span className="text-xs text-chinese-green">530</span>
-                    </div>
-                  )}
-                </div>
-              </FilterItem>
+              {!market.instant && (
+                <ManageLiqEditPaymentTime
+                  market={market}
+                  liquidity={liquidity}
+                  onValueChanged={(value, err, setErr) => {
+                    setPaymentTime({ value, err, setErr });
+                  }}
+                />
+              )}
 
-              <FilterItem
-                title="Payment Time"
-                tip="Update time you expect to receive payment (in seconds)"
-              >
-                <div className="flex gap-4">
-                  <div className="flex flex-col gap-3">
-                    <Input
-                      value={!props.addMode ? "4500" : ""}
-                      placeholder="0"
-                      type="number"
-                      className="px-2"
-                    />
-                    <Slider defaultValue={[1800]} min={0} max={3600} step={1} />
-                  </div>
-                  {!props.addMode && (
-                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                      <span className="">Payment Time</span>
-                      <span className="text-xs text-chinese-green">
-                        15 minutes
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </FilterItem>
+              <ManageLiqEditTarget
+                liquidity={liquidity}
+                market={market}
+                onValueChanged={(value, err, setErr) => {
+                  setTarget({ value, err, setErr });
+                }}
+              />
 
-              <FilterItem
-                title="Target"
-                tip="Specify an address that will only be allowed to swap the liquidity"
-              >
-                <div className="flex gap-4">
-                  <div className="flex flex-col gap-3">
-                    <Input
-                      value={!props.addMode ? "0x1234567890" : ""}
-                      placeholder="0x00000"
-                      type="text"
-                      className="px-2"
-                    />
-                  </div>
-                  {!props.addMode && (
-                    <div className="flex shrink-0 flex-col text-gray-400 text-xs">
-                      <span className="">Current</span>
-                      <span className="text-xs text-chinese-green">
-                        0x123..XyZ
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </FilterItem>
-
-              <FilterItem
-                title="Pause"
-                tip="Pause the liquidity so it cannot be swapped"
-              >
-                <div className="flex gap-4">
-                  <div className="flex flex-col gap-3">
-                    <Switch checked={true} />
-                  </div>
-                </div>
-              </FilterItem>
+              <ManageLiqEditPause
+                liquidity={liquidity}
+                market={market}
+                onValueChanged={(value) => {
+                  setPause(value);
+                }}
+              />
             </Accordion>
           </div>
         </ScrollArea>
         <div className="bottom-0 bg-background absolute w-full p-3 border-t border-gray-800 flex flex-col gap-2">
-          {/*<Button size="full" variant="secondary">*/}
-          {/*  Approve*/}
-          {/*</Button>*/}
-          <Button size="full">{props.addMode ? "Add" : "Update"}</Button>
+          {amount.value && !hasAllowance && (
+            <Button
+              size="full"
+              variant="secondary"
+              disabled={allowLoading}
+              onClick={doRequestAllowance}
+            >
+              {!allowLoading && <>Approve</>}
+              {allowLoading && (
+                <>
+                  <IconSpinner
+                    width="20"
+                    stopColor="#000000"
+                    className="animate-spin"
+                  />
+                </>
+              )}
+            </Button>
+          )}
+          <Button
+            size="full"
+            disabled={!ready || !hasAllowance}
+            onClick={doAddOrUpdate}
+          >
+            {!addLoading && <>{!liquidity ? "Add" : "Update"}</>}
+            {addLoading && (
+              <>
+                <IconSpinner
+                  width="20"
+                  stopColor="#000000"
+                  className="animate-spin"
+                />
+              </>
+            )}
+          </Button>
         </div>
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
-          onClick={props.onClick}
+          onClick={onClick}
         >
           <Cross2Icon className="h-6 w-6" />
           <span className="sr-only">Close</span>

@@ -39,7 +39,7 @@ function MarketTabs() {
   const { listLiquidities } = useLiquidityService();
   const { id } = useParams();
   const [offset, setOffset] = useState(0);
-  const [limit] = useState(1);
+  const [limit] = useState(10);
 
   const market = useQuery({
     queryKey: [
@@ -57,7 +57,11 @@ function MarketTabs() {
         network: getChainInfo().queryName,
         limit,
         offset,
-        liquidityFilter: { ...liquidityFilter, market: id as string },
+        liquidityFilter: {
+          ...liquidityFilter,
+          market: id as string,
+          paused: false,
+        },
       },
     ],
     queryFn: listLiquidities,
@@ -215,13 +219,16 @@ function MarketTabs() {
         }}
       />
 
-      <ManageLiquiditySheet
-        addMode={true}
-        open={openAddLiquiditySheet}
-        onOpenChange={(open) => {
-          setOpenAddLiquiditySheet(open);
-        }}
-      />
+      {market.data && (
+        <ManageLiquiditySheet
+          addMode={true}
+          market={market.data}
+          open={openAddLiquiditySheet}
+          onOpenChange={(open) => {
+            setOpenAddLiquiditySheet(open);
+          }}
+        />
+      )}
     </Tabs>
   );
 }

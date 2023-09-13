@@ -7,8 +7,9 @@ import IconBSC from "../../components/icons/BSC.tsx";
 import IconArbitrum from "../../components/icons/IconArbitrum.tsx";
 import BadgeManagerABI from "../../abi/BadgeManager.json";
 import EnergonABI from "../../abi/Energon.json";
-import NFTABI from "../../abi/NFT.json";
+import NftABI from "../../abi/NFT.json";
 import MarketCoreABI from "../../abi/MarketCore.json";
+import CoreABI from "../../abi/Core.json";
 
 export enum ChainID {
   Ethereum = 1,
@@ -41,6 +42,10 @@ export const SupportedNetworks: ChainInfo[] = [
         "https://assets-cdn.trustwallet.com/blockchains/optimism/assets/0x4200000000000000000000000000000000000006/logo.png",
     }),
     contracts: {
+      core: {
+        address: import.meta.env.VITE_ETHEREUM_CORE_ADDRESS,
+        abi: CoreABI,
+      },
       badgeManager: {
         address: import.meta.env.VITE_ETHEREUM_BADGE_MGR_ADDRESS,
         abi: BadgeManagerABI,
@@ -55,7 +60,7 @@ export const SupportedNetworks: ChainInfo[] = [
       },
       nft: {
         address: import.meta.env.VITE_ETHEREUM_NFT_ADDRESS,
-        abi: NFTABI,
+        abi: NftABI,
       },
     },
   },
@@ -164,6 +169,10 @@ export const SupportedNetworks: ChainInfo[] = [
         "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
     contracts: {
+      core: {
+        address: import.meta.env.VITE_ETHEREUM_CORE_ADDRESS,
+        abi: CoreABI,
+      },
       badgeManager: {
         address: import.meta.env.VITE_LOCALHOST_BADGE_MGR_ADDRESS,
         abi: BadgeManagerABI,
@@ -178,7 +187,7 @@ export const SupportedNetworks: ChainInfo[] = [
       },
       nft: {
         address: import.meta.env.VITE_LOCALHOST_NFT_ADDRESS,
-        abi: NFTABI,
+        abi: NftABI,
       },
     },
   },

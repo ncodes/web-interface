@@ -8,9 +8,9 @@ import ManageLiquidityInstructionsTab from "./ManageLiquidityInstructionsTab.tsx
 
 export function ManageLiquiditySheet(props: {
   liquidity?: Liquidity;
+  market: Market;
   open: boolean;
   onOpenChange: (open) => void;
-  addMode?: boolean;
 }) {
   const [open, setOpen] = React.useState(props.open);
 
@@ -19,24 +19,19 @@ export function ManageLiquiditySheet(props: {
   }, [props.open]);
 
   return (
-    <Sheet
-      key={"axs"}
-      open={open}
-      onOpenChange={props.onOpenChange}
-      modal={true}
-    >
+    <Sheet open={open} onOpenChange={props.onOpenChange} modal={true}>
       <SheetContent
         className="w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
         side="right"
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">
-            {!props.addMode && (
+            {props.liquidity && (
               <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
                 Manage Liquidity
               </SheetTitle>
             )}
-            {props.addMode && (
+            {!props.liquidity && (
               <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
                 Add Liquidity
               </SheetTitle>
@@ -50,7 +45,7 @@ export function ManageLiquiditySheet(props: {
         >
           <ScrollOverflowIndicator>
             <ScrollAreaHorizontal type="scroll">
-              {!props.addMode && (
+              {props.liquidity && (
                 <TabsList className="justify-start px-3 py-2 border-b border-modal-border">
                   <TabsTrigger
                     value="basic"
@@ -70,8 +65,12 @@ export function ManageLiquiditySheet(props: {
           </ScrollOverflowIndicator>
 
           <ManageBasicLiquidityTab
-            liquidity={props.liquidity}
-            addMode={props.addMode}
+            liquidity={props.liquidity as Liquidity}
+            market={props.market}
+            close={() => {
+              setOpen(false);
+              props.onOpenChange && props.onOpenChange(false);
+            }}
             onClick={() => {
               setOpen(false);
               props.onOpenChange && props.onOpenChange(false);

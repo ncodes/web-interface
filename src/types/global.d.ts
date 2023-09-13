@@ -26,7 +26,12 @@ interface ChainInfo {
 }
 
 declare global {
-  type ContractNames = "energon" | "nft" | "badgeManager" | "marketCore";
+  type ContractNames =
+    | "core"
+    | "energon"
+    | "nft"
+    | "badgeManager"
+    | "marketCore";
 
   interface User {
     email: string;
@@ -63,7 +68,7 @@ declare global {
     quoteDecimals: number;
     quoteType: AssetType;
     instant: boolean;
-    allowZeroPrice: boolean;
+    enabledZeroOfferPrice: boolean;
     offerOnly: boolean;
     pair: string;
     commission: number;

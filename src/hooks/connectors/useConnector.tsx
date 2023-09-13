@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { BigNumberish } from "ethers";
 import { getChain, ChainID } from "./networks";
 import {
   Chain,
+  erc20ABI,
   useAccount,
   useDisconnect,
   useNetwork,
@@ -35,10 +35,28 @@ export interface IConnector {
     args?,
     noWait?: boolean
   ): Promise<Address>;
+  getTokenBalance(
+    tokenAddress: Address,
+    accountAddress: Address
+  ): Promise<bigint>;
+  approveAllowance(
+    tokenAddress: Address,
+    spenderAddress: Address,
+    amount: bigint,
+    noWait?: boolean,
+    confirmations?: number
+  ): Promise<`0x${string}`>;
+  getTokenAllowance(
+    tokenAddress: Address,
+    accountAddress: Address,
+    spenderAddress: Address
+  ): Promise<bigint>;
+  getTokenSupply(tokenAddress: Address): Promise<bigint>;
+  humanizeErc20Errors(error: { message: string } | unknown): string;
 
   connected: boolean;
   disconnect: () => Promise<void>;
-  getBalance: () => Promise<BigNumberish>;
+  getBalance: () => Promise<bigint>;
   ready: boolean;
   address: string;
 
@@ -142,7 +160,7 @@ export default function useConnector() {
         return Promise.reject(new Error("not connected to a wallet"));
       if (!_switchNetwork)
         return Promise.reject(new Error("switch function not set"));
-      await _switchNetwork(id);
+      _switchNetwork(id);
       return Promise.resolve();
     } catch (error) {
       return Promise.reject(error);
@@ -152,14 +170,101 @@ export default function useConnector() {
   /**
    * Get coin balance of the connected wallet
    */
-  async function getBalance(): Promise<BigNumberish> {
-    try {
-      return Promise.resolve(
-        await publicClient.getBalance({ address: address as Address })
-      );
-    } catch (e) {
-      return Promise.reject(e);
+  async function getBalance(): Promise<bigint> {
+    return publicClient.getBalance({ address: address as Address });
+  }
+
+  /**
+   * Get token balance of an account
+   * @param tokenAddress - The token address
+   * @param accountAddress - The account's address
+   */
+  async function getTokenBalance(
+    tokenAddress: Address,
+    accountAddress: Address
+  ): Promise<bigint> {
+    if (!publicClient) throw new Error("no provider found");
+    if (!walletClient) throw new Error("wallet not connected");
+    return publicClient.readContract({
+      address: tokenAddress,
+      abi: erc20ABI,
+      functionName: "balanceOf",
+      args: [accountAddress],
+    });
+  }
+
+  /**
+   * Get token supply
+   * @param tokenAddress - The token address
+   */
+  async function getTokenSupply(tokenAddress: Address): Promise<bigint> {
+    if (!publicClient) throw new Error("no provider found");
+    if (!walletClient) throw new Error("wallet not connected");
+    return publicClient.readContract({
+      address: tokenAddress,
+      abi: erc20ABI,
+      functionName: "totalSupply",
+    });
+  }
+
+  /**
+   * Get allowance of a spender for an account
+   * @param tokenAddress - The token address
+   * @param accountAddress - The account's address
+   * @param spenderAddress - The spender's address
+   */
+  async function getTokenAllowance(
+    tokenAddress: Address,
+    accountAddress: Address,
+    spenderAddress: Address
+  ): Promise<bigint> {
+    if (!publicClient) throw new Error("no provider found");
+    if (!walletClient) throw new Error("wallet not connected");
+    return publicClient.readContract({
+      address: tokenAddress,
+      abi: erc20ABI,
+      functionName: "allowance",
+      args: [accountAddress, spenderAddress],
+    });
+  }
+
+  /**
+   * Get token balance of an account
+   * @param tokenAddress - The token address
+   * @param spenderAddress - The spender's address
+   * @param amount - The amount to be approved
+   * @param noWait - If true, the function will not wait for the transaction to be mined
+   * @param confirmations - The number of confirmations to wait for
+   */
+  async function approveAllowance(
+    tokenAddress: Address,
+    spenderAddress: Address,
+    amount: bigint,
+    noWait = false,
+    confirmations = 2
+  ) {
+    if (!walletClient) throw new Error("wallet not connected");
+    const netInfo = getChain(chainId as number);
+    if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
+    const [address] = await walletClient.getAddresses();
+
+    const { request } = await publicClient.simulateContract({
+      address: tokenAddress,
+      abi: erc20ABI,
+      functionName: "approve",
+      args: [spenderAddress, amount],
+      account: address,
+    });
+
+    const txHash = await walletClient.writeContract(request);
+    if (!noWait) {
+      await publicClient.waitForTransactionReceipt({
+        hash: txHash,
+        confirmations: isDev() ? 1 : confirmations,
+      });
     }
+
+    return txHash;
   }
 
   /**
@@ -284,13 +389,35 @@ export default function useConnector() {
     return chain;
   }
 
+  /**
+   * Parse transaction error into human-friendly message
+   * @param error The error object
+   */
+  function humanizeErc20Errors(error: { message: string } | unknown): string {
+    if (error instanceof Error) {
+      // if (error.message.includes("MC: MARKET_EXIST"))
+      //   return "Market already exists";
+    }
+    return "Transaction failed";
+  }
+
   return {
-    defaultNetwork,
+    // Write and read network
     getBalance,
     readContract,
     simulateContract,
     simulateAndWriteContract,
     writeContract,
+
+    // ERC20 operations
+    getTokenBalance,
+    getTokenSupply,
+    getTokenAllowance,
+    approveAllowance,
+    humanizeErc20Errors,
+
+    // Wallet operations
+    defaultNetwork,
     ready,
     connected,
     disconnect,

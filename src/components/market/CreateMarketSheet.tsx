@@ -18,7 +18,7 @@ import { AssetSelector } from "./AssetSelector.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
-import { isDev } from "../../libs/helpers.ts";
+import { isDev, tokenTypeToAssetType } from "../../libs/helpers.ts";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { AssetType } from "../../types/enums.ts";
 import _ from "lodash";
@@ -77,8 +77,8 @@ export function CreateMarketSheet({
       const txHash = await createMarket(
         baseAsset.address,
         quoteAsset.address,
-        baseAsset.type == "ERC20" ? AssetType.ERC20 : AssetType.ERC721,
-        quoteAsset.type == "ERC20" ? AssetType.ERC20 : AssetType.ERC721,
+        tokenTypeToAssetType(baseAsset.type),
+        tokenTypeToAssetType(quoteAsset.type),
         permissions.permPut,
         permissions.permSwap,
         (commission || 0) * 100,

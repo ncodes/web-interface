@@ -208,7 +208,7 @@ export function LiquidityRow({
                     </span>
                   )}
 
-                  {!liquidity.paused && (
+                  {!liquidity.paused && liquidity.amount != "0" && (
                     <span className="flex bg-green-400/30 rounded-full px-[4px] text-xs items-center font-medium tracking-wider border-green-400 text-green-400">
                       <ToolTip
                         className="flex items-center gap-1"
@@ -341,6 +341,14 @@ export function LiquidityRow({
                     </span>
                   </StatCard>
                   <StatCard
+                    title={`Total Swaps`}
+                    tip={`The total number of swaps this liquidity has completed`}
+                  >
+                    <span className="text-gray-200">
+                      {liquidity.totalSwaps}
+                    </span>
+                  </StatCard>
+                  <StatCard
                     title={`Open Disputes`}
                     tip={`The number of open disputes for this liquidity`}
                   >
@@ -354,14 +362,6 @@ export function LiquidityRow({
                   >
                     <span className="text-gray-200">
                       {liquidity.totalDisputes}
-                    </span>
-                  </StatCard>
-                  <StatCard
-                    title={`Total Swaps`}
-                    tip={`The total number of swaps this liquidity has completed`}
-                  >
-                    <span className="text-gray-200">
-                      {liquidity.totalSwaps}
                     </span>
                   </StatCard>
                 </div>
@@ -411,10 +411,10 @@ export function LiquidityRow({
           </div>
           <div
             data-click-trigger="1"
-            className="flex items-center border-l border-gray-800 shrink-0"
+            className="flex items-center border-gray-800 shrink-0"
           >
             {ownerMode && (
-              <span className="hidden lg:inline border-r border-gray-800 shrink-0">
+              <span className="hidden lg:inline border-gray-800 border-l shrink-0">
                 <Button
                   variant="link"
                   rounded="none"
@@ -427,20 +427,22 @@ export function LiquidityRow({
             )}
 
             {!ownerMode && (
-              <span className="flex items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
+              <span className="flex items-center px-2 h-full border-l border-gray-800 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
                 <IconHeart />
               </span>
             )}
 
-            <Button
-              variant="link"
-              rounded="none"
-              scale="sm"
-              className="xl:hidden text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green rounded-lg h-8 mx-1 lg:rounded-br-lg"
-              onClick={() => setOpenSwapSheet(true)}
-            >
-              Swap
-            </Button>
+            {!ownerMode && (
+              <Button
+                variant="link"
+                rounded="lg"
+                scale="sm"
+                className="xl:hidden text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green  h-8 mx-1 lg:rounded-br-lg"
+                onClick={() => setOpenSwapSheet(true)}
+              >
+                Swap
+              </Button>
+            )}
 
             <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu
@@ -494,6 +496,7 @@ export function LiquidityRow({
       />
       <ManageLiquiditySheet
         liquidity={liquidity}
+        market={liquidity.market}
         open={openManageLiquiditySheet}
         onOpenChange={(open) => {
           setOpenManageLiquiditySheet(open);

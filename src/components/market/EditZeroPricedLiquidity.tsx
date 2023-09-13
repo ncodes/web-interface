@@ -17,7 +17,7 @@ export function EditZeroPricedLiquidity({
   market: Market;
   close?: () => void;
 }) {
-  const [checked, setChecked] = useState(market.allowZeroPrice);
+  const [checked, setChecked] = useState(market.enabledZeroOfferPrice);
   const { getChainInfo } = useConnectorContext();
   const { allowZeroOfferPrice, humanizeErrors } = useMarketContract();
   const [loading, setLoading] = useState(false);
@@ -60,16 +60,16 @@ export function EditZeroPricedLiquidity({
             checked={checked}
             disabled={loading}
             onCheckedChange={(value) => {
-              if (market.allowZeroPrice) return;
+              if (market.enabledZeroOfferPrice) return;
               setChecked(value);
             }}
           />
         </EditFieldWithLabel>
-        {!market.allowZeroPrice && (
+        {!market.enabledZeroOfferPrice && (
           <Button
             onClick={doWrite}
             size="sm"
-            disabled={loading || market.allowZeroPrice || !checked}
+            disabled={loading || market.enabledZeroOfferPrice || !checked}
           >
             {!loading && <>Update</>}
             {loading && (
