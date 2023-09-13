@@ -8,7 +8,6 @@ import {
 } from "../ui/sheet.tsx";
 import { Cross2Icon, InfoCircledIcon } from "@radix-ui/react-icons";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Switch } from "../ui/switch.tsx";
 import { Button } from "../ui/Button.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
@@ -21,9 +20,9 @@ import { useToast } from "../../hooks/toast/toast.tsx";
 import { isDev, tokenTypeToAssetType } from "../../libs/helpers.ts";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import _ from "lodash";
-import IconCaution from "../icons/IconCaution.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import Input2 from "../Input2.tsx";
 
 export function CreateMarketSheet({
   children,
@@ -176,9 +175,9 @@ export function CreateMarketSheet({
                 </ToolTip>
               </div>
               <div>
-                <Input
+                <Input2
                   type="number"
-                  value={commission == undefined ? "" : commission}
+                  value={commission == undefined ? "" : commission.toString()}
                   disabled={loading}
                   onChange={(e) => {
                     setCommission(parseFloat(e.target.value || ""));
@@ -191,12 +190,8 @@ export function CreateMarketSheet({
                   }}
                   className="px-3 p-5 !w-[150px]"
                   placeholder="0.1"
+                  err={commissionErr}
                 />
-                {commissionErr != "" && (
-                  <span className="text-xs mt-2 font-light text-red-500 tracking-wide flex gap-1">
-                    <IconCaution width="15px" fillA="#ed4f41" /> {commissionErr}
-                  </span>
-                )}
               </div>
             </div>
           </div>

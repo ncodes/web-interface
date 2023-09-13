@@ -19,8 +19,9 @@ import { EditTransferOwnership } from "./EditTransferOwnership.tsx";
 import { EditRenounceOwnership } from "./EditRenounceOwnership.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 
-export function EditMarketSheet({
+export function ManageMarketSheet({
   market,
   children,
   active,
@@ -31,7 +32,7 @@ export function EditMarketSheet({
   active?: boolean;
   onOpen?: (open: boolean) => void;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -69,24 +70,27 @@ export function EditMarketSheet({
         </SheetHeader>
         <div className="flex flex-col text-gray-200 ">
           <BasicMarketInfoSheetHeader market={market} />
+          <div>
+            <ScrollArea className={cn(sheetHeight)}>
+              <Accordion type="single" className="mt-0">
+                <EditCommission market={market} close={close} />
 
-          <Accordion type="single" className="mt-0">
-            <EditCommission market={market} close={close} />
+                <EditDisputeDurations market={market} close={close} />
 
-            <EditDisputeDurations market={market} close={close} />
+                <EditMarketManager market={market} close={close} />
 
-            <EditMarketManager market={market} close={close} />
+                <EditOfferOnlyMode market={market} close={close} />
 
-            <EditOfferOnlyMode market={market} close={close} />
+                <EditZeroPricedLiquidity market={market} close={close} />
 
-            <EditZeroPricedLiquidity market={market} close={close} />
+                <EditBadgeRequirements market={market} close={close} />
 
-            <EditBadgeRequirements market={market} close={close} />
+                <EditTransferOwnership market={market} close={close} />
 
-            <EditTransferOwnership market={market} close={close} />
-
-            <EditRenounceOwnership market={market} close={close} />
-          </Accordion>
+                <EditRenounceOwnership market={market} close={close} />
+              </Accordion>
+            </ScrollArea>
+          </div>
         </div>
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"

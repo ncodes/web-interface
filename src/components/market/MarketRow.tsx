@@ -16,7 +16,7 @@ import { Button } from "../ui/Button.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { BaseSyntheticEvent, useState } from "react";
 import { cn } from "../../libs/utils.ts";
-import { EditMarketSheet } from "./EditMarketSheet.tsx";
+import { ManageMarketSheet } from "./ManageMarketSheet.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import {
   approxNumber,
@@ -295,7 +295,7 @@ export function MarketRow({
         </div>
       </div>
       <div className="absolute">
-        <EditMarketSheet
+        <ManageMarketSheet
           market={market}
           active={openEditMarketSheet}
           onOpen={(open) => {

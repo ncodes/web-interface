@@ -1,5 +1,4 @@
 import { EditRow } from "./EditRow.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Button } from "../ui/Button.tsx";
 import { isDev } from "../../libs/helpers.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
@@ -10,6 +9,7 @@ import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { isAddress } from "viem";
 import IconSpinner from "../icons/IconSpinner.tsx";
+import Input2 from "../Input2.tsx";
 
 export function EditMarketManager({
   market,
@@ -55,7 +55,7 @@ export function EditMarketManager({
     >
       <div>
         <div className="w-full flex gap-4">
-          <Input
+          <Input2
             type="text"
             value={address}
             disabled={loading}
@@ -70,23 +70,29 @@ export function EditMarketManager({
                 setErr("Invalid address");
               else setErr("");
             }}
+            afterInput={
+              <div className="pr-1">
+                <Button
+                  onClick={doWrite}
+                  disabled={loading || err.length > 0 || address.length == 0}
+                  size="sm"
+                  rounded="xl"
+                  className="mt-[1px]"
+                >
+                  {!loading && <>Update</>}
+                  {loading && (
+                    <>
+                      <IconSpinner
+                        width="20"
+                        stopColor="#06060c"
+                        className="animate-spin"
+                      />
+                    </>
+                  )}
+                </Button>
+              </div>
+            }
           />
-          <Button
-            onClick={doWrite}
-            disabled={loading || err.length > 0 || address.length == 0}
-            size="sm"
-          >
-            {!loading && <>Update</>}
-            {loading && (
-              <>
-                <IconSpinner
-                  width="20"
-                  stopColor="#06060c"
-                  className="animate-spin"
-                />
-              </>
-            )}
-          </Button>
         </div>
         {err.length > 0 && (
           <div className="text-xs font-light mt-2 tracking-wide text-red-500 flex gap-1">

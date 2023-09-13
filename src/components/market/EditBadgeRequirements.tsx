@@ -2,7 +2,6 @@ import { EditRow } from "./EditRow.tsx";
 import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
 import { Button } from "../ui/Button.tsx";
 import { useState } from "react";
-import IconCaution from "../icons/IconCaution.tsx";
 import _ from "lodash";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
@@ -23,6 +22,7 @@ export function EditBadgeRequirements({
   const queryClient = useQueryClient();
   const { setRequiredBadges, humanizeErrors } = useMarketContract();
   const [err, setErr] = useState("");
+  const [err2, setErr2] = useState("");
   const [loading, setLoading] = useState(false);
   const [putBadges, setPutBadges] = useState(
     market.requiredPutBadges.join(",")
@@ -81,36 +81,35 @@ export function EditBadgeRequirements({
         <EditFieldWithLabel
           value={putBadges}
           disabled={loading}
-          label={<div>Liquidity Provider</div>}
+          label={<div>LP</div>}
+          labelWrapperClassName="w-[60px]"
           tip="Specify up to 8 badges that liquidity providers must have to trade in this market. Separate badges with a comma."
           placeholder="ex: kyc, merchant"
           onChange={(e) => {
             const val = e.target.value;
             if (splitAndCleanBadges(val).length > 8)
-              setErr("Too many badges specified (max: 8)");
+              setErr("Too many badges (max: 8)");
             else setErr("");
             setPutBadges(val);
           }}
+          err={err}
         />
         <EditFieldWithLabel
           value={swapBadges}
           disabled={loading}
           label={<div>Taker</div>}
+          labelWrapperClassName="w-[60px]"
           tip="Specify up to 8 badges that takers must have to trade in this market. Separate badges with a comma."
           placeholder="ex: kyc, merchant"
           onChange={(e) => {
             const val = e.target.value;
             if (splitAndCleanBadges(val).length > 8)
-              setErr("Too many badges specified (max: 8)");
-            else setErr("");
+              setErr2("Too many badges (max: 8)");
+            else setErr2("");
             setSwapBadges(val);
           }}
+          err={err2}
         />
-        {err.length > 0 && (
-          <div className="text-xs font-light mt-2 tracking-wide text-red-500 flex gap-1">
-            <IconCaution width="15px" fillA="#ed4f41" /> {err}
-          </div>
-        )}
         <Button
           size="sm"
           className="mt-2"

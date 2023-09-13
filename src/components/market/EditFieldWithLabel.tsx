@@ -1,8 +1,8 @@
 import { ChangeEvent, ReactNode } from "react";
 import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Input } from "../ui/Input.tsx";
 import { cn } from "../../libs/utils.ts";
+import Input2 from "../Input2.tsx";
 
 export function EditFieldWithLabel({
   label,
@@ -14,6 +14,8 @@ export function EditFieldWithLabel({
   disabled,
   placeholder,
   className,
+  labelWrapperClassName,
+  err,
 }: {
   label: ReactNode;
   type?: string;
@@ -24,10 +26,17 @@ export function EditFieldWithLabel({
   disabled?: boolean;
   placeholder?: string;
   className?: string;
+  labelWrapperClassName?: string;
+  err?: string;
 }) {
   return (
     <div className={cn("flex items-center gap-4", className)}>
-      <div className="flex items-center gap-2 shrink-0 text-gray-400">
+      <div
+        className={cn(
+          "flex items-center gap-2 shrink-0 text-gray-400",
+          labelWrapperClassName
+        )}
+      >
         <div>{label}</div>
         <div className="text-gray-400 hover:text-gray-200 cursor-pointer transition-all duration-500">
           <ToolTip tip={tip}>
@@ -37,14 +46,15 @@ export function EditFieldWithLabel({
       </div>
       <div className="w-full flex justify-end">
         {!children && (
-          <Input
+          <Input2
             type={type || "text"}
             value={value}
             disabled={disabled}
             spellCheck={false}
-            className="px-3 !w-[180px]"
+            className="px-3"
             placeholder={placeholder}
             onChange={onChange}
+            err={err}
           />
         )}
 

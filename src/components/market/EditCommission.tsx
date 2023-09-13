@@ -1,14 +1,13 @@
 import { EditRow } from "./EditRow.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Button } from "../ui/Button.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useState } from "react";
-import IconCaution from "../icons/IconCaution.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { isDev } from "../../libs/helpers.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
+import Input2 from "../Input2.tsx";
 
 export function EditCommission(props: { market: Market; close?: () => void }) {
   const { getChainInfo } = useConnectorContext();
@@ -45,12 +44,13 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
 
   return (
     <EditRow title="Commission" tip="Update the market's commission">
-      <div className="w-full flex gap-4">
-        <Input
+      <div className="w-full flex gap-4 items-center">
+        <Input2
           type="number"
           className="px-3 py-4"
-          value={commission}
+          value={commission.toString()}
           disabled={loading}
+          err={err}
           onChange={(e) => {
             setCommission(parseFloat(e.target.value || ""));
             if (e.target.value == undefined) return;
@@ -60,29 +60,30 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
               setErr("");
             }
           }}
-        />
-        <Button
-          size="sm"
-          onClick={doWrite}
-          disabled={loading || err.length > 0}
-        >
-          {!loading && <>Update</>}
-          {loading && (
+          afterInput={
             <>
-              <IconSpinner
-                width="20"
-                stopColor="#06060c"
-                className="animate-spin"
-              />
+              <Button
+                size="sm"
+                rounded="xl"
+                className="mt-[1px] mr-1"
+                onClick={doWrite}
+                disabled={loading || err.length > 0}
+              >
+                {!loading && <>Update</>}
+                {loading && (
+                  <>
+                    <IconSpinner
+                      width="20"
+                      stopColor="#06060c"
+                      className="animate-spin"
+                    />
+                  </>
+                )}
+              </Button>
             </>
-          )}
-        </Button>
+          }
+        />
       </div>
-      {err.length > 0 && (
-        <div className="text-xs font-light mt-2 tracking-wide text-red-500 flex gap-1">
-          <IconCaution width="15px" fillA="#ed4f41" /> {err}
-        </div>
-      )}
     </EditRow>
   );
 }

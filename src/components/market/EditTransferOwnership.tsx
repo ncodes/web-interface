@@ -1,15 +1,14 @@
 import { EditRow } from "./EditRow.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Button } from "../ui/Button.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useState } from "react";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import IconCaution from "../icons/IconCaution.tsx";
 import { isAddress } from "viem";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { isDev } from "../../libs/helpers.ts";
+import Input2 from "../Input2.tsx";
 
 export function EditTransferOwnership({
   market,
@@ -55,7 +54,7 @@ export function EditTransferOwnership({
     >
       <div>
         <div className="w-full flex gap-4">
-          <Input
+          <Input2
             type="text"
             className="px-3 py-4"
             value={newOwner}
@@ -70,30 +69,31 @@ export function EditTransferOwnership({
                 setErr("Invalid address");
               else setErr("");
             }}
+            err={err}
+            afterInput={
+              <div className="mt-[1px] mr-1">
+                <Button
+                  onClick={doWrite}
+                  disabled={loading || err.length > 0 || newOwner.length == 0}
+                  size="sm"
+                  rounded="xl"
+                  variant="destructive"
+                >
+                  {!loading && <>Transfer</>}
+                  {loading && (
+                    <>
+                      <IconSpinner
+                        width="20"
+                        stopColor="#FFFFFF"
+                        className="animate-spin"
+                      />
+                    </>
+                  )}
+                </Button>
+              </div>
+            }
           />
-          <Button
-            onClick={doWrite}
-            disabled={loading || err.length > 0 || newOwner.length == 0}
-            size="sm"
-            variant="destructive"
-          >
-            {!loading && <>Transfer</>}
-            {loading && (
-              <>
-                <IconSpinner
-                  width="20"
-                  stopColor="#FFFFFF"
-                  className="animate-spin"
-                />
-              </>
-            )}
-          </Button>
         </div>
-        {err.length > 0 && (
-          <div className="text-xs font-light mt-2 tracking-wide text-red-500 flex gap-1">
-            <IconCaution width="15px" fillA="#ed4f41" /> {err}
-          </div>
-        )}
       </div>
     </EditRow>
   );

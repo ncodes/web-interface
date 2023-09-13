@@ -44,7 +44,6 @@ export function ManageLiquiditySheet(props: {
             )}
           </div>
         </SheetHeader>
-        x
         <Tabs
           defaultValue={"basic"}
           className="w-full h-full transition-all duration-500"

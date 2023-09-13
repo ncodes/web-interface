@@ -7,8 +7,11 @@ export default function Input2(props: {
   value?: string;
   type?: string;
   isFocused?: boolean;
+  disabled?: boolean;
+  spellCheck?: boolean;
   placeholder?: string;
   className?: string;
+  containerClassName?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement, Element>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void;
@@ -25,6 +28,7 @@ export default function Input2(props: {
   return (
     <div
       className={cn(
+        props.containerClassName,
         "flex-1 bg-card-background border rounded-2xl transition-all duration-500",
         {
           "border-card-border": !focused,
@@ -38,7 +42,8 @@ export default function Input2(props: {
             value={props.value}
             type={props.type || "text"}
             placeholder={props.placeholder}
-            spellCheck={false}
+            disabled={props.disabled}
+            spellCheck={props.spellCheck}
             className={cn(
               "bg-transparent border-transparent px-3 outline-none focus-visible:ring-0",
               props.className
