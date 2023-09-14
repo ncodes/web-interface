@@ -67,29 +67,36 @@ export function MarketsTabContent() {
         </div>
       )}
 
-      {!isLoading && isSuccess && (
-        <>
-          <Paginator
-            curPage={offset}
-            total={data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + 1)}
-            onPrev={() => setOffset(offset - 1)}
-          />
-          <div className="flex flex-col gap-3 p-3 pt-0 pb-0">
-            {data?.markets.map((market: Market) => (
-              <MarketRow market={market} key={market.address} />
-            ))}
+      {!isLoading && isSuccess && data?.markets?.length > 0 && (
+        <div className="flex flex-col gap-3 min-h-[500px]">
+          <div className="flex flex-col gap-3">
+            <Paginator
+              curPage={offset}
+              total={data?.meta?.queryCount}
+              limit={limit}
+              onNext={() => setOffset(offset + 1)}
+              onPrev={() => setOffset(offset - 1)}
+            />
+            <div className="flex flex-col gap-3 p-3 pt-0 pb-0">
+              {data?.markets.map((market: Market) => (
+                <MarketRow market={market} key={market.address} />
+              ))}
+              {data?.markets.map((market: Market) => (
+                <MarketRow market={market} key={market.address} />
+              ))}
+            </div>
           </div>
-          <Paginator
-            className="border-t"
-            curPage={offset}
-            total={data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + 1)}
-            onPrev={() => setOffset(offset - 1)}
-          />
-        </>
+          <div className="flex-1 flex flex-col justify-end">
+            <Paginator
+              className="border-t"
+              curPage={offset}
+              total={data?.meta?.queryCount}
+              limit={limit}
+              onNext={() => setOffset(offset + 1)}
+              onPrev={() => setOffset(offset - 1)}
+            />
+          </div>
+        </div>
       )}
 
       {!isLoading && data?.markets?.length == 0 && (

@@ -13,6 +13,7 @@ import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { cn } from "../libs/utils.ts";
 import { useConnectorContext } from "../hooks/connectors/context.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
+import { Footer } from "../components/Footer.tsx";
 
 export default function Layout({
   tab,
@@ -23,7 +24,7 @@ export default function Layout({
 }) {
   const headerHeight = 55;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isLargeLaptop = useMediaQuery("(min-width: 1280px)");
+  const isXl = useMediaQuery("(min-width: 1280px)");
   const { address } = useConnectorContext();
   const setUser = useStore((state) => state.setUser);
   const { getUser } = useUserService();
@@ -44,8 +45,8 @@ export default function Layout({
   }, [query.data, query.isSuccess, setUser]);
 
   useEffect(() => {
-    setMobileMenuOpen(isLargeLaptop);
-  }, [isLargeLaptop]);
+    setMobileMenuOpen(isXl);
+  }, [isXl]);
 
   useMotionValueEvent(scrollY, "change", (val) => {
     setScrollYPos(val);
@@ -59,7 +60,7 @@ export default function Layout({
     <div>
       <Helmet>
         <title>Dashboard</title>
-        <body className="bg-background " />
+        <body className="bg-background" />
       </Helmet>
 
       <div
@@ -79,28 +80,39 @@ export default function Layout({
           <div>
             <Header onClick={openMobileMenu} height={`h-[${headerHeight}px]`} />
           </div>
-          <div className="flex flex-1 h-full">
+          <div className="flex flex-1">
             <div className="flex-1 flex flex-col mt-3">
               <UnlinkedAccountNotice />
               <div className="relative flex-1 flex flex-col">
-                <div className="absolute z-0 min-h-full w-full h-auto border border-gray-800 border-b-0 rounded-t-3xl bg-vampire-black">
-                  {tab}
+                <div className="absolute w-full">
+                  <div className="z-0  border border-gray-800 rounded-3xl bg-vampire-black overflow-hidden">
+                    {tab}
+                  </div>
+                  <div className="lg:hidden">
+                    <Footer />
+                  </div>
                 </div>
               </div>
             </div>
             {rightSide && (
-              <motion.div
-                animate={{
-                  marginTop:
-                    scrollYPos > headerHeight ? scrollYPos - headerHeight : 0,
-                }}
-                transition={{ ease: "linear", duration: 0.5 }}
-                className={cn(
-                  `w-[400px] px-5 pr-0 h-full overflow-auto hidden xl:flex`
-                )}
-              >
-                {rightSide}
-              </motion.div>
+              <div className="w-[400px] relative hidden xl:flex flex-col">
+                <div
+                  className={`fixed h-full flex flex-col flex-1`}
+                  style={{ paddingBottom: `${headerHeight}px` }}
+                >
+                  <motion.div
+                    animate={{
+                      marginTop: scrollYPos > 50 ? -55 : 0,
+                    }}
+                    transition={{ ease: "linear", duration: 0.1 }}
+                    className={cn(
+                      `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`
+                    )}
+                  >
+                    {rightSide}
+                  </motion.div>
+                </div>
+              </div>
             )}
           </div>
         </div>

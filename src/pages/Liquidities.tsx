@@ -91,10 +91,10 @@ export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
     <Layout
       tab={<LiquidityTabs defaultTab={defaultTab} />}
       rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
+        <div className="flex w-full justify-between flex-col pt-2">
           <LiquidityFilter ownerMode={loc.pathname == "/liquidity/owned"} />
           <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
+            <div className="text-gray-200">
               <Footer />
             </div>
           </div>

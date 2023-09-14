@@ -82,30 +82,36 @@ export function OffersTabContent() {
         </div>
       )}
 
-      {!offers.isLoading && offers.isSuccess && (
-        <>
-          <Paginator
-            curPage={offset}
-            total={offers.data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + 1)}
-            onPrev={() => setOffset(offset - 1)}
-          />
-          <div className="flex flex-col gap-3 p-3 pt-0 pb-0">
-            {offers.data?.offers.map((offer: Offer) => (
-              <OfferRow offer={offer} key={offer.offerId} />
-            ))}
+      {!offers.isLoading &&
+        offers.isSuccess &&
+        offers.data?.offers?.length > 0 && (
+          <div className="flex flex-col gap-3 min-h-[500px]">
+            <div className="flex flex-col gap-3">
+              <Paginator
+                curPage={offset}
+                total={offers.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + 1)}
+                onPrev={() => setOffset(offset - 1)}
+              />
+              <div className="flex flex-col gap-3 p-3 pt-0 pb-0">
+                {offers.data?.offers.map((offer: Offer) => (
+                  <OfferRow offer={offer} key={offer.offerId} />
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col justify-end">
+              <Paginator
+                className="border-t"
+                curPage={offset}
+                total={offers.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + 1)}
+                onPrev={() => setOffset(offset - 1)}
+              />
+            </div>
           </div>
-          <Paginator
-            className="border-t"
-            curPage={offset}
-            total={offers.data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + 1)}
-            onPrev={() => setOffset(offset - 1)}
-          />
-        </>
-      )}
+        )}
 
       {!offers.isLoading && offers.data?.offers?.length == 0 && (
         <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">

@@ -77,35 +77,38 @@ export function MyMarketsTabContent() {
         </div>
       )}
 
-      {!isLoading && isSuccess && (
-        <>
-          <Paginator
-            curPage={offset}
-            total={data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + 1)}
-            onPrev={() => setOffset(offset - 1)}
-          />
-          <div className="flex flex-col gap-3 p-3 pt-0">
-            {data?.markets.map((market: Market) => (
-              <MarketRow
-                market={market}
-                key={market.address}
-                ownerMode={isEqlStr(market.creator, address)}
-              />
-            ))}
+      {!isLoading && isSuccess && data?.markets?.length > 0 && (
+        <div className="flex flex-col gap-3 min-h-[500px]">
+          <div className="flex flex-col gap-3">
+            <Paginator
+              curPage={offset}
+              total={data?.meta?.queryCount}
+              limit={limit}
+              onNext={() => setOffset(offset + 1)}
+              onPrev={() => setOffset(offset - 1)}
+            />
+            <div className="flex flex-col gap-3 p-3 pt-0">
+              {data?.markets.map((market: Market) => (
+                <MarketRow
+                  market={market}
+                  key={market.address}
+                  ownerMode={isEqlStr(market.creator, address)}
+                />
+              ))}
+            </div>
           </div>
-          <Paginator
-            className="border-t mb-0"
-            curPage={offset}
-            total={data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + 1)}
-            onPrev={() => setOffset(offset - 1)}
-          />
-        </>
+          <div className="flex-1 flex flex-col justify-end">
+            <Paginator
+              className="border-t mb-0"
+              curPage={offset}
+              total={data?.meta?.queryCount}
+              limit={limit}
+              onNext={() => setOffset(offset + 1)}
+              onPrev={() => setOffset(offset - 1)}
+            />
+          </div>
+        </div>
       )}
-
       {!isLoading && data?.markets?.length == 0 && (
         <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
           No market found

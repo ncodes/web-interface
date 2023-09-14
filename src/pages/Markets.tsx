@@ -31,7 +31,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   return (
     <Tabs
       defaultValue={defaultTab || "markets"}
-      className="w-full h-full transition-all duration-500"
+      className="w-full h-full transition-all duration-500 "
       onValueChange={(value) => {
         setCurrentTab(value);
       }}
@@ -139,7 +139,7 @@ export default function Markets({ defaultTab }: { defaultTab?: string }) {
     <Layout
       tab={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
+        <div className="flex w-full justify-between flex-col pt-2">
           <MarketFilter />
           <div className="relative">
             <div className="text-gray-200 bottom-0 w-full">

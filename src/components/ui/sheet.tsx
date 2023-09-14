@@ -2,8 +2,32 @@ import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../libs/utils.ts";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useEffect } from "react";
+import { useLockedBody } from "usehooks-ts";
+import useStore from "../../hooks/store/useStore.ts";
 
-const Sheet = SheetPrimitive.Root;
+const Sheet = function (
+  props: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root>
+) {
+  const [, setLocked] = useLockedBody(false);
+  const openState = useStore((s) => s.openState);
+
+  useEffect(() => {
+    setLocked(props.open || false);
+  }, [props.open]);
+
+  useEffect(() => {
+    if (!props.open) return;
+    setLocked(false);
+  }, [openState]);
+
+  return (
+    <VisuallyHidden>
+      <SheetPrimitive.Root {...props}>{props.children}</SheetPrimitive.Root>
+    </VisuallyHidden>
+  );
+};
 
 const SheetTrigger = SheetPrimitive.Trigger;
 
