@@ -28,13 +28,14 @@ import { useLiquidityService } from "../hooks/services/backend/useLiquidityServi
 import { Paginator } from "../components/Paginator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
 import { useConnectorContext } from "../hooks/connectors/context.tsx";
+import { isEqlStr } from "../libs/helpers.ts";
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openAddLiquiditySheet, setOpenAddLiquiditySheet] = useState(false);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const liquidityFilter = useStore((state) => state.liquidityFilter);
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getMarket } = useMarketService();
   const { listLiquidities } = useLiquidityService();
   const { id } = useParams();
@@ -196,6 +197,7 @@ function MarketTabs() {
                     <LiquidityRow
                       liquidity={liquidity}
                       key={`${liquidity.provider}:${liquidity.lid}`}
+                      ownerMode={isEqlStr(liquidity.provider, address)}
                     />
                   ))}
                 </div>

@@ -71,7 +71,7 @@ export function ManageLiqEditMaxSwapAmount({
                 value={maxSwap}
                 type="number"
                 placeholder="0.00"
-                className="bg-transparent border-transparent px-3 outline-none focus-visible:ring-0"
+                className="bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0"
                 onChange={(e) => setMaxSwap(e.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}

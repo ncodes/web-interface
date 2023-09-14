@@ -5,6 +5,7 @@ import { formatUnits } from "ethers/lib/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { AxiosResponse } from "axios";
+import _ from "lodash";
 import * as approx from "approximate-number";
 import * as humanizeDuration from "humanize-duration";
 import { RequestError } from "./RequestError.ts";
@@ -325,4 +326,27 @@ export function tokenTypeToAssetType(
 // Delay for a number of milliseconds
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Split and clean badges
+ * @param badges
+ */
+export function splitAndCleanBadges(badges: string) {
+  return _.map(
+    _.filter(badges.split(","), (v) => v != ""),
+    (v) => v.trim().replaceAll(" ", "")
+  );
+}
+
+/**
+ * Split badge from path
+ * @param badges - The badges
+ */
+export function splitBadgeFromPath(badges: string[]) {
+  return badges.map((badge) => {
+    const parts = badge.split("/");
+    if (parts.length > 1) return [parts[0], parts[1]];
+    return [parts[0], ""];
+  });
 }

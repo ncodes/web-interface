@@ -52,7 +52,7 @@ export function LeftSidebar(props: {
       />
       <div
         className={cn(
-          "w-[250px] left-0 flex absolute xl:relative z-[15] md:z-[20] border-r xl:border-r-0 border-gray-800 xl:pl-0 xl:bg-transparent h-screen transition-left duration-150",
+          "w-[250px] left-0 flex absolute xl:relative z-[15] xl:z-[10] border-r xl:border-r-0 border-gray-800 xl:pl-0 xl:bg-transparent h-screen transition-left duration-150",
           {
             "absolute top-0 -left-[280px] z-[6]  ": !openOverlay,
           }

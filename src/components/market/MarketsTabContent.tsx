@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { RequestError } from "../../libs/RequestError.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { isEqlStr } from "../../libs/helpers.ts";
 
 export function MarketsTabContent() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { listMarkets } = useMarketService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const fullLoadCount = useStore((state) => state.fullLoadCount);
@@ -79,10 +80,11 @@ export function MarketsTabContent() {
             />
             <div className="flex flex-col gap-3 p-3 pt-0 pb-0">
               {data?.markets.map((market: Market) => (
-                <MarketRow market={market} key={market.address} />
-              ))}
-              {data?.markets.map((market: Market) => (
-                <MarketRow market={market} key={market.address} />
+                <MarketRow
+                  market={market}
+                  key={market.address}
+                  ownerMode={isEqlStr(market.creator, address)}
+                />
               ))}
             </div>
           </div>

@@ -58,7 +58,7 @@ export function LinkAccountSetting() {
     const msg = createSignatureMessage(address, email);
     const sig = await sign(msg.toString("utf-8"))
       .catch((e) => {
-        simpleError(e.message, { position: "top-center", duration: 10000 });
+        simpleError(e.message, { position: "top-center", duration: 5000 });
       })
       .finally(() => {
         setDisabled(false);

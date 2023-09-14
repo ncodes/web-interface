@@ -6,7 +6,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion.tsx";
 import { LinkAccountSetting } from "./LinkAccountSetting.tsx";
-import { LiquidityInstruction } from "./LiquidityInstruction.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 export function AccountTab() {
@@ -24,15 +23,6 @@ export function AccountTab() {
           </AccordionTrigger>
           <AccordionContent className="px-5 tracking-wide">
             <LinkAccountSetting />
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem className="mt-3" value="liq-instructions">
-          <AccordionTrigger className="px-5 text-lg pb-2 tracking-wide">
-            Liquidity Instruction
-          </AccordionTrigger>
-          <AccordionContent className="px-5 tracking-wide">
-            <LiquidityInstruction />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

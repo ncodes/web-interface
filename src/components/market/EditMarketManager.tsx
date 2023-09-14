@@ -1,6 +1,6 @@
 import { EditRow } from "./EditRow.tsx";
 import { Button } from "../ui/Button.tsx";
-import { isDev } from "../../libs/helpers.ts";
+import { delay, isDev } from "../../libs/helpers.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useState } from "react";
@@ -31,8 +31,9 @@ export function EditMarketManager({
       setLoading(true);
       const txHash = await setManager(market.address, address);
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully updated market manager", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],

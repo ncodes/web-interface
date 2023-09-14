@@ -5,7 +5,7 @@ import useMarketContract from "../../hooks/services/contracts/useMarketContract.
 import { useState } from "react";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { isDev } from "../../libs/helpers.ts";
+import { delay, isDev } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
 export function EditRenounceOwnership({
@@ -26,8 +26,9 @@ export function EditRenounceOwnership({
       setLoading(true);
       const txHash = await renounceOwnership(market.address);
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully renounced ownership", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],

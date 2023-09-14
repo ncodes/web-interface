@@ -38,7 +38,7 @@ interface InputState {
   setErr?: Dispatch<SetStateAction<string>>;
 }
 
-export function ManageBasicLiquidityTab({
+export function ManageGeneralLiquidityTab({
   onClick,
   liquidity,
   market,
@@ -262,7 +262,7 @@ export function ManageBasicLiquidityTab({
 
   return (
     <TabsContent
-      value="basic"
+      value="general"
       className={`p-0 mt-0 overflow-auto ${sheetHeight}`}
     >
       <div>

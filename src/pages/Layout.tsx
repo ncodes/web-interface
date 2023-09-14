@@ -63,10 +63,7 @@ export default function Layout({
         <body className="bg-background" />
       </Helmet>
 
-      <div
-        ref={ref}
-        className="container-x flex h-screen text-white text z-[5]"
-      >
+      <div ref={ref} className="container-x flex h-screen text-white text ">
         <LeftSidebar
           open={mobileMenuOpen}
           headerHeight={headerHeight}
@@ -85,7 +82,7 @@ export default function Layout({
               <UnlinkedAccountNotice />
               <div className="relative flex-1 flex flex-col">
                 <div className="absolute w-full">
-                  <div className="z-0  border border-gray-800 rounded-3xl bg-vampire-black overflow-hidden">
+                  <div className="z-0  border border-gray-800 rounded-3xl bg-vampire-black">
                     {tab}
                   </div>
                   <div className="lg:hidden">

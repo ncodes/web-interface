@@ -8,7 +8,7 @@ export function TabContentHeader(props: { address: string }) {
 
   return (
     <div className="!select-none text-gray-500 text-[12px] font-light">
-      <span className="text-white w-full px-5 py-2 border-b border-gray-800 flex font-light tracking-widest gap-1 items-center">
+      <span className="text-white w-full px-5 py-2 border-b border-gray-800 flex font-light tracking-wider gap-1 items-center">
         <span className="text-chinese-green">Address:</span>
         <span className="flex items-center gap-1">
           {shortenAddress(props.address)}

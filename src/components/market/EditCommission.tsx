@@ -4,7 +4,7 @@ import useMarketContract from "../../hooks/services/contracts/useMarketContract.
 import { useState } from "react";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { isDev } from "../../libs/helpers.ts";
+import { delay, isDev } from "../../libs/helpers.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import Input2 from "../Input2.tsx";
@@ -25,8 +25,9 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
       setLoading(true);
       const txHash = await write(props.market.address, commission * 100);
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully created a market", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],

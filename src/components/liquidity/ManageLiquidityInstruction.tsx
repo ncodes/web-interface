@@ -1,29 +1,31 @@
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion.tsx";
 import { Textarea } from "../ui/textarea.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { InfoIcon } from "lucide-react";
-import { TabsContent } from "../ui/Tabs.tsx";
 import { Button } from "../ui/Button.tsx";
-import { useCallback, useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import IconSpinner from "../icons/IconSpinner.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
+import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import {
   InstructionsWithGrantSigResponse,
   useInstructionsService,
 } from "../../hooks/services/backend/useInstructionsService.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
-import { isDev } from "../../libs/helpers.ts";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { useCallback, useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { delay, isDev } from "../../libs/helpers.ts";
 
-export default function ManageLiquidityInstructionsTab({
+export function ManageLiquidityInstruction({
   liquidity,
 }: {
   liquidity: Liquidity;
 }) {
-  const [sheetHeight] = useSheetInfo();
   const { notifySuccess, notifyError } = useToast();
-  const { loadInstruction, updateInstruction, humanizeErrors } =
+  const { loadInstruction, grantBadgeBySig, humanizeErrors } =
     useBadgeMgrContract();
   const { updateInstructions } = useInstructionsService();
   const { getChainInfo, address } = useConnectorContext();
@@ -49,7 +51,7 @@ export default function ManageLiquidityInstructionsTab({
       .then((data) => {
         if (!data) return;
         const liqKey = `${liquidity.marketAddress}:${liquidity.provider}:${liquidity.lid}`;
-        const content = data.liquidity[liqKey];
+        const content = data.liquidity[liqKey.toLowerCase()];
         if (!content) return;
         setContent(content);
         setOriginalContent(content);
@@ -63,10 +65,11 @@ export default function ManageLiquidityInstructionsTab({
     async (data: InstructionsWithGrantSigResponse) => {
       try {
         setTxLoading(true);
-        const txHash = await updateInstruction(data.sigInfo);
+        const txHash = await grantBadgeBySig(data.sigInfo);
+        await delay(5000);
         const blockExplorer = getChainInfo().blockExplorer;
         notifySuccess("Successfully granted instruction badge", {
-          duration: 10000,
+          duration: 5000,
           links: [
             {
               label: "View Transaction",
@@ -86,16 +89,16 @@ export default function ManageLiquidityInstructionsTab({
   );
 
   return (
-    <TabsContent
-      value="instructions"
-      className={`p-0 mt-0 h-full overflow-auto ${sheetHeight}`}
-    >
-      <div className="px-5 pt-3">
+    <AccordionItem value="instruction">
+      <AccordionTrigger className="text-lg pb-2 tracking-wide mt-2 px-5">
+        Instruction
+      </AccordionTrigger>
+      <AccordionContent className="tracking-wide px-5">
         <div className="font-light text-gray-100 text-sm">
           Provide takers with essential instructions for engaging with this
           liquidity.
         </div>
-        <div className="mt-1">
+        <div className="mt-1 px-1">
           <div className="flex justify-end text-xs text-gray-400">
             {content?.length || 0}/250
           </div>
@@ -175,7 +178,7 @@ export default function ManageLiquidityInstructionsTab({
             {!update.isLoading && !txLoading && "Publish"}
           </Button>
         </div>
-      </div>
-    </TabsContent>
+      </AccordionContent>
+    </AccordionItem>
   );
 }

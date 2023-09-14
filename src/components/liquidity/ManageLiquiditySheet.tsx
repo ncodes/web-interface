@@ -3,8 +3,8 @@ import React, { useEffect } from "react";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
-import { ManageBasicLiquidityTab } from "./ManageBasicLiquidityTab.tsx";
-import ManageLiquidityInstructionsTab from "./ManageLiquidityInstructionsTab.tsx";
+import { ManageGeneralLiquidityTab } from "./ManageGeneralLiquidityTab.tsx";
+import ManageLiquidityRulesTab from "./ManageLiquidityRulesTab.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
 
@@ -26,7 +26,7 @@ export function ManageLiquiditySheet(props: {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0"
         )}
         side={sheetSide}
       >
@@ -45,7 +45,7 @@ export function ManageLiquiditySheet(props: {
           </div>
         </SheetHeader>
         <Tabs
-          defaultValue={"basic"}
+          defaultValue={"general"}
           className="w-full h-full transition-all duration-500"
         >
           <ScrollOverflowIndicator>
@@ -53,23 +53,23 @@ export function ManageLiquiditySheet(props: {
               {props.liquidity && (
                 <TabsList className="justify-start px-3 py-2 border-b border-modal-border">
                   <TabsTrigger
-                    value="basic"
+                    value="general"
                     className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
                   >
-                    Basic
+                    General
                   </TabsTrigger>
                   <TabsTrigger
-                    value="instructions"
+                    value="rules"
                     className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
                   >
-                    Instructions
+                    Rules
                   </TabsTrigger>
                 </TabsList>
               )}
             </ScrollAreaHorizontal>
           </ScrollOverflowIndicator>
 
-          <ManageBasicLiquidityTab
+          <ManageGeneralLiquidityTab
             liquidity={props.liquidity as Liquidity}
             market={props.market}
             close={() => {
@@ -82,9 +82,7 @@ export function ManageLiquiditySheet(props: {
             }}
           />
 
-          <ManageLiquidityInstructionsTab
-            liquidity={props.liquidity as Liquidity}
-          />
+          <ManageLiquidityRulesTab liquidity={props.liquidity as Liquidity} />
         </Tabs>
       </SheetContent>
     </Sheet>

@@ -18,7 +18,7 @@ export function LiquidityInstruction() {
   const { updateInstructions } = useInstructionsService();
   const {
     loadInstruction,
-    updateInstruction: updateInstruction,
+    grantBadgeBySig: updateInstruction,
     humanizeErrors,
   } = useBadgeMgrContract();
   const { getChainInfo, address } = useConnectorContext();
@@ -56,7 +56,7 @@ export function LiquidityInstruction() {
         const txHash = await updateInstruction(data.sigInfo);
         const blockExplorer = getChainInfo().blockExplorer;
         notifySuccess("Successfully granted instruction badge", {
-          duration: 10000,
+          duration: 5000,
           links: [
             {
               label: "View Transaction",

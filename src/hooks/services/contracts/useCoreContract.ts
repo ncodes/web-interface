@@ -66,20 +66,49 @@ export default function useCoreContract() {
   }
 
   /**
+   * Set swap badges for a liquidity
+   * @param market The market address
+   * @param lid The liquidity ID
+   * @param swapBadges The swap badges
+   */
+  async function setSwapBadgeForLiquidity(
+    market: string,
+    lid: BigNumberish,
+    swapBadges: string[][]
+  ) {
+    return simulateAndWriteContract("core", "setSwapBadgeForLiquidity", [
+      market,
+      lid,
+      swapBadges,
+    ]);
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
   function humanizeErrors(error: { message: string } | unknown) {
     if (error instanceof Error) {
+      // setSwapBadgeForLiquidity
+      if (error.message.includes("OC: ZERO_LIQ"))
+        return "Cannot perform action on empty liquidity";
+
+      // updateFungibleLiquidity: MKT_BADGE_REQ
+      if (error.message.includes("OC: MKT_BADGE_REQ"))
+        return "Permission denied: Missing one or more market badges";
+
+      // Common
       if (error.message.includes("ERC20: transfer amount exceeds balance"))
         return "Insufficient balance";
     }
+
     return "Transaction failed";
   }
 
   return {
     updateFungibleLiquidity,
     hasLiquidity,
+    setSwapBadgeForLiquidity,
     humanizeErrors,
   };
 }

@@ -12,10 +12,11 @@ import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { LiquidityRow } from "./LiquidityRow.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { isEqlStr } from "../../libs/helpers.ts";
 
 export function LiquidityTabContent() {
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getLiquidity } = useLiquidityService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { market, provider, lid } = useParams();
@@ -66,6 +67,7 @@ export function LiquidityTabContent() {
             <LiquidityRow
               liquidity={liquidity.data}
               noFocus={true}
+              ownerMode={isEqlStr(liquidity.data.provider, address)}
               className="rounded-none border-x-0 border-t-0"
             />
 

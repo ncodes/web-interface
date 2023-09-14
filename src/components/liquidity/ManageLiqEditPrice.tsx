@@ -100,7 +100,7 @@ export function ManageLiqEditPrice({
                 value={price}
                 type="number"
                 placeholder="0.00"
-                className="bg-transparent border-transparent px-3 outline-none focus-visible:ring-0"
+                className="bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0"
                 onChange={(e) => {
                   setPrice(e.target.value);
                   setOriginalPrice(e.target.value);

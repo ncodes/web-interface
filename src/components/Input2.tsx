@@ -47,7 +47,7 @@ export default function Input2(props: {
             disabled={props.disabled}
             spellCheck={props.spellCheck}
             className={cn(
-              "bg-transparent border-transparent px-3 outline-none focus-visible:ring-0",
+              "bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0",
               props.className
             )}
             onChange={props.onChange}

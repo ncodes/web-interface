@@ -8,7 +8,7 @@ import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
-import { isDev } from "../../libs/helpers.ts";
+import { delay, isDev } from "../../libs/helpers.ts";
 
 export function EditOfferOnlyMode({
   market,
@@ -29,8 +29,9 @@ export function EditOfferOnlyMode({
       setLoading(true);
       const txHash = await markAsOfferOnly(market.address);
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully enabled market-only mode", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],

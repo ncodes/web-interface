@@ -46,7 +46,7 @@ export default function useBadgeMgrContract() {
    * Create a new instruction badge from a signature
    * @param sigInfo The signature info
    */
-  async function updateInstruction(sigInfo: GrantSigInfo) {
+  async function grantBadgeBySig(sigInfo: GrantSigInfo) {
     if (sigInfo.isNew) {
       const values = sigInfo.values as NewGrantValues;
       return simulateAndWriteContract("badgeManager", "grantBadgeBySig", [
@@ -77,7 +77,7 @@ export default function useBadgeMgrContract() {
 
   return {
     loadInstruction,
-    updateInstruction,
+    grantBadgeBySig,
     humanizeErrors,
   };
 }

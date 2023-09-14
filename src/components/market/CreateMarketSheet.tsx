@@ -17,7 +17,7 @@ import { AssetSelector } from "./AssetSelector.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
-import { isDev, tokenTypeToAssetType } from "../../libs/helpers.ts";
+import { delay, isDev, tokenTypeToAssetType } from "../../libs/helpers.ts";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import _ from "lodash";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
@@ -87,11 +87,12 @@ export function CreateMarketSheet({
       );
       const blockExplorer = getChainInfo().blockExplorer;
       notifySuccess("Successfully created a market", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
+      await delay(5000);
       queryClient.refetchQueries(["getMarkets"]).catch(console.error);
       close();
     } catch (error) {

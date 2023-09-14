@@ -13,6 +13,7 @@ export function ToolTip(props: {
   className?: string;
   className2?: string;
   side?: "top" | "bottom" | "left" | "right";
+  allowPropagation?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -30,7 +31,7 @@ export function ToolTip(props: {
           <span
             className="cursor-pointer"
             onClick={(e) => {
-              e.stopPropagation();
+              if (!props.allowPropagation) e.stopPropagation();
               setOpen(!open);
             }}
           >

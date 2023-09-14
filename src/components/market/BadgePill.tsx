@@ -29,12 +29,13 @@ export function BadgePill({
   return (
     <Sheet
       open={open}
+      notHidden={true}
       onOpenChange={(isOpen) => {
         setOpen(isOpen);
       }}
     >
       <SheetTrigger>
-        <ToolTip tip={tip}>
+        <ToolTip tip={tip} allowPropagation>
           <Badge
             className="w-auto font-normal tracking-wider whitespace-nowrap  cursor-pointer rounded-full bg-gray-800  text-gray-300 hover:bg-chinese-green hover:text-gray-900 flex items-center gap-2"
             variant="secondary"

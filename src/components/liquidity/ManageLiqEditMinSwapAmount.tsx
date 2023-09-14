@@ -69,7 +69,7 @@ export function ManageLiqEditMinSwapAmount({
                 value={minSwap}
                 type="number"
                 placeholder="0.00"
-                className="bg-transparent border-transparent px-3 outline-none focus-visible:ring-0"
+                className="bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0"
                 onChange={(e) => setMinSwap(e.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}

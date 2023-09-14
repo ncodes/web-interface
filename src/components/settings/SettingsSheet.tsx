@@ -12,12 +12,12 @@ import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { AccountTab } from "./AccountTab.tsx";
-import { FeePouchTab } from "./FeePouchTab.tsx";
 import { BalancesTab } from "./BalancesTab.tsx";
 import { SettingsFooter } from "./SettingsFooter.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import { RulesTab } from "./RulesTab.tsx";
 
 export function SettingsSheet(props: {
   children?: React.ReactNode;
@@ -68,23 +68,23 @@ export function SettingsSheet(props: {
                     Balances
                   </TabsTrigger>
                   <TabsTrigger
-                    value="fee-purse"
-                    className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
-                  >
-                    Fee Pouch
-                  </TabsTrigger>
-                  <TabsTrigger
                     value="account"
                     className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
                   >
                     Account
                   </TabsTrigger>
+                  <TabsTrigger
+                    value="rules"
+                    className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                  >
+                    Rules
+                  </TabsTrigger>
                 </TabsList>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>
             <BalancesTab address={address} />
-            <FeePouchTab />
             <AccountTab />
+            <RulesTab />
             <SettingsFooter
               openWalletManager={() => {
                 toggleOpenState && toggleOpenState("settingsSheet");

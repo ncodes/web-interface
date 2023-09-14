@@ -6,7 +6,12 @@ import _ from "lodash";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
-import { isDev } from "../../libs/helpers.ts";
+import {
+  delay,
+  isDev,
+  splitAndCleanBadges,
+  splitBadgeFromPath,
+} from "../../libs/helpers.ts";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
@@ -31,21 +36,6 @@ export function EditBadgeRequirements({
     market.requiredSwapBadges.join(",")
   );
 
-  function splitAndCleanBadges(badges: string) {
-    return _.map(
-      _.filter(badges.split(","), (v) => v != ""),
-      (v) => v.trim().replaceAll(" ", "")
-    );
-  }
-
-  function splitBadgeFromPath(badges: string[]) {
-    return badges.map((badge) => {
-      const parts = badge.split("/");
-      if (parts.length > 1) return [parts[0], parts[1]];
-      return [parts[0], ""];
-    });
-  }
-
   const doWrite = async () => {
     try {
       setLoading(true);
@@ -55,8 +45,9 @@ export function EditBadgeRequirements({
         splitBadgeFromPath(splitAndCleanBadges(swapBadges))
       );
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully updated badge requirement", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],

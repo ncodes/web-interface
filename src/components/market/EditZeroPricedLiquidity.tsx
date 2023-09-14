@@ -3,7 +3,7 @@ import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { isDev } from "../../libs/helpers.ts";
+import { delay, isDev } from "../../libs/helpers.ts";
 import { EditRow } from "./EditRow.tsx";
 import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
 import { Switch } from "../ui/switch.tsx";
@@ -29,8 +29,9 @@ export function EditZeroPricedLiquidity({
       setLoading(true);
       const txHash = await allowZeroOfferPrice(market.address);
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully enabled zero price mode", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],

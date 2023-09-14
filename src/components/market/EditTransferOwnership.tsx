@@ -7,7 +7,7 @@ import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { isAddress } from "viem";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { isDev } from "../../libs/helpers.ts";
+import { delay, isDev } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
 
 export function EditTransferOwnership({
@@ -30,8 +30,9 @@ export function EditTransferOwnership({
       setLoading(true);
       const txHash = await transferOwnership(market.address, newOwner);
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully transferred ownership", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],

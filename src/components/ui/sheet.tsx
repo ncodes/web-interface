@@ -8,7 +8,9 @@ import { useLockedBody } from "usehooks-ts";
 import useStore from "../../hooks/store/useStore.ts";
 
 const Sheet = function (
-  props: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root>
+  props: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root> & {
+    notHidden?: boolean;
+  }
 ) {
   const [, setLocked] = useLockedBody(false);
   const openState = useStore((s) => s.openState);
@@ -21,6 +23,8 @@ const Sheet = function (
     if (!props.open) return;
     setLocked(false);
   }, [openState]);
+
+  if (props.notHidden) return <SheetPrimitive.Root {...props} />;
 
   return (
     <VisuallyHidden>

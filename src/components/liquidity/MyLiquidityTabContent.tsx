@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { isEqlStr } from "../../libs/helpers.ts";
 
 export function MyLiquidityTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -87,7 +88,7 @@ export function MyLiquidityTabContent() {
                 <LiquidityRow
                   liquidity={liq}
                   key={`${liq.marketAddress}:${liq.lid}`}
-                  ownerMode
+                  ownerMode={isEqlStr(liq.provider, address)}
                 />
               ))}
             </div>

@@ -6,7 +6,7 @@ import { EditFieldWithLabelAndSlider } from "./EditFieldWithLabelAndSlider.tsx";
 import { Button } from "../ui/Button.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { humanizeDur2, isDev } from "../../libs/helpers.ts";
+import { delay, humanizeDur2, isDev } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
 export function EditDisputeDurations({
@@ -37,8 +37,9 @@ export function EditDisputeDurations({
         votingDur
       );
       const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
       notifySuccess("Successfully updated durations", {
-        duration: 10000,
+        duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
