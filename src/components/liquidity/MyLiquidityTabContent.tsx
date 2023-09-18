@@ -73,7 +73,7 @@ export function MyLiquidityTabContent() {
         </div>
       )}
 
-      {!isLoading && isSuccess && data?.liquidities?.length > 0 && (
+      {address && !isLoading && isSuccess && data?.liquidities?.length > 0 && (
         <div className="flex flex-col gap-3 min-h-[500px]">
           <div className="flex flex-col gap-3">
             <Paginator

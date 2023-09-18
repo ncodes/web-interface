@@ -45,6 +45,7 @@ export interface LiquidityFilter {
   kycLp?: boolean;
   kycTaker?: boolean;
   swapBadges?: string;
+  paymentMethods?: string;
 }
 
 export interface SwapFilter {

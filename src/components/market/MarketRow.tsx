@@ -202,7 +202,29 @@ export function MarketRow({
         <div className="flex w-full px-3 pr-0 md:px-3 md:pr-0 overflow-hidden">
           <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
             {/*<span className="hidden sm:inline">Badges</span>*/}
-            <ToolTip tip="Badges required by the market creator. LP stands for 'Liquidity Provider', TK for 'Taker'">
+            <ToolTip
+              tip={
+                <>
+                  Market-level badge is used to limit access to market functions
+                  or describe a preference. It is set by the market creator.
+                  <br />
+                  <br />
+                  A badge prefixed with:
+                  <br />
+                  <br />
+                  <b className="text-chinese-green">LP</b>: requires the{" "}
+                  <b>Liquidity Provider</b> to have the badge before they can
+                  add liquidity to the market (ex: <i>LP: verified</i> means the
+                  liquidity provider must have the <i>verified</i> badge).
+                  <br />
+                  <br />
+                  <b className="text-chinese-green">TK</b>: requires the{" "}
+                  <b>Taker</b> to have the badge before they can swap the
+                  liquidity in the market (ex: <i>TK: verified</i> means the
+                  taker must have the <i>verified</i> badge).
+                </>
+              }
+            >
               <span className="text-gray-400 hover:text-chinese-green cursor-pointer transition-all duration-300">
                 <IconInfoCircle width="22px" />
               </span>
@@ -217,7 +239,15 @@ export function MarketRow({
                       key={badge}
                       name={badge.toUpperCase()}
                       prefix="LP"
-                      tip={`Liquidity providers must have "${badge}" badge to be allowed to add liquidity`}
+                      tip={
+                        <>
+                          Liquidity providers must have "
+                          <b>{badge.toUpperCase()}</b>" badge to be allowed to
+                          add liquidity
+                        </>
+                      }
+                      className="bg-cyan-100 text-cyan-800 hover:bg-cyan-400"
+                      prefixClassName="text-cyan-700 bg-cyan-200"
                     />
                   ))}
                   {market.requiredSwapBadges.map((badge) => (
@@ -225,7 +255,14 @@ export function MarketRow({
                       key={badge}
                       name={badge.toUpperCase()}
                       prefix="TK"
-                      tip={`Takers must have "${badge}" badge to be allowed to swap this liquidity`}
+                      tip={
+                        <>
+                          Takers must have "<b>{badge.toUpperCase()}</b>" badge
+                          to be allowed to swap this liquidity
+                        </>
+                      }
+                      className="bg-yellow-100 text-yellow-800 hover:bg-yellow-400"
+                      prefixClassName="text-yellow-700 bg-yellow-200"
                     />
                   ))}
                   {market.requiredPutBadges.length == 0 &&

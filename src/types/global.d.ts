@@ -142,6 +142,7 @@ declare global {
     disputeRate: number;
     satisfactoryRate: number;
     requiredSwapBadges: string[];
+    paymentMethods: string[];
     avgFinalizeDur: number;
     avgPaymentDur: number;
     avgReleaseDur: number;
@@ -366,5 +367,13 @@ declare global {
     logoURI: string;
     price: number; // Used in dev mode only
     isSynthetic: boolean; // Used to identify synthetic tokens
+  }
+
+  interface PaymentMethod {
+    badge: string;
+    name: string;
+    shortName?: string;
+    logoUrl: string;
+    region?: string;
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -18,17 +18,23 @@ export function BadgePill({
   name,
   prefix,
   tip,
+  className,
+  prefixClassName,
+  noOpen,
 }: {
   name: string;
   prefix?: string;
-  tip?: string;
+  tip?: ReactNode;
+  className?: string;
+  prefixClassName?: string;
+  noOpen?: boolean;
 }) {
   const [, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = useState(false);
 
   return (
     <Sheet
-      open={open}
+      open={noOpen ? false : open}
       notHidden={true}
       onOpenChange={(isOpen) => {
         setOpen(isOpen);
@@ -37,10 +43,20 @@ export function BadgePill({
       <SheetTrigger>
         <ToolTip tip={tip} allowPropagation>
           <Badge
-            className="w-auto font-normal tracking-wider whitespace-nowrap  cursor-pointer rounded-full bg-gray-800  text-gray-300 hover:bg-chinese-green hover:text-gray-900 flex items-center gap-2"
+            className={cn(
+              "pl-[1px] py-0 w-auto font-normal tracking-wider whitespace-nowrap  cursor-pointer rounded-full bg-gray-800  text-gray-300 hover:bg-chinese-green hover:text-gray-900 flex items-center gap-2",
+              className
+            )}
             variant="secondary"
           >
-            <span className="text-gray-500">{prefix ? prefix + ":" : ""}</span>
+            <span
+              className={cn(
+                "text-gray-500 block px-2 py-[2px] rounded-full",
+                prefixClassName
+              )}
+            >
+              {prefix ? prefix : ""}
+            </span>
             <span className="font-semibold tracking-widest">{name}</span>
           </Badge>
         </ToolTip>

@@ -18,7 +18,7 @@ export function LiquidityInstruction() {
   const { updateInstructions } = useInstructionsService();
   const {
     loadInstruction,
-    grantBadgeBySig: updateInstruction,
+    grantNewOrUpsetBadgeMetaBySig: updateInstruction,
     humanizeErrors,
   } = useBadgeMgrContract();
   const { getChainInfo, address } = useConnectorContext();

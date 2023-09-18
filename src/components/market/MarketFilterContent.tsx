@@ -1,4 +1,4 @@
-import { useQuery } from "../../hooks/useQuery.ts";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { useNavigate } from "react-router-dom";
 import useStore, { MarketFilter } from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
@@ -51,7 +51,7 @@ interface Values {
 
 export function MarketFilterContent() {
   const [sheetHeight] = useSheetInfo();
-  const query = useQuery();
+  const query = useUrlQuery();
   const navigate = useNavigate();
   const { setMarketFilter, marketFilter } = useStore((state) => ({
     setMarketFilter: state.setMarketFilter,

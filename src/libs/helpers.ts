@@ -1,6 +1,6 @@
 import numeral from "numeral";
 import Decimal from "decimal.js";
-import { BigNumber, BigNumberish } from "ethers";
+import { BigNumber, BigNumberish, ethers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -349,4 +349,27 @@ export function splitBadgeFromPath(badges: string[]) {
     if (parts.length > 1) return [parts[0], parts[1]];
     return [parts[0], ""];
   });
+}
+
+/**
+ * Derive a liquidity address
+ * @param liquidity - The liquidity object
+ */
+export function deriveLiquidityAddress(liquidity: Liquidity) {
+  return ethers.utils.getCreate2Address(
+    liquidity.marketAddress,
+    ethers.utils.keccak256(
+      ethers.utils.defaultAbiCoder.encode(
+        ["address", "uint256"],
+        [liquidity.provider, liquidity.lid]
+      )
+    ),
+    ethers.utils.keccak256(
+      ethers.utils.toUtf8Bytes("Liquidity(address provider, uint256 lid)")
+    )
+  );
+}
+
+export function cleanBadgeName(badge: string) {
+  return badge.split("/")[1].replaceAll("_", " ");
 }

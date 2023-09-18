@@ -1,4 +1,4 @@
-import { useQuery } from "../../hooks/useQuery.ts";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { useNavigate } from "react-router-dom";
 import useStore, { DisputeFilter } from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
@@ -28,7 +28,7 @@ interface Values {
 }
 
 export function DisputeFilterContent() {
-  const query = useQuery();
+  const query = useUrlQuery();
   const navigate = useNavigate();
   const { setDisputeFilter, disputeFilter } = useStore((state) => ({
     setDisputeFilter: state.setDisputeFilter,

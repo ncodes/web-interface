@@ -7,6 +7,7 @@ import { ManageGeneralLiquidityTab } from "./ManageGeneralLiquidityTab.tsx";
 import ManageLiquidityRulesTab from "./ManageLiquidityRulesTab.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import ManageLiquidityPaymentTab from "./ManageLiquidityPaymentTab.tsx";
 
 export function ManageLiquiditySheet(props: {
   liquidity?: Liquidity;
@@ -59,6 +60,12 @@ export function ManageLiquiditySheet(props: {
                     General
                   </TabsTrigger>
                   <TabsTrigger
+                    value="payment"
+                    className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
+                  >
+                    Payment
+                  </TabsTrigger>
+                  <TabsTrigger
                     value="rules"
                     className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
                   >
@@ -83,6 +90,8 @@ export function ManageLiquiditySheet(props: {
           />
 
           <ManageLiquidityRulesTab liquidity={props.liquidity as Liquidity} />
+
+          <ManageLiquidityPaymentTab liquidity={props.liquidity as Liquidity} />
         </Tabs>
       </SheetContent>
     </Sheet>

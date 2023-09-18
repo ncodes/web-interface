@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip.tsx";
 import { cn } from "../libs/utils.ts";
+import { TooltipPortal } from "@radix-ui/react-tooltip";
 
 export function ToolTip(props: {
   tip?: React.ReactNode;
@@ -38,12 +39,17 @@ export function ToolTip(props: {
             {props.children}
           </span>
         </TooltipTrigger>
-        <TooltipContent
-          side={props.side || "top"}
-          className={cn("font-light border border-gray-600", props.className2)}
-        >
-          {props.tip}
-        </TooltipContent>
+        <TooltipPortal>
+          <TooltipContent
+            side={props.side || "top"}
+            className={cn(
+              "relative !z-50 font-light border border-gray-600",
+              props.className2
+            )}
+          >
+            {props.tip}
+          </TooltipContent>
+        </TooltipPortal>
       </Tooltip>
     </TooltipProvider>
   );

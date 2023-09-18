@@ -1,4 +1,4 @@
-import { useQuery } from "../../hooks/useQuery.ts";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { useNavigate } from "react-router-dom";
 import useStore, { TicketFilter } from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
@@ -23,7 +23,7 @@ interface Values {
 }
 
 export function TicketFilterContent() {
-  const query = useQuery();
+  const query = useUrlQuery();
   const navigate = useNavigate();
   const { setTicketFilter, ticketFilter } = useStore((state) => ({
     setTicketFilter: state.setTicketFilter,

@@ -1,4 +1,4 @@
-import { useQuery } from "../../hooks/useQuery.ts";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { useLocation, useNavigate } from "react-router-dom";
 import useStore, { LiquidityFilter } from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
@@ -22,6 +22,10 @@ import Input2 from "../Input2.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
+import { useQuery } from "@tanstack/react-query";
+import { PaymentMethodSelector } from "./PaymentMethodSelector.tsx";
 
 interface Errors {
   price?: string;
@@ -42,11 +46,12 @@ interface Values {
   kyc_lp?: string;
   kyc_taker?: string;
   swap_badges?: string;
+  payment_method?: string;
 }
 
 export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
   const [sheetHeight] = useSheetInfo();
-  const query = useQuery();
+  const query = useUrlQuery();
   const navigate = useNavigate();
   const location = useLocation();
   const { setLiquidityFilter, liquidityFilter } = useStore((state) => ({
@@ -55,8 +60,19 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
   }));
   const [values, setValues] = useState<Values>({});
   const [errors, setErrors] = useState<Errors>({});
+  const [openPayMethodSelector, setOpenPayMethodSelector] = useState(false);
+  const [selectedPayMethod, setSelectedPayMethod] = useState<
+    PaymentMethod | undefined
+  >(undefined);
+  const { getChainInfo } = useConnectorContext();
+  const { getPaymentMethods } = usePaymentService();
 
-  // Load filter fields default values from market filter in store
+  const payMethods = useQuery({
+    queryKey: ["getPaymentMethods", { network: getChainInfo().queryName }],
+    queryFn: getPaymentMethods,
+  });
+
+  // Load filter fields default values from liquidity filter in store
   useEffect(() => {
     if (Object.keys(liquidityFilter).length === 0) return;
 
@@ -107,10 +123,21 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
       provider: liquidityFilter?.provider?.toString() || "",
       market: liquidityFilter?.market || "",
       swap_badges: liquidityFilter?.swapBadges || "",
+      payment_method: liquidityFilter.paymentMethods
+        ? liquidityFilter.paymentMethods
+        : "",
     };
 
     setValues(update);
   }, [liquidityFilter]);
+
+  useEffect(() => {
+    if (selectedPayMethod) return;
+    if (!payMethods.data) return;
+    setSelectedPayMethod(
+      payMethods.data.find((m) => m.badge == values.payment_method)
+    );
+  }, [payMethods.data]);
 
   // Build filter from query params
   useEffect(() => {
@@ -152,8 +179,14 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
 
     filter.quote = query.get("quote") as string;
 
+    filter.paymentMethods = query.get("payment_method") as string;
+
     setLiquidityFilter && setLiquidityFilter(filter);
   }, [query, setLiquidityFilter]);
+
+  function isLoading(): boolean {
+    return payMethods.isLoading && !payMethods.isFetched;
+  }
 
   return (
     <div>
@@ -305,7 +338,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
 
             <FilterItem
               title="Available Liquidity"
-              tip="Find markets with certain amount of available liquidity"
+              tip="Find liquidities with certain amount of available liquidity"
               className={cn({ hidden: values.market })}
             >
               <div>
@@ -380,8 +413,34 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
             </FilterItem>
 
             <FilterItem
+              title="Payment Method"
+              tip="Find liquidities that accept a specific payment method"
+              className={cn({ hidden: values.market })}
+            >
+              <PaymentMethodSelector
+                contentClassName="!ml-0"
+                triggerClassName={cn(
+                  "border-solid border-card-border hover:border-card-border pl-4",
+                  {
+                    "!border-chinese-green ring-2 ring-chinese-green":
+                      openPayMethodSelector,
+                  }
+                )}
+                open={openPayMethodSelector}
+                setOpen={setOpenPayMethodSelector}
+                isLoading={isLoading()}
+                selected={selectedPayMethod}
+                payMethods={payMethods.data}
+                setSelected={(method) => {
+                  setSelectedPayMethod(method);
+                  setValues({ ...values, payment_method: method.badge });
+                }}
+              />
+            </FilterItem>
+
+            <FilterItem
               title="Doxxed LP"
-              tip="Find markets where liquidity providers have completed KYC"
+              tip="Find liquidities where liquidity providers have completed KYC"
               className={cn({ hidden: ownerMode })}
             >
               <RadioGroup
@@ -412,7 +471,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
 
             <FilterItem
               title="Doxxed Takers"
-              tip="Find markets where takers have completed KYC"
+              tip="Find liquidities where takers have completed KYC"
               className={cn({ hidden: ownerMode })}
             >
               <RadioGroup
@@ -444,7 +503,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
             <FilterItem
               title="SWAP Badges"
               className="border-none"
-              tip="Find markets that require takers to have one or more badges"
+              tip="Find liquidities that require takers to have one or more badges"
             >
               <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
                 <Input2

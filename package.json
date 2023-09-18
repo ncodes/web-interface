@@ -40,6 +40,7 @@
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
+    "cmdk": "^0.2.0",
     "connectkit": "^1.4.0",
     "date-fns": "^2.30.0",
     "decimal.js": "^10.4.3",

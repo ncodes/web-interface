@@ -25,7 +25,7 @@ export function ManageLiquidityInstruction({
   liquidity: Liquidity;
 }) {
   const { notifySuccess, notifyError } = useToast();
-  const { loadInstruction, grantBadgeBySig, humanizeErrors } =
+  const { loadInstruction, grantNewOrUpsetBadgeMetaBySig, humanizeErrors } =
     useBadgeMgrContract();
   const { updateInstructions } = useInstructionsService();
   const { getChainInfo, address } = useConnectorContext();
@@ -65,7 +65,7 @@ export function ManageLiquidityInstruction({
     async (data: InstructionsWithGrantSigResponse) => {
       try {
         setTxLoading(true);
-        const txHash = await grantBadgeBySig(data.sigInfo);
+        const txHash = await grantNewOrUpsetBadgeMetaBySig(data.sigInfo);
         await delay(5000);
         const blockExplorer = getChainInfo().blockExplorer;
         notifySuccess("Successfully granted instruction badge", {

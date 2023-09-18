@@ -32,6 +32,7 @@ import {
   humanizeDur,
   shortenAddress,
   isMerchant,
+  cleanBadgeName,
 } from "../../libs/helpers.ts";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { useQuery } from "@tanstack/react-query";
@@ -106,7 +107,7 @@ export function LiquidityRow({
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
           <div
             data-click-trigger="1"
-            className="flex gap-2 p-5 px-3 py-0 items-center shrink-0 border-r border-gray-800"
+            className="flex gap-2 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
             <div>
               {!ownerMode && (
@@ -313,6 +314,7 @@ export function LiquidityRow({
                     title={`Max. Amount`}
                     title2={`(${liquidity.base})`}
                     tip={`The maximum amount of ${liquidity.base} that can be swapped`}
+                    className="w-auto"
                   >
                     <span className="flex gap-1">
                       <span className="text-gray-200">
@@ -375,7 +377,30 @@ export function LiquidityRow({
             className="flex items-center w-full  px-3 pr-0 md:px-3 md:pr-0 overflow-hidden"
           >
             <div className="flex border-r border-gray-800 py-2 pr-2 tracking-wide items-center gap-1 text-sm text-gray-300 font-extralight">
-              <ToolTip tip="Badges required of the taker by the liquidity owner">
+              <ToolTip
+                tip={
+                  <span className="tracking-wider">
+                    Liquidity-level badge is used to limit access to market
+                    functions or describe a preference. It is set by the
+                    liquidity provider.
+                    <br />
+                    <br />
+                    A badge prefixed with:
+                    <br />
+                    <br />
+                    <b className="text-chinese-green">TK</b>: requires the{" "}
+                    <b>Taker</b> to have the badge before they can swap the
+                    liquidity (ex: <i>TK: verified</i> means the taker must have
+                    the <i>verified</i> badge).
+                    <br />
+                    <br />
+                    <b className="text-chinese-green">PM</b>: requires the{" "}
+                    <b>Taker</b> to pay or expect to be paid with a specific
+                    payment method (ex: <i>PM: verified</i> means the taker must
+                    have the <i>verified</i> badge).
+                  </span>
+                }
+              >
                 <span
                   data-click-trigger="1"
                   className="block text-gray-400 hover:text-chinese-green cursor-pointer transition-all duration-300"
@@ -391,19 +416,44 @@ export function LiquidityRow({
                     className="flex items-center gap-2 px-2"
                     data-click-trigger="1"
                   >
+                    {liquidity.paymentMethods.map((badge) => (
+                      <BadgePill
+                        key={badge}
+                        noOpen={true}
+                        name={cleanBadgeName(badge).toUpperCase()}
+                        prefix="PM"
+                        className="bg-green-100 hover:bg-green-400 text-green-800"
+                        prefixClassName="text-green-800 bg-green-200"
+                        tip={
+                          <>
+                            Takers can pay or may expect to be paid using "
+                            <b>{cleanBadgeName(badge).toUpperCase()}</b>"
+                            payment method
+                          </>
+                        }
+                      />
+                    ))}
                     {liquidity.requiredSwapBadges.map((badge) => (
                       <BadgePill
                         key={badge}
                         name={badge.toUpperCase()}
                         prefix="TK"
-                        tip={`Takers must have "${badge}" badge to be allowed to swap this liquidity`}
+                        tip={
+                          <>
+                            Takers must have "<b>{badge.toUpperCase()}</b>"
+                            badge to be permitted to swap this liquidity
+                          </>
+                        }
+                        className="bg-yellow-100 text-yellow-800 hover:bg-yellow-400"
+                        prefixClassName="text-yellow-700 bg-yellow-200"
                       />
                     ))}
-                    {liquidity.requiredSwapBadges.length == 0 && (
-                      <span className="hidden xs:inline text-xs text-gray-500 font-light">
-                        No badge required
-                      </span>
-                    )}
+                    {liquidity.requiredSwapBadges.length == 0 &&
+                      liquidity.paymentMethods.length == 0 && (
+                        <span className="hidden xs:inline text-xs text-gray-500 font-light">
+                          No badge required
+                        </span>
+                      )}
                   </div>
                 </ScrollAreaHorizontal>
               </ScrollOverflowIndicator>
