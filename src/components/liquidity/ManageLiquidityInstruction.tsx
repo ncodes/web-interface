@@ -172,7 +172,7 @@ export function ManageLiquidityInstruction({
               <IconSpinner
                 width="15"
                 className="animate-spin"
-                stopColor="#000000"
+                fill="fill-gray-900"
               />
             )}
             {!update.isLoading && !txLoading && "Publish"}

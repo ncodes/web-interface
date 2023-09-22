@@ -23,6 +23,12 @@ import { useState } from "react";
 import IconConflict from "../icons/IconConflict.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import { useQueryClient } from "@tanstack/react-query";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
+import { useLocation } from "react-router-dom";
 
 export function SwapProgress({
   swap,
@@ -31,12 +37,41 @@ export function SwapProgress({
   swap: Swap;
   onRequestOpenChat: () => void;
 }) {
-  const { address } = useConnectorContext();
+  const location = useLocation();
+  const queryClient = useQueryClient();
+  const { address, getChainInfo } = useConnectorContext();
+  const { cancelOrder, humanizeErrors } = useCoreContract();
+  const { notifyError, notifySuccess } = useToast();
   const [canCancel, setCanCancel] = useState(false);
   const [canDispute, setCanDispute] = useState(false);
+  const { loading, setLoading } = useStore((s) => ({
+    loading: s.loading,
+    setLoading: s.setLoading,
+  }));
   const { swapPageState } = useStore((s) => ({
     swapPageState: s.swapPageState,
   }));
+  const { triggered, setTriggered } = useStore((s) => ({
+    triggered: s.triggered,
+    setTriggered: s.setTriggered,
+  }));
+
+  async function doCancel() {
+    await cancelOrderFunc(
+      swap,
+      cancelOrder,
+      getChainInfo,
+      queryClient,
+      location,
+      loading,
+      triggered,
+      setLoading,
+      setTriggered,
+      humanizeErrors,
+      notifySuccess,
+      notifyError
+    );
+  }
 
   return (
     <div className="mt-3 flex-1">
@@ -262,9 +297,19 @@ export function SwapProgress({
                       "w-[150px]": !canCancel,
                       "w-full": canCancel,
                     })}
-                    disabled={!canCancel}
+                    disabled={
+                      !canCancel || loading.cancelOrder || triggered.cancelOrder
+                    }
+                    onClick={doCancel}
                   >
-                    Cancel
+                    {!loading.cancelOrder && <>Cancel</>}
+                    {loading.cancelOrder && (
+                      <IconSpinner
+                        width="20"
+                        className="animate-spin"
+                        fill="fill-gray-100"
+                      />
+                    )}
                   </Button>
                 </div>
               </>
@@ -351,6 +396,10 @@ export function SwapProgress({
               <Label className="p-5 py-3 pb-0 relative top-1 text-lg flex items-center gap-2 text-red-500">
                 <XCircle className="20" /> <span>Swap Cancelled</span>
               </Label>
+              <div className="md:h-[90px] px-5 pt-5 font-light text-gray-200 text-sm tracking-wide">
+                The swap has been cancelled. Any locked asset has be released
+                back to the owner.
+              </div>
             </>
           )}
           {/* ---- end when swap was cancelled -- */}

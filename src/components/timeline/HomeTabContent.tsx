@@ -82,7 +82,7 @@ export function HomeTabContent() {
             <IconSpinner
               width="20"
               className="animate-spin"
-              stopColor="#3d5226"
+              fill="fill-[#3d5226]"
             />
           </div>
         )}

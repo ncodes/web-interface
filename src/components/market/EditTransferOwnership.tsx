@@ -85,7 +85,7 @@ export function EditTransferOwnership({
                     <>
                       <IconSpinner
                         width="20"
-                        stopColor="#FFFFFF"
+                        fill="fill-gray-100"
                         className="animate-spin"
                       />
                     </>

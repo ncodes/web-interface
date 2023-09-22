@@ -124,7 +124,7 @@ export function ManageLiquidityRequiredBadges({
               <IconSpinner
                 width="15"
                 className="animate-spin"
-                stopColor="#000000"
+                fill="fill-gray-900"
               />
             )}
             {!loading && "Update"}

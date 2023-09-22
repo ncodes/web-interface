@@ -5,18 +5,7 @@ import {
   AccordionTrigger,
 } from "../ui/accordion.tsx";
 import { InputWrapper } from "../InputWrapper.tsx";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
 import { Button } from "../ui/Button.tsx";
-import { Avatar } from "../avatar/Avatar.tsx";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "../ui/command.tsx";
-import { cn } from "../../libs/utils.ts";
 import { useEffect, useState } from "react";
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
@@ -170,7 +159,7 @@ export function ManageLiquiditySetPaymentMethods({
                       <IconSpinner
                         width="15"
                         className="animate-spin"
-                        stopColor="#000000"
+                        fill="fill-gray-900"
                       />
                     )}
                     {!isLoading() && "Add"}

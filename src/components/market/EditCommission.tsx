@@ -75,7 +75,7 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
                   <>
                     <IconSpinner
                       width="20"
-                      stopColor="#06060c"
+                      fill="fill-[#06060c]"
                       className="animate-spin"
                     />
                   </>

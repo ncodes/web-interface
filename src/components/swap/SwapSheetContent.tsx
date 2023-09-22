@@ -686,7 +686,7 @@ export function SwapSheetContent({
               <>
                 <IconSpinner
                   width="20"
-                  stopColor="#000000"
+                  fill="fill-gray-900"
                   className="animate-spin"
                 />
               </>
@@ -699,7 +699,7 @@ export function SwapSheetContent({
             <>
               <IconSpinner
                 width="20"
-                stopColor="#000000"
+                fill="fill-gray-900"
                 className="animate-spin"
               />
             </>

@@ -85,7 +85,7 @@ export function EditMarketManager({
                     <>
                       <IconSpinner
                         width="20"
-                        stopColor="#06060c"
+                        fill="fill-[#06060c]"
                         className="animate-spin"
                       />
                     </>

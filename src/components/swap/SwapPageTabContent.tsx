@@ -22,6 +22,7 @@ export function SwapPageTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { getChainInfo, address } = useConnectorContext();
   const { orderId } = useParams<{ orderId: string }>();
+  const fullLoadCount = useStore((state) => state.fullLoadCount);
   const { getSwap } = useSwapService();
   const swap = useQuery({
     queryKey: [
@@ -30,13 +31,21 @@ export function SwapPageTabContent() {
     ],
     queryFn: getSwap,
     enabled: !!orderId,
+    refetchInterval: 10000,
   });
 
   useEffect(() => {
+    if (fullLoadCount > 0) return; // no need to show loader if data is already cached
     if (swap.isLoading || swap.isRefetching)
       setLoaderProgress && setLoaderProgress(50);
     else setLoaderProgress && setLoaderProgress(100);
-  }, [swap.isError, swap.isLoading, swap.isRefetching, swap.isRefetchError]);
+  }, [
+    swap.isError,
+    swap.isLoading,
+    setLoaderProgress,
+    swap.isRefetching,
+    swap.isRefetchError,
+  ]);
 
   return (
     <TabsContent

@@ -162,10 +162,20 @@ export default function useCoreContract() {
   }
 
   /**
+   * Cancel an order
+   * @param orderId The order ID
+   */
+  async function cancelOrder(orderId: bigint) {
+    return (
+      await simulateAndWriteContract("core", "cancelOrder", [orderId])
+    )[0];
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
-  function humanizeErrors(error: { message: string } | unknown) {
+  function humanizeErrors(error: { message: string } | unknown): string {
     if (error instanceof Error) {
       // setSwapBadgeForLiquidity
       if (error.message.includes("OC: ZERO_LIQ"))
@@ -180,6 +190,10 @@ export default function useCoreContract() {
       // swapQuoteForBase
       if (error.message.includes("OC: OFFER_EXPIRED_TX"))
         return "Transaction expired";
+
+      // cancelOrder
+      if (error.message.includes("OC: NOT_CANCEL_TIME"))
+        return "Cannot cancel order at this time";
 
       // Common
       if (error.message.includes("ERC20: transfer amount exceeds balance"))
@@ -196,5 +210,6 @@ export default function useCoreContract() {
     computeSwapFee,
     setSwapBadgeForLiquidity,
     humanizeErrors,
+    cancelOrder,
   };
 }

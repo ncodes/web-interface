@@ -104,7 +104,11 @@ export function GrantedPaymentMethodRow({
           }}
         >
           {isLoading() && (
-            <IconSpinner width="15" className="animate-spin" stopColor="#fff" />
+            <IconSpinner
+              width="15"
+              className="animate-spin"
+              fill="fill-gray-100"
+            />
           )}
           {!loading && grantSig.fetchStatus == "idle" && "Remove"}
         </Button>

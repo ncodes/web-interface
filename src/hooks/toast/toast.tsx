@@ -8,6 +8,13 @@ export enum ToastType {
   Error,
 }
 
+export type Options = {
+  label?: string;
+  position?: ToastPosition;
+  duration?: number;
+  links?: { href: string; label: string }[];
+};
+
 export function useToast() {
   /**
    * Create an success toast (use native toast element)
@@ -58,15 +65,7 @@ export function useToast() {
    * @param msg - The error message
    * @param options - The toast options
    */
-  function notifyError(
-    msg: ReactNode,
-    options: {
-      label?: string;
-      position?: ToastPosition;
-      duration?: number;
-      links?: { href: string; label: string }[];
-    } = {}
-  ) {
+  function notifyError(msg: ReactNode, options: Options = {}) {
     toast.custom(
       () => (
         <ToastBar
@@ -88,15 +87,7 @@ export function useToast() {
    * @param msg - The success message
    * @param options - The toast options
    */
-  function notifySuccess(
-    msg: ReactNode,
-    options: {
-      label?: string;
-      position?: ToastPosition;
-      duration?: number;
-      links?: { href: string; label: string }[];
-    } = {}
-  ) {
+  function notifySuccess(msg: ReactNode, options: Options = {}) {
     toast.custom(
       () => (
         <ToastBar
@@ -118,15 +109,7 @@ export function useToast() {
    * @param msg - The success message
    * @param options - The toast options
    */
-  function notify(
-    msg: ReactNode,
-    options: {
-      label?: string;
-      position?: ToastPosition;
-      duration?: number;
-      links?: { href: string; label: string }[];
-    } = {}
-  ) {
+  function notify(msg: ReactNode, options: Options = {}) {
     toast.custom(
       () => (
         <ToastBar

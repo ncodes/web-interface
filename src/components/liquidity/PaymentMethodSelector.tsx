@@ -55,7 +55,13 @@ export function PaymentMethodSelector({
                   className="w-[25px] h-[25px] rounded"
                   src={selected.logoUrl}
                   fallbackClassName="w-[25px] h-[25px] rounded bg-card-background"
-                  fallback={<IconSpinner className="animate-spin" width="15" />}
+                  fallback={
+                    <IconSpinner
+                      className="animate-spin"
+                      fill="fill-gray-800"
+                      width="15"
+                    />
+                  }
                 />
               </span>
               <span>{selected.name}</span>
@@ -104,7 +110,11 @@ export function PaymentMethodSelector({
                           fallbackClassName="w-[25px] h-[25px] rounded bg-card-background"
                           src={method.logoUrl}
                           fallback={
-                            <IconSpinner className="animate-spin" width="15" />
+                            <IconSpinner
+                              className="animate-spin"
+                              fill="fill-gray-800"
+                              width="15"
+                            />
                           }
                         />
                       </span>

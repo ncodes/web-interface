@@ -92,6 +92,10 @@ export interface SwapPageState {
   revealPhaseEnded?: boolean;
 }
 
+export interface LoadingOrTriggeredState {
+  cancelOrder?: boolean;
+}
+
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -101,10 +105,18 @@ export interface IStore {
   currentRegion?: string;
   setCurrentRegion?: (region: string) => void;
 
-  // LoadingBar state
+  // Top loading state
   loaderProgress: number;
   fullLoadCount: number;
   setLoaderProgress: (progress: number) => void;
+
+  // Global loading stage
+  loading: LoadingOrTriggeredState;
+  setLoading: (loading: LoadingOrTriggeredState) => void;
+
+  // Trigger state for loading fields
+  triggered: LoadingOrTriggeredState;
+  setTriggered: (triggered: LoadingOrTriggeredState) => void;
 
   // Current tab
   currentTab?: string;
@@ -155,6 +167,26 @@ const useStore = create<IStore>((set, get) => ({
       fullLoadCount:
         progress == 100 ? get().fullLoadCount + 1 : get().fullLoadCount,
     });
+  },
+
+  loading: {},
+  setLoading: (updates: Partial<LoadingOrTriggeredState>) => {
+    set((state) => ({
+      loading: {
+        ...state.loading,
+        ...updates,
+      },
+    }));
+  },
+
+  triggered: {},
+  setTriggered: (updates: Partial<LoadingOrTriggeredState>) => {
+    set((state) => ({
+      triggered: {
+        ...state.triggered,
+        ...updates,
+      },
+    }));
   },
 
   currentRegion: localStorage.getItem("region") || defaultRegion,

@@ -3,14 +3,8 @@ import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { StatCard } from "../market/StatCard.tsx";
 import { Button } from "../ui/Button.tsx";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu.tsx";
 import { cn } from "../../libs/utils.ts";
-import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
+import { TimerIcon } from "@radix-ui/react-icons";
 import { PairAvatar } from "../avatar/PairAvatar.tsx";
 import IconNoPay from "../icons/IconNoPay.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
@@ -18,16 +12,16 @@ import { ToolTip } from "../ToolTip.tsx";
 import {
   canAppeal,
   getPayer,
-  isDisputeAbandoned,
-  isInDispute,
-  isDisputer,
-  isSwapParticipant,
-  isSwapCounterparty,
-  isLastDisputeStalled,
-  isDisputed,
   getSwapDisputeOutcome,
+  isDisputeAbandoned,
+  isDisputed,
+  isDisputer,
+  isInDispute,
+  isLastDisputeStalled,
+  isSwapCounterparty,
   isSwapDisputeEnded,
   isSwapDisputeExecuted,
+  isSwapParticipant,
 } from "../../libs/api_utils.ts";
 import IconPaySent from "../icons/IconPaySent.tsx";
 import { CheckCircle, XCircle } from "lucide-react";
@@ -41,85 +35,18 @@ import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import moment from "moment";
 import { CountDown } from "../Countdown.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { SwapRowLinks } from "./SwapRowLinks.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import { useQueryClient } from "@tanstack/react-query";
+import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
 
 interface ButtonEnableState {
   appeal: boolean;
   cancel: boolean;
-}
-
-function Links({ swap }: { swap: Swap }) {
-  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
-
-  return (
-    <>
-      <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-        <Button
-          variant="link"
-          rounded="none"
-          className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-        >
-          View Liquidity
-        </Button>
-      </span>
-      <span className="hidden lg:inline border-gray-800 shrink-0">
-        <Button
-          variant="link"
-          rounded="none"
-          className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-        >
-          View Market
-        </Button>
-      </span>
-      <span className=" lg:hidden border-l border-gray-800">
-        <DropdownMenu
-          onOpenChange={(open) => {
-            setMoreMenuOpen(open);
-          }}
-        >
-          <DropdownMenuTrigger className="outline-0 ring-0">
-            <span
-              className={cn(
-                "px-2 py-3 outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                { "scale-x-105 text-chinese-green": moreMenuOpen }
-              )}
-            >
-              <DotsVerticalIcon />
-            </span>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-            <DropdownMenuItem className="flex gap-2">
-              View Liquidity
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2">
-              View Market
-            </DropdownMenuItem>
-            {swap && !!swap.orderId && (
-              <DropdownMenuItem
-                disabled={true}
-                className="flex gap-2 border-t rounded-none border-gray-800"
-              >
-                <span className="text-xs font-light text-gray-400 flex gap-1">
-                  <span className="text-gray-500">ID:</span>
-                  <span>{swap.orderId}</span>
-                </span>
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </span>
-      {swap && !!swap.orderId && (
-        <span className="hidden lg:block h-full border-l border-gray-800 shrink-0 cursor-default">
-          <span className="text-xs px-2 font-light text-gray-400 flex h-full items-center gap-1">
-            <span className="text-gray-500">ID:</span>
-            <span>{swap.orderId}</span>
-          </span>
-        </span>
-      )}
-    </>
-  );
 }
 
 export function SwapRow({
@@ -131,8 +58,12 @@ export function SwapRow({
   className?: string;
   swap: Swap;
 }) {
+  const queryClient = useQueryClient();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { address } = useConnectorContext();
+  const { address, getChainInfo } = useConnectorContext();
+  const { cancelOrder, humanizeErrors } = useCoreContract();
+  const { notifyError, notifySuccess } = useToast();
   const { swapPageState } = useStore((s) => ({
     swapPageState: s.swapPageState,
   }));
@@ -140,6 +71,31 @@ export function SwapRow({
     appeal: true,
     cancel: true,
   });
+  const { loading, setLoading } = useStore((s) => ({
+    loading: s.loading,
+    setLoading: s.setLoading,
+  }));
+  const { triggered, setTriggered } = useStore((s) => ({
+    triggered: s.triggered,
+    setTriggered: s.setTriggered,
+  }));
+
+  async function doCancel() {
+    await cancelOrderFunc(
+      swap,
+      cancelOrder,
+      getChainInfo,
+      queryClient,
+      location,
+      loading,
+      triggered,
+      setLoading,
+      setTriggered,
+      humanizeErrors,
+      notifySuccess,
+      notifyError
+    );
+  }
 
   return (
     <div
@@ -411,7 +367,7 @@ export function SwapRow({
         <div
           data-click-trigger="1"
           className={cn(
-            "border-t border-gray-800 px-3 pr-0 md:pr-3 py-1 flex justify-between",
+            "border-t border-gray-800 px-3 pr-0 md:pr-3 py-1 flex justify-between text-gray-400",
             {
               "flex-col md:flex-row md:justify-between pr-3": isSwapParticipant(
                 swap,
@@ -809,7 +765,7 @@ export function SwapRow({
           </span>
           {address && !isSwapParticipant(swap, address) && (
             <div className="flex">
-              <Links swap={swap} />
+              <SwapRowLinks swap={swap} />
             </div>
           )}
         </div>
@@ -819,7 +775,7 @@ export function SwapRow({
             data-click-trigger="1"
             className="flex justify-between border-t border-card-border"
           >
-            <div data-click-trigger="1" className="pt-1 pl-2 flex gap-1">
+            <div data-click-trigger="1" className="pt-1 pl-1 flex gap-1">
               {/* Buttons for swap counterparties  */}
               {address && isSwapCounterparty(swap, address) && (
                 <>
@@ -831,7 +787,7 @@ export function SwapRow({
                       <Button
                         size="sm"
                         rounded="lg"
-                        className="text-xs md:text-sm"
+                        className="text-xs md:text-sm min-w-[100px]"
                         scale="sm"
                       >
                         Release
@@ -847,7 +803,7 @@ export function SwapRow({
                       <Button
                         size="sm"
                         rounded="lg"
-                        className="text-xs md:text-sm"
+                        className="text-xs md:text-sm min-w-[100px]"
                         scale="sm"
                       >
                         I Have Paid
@@ -859,11 +815,25 @@ export function SwapRow({
                       size="sm"
                       variant="destructive"
                       rounded="lg"
-                      className="text-xs md:text-sm"
+                      className="text-xs md:text-sm min-w-[100px]"
                       scale="sm"
-                      disabled={disableButtons.cancel}
+                      onClick={doCancel}
+                      disabled={
+                        disableButtons.cancel ||
+                        loading.cancelOrder ||
+                        triggered.cancelOrder
+                      }
                     >
-                      Cancel
+                      {!loading.cancelOrder && <>Cancel</>}
+                      {loading.cancelOrder && (
+                        <>
+                          <IconSpinner
+                            width="20"
+                            fill="fill-gray-100"
+                            className="animate-spin"
+                          />
+                        </>
+                      )}
                       <CountDown
                         wrapL="&nbsp;("
                         prefix=""
@@ -907,7 +877,7 @@ export function SwapRow({
               data-click-trigger="1"
               className="flex items-center border-l border-gray-800 shrink-0"
             >
-              <Links swap={swap} />
+              <SwapRowLinks swap={swap} />
             </div>
           </div>
         )}
