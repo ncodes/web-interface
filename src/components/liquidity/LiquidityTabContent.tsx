@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { LiquidityEventLog } from "./LiquidityEventLog.tsx";
 import { RecentReviews } from "./RecentReviews.tsx";
@@ -14,7 +14,11 @@ import { LiquidityRow } from "./LiquidityRow.tsx";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { isEqlStr } from "../../libs/helpers.ts";
 
-export function LiquidityTabContent() {
+export function LiquidityTabContent({
+  setLiquidity,
+}: {
+  setLiquidity?: Dispatch<SetStateAction<Liquidity | undefined>>;
+}) {
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
   const { getChainInfo, address } = useConnectorContext();
   const { getLiquidity } = useLiquidityService();
@@ -39,6 +43,7 @@ export function LiquidityTabContent() {
     if (liquidity.isLoading || liquidity.isRefetching)
       setLoaderProgress && setLoaderProgress(50);
     else setLoaderProgress && setLoaderProgress(100);
+    if (liquidity.isSuccess && setLiquidity) setLiquidity(liquidity.data);
   }, [
     liquidity.isError,
     liquidity.isLoading,
@@ -79,12 +84,16 @@ export function LiquidityTabContent() {
         )}
       </div>
 
-      <SwapSheet
-        open={openSwapSheet}
-        onOpenChange={(open) => {
-          setOpenSwapSheet(open);
-        }}
-      />
+      {!!liquidity.data && (
+        <SwapSheet
+          liquidity={liquidity.data as Liquidity}
+          market={liquidity.data.market as Market}
+          open={openSwapSheet}
+          onOpenChange={(open) => {
+            setOpenSwapSheet(open);
+          }}
+        />
+      )}
     </TabsContent>
   );
 }

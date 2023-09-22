@@ -5,6 +5,11 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 export interface GetCryptoRateParams {
   net: string;
   symbolOrAddress: string;
+  symbol: string;
+}
+
+export interface GetSynthRateParams {
+  symbol: string;
 }
 
 /**
@@ -35,7 +40,32 @@ export function useMiscService() {
     }
   }
 
+  /**
+   * Get synthetic USD rate
+   */
+  async function getSynthRate(
+    ctx: QueryFunctionContext<[string, GetSynthRateParams]>
+  ): Promise<number> {
+    try {
+      const [, params] = ctx.queryKey;
+      const headers = {};
+
+      const resp = await axios({
+        method: "get",
+        url: `${import.meta.env.VITE_API_URI}/v1/misc/synth-rate/${
+          params.symbol
+        }`,
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data.price);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     getCryptoRate,
+    getSynthRate,
   };
 }

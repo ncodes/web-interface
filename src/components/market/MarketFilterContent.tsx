@@ -397,7 +397,7 @@ export function MarketFilterContent() {
             </FilterItem>
 
             <FilterItem
-              title="Doxxed LP"
+              title="KYC'D LP"
               tip="Find markets where liquidity providers have completed KYC"
             >
               <RadioGroup
@@ -427,7 +427,7 @@ export function MarketFilterContent() {
             </FilterItem>
 
             <FilterItem
-              title="Doxxed Takers"
+              title="KYC'D Takers"
               tip="Find markets where takers have completed KYC"
             >
               <RadioGroup

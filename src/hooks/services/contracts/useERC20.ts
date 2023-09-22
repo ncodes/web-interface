@@ -1,6 +1,6 @@
 import { Web3Provider } from "@ethersproject/providers";
 import { BigNumber, BigNumberish, Contract } from "ethers";
-import { erc20Abi } from "../../../abi";
+import * as erc20Abi from "../../../abi/ERC20.json";
 
 /**
  * useERC20 provides functions for interacting with an ERC20 contract

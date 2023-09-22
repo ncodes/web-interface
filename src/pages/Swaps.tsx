@@ -80,7 +80,7 @@ function SwapTabs({ defaultTab }: { defaultTab?: string }) {
 export default function Swaps() {
   return (
     <Layout
-      tab={<SwapTabs />}
+      body={<SwapTabs />}
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-2">
           <SwapFilter />

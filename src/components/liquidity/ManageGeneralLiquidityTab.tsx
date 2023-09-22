@@ -11,9 +11,8 @@ import { ManageLiqEditMaxSwapAmount } from "./ManageLiqEditMaxSwapAmount.tsx";
 import { ManageLiqEditPaymentTime } from "./ManageLiqEditPaymentTime.tsx";
 import { ManageLiqEditTarget } from "./ManageLiqEditTarget.tsx";
 import { ManageLiqEditPause } from "./ManageLiqEditPause.tsx";
-import { useMiscService } from "../../hooks/services/backend/useMiscService.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Address } from "viem";
 import _ from "lodash";
 import {
@@ -31,6 +30,8 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { ethers } from "ethers";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
+import { isSynth } from "../../libs/api_utils.ts";
 
 interface InputState {
   value?: string | number;
@@ -50,7 +51,6 @@ export function ManageGeneralLiquidityTab({
   close: () => void;
 }) {
   const [sheetHeight] = useSheetInfo();
-  const { getCryptoRate } = useMiscService();
   const { updateFungibleLiquidity, humanizeErrors } = useCoreContract();
   const {
     getChainInfo,
@@ -79,23 +79,7 @@ export function ManageGeneralLiquidityTab({
     "Price",
   ]);
 
-  const baseUsdRate = useQuery({
-    queryKey: [
-      "getBaseRate",
-      { net: getChainInfo().queryName, symbolOrAddress: market.base }, // TODO: use baseAddress
-    ],
-    queryFn: getCryptoRate,
-    refetchInterval: 60000,
-  });
-
-  const quoteUsdRate = useQuery({
-    queryKey: [
-      "getQuoteRate",
-      { net: getChainInfo().queryName, symbolOrAddress: market.quote }, // TODO: use quoteAddress
-    ],
-    queryFn: getCryptoRate,
-    refetchInterval: 60000,
-  });
+  const { baseUsdRate, quoteUsdRate } = useBaseQuoteRate(market, true, true);
 
   useEffect(() => {
     (async () => {
@@ -119,6 +103,7 @@ export function ManageGeneralLiquidityTab({
 
   // Checks if there is enough allowance to cover the amount
   function hasEnoughAllowance() {
+    if (isSynth(market.baseType)) return true;
     return toDec(allowance).gte(
       toDec((amount.value as string) || "0").mul(powOfD(1, market.baseDecimals))
     );

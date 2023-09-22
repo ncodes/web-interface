@@ -81,7 +81,7 @@ export default function Disputes() {
   const loc = useLocation();
   return (
     <Layout
-      tab={<DisputeTabs />}
+      body={<DisputeTabs />}
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-2">
           <DisputeFilter ownerMode={loc.pathname == "/liquidity/owned"} />

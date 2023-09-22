@@ -50,8 +50,7 @@ export function MarketRow({
       className={cn(
         "border select-none bg-card-background border-card-border border-b-gray-600 transition-all duration-300 rounded-xl ",
         {
-          "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
-            !noFocus,
+          "hover:border-chinese-green cursor-pointer": !noFocus,
         },
         className
       )}
@@ -88,12 +87,25 @@ export function MarketRow({
                 </ToolTip>
               </span>
               <span className="flex items-center gap-1 text-[11px] font-light text-blue-200">
-                <span data-click-trigger="1">
-                  ID: &nbsp;
+                <ToolTip
+                  tip={
+                    <>
+                      <div className="flex gap-2 tracking-wide">
+                        <span className="text-gray-400">Type:</span>
+                        <span className="font-semibold text-chinese-green tracking-wider">
+                          {market.instant ? "Instant" : "Interactive"}
+                        </span>
+                      </div>
+                    </>
+                  }
+                >
                   <span data-click-trigger="1">
-                    {shortenAddress(market.address)}
+                    ID: &nbsp;
+                    <span data-click-trigger="1">
+                      {shortenAddress(market.address)}
+                    </span>
                   </span>
-                </span>
+                </ToolTip>
                 <CopyToClipboard text={market.address}>
                   <IconCopyFilled
                     width="13px"

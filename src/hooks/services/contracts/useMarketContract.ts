@@ -29,7 +29,7 @@ export default function useMarketContract() {
     commission: number,
     poolId: number
   ) {
-    return simulateAndWriteContract("marketCore", "createMarket", [
+    const res = await simulateAndWriteContract("marketCore", "createMarket", [
       baseAddress,
       quoteAddress,
       baseType,
@@ -39,6 +39,7 @@ export default function useMarketContract() {
       toBN(commission),
       toBN(poolId),
     ]);
+    return res[0];
   }
 
   /**
@@ -47,10 +48,11 @@ export default function useMarketContract() {
    * @param commission The commission rate
    */
   async function setCommission(market: string, commission: number) {
-    return simulateAndWriteContract("marketCore", "setCommission", [
+    const res = await simulateAndWriteContract("marketCore", "setCommission", [
       market,
       toBN(commission),
     ]);
+    return res[0];
   }
 
   /**
@@ -66,12 +68,12 @@ export default function useMarketContract() {
     evidenceDur: number,
     predictDur: number
   ) {
-    return simulateAndWriteContract("marketCore", "setDisputeDurations", [
-      market,
-      toBN(disputeDelayDur),
-      toBN(evidenceDur),
-      toBN(predictDur),
-    ]);
+    const res = await simulateAndWriteContract(
+      "marketCore",
+      "setDisputeDurations",
+      [market, toBN(disputeDelayDur), toBN(evidenceDur), toBN(predictDur)]
+    );
+    return res[0];
   }
 
   /**
@@ -80,10 +82,11 @@ export default function useMarketContract() {
    * @param newMgr The new manager address
    */
   async function setManager(market: string, newMgr: string) {
-    return simulateAndWriteContract("marketCore", "setManager", [
+    const res = await simulateAndWriteContract("marketCore", "setManager", [
       market,
       newMgr,
     ]);
+    return res[0];
   }
 
   /**
@@ -91,7 +94,12 @@ export default function useMarketContract() {
    * @param market The market address
    */
   async function markAsOfferOnly(market: string) {
-    return simulateAndWriteContract("marketCore", "markAsOfferOnly", [market]);
+    const res = await simulateAndWriteContract(
+      "marketCore",
+      "markAsOfferOnly",
+      [market]
+    );
+    return res[0];
   }
 
   /**
@@ -99,9 +107,12 @@ export default function useMarketContract() {
    * @param market
    */
   async function allowZeroOfferPrice(market: string) {
-    return simulateAndWriteContract("marketCore", "allowZeroOfferPrice", [
-      market,
-    ]);
+    const res = await simulateAndWriteContract(
+      "marketCore",
+      "allowZeroOfferPrice",
+      [market]
+    );
+    return res[0];
   }
 
   /**
@@ -115,11 +126,12 @@ export default function useMarketContract() {
     put: string[][],
     swap: string[][]
   ) {
-    return simulateAndWriteContract("marketCore", "setRequiredBadges", [
-      market,
-      put,
-      swap,
-    ]);
+    const res = await simulateAndWriteContract(
+      "marketCore",
+      "setRequiredBadges",
+      [market, put, swap]
+    );
+    return res[0];
   }
 
   /**
@@ -128,10 +140,12 @@ export default function useMarketContract() {
    * @param newOwner The new owner address
    */
   async function transferOwnership(market: string, newOwner: string) {
-    return simulateAndWriteContract("marketCore", "transferOwnership", [
-      market,
-      newOwner,
-    ]);
+    const res = await simulateAndWriteContract(
+      "marketCore",
+      "transferOwnership",
+      [market, newOwner]
+    );
+    return res[0];
   }
 
   /**
@@ -139,9 +153,12 @@ export default function useMarketContract() {
    * @param market The market address
    */
   async function renounceOwnership(market: string) {
-    return simulateAndWriteContract("marketCore", "renounceOwnership", [
-      market,
-    ]);
+    const res = await simulateAndWriteContract(
+      "marketCore",
+      "renounceOwnership",
+      [market]
+    );
+    return res[0];
   }
 
   /**

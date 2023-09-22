@@ -78,21 +78,6 @@ export function ManageLiqEditPaymentTime({
             </div>
           }
         />
-        {/*<div className="flex flex-col gap-3">*/}
-        {/*  <Input*/}
-        {/*    value={!addMode ? "4500" : ""}*/}
-        {/*    placeholder="0"*/}
-        {/*    type="number"*/}
-        {/*    className="px-2"*/}
-        {/*  />*/}
-        {/*  <Slider defaultValue={[1800]} min={0} max={3600} step={1} />*/}
-        {/*</div>*/}
-        {/*{!addMode && (*/}
-        {/*  <div className="flex shrink-0 flex-col text-gray-400 text-xs">*/}
-        {/*    <span className="">Payment Time</span>*/}
-        {/*    <span className="text-xs text-chinese-green">15 minutes</span>*/}
-        {/*  </div>*/}
-        {/*)}*/}
       </div>
     </FilterItem>
   );

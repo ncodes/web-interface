@@ -50,7 +50,7 @@ interface ButtonEnableState {
   cancel: boolean;
 }
 
-function Links() {
+function Links({ swap }: { swap: Swap }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
 
   return (
@@ -96,9 +96,28 @@ function Links() {
             <DropdownMenuItem className="flex gap-2">
               View Market
             </DropdownMenuItem>
+            {swap && !!swap.orderId && (
+              <DropdownMenuItem
+                disabled={true}
+                className="flex gap-2 border-t rounded-none border-gray-800"
+              >
+                <span className="text-xs font-light text-gray-400 flex gap-1">
+                  <span className="text-gray-500">ID:</span>
+                  <span>{swap.orderId}</span>
+                </span>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </span>
+      {swap && !!swap.orderId && (
+        <span className="hidden lg:block h-full border-l border-gray-800 shrink-0 cursor-default">
+          <span className="text-xs px-2 font-light text-gray-400 flex h-full items-center gap-1">
+            <span className="text-gray-500">ID:</span>
+            <span>{swap.orderId}</span>
+          </span>
+        </span>
+      )}
     </>
   );
 }
@@ -137,8 +156,7 @@ export function SwapRow({
         className={cn(
           "border bg-card-background border-card-border transition-all duration-300 rounded-xl border-b-gray-600",
           {
-            "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
-              !noFocus,
+            "hover:border-chinese-green cursor-pointer": !noFocus,
           },
           className
         )}
@@ -416,7 +434,7 @@ export function SwapRow({
                       tip="Waiting for the payer to indicate that they have made payment. If the payer fails to make payment within the time limit, the swap can be cancelled by you or eventually by the protocol."
                     >
                       <span className="animate-pulse duration-[5000]">
-                        Waiting for payment.
+                        Waiting for payment
                       </span>
                       <IconInfoCircle width="15" />
                     </ToolTip>
@@ -453,7 +471,7 @@ export function SwapRow({
                       }
                     >
                       <span>
-                        Payer has paid.{" "}
+                        Payer has paid{" "}
                         <span className="font-medium animate-pulse duration-[5000ms] text-chinese-green">
                           Verify payment and release.
                         </span>
@@ -542,8 +560,8 @@ export function SwapRow({
                           ? "You started a dispute"
                           : "The counterpart started a dispute"}
                         {swap.disputes[0].wantRelease
-                          ? " to release the swap."
-                          : " to cancel the swap."}
+                          ? " to release the swap"
+                          : " to cancel the swap"}
                       </span>
                       <IconInfoCircle width="15" />
                     </ToolTip>
@@ -584,7 +602,16 @@ export function SwapRow({
                     <IconSpinner width="15" className="animate-spin" />{" "}
                     <ToolTip
                       className="flex gap-1 w-full justify-between md:justify-start"
-                      tip="Waiting for you to make the payment and click 'I Have Paid'. The counterpart or protocol may cancel the trade if you fail to pay within the time limit."
+                      tip={
+                        <>
+                          Waiting for you to make the payment and to click{" "}
+                          <b>'I Have Paid'</b>.
+                          <br />
+                          <br />
+                          The counterpart or protocol may cancel the trade if
+                          you fail to pay within the time limit.
+                        </>
+                      }
                     >
                       <span>Awaiting your payment {""}</span>
                       <IconInfoCircle width="15" />
@@ -725,8 +752,8 @@ export function SwapRow({
                           ? "You started a dispute"
                           : "The counterpart started a dispute"}
                         {swap.disputes[0].wantRelease
-                          ? " to release the swap."
-                          : " to cancel the swap."}
+                          ? " to release the swap"
+                          : " to cancel the swap"}
                       </span>
                       <IconInfoCircle width="15" />
                     </ToolTip>
@@ -782,7 +809,7 @@ export function SwapRow({
           </span>
           {address && !isSwapParticipant(swap, address) && (
             <div className="flex">
-              <Links />
+              <Links swap={swap} />
             </div>
           )}
         </div>
@@ -790,9 +817,9 @@ export function SwapRow({
         {address && isSwapCounterparty(swap, address) && (
           <div
             data-click-trigger="1"
-            className="flex  justify-between border-t border-card-border"
+            className="flex justify-between border-t border-card-border"
           >
-            <div data-click-trigger="1" className="pt-1 pl-1 flex gap-1">
+            <div data-click-trigger="1" className="pt-1 pl-2 flex gap-1">
               {/* Buttons for swap counterparties  */}
               {address && isSwapCounterparty(swap, address) && (
                 <>
@@ -880,7 +907,7 @@ export function SwapRow({
               data-click-trigger="1"
               className="flex items-center border-l border-gray-800 shrink-0"
             >
-              <Links />
+              <Links swap={swap} />
             </div>
           </div>
         )}

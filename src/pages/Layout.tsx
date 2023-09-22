@@ -16,11 +16,13 @@ import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { Footer } from "../components/Footer.tsx";
 
 export default function Layout({
-  tab,
+  body,
   rightSide,
+  bodyContainerClassName,
 }: {
-  tab?: React.ReactNode;
+  body?: React.ReactNode;
   rightSide?: React.ReactNode;
+  bodyContainerClassName?: string;
 }) {
   const headerHeight = 55;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -81,11 +83,16 @@ export default function Layout({
             <div className="flex-1 flex flex-col mt-3">
               <UnlinkedAccountNotice />
               <div className="relative flex-1 flex flex-col">
-                <div className="absolute w-full">
-                  <div className="z-0  border border-gray-800 rounded-3xl bg-vampire-black">
-                    {tab}
+                <div className="absolute w-full h-full">
+                  <div
+                    className={cn(
+                      "z-0 border border-gray-800 rounded-3xl bg-vampire-black",
+                      bodyContainerClassName
+                    )}
+                  >
+                    {body}
                   </div>
-                  <div className="lg:hidden">
+                  <div className="xl:hidden">
                     <Footer />
                   </div>
                 </div>

@@ -50,7 +50,7 @@ function Page() {
 export default function Offer() {
   return (
     <Layout
-      tab={<Page />}
+      body={<Page />}
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-2">
           <Messenger sheetMode={false} />

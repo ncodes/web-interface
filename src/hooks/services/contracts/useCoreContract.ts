@@ -1,7 +1,7 @@
 import { useConnectorContext } from "../../connectors/context.tsx";
 import { toBN } from "../../../libs/helpers.ts";
 import { Address } from "viem";
-import { BigNumberish } from "ethers";
+import { BigNumberish, ethers } from "ethers";
 
 /**
  * Providers utilities for reading and writing to the Core contract
@@ -53,16 +53,58 @@ export default function useCoreContract() {
       BigNumberish
     ] = [0, 0, 0, 0, 0]
   ) {
-    return simulateAndWriteContract("core", "updateFungibleLiquidity", [
-      market,
+    const res = await simulateAndWriteContract(
+      "core",
+      "updateFungibleLiquidity",
+      [
+        market,
+        lid,
+        deduct,
+        target,
+        [toBN(amount), toBN(price)],
+        wantOrIds,
+        wantAndIds,
+        limits,
+      ]
+    );
+    return res[0];
+  }
+
+  /**
+   * Initiate a swap
+   * @param marketId The market addres
+   * @param provider The liquidity provider address
+   * @param recipient The recipient address
+   * @param lid The liquidity ID
+   * @param amount The amount to swap
+   * @param maxPrice The maximum price
+   * @param ids The NFT IDs
+   * @param txDeadline The transaction deadline
+   * @param operator The operator ID
+   */
+  async function swapQuoteForBase(
+    marketId: string,
+    provider: string,
+    recipient = ethers.constants.AddressZero,
+    lid: BigNumberish,
+    amount: BigNumberish,
+    maxPrice: BigNumberish,
+    ids: BigNumberish[] = [],
+    txDeadline: BigNumberish,
+    operator: BigNumberish = 0
+  ) {
+    const res = await simulateAndWriteContract("core", "swapQuoteForBase", [
+      marketId,
+      provider,
+      recipient,
       lid,
-      deduct,
-      target,
-      [toBN(amount), toBN(price)],
-      wantOrIds,
-      wantAndIds,
-      limits,
+      amount,
+      maxPrice,
+      ids,
+      txDeadline,
+      operator,
     ]);
+    return res;
   }
 
   /**
@@ -76,11 +118,47 @@ export default function useCoreContract() {
     lid: BigNumberish,
     swapBadges: string[][]
   ) {
-    return simulateAndWriteContract("core", "setSwapBadgeForLiquidity", [
-      market,
-      lid,
-      swapBadges,
-    ]);
+    const res = await simulateAndWriteContract(
+      "core",
+      "setSwapBadgeForLiquidity",
+      [market, lid, swapBadges]
+    );
+    return res[0];
+  }
+
+  /**
+   * Compute swap fee
+   * @param mid The market ID
+   * @param provider The liquidity provider address
+   * @param lid The liquidity ID
+   * @param taker The taker address
+   * @param orderAmt The order amount
+   * @param orderPrice The order price
+   */
+  async function computeSwapFee(
+    mid: string,
+    provider: string,
+    lid: number,
+    taker: string,
+    orderAmt: BigNumberish,
+    orderPrice: BigNumberish
+  ): Promise<{
+    protocolFee: bigint;
+    marketFee: bigint;
+    feeBp: bigint;
+    marketFeeBp: bigint;
+  }> {
+    const res: [bigint, bigint, bigint, bigint] = await readContract(
+      "core",
+      "computeSwapFee",
+      [mid, provider, lid, taker, orderAmt, orderPrice]
+    );
+    return {
+      protocolFee: res[0],
+      marketFee: res[1],
+      feeBp: res[2],
+      marketFeeBp: res[3],
+    };
   }
 
   /**
@@ -96,6 +174,12 @@ export default function useCoreContract() {
       // updateFungibleLiquidity: MKT_BADGE_REQ
       if (error.message.includes("OC: MKT_BADGE_REQ"))
         return "Permission denied: Missing one or more market badges";
+      if (error.message.includes("OC: LOW_TTP"))
+        return "Payment time is too short";
+
+      // swapQuoteForBase
+      if (error.message.includes("OC: OFFER_EXPIRED_TX"))
+        return "Transaction expired";
 
       // Common
       if (error.message.includes("ERC20: transfer amount exceeds balance"))
@@ -108,6 +192,8 @@ export default function useCoreContract() {
   return {
     updateFungibleLiquidity,
     hasLiquidity,
+    swapQuoteForBase,
+    computeSwapFee,
     setSwapBadgeForLiquidity,
     humanizeErrors,
   };

@@ -85,7 +85,7 @@ export function OfferRow({
       <div
         data-click-trigger="1"
         className={cn(
-          "border bg-card-background border-card-border transition-all duration-300 rounded-xl hover:scale-[1.002] hover:border-chinese-green cursor-pointer border-b-gray-600",
+          "border bg-card-background border-card-border transition-all duration-300 rounded-xl hover:border-chinese-green cursor-pointer border-b-gray-600",
           className
         )}
       >

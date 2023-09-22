@@ -116,7 +116,7 @@ function MarketTabs() {
       {/* Tab Content */}
       <TabsContent
         value="markets"
-        className="p-3 px-0 mt-0 pt-0 flex flex-col gap-3"
+        className="p-3 px-0 mt-0 pt-0 pb-0 flex flex-col gap-3"
       >
         {/* MARKET INFO */}
 
@@ -184,32 +184,36 @@ function MarketTabs() {
             liquidities.isSuccess &&
             !market.isLoading &&
             !market.isError && (
-              <>
-                <Paginator
-                  curPage={offset}
-                  total={liquidities.data?.meta?.queryCount}
-                  limit={limit}
-                  onNext={() => setOffset(offset + 1)}
-                  onPrev={() => setOffset(offset - 1)}
-                />
-                <div className="flex gap-2 flex-col z-[6] px-3 mt-3">
-                  {liquidities.data?.liquidities.map((liquidity) => (
-                    <LiquidityRow
-                      liquidity={liquidity}
-                      key={`${liquidity.provider}:${liquidity.lid}`}
-                      ownerMode={isEqlStr(liquidity.provider, address)}
-                    />
-                  ))}
+              <div className="flex flex-col gap-3 min-h-[300px]">
+                <div className="flex flex-col gap-3">
+                  <Paginator
+                    curPage={offset}
+                    total={liquidities.data?.meta?.queryCount}
+                    limit={limit}
+                    onNext={() => setOffset(offset + limit)}
+                    onPrev={() => setOffset(offset - limit)}
+                  />
+                  <div className="flex gap-2 flex-col z-[6] px-3">
+                    {liquidities.data?.liquidities.map((liquidity) => (
+                      <LiquidityRow
+                        liquidity={liquidity}
+                        key={`${liquidity.provider}:${liquidity.lid}`}
+                        ownerMode={isEqlStr(liquidity.provider, address)}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <Paginator
-                  className="border-t mt-3"
-                  curPage={offset}
-                  total={liquidities.data?.meta?.queryCount}
-                  limit={limit}
-                  onNext={() => setOffset(offset + 1)}
-                  onPrev={() => setOffset(offset - 1)}
-                />
-              </>
+                <div className="flex-1 flex flex-col justify-end">
+                  <Paginator
+                    className="border-t rounded-b-3xl"
+                    curPage={offset}
+                    total={liquidities.data?.meta?.queryCount}
+                    limit={limit}
+                    onNext={() => setOffset(offset + limit)}
+                    onPrev={() => setOffset(offset - limit)}
+                  />
+                </div>
+              </div>
             )}
         </div>
       </TabsContent>
@@ -237,7 +241,7 @@ function MarketTabs() {
 export default function Market() {
   return (
     <Layout
-      tab={<MarketTabs />}
+      body={<MarketTabs />}
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-2">
           <LiquidityFilter />

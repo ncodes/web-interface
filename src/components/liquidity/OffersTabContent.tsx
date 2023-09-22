@@ -91,8 +91,8 @@ export function OffersTabContent() {
                 curPage={offset}
                 total={offers.data?.meta?.queryCount}
                 limit={limit}
-                onNext={() => setOffset(offset + 1)}
-                onPrev={() => setOffset(offset - 1)}
+                onNext={() => setOffset(offset + limit)}
+                onPrev={() => setOffset(offset - limit)}
               />
               <div className="flex flex-col gap-3 p-3 pt-0 pb-0">
                 {offers.data?.offers.map((offer: Offer) => (
@@ -102,12 +102,12 @@ export function OffersTabContent() {
             </div>
             <div className="flex-1 flex flex-col justify-end">
               <Paginator
-                className="border-t"
+                className="border-t rounded-b-3xl"
                 curPage={offset}
                 total={offers.data?.meta?.queryCount}
                 limit={limit}
-                onNext={() => setOffset(offset + 1)}
-                onPrev={() => setOffset(offset - 1)}
+                onNext={() => setOffset(offset + limit)}
+                onPrev={() => setOffset(offset - limit)}
               />
             </div>
           </div>

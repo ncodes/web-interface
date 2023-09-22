@@ -64,8 +64,7 @@ export function TicketRow({
         className={cn(
           "border bg-card-background border-card-border transition-all duration-300 rounded-xl border-b-gray-600",
           {
-            "hover:scale-[1.002] hover:border-chinese-green cursor-pointer":
-              !noFocus,
+            "hover:border-chinese-green cursor-pointer": !noFocus,
           },
           className
         )}

@@ -120,7 +120,7 @@ export default function Mediation({ defaultTab }: { defaultTab?: string }) {
 
   return (
     <Layout
-      tab={<MediationTabs defaultTab={defaultTab} />}
+      body={<MediationTabs defaultTab={defaultTab} />}
       rightSide={
         loc.pathname.startsWith("/tickets/owned") && (
           <div className="flex w-full h-full justify-between flex-col pt-2">

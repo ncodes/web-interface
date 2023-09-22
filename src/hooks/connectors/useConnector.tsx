@@ -11,7 +11,7 @@ import {
   useSwitchNetwork,
   useWalletClient,
 } from "wagmi";
-import { Address, SimulateContractReturnType } from "viem";
+import { Address, SimulateContractReturnType, TransactionReceipt } from "viem";
 import { ChainInfo } from "../../types/global";
 import { isDev } from "../../libs/helpers.ts";
 
@@ -34,10 +34,10 @@ export interface IConnector {
     targetFunc: string,
     args?,
     noWait?: boolean
-  ): Promise<Address>;
+  ): Promise<[Address, TransactionReceipt]>;
   getTokenBalance(
-    tokenAddress: Address,
-    accountAddress: Address
+    tokenAddress: Address | string,
+    accountAddress: Address | string
   ): Promise<bigint>;
   approveAllowance(
     tokenAddress: Address,
@@ -47,9 +47,9 @@ export interface IConnector {
     confirmations?: number
   ): Promise<`0x${string}`>;
   getTokenAllowance(
-    tokenAddress: Address,
-    accountAddress: Address,
-    spenderAddress: Address
+    tokenAddress: Address | string,
+    accountAddress: Address | string,
+    spenderAddress: Address | string
   ): Promise<bigint>;
   getTokenSupply(tokenAddress: Address): Promise<bigint>;
   humanizeErc20Errors(error: { message: string } | unknown): string;
@@ -180,16 +180,16 @@ export default function useConnector() {
    * @param accountAddress - The account's address
    */
   async function getTokenBalance(
-    tokenAddress: Address,
-    accountAddress: Address
+    tokenAddress: Address | string,
+    accountAddress: Address | string
   ): Promise<bigint> {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
     return publicClient.readContract({
-      address: tokenAddress,
+      address: tokenAddress as Address,
       abi: erc20ABI,
       functionName: "balanceOf",
-      args: [accountAddress],
+      args: [accountAddress as Address],
     });
   }
 
@@ -214,17 +214,17 @@ export default function useConnector() {
    * @param spenderAddress - The spender's address
    */
   async function getTokenAllowance(
-    tokenAddress: Address,
-    accountAddress: Address,
-    spenderAddress: Address
+    tokenAddress: Address | string,
+    accountAddress: Address | string,
+    spenderAddress: Address | string
   ): Promise<bigint> {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
     return publicClient.readContract({
-      address: tokenAddress,
+      address: tokenAddress as Address,
       abi: erc20ABI,
       functionName: "allowance",
-      args: [accountAddress, spenderAddress],
+      args: [accountAddress as Address, spenderAddress as Address],
     });
   }
 
@@ -366,13 +366,15 @@ export default function useConnector() {
       account: address,
     });
     const txHash = await walletClient.writeContract(request);
+    let receipt: TransactionReceipt | undefined = undefined;
     if (!noWait) {
-      await publicClient.waitForTransactionReceipt({
+      receipt = await publicClient.waitForTransactionReceipt({
         hash: txHash,
         confirmations: isDev() ? 1 : confirmations,
       });
     }
-    return txHash;
+
+    return [txHash, receipt];
   }
 
   // Get the current chain info.

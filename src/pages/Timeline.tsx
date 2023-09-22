@@ -10,7 +10,7 @@ import { TopTabContent } from "../components/timeline/TopTabContent.tsx";
 export default function Timeline() {
   return (
     <Layout
-      tab={
+      body={
         <Tabs
           defaultValue="home"
           className="w-full h-full transition-all duration-500"

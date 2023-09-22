@@ -1,6 +1,5 @@
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Address } from "viem";
 import {
   formatToHighDenom,
   formatToMoney,
@@ -8,12 +7,15 @@ import {
   powOfD,
   toBN,
   toDec,
+  toLDD,
 } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
 import { cn } from "../../libs/utils.ts";
 import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
+import { isSynth } from "../../libs/api_utils.ts";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 
 export function ManageLiqEditAmount({
   liquidity,
@@ -41,17 +43,17 @@ export function ManageLiqEditAmount({
   const { getTokenBalance, address } = useConnectorContext();
 
   useEffect(() => {
-    getTokenBalance(market.baseAddress as Address, address as Address).then(
-      (bal) => {
-        setCurBaseBalance(bal);
-      }
-    );
+    (async () => {
+      if (isSynth(market.baseType)) return;
+      const bal = await getTokenBalance(market.baseAddress, address);
+      setCurBaseBalance(bal);
+    })();
   }, []);
 
   useEffect(() => {
     if (!amount) return setErr("");
 
-    const amountLD = toDec(amount).mul(powOfD(1, market.baseDecimals));
+    const amountLD = toLDD(amount, market.baseDecimals);
     if (amountLD.gt(toDec(curBaseBalance))) {
       setErr("Insufficient balance");
     } else {
@@ -86,27 +88,32 @@ export function ManageLiqEditAmount({
           >
             <div className="flex justify-between px-3 pt-1 text-[10px] text-gray-400 tracking-wider">
               <span className="text-gray-200 font-medium">{market.base}</span>
-              <span className="flex gap-2">
-                <span>
-                  BAL:{" "}
-                  {formatToHighDenom(toBN(curBaseBalance), market.baseDecimals)}
+              {!isSynth(market.baseType) && (
+                <span className="flex gap-2">
+                  <span>
+                    BAL:{" "}
+                    {formatToHighDenom(
+                      toBN(curBaseBalance),
+                      market.baseDecimals
+                    )}
+                  </span>
+                  <span>
+                    <Button
+                      variant="ghost"
+                      className="p-0 h-auto text-chinese-green text-[10px] hover:bg-transparent hover:text-chinese-green/90"
+                      onClick={() => {
+                        setAmount(
+                          toDec(curBaseBalance)
+                            .div(powOf(1, market.baseDecimals).toString())
+                            .toFixed()
+                        );
+                      }}
+                    >
+                      Max
+                    </Button>
+                  </span>
                 </span>
-                <span>
-                  <Button
-                    variant="ghost"
-                    className="p-0 h-auto text-chinese-green text-[10px] hover:bg-transparent hover:text-chinese-green/90"
-                    onClick={() => {
-                      setAmount(
-                        toDec(curBaseBalance)
-                          .div(powOf(1, market.baseDecimals).toString())
-                          .toFixed()
-                      );
-                    }}
-                  >
-                    Max
-                  </Button>
-                </span>
-              </span>
+              )}
             </div>
             <Input
               value={amount}
@@ -120,9 +127,10 @@ export function ManageLiqEditAmount({
             <div className="flex flex-wrap justify-between px-3 pb-1 text-[10px] text-gray-400 tracking-wider">
               {baseUsdRate && amount && (
                 <span>
-                  $
                   {formatToMoney(
-                    toDec(baseUsdRate).mul(parseFloat(amount)).toFixed(2)
+                    toDec(baseUsdRate)
+                      .mul(parseFloat(amount))
+                      .toFixed(baseUsdRate < 1 ? 4 : 2)
                   )}
                 </span>
               )}
@@ -137,14 +145,18 @@ export function ManageLiqEditAmount({
             </div>
           </div>
         </div>
-        {/*<p className="flex text-gray-500 text-xs pt-2 items-center gap-1">*/}
-        {/*  <IconInfoCircle width="14px" /> Subtracted amount is returned*/}
-        {/*  to the wallet.*/}
-        {/*</p>*/}
-        {/*<p className="flex text-gray-500 text-xs pt-2 items-center gap-1">*/}
-        {/*  <IconInfoCircle width="14px" /> Additional amount may require*/}
-        {/*  approval.*/}
-        {/*</p>*/}
+        {liquidity && (
+          <>
+            <p className="flex text-gray-500 font-light text-xs pt-2 items-center gap-1">
+              <IconInfoCircle width="14px" /> Subtracted amount is returned to
+              the wallet.
+            </p>
+            <p className="flex text-gray-500 font-light text-xs pt-2 items-center gap-1">
+              <IconInfoCircle width="14px" /> Additional amount may require
+              approval.
+            </p>
+          </>
+        )}
       </div>
     </FilterItem>
   );

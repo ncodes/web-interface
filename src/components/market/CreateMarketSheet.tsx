@@ -85,14 +85,14 @@ export function CreateMarketSheet({
         (commission || 0) * 100,
         1
       );
-      const blockExplorer = getChainInfo().blockExplorer;
+      await delay(5000);
+      const explorer = getChainInfo().blockExplorer;
       notifySuccess("Successfully created a market", {
         duration: 5000,
         links: [
-          { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
         ],
       });
-      await delay(5000);
       queryClient.refetchQueries(["getMarkets"]).catch(console.error);
       close();
     } catch (error) {

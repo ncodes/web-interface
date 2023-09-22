@@ -50,7 +50,12 @@ function SwapPage() {
 export default function Swap() {
   return (
     <Layout
-      tab={<SwapPage />}
+      bodyContainerClassName="lg:h-full"
+      body={
+        <div className="flex flex-col">
+          <SwapPage />
+        </div>
+      }
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-2">
           <Messenger sheetMode={false} />

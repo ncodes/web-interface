@@ -41,7 +41,7 @@ export function SwapPageTabContent() {
   return (
     <TabsContent
       value="my-swaps"
-      className="p-3 pt-0 flex flex-col gap-3 px-0 mt-0"
+      className="p-3 pt-0 flex flex-col gap-3 px-0 mt-0 h-full"
     >
       {swap.isLoading && <RowSkeleton />}
 

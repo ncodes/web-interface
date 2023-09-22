@@ -46,14 +46,40 @@ export function powOfD(n: BigNumberish, power: number) {
  * @param stripZeros If true, strips trailing zeros
  */
 export function toHD(
-  amount: BigNumberish,
+  amount: BigNumberish | Decimal,
   decimals = 18,
   places = 8,
   stripZeros = true
 ) {
-  let val: Decimal = toDec(amount.toString()).div(toDec(10).pow(decimals));
+  return toHDD(amount, decimals, places, stripZeros).toFixed();
+}
+
+/**
+ * Convert amount to high denomination and returns Decimal
+ * @param amount The target amount (in low denomination like wei)
+ * @param decimals The decimal of the asset
+ * @param places The amount of places
+ * @param stripZeros If true, strips trailing zeros
+ */
+export function toHDD(
+  amount: BigNumberish | Decimal,
+  decimals = 18,
+  places = 8,
+  stripZeros = true
+) {
+  let val: Decimal = toDec(amount).div(toDec(10).pow(decimals));
   if (places > 0) val = val.toDecimalPlaces(places);
-  return !stripZeros ? val.toFixed() : parseFloat(val.toFixed()).toString();
+  if (stripZeros && val.lt(1)) return toDec(trimZeros(val.toFixed()));
+  return val;
+}
+
+/**
+ * Strip trailing zeros from a given decimal number
+ * @param amt
+ */
+export function trimZeros(amt: string | number | Decimal) {
+  const amtStr = toDec(amt).toFixed();
+  return amtStr.indexOf(".") != -1 ? amtStr.replaceAll(/0+$/g, "") : amtStr;
 }
 
 /**
@@ -62,7 +88,16 @@ export function toHD(
  * @param decimals The decimal of the asset
  */
 export function toLD(amount: BigNumberish, decimals = 18) {
-  return toDec(amount.toString()).mul(toDec(10).pow(decimals)).toFixed(0);
+  return toLDD(amount, decimals).toFixed(0);
+}
+
+/**
+ * Convert amount to low denomination but returns a Decimal
+ * @param amount
+ * @param decimals
+ */
+export function toLDD(amount: BigNumberish, decimals = 18) {
+  return toDec(amount.toString()).mul(toDec(10).pow(decimals));
 }
 
 /**
@@ -77,7 +112,7 @@ export function cn(...inputs: ClassValue[]) {
  * Convert a number to a Decimal
  * @param val - The value to convert
  */
-export function toDec(val: string | number | BigNumber | bigint) {
+export function toDec(val: string | number | BigNumberish | bigint | Decimal) {
   return new Decimal(val.toString());
 }
 
@@ -129,9 +164,15 @@ export function formatToHighDenom(
  * Format a number to human-readable money format
  * @param v - The value to format
  * @param format - The format to use
+ * @param places - Decimal places to use when v is a decimal number
  */
-export function formatToMoney(v: string | number, format = undefined) {
+export function formatToMoney(
+  v: string | number,
+  format = undefined,
+  places = 6
+) {
   if (!v) return;
+  if (toDec(v).lt(1)) return trimZeros(toDec(v).toFixed(places));
   const param = typeof v === "number" ? v.toLocaleString() : v;
   const fmt = format || (typeof v === "number" ? "0,0.[00]" : "0,0.[0000]");
   return numeral(param).format(fmt) !== "NaN" ? numeral(param).format(fmt) : 0;
@@ -298,7 +339,11 @@ export function isEqlStr(a: string, b: string) {
  * @param amt - The amount
  */
 export function isZero(amt: string | number | undefined) {
-  return !amt || amt === "0";
+  return !amt || toDec(amt).isZero();
+}
+
+export function isNegative(amt: string | number) {
+  return toDec(amt).isNegative();
 }
 
 /**

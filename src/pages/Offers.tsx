@@ -80,7 +80,7 @@ function OfferTabs({ defaultTab }: { defaultTab?: string }) {
 export default function Offers() {
   return (
     <Layout
-      tab={<OfferTabs />}
+      body={<OfferTabs />}
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-2">
           <OfferFilter />

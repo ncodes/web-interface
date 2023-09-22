@@ -49,17 +49,20 @@ export default function useBadgeMgrContract() {
   async function grantNewOrUpsetBadgeMetaBySig(sigInfo: GrantSigInfo) {
     if (sigInfo.isNew) {
       const values = sigInfo.values as NewGrantValues;
-      return simulateAndWriteContract("badgeManager", "grantBadgeBySig", [
-        ...values,
-        sigInfo.sig,
-      ]);
+      const res = await simulateAndWriteContract(
+        "badgeManager",
+        "grantBadgeBySig",
+        [...values, sigInfo.sig]
+      );
+      return res[0];
     } else {
       const values = sigInfo.values as NewGrantValues;
-      return simulateAndWriteContract(
+      const res = await simulateAndWriteContract(
         "badgeManager",
         "upsertGranteeMetaBySig",
         [...values, sigInfo.sig]
       );
+      return res[0];
     }
   }
 

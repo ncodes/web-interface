@@ -17,7 +17,7 @@ export function MyTicketsTabContent() {
   const ticketFilter = useStore((state) => state.ticketFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
-  const [limit] = useState(1);
+  const [limit] = useState(10);
   const {
     isLoading,
     isSuccess,
@@ -79,8 +79,8 @@ export function MyTicketsTabContent() {
               curPage={offset}
               total={data?.meta?.queryCount}
               limit={limit}
-              onNext={() => setOffset(offset + 1)}
-              onPrev={() => setOffset(offset - 1)}
+              onNext={() => setOffset(offset + limit)}
+              onPrev={() => setOffset(offset - limit)}
             />
             <div className="flex flex-col gap-3 p-3 pt-0">
               {data?.tickets.map((ticket: Ticket) => (
@@ -93,12 +93,12 @@ export function MyTicketsTabContent() {
           </div>
           <div className="flex-1 flex flex-col justify-end">
             <Paginator
-              className="border-t"
+              className="border-t rounded-b-3xl"
               curPage={offset}
               total={data?.meta?.queryCount}
               limit={limit}
-              onNext={() => setOffset(offset + 1)}
-              onPrev={() => setOffset(offset - 1)}
+              onNext={() => setOffset(offset + limit)}
+              onPrev={() => setOffset(offset - limit)}
             />
           </div>
         </div>

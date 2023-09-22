@@ -205,8 +205,8 @@ export function SwapProgress({
                 <div className="px-5 font-light text-gray-300 text-sm">
                   The counterpart requires payment.{" "}
                   <b className="text-white tracking-wider">
-                    Send payment to the counterpart using the payment method
-                    they shared with you in the chat.
+                    Send payment to the counterpart using the payment
+                    information they shared with you in the chat.
                   </b>
                   <br />
                   <br />
@@ -216,7 +216,7 @@ export function SwapProgress({
                     </span>
                     <span>
                       Click <b className="text-white">"I have Paid"</b> button
-                      below after you have sent the payment.
+                      after you have sent the payment.
                     </span>
                   </span>
                   <br />

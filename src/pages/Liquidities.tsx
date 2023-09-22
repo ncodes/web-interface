@@ -89,7 +89,7 @@ export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
   const loc = useLocation();
   return (
     <Layout
-      tab={<LiquidityTabs defaultTab={defaultTab} />}
+      body={<LiquidityTabs defaultTab={defaultTab} />}
       rightSide={
         <div className="flex w-full justify-between flex-col pt-2">
           <LiquidityFilter ownerMode={loc.pathname == "/liquidity/owned"} />

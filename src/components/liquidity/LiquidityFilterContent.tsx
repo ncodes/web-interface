@@ -439,7 +439,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
             </FilterItem>
 
             <FilterItem
-              title="Doxxed LP"
+              title="KYC'D LP"
               tip="Find liquidities where liquidity providers have completed KYC"
               className={cn({ hidden: ownerMode })}
             >
@@ -470,7 +470,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
             </FilterItem>
 
             <FilterItem
-              title="Doxxed Takers"
+              title="KYC'D Takers"
               tip="Find liquidities where takers have completed KYC"
               className={cn({ hidden: ownerMode })}
             >

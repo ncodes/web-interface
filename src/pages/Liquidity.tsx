@@ -5,9 +5,8 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { Label } from "../components/ui/label.tsx";
-import { SwapSheetContent } from "../components/swap/SwapSheet.tsx";
 import { Button } from "../components/ui/Button.tsx";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import useStore from "../hooks/store/useStore.ts";
 import {
   CreateOfferContent,
@@ -26,13 +25,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { useConnectorContext } from "../hooks/connectors/context.tsx";
+import { SwapSheetContent } from "../components/swap/SwapSheetContent.tsx";
 
 function LiquidityPage({
   defaultTab,
   onTabChanged,
+  setLiquidity,
 }: {
   defaultTab?: string;
   onTabChanged?: (tab: string) => void;
+  setLiquidity?: Dispatch<SetStateAction<Liquidity | undefined>>;
 }) {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
@@ -128,19 +130,27 @@ function LiquidityPage({
           </DropdownMenu>
         </div>
       </TabsList>
-      {currentTab == "liquidity" && <LiquidityTabContent />}
+      {currentTab == "liquidity" && (
+        <LiquidityTabContent setLiquidity={setLiquidity} />
+      )}
       {currentTab == "offers" && <OffersTabContent />}
       <CreateOfferSheet />
     </Tabs>
   );
 }
 
-function SwapSheetWrapper() {
+function SwapSheetWrapper({ liquidity }: { liquidity: Liquidity | undefined }) {
   return (
     <div className="flex flex-col pt-3">
       <Label className="text-xl">Swap</Label>
       <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
-        <SwapSheetContent outOfSheet={true} />
+        {!!liquidity && (
+          <SwapSheetContent
+            liquidity={liquidity}
+            market={liquidity.market}
+            offSheet={true}
+          />
+        )}
       </div>
     </div>
   );
@@ -159,11 +169,14 @@ function CreateOfferWrapper() {
 
 export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
   const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
+  const [liquidity, setLiquidity] = useState<Liquidity | undefined>();
+
   return (
     <Layout
-      tab={
+      body={
         <LiquidityPage
           defaultTab={currentTab}
+          setLiquidity={setLiquidity}
           onTabChanged={(val) => {
             setCurrentTab(val);
           }}
@@ -171,7 +184,9 @@ export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
       }
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-2">
-          {(currentTab == "liquidity" || !currentTab) && <SwapSheetWrapper />}
+          {(currentTab == "liquidity" || !currentTab) && (
+            <SwapSheetWrapper liquidity={liquidity} />
+          )}
           {currentTab == "offers" && <CreateOfferWrapper />}
           <div className="relative">
             <div className="text-gray-200 bottom-0 w-full">

@@ -122,7 +122,7 @@ export function ManageLiqEditPrice({
                 >
                   -
                 </Button>
-                <div className="flex px-1 justify-center items-center">
+                <div className="flex gap-1 px-1 justify-center items-center">
                   <Input
                     type="number"
                     value={increment}
@@ -154,7 +154,12 @@ export function ManageLiqEditPrice({
               <span>
                 {quoteUsdRate && price && (
                   <>
-                    ${formatToMoney(toDec(quoteUsdRate).mul(price).toFixed(2))}
+                    $
+                    {formatToMoney(
+                      toDec(quoteUsdRate)
+                        .mul(price)
+                        .toFixed(toDec(quoteUsdRate).mul(price).lt(1) ? 4 : 2)
+                    )}
                   </>
                 )}
               </span>
