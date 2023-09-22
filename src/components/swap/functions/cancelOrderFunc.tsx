@@ -7,8 +7,7 @@ import { Options } from "../../../hooks/toast/toast.tsx";
 import { delay, isDev } from "../../../libs/helpers.ts";
 
 /**
- * Order cancelling function intended to be reused in multiple components
- * involving order cancellation.
+ * Order cancelling function
  *
  * @param swap The swap object
  * @param cancelOrder The contract function for cancelling an order
@@ -31,14 +30,14 @@ export async function cancelOrderFunc(
   location: Location,
   loading: LoadingOrTriggeredState,
   triggered: LoadingOrTriggeredState,
-  setLoading: (loading: LoadingOrTriggeredState) => void,
-  setTriggered: (triggered: LoadingOrTriggeredState) => void,
+  setLoading: (id: string, loading: LoadingOrTriggeredState) => void,
+  setTriggered: (id: string, triggered: LoadingOrTriggeredState) => void,
   humanizeErrors: (error: { message: string } | unknown) => string,
   notifySuccess: (msg: ReactNode, options?: Options) => void,
   notifyError: (msg: ReactNode, options?: Options) => void
 ) {
   try {
-    setLoading({ ...loading, cancelOrder: true });
+    setLoading(swap.orderId.toFixed(), { ...loading, cancelOrder: true });
 
     const [txHash] = await cancelOrder(BigInt(swap.orderId));
     await delay(5000);
@@ -54,12 +53,13 @@ export async function cancelOrderFunc(
     } else if (location.pathname.includes("swap/")) {
       await queryClient.refetchQueries(["getSwap"]);
     }
-    setTriggered({ ...triggered, cancelOrder: true });
+
+    setTriggered(swap.orderId.toFixed(), { ...triggered, cancelOrder: true });
   } catch (error) {
     const msg = humanizeErrors(error);
     notifyError(msg);
     if (isDev()) console.error(error);
   } finally {
-    setLoading({ ...loading, cancelOrder: false });
+    setLoading(swap.orderId.toFixed(), { ...loading, cancelOrder: false });
   }
 }

@@ -43,6 +43,7 @@ import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
+import { markOrderAsPaidFunc } from "./functions/markOrderAsPaidFunc.ts";
 
 interface ButtonEnableState {
   appeal: boolean;
@@ -62,7 +63,7 @@ export function SwapRow({
   const location = useLocation();
   const navigate = useNavigate();
   const { address, getChainInfo } = useConnectorContext();
-  const { cancelOrder, humanizeErrors } = useCoreContract();
+  const { cancelOrder, markOrderAsPaid, humanizeErrors } = useCoreContract();
   const { notifyError, notifySuccess } = useToast();
   const { swapPageState } = useStore((s) => ({
     swapPageState: s.swapPageState,
@@ -84,6 +85,23 @@ export function SwapRow({
     await cancelOrderFunc(
       swap,
       cancelOrder,
+      getChainInfo,
+      queryClient,
+      location,
+      loading,
+      triggered,
+      setLoading,
+      setTriggered,
+      humanizeErrors,
+      notifySuccess,
+      notifyError
+    );
+  }
+
+  async function doMarkAsPaid() {
+    await markOrderAsPaidFunc(
+      swap,
+      markOrderAsPaid,
       getChainInfo,
       queryClient,
       location,
@@ -803,10 +821,26 @@ export function SwapRow({
                       <Button
                         size="sm"
                         rounded="lg"
-                        className="text-xs md:text-sm min-w-[100px]"
+                        className="text-xs md:text-sm min-w-[108px]"
                         scale="sm"
+                        onClick={doMarkAsPaid}
+                        disabled={
+                          loading[swap.orderId]?.markOrderAsPaid ||
+                          triggered[swap.orderId]?.markOrderAsPaid
+                        }
                       >
-                        I Have Paid
+                        {!loading[swap.orderId]?.markOrderAsPaid && (
+                          <>I Have Paid</>
+                        )}
+                        {loading[swap.orderId]?.markOrderAsPaid && (
+                          <>
+                            <IconSpinner
+                              width="20"
+                              fill="fill-gray-900"
+                              className="animate-spin"
+                            />
+                          </>
+                        )}
                       </Button>
                     )}
 
@@ -820,12 +854,12 @@ export function SwapRow({
                       onClick={doCancel}
                       disabled={
                         disableButtons.cancel ||
-                        loading.cancelOrder ||
-                        triggered.cancelOrder
+                        loading[swap.orderId]?.cancelOrder ||
+                        triggered[swap.orderId]?.cancelOrder
                       }
                     >
-                      {!loading.cancelOrder && <>Cancel</>}
-                      {loading.cancelOrder && (
+                      {!loading[swap.orderId]?.cancelOrder && <>Cancel</>}
+                      {loading[swap.orderId]?.cancelOrder && (
                         <>
                           <IconSpinner
                             width="20"

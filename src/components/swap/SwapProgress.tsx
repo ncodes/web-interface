@@ -29,6 +29,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
 import { useLocation } from "react-router-dom";
+import { markOrderAsPaidFunc } from "./functions/markOrderAsPaidFunc.ts";
 
 export function SwapProgress({
   swap,
@@ -40,7 +41,7 @@ export function SwapProgress({
   const location = useLocation();
   const queryClient = useQueryClient();
   const { address, getChainInfo } = useConnectorContext();
-  const { cancelOrder, humanizeErrors } = useCoreContract();
+  const { cancelOrder, markOrderAsPaid, humanizeErrors } = useCoreContract();
   const { notifyError, notifySuccess } = useToast();
   const [canCancel, setCanCancel] = useState(false);
   const [canDispute, setCanDispute] = useState(false);
@@ -60,6 +61,23 @@ export function SwapProgress({
     await cancelOrderFunc(
       swap,
       cancelOrder,
+      getChainInfo,
+      queryClient,
+      location,
+      loading,
+      triggered,
+      setLoading,
+      setTriggered,
+      humanizeErrors,
+      notifySuccess,
+      notifyError
+    );
+  }
+
+  async function doMarkAsPaid() {
+    await markOrderAsPaidFunc(
+      swap,
+      markOrderAsPaid,
       getChainInfo,
       queryClient,
       location,
@@ -287,8 +305,24 @@ export function SwapProgress({
                       variant="default"
                       className="px-0 xxs:px-4"
                       size="full"
+                      onClick={doMarkAsPaid}
+                      disabled={
+                        loading[swap.orderId]?.markOrderAsPaid ||
+                        triggered[swap.orderId]?.markOrderAsPaid
+                      }
                     >
-                      I Have Paid
+                      {!loading[swap.orderId]?.markOrderAsPaid && (
+                        <>I Have Paid</>
+                      )}
+                      {loading[swap.orderId]?.markOrderAsPaid && (
+                        <>
+                          <IconSpinner
+                            width="20"
+                            fill="fill-gray-900"
+                            className="animate-spin"
+                          />
+                        </>
+                      )}
                     </Button>
                   )}
                   <Button
@@ -298,12 +332,14 @@ export function SwapProgress({
                       "w-full": canCancel,
                     })}
                     disabled={
-                      !canCancel || loading.cancelOrder || triggered.cancelOrder
+                      !canCancel ||
+                      loading[swap.orderId]?.cancelOrder ||
+                      triggered[swap.orderId]?.cancelOrder
                     }
                     onClick={doCancel}
                   >
-                    {!loading.cancelOrder && <>Cancel</>}
-                    {loading.cancelOrder && (
+                    {!loading[swap.orderId]?.cancelOrder && <>Cancel</>}
+                    {loading[swap.orderId]?.cancelOrder && (
                       <IconSpinner
                         width="20"
                         className="animate-spin"

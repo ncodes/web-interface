@@ -172,6 +172,26 @@ export default function useCoreContract() {
   }
 
   /**
+   * Mark an order as paid
+   * @param orderId The order ID
+   */
+  async function markOrderAsPaid(orderId: bigint) {
+    return (
+      await simulateAndWriteContract("core", "markOrderAsPaid", [orderId])
+    )[0];
+  }
+
+  /**
+   * Release an order
+   * @param orderId The order ID
+   */
+  async function releaseOrder(orderId: bigint) {
+    return (
+      await simulateAndWriteContract("core", "releaseOrder", [orderId])
+    )[0];
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
@@ -211,5 +231,7 @@ export default function useCoreContract() {
     setSwapBadgeForLiquidity,
     humanizeErrors,
     cancelOrder,
+    markOrderAsPaid,
+    releaseOrder,
   };
 }
