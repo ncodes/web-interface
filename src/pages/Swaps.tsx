@@ -16,6 +16,7 @@ import { MySwapTabContent } from "../components/swap/MySwapTabContent.tsx";
 import { SwapFilterSheet } from "../components/swap/SwapFilterSheet.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { SwapFilter } from "../components/swap/SwapFilter.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function SwapTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();
@@ -78,19 +79,18 @@ function SwapTabs({ defaultTab }: { defaultTab?: string }) {
 }
 
 export default function Swaps() {
-  return (
-    <Layout
-      body={<SwapTabs />}
-      rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
-          <SwapFilter />
-          <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
-              <Footer />
-            </div>
-          </div>
+  const { connected } = useConnectorContext();
+
+  const rightSide = connected ? (
+    <div className="flex w-full h-full justify-between flex-col pt-2">
+      <SwapFilter />
+      <div className="relative">
+        <div className="text-gray-200 bottom-0 w-full">
+          <Footer />
         </div>
-      }
-    />
-  );
+      </div>
+    </div>
+  ) : null;
+
+  return <Layout body={<SwapTabs />} rightSide={rightSide} />;
 }

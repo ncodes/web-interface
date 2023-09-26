@@ -9,6 +9,7 @@ import { ActivityLogSkeleton } from "../liquidity/LiquidityEventLog.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Events } from "../../types/enums.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { cn } from "../../libs/utils.ts";
 
 export function SwapEventLogs({ swap }: { swap: Swap }) {
   const { getChainInfo } = useConnectorContext();
@@ -23,6 +24,7 @@ export function SwapEventLogs({ swap }: { swap: Swap }) {
     ],
     queryFn: getEvents,
     enabled: !!swap,
+    refetchInterval: 10000,
   });
 
   return (
@@ -32,7 +34,13 @@ export function SwapEventLogs({ swap }: { swap: Swap }) {
           side="bottom"
           className="[&>span.grad-indicator]:mb-[0px]"
         >
-          <ScrollArea type="scroll" className="h-[300px]">
+          <ScrollArea
+            type="scroll"
+            className={cn({
+              "h-[300px]": (events.data?.length || 0) > 3,
+              "min-h-[150px]": (events.data?.length || 0) <= 3,
+            })}
+          >
             <div className="">
               {events.isLoading && (
                 <span className="absolute w-full">
@@ -50,7 +58,16 @@ export function SwapEventLogs({ swap }: { swap: Swap }) {
 
               {!events.isLoading && events.isSuccess && (
                 <>
+                  {events.data?.map((event: Event) => (
+                    <EventItem
+                      swap={swap}
+                      event={event}
+                      key={`${event.creator}:${event.action}:${event.createdAt}`}
+                    />
+                  ))}
+
                   <EventItem
+                    key="new"
                     swap={swap}
                     event={
                       {
@@ -60,14 +77,6 @@ export function SwapEventLogs({ swap }: { swap: Swap }) {
                       } as Event
                     }
                   />
-
-                  {events.data?.map((event: Event) => (
-                    <EventItem
-                      swap={swap}
-                      event={event}
-                      key={`${event.creator}:${event.action}`}
-                    />
-                  ))}
                 </>
               )}
             </div>

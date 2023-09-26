@@ -87,7 +87,7 @@ export function trimZeros(amt: string | number | Decimal) {
  * @param amount The target amount (in high denomination like eth)
  * @param decimals The decimal of the asset
  */
-export function toLD(amount: BigNumberish, decimals = 18) {
+export function toLD(amount: BigNumberish | Decimal, decimals = 18) {
   return toLDD(amount, decimals).toFixed(0);
 }
 
@@ -96,7 +96,7 @@ export function toLD(amount: BigNumberish, decimals = 18) {
  * @param amount
  * @param decimals
  */
-export function toLDD(amount: BigNumberish, decimals = 18) {
+export function toLDD(amount: BigNumberish | Decimal, decimals = 18) {
   return toDec(amount.toString()).mul(toDec(10).pow(decimals));
 }
 
@@ -181,12 +181,14 @@ export function formatToMoney(
 /**
  * Shorten an address and include ellipsis at the middle
  * @param address - The address
+ * @param lLen - The length of the left side
+ * @param rLen - The length of the right side
  */
-export function shortenAddress(address: string) {
+export function shortenAddress(address: string, lLen = 6, rLen = 4) {
   if (!address) return address;
-  return `${address.substring(0, 6)}...${address.substring(
+  return `${address.substring(0, lLen)}...${address.substring(
     address.length,
-    address.length - 4
+    address.length - rLen
   )}`;
 }
 

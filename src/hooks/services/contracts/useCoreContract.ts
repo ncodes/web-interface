@@ -2,6 +2,8 @@ import { useConnectorContext } from "../../connectors/context.tsx";
 import { toBN } from "../../../libs/helpers.ts";
 import { Address } from "viem";
 import { BigNumberish, ethers } from "ethers";
+import { Structs } from "../../../typechain/Core.ts";
+import OrderStruct = Structs.OrderStruct;
 
 /**
  * Providers utilities for reading and writing to the Core contract
@@ -93,7 +95,7 @@ export default function useCoreContract() {
     txDeadline: BigNumberish,
     operator: BigNumberish = 0
   ) {
-    const res = await simulateAndWriteContract("core", "swapQuoteForBase", [
+    return await simulateAndWriteContract("core", "swapQuoteForBase", [
       marketId,
       provider,
       recipient,
@@ -104,7 +106,6 @@ export default function useCoreContract() {
       txDeadline,
       operator,
     ]);
-    return res;
   }
 
   /**
@@ -192,6 +193,14 @@ export default function useCoreContract() {
   }
 
   /**
+   * Get an order
+   * @param orderId The order ID
+   */
+  async function getOrder(orderId: number): Promise<OrderStruct> {
+    return readContract("core", "getOrder", [orderId]);
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
@@ -226,6 +235,7 @@ export default function useCoreContract() {
   return {
     updateFungibleLiquidity,
     hasLiquidity,
+    getOrder,
     swapQuoteForBase,
     computeSwapFee,
     setSwapBadgeForLiquidity,

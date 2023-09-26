@@ -1,7 +1,6 @@
 import { ChainInfo } from "../../../types/global";
 import { QueryClient } from "@tanstack/react-query";
 import { Location } from "react-router-dom";
-import { LoadingOrTriggeredState } from "../../../hooks/store/useStore.ts";
 import { ReactNode } from "react";
 import { Options } from "../../../hooks/toast/toast.tsx";
 import { delay, isDev } from "../../../libs/helpers.ts";
@@ -15,9 +14,7 @@ import { delay, isDev } from "../../../libs/helpers.ts";
  * @param queryClient The query client
  * @param location The react router location object
  * @param loading The current loading state
- * @param triggered The current triggered state
  * @param setLoading The function for setting the loading state
- * @param setTriggered The function for setting the triggered state
  * @param humanizeErrors The function for humanizing errors from the contract
  * @param notifySuccess The function for notifying success
  * @param notifyError The function for notifying errors
@@ -28,10 +25,8 @@ export async function markOrderAsPaidFunc(
   getChainInfo: () => ChainInfo,
   queryClient: QueryClient,
   location: Location,
-  loading: LoadingOrTriggeredState,
-  triggered: LoadingOrTriggeredState,
-  setLoading: (id: string, loading: LoadingOrTriggeredState) => void,
-  setTriggered: (id: string, triggered: LoadingOrTriggeredState) => void,
+  loading: LoadingState,
+  setLoading: (id: string, loading: LoadingState) => void,
   humanizeErrors: (error: { message: string } | unknown) => string,
   notifySuccess: (msg: ReactNode, options?: Options) => void,
   notifyError: (msg: ReactNode, options?: Options) => void
@@ -53,11 +48,6 @@ export async function markOrderAsPaidFunc(
     } else if (location.pathname.includes("swap/")) {
       await queryClient.refetchQueries(["getSwap"]);
     }
-
-    setTriggered(swap.orderId.toFixed(), {
-      ...triggered,
-      markOrderAsPaid: true,
-    });
   } catch (error) {
     const msg = humanizeErrors(error);
     notifyError(msg);

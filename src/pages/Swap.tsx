@@ -50,7 +50,7 @@ function SwapPage() {
 export default function Swap() {
   return (
     <Layout
-      bodyContainerClassName="lg:h-full"
+      bodyContainerClassName="lg:min-h-full"
       body={
         <div className="flex flex-col">
           <SwapPage />

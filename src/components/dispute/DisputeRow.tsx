@@ -27,13 +27,15 @@ import {
 } from "lucide-react";
 import { StatCard } from "../market/StatCard.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ToolTip } from "../ToolTip.tsx";
 import moment from "moment/moment";
 import {
   getDisputeOutcome,
   getDisputeStatus,
+  isCommitter,
   isDisputeDraftee,
+  isRevealer,
 } from "../../libs/api_utils.ts";
 import {
   DisputeStatusBadge,
@@ -49,10 +51,18 @@ import {
 } from "./DisputeStatusBadge.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { CountDown } from "../Countdown.tsx";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { UserHoverCard } from "../UserHoverCard.tsx";
+import CommitVotePopOver from "../swap/CommitVotePopOver.tsx";
+import { delay, isDev } from "../../libs/helpers.ts";
+import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import RevealVotePopOver from "../swap/RevealVotePopOver.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { useInterval } from "usehooks-ts";
+import { IDBadge } from "../IDBadge.tsx";
 
 interface ButtonEnableState {
   commit: boolean;
@@ -68,25 +78,119 @@ export function DisputeRow({
   noFocus?: boolean;
   className?: string;
 }) {
-  const { address } = useConnectorContext();
+  const { address, getChainInfo } = useConnectorContext();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { getUser } = useUserService();
   const location = useLocation();
+  const queryClient = useQueryClient();
+  const { commitVote, revealVote, humanizeErrors } =
+    useDisputeManagerContract();
+  const { notifySuccess, notifyError } = useToast();
   const setPageSwapState = useStore((state) => state.setPageSwapState);
+  const [loading, setLoading] = useState<LoadingState>({});
+  const [enableButtons, setEnableButtons] = useState<ButtonEnableState>({
+    commit: false,
+    reveal: false,
+  });
+  const [committed, setCommitted] = useState<boolean | undefined>(undefined);
+  const [revealed, setRevealed] = useState<boolean | undefined>(undefined);
+
   const getDefendant = useQuery({
     queryKey: ["getUser", { address: dispute.defendant, noAuth: true }],
     queryFn: getUser,
     enabled: !!dispute.defendant,
   });
+
   const getCreator = useQuery({
     queryKey: ["getUser", { address: dispute.creator, noAuth: true }],
     queryFn: getUser,
     enabled: !!dispute.creator,
   });
-  const [enableButtons, setEnableButtons] = useState<ButtonEnableState>({
-    commit: false,
-    reveal: false,
-  });
+
+  useInterval(
+    () => {
+      setCommitted(isCommitter(dispute, address));
+    },
+    committed == false ? 5000 : null
+  );
+
+  useInterval(
+    () => {
+      setRevealed(isRevealer(dispute, address));
+    },
+    revealed == false ? 5000 : null
+  );
+
+  async function doCommit(hash: string) {
+    try {
+      setLoading({ ...loading, commitVote: true });
+
+      const [txHash] = await commitVote(
+        dispute.orderId,
+        dispute.ticketIndex,
+        hash
+      );
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Vote successfully committed`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      if (location.pathname.includes("disputes")) {
+        await queryClient.refetchQueries(["getDisputesAsParticipant"]);
+      } else if (location.pathname.includes("swap/")) {
+        await queryClient.refetchQueries(["getSwap"]);
+      }
+
+      setCommitted(isCommitter(dispute, address));
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading({ ...loading, commitVote: false });
+    }
+  }
+
+  async function doReveal(vote: string, hash: string) {
+    try {
+      setLoading({ ...loading, revealVote: true });
+
+      const [txHash] = await revealVote(
+        dispute.orderId,
+        dispute.ticketIndex,
+        vote,
+        hash
+      );
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Vote successfully revealed`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      if (location.pathname.includes("disputes")) {
+        await queryClient.refetchQueries(["getDisputesAsParticipant"]);
+      } else if (location.pathname.includes("swap/")) {
+        await queryClient.refetchQueries(["getSwap"]);
+      }
+
+      setRevealed(isRevealer(dispute, address));
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading({ ...loading, revealVote: false });
+    }
+  }
 
   return (
     <div
@@ -150,24 +254,6 @@ export function DisputeRow({
                   data-click-trigger="1"
                 >
                   <StatCard
-                    title={`No. of Mediators`}
-                    tip={`The total number of mediators required for this dispute`}
-                    width="min-w-[160px]"
-                  >
-                    <span className="text-gray-200">
-                      {dispute.numMediators}
-                    </span>
-                  </StatCard>
-                  <StatCard
-                    title={`No. Drafted`}
-                    tip={`The number of mediators that have drafted the dispute`}
-                    width="min-w-[120px]"
-                  >
-                    <span className="text-gray-200">
-                      {dispute.numMediatorsDrafted}
-                    </span>
-                  </StatCard>
-                  <StatCard
                     title={`Disputer Request`}
                     tip={`The outcome the dispute creator is seeking (release or cancel)`}
                     width="min-w-[160px]"
@@ -177,21 +263,44 @@ export function DisputeRow({
                     </span>
                   </StatCard>
                   <StatCard
+                    title={`No. of Mediators`}
+                    tip={`The total number of mediators required for this dispute`}
+                    width="min-w-[160px]"
+                  >
+                    <span className="text-gray-200 flex gap-2 items-center">
+                      <span>{dispute.numMediators}</span>
+                      <span className="font-light text-gray-400 text-sm">
+                        ({dispute.numMediatorsDrafted} drafted)
+                      </span>
+                    </span>
+                  </StatCard>
+                  <StatCard
                     title={`Current Phase`}
                     tip={`The current phase of the dispute`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">
-                      {getDisputeStatus(dispute) == "draft" && <>Drafting</>}
-                      {getDisputeStatus(dispute) == "evidence" && <>Evidence</>}
-                      {getDisputeStatus(dispute) == "commit" && <>Commit</>}
-                      {getDisputeStatus(dispute) == "reveal" && <>Reveal</>}
+                    <span className="text-gray-200 text-[13px]">
+                      {getDisputeStatus(dispute) == "draft" && (
+                        <>Drafting Mediators</>
+                      )}
+                      {getDisputeStatus(dispute) == "evidence" && (
+                        <>Evidence Sharing</>
+                      )}
+                      {getDisputeStatus(dispute) == "commit" && (
+                        <>Vote Commit</>
+                      )}
+                      {getDisputeStatus(dispute) == "reveal" && (
+                        <>Vote Reveal</>
+                      )}
+                      {getDisputeStatus(dispute) == "abandoned" && (
+                        <>Awaiting Execution</>
+                      )}
                       {getDisputeStatus(dispute) == "awaiting_exec" && (
-                        <>Execution</>
+                        <>Awaiting Execution</>
                       )}
                       {["released", "stalled", "cancelled"].includes(
                         getDisputeStatus(dispute)
-                      ) && <>-</>}
+                      ) && <>Verdict Executed</>}
                     </span>
                   </StatCard>
                   <StatCard
@@ -199,12 +308,24 @@ export function DisputeRow({
                     tip={`The next phase of the dispute`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">
-                      {getDisputeStatus(dispute) == "draft" && <>Evidence</>}
-                      {getDisputeStatus(dispute) == "evidence" && <>Commit</>}
-                      {getDisputeStatus(dispute) == "commit" && <>Reveal</>}
-                      {getDisputeStatus(dispute) == "reveal" && <>Execution</>}
+                    <span className="text-gray-200 text-[13px]">
+                      {getDisputeStatus(dispute) == "draft" && (
+                        <>Evidence Sharing</>
+                      )}
+                      {getDisputeStatus(dispute) == "evidence" && (
+                        <>Vote Commit</>
+                      )}
+                      {getDisputeStatus(dispute) == "commit" && (
+                        <>Vote Reveal</>
+                      )}
+                      {getDisputeStatus(dispute) == "reveal" && (
+                        <>Awaiting Execution</>
+                      )}
                       {getDisputeStatus(dispute) == "awaiting_exec" && <>-</>}
+                      {getDisputeStatus(dispute) == "abandoned" && <>-</>}
+                      {["released", "stalled", "cancelled"].includes(
+                        getDisputeStatus(dispute)
+                      ) && <>-</>}
                     </span>
                   </StatCard>
                   <StatCard
@@ -228,9 +349,12 @@ export function DisputeRow({
                         <CountDown isoDate={dispute.revealEndAt} full />
                       </span>
                     )}
-                    {["awaiting_exec", "executed"].includes(
+                    {["awaiting_exec", "executed", "abandoned"].includes(
                       getDisputeStatus(dispute) || ""
                     ) && <span className="text-gray-200">-</span>}
+                    {["released", "stalled", "cancelled"].includes(
+                      getDisputeStatus(dispute)
+                    ) && <>-</>}
                   </StatCard>
                 </div>
               </ScrollAreaHorizontal>
@@ -239,7 +363,7 @@ export function DisputeRow({
         </div>
 
         {/* Level 2 */}
-        <div className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between">
+        <div className="border-t border-gray-800 text-gray-400 px-3 py-1 flex flex-col md:flex-row md:justify-between">
           {address && getDisputeStatus(dispute) == "abandoned" && (
             <span className="flex gap-1 text-xs items-center font-light tracking-wide">
               <CheckCircle width="15" className="" />{" "}
@@ -249,7 +373,7 @@ export function DisputeRow({
                 }
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
-                <span>Swap released by counterpart.</span>
+                <span>Swap was released</span>
                 <IconInfoCircle
                   width="15"
                   className="hidden xs:inline text-gray-300"
@@ -265,7 +389,7 @@ export function DisputeRow({
                 tip={<DisputeTipReleased />}
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
-                <span>Swap released by mediators.</span>
+                <span>Swap released by mediators</span>
                 <IconInfoCircle
                   width="15"
                   className="hidden xs:inline text-gray-300"
@@ -280,7 +404,7 @@ export function DisputeRow({
                 tip={<DisputeTipCancelled />}
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
-                <span>Swap was cancelled by mediators.</span>
+                <span>Swap was cancelled by mediators</span>
                 <IconInfoCircle
                   width="15"
                   className="hidden xs:inline text-gray-300"
@@ -423,6 +547,7 @@ export function DisputeRow({
                 </span>
               </ToolTip>
             </span>
+            <IDBadge id={dispute.disputeId} tip="Dispute ID" />
           </span>
         </div>
 
@@ -431,66 +556,112 @@ export function DisputeRow({
           <div data-click-trigger="1" className="pt-1 pl-1 flex gap-1">
             {["evidence", "commit"].includes(getDisputeStatus(dispute) || "") &&
               isDisputeDraftee(dispute, address) && (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  rounded="lg"
-                  className="text-xs md:text-sm"
-                  scale="sm"
-                  disabled={!enableButtons.commit}
+                <CommitVotePopOver
+                  modal={true}
+                  disputeId={dispute.disputeId}
+                  orderId={dispute.orderId}
+                  ticketIndex={dispute.ticketIndex}
+                  onActivate={(hash) => {
+                    doCommit(hash).catch(console.error);
+                  }}
                 >
-                  Commit
-                  <CountDown
-                    wrapL="&nbsp;("
-                    isoDate={dispute.evidenceEndAt}
-                    onDone={() => {
-                      setEnableButtons({ ...enableButtons, commit: true });
-                    }}
-                  />
-                  {enableButtons.commit && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    rounded="lg"
+                    className="text-xs md:text-sm m-w-[110px]"
+                    scale="sm"
+                    disabled={
+                      !enableButtons.commit ||
+                      loading.commitVote ||
+                      committed != undefined ||
+                      isCommitter(dispute, address)
+                    }
+                  >
+                    {!loading.commitVote && <>Commit</>}
+                    {loading.commitVote && (
+                      <>
+                        <IconSpinner
+                          width="20"
+                          fill="fill-gray-900"
+                          className="animate-spin"
+                        />
+                      </>
+                    )}
                     <CountDown
                       wrapL="&nbsp;("
-                      isoDate={dispute.commitEndAt}
+                      isoDate={dispute.evidenceEndAt}
                       onDone={() => {
-                        setEnableButtons({ ...enableButtons, commit: false });
+                        setEnableButtons({ ...enableButtons, commit: true });
                       }}
                     />
-                  )}
-                </Button>
+                    {enableButtons.commit && (
+                      <CountDown
+                        wrapL="&nbsp;("
+                        isoDate={dispute.commitEndAt}
+                        onDone={() => {
+                          setEnableButtons({ ...enableButtons, commit: false });
+                        }}
+                      />
+                    )}
+                  </Button>
+                </CommitVotePopOver>
               )}
 
             {["commit", "reveal"].includes(getDisputeStatus(dispute) || "") &&
               isDisputeDraftee(dispute, address) && (
-                <Button
-                  size="sm"
-                  rounded="lg"
-                  className="text-xs md:text-sm"
-                  scale="sm"
-                  disabled={
-                    !enableButtons.reveal &&
-                    getDisputeStatus(dispute) != "reveal"
-                  }
+                <RevealVotePopOver
+                  modal={true}
+                  disputeId={dispute.disputeId}
+                  orderId={dispute.orderId}
+                  ticketIndex={dispute.ticketIndex}
+                  onActivate={(vote: string, hash) => {
+                    doReveal(vote, hash).catch(console.error);
+                  }}
                 >
-                  Reveal
-                  <CountDown
-                    wrapL="&nbsp;("
-                    headless={true}
-                    isoDate={dispute.commitEndAt}
-                    onDone={() => {
-                      setEnableButtons({ ...enableButtons, reveal: true });
-                    }}
-                  />
-                  {enableButtons.reveal && (
+                  <Button
+                    size="sm"
+                    rounded="lg"
+                    className="text-xs md:text-sm m-w-[110px]"
+                    scale="sm"
+                    disabled={
+                      (!enableButtons.reveal &&
+                        getDisputeStatus(dispute) != "reveal") ||
+                      loading.revealVote ||
+                      revealed != undefined ||
+                      isRevealer(dispute, address)
+                    }
+                  >
+                    {!loading.revealVote && <>Reveal</>}
+                    {loading.revealVote && (
+                      <>
+                        <IconSpinner
+                          width="20"
+                          fill="fill-gray-900"
+                          className="animate-spin"
+                        />
+                      </>
+                    )}
                     <CountDown
                       wrapL="&nbsp;("
-                      isoDate={dispute.revealEndAt}
+                      headless={true}
+                      isoDate={dispute.commitEndAt}
                       onDone={() => {
-                        setEnableButtons({ ...enableButtons, reveal: false });
-                        setPageSwapState({ revealPhaseEnded: true });
+                        setEnableButtons({ ...enableButtons, reveal: true });
                       }}
                     />
-                  )}
-                </Button>
+                    {enableButtons.reveal && (
+                      <CountDown
+                        wrapL="&nbsp;("
+                        isoDate={dispute.revealEndAt}
+                        onDone={() => {
+                          setEnableButtons({ ...enableButtons, reveal: false });
+                          setPageSwapState({ revealPhaseEnded: true });
+                        }}
+                      />
+                    )}
+                  </Button>
+                </RevealVotePopOver>
               )}
           </div>
 
@@ -499,25 +670,29 @@ export function DisputeRow({
             className="flex items-center lg:border-l border-gray-800 shrink-0 px-2"
           >
             <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className={cn(
-                  "text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1",
-                  { hidden: location.pathname.match("^/swap") }
-                )}
-              >
-                View Swap
-              </Button>
+              <NavLink to={`/swap/${dispute.orderId}`}>
+                <Button
+                  variant="link"
+                  rounded="none"
+                  className={cn(
+                    "text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1",
+                    { hidden: location.pathname.match("^/swap") }
+                  )}
+                >
+                  View Swap
+                </Button>
+              </NavLink>
             </span>
             <span className="hidden lg:inline border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                View Ticket
-              </Button>
+              <NavLink to={`/tickets/owned`}>
+                <Button
+                  variant="link"
+                  rounded="none"
+                  className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                >
+                  View Tickets
+                </Button>
+              </NavLink>
             </span>
 
             <span className="lg:hidden border-l border-gray-800">
@@ -537,16 +712,20 @@ export function DisputeRow({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem
-                    className={cn("flex gap-2", {
-                      hidden: location.pathname.match("^/swap"),
-                    })}
-                  >
-                    View Swap
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="flex gap-2">
-                    View Ticket
-                  </DropdownMenuItem>
+                  <NavLink to={`/swap/${dispute.orderId}`}>
+                    <DropdownMenuItem
+                      className={cn("flex gap-2", {
+                        hidden: location.pathname.match("^/swap"),
+                      })}
+                    >
+                      View Swap
+                    </DropdownMenuItem>
+                  </NavLink>
+                  <NavLink to={`/tickets/owned`}>
+                    <DropdownMenuItem className="flex gap-2">
+                      View Tickets
+                    </DropdownMenuItem>
+                  </NavLink>
                 </DropdownMenuContent>
               </DropdownMenu>
             </span>

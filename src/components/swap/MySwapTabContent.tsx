@@ -15,6 +15,7 @@ export function MySwapTabContent() {
   const { getChainInfo, address } = useConnectorContext();
   const { listSwaps } = useSwapService();
   const swapFilter = useStore((state) => state.swapFilter);
+  const fullLoadCount = useStore((state) => state.fullLoadCount);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
@@ -41,20 +42,14 @@ export function MySwapTabContent() {
     queryFn: listSwaps,
     keepPreviousData: false,
     enabled: !!address,
+    refetchInterval: 10000,
   });
 
   useEffect(() => {
-    if ((fetchStatus != "idle" && isLoading) || isRefetching)
-      setLoaderProgress && setLoaderProgress(50);
+    if (fullLoadCount > 0) return; // no need to show loader if data is already cached
+    if (isLoading || isRefetching) setLoaderProgress && setLoaderProgress(50);
     else setLoaderProgress && setLoaderProgress(100);
-  }, [
-    isError,
-    isLoading,
-    setLoaderProgress,
-    isRefetching,
-    isRefetchError,
-    fetchStatus,
-  ]);
+  }, [isError, isLoading, setLoaderProgress, isRefetching, isRefetchError]);
 
   return (
     <TabsContent value="my-swaps" className="p-0 m-0 flex flex-col gap-3">

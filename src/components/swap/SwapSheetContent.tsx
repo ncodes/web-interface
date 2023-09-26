@@ -359,13 +359,18 @@ export function SwapSheetContent({
   async function doSwap() {
     try {
       setLoading(true);
+      const { address, quoteDecimals, baseType, baseDecimals } = market;
+      const { provider, lid, price } = liquidity;
+      const quoteAmt = toDec(quoteAmount);
       const [txHash, txReceipt] = await swapQuoteForBase(
-        market.address,
-        liquidity.provider,
+        address,
+        provider,
         undefined,
-        liquidity.lid,
-        toLD(toDec(quoteAmount).div(amount).toFixed(), market.baseDecimals),
-        toLD(maxPrice, market.quoteDecimals),
+        lid,
+        !isSynth(baseType)
+          ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
+          : toLD(amount, baseDecimals),
+        toLD(maxPrice, quoteDecimals),
         [],
         0 // TODO: use moment().add(expireDuration, "s").unix()
       );

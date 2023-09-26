@@ -104,6 +104,8 @@ export function ManageGeneralLiquidityTab({
   // Checks if there is enough allowance to cover the amount
   function hasEnoughAllowance() {
     if (isSynth(market.baseType)) return true;
+    const { newAmt, deduct } = getAmountChange();
+    if (deduct || newAmt == "0") return true;
     return toDec(allowance).gte(
       toDec((amount.value as string) || "0").mul(powOfD(1, market.baseDecimals))
     );
@@ -164,6 +166,7 @@ export function ManageGeneralLiquidityTab({
         values.price == liquidity.price &&
         values.minSwap == liquidity.minSwap &&
         values.maxSwap == liquidity.maxSwap &&
+        parseInt(values.paymentTime) == liquidity.timeToPay &&
         values.target == liquidity.target &&
         !!values.paused == liquidity.paused
       ) {
@@ -193,25 +196,31 @@ export function ManageGeneralLiquidityTab({
     }
   }
 
+  function getAmountChange() {
+    const { amount } = getValues();
+    let newAmt = amount;
+    let deduct = false;
+    if (liquidity) {
+      if (toBN(newAmt).eq(liquidity.amount)) {
+        newAmt = "0";
+      } else if (toBN(newAmt).lt(liquidity.amount)) {
+        deduct = true;
+        newAmt = toBN(liquidity.amount).sub(newAmt).toString();
+      } else {
+        deduct = false;
+        newAmt = toBN(newAmt).sub(liquidity.amount).toString();
+      }
+    }
+    return { newAmt, deduct };
+  }
+
   // Add or modify a liquidity
   async function doAddOrUpdate() {
     try {
       setAddLoading(true);
 
       const values = getValues();
-      let deduct = false;
-      let newAmt = values.amount;
-      if (liquidity) {
-        if (toBN(newAmt).eq(liquidity.amount)) {
-          newAmt = "0";
-        } else if (toBN(newAmt).lt(liquidity.amount)) {
-          deduct = true;
-          newAmt = toBN(liquidity.amount).sub(newAmt).toString();
-        } else {
-          deduct = false;
-          newAmt = toBN(newAmt).sub(liquidity.amount).toString();
-        }
-      }
+      const { newAmt, deduct } = getAmountChange();
 
       await updateFungibleLiquidity(
         market.address,
@@ -367,7 +376,7 @@ export function ManageGeneralLiquidityTab({
           )}
           <Button
             size="full"
-            disabled={!ready || !hasAllowance}
+            disabled={!ready || !hasAllowance || addLoading}
             onClick={doAddOrUpdate}
           >
             {!addLoading && <>{!liquidity ? "Add" : "Update"}</>}

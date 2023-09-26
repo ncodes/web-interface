@@ -17,6 +17,7 @@ import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
 import { useState } from "react";
 import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();
@@ -86,20 +87,24 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
 }
 
 export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
+  const { connected } = useConnectorContext();
   const loc = useLocation();
+
+  const rightSide = connected ? (
+    <div className="flex w-full justify-between flex-col pt-2">
+      <LiquidityFilter ownerMode={loc.pathname == "/liquidity/owned"} />
+      <div className="relative">
+        <div className="text-gray-200">
+          <Footer />
+        </div>
+      </div>
+    </div>
+  ) : null;
+
   return (
     <Layout
       body={<LiquidityTabs defaultTab={defaultTab} />}
-      rightSide={
-        <div className="flex w-full justify-between flex-col pt-2">
-          <LiquidityFilter ownerMode={loc.pathname == "/liquidity/owned"} />
-          <div className="relative">
-            <div className="text-gray-200">
-              <Footer />
-            </div>
-          </div>
-        </div>
-      }
+      rightSide={rightSide}
     />
   );
 }

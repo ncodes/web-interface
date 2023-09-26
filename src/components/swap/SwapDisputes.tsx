@@ -3,24 +3,53 @@ import { Label } from "../ui/label.tsx";
 import { DisputeRow } from "../dispute/DisputeRow.tsx";
 import { cn } from "../../libs/utils.ts";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { isEqlStr } from "../../libs/helpers.ts";
+
+function extendDispute(dispute: Dispute, extend: Partial<Dispute> = {}) {
+  return {
+    ...dispute,
+    ...extend,
+  };
+}
 
 export function SwapDisputes({ swap }: { swap: Swap }) {
+  const { address } = useConnectorContext();
   const [showOtherDisputes, setShowOtherDisputes] = useState(false);
 
+  // find dispute drafts where the draftee is address
+  const draftsByAddress = swap.disputes[0].draftees.filter((draft) => {
+    return isEqlStr(draft.owner, address);
+  });
+
   return (
-    <div className="px-1 md:px-2 bg-gray-900/70 mx-1 rounded-xl py-2">
+    <div className="px-1 md:px-2 bg-card-background mx-1 rounded-xl py-2">
       <div className="flex flex-col gap-2">
         <div>
           <div className="p-2 pt-0">
-            <Label className="font-light">
+            <Label className="font-medium tracking-wider">
               Dispute #{swap.disputes[0].disputeId}
             </Label>
           </div>
-          <DisputeRow
-            dispute={swap.disputes[0]}
-            className="border-chinese-green/20"
-            noFocus
-          />
+          <div className="flex flex-col gap-3">
+            {draftsByAddress.length == 0 && (
+              <DisputeRow
+                dispute={swap.disputes[0]}
+                className="border-chinese-green/20"
+                noFocus
+              />
+            )}
+            {draftsByAddress.map((draft) => (
+              <DisputeRow
+                dispute={extendDispute(swap.disputes[0], {
+                  ticketIndex: draft.index,
+                })}
+                className="border-gray-800"
+                key={`${swap.disputes[0].orderId}:${swap.disputes[0].disputeId}:${draft.index}`}
+                noFocus
+              />
+            ))}
+          </div>
         </div>
 
         {/* older disputes */}

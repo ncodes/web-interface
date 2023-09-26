@@ -34,6 +34,7 @@ function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openAddLiquiditySheet, setOpenAddLiquiditySheet] = useState(false);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
+  const fullLoadCount = useStore((state) => state.fullLoadCount);
   const liquidityFilter = useStore((state) => state.liquidityFilter);
   const { getChainInfo, address } = useConnectorContext();
   const { getMarket } = useMarketService();
@@ -68,15 +69,18 @@ function MarketTabs() {
     queryFn: listLiquidities,
     keepPreviousData: true,
     enabled: market.data != undefined,
+    refetchInterval: 10000,
   });
 
   useEffect(() => {
+    if (fullLoadCount > 0) return; // no need to show loader if data is already cached
     if (market.isLoading || market.isRefetching)
       setLoaderProgress && setLoaderProgress(50);
     else setLoaderProgress && setLoaderProgress(100);
   }, [
     market.isError,
     market.isLoading,
+    setLoaderProgress,
     market.isRefetching,
     market.isRefetchError,
   ]);
@@ -131,6 +135,9 @@ function MarketTabs() {
           <MarketRow
             market={market.data}
             className="rounded-none border-x-0 border-t-0"
+            ownerMode={
+              !market.data.renounced && isEqlStr(market.data?.creator, address)
+            }
             noFocus
           />
         )}

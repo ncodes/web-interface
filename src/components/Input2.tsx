@@ -11,6 +11,7 @@ export default function Input2(props: {
   spellCheck?: boolean;
   placeholder?: string;
   className?: string;
+  autoFocus?: boolean;
   containerClassName?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement, Element>) => void;
@@ -45,6 +46,7 @@ export default function Input2(props: {
             type={props.type || "text"}
             placeholder={props.placeholder}
             disabled={props.disabled}
+            autoFocus={props.autoFocus}
             spellCheck={props.spellCheck}
             className={cn(
               "bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0",

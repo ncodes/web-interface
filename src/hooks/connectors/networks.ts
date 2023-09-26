@@ -10,6 +10,7 @@ import EnergonABI from "../../abi/Energon.json";
 import NftABI from "../../abi/NFT.json";
 import MarketCoreABI from "../../abi/MarketCore.json";
 import CoreABI from "../../abi/Core.json";
+import DisputeManagerABI from "../../abi/DisputeManager.json";
 
 export enum ChainID {
   Ethereum = 1,
@@ -53,6 +54,10 @@ export const SupportedNetworks: ChainInfo[] = [
       marketCore: {
         address: import.meta.env.VITE_ETHEREUM_MARKET_CORE_ADDRESS,
         abi: MarketCoreABI,
+      },
+      disputeManager: {
+        address: import.meta.env.VITE_ETHEREUM_DISPUTE_MGR_ADDRESS,
+        abi: DisputeManagerABI,
       },
       energon: {
         address: import.meta.env.VITE_ETHEREUM_ENERGON_ADDRESS,
@@ -180,6 +185,10 @@ export const SupportedNetworks: ChainInfo[] = [
       marketCore: {
         address: import.meta.env.VITE_LOCALHOST_MARKET_CORE_ADDRESS,
         abi: MarketCoreABI,
+      },
+      disputeManager: {
+        address: import.meta.env.VITE_LOCALHOST_DISPUTE_MGR_ADDRESS,
+        abi: DisputeManagerABI,
       },
       energon: {
         address: import.meta.env.VITE_LOCALHOST_ENERGON_ADDRESS,

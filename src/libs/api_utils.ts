@@ -80,20 +80,6 @@ export function isDisputer(swap: Swap, address: string) {
 }
 
 /**
- * Checks if a swap can be appealed
- * @param swap The swap object
- */
-export function canAppeal(swap: Swap) {
-  return (
-    (swap.disputes.length == 0 &&
-      swap.paid &&
-      !swap.released &&
-      !swap.finalizedAt) || // new dispute
-    (swap.disputes.length > 0 && isLastDisputeStalled(swap)) // can re-open abandoned dispute
-  );
-}
-
-/**
  * Checks if the swap is in an ongoing dispute
  * @param swap The swap object
  */
@@ -198,7 +184,10 @@ export function getDisputeStatus(dispute: Dispute) {
   if (executed && getDisputeOutcome(dispute) == DisputeState.Released)
     return DisputeState.Released;
 
-  // Abandoned after dispute (a.k.a stalled)
+  // Released (swap released before dispute execution)
+  if (!executed && orderReleased) return DisputeState.Abandoned;
+
+  // Abandoned (executed)
   if (executed && abandoned) return DisputeState.Abandoned;
 
   // Released without dispute
@@ -414,3 +403,35 @@ export function isSwapDisputeExecuted(swap: Swap) {
   if (swap.disputes.length == 0) return false;
   return swap.disputes[0].executed;
 }
+
+/**
+ * Checks if an address has committed a vote for a given dispute
+ * @param dispute The dispute object
+ * @param address The address to check
+ */
+export function isCommitter(dispute: Dispute, address: string) {
+  return dispute.commits.some(
+    (c) =>
+      isEqlStr(c.committer, address) && c.ticketIndex == dispute.ticketIndex
+  );
+}
+
+/**
+ * Checks if an address has revealed a vote for a given dispute
+ * @param dispute The dispute object
+ * @param address The address to check
+ */
+export function isRevealer(dispute: Dispute, address: string) {
+  return dispute.reveals.some(
+    (r) => isEqlStr(r.revealer, address) && r.ticketIndex == dispute.ticketIndex
+  );
+}
+
+// export function getTicketIndexFromDispute(dispute: Dispute, address: string) {
+//   if (dispute.ticketIndex !== undefined) return [dispute.ticketIndex];
+//   return dis;
+// }
+
+// export function makeSwapLoadingKey(swap: Swap) {
+//   return `swap-${swap.orderId}-`;
+// }

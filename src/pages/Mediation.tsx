@@ -21,8 +21,10 @@ import { TicketFilterSheet } from "../components/mediation/TicketFilterSheet.tsx
 import { Footer } from "../components/Footer.tsx";
 import { TicketFilter } from "../components/mediation/TicketFilter.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function MediationTabs({ defaultTab }: { defaultTab?: string }) {
+  const { connected } = useConnectorContext();
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(defaultTab || "mediation");
@@ -63,43 +65,47 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
         </ScrollOverflowIndicator>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <div className="hidden md:inline">
-            <Button
-              size="sm"
-              onClick={() => {
-                toggleOpenState("buyTicketSheet");
-              }}
-              className="gap-2 transition-all duration-500 hover:scale-x-105"
-            >
-              <TicketIcon width="20px" /> Buy Ticket
-            </Button>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
-                <DotsVerticalIcon />
-              </span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-              <DropdownMenuItem
-                className="gap-2"
+            {connected && (
+              <Button
+                size="sm"
                 onClick={() => {
                   toggleOpenState("buyTicketSheet");
                 }}
+                className="gap-2 transition-all duration-500 hover:scale-x-105"
               >
                 <TicketIcon width="20px" /> Buy Ticket
-              </DropdownMenuItem>
-              {currentTab == "my-tickets" && (
+              </Button>
+            )}
+          </div>
+          {connected && (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
+                  <DotsVerticalIcon />
+                </span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
                 <DropdownMenuItem
-                  className="flex gap-2"
+                  className="gap-2"
                   onClick={() => {
-                    setOpenFilterSheet(true);
+                    toggleOpenState("buyTicketSheet");
                   }}
                 >
-                  <IconFilterOutline /> Filter Tickets
+                  <TicketIcon width="20px" /> Buy Ticket
                 </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                {currentTab == "my-tickets" && (
+                  <DropdownMenuItem
+                    className="flex gap-2"
+                    onClick={() => {
+                      setOpenFilterSheet(true);
+                    }}
+                  >
+                    <IconFilterOutline /> Filter Tickets
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </TabsList>
       {currentTab == "my-tickets" && <MyTicketsTabContent />}
@@ -117,22 +123,26 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
 
 export default function Mediation({ defaultTab }: { defaultTab?: string }) {
   const loc = useLocation();
+  const { connected } = useConnectorContext();
+
+  const rightSide = connected
+    ? (loc.pathname.startsWith("/tickets/owned") ||
+        loc.pathname.startsWith("/mediation")) && (
+        <div className="flex w-full h-full justify-between flex-col pt-2">
+          <TicketFilter />
+          <div className="relative">
+            <div className="text-gray-200 bottom-0 w-full">
+              <Footer />
+            </div>
+          </div>
+        </div>
+      )
+    : null;
 
   return (
     <Layout
       body={<MediationTabs defaultTab={defaultTab} />}
-      rightSide={
-        loc.pathname.startsWith("/tickets/owned") && (
-          <div className="flex w-full h-full justify-between flex-col pt-2">
-            <TicketFilter />
-            <div className="relative">
-              <div className="text-gray-200 bottom-0 w-full">
-                <Footer />
-              </div>
-            </div>
-          </div>
-        )
-      }
+      rightSide={rightSide}
     />
   );
 }

@@ -83,7 +83,7 @@ export function CreateMarketSheet({
         permissions.permPut,
         permissions.permSwap,
         (commission || 0) * 100,
-        1
+        0
       );
       await delay(5000);
       const explorer = getChainInfo().blockExplorer;

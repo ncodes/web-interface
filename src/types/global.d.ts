@@ -31,7 +31,8 @@ declare global {
     | "energon"
     | "nft"
     | "badgeManager"
-    | "marketCore";
+    | "marketCore"
+    | "disputeManager";
 
   interface User {
     email: string;
@@ -46,6 +47,15 @@ declare global {
     volume: string;
     volumeUsd: number;
     lastActiveAt: string;
+  }
+
+  interface LoadingState {
+    cancelOrder?: boolean;
+    markOrderAsPaid?: boolean;
+    releaseOrder?: boolean;
+    appealOrder?: boolean;
+    commitVote?: boolean;
+    revealVote?: boolean;
   }
 
   interface TransactionResponse {}
@@ -153,6 +163,8 @@ declare global {
     amountUsd: number;
     minSwapUsd: number;
     maxSwapUsd: number;
+    createdAt: string;
+    updatedAt: string;
     market: Market;
   }
 
@@ -233,6 +245,7 @@ declare global {
     marketAddress: string;
     orderId: number;
     disputeId: number;
+    ticketIndex: number;
     numMediators: number;
     numMediatorsDrafted: number;
     numMediatorsUndrafted: number;
@@ -254,6 +267,18 @@ declare global {
     draftees: Draft[];
     swap: Swap;
     reveals: Reveal[];
+    commits: Commit[];
+  }
+
+  interface Commit {
+    network: string;
+    committer: string;
+    marketAddress: string;
+    orderId: number;
+    disputeId: number;
+    ticketIndex: number;
+    hash: string;
+    drafted: boolean;
   }
 
   interface Draft {
@@ -273,6 +298,7 @@ declare global {
     marketAddress: string;
     orderId: number;
     disputeId: number;
+    ticketIndex: number;
     vote: string;
     drafted: boolean;
   }
@@ -375,5 +401,12 @@ declare global {
     shortName?: string;
     logoUrl: string;
     region?: string;
+  }
+
+  interface ButtonEnableState {
+    appeal?: boolean;
+    cancel?: boolean;
+    markAsPaid?: boolean;
+    release?: boolean;
   }
 }

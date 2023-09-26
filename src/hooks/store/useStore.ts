@@ -92,11 +92,6 @@ export interface SwapPageState {
   revealPhaseEnded?: boolean;
 }
 
-export interface LoadingOrTriggeredState {
-  cancelOrder?: boolean;
-  markOrderAsPaid?: boolean;
-}
-
 export interface IStore {
   // Authenticated user state
   user: User | null;
@@ -112,12 +107,8 @@ export interface IStore {
   setLoaderProgress: (progress: number) => void;
 
   // Global loading stage
-  loading: { [id: string]: LoadingOrTriggeredState };
-  setLoading: (id: string, loading: LoadingOrTriggeredState) => void;
-
-  // Trigger state for loading fields
-  triggered: { [id: string]: LoadingOrTriggeredState };
-  setTriggered: (id: string, loading: LoadingOrTriggeredState) => void;
+  loading: { [id: string]: LoadingState };
+  setLoading: (id: string, updates: LoadingState) => void;
 
   // Current tab
   currentTab?: string;
@@ -171,19 +162,11 @@ const useStore = create<IStore>((set, get) => ({
   },
 
   loading: {},
-  setLoading: (id: string, updates: Partial<LoadingOrTriggeredState>) => {
+  setLoading: (id: string, updates: Partial<LoadingState>) => {
     set((state) => ({
       loading: {
+        ...state.loading,
         [id]: { ...state.loading[id], ...updates },
-      },
-    }));
-  },
-
-  triggered: {},
-  setTriggered: (id: string, updates: Partial<LoadingOrTriggeredState>) => {
-    set((state) => ({
-      triggered: {
-        [id]: { ...state.triggered[id], ...updates },
       },
     }));
   },

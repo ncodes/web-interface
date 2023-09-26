@@ -8,29 +8,53 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import { cn } from "../../libs/utils.ts";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { NavLink, useLocation } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 
 export function SwapRowLinks({ swap }: { swap: Swap }) {
+  const location = useLocation();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
 
   return (
     <>
+      {location.pathname.includes("/swaps") && (
+        <span className="flex border-l border-gray-800 pl-1">
+          <NavLink to={`/swap/${swap.orderId}`}>
+            <Button
+              title="Open Liquidity"
+              variant="link"
+              rounded="lg"
+              scale="sm"
+              className="text-sm px-1 text-gray-300 flex items-center gap-1"
+            >
+              <ChevronRight />
+            </Button>
+          </NavLink>
+        </span>
+      )}
       <span className="hidden lg:inline border-r border-gray-800 shrink-0">
-        <Button
-          variant="link"
-          rounded="none"
-          className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+        <NavLink
+          to={`/liquidity/${swap.marketAddress}/${swap.provider}/${swap.lid}`}
         >
-          View Liquidity
-        </Button>
+          <Button
+            variant="link"
+            rounded="none"
+            className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+          >
+            View Liquidity
+          </Button>
+        </NavLink>
       </span>
       <span className="hidden lg:inline border-gray-800 shrink-0">
-        <Button
-          variant="link"
-          rounded="none"
-          className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-        >
-          View Market
-        </Button>
+        <NavLink to={`/market/${swap.marketAddress}`}>
+          <Button
+            variant="link"
+            rounded="none"
+            className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+          >
+            View Market
+          </Button>
+        </NavLink>
       </span>
       <span className=" lg:hidden border-l border-gray-800">
         <DropdownMenu
@@ -49,34 +73,21 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-            <DropdownMenuItem className="flex gap-2">
-              View Liquidity
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex gap-2">
-              View Market
-            </DropdownMenuItem>
-            {swap && !!swap.orderId && (
-              <DropdownMenuItem
-                disabled={true}
-                className="flex gap-2 border-t rounded-none border-gray-800"
-              >
-                <span className="text-xs font-light text-gray-400 flex gap-1">
-                  <span className="text-gray-500">ID:</span>
-                  <span>{swap.orderId}</span>
-                </span>
+            <NavLink
+              to={`/liquidity/${swap.marketAddress}/${swap.provider}/${swap.lid}`}
+            >
+              <DropdownMenuItem className="flex gap-2">
+                View Liquidity
               </DropdownMenuItem>
-            )}
+            </NavLink>
+            <NavLink to={`/market/${swap.marketAddress}`}>
+              <DropdownMenuItem className="flex gap-2">
+                View Market
+              </DropdownMenuItem>
+            </NavLink>
           </DropdownMenuContent>
         </DropdownMenu>
       </span>
-      {swap && !!swap.orderId && (
-        <span className="hidden lg:block h-full border-l border-gray-800 shrink-0 cursor-default">
-          <span className="text-xs px-2 font-light text-gray-400 flex h-full items-center gap-1">
-            <span className="text-gray-500">ID:</span>
-            <span>{swap.orderId}</span>
-          </span>
-        </span>
-      )}
     </>
   );
 }

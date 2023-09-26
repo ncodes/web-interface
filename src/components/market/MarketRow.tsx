@@ -25,10 +25,11 @@ import {
 } from "../../libs/helpers.ts";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { PriceChange } from "./PriceChange.tsx";
 import { AssetTip } from "./AssetTip.tsx";
+import { ChevronRight } from "lucide-react";
 
 export function MarketRow({
   market,
@@ -41,6 +42,7 @@ export function MarketRow({
   ownerMode?: boolean;
   noFocus?: boolean;
 }) {
+  const location = useLocation();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openEditMarketSheet, setOpenEditMarketSheet] = useState(false);
   const navigate = useNavigate();
@@ -62,7 +64,7 @@ export function MarketRow({
       }}
     >
       <div className="flex flex-col md:flex-row h-auto">
-        <div className="h-full border-r select-none border-gray-800 shrink-0">
+        <div className="md:w-[230px] h-full border-r select-none border-gray-800 shrink-0">
           <div
             data-click-trigger="1"
             className="flex items-center gap-2 md:gap-3 px-3 md:px-3 md:py-4 pt-2 md:pt-4"
@@ -279,7 +281,10 @@ export function MarketRow({
                   ))}
                   {market.requiredPutBadges.length == 0 &&
                     market.requiredSwapBadges.length == 0 && (
-                      <span className="text-xs text-gray-500 font-light">
+                      <span
+                        className="text-xs text-gray-500 font-light"
+                        data-click-trigger="1"
+                      >
                         No badge required
                       </span>
                     )}
@@ -289,11 +294,26 @@ export function MarketRow({
           </div>
         </div>
         <div
-          className="flex items-center border-l border-gray-800"
+          className="flex items-center  border-gray-800"
           data-click-trigger="1"
         >
+          {!location.pathname.includes("/market/") && (
+            <span className="flex border-l border-gray-800 pl-1">
+              <NavLink to={`/market/${market.address}`}>
+                <Button
+                  title="Open Liquidity"
+                  variant="link"
+                  rounded="lg"
+                  scale="sm"
+                  className="text-sm px-1 text-gray-300 flex items-center gap-1"
+                >
+                  <ChevronRight />
+                </Button>
+              </NavLink>
+            </span>
+          )}
           {ownerMode && (
-            <span className="hidden lg:inline border-gray-800 shrink-0">
+            <span className="hidden lg:inline border-l border-gray-800 shrink-0">
               <Button
                 variant="link"
                 rounded="none"
@@ -307,7 +327,7 @@ export function MarketRow({
             </span>
           )}
           {!ownerMode && (
-            <span className="flex cursor-pointer items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
+            <span className="flex h-full cursor-pointer border-l border-gray-800 items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
               <IconHeart />
             </span>
           )}

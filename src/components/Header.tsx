@@ -20,7 +20,7 @@ export function Header(props: { onClick: () => void; height?: string }) {
         <NavSearchButton />
         <LanguageSelector />
         <NavHelpButton />
-        <NavNotificationButton />
+        {connected && <NavNotificationButton />}
         {connected && <NetworkSelector />}
         <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
         <ConnectWalletButton

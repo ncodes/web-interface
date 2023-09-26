@@ -11,6 +11,7 @@ import useStore from "../../hooks/store/useStore.ts";
 import { Skeleton } from "../ui/skeleton.tsx";
 import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
 import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+import { PlugZapIcon } from "lucide-react";
 
 function InfoCard({
   title,
@@ -72,123 +73,136 @@ export function TicketsStatsTabContent() {
   }, [isError, isLoading, setLoaderProgress, isRefetching, isRefetchError]);
 
   return (
-    <TabsContent value="ticket-stats" className="p-3 pt-0 flex flex-col gap-3">
-      <div className="flex gap-4 flex-col lg:flex-row">
-        <div className="flex-1 bg-card-background border border-card-border rounded-xl">
-          <div className="px-5 justify-between border-b border-gray-700/70 py-3 flex items-center gap-1">
-            <span className="flex items-center gap-1">
-              <InfoCircledIcon width="20px" />
-              About Mediation
-            </span>
-            <span>
-              <NavLink
-                to=""
-                className="text-gray-400 font-light text-sm hover:text-chinese-green"
-              >
-                Learn more
-              </NavLink>
-            </span>
-          </div>
-          <div className="px-5 py-3  text-gray-300 font-light text-sm">
-            <ScrollOverflowIndicator
-              side="bottom"
-              className="[&>span.grad-indicator]:rounded-none"
+    <TabsContent
+      value="ticket-stats"
+      className="min-h-[400px] p-0 m-0 pt-0 flex flex-col gap-3"
+    >
+      {!address && (
+        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
+          <PlugZapIcon className="w-[20px]" /> Connect your wallet
+        </div>
+      )}
+
+      {address && (
+        <div className="p-3">
+          <div className="flex gap-4 flex-col lg:flex-row">
+            <div className="flex-1 bg-card-background border border-card-border rounded-xl">
+              <div className="px-5 justify-between border-b border-gray-700/70 py-3 flex items-center gap-1">
+                <span className="flex items-center gap-1">
+                  <InfoCircledIcon width="20px" />
+                  About Mediation
+                </span>
+                <span>
+                  <NavLink
+                    to=""
+                    className="text-gray-400 font-light text-sm hover:text-chinese-green"
+                  >
+                    Learn more
+                  </NavLink>
+                </span>
+              </div>
+              <div className="px-5 py-3  text-gray-300 font-light text-sm">
+                <ScrollOverflowIndicator
+                  side="bottom"
+                  className="[&>span.grad-indicator]:rounded-none"
+                >
+                  <ScrollArea type="scroll" className="h-[100px] overflow-auto">
+                    Joint Protocol relies on the power of the community to
+                    resolve interactive swap disputes when the parties cannot
+                    agree and finalize a swap. During disputes, Joint randomly
+                    selects mediators from a pool of mediator ticket holders to
+                    review the dispute and vote on the outcome. Joint Protocol
+                    rewards successful mediators.
+                  </ScrollArea>
+                </ScrollOverflowIndicator>
+              </div>
+            </div>
+            <InfoCard
+              title="Ticket Price"
+              tip="The current price for purchasing 1 ticket"
             >
-              <ScrollArea type="scroll" className="h-[100px] overflow-auto">
-                Joint Protocol relies on the power of the community to resolve
-                interactive swap disputes when the parties cannot agree and
-                finalize a swap. During disputes, Joint randomly selects
-                mediators from a pool of mediator ticket holders to review the
-                dispute and vote on the outcome. Joint Protocol rewards
-                successful mediators.
-              </ScrollArea>
-            </ScrollOverflowIndicator>
+              <div className="text-center text-chinese-green relative flex flex-col justify-center items-center">
+                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {!isLoading && isSuccess && (
+                  <>
+                    <span className="text-lg md:text-3xl">
+                      {formatToHighDenom(data.price, 18)}{" "}
+                      <span className="text-gray-400">P2P</span>
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      (${formatToMoney(data?.priceUsd || "0")})
+                    </span>
+                  </>
+                )}
+              </div>
+            </InfoCard>
+            <InfoCard
+              title="Total Available Tickets"
+              tip="The total amount of tickets yet to be sold"
+            >
+              <div className="text-center text-chinese-green relative flex flex-col justify-center items-center">
+                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {!isLoading && isSuccess && (
+                  <span className="flex flex-col text-lg md:text-3xl">
+                    <span>{formatToMoney(data?.ticketAvailable || "0")}</span>
+                    <span className="text-sm text-gray-400">
+                      Total Supply: {formatToMoney(data?.ticketSupply || "0")}
+                    </span>
+                  </span>
+                )}
+              </div>
+            </InfoCard>
+          </div>
+          <div className="flex gap-4 flex-col lg:flex-row">
+            <InfoCard
+              title="Total Bonds"
+              tip="The total amount of bond locked for all tickets"
+            >
+              <div className="text-center text-chinese-green relative flex flex-col items-center">
+                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {!isLoading && isSuccess && (
+                  <span className="flex flex-col text-lg md:text-3xl">
+                    <span>
+                      {formatToHighDenom(data?.totalBonds, 18)}{" "}
+                      <span className="text-gray-400">P2P</span>
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      (${formatToMoney(data?.totalBondsUsd || "0")})
+                    </span>
+                  </span>
+                )}
+              </div>
+            </InfoCard>
+
+            <InfoCard title="Tickets Owned" tip="The number of tickets you own">
+              <div className="text-center text-chinese-green relative flex flex-col items-center text-lg md:text-3xl">
+                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {!isLoading && isSuccess && <span>{data?.owner?.total}</span>}
+              </div>
+            </InfoCard>
+
+            <InfoCard
+              title="Owned Ticket Bonds"
+              tip="The total amount of bond locked in tickets owned by you"
+            >
+              <div className="text-center text-chinese-green relative flex flex-col items-center">
+                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {!isLoading && isSuccess && (
+                  <span className="flex flex-col text-lg md:text-3xl">
+                    <span>
+                      {formatToHighDenom(data?.owner?.totalBonds || "0", 18)}{" "}
+                      <span className="text-gray-400">P2P</span>
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      (${formatToMoney(data?.owner?.totalBondsUsd || "0")})
+                    </span>
+                  </span>
+                )}
+              </div>
+            </InfoCard>
           </div>
         </div>
-        <InfoCard
-          title="Ticket Price"
-          tip="The current price for purchasing 1 ticket"
-        >
-          <div className="text-center text-chinese-green relative flex flex-col justify-center items-center">
-            {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
-            {!isLoading && isSuccess && (
-              <>
-                <span className="text-lg md:text-3xl">
-                  {formatToHighDenom(data.price, 18)}{" "}
-                  <span className="text-gray-400">P2P</span>
-                </span>
-                <span className="text-sm text-gray-400">
-                  (${formatToMoney(data?.priceUsd || "0")})
-                </span>
-              </>
-            )}
-          </div>
-        </InfoCard>
-        <InfoCard
-          title="Total Available Tickets"
-          tip="The total amount of tickets yet to be sold"
-        >
-          <div className="text-center text-chinese-green relative flex flex-col justify-center items-center">
-            {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
-            {!isLoading && isSuccess && (
-              <span className="flex flex-col text-lg md:text-3xl">
-                <span>{formatToMoney(data?.ticketAvailable || "0")}</span>
-                <span className="text-sm text-gray-400">
-                  Total Supply: {formatToMoney(data?.ticketSupply || "0")}
-                </span>
-              </span>
-            )}
-          </div>
-        </InfoCard>
-      </div>
-      <div className="flex gap-4 flex-col lg:flex-row">
-        <InfoCard
-          title="Total Bonds"
-          tip="The total amount of bond locked for all tickets"
-        >
-          <div className="text-center text-chinese-green relative flex flex-col items-center">
-            {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
-            {!isLoading && isSuccess && (
-              <span className="flex flex-col text-lg md:text-3xl">
-                <span>
-                  {formatToHighDenom(data?.totalBonds, 18)}{" "}
-                  <span className="text-gray-400">P2P</span>
-                </span>
-                <span className="text-sm text-gray-400">
-                  (${formatToMoney(data?.totalBondsUsd || "0")})
-                </span>
-              </span>
-            )}
-          </div>
-        </InfoCard>
-
-        <InfoCard title="Tickets Owned" tip="The number of tickets you own">
-          <div className="text-center text-chinese-green relative flex flex-col items-center text-lg md:text-3xl">
-            {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
-            {!isLoading && isSuccess && <span>{data?.owner?.total}</span>}
-          </div>
-        </InfoCard>
-
-        <InfoCard
-          title="Owned Ticket Bonds"
-          tip="The total amount of bond locked in tickets owned by you"
-        >
-          <div className="text-center text-chinese-green relative flex flex-col items-center">
-            {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
-            {!isLoading && isSuccess && (
-              <span className="flex flex-col text-lg md:text-3xl">
-                <span>
-                  {formatToHighDenom(data?.owner?.totalBonds || "0", 18)}{" "}
-                  <span className="text-gray-400">P2P</span>
-                </span>
-                <span className="text-sm text-gray-400">
-                  (${formatToMoney(data?.owner?.totalBondsUsd || "0")})
-                </span>
-              </span>
-            )}
-          </div>
-        </InfoCard>
-      </div>
+      )}
     </TabsContent>
   );
 }

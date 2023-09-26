@@ -107,7 +107,9 @@ export function TicketRow({
                     tip={`The pool where the ticket is currently staked`}
                     width="min-w-[160px]"
                   >
-                    <span className="text-gray-200">{ticket.poolId}</span>
+                    <span className="text-gray-200">
+                      {ticket.poolId || "-"}
+                    </span>
                   </StatCard>
                   <StatCard
                     title={`Draft Count`}
@@ -158,7 +160,7 @@ export function TicketRow({
         </div>
 
         {/* Layer 2 */}
-        <div className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between">
+        <div className="border-t border-gray-800 text-gray-400 px-3 py-1 flex flex-col md:flex-row md:justify-between">
           {getTicketStatus(ticket) == "drained" && (
             <span className="flex gap-1 text-xs items-center font-light tracking-wide">
               <MinusCircle width="15" className="" />{" "}
@@ -167,10 +169,7 @@ export function TicketRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
                 <span>This ticket has been drained of its security bond.</span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}
@@ -194,10 +193,7 @@ export function TicketRow({
                     )
                   </span>
                 </span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}
@@ -213,15 +209,12 @@ export function TicketRow({
                   This ticket has matured. Join a pool{" "}
                   <CountDown
                     prefix=" before "
-                    isoDate={moment().add(1, "h").toISOString()}
+                    isoDate={ticket.joinBy}
                     className="[&>span.time]:text-chinese-green"
                     full
                   />
                 </span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}
@@ -234,10 +227,7 @@ export function TicketRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
                 <span>This ticket has joined a pool.</span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}
@@ -250,10 +240,7 @@ export function TicketRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
                 <span>This ticket has been drafted.</span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}
@@ -266,10 +253,7 @@ export function TicketRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
                 <span>This ticket has expired.</span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}
@@ -292,10 +276,7 @@ export function TicketRow({
                   </span>
                   .
                 </span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}
@@ -308,10 +289,7 @@ export function TicketRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
                 <span>This ticket has been cancelled.</span>
-                <IconInfoCircle
-                  width="15"
-                  className="hidden xs:inline text-gray-300"
-                />
+                <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
             </span>
           )}

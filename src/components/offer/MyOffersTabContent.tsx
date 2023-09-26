@@ -17,7 +17,7 @@ export function MyOffersTabContent() {
   const offerFilter = useStore((state) => state.offerFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
-  const [limit] = useState(1);
+  const [limit] = useState(10);
   const { markAsRead } = useOfferService();
   const queryClient = useQueryClient();
   const offers = useQuery({

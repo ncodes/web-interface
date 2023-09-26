@@ -55,7 +55,7 @@ export function SwapPageTabContent() {
       {swap.isLoading && <RowSkeleton />}
 
       {swap.isError && (
-        <div className="flex items-center bg-red-600 gap-2 text-red-300 justify-center font-light  h-[300px]">
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
           <ErrorIcon className="w-[20px]" />{" "}
           {(swap.error as RequestError)?.message}
         </div>

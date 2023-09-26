@@ -21,11 +21,12 @@ export function CountDown({
   headless?: boolean;
 }) {
   const [timeLeft, setTimeLeft] = useState<number>();
+  const [doneCalled, setDoneCalled] = useState(false);
 
   useEffect(() => {
     const m = moment(isoDate);
     const sec = m.diff(moment(), "seconds");
-    if (sec <= 0) callDone();
+    if (sec <= 0 && !doneCalled) callDone();
     setTimeLeft(sec > 0 ? sec : 0);
   }, [isoDate, onDone]);
 
@@ -39,7 +40,7 @@ export function CountDown({
       if (timeLeft == undefined) return;
       const cur = timeLeft - 1;
       setTimeLeft(cur);
-      if (cur == 0) {
+      if (cur == 0 && !doneCalled) {
         callDone();
         clearInterval(intervalId);
       }
@@ -52,6 +53,7 @@ export function CountDown({
     if (!onDone) return;
     setTimeout(() => {
       onDone && onDone();
+      setDoneCalled(true);
     }, 300);
   }
 

@@ -16,6 +16,7 @@ import { MyDisputeTabContent } from "../components/dispute/MyDisputeTabContent.t
 import { DisputeFilterSheet } from "../components/dispute/DisputeFilterSheet.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { DisputeFilter } from "../components/dispute/DisputeFilter.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function DisputeTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();
@@ -78,20 +79,19 @@ function DisputeTabs({ defaultTab }: { defaultTab?: string }) {
 }
 
 export default function Disputes() {
+  const { connected } = useConnectorContext();
   const loc = useLocation();
-  return (
-    <Layout
-      body={<DisputeTabs />}
-      rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
-          <DisputeFilter ownerMode={loc.pathname == "/liquidity/owned"} />
-          <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
-              <Footer />
-            </div>
-          </div>
+
+  const rightSide = connected ? (
+    <div className="flex w-full h-full justify-between flex-col pt-2">
+      <DisputeFilter ownerMode={loc.pathname == "/liquidity/owned"} />
+      <div className="relative">
+        <div className="text-gray-200 bottom-0 w-full">
+          <Footer />
         </div>
-      }
-    />
-  );
+      </div>
+    </div>
+  ) : null;
+
+  return <Layout body={<DisputeTabs />} rightSide={rightSide} />;
 }

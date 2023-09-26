@@ -16,6 +16,7 @@ import { MyOffersTabContent } from "../components/offer/MyOffersTabContent.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { OfferFilter } from "../components/offer/OfferFilter.tsx";
 import { OfferFilterSheet } from "../components/offer/OfferFilterSheet.tsx";
+import { useConnectorContext } from "../hooks/connectors/context.tsx";
 
 function OfferTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();
@@ -78,19 +79,18 @@ function OfferTabs({ defaultTab }: { defaultTab?: string }) {
 }
 
 export default function Offers() {
-  return (
-    <Layout
-      body={<OfferTabs />}
-      rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
-          <OfferFilter />
-          <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
-              <Footer />
-            </div>
-          </div>
+  const { connected } = useConnectorContext();
+
+  const rightSide = connected ? (
+    <div className="flex w-full h-full justify-between flex-col pt-2">
+      <OfferFilter />
+      <div className="relative">
+        <div className="text-gray-200 bottom-0 w-full">
+          <Footer />
         </div>
-      }
-    />
-  );
+      </div>
+    </div>
+  ) : null;
+
+  return <Layout body={<OfferTabs />} rightSide={rightSide} />;
 }

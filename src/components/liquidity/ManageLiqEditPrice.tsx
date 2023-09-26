@@ -84,7 +84,9 @@ export function ManageLiqEditPrice({
                       setOriginalPrice(price);
                     }}
                   >
-                    <span>{(baseUsdRate / quoteUsdRate).toFixed(8)}</span>
+                    <span>
+                      {formatToMoney((baseUsdRate / quoteUsdRate).toFixed(8))}
+                    </span>
                     <span>
                       <InfoCircledIcon
                         width="15"
