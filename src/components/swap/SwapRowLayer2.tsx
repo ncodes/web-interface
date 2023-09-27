@@ -493,7 +493,9 @@ export default function SwapRowLayer2({
             </span>
           </ToolTip>
         </span>
-        <IDBadge id={swap?.orderId} tip="Swap ID" />
+        {isSwapParticipant(swap, address) && (
+          <IDBadge id={swap?.orderId} tip="Swap ID" />
+        )}
       </span>
       {address && !isSwapParticipant(swap, address) && (
         <div className="flex">
