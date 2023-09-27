@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { LPPool, LPPoolInterface } from "../LPPool.ts";
+import type { LPPool, LPPoolInterface } from "../LPPool";
 
 const _abi = [
   {

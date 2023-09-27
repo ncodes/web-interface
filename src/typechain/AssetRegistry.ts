@@ -24,7 +24,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common.ts";
+} from "./common";
 
 export type InfoStruct = {
   curRate: BigNumberish;

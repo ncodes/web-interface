@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { Energon, EnergonInterface } from "../Energon.ts";
+import type { Energon, EnergonInterface } from "../Energon";
 
 const _abi = [
   {

@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { MarketCore, MarketCoreInterface } from "../MarketCore.ts";
+import type { MarketCore, MarketCoreInterface } from "../MarketCore";
 
 const _abi = [
   {

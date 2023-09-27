@@ -24,7 +24,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common.ts";
+} from "./common";
 
 export interface ERC721Interface extends utils.Interface {
   functions: {

@@ -7,7 +7,7 @@ import type { Provider } from "@ethersproject/providers";
 import type {
   DisputeManager,
   DisputeManagerInterface,
-} from "../DisputeManager.ts";
+} from "../DisputeManager";
 
 const _abi = [
   {
@@ -72,6 +72,12 @@ const _abi = [
         internalType: "address",
         name: "committer",
         type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "ticketIdx",
+        type: "uint256",
       },
       {
         indexed: false,
@@ -291,6 +297,12 @@ const _abi = [
       },
       {
         indexed: false,
+        internalType: "uint256",
+        name: "ticketIdx",
+        type: "uint256",
+      },
+      {
+        indexed: false,
         internalType: "bytes1",
         name: "vote",
         type: "bytes1",
@@ -451,6 +463,11 @@ const _abi = [
       {
         internalType: "uint256",
         name: "orderId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ticketIdx",
         type: "uint256",
       },
       {
@@ -802,6 +819,11 @@ const _abi = [
         name: "",
         type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
     name: "predictions",
     outputs: [
@@ -836,6 +858,11 @@ const _abi = [
       {
         internalType: "uint256",
         name: "orderId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "ticketIdx",
         type: "uint256",
       },
       {

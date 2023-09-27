@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { TokenPool, TokenPoolInterface } from "../TokenPool.ts";
+import type { TokenPool, TokenPoolInterface } from "../TokenPool";
 
 const _abi = [
   {

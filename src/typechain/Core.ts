@@ -24,7 +24,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common.ts";
+} from "./common";
 
 export declare namespace Structs {
   export type LiquidityStruct = {
@@ -1956,7 +1956,9 @@ export interface Core extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    state(overrides?: CallOverrides): Promise<
+    state(
+      overrides?: CallOverrides
+    ): Promise<
       [
         StructsLib.IntSlotStateStructOutput,
         BigNumber,
@@ -1976,7 +1978,9 @@ export interface Core extends BaseContract {
       }
     >;
 
-    state2(overrides?: CallOverrides): Promise<
+    state2(
+      overrides?: CallOverrides
+    ): Promise<
       [
         StructsLib.UintSlotState2StructOutput,
         string,
@@ -2421,7 +2425,9 @@ export interface Core extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  state(overrides?: CallOverrides): Promise<
+  state(
+    overrides?: CallOverrides
+  ): Promise<
     [
       StructsLib.IntSlotStateStructOutput,
       BigNumber,
@@ -2441,7 +2447,9 @@ export interface Core extends BaseContract {
     }
   >;
 
-  state2(overrides?: CallOverrides): Promise<
+  state2(
+    overrides?: CallOverrides
+  ): Promise<
     [
       StructsLib.UintSlotState2StructOutput,
       string,
@@ -2845,7 +2853,9 @@ export interface Core extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    state(overrides?: CallOverrides): Promise<
+    state(
+      overrides?: CallOverrides
+    ): Promise<
       [
         StructsLib.IntSlotStateStructOutput,
         BigNumber,
@@ -2865,7 +2875,9 @@ export interface Core extends BaseContract {
       }
     >;
 
-    state2(overrides?: CallOverrides): Promise<
+    state2(
+      overrides?: CallOverrides
+    ): Promise<
       [
         StructsLib.UintSlotState2StructOutput,
         string,

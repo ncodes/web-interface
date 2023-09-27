@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { Token, TokenInterface } from "../Token.ts";
+import type { Token, TokenInterface } from "../Token";
 
 const _abi = [
   {

@@ -4,10 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type {
-  AssetRegistry,
-  AssetRegistryInterface,
-} from "../AssetRegistry.ts";
+import type { AssetRegistry, AssetRegistryInterface } from "../AssetRegistry";
 
 const _abi = [
   {

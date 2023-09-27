@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { BadgeManager, BadgeManagerInterface } from "../BadgeManager.ts";
+import type { BadgeManager, BadgeManagerInterface } from "../BadgeManager";
 
 const _abi = [
   {

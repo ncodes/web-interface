@@ -25,7 +25,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common.ts";
+} from "./common";
 
 export interface NFTInterface extends utils.Interface {
   functions: {

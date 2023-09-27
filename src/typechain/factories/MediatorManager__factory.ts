@@ -7,7 +7,7 @@ import type { Provider } from "@ethersproject/providers";
 import type {
   MediatorManager,
   MediatorManagerInterface,
-} from "../MediatorManager.ts";
+} from "../MediatorManager";
 
 const _abi = [
   {

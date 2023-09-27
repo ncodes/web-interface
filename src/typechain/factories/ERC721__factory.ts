@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { ERC721, ERC721Interface } from "../ERC721.ts";
+import type { ERC721, ERC721Interface } from "../ERC721";
 
 const _abi = [
   {

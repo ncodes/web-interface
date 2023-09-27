@@ -24,7 +24,7 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common.ts";
+} from "./common";
 
 export type DisputeStruct = {
   commitEndAt: BigNumberish;
@@ -77,7 +77,7 @@ export type DisputeStructOutput = [
 
 export interface DisputeManagerInterface extends utils.Interface {
   functions: {
-    "commitVote(uint256,bytes32)": FunctionFragment;
+    "commitVote(uint256,uint256,bytes32)": FunctionFragment;
     "core()": FunctionFragment;
     "countDisputes(uint256)": FunctionFragment;
     "createDispute(uint256,bool)": FunctionFragment;
@@ -90,9 +90,9 @@ export interface DisputeManagerInterface extends utils.Interface {
     "mediatorMgr()": FunctionFragment;
     "owner()": FunctionFragment;
     "predictDur()": FunctionFragment;
-    "predictions(uint256,uint256,address)": FunctionFragment;
+    "predictions(uint256,uint256,address,uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "revealVote(uint256,string,bytes32)": FunctionFragment;
+    "revealVote(uint256,uint256,string,bytes32)": FunctionFragment;
     "rewardBalanceOf(address)": FunctionFragment;
     "rewards(address)": FunctionFragment;
     "seenCommits(bytes32)": FunctionFragment;
@@ -145,7 +145,7 @@ export interface DisputeManagerInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "commitVote",
-    values: [BigNumberish, BytesLike]
+    values: [BigNumberish, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "core", values?: undefined): string;
   encodeFunctionData(
@@ -191,7 +191,7 @@ export interface DisputeManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "predictions",
-    values: [BigNumberish, BigNumberish, string]
+    values: [BigNumberish, BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -199,7 +199,7 @@ export interface DisputeManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "revealVote",
-    values: [BigNumberish, string, BytesLike]
+    values: [BigNumberish, BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "rewardBalanceOf",
@@ -338,13 +338,13 @@ export interface DisputeManagerInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "Committed(address,uint256,uint256,address,bytes32)": EventFragment;
+    "Committed(address,uint256,uint256,address,uint256,bytes32)": EventFragment;
     "DecisionExecuted(address,uint256,uint256,address,bool,bytes1)": EventFragment;
     "DisputeCreated(uint256,address,uint256,bool)": EventFragment;
     "Drafted(address,address,uint256,uint256,uint256,address)": EventFragment;
     "DraftedMediator(address,uint256,uint256,uint256,address,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "Revealed(address,uint256,uint256,address,bytes1)": EventFragment;
+    "Revealed(address,uint256,uint256,address,uint256,bytes1)": EventFragment;
     "Undrafted(address,uint256,bool,address)": EventFragment;
     "UpdatedCore(address)": EventFragment;
     "UpdatedEvidenceDur(uint256)": EventFragment;
@@ -379,10 +379,11 @@ export interface CommittedEventObject {
   orderId: BigNumber;
   disputeId: BigNumber;
   committer: string;
+  ticketIdx: BigNumber;
   hash: string;
 }
 export type CommittedEvent = TypedEvent<
-  [string, BigNumber, BigNumber, string, string],
+  [string, BigNumber, BigNumber, string, BigNumber, string],
   CommittedEventObject
 >;
 
@@ -464,10 +465,11 @@ export interface RevealedEventObject {
   orderId: BigNumber;
   disputeId: BigNumber;
   revealer: string;
+  ticketIdx: BigNumber;
   vote: string;
 }
 export type RevealedEvent = TypedEvent<
-  [string, BigNumber, BigNumber, string, string],
+  [string, BigNumber, BigNumber, string, BigNumber, string],
   RevealedEventObject
 >;
 
@@ -600,6 +602,7 @@ export interface DisputeManager extends BaseContract {
   functions: {
     commitVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       _hash: BytesLike,
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
@@ -682,6 +685,7 @@ export interface DisputeManager extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [boolean, string, string] & {
@@ -697,6 +701,7 @@ export interface DisputeManager extends BaseContract {
 
     revealVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       vote: string,
       _hash: BytesLike,
       overrides?: Overrides & { from?: string }
@@ -763,6 +768,7 @@ export interface DisputeManager extends BaseContract {
 
   commitVote(
     orderId: BigNumberish,
+    ticketIdx: BigNumberish,
     _hash: BytesLike,
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
@@ -845,6 +851,7 @@ export interface DisputeManager extends BaseContract {
     arg0: BigNumberish,
     arg1: BigNumberish,
     arg2: string,
+    arg3: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     [boolean, string, string] & {
@@ -860,6 +867,7 @@ export interface DisputeManager extends BaseContract {
 
   revealVote(
     orderId: BigNumberish,
+    ticketIdx: BigNumberish,
     vote: string,
     _hash: BytesLike,
     overrides?: Overrides & { from?: string }
@@ -923,6 +931,7 @@ export interface DisputeManager extends BaseContract {
   callStatic: {
     commitVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       _hash: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -1005,6 +1014,7 @@ export interface DisputeManager extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [boolean, string, string] & {
@@ -1018,6 +1028,7 @@ export interface DisputeManager extends BaseContract {
 
     revealVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       vote: string,
       _hash: BytesLike,
       overrides?: CallOverrides
@@ -1066,11 +1077,12 @@ export interface DisputeManager extends BaseContract {
   };
 
   filters: {
-    "Committed(address,uint256,uint256,address,bytes32)"(
+    "Committed(address,uint256,uint256,address,uint256,bytes32)"(
       marketId?: null,
       orderId?: null,
       disputeId?: null,
       committer?: null,
+      ticketIdx?: null,
       hash?: null
     ): CommittedEventFilter;
     Committed(
@@ -1078,6 +1090,7 @@ export interface DisputeManager extends BaseContract {
       orderId?: null,
       disputeId?: null,
       committer?: null,
+      ticketIdx?: null,
       hash?: null
     ): CommittedEventFilter;
 
@@ -1154,11 +1167,12 @@ export interface DisputeManager extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "Revealed(address,uint256,uint256,address,bytes1)"(
+    "Revealed(address,uint256,uint256,address,uint256,bytes1)"(
       marketId?: null,
       orderId?: null,
       disputeId?: null,
       revealer?: null,
+      ticketIdx?: null,
       vote?: null
     ): RevealedEventFilter;
     Revealed(
@@ -1166,6 +1180,7 @@ export interface DisputeManager extends BaseContract {
       orderId?: null,
       disputeId?: null,
       revealer?: null,
+      ticketIdx?: null,
       vote?: null
     ): RevealedEventFilter;
 
@@ -1223,6 +1238,7 @@ export interface DisputeManager extends BaseContract {
   estimateGas: {
     commitVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       _hash: BytesLike,
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
@@ -1277,6 +1293,7 @@ export interface DisputeManager extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1286,6 +1303,7 @@ export interface DisputeManager extends BaseContract {
 
     revealVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       vote: string,
       _hash: BytesLike,
       overrides?: Overrides & { from?: string }
@@ -1353,6 +1371,7 @@ export interface DisputeManager extends BaseContract {
   populateTransaction: {
     commitVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       _hash: BytesLike,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
@@ -1407,6 +1426,7 @@ export interface DisputeManager extends BaseContract {
       arg0: BigNumberish,
       arg1: BigNumberish,
       arg2: string,
+      arg3: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1416,6 +1436,7 @@ export interface DisputeManager extends BaseContract {
 
     revealVote(
       orderId: BigNumberish,
+      ticketIdx: BigNumberish,
       vote: string,
       _hash: BytesLike,
       overrides?: Overrides & { from?: string }

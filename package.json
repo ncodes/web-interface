@@ -11,7 +11,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "typechain": "src/typechain --target ethers-v5 --out-dir typechain src/abi/*.json"
+    "typechain": "typechain --target ethers-v5 --out-dir src/typechain src/abi/*.json"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
@@ -46,7 +46,7 @@
     "connectkit": "^1.4.0",
     "date-fns": "^2.30.0",
     "decimal.js": "^10.4.3",
-    "ethers": "v5.x.x",
+    "ethers": "^5.7.2",
     "framer-motion": "^10.12.21",
     "humanize-duration": "^3.29.0",
     "i18next": "^23.2.11",

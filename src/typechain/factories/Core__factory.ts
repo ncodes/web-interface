@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import type { Provider } from "@ethersproject/providers";
-import type { Core, CoreInterface } from "../Core.ts";
+import type { Core, CoreInterface } from "../Core";
 
 const _abi = [
   {
