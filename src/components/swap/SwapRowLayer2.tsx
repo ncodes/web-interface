@@ -176,7 +176,7 @@ export default function SwapRowLayer2({
                 className="flex gap-1 w-full justify-between md:justify-start"
                 tip="Waiting for the payer to indicate that they have made payment. If the payer fails to make payment within the time limit, the swap can be cancelled by you or eventually by the protocol."
               >
-                <span className="animate-pulse duration-[5000]">
+                <span className="animate-pulse duration-1000">
                   Waiting for payment
                 </span>
                 <IconInfoCircle width="15" />

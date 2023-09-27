@@ -136,21 +136,23 @@ export function OfferRow({
                   </span>
                 )}
 
-                {offer.accepted && !offer.cancelled && !isOfferExpired(offer) && (
-                  <span className="flex bg-yellow-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-yellow-300">
-                    <ToolTip
-                      className="flex items-center gap-1"
-                      tip="The offer was accepted"
-                    >
-                      <CheckCircle width="15" />{" "}
-                      <span className="hidden xs:inline">Accepted</span>
-                      <IconInfoCircle
-                        width="15"
-                        className="hidden xs:inline text-yellow-300"
-                      />
-                    </ToolTip>
-                  </span>
-                )}
+                {offer.accepted &&
+                  !offer.cancelled &&
+                  !isOfferExpired(offer) && (
+                    <span className="flex bg-yellow-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-yellow-300">
+                      <ToolTip
+                        className="flex items-center gap-1"
+                        tip="The offer was accepted"
+                      >
+                        <CheckCircle width="15" />{" "}
+                        <span className="hidden xs:inline">Accepted</span>
+                        <IconInfoCircle
+                          width="15"
+                          className="hidden xs:inline text-yellow-300"
+                        />
+                      </ToolTip>
+                    </span>
+                  )}
 
                 {offer.cancelled && (
                   <span className="flex bg-red-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-red-300">
@@ -281,7 +283,7 @@ export function OfferRow({
                     : "Waiting for the liquidity provider to accept your offer."
                 }
               >
-                <span className="animate-pulse duration-[5000]">
+                <span className="animate-pulse duration-1000">
                   {!isOfferer(offer, address)
                     ? "Waiting for your acceptance"
                     : "Waiting for acceptance"}
@@ -303,7 +305,7 @@ export function OfferRow({
                     : "The liquidity provider accepted the offer. You can now execute the offer to start a swap."
                 }
               >
-                <span className="animate-pulse duration-[5000]">
+                <span className="animate-pulse duration-1000">
                   {!isOfferer(offer, address)
                     ? "Waiting for offer execution"
                     : "Waiting for you to execute the offer"}
@@ -325,7 +327,7 @@ export function OfferRow({
                     : "You cancelled the offer."
                 }
               >
-                <span className="duration-[5000]">
+                <span>
                   {!isOfferer(offer, address)
                     ? "Offer was cancelled"
                     : "You cancelled the offer"}
@@ -347,7 +349,7 @@ export function OfferRow({
                     : "You executed the offer. A new swap has been created."
                 }
               >
-                <span className="duration-[5000]">
+                <span>
                   {!isOfferer(offer, address)
                     ? "Offer was executed"
                     : "You executed the offer"}
@@ -365,7 +367,7 @@ export function OfferRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
                 tip={"The offer expired"}
               >
-                <span className="duration-[5000]">
+                <span className="duration-">
                   The offer exceeded the deadline.
                 </span>
                 <IconInfoCircle width="15" />
