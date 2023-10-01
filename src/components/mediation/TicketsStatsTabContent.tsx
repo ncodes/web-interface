@@ -10,8 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import useStore from "../../hooks/store/useStore.ts";
 import { Skeleton } from "../ui/skeleton.tsx";
 import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { PlugZapIcon } from "lucide-react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 function InfoCard({
   title,

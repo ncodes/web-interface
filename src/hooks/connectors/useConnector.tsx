@@ -11,7 +11,12 @@ import {
   useSwitchNetwork,
   useWalletClient,
 } from "wagmi";
-import { Address, SimulateContractReturnType, TransactionReceipt } from "viem";
+import {
+  Address,
+  SimulateContractReturnType,
+  TransactionReceipt,
+  WalletClient,
+} from "viem";
 import { ChainInfo } from "../../types/global";
 import { isDev } from "../../libs/helpers.ts";
 
@@ -64,6 +69,7 @@ export interface IConnector {
   signedData: string;
   signStatus: string;
 
+  wallet: WalletClient;
   switchNetwork: (id: number) => Promise<void>;
   chainId: number;
   chains: Chain[];
@@ -419,6 +425,7 @@ export default function useConnector() {
     humanizeErc20Errors,
 
     // Wallet operations
+    wallet: walletClient,
     defaultNetwork,
     ready,
     connected,

@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DisputeRow } from "./DisputeRow.tsx";
 import { useDisputeService } from "../../hooks/services/backend/useDisputeService.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MyDisputeTabContent() {
   const { getChainInfo, address } = useConnectorContext();

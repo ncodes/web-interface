@@ -9,8 +9,8 @@ import { PlugZapIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { RequestError } from "../../libs/RequestError.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MyLiquidityTabContent() {
   const { getChainInfo, address } = useConnectorContext();

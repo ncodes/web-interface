@@ -2,7 +2,6 @@ import { TabsContent } from "../ui/Tabs.tsx";
 import { Label } from "../ui/label.tsx";
 import OfferEvent from "./OfferEvent.tsx";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useParams } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +11,7 @@ import { RowSkeleton } from "../RowSkeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { Skeleton } from "../ui/skeleton.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 function OfferEventRowSkeleton() {
   return (

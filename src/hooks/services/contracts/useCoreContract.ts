@@ -1,9 +1,9 @@
-import { useConnectorContext } from "../../connectors/context.tsx";
 import { toBN } from "../../../libs/helpers.ts";
 import { Address } from "viem";
 import { BigNumberish, ethers } from "ethers";
 import * as CoreTypes from "../../../typechain/Core.ts";
 import OrderStruct = CoreTypes.Structs.OrderStruct;
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 /**
  * Providers utilities for reading and writing to the Core contract

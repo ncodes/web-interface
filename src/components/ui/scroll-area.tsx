@@ -6,16 +6,20 @@ const ScrollThumb = ScrollAreaPrimitive.Thumb;
 
 const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
->(({ className, onScroll, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
+    viewportClassName?: string;
+    vref?: React.RefObject<any>;
+  }
+>(({ className, viewportClassName, onScroll, children, ...props }, ref) => (
   <ScrollAreaPrimitive.Root
     ref={ref}
     className={cn("relative overflow-hidden", className)}
     {...props}
   >
     <ScrollAreaPrimitive.Viewport
-      className="h-full w-full rounded-[inherit]"
+      className={cn("h-full w-full rounded-[inherit]", viewportClassName)}
       onScroll={onScroll}
+      ref={props.vref}
     >
       {children}
     </ScrollAreaPrimitive.Viewport>

@@ -9,7 +9,6 @@ import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,6 +20,7 @@ import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
 import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
 import SwapRowLayer2 from "./SwapRowLayer2.tsx";
 import SwapRowLayer3 from "./SwapRowLayer3.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SwapRow({
   noFocus,

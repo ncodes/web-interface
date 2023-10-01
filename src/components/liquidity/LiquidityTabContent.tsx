@@ -11,8 +11,8 @@ import { RowSkeleton } from "../RowSkeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { LiquidityRow } from "./LiquidityRow.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function LiquidityTabContent({
   setLiquidity,

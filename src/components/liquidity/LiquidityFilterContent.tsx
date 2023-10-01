@@ -22,10 +22,10 @@ import Input2 from "../Input2.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { PaymentMethodSelector } from "./PaymentMethodSelector.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 interface Errors {
   price?: string;

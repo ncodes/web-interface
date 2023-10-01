@@ -16,7 +16,8 @@ import { MySwapTabContent } from "../components/swap/MySwapTabContent.tsx";
 import { SwapFilterSheet } from "../components/swap/SwapFilterSheet.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { SwapFilter } from "../components/swap/SwapFilter.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function SwapTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();

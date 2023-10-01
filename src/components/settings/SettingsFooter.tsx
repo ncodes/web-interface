@@ -1,7 +1,8 @@
 import useStore from "../../hooks/store/useStore.ts";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import IconDisconnect from "../icons/IconDisconnect.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SettingsFooter(props: { openWalletManager: () => void }) {
   const { disconnect } = useConnectorContext();

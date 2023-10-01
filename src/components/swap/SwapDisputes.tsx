@@ -3,8 +3,8 @@ import { Label } from "../ui/label.tsx";
 import { DisputeRow } from "../dispute/DisputeRow.tsx";
 import { cn } from "../../libs/utils.ts";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 function extendDispute(dispute: Dispute, extend: Partial<Dispute> = {}) {
   return {

@@ -6,7 +6,6 @@ import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
 import moment from "moment";
 import { ToolTip } from "../ToolTip.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { EventContentLiquidityAdd } from "./event/EventContentLiquidityAdd.tsx";
 import { EventContentLiquidityRemove } from "./event/EventContentLiquidityRemove.tsx";
 import { EventContentLiquiditySwap } from "./event/EventContentLiquiditySwap.tsx";
@@ -18,6 +17,7 @@ import { EventContentLiquidityPriceUpdate } from "./event/EventContentLiquidityP
 import { EventContentLiquiditySwapLimitUpdate } from "./event/EventContentLiquiditySwapLimitUpdate.tsx";
 import { EventContentLiquidityTimeToPayUpdate } from "./event/EventContentLiquidityTimeToPayUpdate.tsx";
 import { UserHoverCard } from "../UserHoverCard.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function LiquidityEventItem({
   event,

@@ -16,7 +16,8 @@ import { MyDisputeTabContent } from "../components/dispute/MyDisputeTabContent.t
 import { DisputeFilterSheet } from "../components/dispute/DisputeFilterSheet.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { DisputeFilter } from "../components/dispute/DisputeFilter.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function DisputeTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();

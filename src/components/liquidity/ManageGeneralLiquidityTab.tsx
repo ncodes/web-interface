@@ -11,7 +11,6 @@ import { ManageLiqEditMaxSwapAmount } from "./ManageLiqEditMaxSwapAmount.tsx";
 import { ManageLiqEditPaymentTime } from "./ManageLiqEditPaymentTime.tsx";
 import { ManageLiqEditTarget } from "./ManageLiqEditTarget.tsx";
 import { ManageLiqEditPause } from "./ManageLiqEditPause.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { Address } from "viem";
 import _ from "lodash";
@@ -32,6 +31,7 @@ import { ethers } from "ethers";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
 import { isSynth } from "../../libs/api_utils.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 interface InputState {
   value?: string | number;

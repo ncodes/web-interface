@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { isERC20, isSynth } from "../libs/api_utils.ts";
 import { useMiscService } from "./services/backend/useMiscService.ts";
-import { useConnectorContext } from "./connectors/context.tsx";
+
+import { useConnectorContext } from "./connectors/useConnectorContext.tsx";
 
 export function useBaseQuoteRate(
   { base, baseType, quote, quoteType }: Market,

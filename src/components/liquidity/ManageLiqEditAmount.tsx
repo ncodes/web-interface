@@ -1,4 +1,3 @@
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   formatToHighDenom,
@@ -16,6 +15,7 @@ import { Input } from "../ui/Input.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
 import { isSynth } from "../../libs/api_utils.ts";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function ManageLiqEditAmount({
   liquidity,

@@ -27,8 +27,8 @@ import { cn } from "../libs/utils.ts";
 import { useLiquidityService } from "../hooks/services/backend/useLiquidityService.ts";
 import { Paginator } from "../components/Paginator.tsx";
 import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
 import { isEqlStr } from "../libs/helpers.ts";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);

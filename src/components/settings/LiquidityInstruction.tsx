@@ -10,9 +10,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { isDev } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function LiquidityInstruction() {
   const { updateInstructions } = useInstructionsService();

@@ -11,9 +11,9 @@ import { StoreAccessTokenKey } from "../constants.ts";
 import useStore from "../hooks/store/useStore.ts";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { cn } from "../libs/utils.ts";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { Footer } from "../components/Footer.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 export default function Layout({
   body,

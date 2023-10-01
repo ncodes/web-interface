@@ -16,7 +16,8 @@ import { MyOffersTabContent } from "../components/offer/MyOffersTabContent.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { OfferFilter } from "../components/offer/OfferFilter.tsx";
 import { OfferFilterSheet } from "../components/offer/OfferFilterSheet.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function OfferTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();

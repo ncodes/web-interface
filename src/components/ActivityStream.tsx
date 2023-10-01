@@ -1,7 +1,6 @@
 import { PairAvatar } from "./avatar/PairAvatar.tsx";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card.tsx";
 import { ScrollAreaHorizontal } from "./ui/scroll-area.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
 import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { ErrorIcon } from "react-hot-toast";
@@ -16,6 +15,7 @@ import { ActivityStreamRowSkeleton } from "./ActivityStreamRowSkeleton.tsx";
 import { ActivityStreamRowPlaceholder } from "./ActivityStreamRowPlaceholder.tsx";
 import { useSwapService } from "../hooks/services/backend/useSwapService.ts";
 import { ToolTip } from "./ToolTip.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function PopularMarketRow(props: { market: Market }) {
   return (

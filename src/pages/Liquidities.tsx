@@ -17,7 +17,8 @@ import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
 import { useState } from "react";
 import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();

@@ -5,8 +5,8 @@ import { Label } from "../ui/label.tsx";
 import { SwapEventLogs } from "./SwapEventLogs.tsx";
 import { useEffect, useState } from "react";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SwapInformation({ swap }: { swap: Swap }) {
   const { loadInstruction } = useBadgeMgrContract();

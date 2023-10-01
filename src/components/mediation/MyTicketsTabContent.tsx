@@ -9,7 +9,8 @@ import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { PlugZapIcon } from "lucide-react";
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MyTicketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();

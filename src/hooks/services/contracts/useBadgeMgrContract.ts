@@ -1,9 +1,9 @@
-import { useConnectorContext } from "../../connectors/context.tsx";
 import {
   GrantSigInfo,
   NewGrantValues,
 } from "../backend/useInstructionsService.ts";
 import { TransactionExecutionError } from "viem";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 /**
  * Providers utilities for reading and writing to the badge manager contract

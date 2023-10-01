@@ -8,8 +8,8 @@ import { ErrorIcon } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { RequestError } from "../../libs/RequestError.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MarketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();

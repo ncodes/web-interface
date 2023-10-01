@@ -23,7 +23,6 @@ import { cn } from "../../libs/utils.ts";
 import { useState } from "react";
 import IconConflict from "../icons/IconConflict.tsx";
 import useStore from "../../hooks/store/useStore.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
@@ -36,6 +35,7 @@ import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
 import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
 import AppealPopOver from "./AppealPopOver.tsx";
 import { useInterval } from "usehooks-ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SwapProgress({
   swap,

@@ -83,6 +83,9 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      backgroundImage: {
+        chat: "url('/images/bg/chatbg.png')",
+      },
       transitionProperty: {
         width: "width",
         left: "left",

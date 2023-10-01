@@ -1,5 +1,5 @@
-import { useConnectorContext } from "../../connectors/context.tsx";
 import { DisputeStruct } from "../../../typechain/DisputeManager.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 /**
  * Providers utilities for reading and writing to the Dispute Manager contract

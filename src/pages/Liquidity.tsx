@@ -24,8 +24,8 @@ import { OffersTabContent } from "../components/liquidity/OffersTabContent.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import { useQuery } from "@tanstack/react-query";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
 import { SwapSheetContent } from "../components/swap/SwapSheetContent.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function LiquidityPage({
   defaultTab,

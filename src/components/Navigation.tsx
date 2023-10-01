@@ -5,7 +5,8 @@ import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 type NavPageLinkProps = {
   iconFile?: string;

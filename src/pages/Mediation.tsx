@@ -21,7 +21,8 @@ import { TicketFilterSheet } from "../components/mediation/TicketFilterSheet.tsx
 import { Footer } from "../components/Footer.tsx";
 import { TicketFilter } from "../components/mediation/TicketFilter.tsx";
 import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function MediationTabs({ defaultTab }: { defaultTab?: string }) {
   const { connected } = useConnectorContext();

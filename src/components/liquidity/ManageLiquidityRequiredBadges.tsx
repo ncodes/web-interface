@@ -17,8 +17,8 @@ import IconCaution from "../icons/IconCaution.tsx";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { useQueryClient } from "@tanstack/react-query";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useLocation } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function ManageLiquidityRequiredBadges({
   liquidity,

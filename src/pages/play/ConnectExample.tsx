@@ -9,7 +9,6 @@ export default function ConnectExample() {
   const signMsg = useCallback(() => {
     const email = "kennedyidialu@gmail.com";
     const msg = createSignatureMessage(address, email);
-    console.log(msg.toString("hex"));
     sign(msg.toString("utf-8"))
       .then((sig) => {
         console.log(">>>SIG", sig);

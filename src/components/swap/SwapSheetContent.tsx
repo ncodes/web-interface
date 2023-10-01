@@ -25,7 +25,6 @@ import {
   toLD,
   trimZeros,
 } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
 import { useInterval } from "usehooks-ts";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
@@ -36,6 +35,7 @@ import { useToast } from "../../hooks/toast/toast.tsx";
 import { Address, decodeEventLog } from "viem";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { useNavigate } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 /**
  * SwapSheetContent

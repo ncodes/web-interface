@@ -1,7 +1,8 @@
 import useStore from "../hooks/store/useStore.ts";
 import IconCaution from "./icons/IconCaution.tsx";
 import { Button } from "./ui/Button.tsx";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 export function UnlinkedAccountNotice() {
   const { connected } = useConnectorContext();

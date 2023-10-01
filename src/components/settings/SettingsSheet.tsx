@@ -14,10 +14,10 @@ import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { AccountTab } from "./AccountTab.tsx";
 import { BalancesTab } from "./BalancesTab.tsx";
 import { SettingsFooter } from "./SettingsFooter.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
 import { RulesTab } from "./RulesTab.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SettingsSheet(props: {
   children?: React.ReactNode;

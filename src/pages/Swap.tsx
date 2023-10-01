@@ -11,8 +11,11 @@ import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { Messenger } from "../components/messenger/Messenger.tsx";
 import { SwapPageTabContent } from "../components/swap/SwapPageTabContent.tsx";
 import { Footer } from "../components/Footer.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { getSwapCounterpart, isSwapParticipant } from "../libs/api_utils.ts";
+import { useState } from "react";
 
-function SwapPage() {
+function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
   return (
     <Tabs
       defaultValue="my-swaps"
@@ -42,30 +45,44 @@ function SwapPage() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <SwapPageTabContent />
+      <SwapPageTabContent
+        onSwapFetched={(swap) => {
+          onSwapFetched && onSwapFetched(swap);
+        }}
+      />
     </Tabs>
   );
 }
 
 export default function Swap() {
+  const { address } = useConnectorContext();
+  const [swap, setSwap] = useState<Swap | null>(null);
+
+  const messenger =
+    swap && isSwapParticipant(swap, address) ? (
+      <div className="flex w-full h-full justify-between flex-col pt-2">
+        <Messenger sheetMode={false} swap={swap} />
+        <div className="relative">
+          <div className="text-gray-200 bottom-0 w-full">
+            <Footer />
+          </div>
+        </div>
+      </div>
+    ) : null;
+
   return (
     <Layout
       bodyContainerClassName="lg:min-h-full"
       body={
         <div className="flex flex-col">
-          <SwapPage />
+          <SwapPage
+            onSwapFetched={(swap) => {
+              setSwap(swap);
+            }}
+          />
         </div>
       }
-      rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
-          <Messenger sheetMode={false} />
-          <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
-              <Footer />
-            </div>
-          </div>
-        </div>
-      }
+      rightSide={messenger}
     />
   );
 }

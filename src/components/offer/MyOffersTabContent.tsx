@@ -9,7 +9,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { RequestError } from "../../libs/RequestError.ts";
 import { OfferRow } from "../liquidity/OfferRow.tsx";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MyOffersTabContent() {
   const { getChainInfo, address } = useConnectorContext();

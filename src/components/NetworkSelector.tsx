@@ -12,7 +12,8 @@ import { cn } from "../libs/utils.ts";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { getChain, getChains } from "../hooks/connectors/networks.ts";
 import { ChainInfo } from "../types/global";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function DropdownMenuItemCustom({
   children,

@@ -2,13 +2,13 @@ import { EditRow } from "./EditRow.tsx";
 import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
 import { Switch } from "../ui/switch.tsx";
 import { useState } from "react";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { delay, isDev } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function EditOfferOnlyMode({
   market,

@@ -10,7 +10,6 @@ import { Cross2Icon, InfoCircledIcon } from "@radix-ui/react-icons";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { Switch } from "../ui/switch.tsx";
 import { Button } from "../ui/Button.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useAssetService } from "../../hooks/services/backend/useAssetService.ts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AssetSelector } from "./AssetSelector.tsx";
@@ -23,6 +22,7 @@ import _ from "lodash";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
 import Input2 from "../Input2.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function CreateMarketSheet({
   children,

@@ -1,6 +1,5 @@
 import { EditRow } from "./EditRow.tsx";
 import { Button } from "../ui/Button.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useState } from "react";
 import { useToast } from "../../hooks/toast/toast.tsx";
@@ -9,6 +8,7 @@ import { isAddress } from "viem";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { delay, isDev } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function EditTransferOwnership({
   market,

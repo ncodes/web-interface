@@ -53,7 +53,6 @@ import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { CountDown } from "../Countdown.tsx";
 import { NavLink, useLocation } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { UserHoverCard } from "../UserHoverCard.tsx";
 import CommitVotePopOver from "../swap/CommitVotePopOver.tsx";
 import { delay, isDev } from "../../libs/helpers.ts";
@@ -63,6 +62,7 @@ import RevealVotePopOver from "../swap/RevealVotePopOver.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { useInterval } from "usehooks-ts";
 import { IDBadge } from "../IDBadge.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 interface ButtonEnableState {
   commit: boolean;

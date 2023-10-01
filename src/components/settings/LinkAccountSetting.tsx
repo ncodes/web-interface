@@ -11,7 +11,8 @@ import { Button } from "../ui/Button.tsx";
 import IconCheckCircle from "../icons/IconCheckCircle.tsx";
 import { StoreAccessTokenKey, StoreEmailKey } from "../../constants.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function LinkAccountSetting() {
   const [email, setEmail] = useState("");

@@ -10,10 +10,10 @@ import { ToolTip } from "../ToolTip.tsx";
 import Input2 from "../Input2.tsx";
 import { XCircle } from "lucide-react";
 import { useVoteSecret } from "../../hooks/useVoteSecret.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { shortenAddress } from "../../libs/helpers.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import { Address, encodePacked, keccak256 } from "viem";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export default function CommitVotePopOver({
   orderId,

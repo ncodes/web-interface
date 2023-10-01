@@ -8,7 +8,6 @@ import { InputWrapper } from "../InputWrapper.tsx";
 import { Button } from "../ui/Button.tsx";
 import { useEffect, useState } from "react";
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useQuery } from "@tanstack/react-query";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { delay, deriveLiquidityAddress, isDev } from "../../libs/helpers.ts";
@@ -19,6 +18,7 @@ import { GrantedPaymentMethodRow } from "./GrantedPaymentMethodRow.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { PaymentMethodSelector } from "./PaymentMethodSelector.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function ManageLiquiditySetPaymentMethods({
   liquidity,

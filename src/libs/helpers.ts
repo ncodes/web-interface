@@ -10,6 +10,7 @@ import * as approx from "approximate-number";
 import * as humanizeDuration from "humanize-duration";
 import { RequestError } from "./RequestError.ts";
 import { AssetType } from "../types/enums.ts";
+import forge from "node-forge";
 
 export function isDev() {
   return import.meta.env.VITE_ENV === "development";
@@ -419,4 +420,8 @@ export function deriveLiquidityAddress(liquidity: Liquidity) {
 
 export function cleanBadgeName(badge: string) {
   return badge.split("/")[1].replaceAll("_", " ");
+}
+
+export function sha1(str: string) {
+  return forge.md.sha1.create().update(str).digest().toHex();
 }

@@ -9,7 +9,8 @@ import useStore from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MySwapTabContent() {
   const { getChainInfo, address } = useConnectorContext();

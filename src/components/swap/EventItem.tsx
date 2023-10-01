@@ -7,7 +7,6 @@ import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { ToolTip } from "../ToolTip.tsx";
 import { isDisputed, isDisputeDraftee } from "../../libs/api_utils.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { EventContentSwapNew } from "./event/EventContentSwapNew.tsx";
 import { EventContentSwapPaid } from "./event/EventContentSwapPaid.tsx";
 import { EventContentSwapReleased } from "./event/EventContentSwapReleased.tsx";
@@ -19,6 +18,7 @@ import { EventContentSwapRevealed } from "./event/EventContentSwapRevealed.tsx";
 import { EventContentSwapExecuted } from "./event/EventContentSwapExecuted.tsx";
 import { EventContentSwapUndrafted } from "./event/EventContentSwapUndrafted.tsx";
 import { UserHoverCard } from "../UserHoverCard.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
   const { getUser } = useUserService();

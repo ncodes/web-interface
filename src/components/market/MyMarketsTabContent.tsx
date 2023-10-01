@@ -10,7 +10,8 @@ import { PlugZapIcon } from "lucide-react";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
+
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MyMarketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();

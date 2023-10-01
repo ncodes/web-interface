@@ -8,8 +8,8 @@ import { RequestError } from "../../libs/RequestError.ts";
 import { ActivityLogSkeleton } from "../liquidity/LiquidityEventLog.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Events } from "../../types/enums.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { cn } from "../../libs/utils.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SwapEventLogs({ swap }: { swap: Swap }) {
   const { getChainInfo } = useConnectorContext();

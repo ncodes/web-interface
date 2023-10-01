@@ -427,11 +427,11 @@ export function isRevealer(dispute: Dispute, address: string) {
   );
 }
 
-// export function getTicketIndexFromDispute(dispute: Dispute, address: string) {
-//   if (dispute.ticketIndex !== undefined) return [dispute.ticketIndex];
-//   return dis;
-// }
+export function getSwapCounterpart(swap: Swap, address: string) {
+  if (isEqlStr(swap.provider, address)) return swap.taker;
+  return swap.provider;
+}
 
-// export function makeSwapLoadingKey(swap: Swap) {
-//   return `swap-${swap.orderId}-`;
-// }
+export function isProvider(swap: Swap, address: string) {
+  return isEqlStr(swap.provider, address);
+}

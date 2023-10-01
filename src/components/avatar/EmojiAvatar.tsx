@@ -8,6 +8,17 @@ interface AvatarParams {
   randomStr: string;
 }
 
+export const RandomBgColors = [
+  "#258f59",
+  "#48518f",
+  "#82a440",
+  "#D92828",
+  "#a95cb5",
+  "#3e37c3",
+  "#093dc3",
+  "#8e925e",
+];
+
 export default function EmojiAvatar(props: AvatarParams) {
   const emojis = [
     "😀",
@@ -66,14 +77,7 @@ export default function EmojiAvatar(props: AvatarParams) {
     "🦄",
     "🐴",
   ];
-  const bgs = [
-    "bg-[#32B572]",
-    "bg-[#76A0EE]",
-    "bg-[#9AB532]",
-    "bg-[#D92828]",
-    "bg-[#E88EF4]",
-    "bg-[#9CC328]",
-  ];
+
   const cls = "flex justify-center items-center rounded-full pt-[2px]";
   const random = new XORShift(
     forge.md.sha1
@@ -89,7 +93,10 @@ export default function EmojiAvatar(props: AvatarParams) {
   };
 
   return (
-    <div className={cn(cls, sizes[props.size][0], random.choice(bgs), {})}>
+    <div
+      className={cn(cls, sizes[props.size][0])}
+      style={{ background: random.choice(RandomBgColors) }}
+    >
       <span className={sizes[props.size][1]}>{random.choice(emojis)}</span>
     </div>
   );

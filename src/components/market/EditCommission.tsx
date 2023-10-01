@@ -5,9 +5,9 @@ import { useState } from "react";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
 import { delay, isDev } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import Input2 from "../Input2.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function EditCommission(props: { market: Market; close?: () => void }) {
   const { getChainInfo } = useConnectorContext();

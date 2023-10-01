@@ -14,9 +14,14 @@ import { SwapInformation } from "./SwapInformation.tsx";
 import { MessengerSheet } from "../messenger/MessengerSheet.tsx";
 import { isSwapParticipant } from "../../libs/api_utils.ts";
 import { SwapDisputes } from "./SwapDisputes.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 
-export function SwapPageTabContent() {
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+
+export function SwapPageTabContent({
+  onSwapFetched,
+}: {
+  onSwapFetched?: (swap: Swap) => void;
+}) {
   const [openMessengerSheet, setOpenMessengerSheet] = useState(false);
   const isLg = useMediaQuery("(min-width: 1024px)");
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
@@ -46,6 +51,11 @@ export function SwapPageTabContent() {
     swap.isRefetching,
     swap.isRefetchError,
   ]);
+
+  useEffect(() => {
+    if (!swap.data) return;
+    onSwapFetched && onSwapFetched(swap.data);
+  }, [swap.data]);
 
   return (
     <TabsContent

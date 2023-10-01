@@ -6,8 +6,8 @@ import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import { NetworkSelector } from "./NetworkSelector.tsx";
 import { NavSearchButton } from "./NavSearchButton.tsx";
 import { cn } from "../libs/utils.ts";
-import { useConnectorContext } from "../hooks/connectors/context.tsx";
 import { InputActivatedSearchBox } from "./search/InputActivatedSearchBox.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 export function Header(props: { onClick: () => void; height?: string }) {
   const { connected } = useConnectorContext();

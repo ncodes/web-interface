@@ -14,10 +14,10 @@ import {
   InstructionsWithGrantSigResponse,
   useInstructionsService,
 } from "../../hooks/services/backend/useInstructionsService.ts";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useCallback, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { delay, isDev } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function ManageLiquidityInstruction({
   liquidity,

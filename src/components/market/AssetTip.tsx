@@ -2,8 +2,8 @@ import { shortenAddress } from "../../libs/helpers.ts";
 import CopyToClipboard from "react-copy-to-clipboard";
 import IconCopyFilled from "../icons/IconCopyFilled.tsx";
 import { Globe } from "lucide-react";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { NavLink } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function AssetTip(props: { address: string }) {
   const { getChainInfo } = useConnectorContext();

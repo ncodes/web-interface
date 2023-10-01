@@ -5,7 +5,6 @@ import { useState } from "react";
 import _ from "lodash";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import {
   delay,
   isDev,
@@ -14,6 +13,7 @@ import {
 } from "../../libs/helpers.ts";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function EditBadgeRequirements({
   market,

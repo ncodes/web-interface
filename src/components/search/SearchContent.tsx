@@ -3,10 +3,10 @@ import { SearchInput } from "./SearchInput.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { SearchBoxItem } from "./SearchBoxItem.tsx";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { useQuery } from "@tanstack/react-query";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import { ActivityStreamRowSkeleton } from "../ActivityStreamRowSkeleton.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SearchContent({ renderInput }: { renderInput?: boolean }) {
   const [focus, setFocus] = useState(false);

@@ -1,6 +1,6 @@
-import { useConnectorContext } from "../../connectors/context.tsx";
 import { toBN } from "../../../libs/helpers.ts";
 import { AssetType } from "../../../types/enums.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 /**
  * Providers utilities for reading and writing to the market contract

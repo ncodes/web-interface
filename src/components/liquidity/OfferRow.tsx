@@ -42,8 +42,8 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import { CountDown } from "../Countdown.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useConnectorContext } from "../../hooks/connectors/context.tsx";
 import { UserHoverCard } from "../UserHoverCard.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 interface ButtonEnableState {
   accept: boolean;
