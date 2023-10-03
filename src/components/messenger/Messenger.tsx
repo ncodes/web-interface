@@ -29,6 +29,9 @@ import {
 import _ from "lodash";
 import moment from "moment";
 import { Message } from "./db.ts";
+import { SwapStatusTypeId } from "../../hooks/messager/codecs/SwapStatusCodec.ts";
+import { MessageRelayTypeId } from "../../hooks/messager/codecs/MessageRelayCodec.ts";
+import useWindowFocus from "../../hooks/useWindowFocus.ts";
 
 export type MessageStream = Promise<Stream<DecodedMessage>>;
 
@@ -54,6 +57,10 @@ export function Messenger({
     relayMessageToConvos,
     getConvoId,
     removeMessageById,
+    sendReadReceipt,
+    sendSwapStatus,
+    sendDeliveryReceipt,
+
     send,
   } = useMessenger();
   const { address } = useConnectorContext();
@@ -65,6 +72,10 @@ export function Messenger({
   const [lastMsgTime, setLastMsgTime] = useState<{ [key: string]: number }>({});
   const streams = useRef<{ [key: string]: MessageStream | undefined }>({});
   const streamEnders = useRef(streamEnderFunc);
+  const [pendingReadReceipts, setPendingReadReceipts] = useState<{
+    [key: string]: DecodedMessage[];
+  }>({});
+  const windowFocus = useWindowFocus();
 
   // As a swap counterparty, create or get existing conversation with counterparty
   useEffect(() => {
@@ -141,9 +152,23 @@ export function Messenger({
         conversation,
         (s) => (stream = s),
         async (message) => {
+          if (message.senderAddress == client.address) return;
           const { peerAddress } = conversation;
           message.recipientAddress = peerAddress;
+
           await processMessage(client.address, peerAddress, message);
+
+          void sendDeliveryReceipt(client.address, message, [conversation]);
+
+          if (windowFocus) {
+            void sendReadReceipt(client.address, message, [conversation]);
+          } else {
+            setPendingReadReceipts({
+              ...pendingReadReceipts,
+              [convId]: (pendingReadReceipts[convId] || []).concat(message),
+            });
+          }
+
           await relayMessageToConvos(
             client.address,
             peerAddress,
@@ -165,7 +190,38 @@ export function Messenger({
       void endStream(stream);
       delete streamsRef[convId];
     };
-  }, [conversation, client, streams, mediatorsConvo]);
+  }, [conversation, client, streams, mediatorsConvo, windowFocus]);
+
+  // Send read receipts for pending messages
+  useEffect(() => {
+    if (!windowFocus || !conversation) return;
+    if (!client) return;
+
+    const sendReadReceiptsForSwapCounterpart = async () => {
+      const convId = getConvoId(conversation);
+      const pendingMsgs = pendingReadReceipts[convId];
+      if (!pendingMsgs || !pendingMsgs?.length) return;
+      for (const msg of pendingMsgs) {
+        await sendReadReceipt(client.address, msg, [conversation]);
+      }
+      delete pendingReadReceipts[convId];
+    };
+
+    const sendReadReceiptsForMediators = async () => {
+      for (const convo of mediatorsConvo) {
+        const convId = getConvoId(convo);
+        const pendingMsgs = pendingReadReceipts[convId];
+        if (!pendingMsgs || !pendingMsgs?.length) continue;
+        for (const msg of pendingMsgs) {
+          await sendReadReceipt(client.address, msg, [convo]);
+        }
+        delete pendingReadReceipts[convId];
+      }
+    };
+
+    void sendReadReceiptsForSwapCounterpart();
+    void sendReadReceiptsForMediators();
+  }, [windowFocus, pendingReadReceipts]);
 
   // As a swap counterparty or mediator, load messages from DB
   const messages = useLiveQuery(async () => {
@@ -216,7 +272,6 @@ export function Messenger({
   // As a swap counterparty, process incoming messages from mediators
   useEffect(() => {
     if (!mediatorsConvo.length || !client) return;
-
     const streamsRef = streams.current;
     const convosStream: MessageStream[] = [];
     const endStream = streamEnders.current;
@@ -224,6 +279,7 @@ export function Messenger({
 
     for (const convo of mediatorsConvo) {
       const convId = getConvoId(convo);
+
       const createConvoStream = async () => {
         await createStream(
           convo,
@@ -232,12 +288,22 @@ export function Messenger({
             convosStream.push(stream);
           },
           async (message) => {
-            await processMessage(
-              client.address,
-              convo.peerAddress,
-              message,
-              true
-            );
+            const { address } = client;
+            const { peerAddress } = convo;
+
+            await processMessage(address, peerAddress, message, true);
+
+            void sendDeliveryReceipt(address, message, [convo]);
+
+            if (windowFocus) {
+              void sendReadReceipt(client.address, message, [convo]);
+            } else {
+              setPendingReadReceipts({
+                ...pendingReadReceipts,
+                [convId]: (pendingReadReceipts[convId] || []).concat(message),
+              });
+            }
+
             const msgTime = message.sent.getTime();
             setLastMsgTime({ ...lastMsgTime, [convId]: msgTime / 1000 });
           },
@@ -246,6 +312,7 @@ export function Messenger({
           }
         );
       };
+
       void createConvoStream();
     }
 
@@ -253,7 +320,7 @@ export function Messenger({
       convosStream.forEach((stream) => void endStream(stream));
       convosId.forEach((convId) => delete streamsRef[convId]);
     };
-  }, [mediatorsConvo, client, streams]);
+  }, [mediatorsConvo, client, streams, pendingReadReceipts, windowFocus]);
 
   // As a mediator, create conversations with swap counterparties (if in dispute)
   useEffect(() => {
@@ -264,7 +331,15 @@ export function Messenger({
       const convos = await createConversationsWithCounterparts(client, swap);
 
       // If dispute is not executed, store references to the counterparties' conversations.
-      setCountPartsConvo(!disputeExecuted ? convos : []);
+      // If dispute is executed, clear references to the counterparties' conversations.
+      if (!disputeExecuted) {
+        setCountPartsConvo(convos);
+      } else {
+        // Delay clearing the conversations to allow incoming messages to be processed.
+        setTimeout(() => {
+          setCountPartsConvo([]);
+        }, 3000);
+      }
 
       // Add conversations to the readable list to allow them to be read from DB.
       setReadableConvoIds(
@@ -327,11 +402,63 @@ export function Messenger({
     };
   }, [client, countPartsConvo]);
 
-  // Post notice of dispute execution in swap counterparty conversation
+  // As a swap counterpart, send swap status for dispute commencement in swap counterparty conversation
   useEffect(() => {
+    if (!conversation) return;
+    if (!swap || !isSwapCounterparty(swap, address)) return;
+    if (!isDisputed(swap)) return;
+    if (isSwapDisputeExecuted(swap)) return;
+
+    const sendDisputeStartedNotice = async () => {
+      const dispId = swap.disputes[0].disputeId;
+      await sendSwapStatus(
+        `dispute-start-${dispId}`,
+        `Dispute #${dispId} has started`,
+        conversation
+      );
+    };
+
+    void sendDisputeStartedNotice();
+  }, [conversation, swap]);
+
+  // As a swap counterpart, send swap status for dispute conclusion to counterparty conversation
+  useEffect(() => {
+    if (!conversation) return;
     if (!swap || !isSwapCounterparty(swap, address)) return;
     if (!isSwapDisputeExecuted(swap)) return;
-  }, [swap]);
+
+    const sendDisputeEndedNotice = async () => {
+      const dispId = swap.disputes[0].disputeId;
+      await sendSwapStatus(
+        `dispute-ended-${dispId}`,
+        `Dispute #${dispId} has concluded`,
+        conversation
+      );
+    };
+
+    void sendDisputeEndedNotice();
+  }, [conversation, swap]);
+
+  // As a mediator, send swap status for dispute commencement to counterparts conversations
+  useEffect(() => {
+    if (!countPartsConvo.length) return;
+    if (!swap || isSwapCounterparty(swap, address)) return;
+    if (!isDisputed(swap)) return;
+    if (isSwapDisputeExecuted(swap)) return;
+
+    const sendDisputeStartedNotice = async () => {
+      for (const convo of countPartsConvo) {
+        const dispId = swap.disputes[0].disputeId;
+        await sendSwapStatus(
+          `dispute-start-${dispId}`,
+          `Dispute #${dispId} has started`,
+          convo
+        );
+      }
+    };
+
+    void sendDisputeStartedNotice();
+  }, [countPartsConvo, swap]);
 
   async function handleSendMsg(msg: string) {
     if (!client) return;
@@ -346,11 +473,13 @@ export function Messenger({
     }
 
     if (isSwapDraftee(swap, address, true)) {
+      const now = moment();
       for (const convo of countPartsConvo) {
-        await send(client, convo, msg);
-        setLastMsgTime({
-          ...lastMsgTime,
-          [getConvoId(convo)]: moment().unix(),
+        void send(client, convo, msg, now.toDate()).then(() => {
+          setLastMsgTime({
+            ...lastMsgTime,
+            [getConvoId(convo)]: moment().unix(),
+          });
         });
       }
     }
@@ -359,7 +488,7 @@ export function Messenger({
   async function handleMsgResend(msg: Message) {
     if (!client) return;
     await removeMessageById(msg.id as number);
-    await handleSendMsg(msg.content);
+    await handleSendMsg(msg.content as string);
   }
 
   // Decide whether to disable send elements
@@ -367,7 +496,7 @@ export function Messenger({
     return (
       !client ||
       (!isSwapCounterparty(swap, address) &&
-        !isSwapDraftee(swap, address, true))
+        (!isSwapDraftee(swap, address, true) || isSwapDisputeExecuted(swap)))
     );
   }
 
@@ -435,23 +564,38 @@ export function Messenger({
                     client &&
                     messages?.map((msg, i) => (
                       <div key={i}>
-                        {!isEqlStr(msg.from || "", address) && (
-                          <MessageItem
-                            msg={msg}
-                            swap={swap}
-                            onResend={(msg) => {
-                              void handleMsgResend(msg);
-                            }}
-                          />
+                        {["text", MessageRelayTypeId].includes(
+                          msg.contentType?.typeId as string
+                        ) && (
+                          <>
+                            {!isEqlStr(msg.from || "", address) && (
+                              <MessageItem
+                                msg={msg}
+                                swap={swap}
+                                onResend={(msg) => {
+                                  void handleMsgResend(msg);
+                                }}
+                              />
+                            )}
+                            {isEqlStr(msg.from, address) && (
+                              <MessageItem
+                                msg={msg}
+                                swap={swap}
+                                onResend={(msg) => {
+                                  void handleMsgResend(msg);
+                                }}
+                              />
+                            )}
+                          </>
                         )}
-                        {isEqlStr(msg.from, address) && (
-                          <MessageItem
-                            msg={msg}
-                            swap={swap}
-                            onResend={(msg) => {
-                              void handleMsgResend(msg);
-                            }}
-                          />
+                        {[SwapStatusTypeId].includes(
+                          msg.contentType?.typeId as string
+                        ) && (
+                          <div className="flex justify-center">
+                            <span className="text-xs font-light bg-gray-800 px-2 rounded-xl text-gray-400">
+                              {msg.content["status"]}
+                            </span>
+                          </div>
                         )}
                       </div>
                     ))}

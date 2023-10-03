@@ -10,6 +10,13 @@ export interface Conversation {
   updatedAt: Date;
 }
 
+export interface ContentType {
+  authorityId: string;
+  typeId: string;
+  versionMajor: number;
+  versionMinor: number;
+}
+
 // Define a message interface
 export interface Message {
   id?: number;
@@ -19,15 +26,12 @@ export interface Message {
   conversationId: string;
   sentAt: number;
   receivedAt?: number;
-  contentType?: {
-    authorityId: string;
-    typeId: string;
-    versionMajor: number;
-    versionMinor: number;
-  };
-  content: string;
+  contentType?: ContentType;
+  content: string | { [key: string]: never };
   contentHash: string;
   status?: "sending" | "sent" | "delivered" | "read" | "failed";
+  readers?: string[];
+  receivers?: string[];
 }
 
 // Define a copied message interface
@@ -86,7 +90,10 @@ class DB extends Dexie {
       contentHash,
       sentAt,
       &[conversationId+contentHash+sentAt],
-      status
+      status,
+      [msgId+status],
+      readers,
+      receivers
       `,
 
       copiedMessages: `

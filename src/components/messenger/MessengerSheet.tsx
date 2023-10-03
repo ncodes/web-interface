@@ -7,9 +7,10 @@ import { cn } from "../../libs/utils.ts";
 
 export function MessengerSheet(props: {
   open: boolean;
+  swap: Swap;
   onOpenChange?: (open) => void;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [height, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = React.useState(props.open);
 
   useEffect(() => {
@@ -21,11 +22,12 @@ export function MessengerSheet(props: {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0"
+          "w-full border-l focus-visible:outline-0 overflow-hidden border-gray-800 pt-0 px-0 pb-0",
+          height
         )}
         side={sheetSide}
       >
-        <Messenger sheetMode />
+        <Messenger swap={props.swap} sheetMode />
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {

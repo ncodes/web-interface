@@ -374,6 +374,10 @@ export function isDisputed(swap: Swap) {
   return swap.disputes.length > 0;
 }
 
+export function getDrafteeIndex(swap: Swap, address: string) {
+  return swap.disputes[0].draftees.findIndex((d) => isEqlStr(d.owner, address));
+}
+
 /**
  * Returns the outcome of the swap's latest dispute.
  * @param swap

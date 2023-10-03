@@ -1,17 +1,25 @@
 import { Message } from "./db.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { Check } from "lucide-react";
+import { Check, CheckCheck } from "lucide-react";
 import { Button } from "../ui/Button.tsx";
+import _ from "lodash";
 import IconCaution from "../icons/IconCaution.tsx";
 import { ToolTip } from "../ToolTip.tsx";
+import { isSwapDraftee } from "../../libs/api_utils.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { shortenAddress } from "../../libs/helpers.ts";
 
 export function MessageItemStatus({
+  swap,
   msg,
   onResend,
 }: {
+  swap: Swap;
   msg: Message;
   onResend?: (msg: Message) => void;
 }) {
+  const { address } = useConnectorContext();
+
   return (
     <div className="relative flex justify-end">
       {msg.status == "sending" && (
@@ -32,6 +40,47 @@ export function MessageItemStatus({
           <span>
             <ToolTip tip="Sent">
               <Check width="15" className="text-gray-500" />
+            </ToolTip>
+          </span>
+        </div>
+      )}
+      {msg.status == "delivered" && (
+        <div className="flex absolute -top-2 text-xs h-[10px] font-extralight tracking-wider items-center gap-1 justify-end text-gray-500">
+          <span>
+            <ToolTip tip="Delivered">
+              <CheckCheck width="15" className="text-gray-500" />
+            </ToolTip>
+          </span>
+        </div>
+      )}
+      {msg.status == "read" && (
+        <div className="flex absolute -top-2 text-xs h-[10px] font-extralight tracking-wider items-center gap-1 justify-end text-gray-500">
+          <span>
+            <ToolTip
+              tip={
+                <>
+                  {isSwapDraftee(swap, address) ? (
+                    <>
+                      <b className="text-gray-500 mb-1 inline-block animate-in fade-in fade-out">
+                        Seen By:
+                      </b>
+                      <br />
+                      {_.uniq(msg.readers)?.map((r) => {
+                        return (
+                          <span key={r}>
+                            {shortenAddress(r)}
+                            <br />
+                          </span>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <>Read</>
+                  )}
+                </>
+              }
+            >
+              <CheckCheck width="15" className="text-green-500" />
             </ToolTip>
           </span>
         </div>

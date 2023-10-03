@@ -102,6 +102,7 @@ export function SwapPageTabContent({
         )}
 
       <MessengerSheet
+        swap={swap.data as Swap}
         open={openMessengerSheet}
         onOpenChange={(open) => {
           setOpenMessengerSheet(open);

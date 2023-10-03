@@ -1,8 +1,8 @@
 import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
+import { JointAuthorityId } from "./common.ts";
 
-export const JointAuthorityId = "joint.exchange";
 export const MessageRelayTypeId = "msg-relay";
-export const ContentTypeMessageRelayCodec = new ContentTypeId({
+export const ContentTypeMessageRelay = new ContentTypeId({
   authorityId: JointAuthorityId,
   typeId: MessageRelayTypeId,
   versionMajor: 1,
@@ -11,12 +11,12 @@ export const ContentTypeMessageRelayCodec = new ContentTypeId({
 
 export default class MessageRelayCodec implements ContentCodec<any> {
   get contentType() {
-    return ContentTypeMessageRelayCodec;
+    return ContentTypeMessageRelay;
   }
 
   encode(data: { from: string; to: string; sentAt: number; content: string }) {
     return {
-      type: ContentTypeMessageRelayCodec,
+      type: ContentTypeMessageRelay,
       parameters: {},
       content: new TextEncoder().encode(JSON.stringify(data)),
     };
@@ -26,7 +26,7 @@ export default class MessageRelayCodec implements ContentCodec<any> {
     return JSON.parse(new TextDecoder().decode(content.content));
   }
 
-  fallback(_content: any): string | undefined {
+  fallback(): string | undefined {
     return undefined;
   }
 }

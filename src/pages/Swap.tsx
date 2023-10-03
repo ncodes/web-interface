@@ -12,7 +12,7 @@ import { Messenger } from "../components/messenger/Messenger.tsx";
 import { SwapPageTabContent } from "../components/swap/SwapPageTabContent.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-import { getSwapCounterpart, isSwapParticipant } from "../libs/api_utils.ts";
+import { isSwapParticipant } from "../libs/api_utils.ts";
 import { useState } from "react";
 
 function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {

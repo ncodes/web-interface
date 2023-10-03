@@ -5,7 +5,10 @@ import { Client, ClientOptions } from "@xmtp/xmtp-js";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { isDev } from "../../libs/helpers.ts";
 import useMessenger from "../../hooks/messager/useMessenger.ts";
-import MessageRelayCodec from "../../hooks/messager/MessageRelayCodec.ts";
+import MessageRelayCodec from "../../hooks/messager/codecs/MessageRelayCodec.ts";
+import SwapStatusCodec from "../../hooks/messager/codecs/SwapStatusCodec.ts";
+import DeliveryReceiptCodec from "../../hooks/messager/codecs/DeliveryReceiptCodec.ts";
+import ReadReceiptCodec from "../../hooks/messager/codecs/ReadReceiptCodec.ts";
 
 export function IdentityInitializer({
   onInitialized,
@@ -43,12 +46,15 @@ export function IdentityInitializer({
         saveKeys(env, address, keys);
       }
 
-      let client = await Client.create(null, {
+      const client = await Client.create(null, {
         ...opts,
         privateKeyOverride: keys,
       });
 
+      client.registerCodec(new DeliveryReceiptCodec());
+      client.registerCodec(new ReadReceiptCodec());
       client.registerCodec(new MessageRelayCodec());
+      client.registerCodec(new SwapStatusCodec());
 
       setLoading(false);
       setClient(client);
