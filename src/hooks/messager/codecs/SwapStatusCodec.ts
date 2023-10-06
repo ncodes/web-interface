@@ -1,5 +1,6 @@
 import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
 import { JointAuthorityId } from "./common.ts";
+import { decode, encode } from "@msgpack/msgpack";
 
 export const SwapStatusTypeId = "swap-status";
 export const ContentTypeSwapStatus = new ContentTypeId({
@@ -22,15 +23,22 @@ export default class SwapStatusCodec implements ContentCodec<any> {
     return {
       type: ContentTypeSwapStatus,
       parameters: {},
-      content: new TextEncoder().encode(JSON.stringify(data)),
+      content: encode(data),
     };
   }
 
   decode(content: { content: any }) {
-    return JSON.parse(new TextDecoder().decode(content.content));
+    return decode(content.content);
   }
 
   fallback(): string | undefined {
     return undefined;
   }
+}
+
+export function isSwapStatusType(contentTypeId: ContentTypeId) {
+  return (
+    contentTypeId.authorityId == JointAuthorityId &&
+    contentTypeId.typeId == SwapStatusTypeId
+  );
 }

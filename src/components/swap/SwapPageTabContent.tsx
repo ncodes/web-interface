@@ -23,7 +23,7 @@ export function SwapPageTabContent({
   onSwapFetched?: (swap: Swap) => void;
 }) {
   const [openMessengerSheet, setOpenMessengerSheet] = useState(false);
-  const isLg = useMediaQuery("(min-width: 1024px)");
+  const isXl = useMediaQuery("(min-width: 1280px)");
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { getChainInfo, address } = useConnectorContext();
   const { orderId } = useParams<{ orderId: string }>();
@@ -92,7 +92,7 @@ export function SwapPageTabContent({
               <SwapProgress
                 swap={swap.data}
                 onRequestOpenChat={() => {
-                  if (isLg) return;
+                  if (isXl) return;
                   setOpenMessengerSheet(true);
                 }}
               />

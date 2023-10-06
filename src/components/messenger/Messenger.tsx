@@ -1,25 +1,24 @@
 import { Label } from "../ui/label.tsx";
-import { IconPlus } from "../icons/IconPlus.tsx";
-import { Input } from "../ui/Input.tsx";
+import TextareaAutosize from "react-textarea-autosize";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { cn } from "../../libs/utils.ts";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu.tsx";
-import { Upload } from "lucide-react";
 import { IdentityInitializer } from "./IdentityInitializer.tsx";
-import { Client, Conversation, DecodedMessage, Stream } from "@xmtp/xmtp-js";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Client,
+  ContentTypeText,
+  Conversation,
+  DecodedMessage,
+  Stream,
+} from "@xmtp/xmtp-js";
+import { createRef, useCallback, useEffect, useRef, useState } from "react";
 import useMessenger from "../../hooks/messager/useMessenger.ts";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useLiveQuery } from "dexie-react-hooks";
 import { isEqlStr } from "../../libs/helpers.ts";
-import { MessageItem } from "./MessageItem.tsx";
+import { MessageItemTextImage } from "./MessageItemTextImage.tsx";
 import { AlwaysScrollToBottom } from "../AlwaysScrollToBottom.tsx";
+import { ContentTypeRemoteAttachment } from "@xmtp/content-type-remote-attachment";
 import {
   isDisputed,
   isSwapCounterparty,
@@ -32,6 +31,8 @@ import { Message } from "./db.ts";
 import { SwapStatusTypeId } from "../../hooks/messager/codecs/SwapStatusCodec.ts";
 import { MessageRelayTypeId } from "../../hooks/messager/codecs/MessageRelayCodec.ts";
 import useWindowFocus from "../../hooks/useWindowFocus.ts";
+import { MessengerInputActions } from "./MessengerInputActions.tsx";
+import { MessageItemSwapStatus } from "./MessageItemSwapStatus.tsx";
 
 export type MessageStream = Promise<Stream<DecodedMessage>>;
 
@@ -49,7 +50,7 @@ export function Messenger({
   const {
     makeSwapConversationKey,
     createConversation,
-    loadMessagesToDB,
+    loadMessagesFromConvoToDB,
     processMessage,
     getMessagesFromDB,
     createOrGetConvoWithMediator,
@@ -64,9 +65,12 @@ export function Messenger({
     send,
   } = useMessenger();
   const { address } = useConnectorContext();
+  const scrollToButtomRef = createRef<HTMLDivElement>();
   const [client, setClient] = useState<Client | null>(null);
   const [readableConvosIds, setReadableConvoIds] = useState<string[]>([]);
-  const [conversation, setConversation] = useState<Conversation | null>(null);
+  const [conversation, setConversation] = useState<Conversation | undefined>(
+    undefined
+  );
   const [mediatorsConvo, setMediatorsConvo] = useState<Conversation[]>([]);
   const [countPartsConvo, setCountPartsConvo] = useState<Conversation[]>([]);
   const [lastMsgTime, setLastMsgTime] = useState<{ [key: string]: number }>({});
@@ -100,7 +104,7 @@ export function Messenger({
   // As a swap counterparty, load messages from conversation with counterparty to DB
   useEffect(() => {
     if (!client || !conversation) return;
-    void loadMessagesToDB(client, conversation);
+    void loadMessagesFromConvoToDB(client, conversation);
   }, [client, conversation]);
 
   // Creates a stream for a conversation
@@ -134,7 +138,7 @@ export function Messenger({
         onError?.(e);
       }
     },
-    []
+    [streams]
   );
 
   // As a swap counterparty, process incoming messages for counterparty conversation.
@@ -148,33 +152,42 @@ export function Messenger({
     const endStream = streamEnders.current;
 
     const createCounterpartyStream = async () => {
-      await createStream(
+      return createStream(
         conversation,
-        (s) => (stream = s),
-        async (message) => {
-          if (message.senderAddress == client.address) return;
+        async (s) => {
+          stream = s;
+        },
+        async (message: DecodedMessage) => {
           const { peerAddress } = conversation;
-          message.recipientAddress = peerAddress;
 
-          await processMessage(client.address, peerAddress, message);
+          // Ignore messages from self
+          if (message.senderAddress != client.address) {
+            // Process and store message
+            const msgCopy = { ...message } as DecodedMessage;
+            await processMessage(client, peerAddress, msgCopy);
 
-          void sendDeliveryReceipt(client.address, message, [conversation]);
+            // Send delivery receipt
+            void sendDeliveryReceipt(client.address, message, [conversation]);
 
-          if (windowFocus) {
-            void sendReadReceipt(client.address, message, [conversation]);
-          } else {
-            setPendingReadReceipts({
-              ...pendingReadReceipts,
-              [convId]: (pendingReadReceipts[convId] || []).concat(message),
-            });
+            // Send read receipt on window focus
+            if (windowFocus) {
+              void sendReadReceipt(client.address, message, [conversation]);
+            } else {
+              setPendingReadReceipts({
+                ...pendingReadReceipts,
+                [convId]: (pendingReadReceipts[convId] || []).concat(message),
+              });
+            }
           }
 
-          await relayMessageToConvos(
+          // Relay message to conversation with mediators
+          void relayMessageToConvos(
             client.address,
-            peerAddress,
+            conversation.peerAddress,
             mediatorsConvo,
             message
           );
+
           const msgTime = message.sent.getTime();
           setLastMsgTime({ ...lastMsgTime, [convId]: msgTime / 1000 });
         },
@@ -190,7 +203,7 @@ export function Messenger({
       void endStream(stream);
       delete streamsRef[convId];
     };
-  }, [conversation, client, streams, mediatorsConvo, windowFocus]);
+  }, [conversation, client, mediatorsConvo, streams, windowFocus]);
 
   // Send read receipts for pending messages
   useEffect(() => {
@@ -262,7 +275,7 @@ export function Messenger({
 
     const loadMsgFromMediators = async () => {
       for (const convo of mediatorsConvo) {
-        void (await loadMessagesToDB(client, convo, true));
+        void (await loadMessagesFromConvoToDB(client, convo, true));
       }
     };
 
@@ -291,7 +304,7 @@ export function Messenger({
             const { address } = client;
             const { peerAddress } = convo;
 
-            await processMessage(address, peerAddress, message, true);
+            await processMessage(client, peerAddress, message, true);
 
             void sendDeliveryReceipt(address, message, [convo]);
 
@@ -356,7 +369,7 @@ export function Messenger({
 
     const loadMsgsFromCounterparts = async () => {
       for (const convo of countPartsConvo) {
-        await loadMessagesToDB(client, convo).catch(console.error);
+        await loadMessagesFromConvoToDB(client, convo).catch(console.error);
       }
     };
 
@@ -382,9 +395,9 @@ export function Messenger({
             convosStream.push(stream);
           },
           async (message) => {
-            message.recipientAddress = convo.peerAddress;
-            const { peerAddress } = convo;
-            await processMessage(client.address, peerAddress, message, true);
+            // Process and store message
+            await processMessage(client, convo.peerAddress, message, true);
+
             const msgTime = message.sent.getTime();
             setLastMsgTime({ ...lastMsgTime, [convId]: msgTime / 1000 });
           },
@@ -475,7 +488,7 @@ export function Messenger({
     if (isSwapDraftee(swap, address, true)) {
       const now = moment();
       for (const convo of countPartsConvo) {
-        void send(client, convo, msg, now.toDate()).then(() => {
+        void send(client, convo, msg, now.toDate(), true).then(() => {
           setLastMsgTime({
             ...lastMsgTime,
             [getConvoId(convo)]: moment().unix(),
@@ -564,12 +577,14 @@ export function Messenger({
                     client &&
                     messages?.map((msg, i) => (
                       <div key={i}>
-                        {["text", MessageRelayTypeId].includes(
-                          msg.contentType?.typeId as string
-                        ) && (
+                        {[
+                          ContentTypeText.typeId,
+                          ContentTypeRemoteAttachment.typeId,
+                          MessageRelayTypeId,
+                        ].includes(msg.contentType?.typeId as string) && (
                           <>
                             {!isEqlStr(msg.from || "", address) && (
-                              <MessageItem
+                              <MessageItemTextImage
                                 msg={msg}
                                 swap={swap}
                                 onResend={(msg) => {
@@ -577,8 +592,9 @@ export function Messenger({
                                 }}
                               />
                             )}
+
                             {isEqlStr(msg.from, address) && (
-                              <MessageItem
+                              <MessageItemTextImage
                                 msg={msg}
                                 swap={swap}
                                 onResend={(msg) => {
@@ -590,64 +606,46 @@ export function Messenger({
                         )}
                         {[SwapStatusTypeId].includes(
                           msg.contentType?.typeId as string
-                        ) && (
-                          <div className="flex justify-center">
-                            <span className="text-xs font-light bg-gray-800 px-2 rounded-xl text-gray-400">
-                              {msg.content["status"]}
-                            </span>
-                          </div>
-                        )}
+                        ) && <MessageItemSwapStatus msg={msg} />}
                       </div>
                     ))}
-                  <AlwaysScrollToBottom />
+                  <AlwaysScrollToBottom scrollRef={scrollToButtomRef} />
                 </div>
               </ScrollArea>
             </ScrollOverflowIndicator>
           </div>
           <div
             className={cn(
-              "flex shrink-0 p-2 gap-2 items-center border-t border-gray-700 bg-gray-800",
+              "flex shrink-0 p-2 px-0 gap-2 items-center border-t border-gray-700 bg-card-background",
               { "rounded-b-xl": !sheetMode }
             )}
           >
-            <div className="flex">
-              <DropdownMenu>
-                <DropdownMenuTrigger disabled={disableSend()}>
-                  <div
-                    className={cn(
-                      "rounded-full p-[2px] cursor-not-allowed transition-all duration-300",
-                      {
-                        "hover:bg-chinese-green hover:text-black cursor-pointer":
-                          !disableSend(),
-                      }
-                    )}
-                  >
-                    <IconPlus width="20" />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-card-background border-card-border text-gray-300 p-0">
-                  <DropdownMenuItem className="flex gap-2">
-                    <Upload width="15" />
-                    <span>Upload File</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className="flex-1">
-              <Input
-                type="text"
-                variant="default"
-                rounded="full"
-                className="px-3"
+            <div className="w-full">
+              <TextareaAutosize
+                className="w-full mt-1 mx-3 font-light text-gray-200 tracking-wide bg-card-background outline-none resize-none"
+                placeholder="Write a message"
+                maxRows={3}
                 disabled={disableSend()}
-                placeholder="Type a message"
+                onChange={() => {
+                  scrollToButtomRef?.current?.scrollIntoView();
+                }}
                 onKeyDown={(e) => {
-                  if (e.key == "Enter") {
+                  // Detect enter as long as shift is not pressed
+                  if (e.key == "Enter" && !e.shiftKey) {
+                    e.preventDefault();
                     handleSendMsg(e.currentTarget.value).catch(console.error);
                     e.currentTarget.value = "";
                   }
                 }}
               />
+              {client && (conversation || countPartsConvo.length > 0) && (
+                <MessengerInputActions
+                  disabled={disableSend()}
+                  swap={swap}
+                  client={client}
+                  convos={[...countPartsConvo.concat(conversation || [])]}
+                />
+              )}
             </div>
           </div>
         </div>

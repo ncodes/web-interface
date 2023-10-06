@@ -9,7 +9,7 @@ import { isSwapDraftee } from "../../libs/api_utils.ts";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { shortenAddress } from "../../libs/helpers.ts";
 
-export function MessageItemStatus({
+export function MessageSendStatus({
   swap,
   msg,
   onResend,

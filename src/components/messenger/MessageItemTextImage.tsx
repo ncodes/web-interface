@@ -7,7 +7,7 @@ import { isEqlStr } from "../../libs/helpers.ts";
 import { useRandomColor } from "../avatar/useRandomColor.ts";
 import { cn } from "../../libs/utils.ts";
 import moment from "moment";
-import { Message } from "./db.ts";
+import { ContentType, Message } from "./db.ts";
 import {
   getDrafteeIndex,
   isProvider,
@@ -15,10 +15,24 @@ import {
   isSwapDraftee,
 } from "../../libs/api_utils.ts";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import { MessageItemStatus } from "./MessageItemStatus.tsx";
+import { MessageSendStatus } from "./MessageSendStatus.tsx";
 import { Clock } from "lucide-react";
+import {
+  isRelayedRemoteAttachmentType,
+  isRemoteAttachmentType,
+  isTextType,
+} from "../../hooks/messager/codecs/common.ts";
+import { FileMeta } from "../../hooks/messager/codecs/RemoteFileCodec.ts";
 
-export function MessageItem({
+function MessageImages({ msg }: { msg: FileMeta }) {
+  return (
+    <div className="h-[120px] overflow-hidden mb-3">
+      <img src={`data:${msg.type};base64,${msg.data}`} alt="" />
+    </div>
+  );
+}
+
+export function MessageItemTextImage({
   msg,
   swap,
   onResend,
@@ -73,8 +87,18 @@ export function MessageItem({
                 <span>{moment.unix(msg.sentAt).fromNow()}</span>
               </span>
             </span>
-            <span className="font-light text-sm text-gray-200 tracking-wide break-words">
-              {msg.content as string}
+            <span className="font-light mt-1 text-sm text-gray-200 tracking-wide break-words">
+              <span className="flex leading-5 whitespace-pre w-[300px]">
+                {(isRemoteAttachmentType(msg.contentType as ContentType) ||
+                  isRelayedRemoteAttachmentType(msg as Message<FileMeta>)) && (
+                  <MessageImages
+                    msg={msg.content as FileMeta}
+                    key={msg.msgId}
+                  />
+                )}
+
+                {isTextType(msg.contentType) && <>{msg.content}</>}
+              </span>
             </span>
           </div>
         </div>
@@ -99,10 +123,20 @@ export function MessageItem({
                 </span>
               </span>
             </span>
-            <span className="font-light text-sm text-gray-200 tracking-wide break-words">
-              {msg.content as string}
-            </span>
-            <MessageItemStatus msg={msg} onResend={onResend} swap={swap} />
+            <div className="relative mt-1 font-light text-sm text-gray-200 tracking-wide break-words">
+              <span className="flex leading-5 whitespace-pre w-[300px]">
+                {(isRemoteAttachmentType(msg.contentType as ContentType) ||
+                  isRelayedRemoteAttachmentType(msg as Message<FileMeta>)) && (
+                  <MessageImages
+                    msg={msg.content as FileMeta}
+                    key={msg.msgId}
+                  />
+                )}
+
+                {isTextType(msg.contentType) && <>{msg.content}</>}
+              </span>
+            </div>
+            <MessageSendStatus msg={msg} onResend={onResend} swap={swap} />
           </div>
           <UserHoverCard user={user?.data as User}>
             <EmojiAvatar size={AvatarSize.Small} randomStr={msg.from} />

@@ -1,6 +1,7 @@
 import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
 import { JointAuthorityId } from "./common.ts";
 import { ContentType } from "../../../components/messenger/db.ts";
+import { decode, encode } from "@msgpack/msgpack";
 
 export const DeliveryReceiptTypeId = "delivery-receipt";
 export const ContentTypeDeliveryReceipt = new ContentTypeId({
@@ -19,12 +20,12 @@ export default class DeliveryReceiptCodec implements ContentCodec<any> {
     return {
       type: ContentTypeDeliveryReceipt,
       parameters: {},
-      content: new TextEncoder().encode(JSON.stringify(data)),
+      content: encode(data),
     };
   }
 
   decode(content: { content: any }) {
-    return JSON.parse(new TextDecoder().decode(content.content));
+    return decode(content.content);
   }
 
   fallback(): string | undefined {

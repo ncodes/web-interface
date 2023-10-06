@@ -1,6 +1,6 @@
 import { Button } from "../ui/Button.tsx";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Client, ClientOptions } from "@xmtp/xmtp-js";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { isDev } from "../../libs/helpers.ts";
@@ -9,6 +9,10 @@ import MessageRelayCodec from "../../hooks/messager/codecs/MessageRelayCodec.ts"
 import SwapStatusCodec from "../../hooks/messager/codecs/SwapStatusCodec.ts";
 import DeliveryReceiptCodec from "../../hooks/messager/codecs/DeliveryReceiptCodec.ts";
 import ReadReceiptCodec from "../../hooks/messager/codecs/ReadReceiptCodec.ts";
+import {
+  AttachmentCodec,
+  RemoteAttachmentCodec,
+} from "@xmtp/content-type-remote-attachment";
 
 export function IdentityInitializer({
   onInitialized,
@@ -20,23 +24,24 @@ export function IdentityInitializer({
   const { wallet, address } = useConnectorContext();
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
-  const [client, setClient] = useState<Client | null>(null);
+  const client = useRef<Client | null>(null);
 
   useEffect(() => {
     if (!address) return;
     const key = loadKeys(env, address);
     if (key) {
-      if (!client) {
+      if (!client.current) {
         void initializeWallet();
       } else {
         setInitialized(true);
-        onInitialized && onInitialized(client as Client);
+        onInitialized && onInitialized(client.current as Client);
       }
     }
-  }, [address, client]);
+  }, [address]);
 
   async function initializeWallet() {
     try {
+      if (client.current) return;
       setLoading(true);
 
       const opts: Partial<ClientOptions> = { env };
@@ -46,20 +51,23 @@ export function IdentityInitializer({
         saveKeys(env, address, keys);
       }
 
-      const client = await Client.create(null, {
+      const c = await Client.create(null, {
         ...opts,
         privateKeyOverride: keys,
+        skipContactPublishing: true,
       });
 
-      client.registerCodec(new DeliveryReceiptCodec());
-      client.registerCodec(new ReadReceiptCodec());
-      client.registerCodec(new MessageRelayCodec());
-      client.registerCodec(new SwapStatusCodec());
+      c.registerCodec(new DeliveryReceiptCodec());
+      c.registerCodec(new ReadReceiptCodec());
+      c.registerCodec(new MessageRelayCodec());
+      c.registerCodec(new SwapStatusCodec());
+      c.registerCodec(new RemoteAttachmentCodec());
+      c.registerCodec(new AttachmentCodec());
 
       setLoading(false);
-      setClient(client);
+      client.current = c;
       setInitialized(true);
-      onInitialized && onInitialized(client as Client);
+      onInitialized && onInitialized(client.current);
     } catch (e) {
       setLoading(false);
       console.error(e);

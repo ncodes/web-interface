@@ -18,7 +18,7 @@ export interface ContentType {
 }
 
 // Define a message interface
-export interface Message {
+export interface Message<T = unknown> {
   id?: number;
   msgId: string;
   from: string;
@@ -27,7 +27,7 @@ export interface Message {
   sentAt: number;
   receivedAt?: number;
   contentType?: ContentType;
-  content: string | { [key: string]: never };
+  content: T;
   contentHash: string;
   status?: "sending" | "sent" | "delivered" | "read" | "failed";
   readers?: string[];

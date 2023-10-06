@@ -113,14 +113,14 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ConnectorProvider
-        appName={import.meta.env.NEXT_PUBLIC_APP_NAME}
-        infuraId={import.meta.env.NEXT_PUBLIC_INFURA_ID}
-      >
-        <RouterProvider router={router} />
-      </ConnectorProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <ConnectorProvider
+      appName={import.meta.env.NEXT_PUBLIC_APP_NAME}
+      infuraId={import.meta.env.NEXT_PUBLIC_INFURA_ID}
+    >
+      <RouterProvider router={router} />
+    </ConnectorProvider>
+  </QueryClientProvider>
+  // </React.StrictMode>
 );

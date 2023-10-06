@@ -95,41 +95,6 @@ export function useSwapService() {
         headers,
       });
 
-      // TODO remove example
-      // const swap = resp.data.data;
-      // swap.cancelled = true;
-      // swap.paid = true;
-      // swap.released = true;
-      // swap.cancelAt = moment().add(10, "d").toISOString();
-      // swap.disputeFrom = moment().add(10, "s").toISOString();
-      // swap.disputes = [];
-      // swap.disputes[0].creator = "0x123";
-      // swap.disputes[0].draftees[0].owner = "0x123";
-      // swap.disputes[0].wantRelease = false;
-      // swap.disputes[0].numMediators = 3;
-      // swap.disputes[0].numMediatorsDrafted = 3;
-      // swap.disputes[0].executed = true;
-      // swap.disputes[0].released = undefined;
-      // swap.disputes[0].evidenceEndAt = moment().add(10, "s").toISOString();
-      // swap.disputes[0].commitEndAt = moment().add(15, "s").toISOString();
-      // swap.disputes[0].revealEndAt = moment().add(20, "s").toISOString();
-      // swap.disputes[0].reveals = [
-      //   { vote: "0x31" },
-      //   { vote: "0x30" },
-      //   { vote: "0x31" },
-      // ];
-      // setTimeout(() => {
-      //   swap.disputes[0].executed = true;
-      //   console.log("EXEC");
-      // }, 30000);
-      // swap.disputes[0].draftees[0].owner =
-      //   "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-      // swap.disputeFrom = moment().add(10, "s").toISOString();
-      // swap.cancelAt = moment().add(10, "s").toISOString();
-      // swap.taker = "0x123";
-      // swap.provider = "0x1ba";
-      // swap.provider = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-
       return Promise.resolve(resp.data.data);
     } catch (e) {
       return Promise.reject(handleAxiosError(e as never));
@@ -154,54 +119,6 @@ export function useSwapService() {
         },
         headers,
       });
-
-      // TODO: delete mocks
-      // resp.data.data = [] as Event[];
-      // resp.data.data[0] = {
-      //   creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-      //   action: Events.SwapPaid,
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
-      // resp.data.data[1] = {
-      //   creator: "0x1787BaB2743467E874ee133ADd46884e0A32ccB5",
-      //   action: Events.SwapReleased,
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
-      // resp.data.data[2] = {
-      //   creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92263",
-      //   action: Events.SwapCancelled,
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
-      // resp.data.data[3] = {
-      //   creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92343",
-      //   action: Events.SwapDisputed,
-      //   dispute: { disputeId: 1 },
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
-      // resp.data.data[4] = {
-      //   creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92343",
-      //   action: Events.SwapDrafted,
-      //   dispute: { disputeId: 1 },
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
-      // resp.data.data[5] = {
-      //   creator: "0x349Fd6e51aad88F6F4ce6aB8827279cffFb92345",
-      //   action: Events.SwapCommitted,
-      //   dispute: { disputeId: 1 },
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
-      // resp.data.data[6] = {
-      //   creator: "0x349Fd6e51axd88F6F4ce6aB8827279cffFb92345",
-      //   action: Events.SwapRevealed,
-      //   dispute: { disputeId: 1 },
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
-      // resp.data.data[7] = {
-      //   creator: "0x349Fd6e51axd88F6F4ce6aB8827279cffFb92349",
-      //   action: Events.SwapUndrafted,
-      //   dispute: { disputeId: 1 },
-      //   createdAt: moment().subtract(1, "day").toISOString(),
-      // } as unknown as Event;
 
       return Promise.resolve(resp.data.data);
     } catch (e) {

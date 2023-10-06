@@ -1,7 +1,10 @@
-import { createRef, useEffect } from "react";
+import { RefObject, useEffect } from "react";
 
-export const AlwaysScrollToBottom = () => {
-  const elementRef = createRef<HTMLDivElement>();
-  useEffect(() => elementRef?.current?.scrollIntoView());
-  return <div ref={elementRef} />;
+export const AlwaysScrollToBottom = ({
+  scrollRef,
+}: {
+  scrollRef?: RefObject<HTMLDivElement>;
+}) => {
+  useEffect(() => scrollRef?.current?.scrollIntoView());
+  return <div ref={scrollRef} />;
 };

@@ -1,5 +1,6 @@
 import {
   Client,
+  ContentTypeId,
   ContentTypeText,
   Conversation,
   DecodedMessage,
@@ -9,10 +10,18 @@ import db, { ContentType, Message } from "../../components/messenger/db.ts";
 import moment from "moment";
 import { isDev, isEqlStr, sha1 } from "../../libs/helpers.ts";
 import { randomBytes } from "ethers/lib.esm/utils";
-import { ContentTypeMessageRelay } from "./codecs/MessageRelayCodec.ts";
-import { JointAuthorityId } from "./codecs/common.ts";
+import {
+  ContentTypeMessageRelay,
+  isMessageRelayType,
+} from "./codecs/MessageRelayCodec.ts";
+import {
+  isRemoteAttachmentType,
+  isTextType,
+  JointAuthorityId,
+} from "./codecs/common.ts";
 import {
   ContentTypeSwapStatus,
+  isSwapStatusType,
   SwapStatusTypeId,
 } from "./codecs/SwapStatusCodec.ts";
 import {
@@ -23,9 +32,15 @@ import {
   ContentTypeReadReceipt,
   isReadReceipt,
 } from "./codecs/ReadReceiptCodec.ts";
+import {
+  RemoteAttachmentCodec,
+  RemoteAttachment,
+  ContentTypeRemoteAttachment,
+  Attachment,
+} from "@xmtp/content-type-remote-attachment";
 
 export default function useMessenger() {
-  const version = "126";
+  const version = "159";
 
   /**
    * Make a key for storing the keys
@@ -188,13 +203,16 @@ export default function useMessenger() {
    * @param conversation The conversation to send the message to
    * @param msg The message to send
    * @param timestamp The timestamp of the message
+   * @param contentType The content type of the message
    */
   async function createPreparedMessage(
     conversation: Conversation,
-    msg: string,
-    timestamp?: Date
+    msg: unknown,
+    timestamp?: Date,
+    contentType?: ContentTypeId
   ) {
     return conversation.prepareMessage(msg, {
+      contentType,
       timestamp: timestamp || new Date(),
     });
   }
@@ -205,7 +223,7 @@ export default function useMessenger() {
    * @param conversation The conversation to load messages from
    * @param ignoreOwnMessages Ignore own messages
    */
-  async function loadMessagesToDB(
+  async function loadMessagesFromConvoToDB(
     client: Client,
     conversation: Conversation,
     ignoreOwnMessages = false
@@ -226,56 +244,9 @@ export default function useMessenger() {
     });
 
     const { peerAddress } = conversation;
-    const { address } = client;
     for (const msg of messages) {
-      if (ignoreOwnMessages && isEqlStr(msg.senderAddress, address)) continue;
-
-      // For message delivery receipt, update message status only, don't save to DB
-      if (isDeliveryReceipt(msg.contentType)) {
-        await db.messages
-          .where("sentAt")
-          .belowOrEqual(moment(msg.sent).unix())
-          .and((q) => {
-            return q.status != "read";
-          })
-          .modify((q) => {
-            if (q.receivers?.includes(msg.senderAddress.toLowerCase())) return;
-            q.status = "delivered";
-            q.receivers = (q.readers || []).concat(
-              msg.senderAddress.toLowerCase()
-            );
-          });
-        continue;
-      }
-
-      // For message read receipt, update message status only, don't save to DB
-      if (isReadReceipt(msg.contentType)) {
-        await db.messages
-          .where("sentAt")
-          .belowOrEqual(moment(msg.sent).unix())
-          .modify((q) => {
-            if (q.readers?.includes(msg.senderAddress.toLowerCase())) return;
-            q.status = "read";
-            q.readers = (q.readers || []).concat(
-              msg.senderAddress.toLowerCase()
-            );
-          });
-        continue;
-      }
-
-      const existing = await db.messages
-        .where("contentHash")
-        .equals(getContentHash(msg))
-        .first();
-      if (existing) continue;
-      try {
-        await db.messages.add(processDecodedMessage(address, peerAddress, msg));
-      } catch (e) {
-        handleMessageAddError(e);
-      }
+      await processMessage(client, peerAddress, msg, ignoreOwnMessages);
     }
-
-    return [];
   }
 
   /**
@@ -286,56 +257,51 @@ export default function useMessenger() {
   function getContentHash(
     msg: {
       contentType?: ContentType;
-      content: string | { [key: string]: string };
+      content: unknown;
       sentAt?: number;
       sent?: Date;
     },
     convoId?: string
   ) {
-    const parts: string[] = [];
-    const { content } = msg;
+    const parts: unknown[] = [];
 
+    // Add conversation ID if provided
     if (convoId) parts.push(convoId);
 
+    // Add sent time. If message is a swap status, don't add sent time
     let sentTime = (msg.sentAt || moment(msg.sent).unix()).toString();
-    if (msg.contentType && msg.contentType.typeId == SwapStatusTypeId)
+    const { contentType } = msg;
+    const skipSentTimeList = [SwapStatusTypeId];
+    if (contentType && skipSentTimeList.includes(contentType.typeId))
       sentTime = "";
     if (sentTime) parts.push(sentTime);
 
-    parts.push(
-      (typeof content == "string"
-        ? content
-        : JSON.stringify(msg.content)
-      ).trim()
-    );
+    // Add content
+    parts.push(JSON.stringify(msg.content));
 
     return sha1(parts.join(":"));
   }
 
   /**
    * Process a message and save it to the database
-   * @param clientAddress The client address
+   * @param client The XMTP client
    * @param peerAddress The peer address
    * @param msg The message to process
    * @param ignoreOwnMessages Ignore own messages
    */
   async function processMessage(
-    clientAddress: string,
+    client: Client,
     peerAddress: string,
     msg: DecodedMessage,
     ignoreOwnMessages = false
   ) {
-    // Ignore own message
-    if (ignoreOwnMessages && isEqlStr(msg.senderAddress, clientAddress)) return;
+    msg.recipientAddress = peerAddress;
 
-    // Ignore existing message
-    const existing = await db.messages
-      .where({ contentHash: getContentHash(msg) })
-      .first();
-    if (existing) return;
+    let dbMsg: Message | null = null;
+    if (ignoreOwnMessages && isEqlStr(msg.senderAddress, client.address))
+      return;
 
     // For message delivery receipt, update message status only, don't save to DB
-    const { senderAddress } = msg;
     if (isDeliveryReceipt(msg.contentType)) {
       await db.messages
         .where("sentAt")
@@ -344,9 +310,11 @@ export default function useMessenger() {
           return q.status != "read";
         })
         .modify((q) => {
-          if (q.receivers?.includes(senderAddress.toLowerCase())) return;
+          if (q.receivers?.includes(msg.senderAddress.toLowerCase())) return;
           q.status = "delivered";
-          q.receivers = (q.readers || []).concat(senderAddress.toLowerCase());
+          q.receivers = (q.readers || []).concat(
+            msg.senderAddress.toLowerCase()
+          );
         });
       return;
     }
@@ -357,16 +325,51 @@ export default function useMessenger() {
         .where("sentAt")
         .belowOrEqual(moment(msg.sent).unix())
         .modify((q) => {
-          if (q.readers?.includes(senderAddress.toLowerCase())) return;
+          if (q.readers?.includes(msg.senderAddress.toLowerCase())) return;
           q.status = "read";
-          q.readers = (q.readers || []).concat(senderAddress.toLowerCase());
+          q.readers = (q.readers || []).concat(msg.senderAddress.toLowerCase());
         });
       return;
     }
 
+    // For remote attachment, load attachment and save to DB.
+    // For message relay with remote attachment, load attachment and save to DB
+    if (
+      isRemoteAttachmentType(msg.contentType) ||
+      (isMessageRelayType(msg.contentType) &&
+        isRemoteAttachmentType(msg.content.originalContentType))
+    ) {
+      const content = !isMessageRelayType(msg.contentType)
+        ? msg.content
+        : msg.content.content;
+
+      const attachment = await RemoteAttachmentCodec.load<Attachment>(
+        content,
+        client
+      );
+
+      msg.content = {
+        type: attachment.mimeType,
+        data: Buffer.from(attachment.data).toString("base64"),
+      };
+
+      dbMsg = processDecodedMessage(client.address, peerAddress, msg);
+    }
+
+    // Ignore existing message
+    const existing = await db.messages
+      .where("contentHash")
+      .equals(getContentHash(msg))
+      .first();
+    if (existing) {
+      return;
+    }
+
     try {
-      const decMsg = processDecodedMessage(clientAddress, peerAddress, msg);
-      await db.messages.add(decMsg);
+      dbMsg = !dbMsg
+        ? processDecodedMessage(client.address, peerAddress, msg)
+        : dbMsg;
+      await db.messages.add(dbMsg);
     } catch (e) {
       handleMessageAddError(e);
     }
@@ -383,16 +386,26 @@ export default function useMessenger() {
     peerAddress: string,
     decoded: DecodedMessage
   ): Message {
-    const { id, contentType, conversation } = decoded;
+    const { id, conversation } = decoded;
+    let contentType: ContentType = {
+      authorityId: decoded.contentType.authorityId,
+      typeId: decoded.contentType.typeId,
+      versionMajor: decoded.contentType.versionMajor,
+      versionMinor: decoded.contentType.versionMinor,
+    };
     let { content, senderAddress, sent } = decoded;
     let to = "";
     const contentHash = getContentHash(decoded);
 
-    if (decoded.contentType.sameAs(ContentTypeMessageRelay)) {
+    if (
+      isMessageRelayType(decoded.contentType) &&
+      isTextType(decoded.content.originalContentType)
+    ) {
       content = decoded.content.content;
       senderAddress = decoded.content.from;
       to = decoded.content.to;
       sent = moment.unix(decoded.content.sentAt).toDate();
+      contentType = decoded.content.originalContentType;
     }
 
     if (decoded.contentType.sameAs(ContentTypeText)) {
@@ -458,38 +471,44 @@ export default function useMessenger() {
 
       // If message is already copied, skip
       const seen = await db.copiedMessages.where({ contentHash }).first();
-      if (seen) continue;
+      if (seen) {
+        console.log("SENT");
+        continue;
+      }
+
+      const { contentType } = message;
 
       // If message is a SwapStatusType, clone it and send to conversation
-      if (message.contentType.sameAs(ContentTypeSwapStatus)) {
-        await conversation.send(message.content, {
-          contentType: ContentTypeSwapStatus,
-        });
+      if (isSwapStatusType(contentType)) {
+        await conversation.send(message.content, { contentType });
         await db.copiedMessages.add({ contentHash, createdAt: new Date() });
         continue;
       }
 
       // If message is a ContentTypeDeliveryReceipt, skip
-      if (message.contentType.sameAs(ContentTypeDeliveryReceipt)) {
+      if (isDeliveryReceipt(contentType)) {
         continue;
       }
 
       // If message is a ContentTypeReadReceipt, skip
-      if (message.contentType.sameAs(ContentTypeReadReceipt)) {
+      if (isReadReceipt(contentType)) {
         continue;
       }
 
+      // Send message to conversation
       await conversation.send(
         {
           from: decMsg.from,
-          to: conversation.peerAddress,
+          to: decMsg.to,
           sentAt: decMsg.sentAt,
           content: decMsg.content,
+          originalContentType: decMsg.contentType,
         },
         {
           contentType: ContentTypeMessageRelay,
         }
       );
+
       await db.copiedMessages.add({ contentHash, createdAt: new Date() });
     }
   }
@@ -599,52 +618,94 @@ export default function useMessenger() {
    * @param client The XMTP client
    * @param conversation The conversation to send the message to
    * @param msg The message to send
-   * @param sentAt
+   * @param sentAt The timestamp of the message
+   * @param ignoreDupCheck
+   * @param metadata Additional information about the message
    */
   async function send(
     client: Client,
     conversation: Conversation,
-    msg: string | { [key: string]: never },
-    sentAt?: Date
+    msg: string | { [key: string]: never } | RemoteAttachment,
+    sentAt?: Date,
+    ignoreDupCheck = false,
+    metadata?: { [key: string]: string }
   ) {
-    let unsentMsgId = 0;
-    try {
-      if (!conversation) return;
+    if (!conversation) return;
 
-      const now = sentAt ? moment(sentAt) : moment();
-      const message = await createPreparedMessage(
+    let pendingMsgId = 0;
+    const now = sentAt ? moment(sentAt) : moment();
+    type PreparedMessage = ReturnType<typeof createPreparedMessage>;
+    let convoMsg: PreparedMessage | undefined = undefined;
+
+    // Create unsent message with common fields
+    let dbMsg: Partial<Message> = {
+      msgId: Buffer.from(randomBytes(16)).toString("hex"),
+      from: client.address,
+      to: conversation.peerAddress,
+      conversationId: getConvoId(conversation),
+      status: "sending",
+      sentAt: now.unix(),
+    };
+
+    // Create message for text or object messages
+    if (
+      typeof msg == "string" ||
+      (typeof msg == "object" && !("contentLength" in msg))
+    ) {
+      convoMsg = createPreparedMessage(
         conversation,
         msg as string,
         now.toDate()
       );
-
-      // Add message to DB with pending status
-      unsentMsgId = await db.messages.add({
-        msgId: Buffer.from(randomBytes(16)).toString("hex"),
-        from: client.address,
-        to: conversation.peerAddress,
-        contentHash: getContentHash({ content: msg, sentAt: now.unix() }),
-        contentType: {
-          typeId: "text",
-          authorityId: "xmtp.org",
-          versionMajor: 1,
-          versionMinor: 0,
-        },
+      dbMsg = {
+        ...dbMsg,
         content: msg,
-        conversationId: getConvoId(conversation),
-        status: "sending",
-        sentAt: now.unix(),
-      });
+        contentHash: getContentHash({ content: msg, sentAt: now.unix() }),
+        contentType: ContentTypeText,
+      };
+    }
+
+    // Create message for remote attachment messages
+    if (typeof msg == "object" && "contentLength" in msg) {
+      const content = { ...metadata };
+      dbMsg = {
+        ...dbMsg,
+        content,
+        contentHash: getContentHash({ content, sentAt: now.unix() }),
+        contentType: ContentTypeRemoteAttachment,
+      };
+      convoMsg = createPreparedMessage(
+        conversation,
+        msg,
+        now.toDate(),
+        ContentTypeRemoteAttachment
+      );
+    }
+
+    if (!convoMsg) throw new Error("message is undefined");
+
+    try {
+      // If message is already sent, skip
+      if (!ignoreDupCheck) {
+        const existing = await db.messages
+          .where("contentHash")
+          .equals(dbMsg.contentHash as string)
+          .first();
+        if (existing) return;
+      }
+
+      // Add pending message to database
+      pendingMsgId = await db.messages.add(dbMsg as Message);
 
       try {
-        await message.send();
+        await (await convoMsg).send();
       } catch (e) {
-        db.messages.update(unsentMsgId, { status: "failed" });
+        db.messages.update(pendingMsgId, { status: "failed" });
         throw e;
       }
 
-      db.messages.update(unsentMsgId, {
-        msgId: await message.messageID(),
+      db.messages.update(pendingMsgId, {
+        msgId: await (await convoMsg).messageID(),
         status: "sent",
       });
     } catch (e) {
@@ -692,7 +753,7 @@ export default function useMessenger() {
     createConversation,
     send,
     getConvoId,
-    loadMessagesToDB,
+    loadMessagesFromConvoToDB,
     removeMessageById,
     getMessagesFromDB,
     processMessage,

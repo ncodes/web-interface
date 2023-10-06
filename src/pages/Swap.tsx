@@ -14,6 +14,7 @@ import { Footer } from "../components/Footer.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { isSwapParticipant } from "../libs/api_utils.ts";
 import { useState } from "react";
+import { useMediaQuery } from "usehooks-ts";
 
 function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
   return (
@@ -57,11 +58,12 @@ function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
 export default function Swap() {
   const { address } = useConnectorContext();
   const [swap, setSwap] = useState<Swap | null>(null);
+  const isXl = useMediaQuery("(min-width: 1280px)");
 
   const messenger =
     swap && isSwapParticipant(swap, address) ? (
       <div className="flex w-full h-full justify-between flex-col pt-2">
-        <Messenger sheetMode={false} swap={swap} />
+        {isXl && <Messenger sheetMode={false} swap={swap} />}
         <div className="relative">
           <div className="text-gray-200 bottom-0 w-full">
             <Footer />
