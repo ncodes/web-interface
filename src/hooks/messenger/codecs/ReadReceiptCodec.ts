@@ -1,8 +1,8 @@
-import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
-import { JointAuthorityId } from "./common.ts";
-import { ContentType } from "../../../components/messenger/db.ts";
 import { decode, encode } from "@msgpack/msgpack";
+import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
+import { ContentType } from "../../../components/messenger/db.ts";
 
+const JointAuthorityId = "joint.exchange";
 export const ReadReceiptTypeId = "read-receipt";
 export const ContentTypeReadReceipt = new ContentTypeId({
   authorityId: JointAuthorityId,

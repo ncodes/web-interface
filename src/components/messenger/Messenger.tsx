@@ -1,9 +1,4 @@
-import { Label } from "../ui/label.tsx";
-import TextareaAutosize from "react-textarea-autosize";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { cn } from "../../libs/utils.ts";
-import { IdentityInitializer } from "./IdentityInitializer.tsx";
+import { ContentTypeRemoteAttachment } from "@xmtp/content-type-remote-attachment";
 import {
   Client,
   ContentTypeText,
@@ -11,28 +6,33 @@ import {
   DecodedMessage,
   Stream,
 } from "@xmtp/xmtp-js";
-import { createRef, useCallback, useEffect, useRef, useState } from "react";
-import useMessenger from "../../hooks/messager/useMessenger.ts";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useLiveQuery } from "dexie-react-hooks";
-import { isEqlStr } from "../../libs/helpers.ts";
-import { MessageItemTextImage } from "./MessageItemTextImage.tsx";
-import { AlwaysScrollToBottom } from "../AlwaysScrollToBottom.tsx";
-import { ContentTypeRemoteAttachment } from "@xmtp/content-type-remote-attachment";
+import _ from "lodash";
+import moment from "moment";
+import { createRef, useCallback, useEffect, useRef, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { MessageRelayTypeId } from "../../hooks/messenger/codecs/MessageRelayCodec.ts";
+import { SwapStatusTypeId } from "../../hooks/messenger/codecs/SwapStatusCodec.ts";
+import useMessenger from "../../hooks/messenger/useMessenger.ts";
+import useWindowFocus from "../../hooks/useWindowFocus.ts";
 import {
   isDisputed,
   isSwapCounterparty,
   isSwapDisputeExecuted,
   isSwapDraftee,
 } from "../../libs/api_utils.ts";
-import _ from "lodash";
-import moment from "moment";
-import { Message } from "./db.ts";
-import { SwapStatusTypeId } from "../../hooks/messager/codecs/SwapStatusCodec.ts";
-import { MessageRelayTypeId } from "../../hooks/messager/codecs/MessageRelayCodec.ts";
-import useWindowFocus from "../../hooks/useWindowFocus.ts";
-import { MessengerInputActions } from "./MessengerInputActions.tsx";
+import { isEqlStr } from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import { AlwaysScrollToBottom } from "../AlwaysScrollToBottom.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { Label } from "../ui/label.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
+import { IdentityInitializer } from "./IdentityInitializer.tsx";
+import { MessageItem } from "./MessageItem.tsx";
 import { MessageItemSwapStatus } from "./MessageItemSwapStatus.tsx";
+import { MessengerInputActions } from "./MessengerInputActions.tsx";
+import { Message } from "./db.ts";
 
 export type MessageStream = Promise<Stream<DecodedMessage>>;
 
@@ -56,6 +56,7 @@ export function Messenger({
     createOrGetConvoWithMediator,
     createConversationsWithCounterparts,
     relayMessageToConvos,
+    relayConvoToConvos,
     getConvoId,
     removeMessageById,
     sendReadReceipt,
@@ -65,7 +66,7 @@ export function Messenger({
     send,
   } = useMessenger();
   const { address } = useConnectorContext();
-  const scrollToButtomRef = createRef<HTMLDivElement>();
+  const scrollToBottomRef = createRef<HTMLDivElement>();
   const [client, setClient] = useState<Client | null>(null);
   const [readableConvosIds, setReadableConvoIds] = useState<string[]>([]);
   const [conversation, setConversation] = useState<Conversation | undefined>(
@@ -106,6 +107,13 @@ export function Messenger({
     if (!client || !conversation) return;
     void loadMessagesFromConvoToDB(client, conversation);
   }, [client, conversation]);
+
+  // As a swap counterparty, relay counterparty's conversation to mediators' conversation
+  useEffect(() => {
+    if (!client || !conversation) return;
+    if (mediatorsConvo.length == 0) return;
+    relayConvoToConvos(client.address, conversation, mediatorsConvo);
+  }, [client, conversation, swap.disputes, mediatorsConvo]);
 
   // Creates a stream for a conversation
   const createStream = useCallback(
@@ -238,7 +246,9 @@ export function Messenger({
 
   // As a swap counterparty or mediator, load messages from DB
   const messages = useLiveQuery(async () => {
-    return getMessagesFromDB(readableConvosIds);
+    const messages = getMessagesFromDB(readableConvosIds);
+    scrollToBottomRef?.current?.scrollIntoView();
+    return messages;
   }, [conversation, readableConvosIds, lastMsgTime]);
 
   // As a swap counterparty, create conversations with mediators (if in dispute)
@@ -432,7 +442,7 @@ export function Messenger({
     };
 
     void sendDisputeStartedNotice();
-  }, [conversation, swap]);
+  }, [conversation, swap.disputes]);
 
   // As a swap counterpart, send swap status for dispute conclusion to counterparty conversation
   useEffect(() => {
@@ -450,7 +460,7 @@ export function Messenger({
     };
 
     void sendDisputeEndedNotice();
-  }, [conversation, swap]);
+  }, [conversation, swap.disputes]);
 
   // As a mediator, send swap status for dispute commencement to counterparts conversations
   useEffect(() => {
@@ -471,7 +481,7 @@ export function Messenger({
     };
 
     void sendDisputeStartedNotice();
-  }, [countPartsConvo, swap]);
+  }, [countPartsConvo, swap.disputes]);
 
   async function handleSendMsg(msg: string) {
     if (!client) return;
@@ -485,7 +495,7 @@ export function Messenger({
       });
     }
 
-    if (isSwapDraftee(swap, address, true)) {
+    if (isDisputed(swap) && isSwapDraftee(swap, address, true)) {
       const now = moment();
       for (const convo of countPartsConvo) {
         void send(client, convo, msg, now.toDate(), true).then(() => {
@@ -584,7 +594,7 @@ export function Messenger({
                         ].includes(msg.contentType?.typeId as string) && (
                           <>
                             {!isEqlStr(msg.from || "", address) && (
-                              <MessageItemTextImage
+                              <MessageItem
                                 msg={msg}
                                 swap={swap}
                                 onResend={(msg) => {
@@ -594,7 +604,7 @@ export function Messenger({
                             )}
 
                             {isEqlStr(msg.from, address) && (
-                              <MessageItemTextImage
+                              <MessageItem
                                 msg={msg}
                                 swap={swap}
                                 onResend={(msg) => {
@@ -609,7 +619,7 @@ export function Messenger({
                         ) && <MessageItemSwapStatus msg={msg} />}
                       </div>
                     ))}
-                  <AlwaysScrollToBottom scrollRef={scrollToButtomRef} />
+                  <AlwaysScrollToBottom scrollRef={scrollToBottomRef} />
                 </div>
               </ScrollArea>
             </ScrollOverflowIndicator>
@@ -622,12 +632,12 @@ export function Messenger({
           >
             <div className="w-full">
               <TextareaAutosize
-                className="w-full mt-1 mx-3 font-light text-gray-200 tracking-wide bg-card-background outline-none resize-none"
+                className="w-full mt-1 px-3 font-light text-gray-200 tracking-wide bg-card-background outline-none resize-none"
                 placeholder="Write a message"
                 maxRows={3}
                 disabled={disableSend()}
                 onChange={() => {
-                  scrollToButtomRef?.current?.scrollIntoView();
+                  scrollToBottomRef?.current?.scrollIntoView();
                 }}
                 onKeyDown={(e) => {
                   // Detect enter as long as shift is not pressed
@@ -644,6 +654,9 @@ export function Messenger({
                   swap={swap}
                   client={client}
                   convos={[...countPartsConvo.concat(conversation || [])]}
+                  onFileUpload={() => {
+                    scrollToBottomRef?.current?.scrollIntoView();
+                  }}
                 />
               )}
             </div>

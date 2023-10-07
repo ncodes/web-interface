@@ -1,16 +1,17 @@
-import numeral from "numeral";
+import * as approx from "approximate-number";
+import { AxiosResponse } from "axios";
+import { clsx, type ClassValue } from "clsx";
 import Decimal from "decimal.js";
 import { BigNumber, BigNumberish, ethers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { AxiosResponse } from "axios";
-import _ from "lodash";
-import * as approx from "approximate-number";
 import * as humanizeDuration from "humanize-duration";
-import { RequestError } from "./RequestError.ts";
-import { AssetType } from "../types/enums.ts";
+import _ from "lodash";
 import forge from "node-forge";
+import numeral from "numeral";
+import { twMerge } from "tailwind-merge";
+import prettyBytes from 'pretty-bytes';
+import { AssetType } from "../types/enums.ts";
+import { RequestError } from "./RequestError.ts";
 
 export function isDev() {
   return import.meta.env.VITE_ENV === "development";
@@ -422,6 +423,16 @@ export function cleanBadgeName(badge: string) {
   return badge.split("/")[1].replaceAll("_", " ");
 }
 
-export function sha1(str: string) {
-  return forge.md.sha1.create().update(str).digest().toHex();
+export function sha1(str: string | Uint8Array) {
+  const msg = forge.util.createBuffer(str);
+  return forge.md.sha1.create().update(msg.toHex()).digest().toHex();
+}
+
+export function humanizeBytes(bytes: number|string) {
+  return prettyBytes(Number(bytes));
+}
+
+
+export function uint8ArrayToB64(bytes: Uint8Array) {
+  return Buffer.from(bytes).toString("base64");
 }

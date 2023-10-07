@@ -1,8 +1,8 @@
+import { decode, encode } from "@msgpack/msgpack";
 import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
-import { JointAuthorityId } from "./common.ts";
 import { ContentType } from "../../../components/messenger/db.ts";
-import { encode, decode } from "@msgpack/msgpack";
 
+const JointAuthorityId = "joint.exchange";
 export const MessageRelayTypeId = "msg-relay";
 export const ContentTypeMessageRelay = new ContentTypeId({
   authorityId: JointAuthorityId,
@@ -11,13 +11,13 @@ export const ContentTypeMessageRelay = new ContentTypeId({
   versionMinor: 0,
 });
 
-interface MessageRelayPayload {
+export type MessageRelayPayload = {
   from: string;
   to: string;
   sentAt: number;
   content: unknown;
   originalContentType: ContentType | undefined;
-}
+};
 
 export default class MessageRelayCodec implements ContentCodec<any> {
   get contentType() {

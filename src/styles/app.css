@@ -92,6 +92,14 @@
         @apply hover:text-chinese-green;
       }
     }
+    
+    video::-webkit-media-controls {
+         visibility: hidden;
+    }
+
+    video::-webkit-media-controls-enclosure {
+         visibility: visible;
+    }
   }
 
   .toast-modal.success {

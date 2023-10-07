@@ -1,9 +1,11 @@
+import { ContentTypeRemoteAttachment } from "@xmtp/content-type-remote-attachment";
 import { ContentTypeText } from "@xmtp/xmtp-js";
 import { ContentType, Message } from "../../../components/messenger/db.ts";
-import { ContentTypeRemoteAttachment } from "@xmtp/content-type-remote-attachment";
 import { isMessageRelayType } from "./MessageRelayCodec.ts";
-import { FileMeta } from "./RemoteFileCodec.ts";
-export const JointAuthorityId = "joint.exchange";
+export interface FileMeta {
+  type: string;
+  data: string;
+}
 
 export function isTextType(contentTypeId: ContentType | undefined) {
   if (!contentTypeId) return false;

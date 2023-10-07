@@ -1,18 +1,18 @@
-import { Button } from "../ui/Button.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import { useEffect, useRef, useState } from "react";
-import { Client, ClientOptions } from "@xmtp/xmtp-js";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { isDev } from "../../libs/helpers.ts";
-import useMessenger from "../../hooks/messager/useMessenger.ts";
-import MessageRelayCodec from "../../hooks/messager/codecs/MessageRelayCodec.ts";
-import SwapStatusCodec from "../../hooks/messager/codecs/SwapStatusCodec.ts";
-import DeliveryReceiptCodec from "../../hooks/messager/codecs/DeliveryReceiptCodec.ts";
-import ReadReceiptCodec from "../../hooks/messager/codecs/ReadReceiptCodec.ts";
 import {
   AttachmentCodec,
   RemoteAttachmentCodec,
 } from "@xmtp/content-type-remote-attachment";
+import { Client, ClientOptions } from "@xmtp/xmtp-js";
+import { useEffect, useRef, useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import DeliveryReceiptCodec from "../../hooks/messenger/codecs/DeliveryReceiptCodec.ts";
+import MessageRelayCodec from "../../hooks/messenger/codecs/MessageRelayCodec.ts";
+import ReadReceiptCodec from "../../hooks/messenger/codecs/ReadReceiptCodec.ts";
+import SwapStatusCodec from "../../hooks/messenger/codecs/SwapStatusCodec.ts";
+import useMessenger from "../../hooks/messenger/useMessenger.ts";
+import { isDev } from "../../libs/helpers.ts";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
 
 export function IdentityInitializer({
   onInitialized,

@@ -1,11 +1,12 @@
-import axios from "axios";
-import { handleAxiosError } from "../../../libs/helpers.ts";
+import axios, { AxiosProgressEvent } from "axios";
 import { StoreAccessTokenKey } from "../../../constants.ts";
+import { handleAxiosError } from "../../../libs/helpers.ts";
 
 export interface UploadParams {
   net: string;
   orderId: number;
   data: FormData;
+  onUploadProgress: (progressEvent: AxiosProgressEvent) => void;
 }
 
 /**
@@ -17,7 +18,7 @@ export function useFileService() {
    */
   async function uploadFile(params: UploadParams): Promise<string> {
     try {
-      const { net, orderId, data } = params;
+      const { net, orderId, data, onUploadProgress } = params;
       const headers = { "Content-Type": "multipart/form-data" };
 
       const token = localStorage.getItem(StoreAccessTokenKey);
@@ -30,6 +31,7 @@ export function useFileService() {
         }/v1/files/upload/${net}/${orderId}`,
         headers,
         data,
+        onUploadProgress,
       });
 
       return Promise.resolve(resp.data.data.hash);

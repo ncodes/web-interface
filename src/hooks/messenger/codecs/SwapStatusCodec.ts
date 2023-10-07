@@ -1,7 +1,7 @@
-import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
-import { JointAuthorityId } from "./common.ts";
 import { decode, encode } from "@msgpack/msgpack";
+import { ContentCodec, ContentTypeId } from "@xmtp/xmtp-js";
 
+const JointAuthorityId = "joint.exchange";
 export const SwapStatusTypeId = "swap-status";
 export const ContentTypeSwapStatus = new ContentTypeId({
   authorityId: JointAuthorityId,

@@ -1,46 +1,43 @@
 import {
+  Attachment,
+  ContentTypeRemoteAttachment,
+  RemoteAttachment,
+  RemoteAttachmentCodec,
+} from "@xmtp/content-type-remote-attachment";
+import {
   Client,
   ContentTypeId,
   ContentTypeText,
   Conversation,
   DecodedMessage,
 } from "@xmtp/xmtp-js";
-import { getSwapCounterpart } from "../../libs/api_utils.ts";
-import db, { ContentType, Message } from "../../components/messenger/db.ts";
-import moment from "moment";
-import { isDev, isEqlStr, sha1 } from "../../libs/helpers.ts";
 import { randomBytes } from "ethers/lib.esm/utils";
-import {
-  ContentTypeMessageRelay,
-  isMessageRelayType,
-} from "./codecs/MessageRelayCodec.ts";
-import {
-  isRemoteAttachmentType,
-  isTextType,
-  JointAuthorityId,
-} from "./codecs/common.ts";
-import {
-  ContentTypeSwapStatus,
-  isSwapStatusType,
-  SwapStatusTypeId,
-} from "./codecs/SwapStatusCodec.ts";
+import moment from "moment";
+import db, { ContentType, Message } from "../../components/messenger/db.ts";
+import { getSwapCounterpart } from "../../libs/api_utils.ts";
+import { isDev, isEqlStr, sha1, uint8ArrayToB64 } from "../../libs/helpers.ts";
 import {
   ContentTypeDeliveryReceipt,
   isDeliveryReceipt,
 } from "./codecs/DeliveryReceiptCodec.ts";
 import {
+  ContentTypeMessageRelay,
+  MessageRelayPayload,
+  isMessageRelayType,
+} from "./codecs/MessageRelayCodec.ts";
+import {
   ContentTypeReadReceipt,
   isReadReceipt,
 } from "./codecs/ReadReceiptCodec.ts";
 import {
-  RemoteAttachmentCodec,
-  RemoteAttachment,
-  ContentTypeRemoteAttachment,
-  Attachment,
-} from "@xmtp/content-type-remote-attachment";
+  ContentTypeSwapStatus,
+  SwapStatusTypeId,
+  isSwapStatusType,
+} from "./codecs/SwapStatusCodec.ts";
+import { isRemoteAttachmentType, isTextType } from "./codecs/common.ts";
 
 export default function useMessenger() {
-  const version = "159";
+  const version = "167";
 
   /**
    * Make a key for storing the keys
@@ -250,8 +247,8 @@ export default function useMessenger() {
   }
 
   /**
-   * Get the content hash of a message
-   * @param msg The message to get the content hash from
+   * Get the message hash of a message
+   * @param msg The message to get the message hash from
    * @param convoId The conversation id (optional)
    */
   function getContentHash(
@@ -297,7 +294,6 @@ export default function useMessenger() {
   ) {
     msg.recipientAddress = peerAddress;
 
-    let dbMsg: Message | null = null;
     if (ignoreOwnMessages && isEqlStr(msg.senderAddress, client.address))
       return;
 
@@ -348,80 +344,64 @@ export default function useMessenger() {
         client
       );
 
-      msg.content = {
-        type: attachment.mimeType,
-        data: Buffer.from(attachment.data).toString("base64"),
-      };
+      const { mimeType, data } = attachment;
+      msg.content = { type: mimeType, data: uint8ArrayToB64(data) };
+    }
 
-      dbMsg = processDecodedMessage(client.address, peerAddress, msg);
+    // For text message relay, reconstruct message using the original content
+    // type and relayed content to make it appear as though the message was
+    // sent directly to the client by the original sender.
+    if (
+      isMessageRelayType(msg.contentType) &&
+      isTextType(msg.content.originalContentType)
+    ) {
+      msg.senderAddress = msg.content.from;
+      msg.recipientAddress = msg.content.to;
+      msg.sent = moment.unix(msg.content.sentAt).toDate();
+      msg.contentType = msg.content.originalContentType;
+      msg.content = msg.content.content;
+    }
+
+    // For text message, if recipient address is unset, set recipient address to
+    // be the peer address if the sender address is the client address.
+    if (isTextType(msg.contentType) && !msg.recipientAddress) {
+      msg.recipientAddress = isEqlStr(msg.senderAddress, client.address)
+        ? peerAddress
+        : client.address;
     }
 
     // Ignore existing message
     const existing = await db.messages
-      .where("contentHash")
+      .where("msgHash")
       .equals(getContentHash(msg))
       .first();
-    if (existing) {
-      return;
-    }
+    if (existing) return;
 
     try {
-      dbMsg = !dbMsg
-        ? processDecodedMessage(client.address, peerAddress, msg)
-        : dbMsg;
-      await db.messages.add(dbMsg);
+      await db.messages.add(processDecodedMessage(msg));
     } catch (e) {
       handleMessageAddError(e);
     }
   }
 
   /**
-   * Process decoded message
+   * Converts a DecodedMessage to a Message
    * @param clientAddress The client address
    * @param peerAddress The peer address
    * @param decoded The decoded message
    */
-  function processDecodedMessage(
-    clientAddress: string,
-    peerAddress: string,
-    decoded: DecodedMessage
-  ): Message {
-    const { id, conversation } = decoded;
-    let contentType: ContentType = {
-      authorityId: decoded.contentType.authorityId,
-      typeId: decoded.contentType.typeId,
-      versionMajor: decoded.contentType.versionMajor,
-      versionMinor: decoded.contentType.versionMinor,
-    };
-    let { content, senderAddress, sent } = decoded;
-    let to = "";
-    const contentHash = getContentHash(decoded);
-
-    if (
-      isMessageRelayType(decoded.contentType) &&
-      isTextType(decoded.content.originalContentType)
-    ) {
-      content = decoded.content.content;
-      senderAddress = decoded.content.from;
-      to = decoded.content.to;
-      sent = moment.unix(decoded.content.sentAt).toDate();
-      contentType = decoded.content.originalContentType;
-    }
-
-    if (decoded.contentType.sameAs(ContentTypeText)) {
-      to = isEqlStr(senderAddress, clientAddress) ? peerAddress : clientAddress;
-    }
-
+  function processDecodedMessage(decoded: DecodedMessage): Message {
     return {
-      conversationId: conversation?.context?.conversationId || "",
-      from: senderAddress,
-      to,
-      sentAt: moment(sent).unix(),
+      conversationId: decoded.conversation?.context?.conversationId || "",
+      from: decoded.senderAddress,
+      to: decoded.recipientAddress || "",
+      sentAt: moment(decoded.sent).unix(),
       receivedAt: moment().unix(),
-      msgId: id,
-      content,
-      contentHash: contentHash,
-      contentType,
+      msgId: decoded.id,
+      content: decoded.content,
+      msgHash: getContentHash(decoded),
+      contentHash: "",
+      contentType: decoded.contentType,
     };
   }
 
@@ -444,11 +424,22 @@ export default function useMessenger() {
   function uniqifyMessages(messages: Message[]) {
     const msgHash: { [key: string]: boolean } = {};
     const uniqueMessages: Message[] = [];
+    let lastRelayedContentHash = "";
+
     for (const msg of messages) {
-      if (msgHash[msg.contentHash]) continue;
-      msgHash[msg.contentHash] = true;
+      if (msgHash[msg.msgHash]) continue;
+      msgHash[msg.msgHash] = true;
+
+      // For relayed message, skip when the last content hash matches the current content hash.
+      // Prevents showing duplicate messages relayed by multiple clients.
+      if (isMessageRelayType(msg.contentType)) {
+        if (msg.contentHash == lastRelayedContentHash) continue;
+        lastRelayedContentHash = msg.contentHash;
+      }
+
       uniqueMessages.push(msg);
     }
+
     return uniqueMessages;
   }
 
@@ -466,13 +457,18 @@ export default function useMessenger() {
     message: DecodedMessage
   ) {
     for (const conversation of conversations) {
-      const decMsg = processDecodedMessage(clientAddress, peerAddress, message);
-      const contentHash = getContentHash(decMsg, getConvoId(conversation));
+      const msgHash = getContentHash(
+        {
+          contentType: message.contentType,
+          content: message.content,
+          sentAt: moment(message.sent).unix(),
+        },
+        getConvoId(conversation)
+      );
 
       // If message is already copied, skip
-      const seen = await db.copiedMessages.where({ contentHash }).first();
+      const seen = await db.copiedMessages.where({ msgHash }).first();
       if (seen) {
-        console.log("SENT");
         continue;
       }
 
@@ -481,7 +477,7 @@ export default function useMessenger() {
       // If message is a SwapStatusType, clone it and send to conversation
       if (isSwapStatusType(contentType)) {
         await conversation.send(message.content, { contentType });
-        await db.copiedMessages.add({ contentHash, createdAt: new Date() });
+        await db.copiedMessages.add({ msgHash, createdAt: new Date() });
         continue;
       }
 
@@ -498,18 +494,43 @@ export default function useMessenger() {
       // Send message to conversation
       await conversation.send(
         {
-          from: decMsg.from,
-          to: decMsg.to,
-          sentAt: decMsg.sentAt,
-          content: decMsg.content,
-          originalContentType: decMsg.contentType,
-        },
+          from: message.senderAddress,
+          to: isEqlStr(message.senderAddress, clientAddress)
+            ? peerAddress
+            : clientAddress,
+          sentAt: moment(message.sent).unix(),
+          content: message.content,
+          originalContentType: message.contentType,
+        } as MessageRelayPayload,
         {
           contentType: ContentTypeMessageRelay,
         }
       );
 
-      await db.copiedMessages.add({ contentHash, createdAt: new Date() });
+      await db.copiedMessages.add({ msgHash, createdAt: new Date() });
+    }
+  }
+
+  /**
+   * Relay a conversation to other conversations
+   * @param clientAddress The client address
+   * @param peerAddress The source conversation peer address
+   * @param convo The source conversation
+   * @param conversations The destination conversations
+   */
+  async function relayConvoToConvos(
+    clientAddress: string,
+    convo: Conversation,
+    conversations: Conversation[]
+  ) {
+    const messages = await convo.messages({});
+    for (const msg of messages) {
+      await relayMessageToConvos(
+        clientAddress,
+        convo.peerAddress,
+        conversations,
+        msg
+      );
     }
   }
 
@@ -528,10 +549,7 @@ export default function useMessenger() {
 
     // Find swap-status message
     const existing = messages.find(
-      (msg) =>
-        msg.contentType?.authorityId == JointAuthorityId &&
-        msg.contentType?.typeId == SwapStatusTypeId &&
-        msg.content.id == id
+      (msg) => isSwapStatusType(msg.contentType) && msg.content.id == id
     );
     if (existing) return;
 
@@ -660,7 +678,7 @@ export default function useMessenger() {
       dbMsg = {
         ...dbMsg,
         content: msg,
-        contentHash: getContentHash({ content: msg, sentAt: now.unix() }),
+        msgHash: getContentHash({ content: msg, sentAt: now.unix() }),
         contentType: ContentTypeText,
       };
     }
@@ -671,7 +689,7 @@ export default function useMessenger() {
       dbMsg = {
         ...dbMsg,
         content,
-        contentHash: getContentHash({ content, sentAt: now.unix() }),
+        msgHash: getContentHash({ content, sentAt: now.unix() }),
         contentType: ContentTypeRemoteAttachment,
       };
       convoMsg = createPreparedMessage(
@@ -688,8 +706,8 @@ export default function useMessenger() {
       // If message is already sent, skip
       if (!ignoreDupCheck) {
         const existing = await db.messages
-          .where("contentHash")
-          .equals(dbMsg.contentHash as string)
+          .where("msgHash")
+          .equals(dbMsg.msgHash as string)
           .first();
         if (existing) return;
       }
@@ -760,6 +778,7 @@ export default function useMessenger() {
     sendDeliveryReceipt,
     sendReadReceipt,
     relayMessageToConvos,
+    relayConvoToConvos,
     sendSwapStatus,
   };
 }

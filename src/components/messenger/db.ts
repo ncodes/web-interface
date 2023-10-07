@@ -1,5 +1,6 @@
+import { encode } from "@msgpack/msgpack";
 import Dexie from "dexie";
-import { isDev } from "../../libs/helpers.ts";
+import { isDev, sha1 } from "../../libs/helpers.ts";
 
 // Define a conversation interface
 export interface Conversation {
@@ -28,6 +29,7 @@ export interface Message<T = unknown> {
   receivedAt?: number;
   contentType?: ContentType;
   content: T;
+  msgHash: string;
   contentHash: string;
   status?: "sending" | "sent" | "delivered" | "read" | "failed";
   readers?: string[];
@@ -37,7 +39,7 @@ export interface Message<T = unknown> {
 // Define a copied message interface
 export interface CopiedMessage {
   id?: number;
-  contentHash: string;
+  msgHash: string;
   createdAt: Date;
 }
 
@@ -87,9 +89,10 @@ class DB extends Dexie {
       content,
       contentType,
       conversationId,
-      contentHash,
+      msgHash,
       sentAt,
-      &[conversationId+contentHash+sentAt],
+      &[conversationId+msgHash+sentAt],
+      contentHash,
       status,
       [msgId+status],
       readers,
@@ -98,7 +101,7 @@ class DB extends Dexie {
 
       copiedMessages: `
       ++id,
-      contentHash,
+      msgHash,
       createdAt
       `,
 
@@ -117,6 +120,10 @@ class DB extends Dexie {
       reactor,
       name
     `,
+    });
+
+    this.messages.hook("creating", (_primKey, obj) => {
+      obj.contentHash = sha1(encode(obj.content));
     });
   }
 }
