@@ -27,7 +27,7 @@ export interface Message<T = unknown> {
   conversationId: string;
   sentAt: number;
   receivedAt?: number;
-  contentType?: ContentType;
+  contentType: ContentType;
   content: T;
   msgHash: string;
   contentHash: string;

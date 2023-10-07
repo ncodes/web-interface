@@ -36,8 +36,14 @@ import {
 } from "./codecs/SwapStatusCodec.ts";
 import { isRemoteAttachmentType, isTextType } from "./codecs/common.ts";
 
+/**
+ * UseMessenger provides messaging capabilities built on top of XMTP
+ * messaging network. This hook provides functions for sending, receiving,
+ * filtering and storage of messages. 
+ * @returns 
+ */
 export default function useMessenger() {
-  const version = "167";
+  const version = "170";
 
   /**
    * Make a key for storing the keys
@@ -303,7 +309,7 @@ export default function useMessenger() {
         .where("sentAt")
         .belowOrEqual(moment(msg.sent).unix())
         .and((q) => {
-          return q.status != "read";
+          return q.status != "read" && q.status != "delivered";
         })
         .modify((q) => {
           if (q.receivers?.includes(msg.senderAddress.toLowerCase())) return;

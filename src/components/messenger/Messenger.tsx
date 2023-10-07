@@ -32,7 +32,6 @@ import { IdentityInitializer } from "./IdentityInitializer.tsx";
 import { MessageItem } from "./MessageItem.tsx";
 import { MessageItemSwapStatus } from "./MessageItemSwapStatus.tsx";
 import { MessengerInputActions } from "./MessengerInputActions.tsx";
-import { Message } from "./db.ts";
 
 export type MessageStream = Promise<Stream<DecodedMessage>>;
 
@@ -88,8 +87,8 @@ export function Messenger({
 
     const createConvoWithCounterpart = async () => {
       let conversation = (await client.conversations.list()).find((c) => {
-        const convId = c.context?.conversationId;
-        return convId == makeSwapConversationKey(swap.network, swap.orderId);
+        const convoId = c.context?.conversationId;
+        return convoId == makeSwapConversationKey(swap.network, swap.orderId);
       });
 
       if (!conversation) conversation = await createConversation(client, swap);
@@ -123,21 +122,21 @@ export function Messenger({
       onMessage?: (msg: DecodedMessage) => void,
       onError?: (err: unknown) => void
     ) => {
-      const convId = getConvoId(conversation);
-      if (streams.current[convId]) return;
+      const convoId = getConvoId(conversation);
+      if (streams.current[convoId]) return;
 
       // Create stream for conversation if not created
       let stream: MessageStream | undefined;
-      if (streams.current[convId] == undefined) {
-        streams.current[convId] = conversation.streamMessages();
-        stream = streams.current[convId];
+      if (streams.current[convoId] == undefined) {
+        streams.current[convoId] = conversation.streamMessages();
+        stream = streams.current[convoId];
         onCreated?.(stream as MessageStream);
       } else {
         return;
       }
 
       try {
-        stream = streams.current[convId];
+        stream = streams.current[convoId];
         if (!stream) return;
         for await (const message of await stream) {
           onMessage?.(message);
@@ -155,7 +154,7 @@ export function Messenger({
     if (!conversation || !client) return;
 
     const streamsRef = streams.current;
-    const convId = getConvoId(conversation);
+    const convoId = getConvoId(conversation);
     let stream: MessageStream | undefined;
     const endStream = streamEnders.current;
 
@@ -183,7 +182,7 @@ export function Messenger({
             } else {
               setPendingReadReceipts({
                 ...pendingReadReceipts,
-                [convId]: (pendingReadReceipts[convId] || []).concat(message),
+                [convoId]: (pendingReadReceipts[convoId] || []).concat(message),
               });
             }
           }
@@ -197,7 +196,7 @@ export function Messenger({
           );
 
           const msgTime = message.sent.getTime();
-          setLastMsgTime({ ...lastMsgTime, [convId]: msgTime / 1000 });
+          setLastMsgTime({ ...lastMsgTime, [convoId]: msgTime / 1000 });
         },
         (err) => {
           console.error("counterparty conversation stream error:", err);
@@ -209,7 +208,7 @@ export function Messenger({
 
     return () => {
       void endStream(stream);
-      delete streamsRef[convId];
+      delete streamsRef[convoId];
     };
   }, [conversation, client, mediatorsConvo, streams, windowFocus]);
 
@@ -219,24 +218,24 @@ export function Messenger({
     if (!client) return;
 
     const sendReadReceiptsForSwapCounterpart = async () => {
-      const convId = getConvoId(conversation);
-      const pendingMsgs = pendingReadReceipts[convId];
+      const convoId = getConvoId(conversation);
+      const pendingMsgs = pendingReadReceipts[convoId];
       if (!pendingMsgs || !pendingMsgs?.length) return;
       for (const msg of pendingMsgs) {
         await sendReadReceipt(client.address, msg, [conversation]);
       }
-      delete pendingReadReceipts[convId];
+      delete pendingReadReceipts[convoId];
     };
 
     const sendReadReceiptsForMediators = async () => {
       for (const convo of mediatorsConvo) {
-        const convId = getConvoId(convo);
-        const pendingMsgs = pendingReadReceipts[convId];
+        const convoId = getConvoId(convo);
+        const pendingMsgs = pendingReadReceipts[convoId];
         if (!pendingMsgs || !pendingMsgs?.length) continue;
         for (const msg of pendingMsgs) {
           await sendReadReceipt(client.address, msg, [convo]);
         }
-        delete pendingReadReceipts[convId];
+        delete pendingReadReceipts[convoId];
       }
     };
 
@@ -301,13 +300,13 @@ export function Messenger({
     const convosId: string[] = [];
 
     for (const convo of mediatorsConvo) {
-      const convId = getConvoId(convo);
+      const convoId = getConvoId(convo);
 
       const createConvoStream = async () => {
         await createStream(
           convo,
           (stream) => {
-            convosId.push(convId);
+            convosId.push(convoId);
             convosStream.push(stream);
           },
           async (message) => {
@@ -323,12 +322,12 @@ export function Messenger({
             } else {
               setPendingReadReceipts({
                 ...pendingReadReceipts,
-                [convId]: (pendingReadReceipts[convId] || []).concat(message),
+                [convoId]: (pendingReadReceipts[convoId] || []).concat(message),
               });
             }
 
             const msgTime = message.sent.getTime();
-            setLastMsgTime({ ...lastMsgTime, [convId]: msgTime / 1000 });
+            setLastMsgTime({ ...lastMsgTime, [convoId]: msgTime / 1000 });
           },
           (err) => {
             console.error("mediator conversation stream error:", err);
@@ -341,7 +340,7 @@ export function Messenger({
 
     return () => {
       convosStream.forEach((stream) => void endStream(stream));
-      convosId.forEach((convId) => delete streamsRef[convId]);
+      convosId.forEach((convoId) => delete streamsRef[convoId]);
     };
   }, [mediatorsConvo, client, streams, pendingReadReceipts, windowFocus]);
 
@@ -396,12 +395,12 @@ export function Messenger({
     const convosId: string[] = [];
 
     for (const convo of countPartsConvo) {
-      const convId = getConvoId(convo);
+      const convoId = getConvoId(convo);
       const createConvoStream = async () => {
         await createStream(
           convo,
           (stream) => {
-            convosId.push(convId);
+            convosId.push(convoId);
             convosStream.push(stream);
           },
           async (message) => {
@@ -409,7 +408,7 @@ export function Messenger({
             await processMessage(client, convo.peerAddress, message, true);
 
             const msgTime = message.sent.getTime();
-            setLastMsgTime({ ...lastMsgTime, [convId]: msgTime / 1000 });
+            setLastMsgTime({ ...lastMsgTime, [convoId]: msgTime / 1000 });
           },
           (err) => {
             console.error("counterpart conversation stream error:", err);
@@ -421,7 +420,7 @@ export function Messenger({
 
     return () => {
       convosStream.forEach((stream) => void endStream(stream));
-      convosId.forEach((convId) => delete streamsRef[convId]);
+      convosId.forEach((convoId) => delete streamsRef[convoId]);
     };
   }, [client, countPartsConvo]);
 
@@ -508,10 +507,10 @@ export function Messenger({
     }
   }
 
-  async function handleMsgResend(msg: Message) {
+  async function handleMsgResend(id: number, content: unknown) {
     if (!client) return;
-    await removeMessageById(msg.id as number);
-    await handleSendMsg(msg.content as string);
+    await removeMessageById(id as number);
+    await handleSendMsg(content as string);
   }
 
   // Decide whether to disable send elements
@@ -595,20 +594,34 @@ export function Messenger({
                           <>
                             {!isEqlStr(msg.from || "", address) && (
                               <MessageItem
-                                msg={msg}
+                                id={msg.id}
+                                from={msg.from}
+                                content={msg.content}
+                                contentType={msg.contentType}
+                                readers={msg.readers || []}
+                                msgId={msg.msgId}
+                                sentAt={msg.sentAt}
+                                status={msg.status}
                                 swap={swap}
-                                onResend={(msg) => {
-                                  void handleMsgResend(msg);
+                                onResend={(id: number, content: unknown) => {
+                                  void handleMsgResend(id, content);
                                 }}
                               />
                             )}
 
                             {isEqlStr(msg.from, address) && (
                               <MessageItem
-                                msg={msg}
+                                id={msg.id}
+                                from={msg.from}
+                                content={msg.content}
+                                contentType={msg.contentType}
+                                readers={msg.readers || []}
+                                msgId={msg.msgId}
+                                sentAt={msg.sentAt}
+                                status={msg.status}
                                 swap={swap}
-                                onResend={(msg) => {
-                                  void handleMsgResend(msg);
+                                onResend={(id: number, content: unknown) => {
+                                  void handleMsgResend(id, content);
                                 }}
                               />
                             )}

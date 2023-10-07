@@ -1,6 +1,6 @@
 import { ContentTypeRemoteAttachment } from "@xmtp/content-type-remote-attachment";
 import { ContentTypeText } from "@xmtp/xmtp-js";
-import { ContentType, Message } from "../../../components/messenger/db.ts";
+import { ContentType } from "../../../components/messenger/db.ts";
 import { isMessageRelayType } from "./MessageRelayCodec.ts";
 export interface FileMeta {
   type: string;
@@ -22,9 +22,11 @@ export function isRemoteAttachmentType(contentTypeId: ContentType) {
   );
 }
 
-export function isRelayedRemoteAttachmentType(msg: Message<FileMeta>) {
+export function isRelayedRemoteAttachmentType(msg: {
+  contentType: ContentType;
+  data: string;
+  type: string;
+}) {
   if (!msg) return false;
-  return (
-    isMessageRelayType(msg.contentType) && msg.content.data && msg.content.type
-  );
+  return isMessageRelayType(msg.contentType) && msg.data && msg.type;
 }

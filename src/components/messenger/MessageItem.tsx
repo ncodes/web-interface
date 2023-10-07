@@ -26,22 +26,22 @@ import { useRandomColor } from "../avatar/useRandomColor.ts";
 import { MessageSendStatus } from "./MessageSendStatus.tsx";
 import { ContentType, Message } from "./db.ts";
 
-function MessageImage({ msg }: { msg: FileMeta }) {
+function MessageImage({ type, data }: { type: string; data: string }) {
   return (
     <div className="w-[300px] overflow-hidden mb-3">
-      <img src={`data:${msg.type};base64,${msg.data}`} alt="" />
+      <img src={`data:${type};base64,${data}`} alt="" />
     </div>
   );
 }
 
-function MessageVideo({ msg }: { msg: FileMeta }) {
+function MessageVideo({ data, type }: { data: string; type: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     if (!ref.current) return;
-    const buf = Buffer.from(msg.data, "base64");
-    const blob = new Blob([buf], { type: msg.type });
+    const buf = Buffer.from(data, "base64");
+    const blob = new Blob([buf], { type: type });
     ref.current.src = window.URL.createObjectURL(blob);
-  }, [ref, msg]);
+  }, [ref, data, type]);
 
   return (
     <div className="overflow-hidden mb-3">
@@ -51,23 +51,37 @@ function MessageVideo({ msg }: { msg: FileMeta }) {
 }
 
 export function MessageItem({
-  msg,
   swap,
   onResend,
+  id,
+  from,
+  sentAt,
+  content,
+  contentType,
+  msgId,
+  readers,
+  status,
 }: {
-  msg: Message;
+  id: number;
+  from: string;
   swap: Swap;
-  onResend?: (msg: Message) => void;
+  sentAt: number;
+  content: unknown;
+  contentType: ContentType;
+  msgId: string;
+  readers: string[];
+  status: Message["status"];
+  onResend?: (id: number, content: unknown) => void;
 }) {
   const { getUser } = useUserService();
   const { getBgColor } = useRandomColor();
   const { address } = useConnectorContext();
-  const mine = isEqlStr(msg.from, address);
-  const title = getTitle(swap, msg.from);
+  const mine = isEqlStr(from, address);
+  const title = getTitle(swap, from);
   const user = useQuery({
-    queryKey: ["getUser", { address: msg.from, noAuth: true }],
+    queryKey: ["getUser", { address: from, noAuth: true }],
     queryFn: getUser,
-    enabled: !!msg.from,
+    enabled: !!from,
   });
 
   function getTitle(swap: Swap, sender: string) {
@@ -86,7 +100,7 @@ export function MessageItem({
       {!mine && (
         <div className="flex gap-2 animate-in slide-in-from-left-56">
           <UserHoverCard user={user?.data as User}>
-            <EmojiAvatar size={AvatarSize.Small} randomStr={msg.from} />
+            <EmojiAvatar size={AvatarSize.Small} randomStr={from} />
           </UserHoverCard>
           <div className="flex flex-col bg-gray-800/60 border border-gray-700/50 flex-1 rounded-xl rounded-tl-none px-2 pb-1">
             <span className="flex justify-between text-xs pt-1 pb-1 font-normal tracking-wide">
@@ -95,38 +109,44 @@ export function MessageItem({
                   className={cn(
                     `px-[5px] text-[10px] rounded-xl rounded-tl-none rounded-bl-md text-gray-100`
                   )}
-                  style={{ background: getBgColor(msg.from) }}
+                  style={{ background: getBgColor(from) }}
                 >
                   {title}
                 </span>
               </span>
               <span className="flex gap-1 h-[16px] items-center text-gray-500 tracking-wider font-light">
                 <Clock width="10" className="text-gray-400" />
-                <span>{moment.unix(msg.sentAt).fromNow()}</span>
+                <span>{moment.unix(sentAt).fromNow()}</span>
               </span>
             </span>
             <span className="font-light mt-1 text-sm text-gray-200 tracking-wide">
               <div className="flex leading-5 whitespace-pre-line w-[300px] break-words">
-                {(isRemoteAttachmentType(msg.contentType as ContentType) ||
-                  isRelayedRemoteAttachmentType(msg as Message<FileMeta>)) && (
+                {(isRemoteAttachmentType(contentType as ContentType) ||
+                  isRelayedRemoteAttachmentType({
+                    contentType: contentType,
+                    data: (content as FileMeta).data,
+                    type: (content as FileMeta).type,
+                  })) && (
                   <>
-                    {(msg.content as File).type.startsWith("image") && (
+                    {(content as File).type.startsWith("image") && (
                       <MessageImage
-                        msg={msg.content as FileMeta}
-                        key={msg.msgId}
+                        data={(content as FileMeta).data}
+                        type={(content as FileMeta).type}
+                        key={msgId}
                       />
                     )}
 
-                    {(msg.content as File).type.startsWith("video") && (
+                    {(content as File).type.startsWith("video") && (
                       <MessageVideo
-                        msg={msg.content as FileMeta}
-                        key={msg.msgId}
+                        key={msgId}
+                        data={(content as FileMeta).data}
+                        type={(content as FileMeta).type}
                       />
                     )}
                   </>
                 )}
 
-                {isTextType(msg.contentType) && <>{msg.content}</>}
+                {isTextType(contentType) && <>{content}</>}
               </div>
             </span>
           </div>
@@ -139,14 +159,14 @@ export function MessageItem({
             <span className="flex justify-between text-xs pt-1 pb-1 font-normal tracking-wide">
               <span className="text-gray-500 h-[16px] font-light gap-1 flex items-center">
                 <Clock width="10" className="text-gray-400" />
-                <span>{moment.unix(msg.sentAt).fromNow()}</span>
+                <span>{moment.unix(sentAt).fromNow()}</span>
               </span>
               <span className="select-none flex gap-1">
                 <span
                   className={cn(
                     `px-[5px] text-[10px] rounded-xl rounded-tr-none rounded-br-md`
                   )}
-                  style={{ background: getBgColor(msg.from) }}
+                  style={{ background: getBgColor(from) }}
                 >
                   You
                 </span>
@@ -154,32 +174,45 @@ export function MessageItem({
             </span>
             <div className="relative mt-1 font-light text-sm text-gray-200 tracking-wide">
               <div className="flex leading-5 whitespace-pre-line w-[300px] break-words">
-                {(isRemoteAttachmentType(msg.contentType as ContentType) ||
-                  isRelayedRemoteAttachmentType(msg as Message<FileMeta>)) && (
+                {(isRemoteAttachmentType(contentType as ContentType) ||
+                  isRelayedRemoteAttachmentType({
+                    contentType: contentType,
+                    data: (content as FileMeta).data,
+                    type: (content as FileMeta).type,
+                  })) && (
                   <>
-                    {(msg.content as File).type.startsWith("image") && (
+                    {(content as File).type.startsWith("image") && (
                       <MessageImage
-                        msg={msg.content as FileMeta}
-                        key={msg.msgId}
+                        data={(content as FileMeta).data}
+                        type={(content as FileMeta).type}
+                        key={msgId}
                       />
                     )}
 
-                    {(msg.content as File).type.startsWith("video") && (
+                    {(content as File).type.startsWith("video") && (
                       <MessageVideo
-                        msg={msg.content as FileMeta}
-                        key={msg.msgId}
+                        key={msgId}
+                        data={(content as FileMeta).data}
+                        type={(content as FileMeta).type}
                       />
                     )}
                   </>
                 )}
 
-                {isTextType(msg.contentType) && <>{msg.content}</>}
+                {isTextType(contentType) && <>{content}</>}
               </div>
             </div>
-            <MessageSendStatus msg={msg} onResend={onResend} swap={swap} />
+            <MessageSendStatus
+              readers={readers}
+              status={status}
+              swap={swap}
+              onResend={() => {
+                if (onResend) onResend(id, content);
+              }}
+            />
           </div>
           <UserHoverCard user={user?.data as User}>
-            <EmojiAvatar size={AvatarSize.Small} randomStr={msg.from} />
+            <EmojiAvatar size={AvatarSize.Small} randomStr={from} />
           </UserHoverCard>
         </div>
       )}
