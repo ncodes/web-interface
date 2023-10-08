@@ -11,6 +11,8 @@ export function UnlinkedAccountNotice() {
     toggleOpenState: state.toggleOpenState,
   }));
 
+  if (user === undefined) return null;
+
   return (
     <>
       {!user && connected && (

@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { defaultRegion } from "../../components/region/constants.ts";
 
 type OpenStateKey =
@@ -94,8 +94,8 @@ export interface SwapPageState {
 
 export interface IStore {
   // Authenticated user state
-  user: User | null;
-  setUser: (user: User) => void;
+  user: User | undefined | null;
+  setUser: (user: User | undefined | null) => void;
 
   // Region state
   currentRegion?: string;
@@ -148,8 +148,8 @@ export interface IStore {
 }
 
 const useStore = create<IStore>((set, get) => ({
-  user: null,
-  setUser: (user: User) => set({ user }),
+  user: undefined,
+  setUser: (user: User | undefined | null) => set({ user }),
 
   loaderProgress: 0,
   fullLoadCount: 0,

@@ -1,19 +1,19 @@
-import { Helmet } from "react-helmet";
-import { LeftSidebar } from "../components/LeftSidebar.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useMediaQuery } from "usehooks-ts";
+import { Footer } from "../components/Footer.tsx";
 import { Header } from "../components/Header.tsx";
+import { LeftSidebar } from "../components/LeftSidebar.tsx";
 import { NotificationSheet } from "../components/NotificationSheet.tsx";
 import { UnlinkedAccountNotice } from "../components/UnlinkedAccountNotice.tsx";
-import { useUserService } from "../hooks/services/backend/useUserService.ts";
-import { useQuery } from "@tanstack/react-query";
-import { StoreAccessTokenKey } from "../constants.ts";
-import useStore from "../hooks/store/useStore.ts";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { cn } from "../libs/utils.ts";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
-import { Footer } from "../components/Footer.tsx";
+import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useUserService } from "../hooks/services/backend/useUserService.ts";
+import useStore from "../hooks/store/useStore.ts";
+import { cn } from "../libs/utils.ts";
 
 export default function Layout({
   body,
@@ -42,9 +42,9 @@ export default function Layout({
   const [scrollYPos, setScrollYPos] = useState(0);
 
   useEffect(() => {
-    if (!query.isSuccess) return;
-    setUser(query.data);
-  }, [query.data, query.isSuccess, setUser]);
+    if (query.isLoading) return;
+    setUser(query.isSuccess ? query.data : null);
+  }, [query.data, query.isLoading, query.isSuccess, setUser]);
 
   useEffect(() => {
     setMobileMenuOpen(isXl);
