@@ -424,7 +424,8 @@ export function Messenger({
     };
   }, [client, countPartsConvo]);
 
-  // As a swap counterpart, send swap status for dispute commencement in swap counterparty conversation
+  // As a swap counterpart, send swap status for dispute commencement
+  // in swap counterparty conversation
   useEffect(() => {
     if (!conversation) return;
     if (!swap || !isSwapCounterparty(swap, address)) return;
@@ -443,7 +444,8 @@ export function Messenger({
     void sendDisputeStartedNotice();
   }, [conversation, swap.disputes]);
 
-  // As a swap counterpart, send swap status for dispute conclusion to counterparty conversation
+  // As a swap counterpart, send swap status for dispute conclusion to
+  // counterparty conversation
   useEffect(() => {
     if (!conversation) return;
     if (!swap || !isSwapCounterparty(swap, address)) return;
@@ -461,7 +463,8 @@ export function Messenger({
     void sendDisputeEndedNotice();
   }, [conversation, swap.disputes]);
 
-  // As a mediator, send swap status for dispute commencement to counterparts conversations
+  // As a mediator, send swap status for dispute commencement to
+  // counterparts conversations
   useEffect(() => {
     if (!countPartsConvo.length) return;
     if (!swap || isSwapCounterparty(swap, address)) return;
@@ -480,7 +483,7 @@ export function Messenger({
     };
 
     void sendDisputeStartedNotice();
-  }, [countPartsConvo, swap.disputes]);
+  }, [countPartsConvo, swap.disputes, address]);
 
   async function handleSendMsg(msg: string) {
     if (!client) return;
@@ -594,7 +597,7 @@ export function Messenger({
                           <>
                             {!isEqlStr(msg.from || "", address) && (
                               <MessageItem
-                                id={msg.id}
+                                id={msg.id as number}
                                 from={msg.from}
                                 content={msg.content}
                                 contentType={msg.contentType}
@@ -611,7 +614,7 @@ export function Messenger({
 
                             {isEqlStr(msg.from, address) && (
                               <MessageItem
-                                id={msg.id}
+                                id={msg.id as number}
                                 from={msg.from}
                                 content={msg.content}
                                 contentType={msg.contentType}

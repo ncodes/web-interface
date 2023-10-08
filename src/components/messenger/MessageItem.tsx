@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { File } from "buffer";
 import { Clock } from "lucide-react";
 import moment from "moment";
-import { useEffect, useRef } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import {
   FileMeta,
@@ -23,32 +22,11 @@ import { UserHoverCard } from "../UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { useRandomColor } from "../avatar/useRandomColor.ts";
+import { MessageFile } from "./MessageFile.tsx";
+import { MessageImage } from "./MessageImage.tsx";
 import { MessageSendStatus } from "./MessageSendStatus.tsx";
+import { MessageVideo } from "./MessageVideo.tsx";
 import { ContentType, Message } from "./db.ts";
-
-function MessageImage({ type, data }: { type: string; data: string }) {
-  return (
-    <div className="w-[300px] overflow-hidden mb-3">
-      <img src={`data:${type};base64,${data}`} alt="" />
-    </div>
-  );
-}
-
-function MessageVideo({ data, type }: { data: string; type: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    if (!ref.current) return;
-    const buf = Buffer.from(data, "base64");
-    const blob = new Blob([buf], { type: type });
-    ref.current.src = window.URL.createObjectURL(blob);
-  }, [ref, data, type]);
-
-  return (
-    <div className="overflow-hidden mb-3">
-      <video ref={ref} className="w-[300px]" controls></video>
-    </div>
-  );
-}
 
 export function MessageItem({
   swap,
@@ -143,6 +121,15 @@ export function MessageItem({
                         type={(content as FileMeta).type}
                       />
                     )}
+
+                    {(content as File).type.startsWith("application") && (
+                      <MessageFile
+                        key={msgId}
+                        data={(content as FileMeta).data}
+                        type={(content as FileMeta).type}
+                        filename={(content as FileMeta).filename}
+                      />
+                    )}
                   </>
                 )}
 
@@ -194,6 +181,15 @@ export function MessageItem({
                         key={msgId}
                         data={(content as FileMeta).data}
                         type={(content as FileMeta).type}
+                      />
+                    )}
+
+                    {(content as File).type.startsWith("application") && (
+                      <MessageFile
+                        key={msgId}
+                        data={(content as FileMeta).data}
+                        type={(content as FileMeta).type}
+                        filename={(content as FileMeta).filename}
                       />
                     )}
                   </>

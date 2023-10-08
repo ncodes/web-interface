@@ -1,9 +1,9 @@
-import { Sheet, SheetContent } from "../ui/sheet.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import React, { useEffect } from "react";
-import { Messenger } from "./Messenger.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import { Sheet, SheetContent } from "../ui/sheet.tsx";
+import { Messenger } from "./Messenger.tsx";
 
 export function MessengerSheet(props: {
   open: boolean;
@@ -23,7 +23,7 @@ export function MessengerSheet(props: {
         className={cn(
           styles,
           "w-full border-l focus-visible:outline-0 overflow-hidden border-gray-800 pt-0 px-0 pb-0",
-          height
+          "h-[90vh]"
         )}
         side={sheetSide}
       >

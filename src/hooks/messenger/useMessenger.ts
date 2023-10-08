@@ -34,13 +34,17 @@ import {
   SwapStatusTypeId,
   isSwapStatusType,
 } from "./codecs/SwapStatusCodec.ts";
-import { isRemoteAttachmentType, isTextType } from "./codecs/common.ts";
+import {
+  FileMeta,
+  isRemoteAttachmentType,
+  isTextType,
+} from "./codecs/common.ts";
 
 /**
  * UseMessenger provides messaging capabilities built on top of XMTP
  * messaging network. This hook provides functions for sending, receiving,
- * filtering and storage of messages. 
- * @returns 
+ * filtering and storage of messages.
+ * @returns
  */
 export default function useMessenger() {
   const version = "170";
@@ -350,8 +354,12 @@ export default function useMessenger() {
         client
       );
 
-      const { mimeType, data } = attachment;
-      msg.content = { type: mimeType, data: uint8ArrayToB64(data) };
+      const { mimeType, data, filename } = attachment;
+      msg.content = {
+        type: mimeType,
+        data: uint8ArrayToB64(data),
+        filename,
+      } as FileMeta;
     }
 
     // For text message relay, reconstruct message using the original content

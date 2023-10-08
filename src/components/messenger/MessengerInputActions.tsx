@@ -44,7 +44,7 @@ export function MessengerInputActions({
   const [files, setFiles] = useState<File[] | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const docInputRef = useRef<HTMLInputElement>(null);
   const { send } = useMessenger();
   const [uploading, setUploading] = useState(false);
   const [curUploadName, setCurUploadName] = useState<string>("");
@@ -155,6 +155,7 @@ export function MessengerInputActions({
             await send(client, convo, remoteAttachment, now.toDate(), true, {
               type: prepFile.type,
               data: prepFile.dataB64,
+              filename: prepFile.name,
             });
           }
 
@@ -216,6 +217,30 @@ export function MessengerInputActions({
     videoInputRef.current.value = "";
   };
 
+  const handleDocFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!docInputRef.current) return;
+    if (!e.target.files) return;
+    if (e.target.files.length > 4) {
+      notifyError("You can only upload 4 documents at a time");
+      docInputRef.current.value = "";
+      return;
+    }
+
+    // Each files cannot be more that 10MB in size
+    for (const file of e.target.files) {
+      const { size } = file;
+      const max = import.meta.env.VITE_FILE_UPLOAD_MAX_DOC_SIZE;
+      if (size > parseInt(max)) {
+        notifyError(`File too large (max: ${humanizeBytes(max)})`);
+        docInputRef.current.value = "";
+        return;
+      }
+    }
+
+    setFiles(Array.from(e.target.files));
+    docInputRef.current.value = "";
+  };
+
   return (
     <div>
       {uploading && (
@@ -254,14 +279,19 @@ export function MessengerInputActions({
           <ImagePlus width="20" />
         </MessengerInputAction>
         <MessengerInputAction
-          disabled={disabled}
+          disabled={disabled || uploading}
           onClick={() => {
             videoInputRef.current?.click();
           }}
         >
           <VideoIcon width="30" />
         </MessengerInputAction>
-        <MessengerInputAction disabled={disabled}>
+        <MessengerInputAction
+          disabled={disabled || uploading}
+          onClick={() => {
+            docInputRef.current?.click();
+          }}
+        >
           <FileIcon width="20" />
         </MessengerInputAction>
         <Input
@@ -280,11 +310,12 @@ export function MessengerInputActions({
           onChange={handleVideoFileChange}
         />
         <Input
-          ref={fileInputRef}
+          ref={docInputRef}
           type="file"
+          accept="application/pdf"
           multiple
           style={{ display: "none" }}
-          // onChange={handleFileChange}
+          onChange={handleDocFileChange}
         />
       </div>
     </div>

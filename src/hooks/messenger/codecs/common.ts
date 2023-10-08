@@ -5,6 +5,7 @@ import { isMessageRelayType } from "./MessageRelayCodec.ts";
 export interface FileMeta {
   type: string;
   data: string;
+  filename: string;
 }
 
 export function isTextType(contentTypeId: ContentType | undefined) {
