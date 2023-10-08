@@ -642,13 +642,13 @@ export function Messenger({
           </div>
           <div
             className={cn(
-              "flex shrink-0 p-2 px-0 gap-2 items-center border-t border-gray-700 bg-card-background",
+              "flex shrink-0 p-2 pb-0 px-0 gap-2 items-center border-t border-gray-700 bg-card-background",
               { "rounded-b-xl": !sheetMode }
             )}
           >
             <div className="w-full">
               <TextareaAutosize
-                className="w-full mt-1 px-3 font-light text-gray-200 tracking-wide bg-card-background outline-none resize-none"
+                className="w-full px-3 font-light text-gray-200 tracking-wide bg-card-background outline-none resize-none"
                 placeholder="Write a message"
                 maxRows={3}
                 disabled={disableSend()}

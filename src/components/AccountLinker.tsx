@@ -1,10 +1,9 @@
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../hooks/store/useStore.ts";
 import IconCaution from "./icons/IconCaution.tsx";
 import { Button } from "./ui/Button.tsx";
 
-import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-
-export function UnlinkedAccountNotice() {
+export function AccountLinker() {
   const { connected } = useConnectorContext();
   const { toggleOpenState, user } = useStore((state) => ({
     user: state.user,

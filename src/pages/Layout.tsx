@@ -7,7 +7,7 @@ import { Footer } from "../components/Footer.tsx";
 import { Header } from "../components/Header.tsx";
 import { LeftSidebar } from "../components/LeftSidebar.tsx";
 import { NotificationSheet } from "../components/NotificationSheet.tsx";
-import { UnlinkedAccountNotice } from "../components/UnlinkedAccountNotice.tsx";
+import { AccountLinker } from "../components/AccountLinker.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
@@ -37,7 +37,6 @@ export default function Layout({
     queryKey: ["getUser", { address }],
     queryFn: getUser,
     enabled: !!accessToken && !!address,
-    refetchIntervalInBackground: false,
   });
   const [scrollYPos, setScrollYPos] = useState(0);
 
@@ -81,7 +80,7 @@ export default function Layout({
           </div>
           <div className="flex flex-1">
             <div className="flex-1 flex flex-col mt-3">
-              <UnlinkedAccountNotice />
+              <AccountLinker />
               <div className="relative flex-1 flex flex-col">
                 <div className="absolute w-full h-full">
                   <div

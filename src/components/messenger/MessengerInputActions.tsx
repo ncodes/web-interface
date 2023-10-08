@@ -12,9 +12,11 @@ import moment from "moment";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import { useFileService } from "../../hooks/services/backend/useFileService.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useToast } from "../../hooks/toast/toast.tsx";
 import { humanizeBytes } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Progress } from "../ui/progress.tsx";
 import { MessengerInputAction } from "./MessengerInputAction.tsx";
@@ -54,6 +56,8 @@ export function MessengerInputActions({
   const { notifyError } = useToast();
   const { uploadFile } = useFileService();
   const uploadMut = useMutation(uploadFile);
+  const user = useStore((state) => state.user);
+  const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   /**
    * Prepare file for upload
@@ -241,8 +245,26 @@ export function MessengerInputActions({
     docInputRef.current.value = "";
   };
 
+  if (!user)
+    return (
+      <div className="flex justify-between p-3 py-1 pb-1 text-xs font-light text-gray-500 border-t border-gray-700 tracking-wide">
+        <span>Link your wallet to upload attachment</span>
+        <span>
+          <Button
+            variant="link"
+            className="p-0 font-normal rounded-none text-xs h-auto"
+            onClick={() => {
+              toggleOpenState("settingsSheet", "account");
+            }}
+          >
+            Link
+          </Button>
+        </span>
+      </div>
+    );
+
   return (
-    <div>
+    <div className="pb-2">
       {uploading && (
         <div className="animate-in slide-in-from-bottom">
           <div className="flex border-y text-xs font-light tracking-wider justify-between border-gray-800 px-3 py-2">
