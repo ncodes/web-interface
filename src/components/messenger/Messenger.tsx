@@ -26,6 +26,7 @@ import { isEqlStr } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { AlwaysScrollToBottom } from "../AlwaysScrollToBottom.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
 import { Label } from "../ui/label.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { IdentityInitializer } from "./IdentityInitializer.tsx";
@@ -76,10 +77,18 @@ export function Messenger({
   const [lastMsgTime, setLastMsgTime] = useState<{ [key: string]: number }>({});
   const streams = useRef<{ [key: string]: MessageStream | undefined }>({});
   const streamEnders = useRef(streamEnderFunc);
+  const [reveal, setReveal] = useState(false);
   const [pendingReadReceipts, setPendingReadReceipts] = useState<{
     [key: string]: DecodedMessage[];
   }>({});
   const windowFocus = useWindowFocus();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setReveal(true);
+      scrollToBottomRef.current?.scrollIntoView();
+    }, 3000);
+  }, []);
 
   // As a swap counterparty, create or get existing conversation with counterparty
   useEffect(() => {
@@ -527,6 +536,15 @@ export function Messenger({
 
   return (
     <div className="relative h-full">
+      {!reveal && (
+        <div className="absolute flex justify-center items-center z-10 w-full h-full bg-gray-900 rounded-xl">
+          <IconSpinner
+            width="20"
+            fill="fill-gray-600"
+            className="animate-spin"
+          />
+        </div>
+      )}
       <div
         className={cn(
           "absolute overflow-hidden flex flex-col text-gray-200 w-full h-full bg-card-background",
