@@ -1,13 +1,14 @@
-import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
+import moment from "moment/moment";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useStore, { DisputeFilter } from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
-import { Accordion } from "../ui/accordion.tsx";
 import { FilterItem } from "../FilterItem.tsx";
-import { Input } from "../ui/Input.tsx";
-import { Button } from "../ui/Button.tsx";
 import { CalendarInput } from "../swap/CalendarInput.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Input } from "../ui/Input.tsx";
+import { Accordion } from "../ui/accordion.tsx";
 import {
   Select,
   SelectContent,
@@ -15,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select.tsx";
-import moment from "moment/moment";
 
 interface Values {
   market?: string;
@@ -224,7 +224,7 @@ export function DisputeFilterContent() {
           onClick={() => {
             const cloned = { ...values };
             navigate({
-              pathname: "/disputes",
+              pathname: "/my/disputes",
               search: new URLSearchParams(
                 rmUndefinedAndNull(cloned, true)
               ).toString(),

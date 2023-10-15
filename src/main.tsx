@@ -1,14 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "../polyfills.ts";
 import App from "./App.tsx";
 import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.tsx";
 import "./hooks/store/useStore.ts";
 import "./i18n/i18n.ts";
 import Disputes from "./pages/Disputes.tsx";
-import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import Liquidities from "./pages/Liquidities.tsx";
 import Liquidity from "./pages/Liquidity.tsx";
 import Market from "./pages/Market.tsx";
@@ -16,10 +15,11 @@ import Markets from "./pages/Markets.tsx";
 import Mediation from "./pages/Mediation.tsx";
 import Offer from "./pages/Offer.tsx";
 import Offers from "./pages/Offers.tsx";
-import ConnectExample from "./pages/play/ConnectExample.tsx";
 import Swap from "./pages/Swap.tsx";
 import Swaps from "./pages/Swaps.tsx";
 import Timeline from "./pages/Timeline.tsx";
+import { RootErrorBoundary } from "./pages/errors/root.tsx";
+import ConnectExample from "./pages/play/ConnectExample.tsx";
 import "./styles/app.css";
 import "./styles/fonts.css";
 
@@ -45,11 +45,11 @@ const router = createBrowserRouter([
   },
   {
     path: makePath("/markets/watching"),
-    element: <App page={<Markets defaultTab="watching-markets" />} />,
+    element: <App page={<Markets defaultTab="watched-markets" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/markets/owned"),
+    path: makePath("/my/markets"),
     element: <App page={<Markets defaultTab="my-markets" />} />,
     errorElement: <RootErrorBoundary />,
   },
@@ -59,8 +59,13 @@ const router = createBrowserRouter([
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/liquidity/owned"),
-    element: <App page={<Liquidities />} />,
+    path: makePath("/my/liquidity"),
+    element: <App page={<Liquidities defaultTab="my-liquidities" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/liquidity/watched"),
+    element: <App page={<Liquidities defaultTab="watched-liquidities" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
@@ -74,7 +79,7 @@ const router = createBrowserRouter([
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/swaps/owned"),
+    path: makePath("/my/swaps"),
     element: <App page={<Swaps />} />,
     errorElement: <RootErrorBoundary />,
   },
@@ -84,17 +89,12 @@ const router = createBrowserRouter([
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/disputes"),
+    path: makePath("/my/disputes"),
     element: <App page={<Disputes />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/mediation"),
-    element: <App page={<Mediation defaultTab="my-tickets" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
-  {
-    path: makePath("/tickets/owned"),
+    path: makePath("/my/tickets"),
     element: <App page={<Mediation defaultTab="my-tickets" />} />,
     errorElement: <RootErrorBoundary />,
   },
@@ -104,7 +104,7 @@ const router = createBrowserRouter([
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/offers"),
+    path: makePath("/my/offers"),
     element: <App page={<Offers />} />,
     errorElement: <RootErrorBoundary />,
   },

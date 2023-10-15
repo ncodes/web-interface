@@ -1,10 +1,10 @@
-import { ChainInfo } from "../../../types/global";
 import { QueryClient } from "@tanstack/react-query";
-import { Location } from "react-router-dom";
 import { ReactNode } from "react";
+import { Location } from "react-router-dom";
+import { TransactionReceipt, decodeEventLog } from "viem";
 import { Options } from "../../../hooks/toast/toast.tsx";
 import { delay, isDev } from "../../../libs/helpers.ts";
-import { decodeEventLog, TransactionReceipt } from "viem";
+import { ChainInfo } from "../../../types/global";
 
 /**
  * Appeal an order
@@ -63,7 +63,7 @@ export async function appealOrderFunc(
       links: [{ label: "View Transaction", href: `${explorer}/tx/${txHash}` }],
     });
 
-    if (location.pathname.includes("swaps/owned")) {
+    if (location.pathname.includes("my/swaps")) {
       await queryClient.refetchQueries(["getSwapsAsParticipant"]);
     } else if (location.pathname.includes("swap/")) {
       await queryClient.refetchQueries(["getSwap"]);

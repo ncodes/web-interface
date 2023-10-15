@@ -1,52 +1,52 @@
+import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronRight, PlayCircle } from "lucide-react";
+import moment from "moment";
 import { BaseSyntheticEvent, useState } from "react";
-import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
-import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { ToolTip } from "../ToolTip.tsx";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import {
+  approxNumber,
+  cleanBadgeName,
+  formatToHighDenom,
+  humanizeDur,
+  isMerchant,
+  shortenAddress,
+} from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import { IDBadge } from "../IDBadge.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { StatCard } from "../market/StatCard.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { BadgePill } from "../market/BadgePill.tsx";
-import { Button } from "../ui/Button.tsx";
-import IconOffer from "../icons/IconOffer.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
+import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
+import { PairAvatar } from "../avatar/PairAvatar.tsx";
+import { AvatarSize } from "../avatar/useAvatar.tsx";
+import IconCaution from "../icons/IconCaution.tsx";
 import IconEdit from "../icons/IconEdit.tsx";
-import IconHeart from "../icons/IconHeart.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { IconMarket } from "../icons/IconMarket.tsx";
+import IconOffer from "../icons/IconOffer.tsx";
+import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
+import { IconStarSmile } from "../icons/IconStarSmile.tsx";
+import { BadgePill } from "../market/BadgePill.tsx";
+import { FollowLiquidity } from "../market/FollowLiquidity.tsx";
+import { StatCard } from "../market/StatCard.tsx";
+import { SwapSheet } from "../swap/SwapSheet.tsx";
+import { Button } from "../ui/Button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
-import { cn } from "../../libs/utils.ts";
-import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
-import { VerifiedBadge } from "./VerifiedBadge.tsx";
-import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
-import { SwapSheet } from "../swap/SwapSheet.tsx";
-import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
-import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
-import { IconStarSmile } from "../icons/IconStarSmile.tsx";
-import useStore from "../../hooks/store/useStore.ts";
-import {
-  approxNumber,
-  formatToHighDenom,
-  humanizeDur,
-  shortenAddress,
-  isMerchant,
-  cleanBadgeName,
-} from "../../libs/helpers.ts";
-import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Skeleton } from "../ui/skeleton.tsx";
-import IconCaution from "../icons/IconCaution.tsx";
-import { PairAvatar } from "../avatar/PairAvatar.tsx";
-import { ChevronRight, PlayCircle } from "lucide-react";
-import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { UserHoverCard } from "../UserHoverCard.tsx";
-import { IconMarket } from "../icons/IconMarket.tsx";
-import { IDBadge } from "../IDBadge.tsx";
-import moment from "moment";
+import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
+import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
+import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
+import { VerifiedBadge } from "./VerifiedBadge.tsx";
 
 function ProviderInfoSkeleton() {
   return (
@@ -62,11 +62,13 @@ export function LiquidityRow({
   noFocus,
   className,
   liquidity,
+  onFollowUpdate,
 }: {
   ownerMode?: boolean;
   noFocus?: boolean;
   className?: string;
   liquidity: Liquidity;
+  onFollowUpdate?: () => void;
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -562,12 +564,13 @@ export function LiquidityRow({
             )}
 
             {!ownerMode && (
-              <span className="flex items-center px-2 h-full border-l border-gray-800 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
-                <IconHeart />
-              </span>
+              <FollowLiquidity
+                liquidity={liquidity}
+                onFollowUpdate={onFollowUpdate}
+              />
             )}
 
-            {location.pathname.includes("/liquidity/owned") && (
+            {location.pathname.includes("/my/liquidity") && (
               <span className="hidden md:flex border-l border-gray-800 pl-1">
                 <NavLink
                   to={`/liquidity/${liquidity.marketAddress}/${liquidity.provider}/${liquidity.lid}`}

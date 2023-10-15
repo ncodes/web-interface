@@ -3,7 +3,6 @@ import { Client, PrivateKey, Signature } from "@xmtp/xmtp-js";
 import { PlugZapIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ErrorIcon } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import FollowCodec, {
   ContentTypeFollow,
@@ -12,7 +11,6 @@ import FollowCodec, {
 import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isDev, isEqlStr } from "../../libs/helpers.ts";
@@ -25,16 +23,14 @@ import { Label } from "../ui/label.tsx";
 import { MarketRow } from "./MarketRow.tsx";
 
 export function WatchedMarketContent() {
-  const navigate = useNavigate();
   const { wallet, address, chain, getChainInfo } = useConnectorContext();
   const env = isDev() ? "dev" : "production";
-  const { loadKeys, initClient, getMailbox, readMailbox } = useMessenger();
+  const { loadKeys, initClient, readMailbox } = useMessenger();
   const [loading, setLoading] = useState(true);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
   const [initializing, setInitializing] = useState(false);
   const client = useRef<Client | undefined>();
-  const { notifySuccess, notifyError } = useToast();
   const forceUpdate = useForceUpdate();
   const [watchedMarkets, setWatchedMarkets] = useState<string[]>([]);
   const { listMarkets } = useMarketService();
@@ -75,24 +71,37 @@ export function WatchedMarketContent() {
   useEffect(() => {
     const findFollowedMarkets = async () => {
       if (!client.current) return;
+
       setLoading(true);
       const { keystore } = client.current;
       const key = (await keystore.getPrivateKeyBundle())
         .identityKey as PrivateKey;
       const markets: { [k: string]: boolean } = {};
-      await readMailbox(chain, address, ContentTypeFollow, async (msg) => {
-        const content = msg.content as FollowPayload;
-        if (content.type == "market") {
-          const sigBytes = Buffer.from(content.signature, "hex");
-          const sig = Signature.fromBytes(sigBytes);
-          delete msg.content.signature;
-          const digest = new FollowCodec().encode(msg.content);
-          const valid = key.publicKey.verify(sig, digest.content);
-          if (!valid) return;
-          markets[content.market] = true;
-          if (content.unfollow) delete markets[content.market];
+
+      await readMailbox(
+        chain,
+        address,
+        ContentTypeFollow,
+        false,
+        async (msg) => {
+          const content = msg.content as FollowPayload;
+
+          if (content.type == "market") {
+            const sigBytes = Buffer.from(content.signature, "hex");
+            const sig = Signature.fromBytes(sigBytes);
+            delete msg.content.signature;
+            const digest = new FollowCodec().encode(msg.content);
+            const valid = key.publicKey.verify(sig, digest.content);
+            if (!valid) return false;
+
+            markets[content.market] = true;
+            if (content.unfollow) delete markets[content.market];
+          }
+
+          return false;
         }
-      });
+      );
+
       setWatchedMarkets(Object.keys(markets));
       setLoading(false);
     };
@@ -129,7 +138,7 @@ export function WatchedMarketContent() {
 
   return (
     <TabsContent
-      value="watching-markets"
+      value="watched-markets"
       className="p-0 m-0 flex flex-col gap-3"
     >
       {((fetchMarkets.isLoading &&

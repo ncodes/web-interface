@@ -1,21 +1,9 @@
-import { BaseSyntheticEvent, useState } from "react";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { Button } from "../ui/Button.tsx";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu.tsx";
-import { cn } from "../../libs/utils.ts";
 import {
   DotsVerticalIcon,
   LockOpen1Icon,
   TimerIcon,
 } from "@radix-ui/react-icons";
-import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
-import { AvatarSize } from "../avatar/useAvatar.tsx";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CheckCircle,
   FileLock,
@@ -25,11 +13,15 @@ import {
   UserPlus2,
   XCircle,
 } from "lucide-react";
-import { StatCard } from "../market/StatCard.tsx";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ToolTip } from "../ToolTip.tsx";
 import moment from "moment/moment";
+import { BaseSyntheticEvent, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { useInterval } from "usehooks-ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
 import {
   getDisputeOutcome,
   getDisputeStatus,
@@ -37,6 +29,28 @@ import {
   isDisputeDraftee,
   isRevealer,
 } from "../../libs/api_utils.ts";
+import { delay, isDev } from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import { CountDown } from "../Countdown.tsx";
+import { IDBadge } from "../IDBadge.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
+import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
+import { AvatarSize } from "../avatar/useAvatar.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { StatCard } from "../market/StatCard.tsx";
+import CommitVotePopOver from "../swap/CommitVotePopOver.tsx";
+import RevealVotePopOver from "../swap/RevealVotePopOver.tsx";
+import { Button } from "../ui/Button.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu.tsx";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import {
   DisputeStatusBadge,
   DisputeTipAbandoned,
@@ -49,20 +63,6 @@ import {
   DisputeTipReveal,
   DisputeTipStalled,
 } from "./DisputeStatusBadge.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { CountDown } from "../Countdown.tsx";
-import { NavLink, useLocation } from "react-router-dom";
-import useStore from "../../hooks/store/useStore.ts";
-import { UserHoverCard } from "../UserHoverCard.tsx";
-import CommitVotePopOver from "../swap/CommitVotePopOver.tsx";
-import { delay, isDev } from "../../libs/helpers.ts";
-import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
-import RevealVotePopOver from "../swap/RevealVotePopOver.tsx";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { useInterval } from "usehooks-ts";
-import { IDBadge } from "../IDBadge.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 interface ButtonEnableState {
   commit: boolean;
@@ -684,7 +684,7 @@ export function DisputeRow({
               </NavLink>
             </span>
             <span className="hidden lg:inline border-gray-800 shrink-0">
-              <NavLink to={`/tickets/owned`}>
+              <NavLink to={`/my/tickets`}>
                 <Button
                   variant="link"
                   rounded="none"
@@ -721,7 +721,7 @@ export function DisputeRow({
                       View Swap
                     </DropdownMenuItem>
                   </NavLink>
-                  <NavLink to={`/tickets/owned`}>
+                  <NavLink to={`/my/tickets`}>
                     <DropdownMenuItem className="flex gap-2">
                       View Tickets
                     </DropdownMenuItem>

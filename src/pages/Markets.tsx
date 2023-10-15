@@ -53,13 +53,13 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
                 value="my-markets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/markets/owned");
+                  navigate("/my/markets");
                 }}
               >
                 My Markets
               </TabsTrigger>
               <TabsTrigger
-                value="watching-markets"
+                value="watched-markets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
                   navigate("/markets/watching");
@@ -126,7 +126,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
       </TabsList>
       {currentTab == "markets" && <MarketsTabContent />}
       {currentTab == "my-markets" && <MyMarketsTabContent />}
-      {currentTab == "watching-markets" && <WatchedMarketContent />}
+      {currentTab == "watched-markets" && <WatchedMarketContent />}
       <MarketFilterSheet
         active={openFilterSheet}
         onOpen={(open) => {

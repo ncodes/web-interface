@@ -1,10 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
+import { Link, useLocation } from "react-router-dom";
+import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import { cn } from "../libs/helpers.ts";
 import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
-import { Link, useLocation } from "react-router-dom";
 import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
@@ -86,24 +86,24 @@ export function Navigation() {
           <NavPageLink
             iconFile="liquidity.svg"
             label="Liquidity"
-            active={pathname.match("^/liquidity") != null}
-            to="/liquidity/owned"
+            active={pathname.match("^/my/liquidity") != null}
+            to="/my/liquidity"
           />
         </li>
         <li>
           <NavPageLink
             icon={<IconExchange />}
             label="Swaps"
-            active={pathname.match("^/swap(s|)") != null}
-            to="/swaps/owned"
+            active={pathname.match("^/my/swap(s|)") != null}
+            to="/my/swaps"
           />
         </li>
         <li>
           <NavPageLink
             icon={<IconOffer />}
             label="Offers"
-            active={pathname.match("^/offer(s|)") != null}
-            to="/offers"
+            active={pathname.match("^/my/offer(s|)") != null}
+            to="/my/offers"
             countBadge={
               unreadOfferCount.data &&
               unreadOfferCount.data.asOfferer +
@@ -119,16 +119,16 @@ export function Navigation() {
           <NavPageLink
             iconFile="disputes.svg"
             label="Disputes"
-            active={pathname.match("^/dispute") != null}
-            to="/disputes"
+            active={pathname.match("^/my/dispute") != null}
+            to="/my/disputes"
           />
         </li>
         <li>
           <NavPageLink
             iconFile="mediation.svg"
             label="Mediation"
-            active={pathname.match("^/mediation") != null}
-            to="/mediation"
+            active={pathname.match("^/(my/)?tickets") != null}
+            to="/my/tickets"
           />
         </li>
       </ul>

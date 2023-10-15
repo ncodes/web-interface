@@ -1,33 +1,33 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
+import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
+import { MyLiquidityTabContent } from "../components/liquidity/MyLiquidityTabContent.tsx";
+import { WatchedLiquidityTabContent } from "../components/liquidity/WatchedLiquidityTabContent.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { MyWatchedLiquidityTabContent } from "../components/liquidity/MyWatchedLiquidityTabContent.tsx";
-import { MyLiquidityTabContent } from "../components/liquidity/MyLiquidityTabContent.tsx";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Footer } from "../components/Footer.tsx";
-import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
-import { useState } from "react";
-import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
-import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import Layout from "./Layout.tsx";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState(defaultTab || "my-liquidity");
+  const [currentTab, setCurrentTab] = useState(defaultTab || "my-liquidities");
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
 
   return (
     <Tabs
-      defaultValue={defaultTab || "my-liquidity"}
+      defaultValue={defaultTab || "my-liquidities"}
       className="w-full h-full transition-all duration-500"
       onValueChange={(value) => {
         setCurrentTab(value);
@@ -38,17 +38,20 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
           <ScrollAreaHorizontal type="scroll" className="w-full">
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
-                value="my-liquidity"
+                value="my-liquidities"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/liquidity/owned");
+                  navigate("/my/liquidity");
                 }}
               >
                 My Liquidity
               </TabsTrigger>
               <TabsTrigger
-                value="watching"
+                value="watched-liquidities"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/liquidity/watched");
+                }}
               >
                 Watching
               </TabsTrigger>
@@ -75,8 +78,8 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
           </DropdownMenu>
         </div>
       </TabsList>
-      {currentTab == "my-liquidity" && <MyLiquidityTabContent />}
-      {currentTab == "watching" && <MyWatchedLiquidityTabContent />}
+      {currentTab == "my-liquidities" && <MyLiquidityTabContent />}
+      {currentTab == "watched-liquidities" && <WatchedLiquidityTabContent />}
       <LiquidityFilterSheet
         active={openFilterSheet}
         onOpen={(open) => {
@@ -93,7 +96,7 @@ export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
 
   const rightSide = connected ? (
     <div className="flex w-full justify-between flex-col pt-2">
-      <LiquidityFilter ownerMode={loc.pathname == "/liquidity/owned"} />
+      <LiquidityFilter ownerMode={loc.pathname == "/my/liquidity"} />
       <div className="relative">
         <div className="text-gray-200">
           <Footer />

@@ -55,7 +55,7 @@ import {
  * @returns
  */
 export default function useMessenger() {
-  const version = "170"; // TODO: use 1 in production
+  const version = "171"; // TODO: use 1 in production
 
   /**
    * Make a key for storing the keys
@@ -861,19 +861,21 @@ export default function useMessenger() {
    * @param chain The chain to use
    * @param address The address that owns the mailbox
    * @param type The content type to filter by
+   * @param reverse Whether to read the mailbox in reverse
    * @param cb A callback function to call for each message
    */
   async function readMailbox(
     chain: Chain,
     address: string,
     type?: ContentTypeId,
-    cb?: (msg: DecodedMessage) => Promise<void>
-  ) {
+    reverse = false,
+    cb?: (msg: DecodedMessage) => Promise<boolean>
+  ): Promise<void> {
     const { convo } = await getMailbox(chain, address);
     const messages = await convo.messages({});
-    for (const msg of messages) {
+    for (const msg of reverse ? messages.reverse() : messages) {
       if (type && !msg.contentType.sameAs(type)) continue;
-      await cb?.(msg);
+      if (await cb?.(msg)) break;
     }
   }
 

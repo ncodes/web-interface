@@ -1,9 +1,9 @@
-import { ChainInfo } from "../../../types/global";
 import { QueryClient } from "@tanstack/react-query";
-import { Location } from "react-router-dom";
 import { ReactNode } from "react";
+import { Location } from "react-router-dom";
 import { Options } from "../../../hooks/toast/toast.tsx";
 import { delay, isDev } from "../../../libs/helpers.ts";
+import { ChainInfo } from "../../../types/global";
 
 /**
  * Mark an order as "Paid" function
@@ -43,7 +43,7 @@ export async function markOrderAsPaidFunc(
       links: [{ label: "View Transaction", href: `${explorer}/tx/${txHash}` }],
     });
 
-    if (location.pathname.includes("swaps/owned")) {
+    if (location.pathname.includes("my/swaps")) {
       await queryClient.refetchQueries(["getSwapsAsParticipant"]);
     } else if (location.pathname.includes("swap/")) {
       await queryClient.refetchQueries(["getSwap"]);

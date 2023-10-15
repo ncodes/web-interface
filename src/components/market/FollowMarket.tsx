@@ -62,20 +62,30 @@ export function FollowMarket({
 
       try {
         let follow = false;
-        await readMailbox(chain, address, ContentTypeFollow, async (msg) => {
-          const content = msg.content as FollowPayload;
-          if (content.type == "market" && content.market == marketAddress) {
-            const sigBytes = Buffer.from(content.signature, "hex");
-            const sig = Signature.fromBytes(sigBytes);
-            delete msg.content.signature;
-            const digest = new FollowCodec().encode(msg.content);
-            const valid = key.publicKey.verify(sig, digest.content);
-            if (!valid) return;
-            follow = true;
-            if (content.unfollow) follow = false;
-            setFollowing(true);
+        await readMailbox(
+          chain,
+          address,
+          ContentTypeFollow,
+          true,
+          async (msg) => {
+            const content = msg.content as FollowPayload;
+            if (content.type == "market" && content.market == marketAddress) {
+              const sigBytes = Buffer.from(content.signature, "hex");
+              const sig = Signature.fromBytes(sigBytes);
+              delete msg.content.signature;
+              const digest = new FollowCodec().encode(msg.content);
+              const valid = key.publicKey.verify(sig, digest.content);
+              if (!valid) return false;
+
+              follow = true;
+              if (content.unfollow) follow = false;
+              setFollowing(follow);
+              return true;
+            }
+
+            return false;
           }
-        });
+        );
         setFollowing(follow);
         setLoading(false);
       } catch (error) {

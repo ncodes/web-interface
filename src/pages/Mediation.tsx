@@ -1,26 +1,26 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { TicketIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { BuyTicketSheet } from "../components/mediation/BuyTicketSheet.tsx";
+import { MyTicketsTabContent } from "../components/mediation/MyTicketsTabContent.tsx";
+import { TicketFilter } from "../components/mediation/TicketFilter.tsx";
+import { TicketFilterSheet } from "../components/mediation/TicketFilterSheet.tsx";
+import { TicketsStatsTabContent } from "../components/mediation/TicketsStatsTabContent.tsx";
+import { Button } from "../components/ui/Button.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { Button } from "../components/ui/Button.tsx";
-import { BuyTicketSheet } from "../components/mediation/BuyTicketSheet.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import useStore from "../hooks/store/useStore.ts";
-import { TicketIcon } from "lucide-react";
-import { MyTicketsTabContent } from "../components/mediation/MyTicketsTabContent.tsx";
-import { TicketsStatsTabContent } from "../components/mediation/TicketsStatsTabContent.tsx";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { TicketFilterSheet } from "../components/mediation/TicketFilterSheet.tsx";
-import { Footer } from "../components/Footer.tsx";
-import { TicketFilter } from "../components/mediation/TicketFilter.tsx";
-import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import Layout from "./Layout.tsx";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
@@ -31,9 +31,13 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
   const [currentTab, setCurrentTab] = useState(defaultTab || "mediation");
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
 
+  useEffect(() => {
+    setCurrentTab(defaultTab || "my-tickets");
+  }, [defaultTab]);
+
   return (
     <Tabs
-      defaultValue={defaultTab || "my-tickets"}
+      value={defaultTab || "my-tickets"}
       className="w-full h-full transition-all duration-500"
       onValueChange={(value) => {
         setCurrentTab(value);
@@ -47,7 +51,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
                 value="my-tickets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/tickets/owned");
+                  navigate("/my/tickets");
                 }}
               >
                 My Tickets
@@ -127,8 +131,7 @@ export default function Mediation({ defaultTab }: { defaultTab?: string }) {
   const { connected } = useConnectorContext();
 
   const rightSide = connected
-    ? (loc.pathname.startsWith("/tickets/owned") ||
-        loc.pathname.startsWith("/mediation")) && (
+    ? loc.pathname.startsWith("/my/tickets") && (
         <div className="flex w-full h-full justify-between flex-col pt-2">
           <TicketFilter />
           <div className="relative">

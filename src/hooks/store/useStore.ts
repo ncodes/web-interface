@@ -39,6 +39,7 @@ export interface LiquidityFilter {
   provider?: string;
   paused?: boolean;
   price?: string;
+  liquidities?: { marketAddress: string; provider: string; lid: number }[];
   priceUsd?: string;
   amount?: string;
   amountUsd?: string;

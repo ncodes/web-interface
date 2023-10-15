@@ -1,21 +1,21 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { MySwapTabContent } from "../components/swap/MySwapTabContent.tsx";
+import { SwapFilter } from "../components/swap/SwapFilter.tsx";
+import { SwapFilterSheet } from "../components/swap/SwapFilterSheet.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import { MySwapTabContent } from "../components/swap/MySwapTabContent.tsx";
-import { SwapFilterSheet } from "../components/swap/SwapFilterSheet.tsx";
-import { Footer } from "../components/Footer.tsx";
-import { SwapFilter } from "../components/swap/SwapFilter.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import Layout from "./Layout.tsx";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
@@ -40,7 +40,7 @@ function SwapTabs({ defaultTab }: { defaultTab?: string }) {
                 value="my-swaps"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/swaps/owned");
+                  navigate("/my/swaps");
                 }}
               >
                 My Swaps

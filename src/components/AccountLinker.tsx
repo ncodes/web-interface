@@ -15,7 +15,7 @@ export function AccountLinker() {
   return (
     <>
       {!user && connected && (
-        <div className="select-none pt-2 py-2 bg-gray-900 rounded-3xl mb-2 px-3 md:px-3 border border-chinese-green flex items-center gap-3">
+        <div className="select-none pt-2 py-2 bg-card-background rounded-3xl mb-2 px-3 md:px-3 border border-card-border flex items-center gap-3">
           <span>
             <IconCaution
               width="25"

@@ -1,16 +1,16 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import { LiquidityRow } from "./LiquidityRow.tsx";
-import { Paginator } from "../Paginator.tsx";
-import useStore from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
-import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { PlugZapIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { PlugZapIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { Paginator } from "../Paginator.tsx";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
+import { LiquidityRow } from "./LiquidityRow.tsx";
 
 export function MyLiquidityTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -58,7 +58,7 @@ export function MyLiquidityTabContent() {
   ]);
 
   return (
-    <TabsContent value="my-liquidity" className="p-0 m-0 flex flex-col gap-3">
+    <TabsContent value="my-liquidities" className="p-0 m-0 flex flex-col gap-3">
       {isLoading && fetchStatus != "idle" && <RowSkeleton />}
 
       {isError && (

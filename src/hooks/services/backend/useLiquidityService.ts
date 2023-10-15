@@ -1,9 +1,9 @@
-import axios from "axios";
-import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
 import { QueryFunctionContext } from "@tanstack/react-query";
-import { LiquidityFilter } from "../../store/useStore.ts";
-import { Events } from "../../../types/enums.ts";
+import axios from "axios";
 import moment from "moment";
+import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
+import { Events } from "../../../types/enums.ts";
+import { LiquidityFilter } from "../../store/useStore.ts";
 export interface ListLiquidityParams {
   provider?: string;
   network: string;
@@ -13,7 +13,10 @@ export interface ListLiquidityParams {
   liquidityFilter?: LiquidityFilter;
 }
 
-type ListLiquidityIDs = "getLiquidities" | "getLiquidityByCreator";
+type ListLiquidityIDs =
+  | "getLiquidities"
+  | "getLiquidityByCreator"
+  | "getLiquiditiesByLiquidities";
 type GetLiquidityIDs = "getLiquidity";
 type GetLiquidityEventsIDs = "getLiquidityEvents";
 
@@ -38,7 +41,9 @@ export function useLiquidityService() {
     try {
       const [id, params] = ctx.queryKey;
       const { network, limit, liquidityFilter, offset } = params;
-      const headers = {};
+      const headers = {
+        "Content-Type": "application/json",
+      };
 
       const payload = {
         ...liquidityFilter,
@@ -52,9 +57,9 @@ export function useLiquidityService() {
       }
 
       const resp = await axios({
-        method: "get",
+        method: "post",
         url: `${import.meta.env.VITE_API_URI}/v1/liquidities`,
-        params: payload,
+        data: payload,
         headers,
       });
 

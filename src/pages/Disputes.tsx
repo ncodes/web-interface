@@ -1,21 +1,21 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import { DisputeFilter } from "../components/dispute/DisputeFilter.tsx";
+import { DisputeFilterSheet } from "../components/dispute/DisputeFilterSheet.tsx";
+import { MyDisputeTabContent } from "../components/dispute/MyDisputeTabContent.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import { MyDisputeTabContent } from "../components/dispute/MyDisputeTabContent.tsx";
-import { DisputeFilterSheet } from "../components/dispute/DisputeFilterSheet.tsx";
-import { Footer } from "../components/Footer.tsx";
-import { DisputeFilter } from "../components/dispute/DisputeFilter.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import Layout from "./Layout.tsx";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
@@ -40,7 +40,7 @@ function DisputeTabs({ defaultTab }: { defaultTab?: string }) {
                 value="my-disputes"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/disputes");
+                  navigate("/my/disputes");
                 }}
               >
                 Disputes
@@ -85,7 +85,7 @@ export default function Disputes() {
 
   const rightSide = connected ? (
     <div className="flex w-full h-full justify-between flex-col pt-2">
-      <DisputeFilter ownerMode={loc.pathname == "/liquidity/owned"} />
+      <DisputeFilter ownerMode={loc.pathname == "/my/liquidity"} />
       <div className="relative">
         <div className="text-gray-200 bottom-0 w-full">
           <Footer />

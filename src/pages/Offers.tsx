@@ -1,21 +1,21 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { MyOffersTabContent } from "../components/offer/MyOffersTabContent.tsx";
+import { OfferFilter } from "../components/offer/OfferFilter.tsx";
+import { OfferFilterSheet } from "../components/offer/OfferFilterSheet.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { useNavigate } from "react-router-dom";
-import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import { MyOffersTabContent } from "../components/offer/MyOffersTabContent.tsx";
-import { Footer } from "../components/Footer.tsx";
-import { OfferFilter } from "../components/offer/OfferFilter.tsx";
-import { OfferFilterSheet } from "../components/offer/OfferFilterSheet.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import Layout from "./Layout.tsx";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
@@ -40,7 +40,7 @@ function OfferTabs({ defaultTab }: { defaultTab?: string }) {
                 value="offers"
                 className="font-light gap-1 relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/offers");
+                  navigate("/my/offers");
                 }}
               >
                 Offers

@@ -1,11 +1,14 @@
-import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useStore, { SwapFilter } from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
-import { Accordion } from "../ui/accordion.tsx";
 import { FilterItem } from "../FilterItem.tsx";
+import { CalendarInput } from "../swap/CalendarInput.tsx";
+import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
+import { Accordion } from "../ui/accordion.tsx";
 import {
   Select,
   SelectContent,
@@ -13,9 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select.tsx";
-import { Button } from "../ui/Button.tsx";
-import moment from "moment";
-import { CalendarInput } from "../swap/CalendarInput.tsx";
 
 interface Values {
   creator?: string;
@@ -172,7 +172,7 @@ export function OfferFilterContent() {
           onClick={() => {
             const cloned = { ...values };
             navigate({
-              pathname: "/offers",
+              pathname: "/my/offers",
               search: new URLSearchParams(
                 rmUndefinedAndNull(cloned, true)
               ).toString(),
