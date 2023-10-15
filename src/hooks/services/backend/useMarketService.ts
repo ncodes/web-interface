@@ -1,9 +1,12 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
-import { QueryFunctionContext } from "@tanstack/react-query";
 import { MarketFilter } from "../../store/useStore.ts";
 
-export type ListMarketsIDs = "getMarkets" | "getMarketsByCreator";
+export type ListMarketsIDs =
+  | "getMarkets"
+  | "getMarketsByCreator"
+  | "getMarketsByAddresses";
 export interface ListMarketsParams {
   network: string;
   marketFilter: MarketFilter;

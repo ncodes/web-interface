@@ -1,14 +1,6 @@
-import {
-  AttachmentCodec,
-  RemoteAttachmentCodec,
-} from "@xmtp/content-type-remote-attachment";
-import { Client, ClientOptions } from "@xmtp/xmtp-js";
+import { Client } from "@xmtp/xmtp-js";
 import { useEffect, useRef, useState } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import DeliveryReceiptCodec from "../../hooks/messenger/codecs/DeliveryReceiptCodec.ts";
-import MessageRelayCodec from "../../hooks/messenger/codecs/MessageRelayCodec.ts";
-import ReadReceiptCodec from "../../hooks/messenger/codecs/ReadReceiptCodec.ts";
-import SwapStatusCodec from "../../hooks/messenger/codecs/SwapStatusCodec.ts";
 import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import { isDev } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -19,7 +11,7 @@ export function IdentityInitializer({
 }: {
   onInitialized: (client: Client) => void;
 }) {
-  const { saveKeys, loadKeys } = useMessenger();
+  const { saveKeys, loadKeys, initClient } = useMessenger();
   const env = isDev() ? "dev" : "production";
   const { wallet, address } = useConnectorContext();
   const [loading, setLoading] = useState(false);
@@ -44,28 +36,14 @@ export function IdentityInitializer({
       if (client.current) return;
       setLoading(true);
 
-      const opts: Partial<ClientOptions> = { env };
-      let keys = loadKeys(env, address);
-      if (!keys) {
-        keys = await Client.getKeys(wallet, opts);
-        saveKeys(env, address, keys);
-      }
+      client.current = await initClient(env, wallet);
 
-      const c = await Client.create(null, {
-        ...opts,
-        privateKeyOverride: keys,
-        skipContactPublishing: true,
-      });
-
-      c.registerCodec(new DeliveryReceiptCodec());
-      c.registerCodec(new ReadReceiptCodec());
-      c.registerCodec(new MessageRelayCodec());
-      c.registerCodec(new SwapStatusCodec());
-      c.registerCodec(new RemoteAttachmentCodec());
-      c.registerCodec(new AttachmentCodec());
+      // console.log((await c.keystore.getPrivateKeyBundle()).identityKey);
+      // console.log(
+      // ((await c.keystore.getPublicKeyBundle()).identityKey as PublicKey).verify()
+      // );
 
       setLoading(false);
-      client.current = c;
       setInitialized(true);
       onInitialized && onInitialized(client.current);
     } catch (e) {

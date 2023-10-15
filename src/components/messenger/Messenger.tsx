@@ -537,7 +537,7 @@ export function Messenger({
   return (
     <div className="relative h-full">
       {!reveal && (
-        <div className="absolute flex justify-center items-center z-10 w-full h-full bg-gray-900 rounded-xl">
+        <div className="absolute flex justify-center items-center z-10 w-full h-full bg-card-background rounded-xl">
           <IconSpinner
             width="20"
             fill="fill-gray-600"

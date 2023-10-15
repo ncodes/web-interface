@@ -1,4 +1,8 @@
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { cn } from "../../libs/utils.ts";
 import { Button } from "../ui/Button.tsx";
 import {
   DropdownMenu,
@@ -6,10 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
-import { cn } from "../../libs/utils.ts";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { NavLink, useLocation } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
 
 export function SwapRowLinks({ swap }: { swap: Swap }) {
   const location = useLocation();
@@ -17,21 +17,6 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
 
   return (
     <>
-      {location.pathname.includes("/swaps") && (
-        <span className="flex border-l border-gray-800 pl-1">
-          <NavLink to={`/swap/${swap.orderId}`}>
-            <Button
-              title="Open Liquidity"
-              variant="link"
-              rounded="lg"
-              scale="sm"
-              className="text-sm px-1 text-gray-300 flex items-center gap-1"
-            >
-              <ChevronRight />
-            </Button>
-          </NavLink>
-        </span>
-      )}
       <span className="hidden lg:inline border-r border-gray-800 shrink-0">
         <NavLink
           to={`/liquidity/${swap.marketAddress}/${swap.provider}/${swap.lid}`}
@@ -88,6 +73,21 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </span>
+      {location.pathname.includes("/swaps") && (
+        <span className="flex border-l border-gray-800 pl-1">
+          <NavLink to={`/swap/${swap.orderId}`}>
+            <Button
+              title="Open Liquidity"
+              variant="link"
+              rounded="lg"
+              scale="sm"
+              className="text-sm px-1 text-gray-300 flex items-center gap-1"
+            >
+              <ChevronRight />
+            </Button>
+          </NavLink>
+        </span>
+      )}
     </>
   );
 }

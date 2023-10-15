@@ -1,26 +1,26 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
-import { Button } from "../components/ui/Button.tsx";
-import { IconPlus } from "../components/icons/IconPlus.tsx";
-import { useState } from "react";
-import { MarketFilter } from "../components/market/MarketFilter.tsx";
-import { Footer } from "../components/Footer.tsx";
-import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { IconPlus } from "../components/icons/IconPlus.tsx";
+import { CreateMarketSheet } from "../components/market/CreateMarketSheet.tsx";
+import { MarketFilter } from "../components/market/MarketFilter.tsx";
+import { MarketFilterSheet } from "../components/market/MarketFilterSheet.tsx";
+import { MarketsTabContent } from "../components/market/MarketsTabContent.tsx";
+import { MyMarketsTabContent } from "../components/market/MyMarketsTabContent.tsx";
+import { WatchedMarketContent } from "../components/market/WatchedMarketContent.tsx";
+import { Button } from "../components/ui/Button.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { CreateMarketSheet } from "../components/market/CreateMarketSheet.tsx";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { MarketsTabContent } from "../components/market/MarketsTabContent.tsx";
-import { MyMarketsTabContent } from "../components/market/MyMarketsTabContent.tsx";
-import { WatchedMarketContent } from "../components/market/WatchedMarketContent.tsx";
-import { useNavigate } from "react-router-dom";
-import { MarketFilterSheet } from "../components/market/MarketFilterSheet.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import Layout from "./Layout.tsx";
 
 function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
@@ -59,8 +59,11 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
                 My Markets
               </TabsTrigger>
               <TabsTrigger
-                value="watching"
+                value="watching-markets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/markets/watching");
+                }}
               >
                 Watching
               </TabsTrigger>
@@ -123,7 +126,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
       </TabsList>
       {currentTab == "markets" && <MarketsTabContent />}
       {currentTab == "my-markets" && <MyMarketsTabContent />}
-      <WatchedMarketContent />
+      {currentTab == "watching-markets" && <WatchedMarketContent />}
       <MarketFilterSheet
         active={openFilterSheet}
         onOpen={(open) => {

@@ -1,11 +1,20 @@
-import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
-import { useNavigate } from "react-router-dom";
-import useStore, { MarketFilter } from "../../hooks/store/useStore.ts";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { validators } from "tailwind-merge";
+import useStore, { MarketFilter } from "../../hooks/store/useStore.ts";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
-import { Accordion } from "../ui/accordion.tsx";
-import { FilterItem } from "../FilterItem.tsx";
 import { cn } from "../../libs/utils.ts";
+import { FilterItem } from "../FilterItem.tsx";
+import Input2 from "../Input2.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Accordion } from "../ui/accordion.tsx";
+import { Label } from "../ui/label.tsx";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import {
   Select,
   SelectContent,
@@ -13,15 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select.tsx";
-import { validators } from "tailwind-merge";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group.tsx";
-import { ToolTip } from "../ToolTip.tsx";
-import { Label } from "../ui/label.tsx";
-import { Button } from "../ui/Button.tsx";
-import Input2 from "../Input2.tsx";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 
 interface Errors {
   price?: string;
@@ -53,6 +53,7 @@ export function MarketFilterContent() {
   const [sheetHeight] = useSheetInfo();
   const query = useUrlQuery();
   const navigate = useNavigate();
+  const loc = useLocation();
   const { setMarketFilter, marketFilter } = useStore((state) => ({
     setMarketFilter: state.setMarketFilter,
     marketFilter: state.marketFilter,
@@ -629,7 +630,7 @@ export function MarketFilterContent() {
             }
 
             navigate({
-              pathname: "/markets",
+              pathname: loc.pathname,
               search: new URLSearchParams(
                 rmUndefinedAndNull(cloned, true)
               ).toString(),

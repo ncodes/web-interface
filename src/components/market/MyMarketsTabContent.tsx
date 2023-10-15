@@ -1,15 +1,15 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import { Paginator } from "../Paginator.tsx";
-import { MarketRow } from "./MarketRow.tsx";
 import { useQuery } from "@tanstack/react-query";
+import { PlugZapIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { ErrorIcon } from "react-hot-toast";
-import { useEffect, useState } from "react";
-import { PlugZapIcon } from "lucide-react";
-import { RowSkeleton } from "../RowSkeleton.tsx";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { Paginator } from "../Paginator.tsx";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
+import { MarketRow } from "./MarketRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
@@ -17,19 +17,11 @@ export function MyMarketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
   const { listMarkets } = useMarketService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
+  const loaderProgress = useStore((state) => state.loaderProgress);
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
-  const {
-    isLoading,
-    isSuccess,
-    isRefetching,
-    isError,
-    fetchStatus,
-    isRefetchError,
-    data,
-    error,
-  } = useQuery({
+  const fetchMarkets = useQuery({
     queryKey: [
       "getMarketsByCreator",
       {
@@ -49,26 +41,29 @@ export function MyMarketsTabContent() {
     setOffset(0);
   }, [marketFilter]);
 
+  // Update global progress bar on market fetch
   useEffect(() => {
-    if ((fetchStatus != "idle" && isLoading) || isRefetching)
-      setLoaderProgress && setLoaderProgress(50);
-    else setLoaderProgress && setLoaderProgress(100);
-  }, [
-    isError,
-    isLoading,
-    setLoaderProgress,
-    isRefetching,
-    isRefetchError,
-    fetchStatus,
-  ]);
+    const { isLoading, isRefetching } = fetchMarkets;
+    if (isLoading) setLoaderProgress && setLoaderProgress(50);
+    if (!(isRefetching || isLoading) && loaderProgress == 50)
+      setLoaderProgress?.(100);
+  }, [fetchMarkets.isLoading, fetchMarkets.isRefetching, loaderProgress]);
+
+  // Set loader to 50% when market filter changes.
+  useEffect(() => {
+    setLoaderProgress?.(50);
+  }, [marketFilter]);
 
   return (
     <TabsContent value="my-markets" className="p-0 m-0 flex flex-col gap-3">
-      {isLoading && fetchStatus != "idle" && <RowSkeleton />}
+      {fetchMarkets.isLoading && fetchMarkets.fetchStatus != "idle" && (
+        <RowSkeleton />
+      )}
 
-      {isError && (
+      {fetchMarkets.isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
-          <ErrorIcon className="w-[20px]" /> {(error as RequestError)?.message}
+          <ErrorIcon className="w-[20px]" />{" "}
+          {(fetchMarkets.error as RequestError)?.message}
         </div>
       )}
 
@@ -78,39 +73,41 @@ export function MyMarketsTabContent() {
         </div>
       )}
 
-      {!isLoading && isSuccess && data?.markets?.length > 0 && (
-        <div className="flex flex-col gap-3 min-h-[500px]">
-          <div className="flex flex-col gap-3">
-            <Paginator
-              curPage={offset}
-              total={data?.meta?.queryCount}
-              limit={limit}
-              onNext={() => setOffset(offset + limit)}
-              onPrev={() => setOffset(offset - limit)}
-            />
-            <div className="flex flex-col gap-3 p-3 pt-0">
-              {data?.markets.map((market: Market) => (
-                <MarketRow
-                  market={market}
-                  key={market.address}
-                  ownerMode={isEqlStr(market.creator, address)}
-                />
-              ))}
+      {!fetchMarkets.isLoading &&
+        fetchMarkets.isSuccess &&
+        fetchMarkets.data?.markets?.length > 0 && (
+          <div className="flex flex-col gap-3 min-h-[500px]">
+            <div className="flex flex-col gap-3">
+              <Paginator
+                curPage={offset}
+                total={fetchMarkets.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + limit)}
+                onPrev={() => setOffset(offset - limit)}
+              />
+              <div className="flex flex-col gap-3 p-3 pt-0">
+                {fetchMarkets.data?.markets.map((market: Market) => (
+                  <MarketRow
+                    market={market}
+                    key={market.address}
+                    ownerMode={isEqlStr(market.creator, address)}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col justify-end">
+              <Paginator
+                className="border-t mb-0 rounded-b-3xl"
+                curPage={offset}
+                total={fetchMarkets.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + limit)}
+                onPrev={() => setOffset(offset - limit)}
+              />
             </div>
           </div>
-          <div className="flex-1 flex flex-col justify-end">
-            <Paginator
-              className="border-t mb-0 rounded-b-3xl"
-              curPage={offset}
-              total={data?.meta?.queryCount}
-              limit={limit}
-              onNext={() => setOffset(offset + limit)}
-              onPrev={() => setOffset(offset - limit)}
-            />
-          </div>
-        </div>
-      )}
-      {!isLoading && data?.markets?.length == 0 && (
+        )}
+      {!fetchMarkets.isLoading && fetchMarkets.data?.markets?.length == 0 && (
         <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
           No market found
         </div>

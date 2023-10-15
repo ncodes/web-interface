@@ -1,46 +1,48 @@
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { ChevronRight } from "lucide-react";
+import { BaseSyntheticEvent, useState } from "react";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  approxNumber,
+  formatToHighDenom,
+  shortenAddress,
+} from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { PairAvatar } from "../avatar/PairAvatar.tsx";
 import IconCopyFilled from "../icons/IconCopyFilled.tsx";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import IconHeart from "../icons/IconHeart.tsx";
-import { StatCard } from "./StatCard.tsx";
-import { BadgePill } from "./BadgePill.tsx";
+import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
+import { Button } from "../ui/Button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
-import { Button } from "../ui/Button.tsx";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { BaseSyntheticEvent, useState } from "react";
-import { cn } from "../../libs/utils.ts";
-import { ManageMarketSheet } from "./ManageMarketSheet.tsx";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import {
-  approxNumber,
-  formatToHighDenom,
-  shortenAddress,
-} from "../../libs/helpers.ts";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
-import { PriceChange } from "./PriceChange.tsx";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
+import { FollowMarket } from "./FollowMarket.tsx";
 import { AssetTip } from "./AssetTip.tsx";
-import { ChevronRight } from "lucide-react";
+import { BadgePill } from "./BadgePill.tsx";
+import { ManageMarketSheet } from "./ManageMarketSheet.tsx";
+import { PriceChange } from "./PriceChange.tsx";
+import { StatCard } from "./StatCard.tsx";
 
 export function MarketRow({
   market,
   ownerMode,
   noFocus,
   className,
+  onFollowUpdate
 }: {
   market: Market;
   className?: string;
   ownerMode?: boolean;
   noFocus?: boolean;
+  onFollowUpdate?: () => void;
 }) {
   const location = useLocation();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -88,7 +90,7 @@ export function MarketRow({
                   {market.quote}
                 </ToolTip>
               </span>
-              <span className="flex items-center gap-1 text-[11px] font-light text-blue-200">
+              <span className="flex items-center gap-1 text-[11px] font-light text-gray-400">
                 <ToolTip
                   tip={
                     <>
@@ -103,7 +105,7 @@ export function MarketRow({
                 >
                   <span data-click-trigger="1">
                     ID: &nbsp;
-                    <span data-click-trigger="1">
+                    <span data-click-trigger="1" className="tracking-wide">
                       {shortenAddress(market.address)}
                     </span>
                   </span>
@@ -297,21 +299,6 @@ export function MarketRow({
           className="flex items-center  border-gray-800"
           data-click-trigger="1"
         >
-          {!location.pathname.includes("/market/") && (
-            <span className="flex border-l border-gray-800 pl-1">
-              <NavLink to={`/market/${market.address}`}>
-                <Button
-                  title="Open Liquidity"
-                  variant="link"
-                  rounded="lg"
-                  scale="sm"
-                  className="text-sm px-1 text-gray-300 flex items-center gap-1"
-                >
-                  <ChevronRight />
-                </Button>
-              </NavLink>
-            </span>
-          )}
           {ownerMode && (
             <span className="hidden lg:inline border-l border-gray-800 shrink-0">
               <Button
@@ -326,11 +313,7 @@ export function MarketRow({
               </Button>
             </span>
           )}
-          {!ownerMode && (
-            <span className="flex h-full cursor-pointer border-l border-gray-800 items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110">
-              <IconHeart />
-            </span>
-          )}
+          {!ownerMode && <FollowMarket marketAddress={market.address} onFollowUpdate={onFollowUpdate} />}
           {ownerMode && (
             <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu
@@ -359,6 +342,21 @@ export function MarketRow({
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+            </span>
+          )}
+          {!location.pathname.includes("/market/") && (
+            <span className="flex border-l border-gray-800 pl-1">
+              <NavLink to={`/market/${market.address}`}>
+                <Button
+                  title="Open Liquidity"
+                  variant="link"
+                  rounded="lg"
+                  scale="sm"
+                  className="text-sm px-1 text-gray-300 flex items-center gap-1"
+                >
+                  <ChevronRight />
+                </Button>
+              </NavLink>
             </span>
           )}
         </div>

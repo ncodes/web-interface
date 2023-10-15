@@ -1,35 +1,43 @@
 import {
   Attachment,
+  AttachmentCodec,
   ContentTypeRemoteAttachment,
   RemoteAttachment,
   RemoteAttachmentCodec,
 } from "@xmtp/content-type-remote-attachment";
 import {
   Client,
+  ClientOptions,
   ContentTypeId,
   ContentTypeText,
   Conversation,
   DecodedMessage,
 } from "@xmtp/xmtp-js";
+import EthCrypto from "eth-crypto";
 import { randomBytes } from "ethers/lib.esm/utils";
 import moment from "moment";
+import forge from "node-forge";
+import { Chain, WalletClient, createWalletClient, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { hardhat } from "wagmi/chains";
 import db, { ContentType, Message } from "../../components/messenger/db.ts";
 import { getSwapCounterpart } from "../../libs/api_utils.ts";
 import { isDev, isEqlStr, sha1, uint8ArrayToB64 } from "../../libs/helpers.ts";
-import {
+import DeliveryReceiptCodec, {
   ContentTypeDeliveryReceipt,
   isDeliveryReceipt,
 } from "./codecs/DeliveryReceiptCodec.ts";
-import {
+import FollowCodec from "./codecs/FollowCodec.ts";
+import MessageRelayCodec, {
   ContentTypeMessageRelay,
   MessageRelayPayload,
   isMessageRelayType,
 } from "./codecs/MessageRelayCodec.ts";
-import {
+import ReadReceiptCodec, {
   ContentTypeReadReceipt,
   isReadReceipt,
 } from "./codecs/ReadReceiptCodec.ts";
-import {
+import SwapStatusCodec, {
   ContentTypeSwapStatus,
   SwapStatusTypeId,
   isSwapStatusType,
@@ -47,7 +55,7 @@ import {
  * @returns
  */
 export default function useMessenger() {
-  const version = "170";
+  const version = "170"; // TODO: use 1 in production
 
   /**
    * Make a key for storing the keys
@@ -78,6 +86,45 @@ export default function useMessenger() {
     const keys = localStorage.getItem(makeStorageKey(env, address));
     if (!keys) return;
     return Buffer.from(keys, "hex").valueOf();
+  }
+
+  function applyCodecToClient(client: Client) {
+    client.registerCodec(new DeliveryReceiptCodec());
+    client.registerCodec(new ReadReceiptCodec());
+    client.registerCodec(new MessageRelayCodec());
+    client.registerCodec(new SwapStatusCodec());
+    client.registerCodec(new RemoteAttachmentCodec());
+    client.registerCodec(new AttachmentCodec());
+    client.registerCodec(new FollowCodec());
+  }
+
+  /**
+   * Initialize the XMTP client
+   * @param env The environment to initialize the client for
+   * @param wallet The wallet to use for signing
+   * @returns The XMTP client
+   */
+  async function initClient(
+    env: "local" | "dev" | "production",
+    wallet: WalletClient
+  ) {
+    const opts: Partial<ClientOptions> = { env };
+    const address = (await wallet.getAddresses())[0];
+    let keys = loadKeys(env, address);
+    if (!keys) {
+      keys = await Client.getKeys(wallet, opts);
+      saveKeys(env, address, keys);
+    }
+
+    const c = await Client.create(null, {
+      ...opts,
+      privateKeyOverride: keys,
+      skipContactPublishing: true,
+    });
+
+    applyCodecToClient(c);
+
+    return c;
   }
 
   /**
@@ -776,7 +823,62 @@ export default function useMessenger() {
     await db.messages.delete(id);
   }
 
+  /**
+   * Get public conversation used as a mailbox that anyone can write to.
+   * @param chain The chain to use
+   * @param address The address that owns the mailbox
+   * @returns Returns the convo and a client for writing to the mailbox
+   */
+  async function getMailbox(chain: Chain, address: string) {
+    const entropy = forge.md.sha512
+      .create()
+      .update(`mailbox_address:${address}`)
+      .digest()
+      .toHex();
+    const identity = EthCrypto.createIdentity(Buffer.from(entropy, "utf8"));
+    const account = privateKeyToAccount(identity.privateKey as `0x${string}`);
+    const walletClient = createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    });
+    const client = await Client.create(walletClient, {
+      env: chain === hardhat ? "dev" : isDev() ? "dev" : "production",
+    });
+    applyCodecToClient(client);
+    const convo: Conversation = await client.conversations.newConversation(
+      address,
+      {
+        conversationId: `mailbox:${version}`,
+        metadata: {},
+      }
+    );
+    return { convo, client };
+  }
+
+  /**
+   * Read a mailbox
+   * @param chain The chain to use
+   * @param address The address that owns the mailbox
+   * @param type The content type to filter by
+   * @param cb A callback function to call for each message
+   */
+  async function readMailbox(
+    chain: Chain,
+    address: string,
+    type?: ContentTypeId,
+    cb?: (msg: DecodedMessage) => Promise<void>
+  ) {
+    const { convo } = await getMailbox(chain, address);
+    const messages = await convo.messages({});
+    for (const msg of messages) {
+      if (type && !msg.contentType.sameAs(type)) continue;
+      await cb?.(msg);
+    }
+  }
+
   return {
+    initClient,
     saveKeys,
     loadKeys,
     makeSwapConversationKey,
@@ -794,5 +896,7 @@ export default function useMessenger() {
     relayMessageToConvos,
     relayConvoToConvos,
     sendSwapStatus,
+    getMailbox,
+    readMailbox,
   };
 }

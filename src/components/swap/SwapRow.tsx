@@ -1,26 +1,26 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { BaseSyntheticEvent, useState } from "react";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { StatCard } from "../market/StatCard.tsx";
-import { cn } from "../../libs/utils.ts";
-import { PairAvatar } from "../avatar/PairAvatar.tsx";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
 import { isSwapCounterparty } from "../../libs/api_utils.ts";
 import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
-import { useLocation, useNavigate } from "react-router-dom";
-import useStore from "../../hooks/store/useStore.ts";
-import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
-import { useQueryClient } from "@tanstack/react-query";
+import { PairAvatar } from "../avatar/PairAvatar.tsx";
+import { StatCard } from "../market/StatCard.tsx";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
+import SwapRowLayer2 from "./SwapRowLayer2.tsx";
+import SwapRowLayer3 from "./SwapRowLayer3.tsx";
+import { SwapStatusBadge } from "./SwapStatusBadge.tsx";
+import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
 import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
 import { markOrderAsPaidFunc } from "./functions/markOrderAsPaidFunc.ts";
 import { releaseOrderFunc } from "./functions/releaseOrderFunc.ts";
-import { SwapStatusBadge } from "./SwapStatusBadge.tsx";
-import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
-import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
-import SwapRowLayer2 from "./SwapRowLayer2.tsx";
-import SwapRowLayer3 from "./SwapRowLayer3.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function SwapRow({
   noFocus,

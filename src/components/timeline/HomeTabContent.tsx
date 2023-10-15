@@ -1,14 +1,14 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import TimelineEvent from "./TimelineEvent.tsx";
-import { useTimelineService } from "../../hooks/services/backend/useTimelineService.ts";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Skeleton } from "../ui/skeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../../libs/RequestError.ts";
-import { Fragment, useEffect } from "react";
 import { useWindowScroll } from "@uidotdev/usehooks";
-import IconSpinner from "../icons/IconSpinner.tsx";
+import { Fragment, useEffect } from "react";
+import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useTimelineService } from "../../hooks/services/backend/useTimelineService.ts";
+import { RequestError } from "../../libs/RequestError.ts";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
+import { Skeleton } from "../ui/skeleton.tsx";
+import TimelineEvent from "./TimelineEvent.tsx";
 
 function RowSkeleton() {
   return (
@@ -54,7 +54,7 @@ export function HomeTabContent() {
   }, 5000);
 
   return (
-    <TabsContent value="home" className="h-[1400px]">
+    <TabsContent value="home" className="h-auto">
       <div className="flex flex-col md:items-center gap-5 md:px-5 py-5">
         {events.isLoading && <RowSkeleton />}
 

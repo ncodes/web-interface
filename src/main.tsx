@@ -1,27 +1,27 @@
-import "../polyfills.ts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./styles/fonts.css";
-import "./styles/app.css";
-import { RootErrorBoundary } from "./pages/errors/root.tsx";
-import ConnectExample from "./pages/play/ConnectExample.tsx";
-import "./i18n/i18n.ts";
+import "../polyfills.ts";
+import App from "./App.tsx";
+import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.tsx";
 import "./hooks/store/useStore.ts";
-import Markets from "./pages/Markets.tsx";
-import Timeline from "./pages/Timeline.tsx";
-import Market from "./pages/Market.tsx";
+import "./i18n/i18n.ts";
+import Disputes from "./pages/Disputes.tsx";
+import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import Liquidities from "./pages/Liquidities.tsx";
 import Liquidity from "./pages/Liquidity.tsx";
-import Swaps from "./pages/Swaps.tsx";
-import Swap from "./pages/Swap.tsx";
-import Disputes from "./pages/Disputes.tsx";
+import Market from "./pages/Market.tsx";
+import Markets from "./pages/Markets.tsx";
 import Mediation from "./pages/Mediation.tsx";
-import Offers from "./pages/Offers.tsx";
 import Offer from "./pages/Offer.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.tsx";
+import Offers from "./pages/Offers.tsx";
+import ConnectExample from "./pages/play/ConnectExample.tsx";
+import Swap from "./pages/Swap.tsx";
+import Swaps from "./pages/Swaps.tsx";
+import Timeline from "./pages/Timeline.tsx";
+import "./styles/app.css";
+import "./styles/fonts.css";
 
 function makePath(path: string) {
   return `:locale?/${path}`;
@@ -41,6 +41,11 @@ const router = createBrowserRouter([
   {
     path: makePath("/markets"),
     element: <App page={<Markets defaultTab="markets" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/markets/watching"),
+    element: <App page={<Markets defaultTab="watching-markets" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
@@ -113,14 +118,14 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  // <React.StrictMode>
-  <QueryClientProvider client={queryClient}>
-    <ConnectorProvider
-      appName={import.meta.env.NEXT_PUBLIC_APP_NAME}
-      infuraId={import.meta.env.NEXT_PUBLIC_INFURA_ID}
-    >
-      <RouterProvider router={router} />
-    </ConnectorProvider>
-  </QueryClientProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ConnectorProvider
+        appName={import.meta.env.NEXT_PUBLIC_APP_NAME}
+        infuraId={import.meta.env.NEXT_PUBLIC_INFURA_ID}
+      >
+        <RouterProvider router={router} />
+      </ConnectorProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );

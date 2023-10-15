@@ -1,11 +1,11 @@
 import { ActivityStream } from "../components/ActivityStream.tsx";
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { Footer } from "../components/Footer.tsx";
-import Layout from "./Layout.tsx";
-import { HomeTabContent } from "../components/timeline/HomeTabContent.tsx";
 import { FollowingTabContent } from "../components/timeline/FollowingTabContent.tsx";
+import { HomeTabContent } from "../components/timeline/HomeTabContent.tsx";
 import { TopTabContent } from "../components/timeline/TopTabContent.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import Layout from "./Layout.tsx";
 
 export default function Timeline() {
   return (
@@ -13,7 +13,7 @@ export default function Timeline() {
       body={
         <Tabs
           defaultValue="home"
-          className="w-full h-full transition-all duration-500"
+          className="w-full h-auto transition-all duration-500"
         >
           <ScrollAreaHorizontal type="scroll">
             <TabsList className="justify-start px-3 py-2 border-b border-modal-border pt-0">
