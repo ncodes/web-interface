@@ -203,11 +203,14 @@ export function WatchedMarketContent() {
           </div>
         )}
 
-      {client.current && watchedMarkets.length == 0 && !loading && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
-          No market found
-        </div>
-      )}
+      {client.current &&
+        (watchedMarkets.length == 0 ||
+          fetchMarkets.data?.markets.length == 0) &&
+        !loading && (
+          <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+            No market found
+          </div>
+        )}
 
       {!client.current && (
         <div className="p-3 pt-0">
