@@ -1,5 +1,12 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
 import React from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import {
   Sheet,
   SheetContent,
@@ -7,17 +14,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet.tsx";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { AccountTab } from "./AccountTab.tsx";
 import { BalancesTab } from "./BalancesTab.tsx";
-import { SettingsFooter } from "./SettingsFooter.tsx";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { cn } from "../../libs/utils.ts";
 import { RulesTab } from "./RulesTab.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { SettingsFooter } from "./SettingsFooter.tsx";
 
 export function SettingsSheet(props: {
   children?: React.ReactNode;
@@ -53,7 +53,7 @@ export function SettingsSheet(props: {
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="px-0 text-white h-full pb-10">
+        <div className="px-0 text-white h-full">
           <Tabs
             defaultValue={currentTab || "balances"}
             className="w-full h-full transition-all duration-500"

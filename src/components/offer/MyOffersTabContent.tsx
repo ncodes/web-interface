@@ -1,14 +1,14 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import { Paginator } from "../Paginator.tsx";
-import useStore from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
-import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { PlugZapIcon } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { RequestError } from "../../libs/RequestError.ts";
-import { OfferRow } from "../liquidity/OfferRow.tsx";
+import { PlugZapIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { RequestError } from "../../libs/RequestError.ts";
+import { Paginator } from "../Paginator.tsx";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { OfferRow } from "../liquidity/OfferRow.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
@@ -17,6 +17,7 @@ export function MyOffersTabContent() {
   const { listOffers } = useOfferService();
   const offerFilter = useStore((state) => state.offerFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
+  const loaderProgress = useStore((state) => state.loaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
   const { markAsRead } = useOfferService();
@@ -47,12 +48,10 @@ export function MyOffersTabContent() {
   });
 
   useEffect(() => {
-    if (
-      (offers.fetchStatus != "idle" && offers.isLoading) ||
-      offers.isRefetching
-    )
-      setLoaderProgress && setLoaderProgress(50);
-    else setLoaderProgress && setLoaderProgress(100);
+    const { isLoading, isRefetching } = offers;
+    if (isLoading) setLoaderProgress && setLoaderProgress(50);
+    if (!(isRefetching || isLoading) && loaderProgress == 50)
+      setLoaderProgress?.(100);
   }, [
     offers.isError,
     offers.isLoading,
@@ -79,28 +78,32 @@ export function MyOffersTabContent() {
       )}
 
       {!offers.isLoading && offers.isSuccess && (
-        <>
-          <Paginator
-            curPage={offset}
-            total={offers.data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + limit)}
-            onPrev={() => setOffset(offset - limit)}
-          />
-          <div className="flex flex-col gap-3 p-3 pt-0">
-            {offers.data?.offers.map((offer: Offer) => (
-              <OfferRow offer={offer} />
-            ))}
+        <div className="flex flex-col gap-3 min-h-[500px]">
+          <div className="flex flex-col gap-3">
+            <Paginator
+              curPage={offset}
+              total={offers.data?.meta?.queryCount}
+              limit={limit}
+              onNext={() => setOffset(offset + limit)}
+              onPrev={() => setOffset(offset - limit)}
+            />
+            <div className="flex flex-col gap-3 p-3 pt-0">
+              {offers.data?.offers.map((offer: Offer) => (
+                <OfferRow offer={offer} />
+              ))}
+            </div>
           </div>
-          <Paginator
-            className="border-t"
-            curPage={offset}
-            total={offers.data?.meta?.queryCount}
-            limit={limit}
-            onNext={() => setOffset(offset + limit)}
-            onPrev={() => setOffset(offset - limit)}
-          />
-        </>
+          <div className="flex-1 flex flex-col justify-end">
+            <Paginator
+              className="border-t rounded-b-3xl"
+              curPage={offset}
+              total={offers.data?.meta?.queryCount}
+              limit={limit}
+              onNext={() => setOffset(offset + limit)}
+              onPrev={() => setOffset(offset - limit)}
+            />
+          </div>
+        </div>
       )}
 
       {!offers.isLoading && offers.data?.offers?.length == 0 && (

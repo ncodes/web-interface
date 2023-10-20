@@ -1,28 +1,50 @@
-import { TabsContent } from "../ui/Tabs.tsx";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
+import { useParams } from "react-router-dom";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
 import { RequestError } from "../../libs/RequestError.ts";
 import { Paginator } from "../Paginator.tsx";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
 import { OfferRow } from "./OfferRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 
-export function OffersTabContent() {
+export function OffersTabContent({
+  setLiquidity,
+}: {
+  setLiquidity?: Dispatch<SetStateAction<Liquidity | undefined>>;
+}) {
   const { getChainInfo, address } = useConnectorContext();
   const { market, provider, lid } = useParams();
   const { listOffers } = useOfferService();
+  const { getLiquidity } = useLiquidityService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
   const queryClient = useQueryClient();
+  const { markAsRead } = useOfferService();
+
+  const liquidity = useQuery({
+    queryKey: [
+      "getLiquidity",
+      {
+        network: getChainInfo().queryName,
+        market: market as string,
+        provider: provider as string,
+        lid: parseInt(lid as string),
+      },
+    ],
+    queryFn: getLiquidity,
+    enabled: !!market && !!provider && !!lid,
+  });
+
   const offers = useQuery({
     queryKey: [
-      "getOffers",
+      "getLiquidityOffers",
       {
         network: getChainInfo().queryName,
         limit,
@@ -39,7 +61,6 @@ export function OffersTabContent() {
     enabled: !!market && !!provider && !!lid,
   });
 
-  const { markAsRead } = useOfferService();
   useQuery({
     queryKey: [
       "markAsRead",
@@ -56,6 +77,10 @@ export function OffersTabContent() {
       await queryClient.refetchQueries(["countUnreadOffer"]);
     },
   });
+
+  useEffect(() => {
+    if (liquidity.isSuccess && setLiquidity) setLiquidity(liquidity.data);
+  }, [liquidity.isSuccess]);
 
   useEffect(() => {
     if (

@@ -33,6 +33,7 @@ import { IconStarSmile } from "../icons/IconStarSmile.tsx";
 import { BadgePill } from "../market/BadgePill.tsx";
 import { FollowLiquidity } from "../market/FollowLiquidity.tsx";
 import { StatCard } from "../market/StatCard.tsx";
+import { SwapOfferCreatorSheet } from "../swap/SwapOfferCreatorSheet.tsx";
 import { SwapSheet } from "../swap/SwapSheet.tsx";
 import { Button } from "../ui/Button.tsx";
 import {
@@ -43,7 +44,6 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Skeleton } from "../ui/skeleton.tsx";
-import { CreateOfferSheet } from "./CreateOfferSheet.tsx";
 import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
 import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
 import { VerifiedBadge } from "./VerifiedBadge.tsx";
@@ -429,7 +429,7 @@ export function LiquidityRow({
             </span>
           </span>
           <span>
-            <IDBadge id={liquidity.lid} tip="Dispute ID" />
+            <IDBadge id={liquidity.lid} tip="Liquidity ID" />
           </span>
         </div>
         <div
@@ -549,6 +549,19 @@ export function LiquidityRow({
                 </NavLink>
               </span>
             )}
+
+            <span className="hidden lg:inline border-l border-gray-800 shrink-0">
+              <Button
+                variant="link"
+                rounded="none"
+                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                onClick={() => {
+                  toggleOpenState("createOfferSheet");
+                }}
+              >
+                Create Offer
+              </Button>
+            </span>
 
             {ownerMode && (
               <span className="hidden lg:inline border-gray-800 border-l shrink-0">
@@ -673,7 +686,7 @@ export function LiquidityRow({
           toggleOpenState && toggleOpenState("reviewSheet");
         }}
       />
-      <CreateOfferSheet />
+      <SwapOfferCreatorSheet liquidity={liquidity} />
     </div>
   );
 }

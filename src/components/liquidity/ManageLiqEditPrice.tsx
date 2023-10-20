@@ -1,12 +1,12 @@
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { formatToMoney, toDec, toHD } from "../../libs/helpers.ts";
-import { FilterItem } from "../FilterItem.tsx";
 import { cn } from "../../libs/utils.ts";
-import { Input } from "../ui/Input.tsx";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { FilterItem } from "../FilterItem.tsx";
 import { ToolTip } from "../ToolTip.tsx";
-import { Button } from "../ui/Button.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Input } from "../ui/Input.tsx";
 
 export function ManageLiqEditPrice({
   liquidity,

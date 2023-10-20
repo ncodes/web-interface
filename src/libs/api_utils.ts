@@ -354,6 +354,30 @@ export function isSwapCounterparty(swap: Swap, address: string) {
 }
 
 /**
+ * Checks if the address is either the offer creator or liquidity provider.
+ * @param offer The offer object
+ * @param address The address to check
+ */
+export function isOfferCounterparty(offer: Offer, address: string) {
+  return isEqlStr(offer.provider, address) || isEqlStr(offer.creator, address);
+}
+
+/**
+ * Checks if an offer is executable.
+ * @param offer The offer object
+ * @returns True if the offer is executable, false otherwise
+ */
+export function canExecuteOffer(offer: Offer | undefined) {
+  if (!offer) return false;
+  return (
+    offer.accepted &&
+    !offer.executed &&
+    !offer.cancelled &&
+    !isOfferExpired(offer)
+  );
+}
+
+/**
  * Checks if the address is one of the swap's dispute draftees.
  * @param swap The swap object
  * @param address The address to check
@@ -434,6 +458,11 @@ export function isRevealer(dispute: Dispute, address: string) {
 export function getSwapCounterpart(swap: Swap, address: string) {
   if (isEqlStr(swap.provider, address)) return swap.taker;
   return swap.provider;
+}
+
+export function getOfferCounterpart(offer: Offer, address: string) {
+  if (isEqlStr(offer.creator, address)) return offer.provider;
+  return offer.creator;
 }
 
 export function isProvider(swap: Swap, address: string) {

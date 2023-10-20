@@ -1,34 +1,34 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import { Paginator } from "../components/Paginator.tsx";
+import { RowSkeleton } from "../components/RowSkeleton.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
+import { IconPlus } from "../components/icons/IconPlus.tsx";
+import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
+import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
+import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
+import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
+import { MarketRow } from "../components/market/MarketRow.tsx";
+import { Button } from "../components/ui/Button.tsx";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
-import { useEffect, useState } from "react";
-import { Footer } from "../components/Footer.tsx";
-import { Button } from "../components/ui/Button.tsx";
-import { IconPlus } from "../components/icons/IconPlus.tsx";
-import IconFilterOutline from "../components/icons/IconFilterOutline.tsx";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { ManageLiquiditySheet } from "../components/liquidity/ManageLiquiditySheet.tsx";
-import { LiquidityFilter } from "../components/liquidity/LiquidityFilter.tsx";
-import { LiquidityFilterSheet } from "../components/liquidity/LiquidityFilterSheet.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
-import { useParams } from "react-router-dom";
-import { MarketRow } from "../components/market/MarketRow.tsx";
-import useStore from "../hooks/store/useStore.ts";
-import { RowSkeleton } from "../components/RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../libs/RequestError.ts";
-import { cn } from "../libs/utils.ts";
-import { useLiquidityService } from "../hooks/services/backend/useLiquidityService.ts";
-import { Paginator } from "../components/Paginator.tsx";
-import { LiquidityRow } from "../components/liquidity/LiquidityRow.tsx";
-import { isEqlStr } from "../libs/helpers.ts";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useLiquidityService } from "../hooks/services/backend/useLiquidityService.ts";
+import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
+import useStore from "../hooks/store/useStore.ts";
+import { RequestError } from "../libs/RequestError.ts";
+import { isEqlStr } from "../libs/helpers.ts";
+import { cn } from "../libs/utils.ts";
+import Layout from "./Layout.tsx";
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);

@@ -4,13 +4,17 @@ import { defaultRegion } from "../../components/region/constants.ts";
 type OpenStateKey =
   | "createOfferSheet"
   | "searchSheet"
-  | "notifSheet"
+  | "notificationSheet"
   | "reviewSheet"
   | "settingsSheet"
   | "buyTicketSheet";
 
 type OpenState = {
   [key in OpenStateKey]: boolean;
+};
+
+type OpenStateContext = {
+  [key in OpenStateKey]: unknown;
 };
 
 export interface MarketFilter {
@@ -116,8 +120,14 @@ export interface IStore {
   setCurrentTab?: (tab: string) => void;
 
   // Open state toggling for sheets and modals
+  openStateContext: OpenStateContext;
   openState: OpenState;
-  toggleOpenState: (key: OpenStateKey, activeTab?: string) => void;
+  toggleOpenState: (
+    key: OpenStateKey,
+    activeTab?: string,
+    ctx?: unknown
+  ) => void;
+  resetOpenState: () => void;
 
   // Swap page state
   swapPageState: SwapPageState;
@@ -178,22 +188,41 @@ const useStore = create<IStore>((set, get) => ({
   currentTab: "",
   setCurrentTab: (tab: string) => set({ currentTab: tab }),
 
+  openStateContext: {},
   openState: {
     createOfferSheet: false,
     searchSheet: false,
-    notifSheet: false,
+    notificationSheet: false,
     reviewSheet: false,
     settingsSheet: false,
     buyTicketSheet: false,
   },
-  toggleOpenState: (key: OpenStateKey, activeTab?: string) => {
+  toggleOpenState: (key: OpenStateKey, activeTab?: string, ctx?: unknown) => {
     set((state) => ({
       currentTab: activeTab || "",
+      openStateContext: {
+        ...state.openStateContext,
+        [key]: ctx,
+      },
       openState: {
         ...state.openState,
         [key]: !state.openState[key],
       },
     }));
+  },
+  resetOpenState: () => {
+    set({
+      currentTab: "",
+      openStateContext: {},
+      openState: {
+        createOfferSheet: false,
+        searchSheet: false,
+        notificationSheet: false,
+        reviewSheet: false,
+        settingsSheet: false,
+        buyTicketSheet: false,
+      },
+    });
   },
 
   marketFilter: {},

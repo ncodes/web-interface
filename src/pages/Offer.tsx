@@ -1,18 +1,24 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import { Messenger } from "../components/messenger/Messenger.tsx";
+import { OfferTabContent } from "../components/offer/OfferTabContent.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { Messenger } from "../components/messenger/Messenger.tsx";
-import { OfferTabContent } from "../components/offer/OfferTabContent.tsx";
-import { Footer } from "../components/Footer.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import Layout from "./Layout.tsx";
 
-function Page() {
+function Page({
+  setOffer,
+}: {
+  setOffer: Dispatch<SetStateAction<Offer | undefined>>;
+}) {
   return (
     <Tabs
       defaultValue="offers"
@@ -42,25 +48,25 @@ function Page() {
           </DropdownMenu>
         </div>
       </TabsList>
-      <OfferTabContent />
+      <OfferTabContent setOffer={setOffer} />
     </Tabs>
   );
 }
 
 export default function Offer() {
-  return (
-    <Layout
-      body={<Page />}
-      rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
-          <Messenger sheetMode={false} />
-          <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
-              <Footer />
-            </div>
-          </div>
+  const { connected } = useConnectorContext();
+  const [offer, setOffer] = useState<Offer | undefined>();
+
+  const rightSide = connected ? (
+    <div className="flex w-full h-full justify-between flex-col pt-2">
+      <Messenger sheetMode={false} offer={offer} />
+      <div className="relative">
+        <div className="text-gray-200 bottom-0 w-full">
+          <Footer />
         </div>
-      }
-    />
-  );
+      </div>
+    </div>
+  ) : null;
+
+  return <Layout body={<Page setOffer={setOffer} />} rightSide={rightSide} />;
 }

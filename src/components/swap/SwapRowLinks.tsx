@@ -17,6 +17,20 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
 
   return (
     <>
+      {swap.offerId != undefined && (
+        <span className="hidden lg:inline border-r border-gray-800 shrink-0">
+          <NavLink to={`/offer/${swap.offerId}`}>
+            <Button
+              variant="link"
+              rounded="none"
+              className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+            >
+              View Offer
+            </Button>
+          </NavLink>
+        </span>
+      )}
+
       <span className="hidden lg:inline border-r border-gray-800 shrink-0">
         <NavLink
           to={`/liquidity/${swap.marketAddress}/${swap.provider}/${swap.lid}`}
@@ -30,6 +44,7 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
           </Button>
         </NavLink>
       </span>
+
       <span className="hidden lg:inline border-gray-800 shrink-0">
         <NavLink to={`/market/${swap.marketAddress}`}>
           <Button
@@ -41,6 +56,7 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
           </Button>
         </NavLink>
       </span>
+
       <span className=" lg:hidden border-l border-gray-800">
         <DropdownMenu
           onOpenChange={(open) => {
@@ -58,6 +74,13 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
+            {swap.offerId != undefined && (
+              <NavLink to={`/offer/${swap.offerId}`}>
+                <DropdownMenuItem className="flex gap-2">
+                  View Offer
+                </DropdownMenuItem>
+              </NavLink>
+            )}
             <NavLink
               to={`/liquidity/${swap.marketAddress}/${swap.provider}/${swap.lid}`}
             >
@@ -73,6 +96,7 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
           </DropdownMenuContent>
         </DropdownMenu>
       </span>
+
       {location.pathname.includes("/swaps") && (
         <span className="flex border-l border-gray-800 pl-1">
           <NavLink to={`/swap/${swap.orderId}`}>

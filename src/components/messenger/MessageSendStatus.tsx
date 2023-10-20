@@ -17,7 +17,8 @@ export function MessageSendStatus({
 }: {
   status: Message["status"];
   readers: string[];
-  swap: Swap;
+  swap?: Swap;
+  offer?: Offer;
   onResend?: () => void;
 }) {
   const { address } = useConnectorContext();
@@ -61,7 +62,7 @@ export function MessageSendStatus({
             <ToolTip
               tip={
                 <>
-                  {isSwapDraftee(swap, address) ? (
+                  {swap && isSwapDraftee(swap, address) ? (
                     <>
                       <b className="text-gray-500 mb-1 inline-block animate-in fade-in fade-out">
                         Seen By:

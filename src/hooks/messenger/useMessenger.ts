@@ -21,7 +21,6 @@ import { Chain, WalletClient, createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { hardhat } from "wagmi/chains";
 import db, { ContentType, Message } from "../../components/messenger/db.ts";
-import { getSwapCounterpart } from "../../libs/api_utils.ts";
 import { isDev, isEqlStr, sha1, uint8ArrayToB64 } from "../../libs/helpers.ts";
 import DeliveryReceiptCodec, {
   ContentTypeDeliveryReceipt,
@@ -55,7 +54,7 @@ import {
  * @returns
  */
 export default function useMessenger() {
-  const version = "171"; // TODO: use 1 in production
+  const version = "172"; // TODO: use 1 in production
 
   /**
    * Make a key for storing the keys
@@ -132,8 +131,17 @@ export default function useMessenger() {
    * @param network The network where the swap order was created
    * @param orderId The id of the swap order
    */
-  function makeSwapConversationKey(network: string, orderId: number) {
+  function makeSwapConvoKey(network: string, orderId: number) {
     return `swap_conversation_${version}:${network}:${orderId}`;
+  }
+
+  /**
+   * Make a key for referencing an offer conversation
+   * @param network The network where the swap order was created
+   * @param offerId The id of the offer
+   */
+  function makeOfferConvoKey(network: string, offerId: number) {
+    return `offer_conversation_${version}:${network}:${offerId}`;
   }
 
   /**
@@ -169,26 +177,26 @@ export default function useMessenger() {
   }
 
   /**
-   * Create a conversation for a swap
+   * Create a conversation
    * @param client The XMTP client
-   * @param swap The swap order
+   * @param peerAddress The peer address
+   * @param convoId The conversation id
+   * @returns The conversation
    */
   function createConversation(
     client: Client,
-    swap: Swap
+    peerAddress: string,
+    convoId: string
   ): Promise<Conversation> {
-    return client.conversations.newConversation(
-      getSwapCounterpart(swap, client.address),
-      {
-        conversationId: makeSwapConversationKey(swap.network, swap.orderId),
-        metadata: {},
-      }
-    );
+    return client.conversations.newConversation(peerAddress, {
+      conversationId: convoId,
+      metadata: {},
+    });
   }
 
   /**
    * Create conversations for each dispute draftees.
-   * If a draftee is not on XMPT, it will not create a conversation.
+   * If a draftee is not on XMTP, it will not create a conversation.
    * If client address is a counterparty, it will not create a conversation.
    * @param client The XMTP client
    * @param dispute The dispute object
@@ -883,7 +891,8 @@ export default function useMessenger() {
     initClient,
     saveKeys,
     loadKeys,
-    makeSwapConversationKey,
+    makeSwapConvoKey,
+    makeOfferConvoKey,
     createOrGetConvoWithMediator,
     createConversationsWithCounterparts,
     createConversation,

@@ -1,10 +1,10 @@
-import axios from "axios";
-import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
 import { QueryFunctionContext } from "@tanstack/react-query";
-import { OfferFilter } from "../../store/useStore.ts";
-import { StoreAccessTokenKey } from "../../../constants.ts";
+import axios from "axios";
 import moment from "moment";
+import { StoreAccessTokenKey } from "../../../constants.ts";
+import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
 import { Events } from "../../../types/enums.ts";
+import { OfferFilter } from "../../store/useStore.ts";
 
 export interface ListOfferParams {
   network: string;
@@ -31,9 +31,13 @@ interface OfferReadStatusParams {
   marketAddress?: string;
   provider?: string;
   lid?: number;
+  offerId?: number;
 }
 
-export type ListOfferIDs = "getOffersAsParticipant" | "getOffers";
+export type ListOfferIDs =
+  | "getOffersAsParticipant"
+  | "getOffers"
+  | "getLiquidityOffers";
 
 /**
  * useOfferService provides access to v1/offers endpoints
@@ -65,11 +69,6 @@ export function useOfferService() {
         },
         headers,
       });
-
-      // TODO: remove mock
-      // resp.data.data[0].creator = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-      // resp.data.data[0].accepted = true;
-      // resp.data.data[0].deadline = moment().add(20, "s").toISOString();
 
       return Promise.resolve({
         offers: resp.data.data,

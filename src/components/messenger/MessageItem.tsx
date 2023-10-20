@@ -30,6 +30,7 @@ import { ContentType, Message } from "./db.ts";
 
 export function MessageItem({
   swap,
+  offer,
   onResend,
   id,
   from,
@@ -42,7 +43,8 @@ export function MessageItem({
 }: {
   id: number;
   from: string;
-  swap: Swap;
+  swap?: Swap;
+  offer?: Offer;
   sentAt: number;
   content: unknown;
   contentType: ContentType;
@@ -55,21 +57,25 @@ export function MessageItem({
   const { getBgColor } = useRandomColor();
   const { address } = useConnectorContext();
   const mine = isEqlStr(from, address);
-  const title = getTitle(swap, from);
+  const title = getTitle(from);
   const user = useQuery({
     queryKey: ["getUser", { address: from, noAuth: true }],
     queryFn: getUser,
     enabled: !!from,
   });
 
-  function getTitle(swap: Swap, sender: string) {
+  function getTitle(sender: string) {
     if (isEqlStr(sender, address)) return "You";
-    if (isSwapCounterparty(swap, sender)) {
+    
+    if (swap && isSwapCounterparty(swap, sender)) {
       if (isProvider(swap, sender)) return "Liquidity Provider";
       return "Taker";
     }
-    if (isSwapDraftee(swap, sender))
+    if (swap && isSwapDraftee(swap, sender))
       return `Mediator#${getDrafteeIndex(swap, sender)}`;
+    
+    if (offer && isEqlStr(offer.provider, sender)) return "Liquidity Provider";
+    if (offer && isEqlStr(offer.creator, sender)) return "Offerer";
     return "";
   }
 

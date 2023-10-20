@@ -1,12 +1,5 @@
-import { BaseSyntheticEvent, useState } from "react";
-import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
-import { AvatarSize } from "../avatar/useAvatar.tsx";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { StatCard } from "../market/StatCard.tsx";
-import { cn } from "../../libs/utils.ts";
-import { Button } from "../ui/Button.tsx";
 import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CheckCircle,
   Clock2Icon,
@@ -14,36 +7,52 @@ import {
   MessageCircle,
   XCircle,
 } from "lucide-react";
+import moment from "moment/moment";
+import { BaseSyntheticEvent, useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import {
+  canExecuteOffer,
+  isOfferExpired,
+  isOfferPending,
+  isOfferer,
+} from "../../libs/api_utils.ts";
+import {
+  delay,
+  formatToHighDenom,
+  isDev,
+  isMerchant,
+  shortenAddress,
+} from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import { CountDown } from "../Countdown.tsx";
+import { IDBadge } from "../IDBadge.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
+import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
+import { AvatarSize } from "../avatar/useAvatar.tsx";
+import IconCopyFilled from "../icons/IconCopyFilled.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { StatCard } from "../market/StatCard.tsx";
+import { MessengerSheet } from "../messenger/MessengerSheet.tsx";
+import { SwapOfferCreatorSheet } from "../swap/SwapOfferCreatorSheet.tsx";
+import { Button } from "../ui/Button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { useQuery } from "@tanstack/react-query";
-import { ToolTip } from "../ToolTip.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import {
-  formatToHighDenom,
-  isMerchant,
-  shortenAddress,
-} from "../../libs/helpers.ts";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { VerifiedBadge } from "./VerifiedBadge.tsx";
-import IconCopyFilled from "../icons/IconCopyFilled.tsx";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import {
-  isOfferer,
-  isOfferExpired,
-  isOfferPending,
-} from "../../libs/api_utils.ts";
-import moment from "moment/moment";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { CountDown } from "../Countdown.tsx";
-import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
-import { useLocation, useNavigate } from "react-router-dom";
-import { UserHoverCard } from "../UserHoverCard.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 interface ButtonEnableState {
   accept: boolean;
@@ -61,17 +70,119 @@ export function OfferRow({
   const navigate = useNavigate();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { getUser } = useUserService();
-  const { address } = useConnectorContext();
+  const { address, getChainInfo } = useConnectorContext();
+  const { notifySuccess, notifyError } = useToast();
+  const [renderOfferCreatorSheet, setRenderOfferCreatorSheet] = useState(false);
+  const { cancelOffer, acceptOffer, unacceptOffer, humanizeErrors } =
+    useCoreContract();
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const [openChat, setOpenChat] = useState(false);
+  const toggleOpenState = useStore((s) => s.toggleOpenState);
   const [disableButtons, setDisableButtons] = useState<ButtonEnableState>({
     accept: false,
     execute: false,
   });
+
   const getProvider = useQuery({
     queryKey: ["getUser", { address: offer.creator, noAuth: true }],
     queryFn: getUser,
     enabled: !!offer.creator,
   });
+
+  async function doCancel() {
+    try {
+      setLoading(true);
+      const [txHash] = await cancelOffer(BigInt(offer.offerId));
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Offer was successfully cancelled`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      if (location.pathname.includes("my/offers")) {
+        await queryClient.refetchQueries(["getOffersAsParticipant"]);
+      } else if (location.pathname.includes("/offer/")) {
+        await queryClient.refetchQueries(["getOffer"]);
+        await queryClient.refetchQueries(["getOfferEvents"]);
+      } else if (location.pathname.match("/liquidity/.*/offers")) {
+        await queryClient.refetchQueries(["getLiquidityOffers"]);
+      }
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function doAccept() {
+    try {
+      setLoading(true);
+      const [txHash] = await acceptOffer(BigInt(offer.offerId), BigInt(0));
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Offer was successfully accepted`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      if (location.pathname.includes("my/offers")) {
+        await queryClient.refetchQueries(["getOffersAsParticipant"]);
+      } else if (location.pathname.includes("/offer/")) {
+        await queryClient.refetchQueries(["getOffer"]);
+        await queryClient.refetchQueries(["getOfferEvents"]);
+      } else if (location.pathname.match("/liquidity/.*/offers")) {
+        await queryClient.refetchQueries(["getLiquidityOffers"]);
+      }
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function doUnaccept() {
+    try {
+      setLoading(true);
+      const [txHash] = await unacceptOffer(BigInt(offer.offerId));
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Offer was successfully unaccepted`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      if (location.pathname.includes("my/offers")) {
+        await queryClient.refetchQueries(["getOffersAsParticipant"]);
+      } else if (location.pathname.includes("/offer/")) {
+        await queryClient.refetchQueries(["getOffer"]);
+        await queryClient.refetchQueries(["getOfferEvents"]);
+      } else if (location.pathname.match("/liquidity/.*/offers")) {
+        await queryClient.refetchQueries(["getLiquidityOffers"]);
+      }
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div
@@ -97,7 +208,10 @@ export function OfferRow({
           >
             <div data-click-trigger="1">
               <UserHoverCard user={getProvider.data as User}>
-                <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
+                <EmojiAvatar
+                  size={AvatarSize.Small}
+                  randomStr={offer.creator}
+                />
               </UserHoverCard>
             </div>
             <div
@@ -137,6 +251,7 @@ export function OfferRow({
                 )}
 
                 {offer.accepted &&
+                  !offer.executed &&
                   !offer.cancelled &&
                   !isOfferExpired(offer) && (
                     <span className="flex bg-yellow-300/30 rounded-full px-[4px] text-xs items-center gap-1 font-medium tracking-wider text-yellow-300">
@@ -224,7 +339,7 @@ export function OfferRow({
                     </span>
                   </StatCard>
                   <StatCard
-                    title={`Amount`}
+                    title={`Amount (${offer.market.base})`}
                     tip={`The amount of ${offer.market.base} being requested`}
                   >
                     <span
@@ -238,26 +353,46 @@ export function OfferRow({
                       <USDAmountToolTip v={offer.amountUsd} />
                     </span>
                   </StatCard>
-                  <StatCard
-                    title={`Expires In`}
-                    tip={`When the offer will expire`}
-                  >
-                    <ToolTip
-                      tip={moment(offer.deadline).format(
-                        "DD MMM YYYY, h:mm:ss a"
-                      )}
+                  {!offer.executed && !offer.cancelled && (
+                    <StatCard
+                      title={isOfferExpired(offer) ? "Expired" : `Expires In`}
+                      tip={`When the offer will expire`}
+                    >
+                      <ToolTip
+                        tip={moment(offer.deadline).format(
+                          "DD MMM YYYY, h:mm:ss a"
+                        )}
+                      >
+                        <span
+                          className="text-gray-200 text-sm flex gap-1 items-center"
+                          data-click-trigger="1"
+                        >
+                          {!offer.cancelled && (
+                            <>
+                              <span>{moment(offer.deadline).fromNow()}</span>
+                              <span>
+                                <IconInfoCircle width="15" />
+                              </span>
+                            </>
+                          )}
+                        </span>
+                      </ToolTip>
+                    </StatCard>
+                  )}
+                  {(offer.executed || offer.cancelled) && (
+                    <StatCard
+                      title={`Status`}
+                      tip={`The current status of the offer`}
                     >
                       <span
-                        className="text-gray-200 flex gap-1 items-center"
+                        className="text-gray-200 text-sm flex gap-1 items-center"
                         data-click-trigger="1"
                       >
-                        <span>{moment(offer.deadline).fromNow()}</span>
-                        <span>
-                          <IconInfoCircle width="15" />
-                        </span>
+                        {offer.executed && "Executed"}
+                        {offer.cancelled && "Cancelled"}
                       </span>
-                    </ToolTip>
-                  </StatCard>
+                    </StatCard>
+                  )}
                 </div>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>
@@ -267,7 +402,7 @@ export function OfferRow({
         {/* Level 2 */}
         <div
           data-click-trigger="1"
-          className="border-t border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between"
+          className="border-t text-gray-400 border-gray-800 px-3 py-1 flex flex-col md:flex-row md:justify-between"
         >
           {address && isOfferPending(offer) && (
             <span
@@ -283,7 +418,7 @@ export function OfferRow({
                     : "Waiting for the liquidity provider to accept your offer."
                 }
               >
-                <span className="animate-pulse duration-1000">
+                <span className="duration-1000">
                   {!isOfferer(offer, address)
                     ? "Waiting for your acceptance"
                     : "Waiting for acceptance"}
@@ -294,27 +429,30 @@ export function OfferRow({
             </span>
           )}
 
-          {offer.accepted && !offer.cancelled && !isOfferExpired(offer) && (
-            <span className="flex gap-1 text-xs items-center font-light tracking-wide">
-              <IconSpinner width="15" className="animate-spin" />{" "}
-              <ToolTip
-                className="flex gap-1 w-full justify-between md:justify-start"
-                tip={
-                  !isOfferer(offer, address)
-                    ? "You accepted the offer. Now waiting for the offer creator to execute the offer which will start a new swap."
-                    : "The liquidity provider accepted the offer. You can now execute the offer to start a swap."
-                }
-              >
-                <span className="animate-pulse duration-1000">
-                  {!isOfferer(offer, address)
-                    ? "Waiting for offer execution"
-                    : "Waiting for you to execute the offer"}
-                  .
-                </span>
-                <IconInfoCircle width="15" />
-              </ToolTip>
-            </span>
-          )}
+          {offer.accepted &&
+            !offer.executed &&
+            !offer.cancelled &&
+            !isOfferExpired(offer) && (
+              <span className="flex gap-1 text-xs items-center font-light tracking-wide">
+                <IconSpinner width="15" className="animate-spin" />{" "}
+                <ToolTip
+                  className="flex gap-1 w-full justify-between md:justify-start"
+                  tip={
+                    !isOfferer(offer, address)
+                      ? "You accepted the offer. Now waiting for the offer creator to execute the offer which will start a new swap."
+                      : "The liquidity provider accepted the offer. You can now execute the offer to start a swap."
+                  }
+                >
+                  <span className="duration-1000">
+                    {!isOfferer(offer, address)
+                      ? "Waiting for offer execution"
+                      : "Waiting for you to execute the offer"}
+                    .
+                  </span>
+                  <IconInfoCircle width="15" />
+                </ToolTip>
+              </span>
+            )}
 
           {offer.cancelled && (
             <span className="flex gap-1 text-xs items-center font-light tracking-wide">
@@ -377,7 +515,7 @@ export function OfferRow({
 
           <span
             data-click-trigger="1"
-            className="flex py-1 text-[12px] text-gray-400 gap-1 items-center tracking-wide font-light"
+            className="flex justify-between py-1 text-[12px] text-gray-400 gap-1 items-center tracking-wide font-light"
           >
             <span className="text-gray-500">
               <ToolTip
@@ -393,6 +531,9 @@ export function OfferRow({
                     .toUpperCase()}
                 </span>
               </ToolTip>
+            </span>
+            <span>
+              <IDBadge id={offer.offerId} tip="Offer ID" />
             </span>
           </span>
         </div>
@@ -413,17 +554,34 @@ export function OfferRow({
                   <Button
                     size="sm"
                     rounded="lg"
-                    className="rounded-tl-none text-xs md:text-sm"
+                    className="min-w-[100px]  text-xs md:text-sm"
                     scale="sm"
-                    disabled={disableButtons.accept}
+                    disabled={disableButtons.accept || loading}
+                    onClick={doAccept}
                   >
-                    Accept{" "}
-                    <CountDown
-                      isoDate={offer.deadline}
-                      onDone={() => {
-                        setDisableButtons({ ...disableButtons, accept: true });
-                      }}
-                    />
+                    <span>
+                      {!loading && (
+                        <>
+                          <span className="mr-1">Accept</span>
+                          <CountDown
+                            isoDate={offer.deadline}
+                            onDone={() => {
+                              setDisableButtons({
+                                ...disableButtons,
+                                accept: true,
+                              });
+                            }}
+                          />
+                        </>
+                      )}
+                      {loading && (
+                        <IconSpinner
+                          width="15"
+                          className="animate-spin"
+                          fill="fill-gray-800"
+                        />
+                      )}
+                    </span>
                   </Button>
                 )}
                 {isOfferer(offer, address) && (
@@ -431,27 +589,45 @@ export function OfferRow({
                     size="sm"
                     variant="outline"
                     rounded="lg"
-                    className="text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
+                    className="min-w-[100px] text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
                     scale="sm"
+                    disabled={loading}
+                    onClick={doCancel}
                   >
-                    Cancel
+                    {!loading && "Cancel"}
+                    {loading && (
+                      <IconSpinner
+                        width="15"
+                        className="animate-spin"
+                        fill="fill-gray-300"
+                      />
+                    )}
                   </Button>
                 )}
               </>
             )}
 
             {/* offer is accepted */}
-            {offer.accepted && !offer.cancelled && !isOfferExpired(offer) && (
+            {canExecuteOffer(offer) && (
               <>
                 {!isOfferer(offer, address) && (
                   <Button
                     size="sm"
                     variant="outline"
                     rounded="lg"
-                    className="text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
+                    className="min-w-[100px] text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
                     scale="sm"
+                    disabled={loading}
+                    onClick={doUnaccept}
                   >
-                    Unaccept
+                    {!loading && "Unaccept"}
+                    {loading && (
+                      <IconSpinner
+                        width="15"
+                        className="animate-spin"
+                        fill="fill-gray-300"
+                      />
+                    )}
                   </Button>
                 )}
                 {isOfferer(offer, address) && (
@@ -459,11 +635,15 @@ export function OfferRow({
                     <Button
                       size="sm"
                       rounded="lg"
-                      className="rounded-tl-none text-xs md:text-sm"
+                      className="min-w-[100px]  text-xs md:text-sm"
                       scale="sm"
                       disabled={disableButtons.execute}
+                      onClick={() => {
+                        toggleOpenState?.("createOfferSheet");
+                        setRenderOfferCreatorSheet(true);
+                      }}
                     >
-                      Execute{" "}
+                      <span className="mr-1">Execute</span>
                       <CountDown
                         isoDate={offer.deadline}
                         onDone={() => {
@@ -478,12 +658,42 @@ export function OfferRow({
                       size="sm"
                       variant="outline"
                       rounded="lg"
-                      className="text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
+                      className="min-w-[100px] text-xs md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
                       scale="sm"
+                      disabled={loading}
+                      onClick={doCancel}
                     >
-                      Cancel
+                      {!loading && "Cancel"}
+                      {loading && (
+                        <IconSpinner
+                          width="15"
+                          className="animate-spin"
+                          fill="fill-gray-300"
+                        />
+                      )}
                     </Button>
                   </div>
+                )}
+              </>
+            )}
+
+            {/* If offer is not executed and user is offerer, show edit button*/}
+            {!offer.executed && !isOfferExpired(offer) && (
+              <>
+                {isOfferer(offer, address) && (
+                  <Button
+                    size="sm"
+                    variant="link"
+                    rounded="lg"
+                    className="text-xs text-gray-400 md:text-sm hover:bg-background hover:text-white hover:border-gray-600"
+                    scale="sm"
+                    onClick={() => {
+                      toggleOpenState?.("createOfferSheet", undefined, "edit");
+                      setRenderOfferCreatorSheet(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
                 )}
               </>
             )}
@@ -491,41 +701,58 @@ export function OfferRow({
 
           <div
             data-click-trigger="1"
-            className="flex items-center border-l border-gray-800 shrink-0 px-2"
+            className="flex items-center border-gray-800 shrink-0"
           >
             <span
               className={cn(
-                "hidden md:inline border-r border-gray-800 shrink-0",
-                { "!hidden": !offer.swap }
+                "hidden md:inline border-gray-800 border-l shrink-0",
+                {
+                  "!hidden": !offer.swap || offer.swap.orderId == undefined,
+                }
               )}
             >
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                View Swap
-              </Button>
+              <NavLink to={`/swap/${offer.swap?.orderId}`}>
+                <Button
+                  variant="link"
+                  rounded="none"
+                  className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                >
+                  View Swap
+                </Button>
+              </NavLink>
             </span>
             <span
               className={cn(
-                "hidden md:inline border-r border-gray-800 shrink-0",
-                { "!hidden": location.pathname.match("^/liquidity") }
+                "hidden md:inline border-gray-800 border-l shrink-0",
+                {
+                  "!hidden": location.pathname.match("^/liquidity"),
+                }
               )}
+            >
+              <NavLink
+                to={`/liquidity/${offer.marketAddress}/${offer.provider}/${offer.lid}`}
+              >
+                <Button
+                  variant="link"
+                  rounded="none"
+                  className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                >
+                  View Liquidity
+                </Button>
+              </NavLink>
+            </span>
+            <span
+              className={cn("border-gray-800 shrink-0 border-l", {
+                "xl:hidden": location.pathname.match("^/offer/"),
+              })}
             >
               <Button
                 variant="link"
                 rounded="none"
-                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-              >
-                View Liquidity
-              </Button>
-            </span>
-            <span className="border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1 font-light"
+                onClick={() => {
+                  setOpenChat(true);
+                }}
               >
                 <MessageCircle width="20px" />{" "}
                 <span className="hidden md:inline">Message</span>
@@ -553,26 +780,49 @@ export function OfferRow({
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-                  <DropdownMenuItem
-                    className={cn("flex md:hidden gap-2", {
-                      "!hidden": !offer.swap,
-                    })}
+                  {offer.swap && (
+                    <NavLink to={`/swap/${offer.swap?.orderId}`}>
+                      <DropdownMenuItem
+                        className={cn("flex md:hidden gap-2", {
+                          "!hidden":
+                            !offer.swap || offer.swap.orderId == undefined,
+                        })}
+                      >
+                        View Swap
+                      </DropdownMenuItem>
+                    </NavLink>
+                  )}
+                  <NavLink
+                    to={`/liquidity/${offer.marketAddress}/${offer.provider}/${offer.lid}`}
                   >
-                    View Swap
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    className={cn("flex md:hidden gap-2", {
-                      "!hidden": location.pathname.match("^/liquidity"),
-                    })}
-                  >
-                    View Liquidity
-                  </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className={cn("flex md:hidden gap-2", {
+                        "!hidden": location.pathname.match("^/liquidity"),
+                      })}
+                    >
+                      View Liquidity
+                    </DropdownMenuItem>
+                  </NavLink>
                 </DropdownMenuContent>
               </DropdownMenu>
             </span>
           </div>
         </div>
       </div>
+
+      {offer && (
+        <MessengerSheet
+          offer={offer}
+          open={openChat}
+          onOpenChange={(open) => {
+            setOpenChat(open);
+          }}
+        />
+      )}
+
+      {renderOfferCreatorSheet && (
+        <SwapOfferCreatorSheet liquidity={offer.liquidity} offer={offer} />
+      )}
     </div>
   );
 }

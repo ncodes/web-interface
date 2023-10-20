@@ -1,16 +1,22 @@
-import { cn } from "../../libs/utils.ts";
-import { SwapInput } from "./SwapInput.tsx";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion.tsx";
-import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
-import { EditSwapSlippage } from "./EditSwapSlippage.tsx";
-import { Button } from "../ui/Button.tsx";
-import { EditSwapExpiry } from "./EditSwapExpiry.tsx";
+import * as Separator from "@radix-ui/react-separator";
+import { useQueryClient } from "@tanstack/react-query";
+import { constants } from "ethers";
+import { InfoIcon } from "lucide-react";
+import moment from "moment";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useInterval } from "usehooks-ts";
+import { Address, decodeEventLog } from "viem";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
+import {
+  canExecuteOffer as canExecOffer,
+  isERC20,
+  isSynth,
+} from "../../libs/api_utils.ts";
 import {
   delay,
   formatToHighDenom,
@@ -25,44 +31,56 @@ import {
   toLD,
   trimZeros,
 } from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import { ToolTip } from "../ToolTip.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
-import { useInterval } from "usehooks-ts";
-import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
-import { isERC20, isSynth } from "../../libs/api_utils.ts";
-import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
-import * as Separator from "@radix-ui/react-separator";
-import { useToast } from "../../hooks/toast/toast.tsx";
-import { Address, decodeEventLog } from "viem";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { useNavigate } from "react-router-dom";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { Button } from "../ui/Button.tsx";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion.tsx";
+import { EditSwapExpiry } from "./EditSwapExpiry.tsx";
+import { EditSwapSlippage } from "./EditSwapSlippage.tsx";
+import { SwapInput } from "./SwapInput.tsx";
 
 /**
- * SwapSheetContent
+ * SwapSheetContent is the main component for creating a swap or offer.
  * @param liquidity The liquidity object
  * @param market The market object
- * @param offSheet - whether the component is rendered in a sheet or not
+ * @param inBody - whether the component is rendered in a sheet or on the page
+ * @param offer The offer object if the component is rendered in offer mode for
+ * a specific offer to be executed or edited
+ * @param offerMode - whether the component is rendered in offer mode
  * @constructor
  */
-export function SwapSheetContent({
+export function SwapOfferCreatorContent({
   liquidity,
   market,
-  offSheet,
+  offer,
+  inBody: inSheet,
+  offerMode,
 }: {
   liquidity: Liquidity;
   market: Market;
-  offSheet?: boolean;
+  inBody?: boolean;
+  offer?: Offer;
+  offerMode?: boolean;
 }) {
   const navigate = useNavigate();
-  const { computeSwapFee, swapQuoteForBase, humanizeErrors } =
-    useCoreContract();
-  const { notifyError, notifySuccess } = useToast();
-  const [approveLoading, setApproveLoading] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [price] = useState(liquidity.price);
-  const [maxPrice, setMaxPrice] = useState(price);
-  const [slippage, setSlippage] = useState(0);
-  const [expireDuration, setExpireDuration] = useState(0);
+  const openStateContext = useStore((state) => state.openStateContext);
+  const {
+    computeSwapFee,
+    swapQuoteForBase,
+    createOffer,
+    executeOffer,
+    updateOffer,
+    humanizeErrors,
+  } = useCoreContract();
   const {
     getChainInfo,
     getTokenBalance,
@@ -73,9 +91,22 @@ export function SwapSheetContent({
     ready,
     getTokenAllowance,
   } = useConnectorContext();
+  const [expireDuration, setExpireDuration] = useState(
+    getInitialExpireDuration()
+  );
+  const queryClient = useQueryClient();
+  const { notifyError, notifySuccess } = useToast();
+  const resetOpenState = useStore((state) => state.resetOpenState);
+  const [amountInputFocused, setAmountInputFocused] = useState(false);
+  const [quoteAmountInputFocused, setQuoteAmountInputFocused] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [price, setPrice] = useState(getInitialPrice());
+  const [maxPrice, setMaxPrice] = useState(price);
+  const [slippage, setSlippage] = useState(0);
   const [quoteBal, setQuoteBal] = useState<bigint>(0n);
-  const [canSwap, setCanSwap] = useState(false);
-  const [amount, setAmount] = useState("");
+  const [canDo, setCanDo] = useState(false);
+  const [amount, setAmount] = useState(getInitialAmount());
   const [slippageAmount, setSlippageAmount] = useState(amount);
   const [quoteAmount, setQuoteAmount] = useState("");
   const [amountErr, setAmountErr] = useState("");
@@ -85,8 +116,6 @@ export function SwapSheetContent({
   const [maxQuoteAmount, setMaxQuoteAmount] = useState("");
   const { baseUsdRate, quoteUsdRate } = useBaseQuoteRate(market, true, true);
   const [hasAllowance, setHasAllowance] = useState(false);
-  const [amountInputFocused, setAmountInputFocused] = useState(false);
-  const [quoteAmountInputFocused, setQuoteAmountInputFocused] = useState(false);
 
   const [feeInfo, setFeeInfo] = useState({
     protocol: "0",
@@ -96,6 +125,22 @@ export function SwapSheetContent({
     symbol: "",
     protoFeeBps: 0,
   });
+
+  function getInitialAmount() {
+    if (!offer) return "";
+    return toHD(offer.amount, market.baseDecimals);
+  }
+
+  function getInitialPrice() {
+    if (!offer) return liquidity.price;
+    return offer.price;
+  }
+
+  function getInitialExpireDuration() {
+    if (!offer) return 1800;
+    if (offer && canExecuteOffer(offer)) return 1800;
+    return moment(offer?.deadline).diff(moment(), "seconds");
+  }
 
   // Update quote balance every 10 seconds
   useInterval(() => {
@@ -118,11 +163,12 @@ export function SwapSheetContent({
     if (amount != "") {
       const amt = toDec(amount);
       const denom = powOfD(1, baseDecimals);
-      if (!isZero(minSwap) && amt.mul(denom).lt(toDec(minSwap))) {
+
+      if (!offerMode && !isZero(minSwap) && amt.mul(denom).lt(toDec(minSwap))) {
         amtErrMsg = "Below minimum amount";
       }
 
-      const mxSwap = !isZero(maxSwap) ? maxSwap : liquidity.amount;
+      const mxSwap = getMaxBaseAmount();
       if (amt.mul(denom).gt(toDec(mxSwap))) {
         amtErrMsg = "Above maximum amount";
       }
@@ -153,11 +199,12 @@ export function SwapSheetContent({
     }
   }, [amount, quoteAmount, baseUsdRate.data, quoteUsdRate.data]);
 
-  // Set or update amount when quote amount or price is changed
+  // Set or update amount when quote amount or price changed
   useEffect(() => {
     (async () => {
       if (!quoteAmountInputFocused) return;
       if (quoteAmount == "") return setAmount("");
+      if (isZero(price)) return setQuoteAmount("0");
 
       let amount = toDec(quoteAmount).div(toHD(price, market.quoteDecimals));
 
@@ -172,7 +219,7 @@ export function SwapSheetContent({
   // Set or update quote amount when amount changed
   useEffect(() => {
     (async () => {
-      if (!amountInputFocused) return;
+      if (!(offer && amount && !quoteAmount) && !amountInputFocused) return;
       if (amount == "") return setQuoteAmount("");
       let totalFeeBp = 0;
 
@@ -190,15 +237,15 @@ export function SwapSheetContent({
       const newQuoteAmt = amtD.div(1 - feePct).mul(priceHD);
       setQuoteAmount(trimZeros(newQuoteAmt.toFixed(8)));
     })();
-  }, [amount]);
+  }, [amount, price]);
 
   // Determine if swap can be executed
   useEffect(() => {
-    if (amountErr || quoteAmountErr) return setCanSwap(false);
-    if (!amount) return setCanSwap(false);
-    if (!hasAllowance) return setCanSwap(false);
-    if (loading) return setCanSwap(false);
-    setCanSwap(true);
+    if (amountErr || quoteAmountErr) return setCanDo(false);
+    if (isZero(amount)) return setCanDo(false);
+    if (!offerMode && !hasAllowance) return setCanDo(false);
+    if (loading) return setCanDo(false);
+    setCanDo(true);
   }, [
     quoteBal,
     amount,
@@ -209,7 +256,7 @@ export function SwapSheetContent({
     loading,
   ]);
 
-  // Adjust max price and max quote amount when slippage is changed
+  // Adjust max price and max quote amount when slippage and quote amount change
   useEffect(() => {
     (async () => {
       if (isEmpty(quoteAmount)) return;
@@ -336,6 +383,18 @@ export function SwapSheetContent({
     });
   }
 
+  function canExecuteOffer(offer: Offer | undefined) {
+    if (openStateContext.createOfferSheet === "edit") return false;
+    return canExecOffer(offer);
+  }
+
+  // Get the maximum base amount.
+  // Result cannot be greater than available liquidity
+  function getMaxBaseAmount() {
+    const { maxSwap, amount } = liquidity;
+    return !isZero(maxSwap) && toDec(maxSwap).lte(amount) ? maxSwap : amount;
+  }
+
   // Request and execute token allowance
   async function doRequestAllowance() {
     try {
@@ -356,26 +415,28 @@ export function SwapSheetContent({
     }
   }
 
-  async function doSwap() {
+  async function doCreateSwap() {
     try {
       setLoading(true);
       const { address, quoteDecimals, baseType, baseDecimals } = market;
       const { provider, lid, price } = liquidity;
       const quoteAmt = toDec(quoteAmount);
+      const amt = !isSynth(baseType)
+        ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
+        : toLD(amount, baseDecimals);
+
       const [txHash, txReceipt] = await swapQuoteForBase(
         address,
         provider,
         undefined,
         lid,
-        !isSynth(baseType)
-          ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
-          : toLD(amount, baseDecimals),
+        amt,
         toLD(maxPrice, quoteDecimals),
         [],
         0 // TODO: use moment().add(expireDuration, "s").unix()
       );
 
-      // give backend a chance to process tx
+      // Give backend a chance to process tx
       await delay(5000);
 
       // For interactive swap, redirect to swap page
@@ -387,6 +448,7 @@ export function SwapSheetContent({
         });
         const orderId = (event.args as { numTypeInfo: bigint[] })
           .numTypeInfo[0];
+        resetOpenState();
         navigate(`/swap/${orderId}`);
         return;
       }
@@ -408,14 +470,170 @@ export function SwapSheetContent({
     }
   }
 
+  async function doCreateOffer() {
+    try {
+      setLoading(true);
+      const { address, quoteDecimals, baseType, baseDecimals } = market;
+      const quoteAmt = toDec(quoteAmount);
+      const amt =
+        price != "0"
+          ? !isSynth(baseType)
+            ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
+            : toLD(amount, baseDecimals)
+          : toLD(amount, baseDecimals);
+
+      const [, txReceipt] = await createOffer(
+        address,
+        liquidity.provider,
+        constants.AddressZero,
+        liquidity.lid,
+        amt,
+        price,
+        [],
+        expireDuration
+      );
+
+      // Give backend a chance to process tx
+      await delay(5000);
+
+      // For interactive swap, redirect to swap page
+      const event = decodeEventLog({
+        abi: getChainInfo().contracts?.core.abi,
+        data: txReceipt.logs[0].data,
+        topics: txReceipt.logs[0].topics,
+      });
+
+      reset();
+      resetOpenState();
+
+      const offerId = (event.args as { offerId: bigint }).offerId;
+      navigate(`/offer/${offerId - BigInt(1)}`);
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function doExecOffer() {
+    try {
+      if (!offer) return;
+
+      setLoading(true);
+      const [txHash, txReceipt] = await executeOffer(
+        BigInt(offer.offerId),
+        BigInt(0) // TODO: use moment().add(expireDuration, "s").unix()
+      );
+
+      // Give backend a chance to process tx
+      await delay(5000);
+
+      // Reset form and close sheets
+      reset();
+      resetOpenState();
+
+      // For interactive swap, redirect to swap page
+      if (!market.instant) {
+        const event = decodeEventLog({
+          abi: getChainInfo().contracts?.core.abi,
+          data: txReceipt.logs[txReceipt.logs.length - 1].data,
+          topics: txReceipt.logs[txReceipt.logs.length - 1].topics,
+        });
+        const orderId = (event.args as { numTypeInfo: bigint[] })
+          .numTypeInfo[0];
+        navigate(`/swap/${orderId}`);
+        return;
+      }
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Swap was successful`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      if (location.pathname.includes("my/offers")) {
+        await queryClient.refetchQueries(["getOffersAsParticipant"]);
+      } else if (location.pathname.includes("/offer/")) {
+        await queryClient.refetchQueries(["getOffer"]);
+        await queryClient.refetchQueries(["getOfferEvents"]);
+      } else if (location.pathname.match("/liquidity/.*/offers")) {
+        await queryClient.refetchQueries(["getLiquidityOffers"]);
+      }
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function doUpdateOffer() {
+    try {
+      if (!offer) return;
+      setLoading(true);
+
+      const { quoteDecimals, baseType, baseDecimals } = market;
+      const quoteAmt = toDec(quoteAmount);
+      const amt =
+        price != "0"
+          ? !isSynth(baseType)
+            ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
+            : toLD(amount, baseDecimals)
+          : toLD(amount, baseDecimals);
+
+      const [txHash] = await updateOffer(
+        BigInt(offer.offerId),
+        amt,
+        price,
+        [],
+        expireDuration
+      );
+
+      // Give backend a chance to process tx
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Offer was successful updated`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      if (location.pathname.includes("my/offers")) {
+        await queryClient.refetchQueries(["getOffersAsParticipant"]);
+      } else if (location.pathname.includes("/offer/")) {
+        await queryClient.refetchQueries(["getOffer"]);
+        await queryClient.refetchQueries(["getOfferEvents"]);
+      } else if (location.pathname.match("/liquidity/.*/offers")) {
+        await queryClient.refetchQueries(["getLiquidityOffers"]);
+      }
+
+      // Close sheets
+      resetOpenState();
+      reset();
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div
       className={cn("text-white flex flex-col justify-between overflow-auto", {
-        "overflow-auto h-full": !offSheet,
+        "overflow-auto h-full": !inSheet,
       })}
     >
       <div className="flex-1 h-[90vh] xl:h-[100vh]">
-        {!offSheet && (
+        {!inSheet && (
           <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-900">
             <span className="flex gap-2 items-center text-sm">
               <span>
@@ -427,17 +645,25 @@ export function SwapSheetContent({
                   {market.quote}
                 </span>
                 <span className="text-gray-500 text-xs">
-                  ($
-                  {toHDD(price, market.quoteDecimals)
-                    .mul(quoteUsdRate.data || 0)
-                    .toFixed(2)}
-                  )
+                  <span>$</span>
+                  <span>
+                    {toHDD(price, market.quoteDecimals)
+                      .mul(quoteUsdRate.data || 0)
+                      .toFixed(2)}
+                  </span>
                 </span>
+              </span>
+              <span>
+                <ToolTip tip="The original price of the liquidity">
+                  <InfoIcon width="15" />
+                </ToolTip>
               </span>
             </span>
           </div>
         )}
-        <div className="px-4 pt-5 mb-5 ">
+
+        <div className="flex flex-col gap-5 px-4 pt-5 mb-5 ">
+          {/* IN Amount (QUOTE) */}
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
               <span className="pl-4 text-gray-200 tracking-wide">In</span>
@@ -452,14 +678,16 @@ export function SwapSheetContent({
                 value={quoteAmount}
                 setValue={setQuoteAmount}
                 onFocused={setQuoteAmountInputFocused}
-                disabled={loading || approveLoading}
+                disabled={loading || approveLoading || canExecuteOffer(offer)}
                 afterInput={
                   isERC20(market.quoteType) &&
                   quoteBal > 0 && (
                     <span className="h-full flex justify-center items-center mr-3">
                       <Button
                         variant="link"
-                        className="text-xs px-0 -mt-[4px] font-light"
+                        className={cn("text-xs px-0 -mt-[4px] font-light", {
+                          hidden: canExecuteOffer(offer),
+                        })}
                         onMouseUp={() => {
                           setQuoteAmount(toHD(quoteBal, market.quoteDecimals));
                           setQuoteAmountInputFocused(true);
@@ -496,7 +724,30 @@ export function SwapSheetContent({
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-1 mt-5">
+
+          {/* Price (QUOTE) */}
+          {offerMode && (
+            <div className="flex flex-col gap-1">
+              <div className="flex justify-between items-center">
+                <span className="pl-4 text-gray-200 tracking-wide">Price</span>
+              </div>
+              <div className="flex flex-col">
+                <SwapInput
+                  avatar={market.quoteLogo}
+                  avatarFallback={market.quote}
+                  value={toHD(price, market.quoteDecimals)}
+                  onFocused={setAmountInputFocused}
+                  setValue={(v) => {
+                    setPrice(toLD(v || "0", market.quoteDecimals));
+                  }}
+                  disabled={loading || canExecuteOffer(offer)}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* OUT Amount (BASE) */}
+          <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
               <span className="pl-4 text-gray-200 tracking-wide">Out</span>
               <span className="font-extralight text-xs text-blue-300 pr-5">
@@ -510,7 +761,7 @@ export function SwapSheetContent({
                 value={amount}
                 setValue={setAmount}
                 onFocused={setAmountInputFocused}
-                disabled={loading || approveLoading}
+                disabled={loading || approveLoading || canExecuteOffer(offer)}
               />
               <div className="flex justify-between">
                 <div>
@@ -527,9 +778,7 @@ export function SwapSheetContent({
                     <span>
                       <span className="text-gray-300">Max: </span>
                       {formatToHighDenom(
-                        !isZero(liquidity.maxSwap)
-                          ? liquidity.maxSwap
-                          : liquidity.amount,
+                        getMaxBaseAmount(),
                         market.baseDecimals
                       )}
                     </span>
@@ -549,13 +798,28 @@ export function SwapSheetContent({
             </div>
           </div>
         </div>
-        <div className="m-5 my-0  rounded-2xl pb-3 bg-gray-900 tracking-wide">
+
+        <div className="m-5 my-0  rounded-2xl pb-3 bg-gray-900/80 tracking-wide">
           <div className="flex pt-2 pb-2 px-3 justify-between text-xs text-blue-200 border-b border-gray-800">
-            <span className="text-gray-400">Network Fees</span>
-            <span className="flex gap-1">
+            <span className="flex gap-1 items-center text-gray-400">
+              <span className="shrink-0">Swap Fees</span>
+              {offerMode && (
+                <span>
+                  <ToolTip
+                    tip={
+                      "The swap fee may change at the time of offer execution."
+                    }
+                  >
+                    <IconInfoCircle width="15" />
+                  </ToolTip>
+                </span>
+              )}
+            </span>
+            <span className="flex gap-1 flex-wrap text-right h-[20px] overflow-auto">
               <span>
                 {formatToMoney(feeInfo.total)} {feeInfo.symbol}
               </span>
+              &nbsp;
               <span>(${formatToMoney(feeInfo.totalUsd) || "0"})</span>
             </span>
           </div>
@@ -640,9 +904,10 @@ export function SwapSheetContent({
             )}
           </div>
         </div>
+
         <div
           className={cn("p-5 pt-0 px-3 relative mt-3", {
-            "pb-[100px]": !offSheet,
+            "pb-[100px]": !inSheet,
           })}
         >
           <Accordion type="single" collapsible>
@@ -653,16 +918,20 @@ export function SwapSheetContent({
                 </div>
               </AccordionTrigger>
               <AccordionContent className="pt-3 px-3 tracking-wide">
-                <EditSwapSlippage
-                  disabled={loading || approveLoading}
-                  defaultValue={slippage}
-                  onValueChanged={(val) => {
-                    setSlippage(val);
-                  }}
-                />
+                {!offerMode && (
+                  <EditSwapSlippage
+                    disabled={loading || approveLoading}
+                    defaultValue={slippage}
+                    onValueChanged={(val) => {
+                      setSlippage(val);
+                    }}
+                  />
+                )}
                 <EditSwapExpiry
                   disabled={loading || approveLoading}
                   defaultValue={expireDuration}
+                  offerMode={!!offer || offerMode}
+                  canExecOffer={canExecuteOffer(offer)}
                   onValueChanged={(val) => {
                     setExpireDuration(val);
                   }}
@@ -676,18 +945,40 @@ export function SwapSheetContent({
       <div
         className={cn(
           "flex flex-col gap-2 p-3 w-full border-t border-gray-800 bg-card-background",
-          { "absolute bottom-0 w-full": !offSheet }
+          { "absolute bottom-0 w-full": !inSheet }
         )}
       >
-        {isERC20(market.quoteType) && !hasAllowance && (
+        {(!offerMode || canExecuteOffer(offer)) &&
+          !isZero(quoteAmount) &&
+          isERC20(market.quoteType) &&
+          !hasAllowance && (
+            <Button
+              size="full"
+              variant="secondary"
+              disabled={isZero(amount) || approveLoading}
+              onClick={doRequestAllowance}
+            >
+              {!approveLoading && <>Approve</>}
+              {approveLoading && (
+                <>
+                  <IconSpinner
+                    width="20"
+                    fill="fill-gray-900"
+                    className="animate-spin"
+                  />
+                </>
+              )}
+            </Button>
+          )}
+
+        {(!offerMode || canExecuteOffer(offer)) && (
           <Button
             size="full"
-            variant="secondary"
-            disabled={isZero(amount) || approveLoading}
-            onClick={doRequestAllowance}
+            disabled={!canDo}
+            onClick={!offerMode ? doCreateSwap : doExecOffer}
           >
-            {!approveLoading && <>Approve</>}
-            {approveLoading && (
+            {!loading && <>Swap</>}
+            {loading && (
               <>
                 <IconSpinner
                   width="20"
@@ -698,18 +989,36 @@ export function SwapSheetContent({
             )}
           </Button>
         )}
-        <Button size="full" disabled={!canSwap} onClick={doSwap}>
-          {!loading && <>Swap</>}
-          {loading && (
-            <>
-              <IconSpinner
-                width="20"
-                fill="fill-gray-900"
-                className="animate-spin"
-              />
-            </>
-          )}
-        </Button>
+
+        {offerMode && !offer && !canExecuteOffer(offer) && (
+          <Button size="full" disabled={!canDo} onClick={doCreateOffer}>
+            {!loading && <>Create</>}
+            {loading && (
+              <>
+                <IconSpinner
+                  width="20"
+                  fill="fill-gray-900"
+                  className="animate-spin"
+                />
+              </>
+            )}
+          </Button>
+        )}
+
+        {offerMode && offer && !canExecuteOffer(offer) && (
+          <Button size="full" disabled={!canDo} onClick={doUpdateOffer}>
+            {!loading && <>Update</>}
+            {loading && (
+              <>
+                <IconSpinner
+                  width="20"
+                  fill="fill-gray-900"
+                  className="animate-spin"
+                />
+              </>
+            )}
+          </Button>
+        )}
       </div>
     </div>
   );

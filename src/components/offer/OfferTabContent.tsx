@@ -1,68 +1,74 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { ErrorIcon } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { RequestError } from "../../libs/RequestError.ts";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { OfferRow } from "../liquidity/OfferRow.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { Label } from "../ui/label.tsx";
 import OfferEvent from "./OfferEvent.tsx";
-import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
-import { useParams } from "react-router-dom";
-import useStore from "../../hooks/store/useStore.ts";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { OfferRow } from "../liquidity/OfferRow.tsx";
-import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../../libs/RequestError.ts";
-import { Skeleton } from "../ui/skeleton.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { OfferEventRowSkeleton } from "./OfferEventRowSkeleton.tsx";
 
-function OfferEventRowSkeleton() {
-  return (
-    <div className="flex gap-2 w-full md:w-[500px]">
-      <Skeleton className="w-[35px] h-[35px] rounded-full" />
-      <div className="flex-1 flex flex-col gap-1">
-        <Skeleton className="w-full h-[20px]" />
-        <Skeleton className="w-full h-[20px]" />
-      </div>
-    </div>
-  );
-}
-
-export function OfferTabContent() {
-  const { getOffer, getEvents } = useOfferService();
-  const { getChainInfo } = useConnectorContext();
+export function OfferTabContent({
+  setOffer,
+}: {
+  setOffer: Dispatch<SetStateAction<Offer | undefined>>;
+}) {
+  const { getOffer, markAsRead, getEvents } = useOfferService();
+  const { getChainInfo, address } = useConnectorContext();
+  const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
+  const loaderProgress = useStore((state) => state.loaderProgress);
   const offer = useQuery({
     queryKey: [
       "getOffer",
-      {
-        network: getChainInfo().queryName,
-        offerId: parseInt(id as string),
-      },
+      { network: getChainInfo().queryName, offerId: parseInt(id as string) },
     ],
     queryFn: getOffer,
     enabled: !!id,
+    refetchInterval: 15000,
   });
+
   const events = useQuery({
     queryKey: [
-      "getEvents",
-      {
-        network: getChainInfo().queryName,
-        offerId: parseInt(id as string),
-      },
+      "getOfferEvents",
+      { network: getChainInfo().queryName, offerId: parseInt(id as string) },
     ],
     queryFn: getEvents,
     enabled: offer.isSuccess,
+    refetchInterval: 15000,
   });
 
   useEffect(() => {
-    if (offer.isLoading || offer.isRefetching)
-      setLoaderProgress && setLoaderProgress(50);
-    else setLoaderProgress && setLoaderProgress(100);
+    const { isLoading, isRefetching } = offer;
+    if (isLoading) setLoaderProgress && setLoaderProgress(50);
+    if (!(isRefetching || isLoading) && loaderProgress == 50)
+      setLoaderProgress?.(100);
+    if (offer.data) setOffer(offer.data);
   }, [
     offer.isError,
     offer.isLoading,
     offer.isRefetching,
     offer.isRefetchError,
   ]);
+
+  useQuery({
+    queryKey: [
+      "markAsRead",
+      { network: getChainInfo().queryName, offerId: offer.data?.offerId },
+    ],
+    queryFn: markAsRead,
+    enabled: !!address,
+    refetchInterval: false,
+    onSuccess: async () => {
+      await queryClient.refetchQueries(["countUnreadOffer"]);
+    },
+  });
 
   return (
     <TabsContent value="offers" className="p-0 m-0 px-0 flex flex-col gap-3">

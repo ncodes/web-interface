@@ -1,11 +1,11 @@
-import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../libs/utils.ts";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 import { useEffect } from "react";
 import { useLockedBody } from "usehooks-ts";
 import useStore from "../../hooks/store/useStore.ts";
+import { cn } from "../../libs/utils.ts";
 
 const Sheet = function (
   props: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root> & {
@@ -40,7 +40,7 @@ const SheetClose = SheetPrimitive.Close;
 const SheetPortal = ({
   className,
   ...props
-}: SheetPrimitive.DialogPortalProps) => (
+}: SheetPrimitive.DialogPortalProps & { className?: string }) => (
   <SheetPrimitive.Portal className={cn(className)} {...props} />
 );
 SheetPortal.displayName = SheetPrimitive.Portal.displayName;
@@ -151,11 +151,11 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
 export {
   Sheet,
-  SheetTrigger,
   SheetClose,
   SheetContent,
-  SheetHeader,
-  SheetFooter,
-  SheetTitle,
   SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 };

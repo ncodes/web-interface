@@ -1,10 +1,10 @@
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { Button } from "../ui/Button.tsx";
+import { Input } from "../ui/Input.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { BalanceCard, BalanceCardLink } from "./BalanceCard.tsx";
 import { TabContentHeader } from "./TabContentHeader.tsx";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { Input } from "../ui/Input.tsx";
-import { Button } from "../ui/Button.tsx";
 
 export function BalancesTab(props: { address: string }) {
   const [sheetHeight] = useSheetInfo();
@@ -13,7 +13,7 @@ export function BalancesTab(props: { address: string }) {
     <TabsContent value="balances" className={`p-0 mt-0 ${sheetHeight}`}>
       <TabContentHeader address={props.address} />
       <ScrollArea type="scroll" className="h-full">
-        <div className="mb-5 overflow-auto scrollbar-hide px-5 pt-3 flex flex-col">
+        <div className="mb-5 overflow-auto scrollbar-hide px-5 pt-3 flex flex-col pb-10">
           <div className="flex flex-col gap-4 box-border min-w-full float-left">
             <BalanceCard symbol="ETH" balance="12.5">
               <BalanceCardLink title="Convert to WETH" />

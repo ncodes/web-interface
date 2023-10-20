@@ -1,9 +1,9 @@
-import { toBN } from "../../../libs/helpers.ts";
-import { Address } from "viem";
 import { BigNumberish, ethers } from "ethers";
+import { Address } from "viem";
+import { toBN } from "../../../libs/helpers.ts";
 import * as CoreTypes from "../../../typechain/Core.ts";
-import OrderStruct = CoreTypes.Structs.OrderStruct;
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import OrderStruct = CoreTypes.Structs.OrderStruct;
 
 /**
  * Providers utilities for reading and writing to the Core contract
@@ -105,6 +105,109 @@ export default function useCoreContract() {
       ids,
       txDeadline,
       operator,
+    ]);
+  }
+
+  /**
+   * Create an offer
+   * @param marketId The market address
+   * @param provider The liquidity provider address
+   * @param recipient The recipient address
+   * @param lid The liquidity ID
+   * @param amount The amount of the offer
+   * @param price The price of the offer
+   * @param ids The NFT IDs if liquidity is NFT
+   * @param txDeadline The transaction deadline
+   * @param operator The operator ID
+   */
+  async function createOffer(
+    marketId: string,
+    provider: string,
+    recipient: string | undefined,
+    lid: BigNumberish,
+    amount: BigNumberish,
+    price: BigNumberish,
+    ids: BigNumberish[] = [],
+    txDeadline: BigNumberish,
+    operator: BigNumberish = "0"
+  ) {
+    return await simulateAndWriteContract("core", "createOffer", [
+      marketId,
+      provider,
+      recipient,
+      lid,
+      amount,
+      price,
+      ids,
+      txDeadline,
+      operator,
+    ]);
+  }
+
+  /**
+   * Update an offer
+   * @param offerId The offer ID
+   * @param amount The updated amount
+   * @param price The updated price
+   * @param ids The updated NFT IDs
+   * @param txDeadline The transaction deadline
+   * @returns
+   */
+  async function updateOffer(
+    offerId: bigint,
+    amount: BigNumberish,
+    price: BigNumberish,
+    ids: BigNumberish[] = [],
+    txDeadline: BigNumberish
+  ) {
+    return await simulateAndWriteContract("core", "updateOffer", [
+      offerId,
+      amount,
+      price,
+      ids,
+      txDeadline,
+    ]);
+  }
+
+  /**
+   * Cancel an offer
+   * @param offerId The offer ID
+   */
+  async function cancelOffer(offerId: bigint) {
+    return await simulateAndWriteContract("core", "cancelOffer", [offerId]);
+  }
+
+  /**
+   * Accept an offer
+   * @param offerId The offer ID
+   * @param execDelayDur The execution delay duration
+   * @returns
+   */
+  async function acceptOffer(offerId: bigint, execDelayDur: bigint) {
+    return await simulateAndWriteContract("core", "acceptOffer", [
+      offerId,
+      execDelayDur,
+    ]);
+  }
+
+  /**
+   * Unaccept an offer
+   * @param offerId The offer ID
+   * @returns
+   */
+  async function unacceptOffer(offerId: bigint) {
+    return await simulateAndWriteContract("core", "unacceptOffer", [offerId]);
+  }
+
+  /**
+   * Execute an offer
+   * @param offerId The offer ID
+   * @returns
+   */
+  async function executeOffer(offerId: bigint, txDeadline: bigint) {
+    return await simulateAndWriteContract("core", "executeOffer", [
+      offerId,
+      txDeadline,
     ]);
   }
 
@@ -224,7 +327,12 @@ export default function useCoreContract() {
       if (error.message.includes("OC: NOT_CANCEL_TIME"))
         return "Cannot cancel order at this time";
 
+      // createOffer, updateOffer
+      if (error.message.includes("OC: MAX_PRICE_REQ"))
+        return "Price is required";
+
       // Common
+      if (error.message.includes("OC: AMOUNT_REQ")) return "Amount is required";
       if (error.message.includes("ERC20: transfer amount exceeds balance"))
         return "Insufficient balance";
     }
@@ -242,6 +350,12 @@ export default function useCoreContract() {
     humanizeErrors,
     cancelOrder,
     markOrderAsPaid,
+    createOffer,
+    cancelOffer,
     releaseOrder,
+    acceptOffer,
+    unacceptOffer,
+    executeOffer,
+    updateOffer,
   };
 }

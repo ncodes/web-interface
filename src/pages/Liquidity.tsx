@@ -1,40 +1,39 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { Footer } from "../components/Footer.tsx";
-import { Label } from "../components/ui/label.tsx";
-import { Button } from "../components/ui/Button.tsx";
+import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useState } from "react";
-import useStore from "../hooks/store/useStore.ts";
-import {
-  CreateOfferContent,
-  CreateOfferSheet,
-} from "../components/liquidity/CreateOfferSheet.tsx";
+import { useNavigate, useParams } from "react-router-dom";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import IconOffer from "../components/icons/IconOffer.tsx";
+import { LiquidityTabContent } from "../components/liquidity/LiquidityTabContent.tsx";
+import { OffersTabContent } from "../components/liquidity/OffersTabContent.tsx";
+import { SwapOfferCreatorContent } from "../components/swap/SwapOfferCreatorContent.tsx";
+import { SwapOfferCreatorSheet } from "../components/swap/SwapOfferCreatorSheet.tsx";
+import { Button } from "../components/ui/Button.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { LiquidityTabContent } from "../components/liquidity/LiquidityTabContent.tsx";
-import { OffersTabContent } from "../components/liquidity/OffersTabContent.tsx";
-import { useNavigate, useParams } from "react-router-dom";
-import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
-import { useQuery } from "@tanstack/react-query";
-import { SwapSheetContent } from "../components/swap/SwapSheetContent.tsx";
+import { Label } from "../components/ui/label.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
+import useStore from "../hooks/store/useStore.ts";
+import Layout from "./Layout.tsx";
 
 function LiquidityPage({
   defaultTab,
   onTabChanged,
   setLiquidity,
+  liquidity,
 }: {
   defaultTab?: string;
   onTabChanged?: (tab: string) => void;
   setLiquidity?: Dispatch<SetStateAction<Liquidity | undefined>>;
+  liquidity?: Liquidity;
 }) {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
@@ -133,8 +132,10 @@ function LiquidityPage({
       {currentTab == "liquidity" && (
         <LiquidityTabContent setLiquidity={setLiquidity} />
       )}
-      {currentTab == "offers" && <OffersTabContent />}
-      <CreateOfferSheet />
+      {currentTab == "offers" && (
+        <OffersTabContent setLiquidity={setLiquidity} />
+      )}
+      <SwapOfferCreatorSheet liquidity={liquidity as Liquidity} />
     </Tabs>
   );
 }
@@ -145,10 +146,10 @@ function SwapSheetWrapper({ liquidity }: { liquidity: Liquidity | undefined }) {
       <Label className="text-xl">Swap</Label>
       <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
         {!!liquidity && (
-          <SwapSheetContent
+          <SwapOfferCreatorContent
             liquidity={liquidity}
             market={liquidity.market}
-            offSheet={true}
+            inBody={true}
           />
         )}
       </div>
@@ -156,12 +157,16 @@ function SwapSheetWrapper({ liquidity }: { liquidity: Liquidity | undefined }) {
   );
 }
 
-function CreateOfferWrapper() {
+function CreateOfferWrapper({ liquidity }: { liquidity?: Liquidity }) {
   return (
     <div className="flex flex-col pt-3">
       <Label className="text-xl">Create Offer</Label>
       <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
-        <CreateOfferContent outOfSheet={true} />
+        <SwapOfferCreatorContent
+          liquidity={liquidity as Liquidity}
+          market={liquidity?.market as Market}
+          inBody
+        />
       </div>
     </div>
   );
@@ -169,7 +174,7 @@ function CreateOfferWrapper() {
 
 export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
   const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
-  const [liquidity, setLiquidity] = useState<Liquidity | undefined>();
+  const [liquidity, setLiquidity] = useState<Liquidity>();
 
   return (
     <Layout
@@ -177,6 +182,7 @@ export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
         <LiquidityPage
           defaultTab={currentTab}
           setLiquidity={setLiquidity}
+          liquidity={liquidity}
           onTabChanged={(val) => {
             setCurrentTab(val);
           }}
@@ -187,7 +193,9 @@ export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
           {(currentTab == "liquidity" || !currentTab) && (
             <SwapSheetWrapper liquidity={liquidity} />
           )}
-          {currentTab == "offers" && <CreateOfferWrapper />}
+          {currentTab == "offers" && liquidity && (
+            <CreateOfferWrapper liquidity={liquidity} />
+          )}
           <div className="relative">
             <div className="text-gray-200 bottom-0 w-full">
               <Footer />

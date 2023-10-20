@@ -1,9 +1,9 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import React, { useEffect } from "react";
-import { cn } from "../../libs/utils.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { SwapSheetContent } from "./SwapSheetContent.tsx";
+import { cn } from "../../libs/utils.ts";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet.tsx";
+import { SwapOfferCreatorContent } from "./SwapOfferCreatorContent.tsx";
 
 export function SwapSheet(props: {
   market: Market;
@@ -34,7 +34,10 @@ export function SwapSheet(props: {
             </SheetTitle>
           </div>
         </SheetHeader>
-        <SwapSheetContent liquidity={props.liquidity} market={props.market} />
+        <SwapOfferCreatorContent
+          liquidity={props.liquidity}
+          market={props.market}
+        />
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {

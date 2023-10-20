@@ -29,19 +29,14 @@ export function IdentityInitializer({
         onInitialized && onInitialized(client.current as Client);
       }
     }
-  }, [address]);
+  }, [address, wallet]);
 
   async function initializeWallet() {
     try {
-      if (client.current) return;
+      if (!wallet || client.current) return;
       setLoading(true);
 
       client.current = await initClient(env, wallet);
-
-      // console.log((await c.keystore.getPrivateKeyBundle()).identityKey);
-      // console.log(
-      // ((await c.keystore.getPublicKeyBundle()).identityKey as PublicKey).verify()
-      // );
 
       setLoading(false);
       setInitialized(true);

@@ -1,19 +1,23 @@
-import { Label } from "../ui/label.tsx";
-import { ToolTip } from "../ToolTip.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Slider } from "../ui/slider.tsx";
-import IconCaution from "../icons/IconCaution.tsx";
-import Input2 from "../Input2.tsx";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { humanizeDur2 } from "../../libs/helpers.ts";
+import Input2 from "../Input2.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import IconCaution from "../icons/IconCaution.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { Label } from "../ui/label.tsx";
+import { Slider } from "../ui/slider.tsx";
 
 export function EditSwapExpiry({
   defaultValue,
   onValueChanged,
   disabled,
+  offerMode,
+  canExecOffer,
 }: {
   disabled?: boolean;
   defaultValue?: number;
+  offerMode?: boolean;
+  canExecOffer?: boolean;
   onValueChanged?: (
     value: number,
     err: string,
@@ -32,7 +36,25 @@ export function EditSwapExpiry({
     <div className="flex justify-between mt-3">
       <Label className="font-normal flex items-center gap-1">
         <span>Expire</span>
-        <ToolTip tip="The number of seconds within which the swap is expected to be executed, otherwise, it is cancelled.">
+        <ToolTip
+          tip={
+            <>
+              {!offerMode ||
+                (canExecOffer && (
+                  <span>
+                    The number of seconds within which the transaction is
+                    expected to be mined, otherwise, it is cancelled.
+                  </span>
+                ))}
+              {offerMode && !canExecOffer && (
+                <span>
+                  The number of seconds within which the offer must be accepted
+                  and executed otherwise, it expires.
+                </span>
+              )}
+            </>
+          }
+        >
           <IconInfoCircle width="13px" />
         </ToolTip>
       </Label>
@@ -78,7 +100,7 @@ export function EditSwapExpiry({
           }
           afterInput={
             <div className="text-xs font-light p-3 pt-2 pb-0 text-gray-400">
-              {humanizeDur2(duration)}
+              {humanizeDur2(duration || 0)}
             </div>
           }
         />

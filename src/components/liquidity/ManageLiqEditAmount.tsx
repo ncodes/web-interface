@@ -1,4 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { isSynth } from "../../libs/api_utils.ts";
 import {
   formatToHighDenom,
   formatToMoney,
@@ -8,14 +10,12 @@ import {
   toDec,
   toLDD,
 } from "../../libs/helpers.ts";
-import { FilterItem } from "../FilterItem.tsx";
 import { cn } from "../../libs/utils.ts";
+import { FilterItem } from "../FilterItem.tsx";
+import IconCaution from "../icons/IconCaution.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
-import IconCaution from "../icons/IconCaution.tsx";
-import { isSynth } from "../../libs/api_utils.ts";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function ManageLiqEditAmount({
   liquidity,
@@ -127,11 +127,12 @@ export function ManageLiqEditAmount({
             <div className="flex flex-wrap justify-between px-3 pb-1 text-[10px] text-gray-400 tracking-wider">
               {baseUsdRate && amount && (
                 <span>
-                  {formatToMoney(
-                    toDec(baseUsdRate)
-                      .mul(parseFloat(amount))
-                      .toFixed(baseUsdRate < 1 ? 4 : 2)
-                  )}
+                  {"$" +
+                    formatToMoney(
+                      toDec(baseUsdRate)
+                        .mul(parseFloat(amount))
+                        .toFixed(baseUsdRate < 1 ? 4 : 2)
+                    )}
                 </span>
               )}
               {err && (

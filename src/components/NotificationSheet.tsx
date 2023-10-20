@@ -1,14 +1,8 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
 import React, { useEffect, useState } from "react";
 import useStore from "../hooks/store/useStore.ts";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet.tsx";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { ScrollArea } from "./ui/scroll-area.tsx";
+import { useSheetInfo } from "../hooks/useSheetInfo.ts";
+import { cn } from "../libs/utils.ts";
 import {
   Card,
   CardContent,
@@ -16,8 +10,14 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card.tsx";
-import { useSheetInfo } from "../hooks/useSheetInfo.ts";
-import { cn } from "../libs/utils.ts";
+import { ScrollArea } from "./ui/scroll-area.tsx";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet.tsx";
 
 function NotificationItem() {
   return (
@@ -52,8 +52,8 @@ export function NotificationSheet(props: {
   const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   useEffect(() => {
-    setOpen(openState.notifSheet ?? open);
-  }, [openState.notifSheet]);
+    setOpen(openState.notificationSheet ?? open);
+  }, [openState.notificationSheet]);
 
   return (
     <Sheet
@@ -61,7 +61,7 @@ export function NotificationSheet(props: {
       onOpenChange={(open) => {
         setOpen(open);
         props.onOpen && props.onOpen(open);
-        toggleOpenState && toggleOpenState("notifSheet");
+        toggleOpenState && toggleOpenState("notificationSheet");
       }}
     >
       <SheetTrigger>{props.children}</SheetTrigger>
@@ -100,7 +100,7 @@ export function NotificationSheet(props: {
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {
-            toggleOpenState && toggleOpenState("notifSheet");
+            toggleOpenState && toggleOpenState("notificationSheet");
           }}
         >
           <Cross2Icon className="h-6 w-6" />
