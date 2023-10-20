@@ -107,7 +107,7 @@ export function MyLiquidityTabContent() {
       )}
 
       {!isLoading && data?.liquidities?.length == 0 && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+        <div className="flex items-center justify-center font-light text-gray-400 h-[370px]">
           No liquidity found
         </div>
       )}

@@ -1,21 +1,23 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { formatToMoney, isZero, toDec, toHD } from "../../libs/helpers.ts";
-import { FilterItem } from "../FilterItem.tsx";
 import { cn } from "../../libs/utils.ts";
-import { Input } from "../ui/Input.tsx";
+import { FilterItem } from "../FilterItem.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
+import { Input } from "../ui/Input.tsx";
 
 export function ManageLiqEditMinSwapAmount({
   market,
   liquidityEdits,
   liquidity,
   baseUsdRate,
+  disabled,
   onValueChanged,
 }: {
   market: Market;
   liquidityEdits: Partial<Liquidity>;
   liquidity: Liquidity;
   baseUsdRate: number;
+  disabled?: boolean;
   onValueChanged?: (
     value: string,
     err: string,
@@ -69,6 +71,7 @@ export function ManageLiqEditMinSwapAmount({
                 value={minSwap}
                 type="number"
                 placeholder="0.00"
+                disabled={disabled}
                 className="bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0"
                 onChange={(e) => setMinSwap(e.target.value)}
                 onFocus={() => setFocused(true)}
@@ -91,23 +94,7 @@ export function ManageLiqEditMinSwapAmount({
               )}
             </div>
           </div>
-          {/*{!addMode && (*/}
-          {/*  <div className="flex flex-col text-gray-400 text-xs">*/}
-          {/*    <span className="">Current</span>*/}
-          {/*    <span className="text-xs text-chinese-green">*/}
-          {/*      34,000*/}
-          {/*    </span>*/}
-          {/*  </div>*/}
-          {/*)}*/}
         </div>
-        {/*<p className="flex text-gray-500 text-xs pt-2 items-center gap-1">*/}
-        {/*  <IconInfoCircle width="14px" /> Subtracted amount is returned*/}
-        {/*  to the wallet.*/}
-        {/*</p>*/}
-        {/*<p className="flex text-gray-500 text-xs pt-2 items-center gap-1">*/}
-        {/*  <IconInfoCircle width="14px" /> Additional amount may require*/}
-        {/*  approval.*/}
-        {/*</p>*/}
       </div>
     </FilterItem>
   );

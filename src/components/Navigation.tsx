@@ -102,7 +102,7 @@ export function Navigation() {
           <NavPageLink
             icon={<IconOffer />}
             label="Offers"
-            active={pathname.match("^/my/offer(s|)") != null}
+            active={pathname.match("^/(my/)?offer(s|)") != null}
             to="/my/offers"
             countBadge={
               unreadOfferCount.data &&

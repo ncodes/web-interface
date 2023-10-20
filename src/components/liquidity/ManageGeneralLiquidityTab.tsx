@@ -1,19 +1,15 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import { Accordion } from "../ui/accordion.tsx";
-import { Button } from "../ui/Button.tsx";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { ManageLiqEditAmount } from "./ManageLiqEditAmount.tsx";
-import { ManageLiqEditPrice } from "./ManageLiqEditPrice.tsx";
-import { ManageLiqEditMinSwapAmount } from "./ManageLiqEditMinSwapAmount.tsx";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { ManageLiqEditMaxSwapAmount } from "./ManageLiqEditMaxSwapAmount.tsx";
-import { ManageLiqEditPaymentTime } from "./ManageLiqEditPaymentTime.tsx";
-import { ManageLiqEditTarget } from "./ManageLiqEditTarget.tsx";
-import { ManageLiqEditPause } from "./ManageLiqEditPause.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import { Address } from "viem";
+import { ethers } from "ethers";
 import _ from "lodash";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Address } from "viem";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
+import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { isSynth } from "../../libs/api_utils.ts";
 import {
   delay,
   isDev,
@@ -24,14 +20,18 @@ import {
   toDec,
   toLD,
 } from "../../libs/helpers.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
-import { ethers } from "ethers";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
-import { isSynth } from "../../libs/api_utils.ts";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { Button } from "../ui/Button.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
+import { Accordion } from "../ui/accordion.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
+import { ManageLiqEditAmount } from "./ManageLiqEditAmount.tsx";
+import { ManageLiqEditMaxSwapAmount } from "./ManageLiqEditMaxSwapAmount.tsx";
+import { ManageLiqEditMinSwapAmount } from "./ManageLiqEditMinSwapAmount.tsx";
+import { ManageLiqEditPause } from "./ManageLiqEditPause.tsx";
+import { ManageLiqEditPaymentTime } from "./ManageLiqEditPaymentTime.tsx";
+import { ManageLiqEditPrice } from "./ManageLiqEditPrice.tsx";
+import { ManageLiqEditTarget } from "./ManageLiqEditTarget.tsx";
 
 interface InputState {
   value?: string | number;
@@ -283,6 +283,7 @@ export function ManageGeneralLiquidityTab({
               <ManageLiqEditAmount
                 market={market}
                 liquidity={liquidity}
+                disabled={addLoading}
                 baseUsdRate={baseUsdRate.data as number}
                 onValueChanged={(value, err, setErr) => {
                   setAmount({ value, err, setErr });
@@ -293,6 +294,7 @@ export function ManageGeneralLiquidityTab({
               <ManageLiqEditPrice
                 liquidity={liquidity}
                 market={market}
+                disabled={addLoading}
                 baseUsdRate={baseUsdRate.data as number}
                 quoteUsdRate={quoteUsdRate.data as number}
                 onValueChanged={(value, err, setErr) => {
@@ -303,6 +305,7 @@ export function ManageGeneralLiquidityTab({
 
               <ManageLiqEditMinSwapAmount
                 market={market}
+                disabled={addLoading}
                 baseUsdRate={baseUsdRate.data as number}
                 liquidity={liquidity}
                 liquidityEdits={{ amount: amount?.value as string }}
@@ -314,6 +317,7 @@ export function ManageGeneralLiquidityTab({
 
               <ManageLiqEditMaxSwapAmount
                 market={market}
+                disabled={addLoading}
                 baseUsdRate={baseUsdRate.data as number}
                 liquidity={liquidity}
                 liquidityEdits={{
@@ -329,6 +333,7 @@ export function ManageGeneralLiquidityTab({
               {!market.instant && (
                 <ManageLiqEditPaymentTime
                   market={market}
+                  disabled={addLoading}
                   liquidity={liquidity}
                   onValueChanged={(value, err, setErr) => {
                     setPaymentTime({ value, err, setErr });
@@ -338,6 +343,7 @@ export function ManageGeneralLiquidityTab({
 
               <ManageLiqEditTarget
                 liquidity={liquidity}
+                disabled={addLoading}
                 market={market}
                 onValueChanged={(value, err, setErr) => {
                   setTarget({ value, err, setErr });
@@ -346,6 +352,7 @@ export function ManageGeneralLiquidityTab({
 
               <ManageLiqEditPause
                 liquidity={liquidity}
+                disabled={addLoading}
                 market={market}
                 onValueChanged={(value) => {
                   setPause(value);

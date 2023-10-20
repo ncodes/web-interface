@@ -223,7 +223,7 @@ export function WatchedLiquidityTabContent() {
         (watchedLiquidities.length == 0 ||
           fetchLiqs.data?.liquidities.length == 0) &&
         !loading && (
-          <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+          <div className="flex items-center justify-center font-light text-gray-400 h-[510px]">
             No liquidity found
           </div>
         )}

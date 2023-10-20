@@ -519,9 +519,10 @@ export function Messenger({
   async function handleSendMsg(msg: string) {
     if (!client) return;
 
-    if (swap || offer) {
-      if (swap && !isSwapCounterparty(swap, address)) return;
-      if (offer && !isOfferCounterparty(offer, address)) return;
+    if (
+      (swap && isSwapCounterparty(swap, address)) ||
+      (offer && isOfferCounterparty(offer, address))
+    ) {
       if (!conversation) return;
       await send(client, conversation, msg);
       setLastMsgTime({

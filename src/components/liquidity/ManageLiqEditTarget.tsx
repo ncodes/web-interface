@@ -1,17 +1,19 @@
-import { FilterItem } from "../FilterItem.tsx";
-import Input2 from "../Input2.tsx";
-import IconCaution from "../icons/IconCaution.tsx";
+import { ethers } from "ethers";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { isAddress } from "viem";
 import { isEqlStr } from "../../libs/helpers.ts";
-import { ethers } from "ethers";
+import { FilterItem } from "../FilterItem.tsx";
+import Input2 from "../Input2.tsx";
+import IconCaution from "../icons/IconCaution.tsx";
 
 export function ManageLiqEditTarget({
   onValueChanged,
   liquidity,
+  disabled,
 }: {
   market: Market;
   liquidity?: Liquidity;
+  disabled?: boolean;
   onValueChanged?: (
     value: string,
     err: string,
@@ -39,6 +41,7 @@ export function ManageLiqEditTarget({
           type="text"
           placeholder="0x0000..."
           value={target}
+          disabled={disabled}
           onChange={(e) => {
             setTarget(e.target.value);
             if (e.target.value && !isAddress(e.target.value)) {

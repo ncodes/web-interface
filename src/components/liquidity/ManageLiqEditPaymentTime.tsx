@@ -1,16 +1,18 @@
-import { FilterItem } from "../FilterItem.tsx";
-import { Slider } from "../ui/slider.tsx";
-import Input2 from "../Input2.tsx";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { humanizeDur2 } from "../../libs/helpers.ts";
+import { FilterItem } from "../FilterItem.tsx";
+import Input2 from "../Input2.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
+import { Slider } from "../ui/slider.tsx";
 
 export function ManageLiqEditPaymentTime({
   liquidity,
+  disabled,
   onValueChanged,
 }: {
   market: Market;
   liquidity?: Liquidity;
+  disabled?: boolean;
   onValueChanged?: (
     value: number,
     err: string,
@@ -40,6 +42,7 @@ export function ManageLiqEditPaymentTime({
           value={duration.toString()}
           placeholder="0"
           isFocused={focused}
+          disabled={disabled}
           onChange={(e) => {
             setDuration(parseInt(e.target.value));
           }}
@@ -50,6 +53,7 @@ export function ManageLiqEditPaymentTime({
                   value={[duration || 1800]}
                   min={900}
                   max={3600}
+                  disabled={disabled}
                   step={1}
                   onValueChange={(value) => {
                     setFocused(true);

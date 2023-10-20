@@ -21,10 +21,12 @@ export function ManageLiqEditAmount({
   liquidity,
   market,
   baseUsdRate,
+  disabled,
   onValueChanged,
 }: {
   liquidity: Liquidity;
   market: Market;
+  disabled?: boolean;
   baseUsdRate: number;
   onValueChanged?: (
     value: string,
@@ -100,6 +102,7 @@ export function ManageLiqEditAmount({
                   <span>
                     <Button
                       variant="ghost"
+                      disabled={disabled}
                       className="p-0 h-auto text-chinese-green text-[10px] hover:bg-transparent hover:text-chinese-green/90"
                       onClick={() => {
                         setAmount(
@@ -119,6 +122,7 @@ export function ManageLiqEditAmount({
               value={amount}
               type="number"
               placeholder="0.00"
+              disabled={disabled}
               className="bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0"
               onChange={(e) => setAmount(e.target.value)}
               onFocus={() => setFocused(true)}

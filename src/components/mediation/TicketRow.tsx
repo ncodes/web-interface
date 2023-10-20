@@ -1,14 +1,3 @@
-import { BaseSyntheticEvent, useState } from "react";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { Button } from "../ui/Button.tsx";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu.tsx";
-import { cn } from "../../libs/utils.ts";
 import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
 import {
   CheckCircle,
@@ -19,9 +8,25 @@ import {
   Users2,
   XCircle,
 } from "lucide-react";
-import { StatCard } from "../market/StatCard.tsx";
-import { ToolTip } from "../ToolTip.tsx";
 import moment from "moment";
+import { BaseSyntheticEvent, useState } from "react";
+import { getTicketStatus } from "../../libs/api_utils.ts";
+import { formatToHighDenom } from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import { CountDown } from "../Countdown.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { StatCard } from "../market/StatCard.tsx";
+import { Button } from "../ui/Button.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu.tsx";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import {
   TicketStatusBadge,
   TicketTipCancelled,
@@ -33,11 +38,6 @@ import {
   TicketTipMatured,
   TicketTipMaturing,
 } from "./TicketStatusBadge.tsx";
-import { getTicketStatus } from "../../libs/api_utils.ts";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { CountDown } from "../Countdown.tsx";
-import { formatToHighDenom } from "../../libs/helpers.ts";
-import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 
 export function TicketRow({
   ticket,
@@ -108,7 +108,7 @@ export function TicketRow({
                     width="min-w-[160px]"
                   >
                     <span className="text-gray-200">
-                      {ticket.poolId || "-"}
+                      {ticket.poolId != undefined ? ticket.poolId : "-"}
                     </span>
                   </StatCard>
                   <StatCard
@@ -146,7 +146,9 @@ export function TicketRow({
                     <span className="text-gray-200 ">
                       {getTicketStatus(ticket) == "maturing" && <>Maturation</>}
                       {getTicketStatus(ticket) == "matured" && <>Join Pool</>}
-                      {getTicketStatus(ticket) == "joined" && <>Drafting</>}
+                      {getTicketStatus(ticket) == "joined" && (
+                        <>Awaiting Draft</>
+                      )}
                       {getTicketStatus(ticket) == "drafted" && <>Mediate</>}
                       {getTicketStatus(ticket) == "expired" && (
                         <>Cancellation</>

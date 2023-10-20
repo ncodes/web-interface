@@ -11,12 +11,14 @@ import { Input } from "../ui/Input.tsx";
 export function ManageLiqEditPrice({
   liquidity,
   market,
+  disabled,
   baseUsdRate,
   quoteUsdRate,
   onValueChanged,
 }: {
   liquidity: Liquidity;
   market: Market;
+  disabled?: boolean;
   baseUsdRate: number;
   quoteUsdRate: number;
   onValueChanged?: (
@@ -102,6 +104,7 @@ export function ManageLiqEditPrice({
                 value={price}
                 type="number"
                 placeholder="0.00"
+                disabled={disabled}
                 className="bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0"
                 onChange={(e) => {
                   setPrice(e.target.value);
@@ -115,7 +118,7 @@ export function ManageLiqEditPrice({
                 <Button
                   variant="secondary"
                   className="p-0 px-2 h-auto rounded"
-                  disabled={!price}
+                  disabled={disabled || !price}
                   onClick={() => {
                     setIncrement(
                       parseFloat((increment - increment * 0.01).toFixed(1))
@@ -128,7 +131,7 @@ export function ManageLiqEditPrice({
                   <Input
                     type="number"
                     value={increment}
-                    disabled={!price}
+                    disabled={disabled || !price}
                     className="!w-[40px] text-sm text-center !h-[25px] border-none bg-transparent focus-visible:outline-0 focus-visible:ring-0"
                     onChange={(e) => {
                       setIncrement(
@@ -141,7 +144,7 @@ export function ManageLiqEditPrice({
                 <Button
                   variant="secondary"
                   className="p-0 px-2 h-auto rounded"
-                  disabled={!price}
+                  disabled={disabled || !price}
                   onClick={() => {
                     setIncrement(
                       parseFloat((increment + increment * 0.01).toFixed(1))

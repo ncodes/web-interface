@@ -1,14 +1,14 @@
-import { TabsContent } from "../ui/Tabs.tsx";
+import { useQuery } from "@tanstack/react-query";
+import { PlugZapIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
+import { useDisputeService } from "../../hooks/services/backend/useDisputeService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { RequestError } from "../../libs/RequestError.ts";
 import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../../libs/RequestError.ts";
-import { PlugZapIcon } from "lucide-react";
-import useStore from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { TabsContent } from "../ui/Tabs.tsx";
 import { DisputeRow } from "./DisputeRow.tsx";
-import { useDisputeService } from "../../hooks/services/backend/useDisputeService.ts";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
@@ -101,7 +101,7 @@ export function MyDisputeTabContent() {
       )}
 
       {!isLoading && data?.disputes?.length == 0 && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+        <div className="flex items-center justify-center font-light text-gray-400 h-[370px]">
           No dispute found
         </div>
       )}

@@ -1,13 +1,15 @@
+import { useEffect, useState } from "react";
 import { FilterItem } from "../FilterItem.tsx";
 import { Switch } from "../ui/switch.tsx";
-import { useEffect, useState } from "react";
 
 export function ManageLiqEditPause({
   liquidity,
   onValueChanged,
+  disabled,
 }: {
   liquidity?: Liquidity;
   market: Market;
+  disabled?: boolean;
   onValueChanged?: (value: boolean) => void;
 }) {
   const [pause, setPause] = useState(liquidity ? liquidity.paused : false);
@@ -25,6 +27,7 @@ export function ManageLiqEditPause({
         <div className="flex flex-col gap-3">
           <Switch
             checked={pause}
+            disabled={disabled}
             onCheckedChange={(checked) => {
               setPause(checked);
             }}
