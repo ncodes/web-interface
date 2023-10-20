@@ -26,7 +26,7 @@ export function SwapOfferCreatorSheet({
     () => {
       setReveal(true);
     },
-    !reveal ? 3000 : null
+    !reveal ? 2000 : null
   );
 
   function canExecuteOffer(offer: Offer | undefined) {
@@ -41,7 +41,6 @@ export function SwapOfferCreatorSheet({
   return (
     <Sheet
       open={openState.createOfferSheet}
-      modal={true}
       onOpenChange={(open) => {
         if (!open) setReveal(false);
         toggleOpenState && toggleOpenState("createOfferSheet");

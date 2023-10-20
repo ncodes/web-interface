@@ -1,16 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
+import moment from "moment";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { shortenAddress } from "../../libs/helpers.ts";
+import { Events } from "../../types/enums.ts";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { shortenAddress } from "../../libs/helpers.ts";
-import moment from "moment";
-import { useQuery } from "@tanstack/react-query";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { Events } from "../../types/enums.ts";
-import { EventContentOfferCreate } from "./event/EventContentOfferCreate.tsx";
-import { EventContentOfferUpdate } from "./event/EventContentOfferUpdate.tsx";
 import { EventContentOfferAccept } from "./event/EventContentOfferAccept.tsx";
-import { EventContentOfferUnaccept } from "./event/EventContentOfferUnaccept.tsx";
 import { EventContentOfferCancel } from "./event/EventContentOfferCancel.tsx";
-import { UserHoverCard } from "../UserHoverCard.tsx";
+import { EventContentOfferCreate } from "./event/EventContentOfferCreate.tsx";
+import { EventContentOfferExecuted } from "./event/EventContentOfferExecuted.tsx";
+import { EventContentOfferUnaccept } from "./event/EventContentOfferUnaccept.tsx";
+import { EventContentOfferUpdate } from "./event/EventContentOfferUpdate.tsx";
 
 export default function OfferEvent({ event }: { event: Event }) {
   const { getUser } = useUserService();
@@ -44,6 +45,7 @@ export default function OfferEvent({ event }: { event: Event }) {
                 amount={event.amount}
                 market={event.market}
                 price={event.price}
+                liquidity={event.offer.liquidity}
               />
             )}
 
@@ -53,6 +55,7 @@ export default function OfferEvent({ event }: { event: Event }) {
                 amount={event.amount}
                 market={event.market}
                 price={event.price}
+                liquidity={event.offer.liquidity}
               />
             )}
 
@@ -62,6 +65,7 @@ export default function OfferEvent({ event }: { event: Event }) {
                 amount={event.amount}
                 market={event.market}
                 price={event.price}
+                liquidity={event.offer.liquidity}
               />
             )}
 
@@ -71,6 +75,8 @@ export default function OfferEvent({ event }: { event: Event }) {
                 amount={event.amount}
                 market={event.market}
                 price={event.price}
+                offer={event.offer}
+                liquidity={event.offer.liquidity}
               />
             )}
 
@@ -80,18 +86,21 @@ export default function OfferEvent({ event }: { event: Event }) {
                 amount={event.amount}
                 market={event.market}
                 price={event.price}
+                liquidity={event.offer.liquidity}
+              />
+            )}
+
+            {/* Offer: Cancelled */}
+            {event.action == Events.OfferExecute && (
+              <EventContentOfferExecuted
+                amount={event.swap.amount}
+                market={event.market}
+                price={event.offer.price}
+                liquidity={event.offer.liquidity}
+                swap={event.swap}
               />
             )}
           </div>
-          {/*<div className="mt-4">*/}
-          {/*  <Button*/}
-          {/*    variant="outline"*/}
-          {/*    size="full"*/}
-          {/*    className="border-gray-800 text-sm"*/}
-          {/*  >*/}
-          {/*    Accept*/}
-          {/*  </Button>*/}
-          {/*</div>*/}
         </div>
       </div>
     </div>

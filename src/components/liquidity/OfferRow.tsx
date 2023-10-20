@@ -340,7 +340,7 @@ export function OfferRow({
                   </StatCard>
                   <StatCard
                     title={`Amount (${offer.market.base})`}
-                    tip={`The amount of ${offer.market.base} being requested`}
+                    tip={`The amount of ${offer.market.base} the offer creator wants (including swap fees).`}
                   >
                     <span
                       className="text-gray-200 flex gap-1"
@@ -678,7 +678,7 @@ export function OfferRow({
             )}
 
             {/* If offer is not executed and user is offerer, show edit button*/}
-            {!offer.executed && !isOfferExpired(offer) && (
+            {!offer.executed && !offer.cancelled && !isOfferExpired(offer) && (
               <>
                 {isOfferer(offer, address) && (
                   <Button
@@ -755,8 +755,7 @@ export function OfferRow({
                 }}
               >
                 <MessageCircle width="20px" />{" "}
-                <span className="hidden md:inline">Message</span>
-                <span className="hidden xs:inline md:hidden">Chat </span>
+                <span className="font-medium text-gray-200">Open Chat</span>
                 <div className="rounded-full h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center bg-red-600 text-[10px] text-white">
                   2
                 </div>

@@ -91,9 +91,7 @@ export function SwapOfferCreatorContent({
     ready,
     getTokenAllowance,
   } = useConnectorContext();
-  const [expireDuration, setExpireDuration] = useState(
-    getInitialExpireDuration()
-  );
+  const [expireDuration, setExpireDuration] = useState(1800);
   const queryClient = useQueryClient();
   const { notifyError, notifySuccess } = useToast();
   const resetOpenState = useStore((state) => state.resetOpenState);
@@ -101,12 +99,12 @@ export function SwapOfferCreatorContent({
   const [quoteAmountInputFocused, setQuoteAmountInputFocused] = useState(false);
   const [approveLoading, setApproveLoading] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [price, setPrice] = useState(getInitialPrice());
+  const [price, setPrice] = useState("0");
   const [maxPrice, setMaxPrice] = useState(price);
   const [slippage, setSlippage] = useState(0);
   const [quoteBal, setQuoteBal] = useState<bigint>(0n);
   const [canDo, setCanDo] = useState(false);
-  const [amount, setAmount] = useState(getInitialAmount());
+  const [amount, setAmount] = useState("");
   const [slippageAmount, setSlippageAmount] = useState(amount);
   const [quoteAmount, setQuoteAmount] = useState("");
   const [amountErr, setAmountErr] = useState("");
@@ -126,38 +124,52 @@ export function SwapOfferCreatorContent({
     protoFeeBps: 0,
   });
 
-  function getInitialAmount() {
-    if (!offer) return "";
-    return toHD(offer.amount, market.baseDecimals);
-  }
+  // Compute and set initial values
+  useEffect(() => {
+    const setInitialAmount = async () => {
+      if (!offer) return setAmount("");
 
-  function getInitialPrice() {
-    if (!offer) return liquidity.price;
-    return offer.price;
-  }
+      // In offer mode, use offer amount as initial amount minus any fees
+      let amount = toHDD(offer.amount, market.baseDecimals);
+      const feeInfo = await computeFeeInfo(amount.toFixed());
+      setFeeInfo(feeInfo);
+      if (feeInfo.symbol == market.base) amount = amount.sub(feeInfo.total);
+      setAmount(trimZeros(amount.toFixed(8)));
+    };
 
-  function getInitialExpireDuration() {
-    if (!offer) return 1800;
-    if (offer && canExecuteOffer(offer)) return 1800;
-    return moment(offer?.deadline).diff(moment(), "seconds");
-  }
+    const setInitialPrice = async () => {
+      if (!offer) return setPrice(liquidity.price);
+      setPrice(offer.price);
+    };
+
+    const setInitialExpireDuration = () => {
+      if (!offer) return setExpireDuration(1800);
+      if (offer && canExecuteOffer(offer)) return setExpireDuration(1800);
+      const expDur = moment(offer?.deadline).diff(moment(), "seconds");
+      setExpireDuration(expDur);
+    };
+
+    void setInitialAmount();
+    void setInitialPrice();
+    void setInitialExpireDuration();
+  }, []);
 
   // Update quote balance every 10 seconds
   useInterval(() => {
     if (!ready) return;
-    getQuoteBalance().catch(console.error);
+    void getQuoteBalance();
   }, 10000);
 
   // Update quote balance on mount
   useEffect(() => {
     if (!ready) return;
-    getQuoteBalance().catch(console.error);
+    void getQuoteBalance();
   }, [ready]);
 
   // Validate amount and quote amount
   useEffect(() => {
     const { baseDecimals, quoteDecimals } = market;
-    const { minSwap, maxSwap } = liquidity;
+    const { minSwap } = liquidity;
 
     let amtErrMsg = "";
     if (amount != "") {

@@ -1,9 +1,7 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import moment from "moment";
 import { StoreAccessTokenKey } from "../../../constants.ts";
-import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
-import { Events } from "../../../types/enums.ts";
+import { handleAxiosError } from "../../../libs/helpers.ts";
 import { OfferFilter } from "../../store/useStore.ts";
 
 export interface ListOfferParams {
@@ -101,72 +99,6 @@ export function useOfferService() {
         headers,
       });
 
-      // TODO: remove mock
-      resp.data.data[0] = {
-        action: Events.OfferCreate,
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        amount: powOf(100, 18).toString(),
-        price: powOf(10, 18).toString(),
-        market: {
-          baseDecimals: 18,
-          quoteDecimals: 18,
-          base: "BTC",
-          quote: "USDT",
-        },
-        createdAt: moment().subtract(10, "m").toISOString(),
-      } as Event;
-      resp.data.data[1] = {
-        action: Events.OfferUpdate,
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92245",
-        amount: powOf(1530, 18).toString(),
-        price: powOf(10000, 18).toString(),
-        market: {
-          baseDecimals: 18,
-          quoteDecimals: 18,
-          base: "BTC",
-          quote: "USDT",
-        },
-        createdAt: moment().subtract(20, "m").toISOString(),
-      } as Event;
-      resp.data.data[2] = {
-        action: Events.OfferAccept,
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92223",
-        amount: powOf(1530, 18).toString(),
-        price: powOf(10000, 18).toString(),
-        market: {
-          baseDecimals: 18,
-          quoteDecimals: 18,
-          base: "BTC",
-          quote: "USDT",
-        },
-        createdAt: moment().subtract(20, "m").toISOString(),
-      } as Event;
-      resp.data.data[3] = {
-        action: Events.OfferUnaccept,
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cxzFb92223",
-        amount: powOf(1530, 18).toString(),
-        price: powOf(10000, 18).toString(),
-        market: {
-          baseDecimals: 18,
-          quoteDecimals: 18,
-          base: "BTC",
-          quote: "USDT",
-        },
-        createdAt: moment().subtract(20, "m").toISOString(),
-      } as Event;
-      resp.data.data[4] = {
-        action: Events.OfferCancel,
-        creator: "0xf39Fd6e51aad88F6F4ce6aBx827279cxzFb92223",
-        amount: powOf(1530, 18).toString(),
-        price: powOf(10000, 18).toString(),
-        market: {
-          baseDecimals: 18,
-          quoteDecimals: 18,
-          base: "BTC",
-          quote: "USDT",
-        },
-        createdAt: moment().subtract(20, "m").toISOString(),
-      } as Event;
       return Promise.resolve({
         events: resp.data.data,
         meta: resp.data.meta,

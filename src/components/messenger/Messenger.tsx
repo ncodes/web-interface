@@ -634,6 +634,30 @@ export function Messenger({
                     </div>
                   )}
 
+                {messages?.length == 0 &&
+                  client &&
+                  offer &&
+                  isEqlStr(offer.creator, address) && (
+                    <div className="text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10">
+                      Start a conversation with the liquidity provider to
+                      discuss the terms and details of your offer.
+                      <br />
+                      <span className="text-chinese-green">Send a message</span>
+                    </div>
+                  )}
+
+                {messages?.length == 0 &&
+                  client &&
+                  offer &&
+                  isEqlStr(offer.provider, address) && (
+                    <div className="text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10">
+                      Start a conversation with the offer creator to discuss the
+                      terms and details of the offer.
+                      <br />
+                      <span className="text-chinese-green">Send a message</span>
+                    </div>
+                  )}
+
                 <div className="px-3 flex flex-col gap-3 py-3">
                   {address &&
                     client &&
