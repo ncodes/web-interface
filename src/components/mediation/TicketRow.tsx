@@ -18,7 +18,7 @@ import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { StatCard } from "../market/StatCard.tsx";
+import { InfoCard } from "../market/InfoCard.tsx";
 import { Button } from "../ui/Button.tsx";
 import {
   DropdownMenu,
@@ -92,7 +92,7 @@ export function TicketRow({
                   className="flex-1 flex py-2 px-2 gap-2"
                   data-click-trigger="1"
                 >
-                  <StatCard
+                  <InfoCard
                     title={`Bond (P2P)`}
                     tip={`The total amount of security deposit locked in the ticket`}
                     width="min-w-[160px]"
@@ -101,8 +101,8 @@ export function TicketRow({
                       <span>{formatToHighDenom(ticket.bond, 18)}</span>
                       <USDAmountToolTip v={ticket.bondUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Pool ID`}
                     tip={`The pool where the ticket is currently staked`}
                     width="min-w-[160px]"
@@ -110,8 +110,8 @@ export function TicketRow({
                     <span className="text-gray-200">
                       {ticket.poolId != undefined ? ticket.poolId : "-"}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Draft Count`}
                     tip={`The number of times this ticket has been drafted`}
                     width="min-w-[160px]"
@@ -119,8 +119,8 @@ export function TicketRow({
                     <span className="text-gray-200">
                       {ticket.drafts.length}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Current Phase`}
                     tip={`The current phase of the ticket`}
                     width="min-w-[160px]"
@@ -137,8 +137,8 @@ export function TicketRow({
                       {getTicketStatus(ticket) == "cancelled" && <>Cancelled</>}
                       {getTicketStatus(ticket) == "drained" && <>Drained</>}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Next Phase`}
                     tip={`The next phase of the ticket`}
                     width="min-w-[160px]"
@@ -154,7 +154,7 @@ export function TicketRow({
                         <>Cancellation</>
                       )}
                     </span>
-                  </StatCard>
+                  </InfoCard>
                 </div>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>

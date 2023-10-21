@@ -41,7 +41,7 @@ import { AvatarSize } from "../avatar/useAvatar.tsx";
 import IconCopyFilled from "../icons/IconCopyFilled.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { StatCard } from "../market/StatCard.tsx";
+import { InfoCard } from "../market/InfoCard.tsx";
 import { MessengerSheet } from "../messenger/MessengerSheet.tsx";
 import { SwapOfferCreatorSheet } from "../swap/SwapOfferCreatorSheet.tsx";
 import { Button } from "../ui/Button.tsx";
@@ -326,7 +326,7 @@ export function OfferRow({
                   className="flex-1 flex py-2 px-2 gap-2"
                   data-click-trigger="1"
                 >
-                  <StatCard
+                  <InfoCard
                     title={`Price (${offer.market.quote})`}
                     tip={`The offer price for 1 ${offer.market.base} in ${offer.market.quote}`}
                   >
@@ -337,8 +337,8 @@ export function OfferRow({
                       )}
                       <USDAmountToolTip v={offer.priceUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Amount (${offer.market.base})`}
                     tip={`The amount of ${offer.market.base} the offer creator wants (including swap fees).`}
                   >
@@ -352,9 +352,9 @@ export function OfferRow({
                       )}
                       <USDAmountToolTip v={offer.amountUsd} />
                     </span>
-                  </StatCard>
+                  </InfoCard>
                   {!offer.executed && !offer.cancelled && (
-                    <StatCard
+                    <InfoCard
                       title={isOfferExpired(offer) ? "Expired" : `Expires In`}
                       tip={`When the offer will expire`}
                     >
@@ -377,10 +377,10 @@ export function OfferRow({
                           )}
                         </span>
                       </ToolTip>
-                    </StatCard>
+                    </InfoCard>
                   )}
                   {(offer.executed || offer.cancelled) && (
-                    <StatCard
+                    <InfoCard
                       title={`Status`}
                       tip={`The current status of the offer`}
                     >
@@ -391,7 +391,7 @@ export function OfferRow({
                         {offer.executed && "Executed"}
                         {offer.cancelled && "Cancelled"}
                       </span>
-                    </StatCard>
+                    </InfoCard>
                   )}
                 </div>
               </ScrollAreaHorizontal>

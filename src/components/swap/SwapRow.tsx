@@ -12,7 +12,7 @@ import { cn } from "../../libs/utils.ts";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { PairAvatar } from "../avatar/PairAvatar.tsx";
-import { StatCard } from "../market/StatCard.tsx";
+import { InfoCard } from "../market/InfoCard.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import SwapRowLayer2 from "./SwapRowLayer2.tsx";
 import SwapRowLayer3 from "./SwapRowLayer3.tsx";
@@ -188,7 +188,7 @@ export function SwapRow({
                   className="flex-1 flex py-2 px-2 gap-2"
                   data-click-trigger="1"
                 >
-                  <StatCard
+                  <InfoCard
                     title={`Price (${swap.quote})`}
                     tip={`The price of 1 ${swap.base} in ${swap.quote}`}
                   >
@@ -201,8 +201,8 @@ export function SwapRow({
                       </span>
                       <USDAmountToolTip v={swap.priceUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Amount (${swap.base})`}
                     tip={`The amount of ${swap.base} requested by the taker`}
                   >
@@ -218,8 +218,8 @@ export function SwapRow({
                       </span>
                       <USDAmountToolTip v={swap.amountUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Cost (${swap.quote})`}
                     tip={`The amount of ${swap.quote} to be paid by the taker`}
                   >
@@ -230,8 +230,8 @@ export function SwapRow({
                       <span>{formatToMoney(swap.cost)}</span>
                       <USDAmountToolTip v={swap.costUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Fee (${swap.feeSymbol})`}
                     tip={`The amount of fee paid`}
                   >
@@ -244,15 +244,15 @@ export function SwapRow({
                       </span>
                       <USDAmountToolTip v={swap.feeUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Type`}
                     tip={`Whether the swap is instant or interactive`}
                   >
                     <span className="text-gray-200">
                       {swap.instant ? "Instant" : "Interactive"}
                     </span>
-                  </StatCard>
+                  </InfoCard>
                 </div>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>

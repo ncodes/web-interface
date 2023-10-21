@@ -1,26 +1,26 @@
-import { ReactNode, useState } from "react";
-import { cn } from "../libs/utils.ts";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "./ui/hover-card.tsx";
 import { HoverCardPortal } from "@radix-ui/react-hover-card";
-import EmojiAvatar from "./avatar/EmojiAvatar.tsx";
-import { AvatarSize } from "./avatar/useAvatar.tsx";
+import moment from "moment/moment";
+import { ReactNode, useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   approxNumber,
   formatToMoney,
   isMerchant,
   shortenAddress,
 } from "../libs/helpers.ts";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { cn } from "../libs/utils.ts";
+import ScrollOverflowIndicator from "./ScrollOverflowIndicator.tsx";
+import EmojiAvatar from "./avatar/EmojiAvatar.tsx";
+import { AvatarSize } from "./avatar/useAvatar.tsx";
 import IconCopyFilled from "./icons/IconCopyFilled.tsx";
 import { VerifiedBadge } from "./liquidity/VerifiedBadge.tsx";
+import { InfoCard } from "./market/InfoCard.tsx";
 import { Button } from "./ui/Button.tsx";
-import ScrollOverflowIndicator from "./ScrollOverflowIndicator.tsx";
-import { StatCard } from "./market/StatCard.tsx";
-import moment from "moment/moment";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "./ui/hover-card.tsx";
 
 export function UserHoverCard({
   children,
@@ -93,7 +93,7 @@ export function UserHoverCard({
               className="overflow-hidden rounded-b-xl"
             >
               <div className="p-2 flex flex-col gap-2 h-[200px] overflow-auto scrollbar-hide">
-                <StatCard
+                <InfoCard
                   title="Total Swaps"
                   tip={`The total number of swaps completed across all liquidities`}
                   width="w-full"
@@ -102,8 +102,8 @@ export function UserHoverCard({
                   <span className="text-gray-200">
                     {formatToMoney(user?.totalSwaps || "0")}
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="Completion Rate"
                   tip={`The percentage of non-disputed swaps across all liquidities`}
                   width="w-full"
@@ -112,8 +112,8 @@ export function UserHoverCard({
                   <span className="text-gray-200">
                     {user?.completionRate || 0}%
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="Volume"
                   tip={`The total volume of swaps across all liquidities`}
                   width="w-full"
@@ -125,8 +125,8 @@ export function UserHoverCard({
                       ? approxNumber(user?.volumeUsd || 0, 3)
                       : "0"}
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="Last Active"
                   tip={`The last time the user participated in a swap`}
                   width="w-full"
@@ -135,7 +135,7 @@ export function UserHoverCard({
                   <span className="text-gray-200">
                     {moment(user?.lastActiveAt).fromNow()}
                   </span>
-                </StatCard>
+                </InfoCard>
               </div>
             </ScrollOverflowIndicator>
           </HoverCardContent>

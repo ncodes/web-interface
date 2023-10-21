@@ -32,7 +32,7 @@ import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
 import { IconStarSmile } from "../icons/IconStarSmile.tsx";
 import { BadgePill } from "../market/BadgePill.tsx";
 import { FollowLiquidity } from "../market/FollowLiquidity.tsx";
-import { StatCard } from "../market/StatCard.tsx";
+import { InfoCard } from "../market/InfoCard.tsx";
 import { SwapOfferCreatorSheet } from "../swap/SwapOfferCreatorSheet.tsx";
 import { SwapSheet } from "../swap/SwapSheet.tsx";
 import { Button } from "../ui/Button.tsx";
@@ -280,7 +280,7 @@ export function LiquidityRow({
                   className="flex-1 flex py-2 px-2 gap-2"
                   data-click-trigger="1"
                 >
-                  <StatCard
+                  <InfoCard
                     title={`Price (${liquidity.quote})`}
                     tip={`The price of 1 ${liquidity.base} in ${liquidity.quote}`}
                     title2={
@@ -309,8 +309,8 @@ export function LiquidityRow({
                       </span>
                       <USDAmountToolTip v={liquidity.priceUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Available`}
                     title2={`(${liquidity.base})`}
                     tip={`The amount ${liquidity.base} available for swap`}
@@ -324,8 +324,8 @@ export function LiquidityRow({
                       </span>
                       <USDAmountToolTip v={liquidity.amountUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Min. Swap`}
                     title2={`(${liquidity.base})`}
                     tip={`The minimum amount of ${liquidity.base} that can be swapped`}
@@ -339,8 +339,8 @@ export function LiquidityRow({
                       </span>
                       <USDAmountToolTip v={liquidity.minSwapUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Max. Amount`}
                     title2={`(${liquidity.base})`}
                     tip={`The maximum amount of ${liquidity.base} that can be swapped`}
@@ -355,8 +355,8 @@ export function LiquidityRow({
                       </span>
                       <USDAmountToolTip v={liquidity.maxSwapUsd} />
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Payment Time`}
                     tip={`The duration payment is expected to be made`}
                   >
@@ -366,39 +366,39 @@ export function LiquidityRow({
                     >
                       {humanizeDur(liquidity.timeToPay)}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`24hrs Volume`}
                     tip={`The volume of ${liquidity.base} traded in the last 24hrs`}
                   >
                     <span className="text-gray-200">
                       ${approxNumber(parseFloat(liquidity.volume24h), 3)}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Total Swaps`}
                     tip={`The total number of swaps this liquidity has completed`}
                   >
                     <span className="text-gray-200" data-click-trigger="1">
                       {liquidity.totalSwaps}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Open Disputes`}
                     tip={`The number of open disputes for this liquidity`}
                   >
                     <span className="text-gray-200" data-click-trigger="1">
                       {liquidity.openDisputes}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Total Disputes`}
                     tip={`The total number of disputes started for this liquidity`}
                   >
                     <span className="text-gray-200" data-click-trigger="1">
                       {liquidity.totalDisputes}
                     </span>
-                  </StatCard>
+                  </InfoCard>
                 </div>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>

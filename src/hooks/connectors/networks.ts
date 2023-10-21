@@ -1,16 +1,18 @@
-import TokenInfo from "./token_info.ts";
-import { ChainInfo } from "../../types/global";
-import IconEthereum from "../../components/icons/IconEthereum.tsx";
-import IconPolygon from "../../components/icons/IconPolygon.tsx";
-import IconOptimism from "../../components/icons/IconOptimism.tsx";
-import IconBSC from "../../components/icons/BSC.tsx";
-import IconArbitrum from "../../components/icons/IconArbitrum.tsx";
 import BadgeManagerABI from "../../abi/BadgeManager.json";
-import EnergonABI from "../../abi/Energon.json";
-import NftABI from "../../abi/NFT.json";
-import MarketCoreABI from "../../abi/MarketCore.json";
 import CoreABI from "../../abi/Core.json";
 import DisputeManagerABI from "../../abi/DisputeManager.json";
+import EnergonABI from "../../abi/Energon.json";
+import MarketCoreABI from "../../abi/MarketCore.json";
+import NftABI from "../../abi/NFT.json";
+import MediatorManagerABI from "../../abi/MediatorManager.json";
+import NativeTokenABI from "../../abi/Token.json";
+import IconBSC from "../../components/icons/BSC.tsx";
+import IconArbitrum from "../../components/icons/IconArbitrum.tsx";
+import IconEthereum from "../../components/icons/IconEthereum.tsx";
+import IconOptimism from "../../components/icons/IconOptimism.tsx";
+import IconPolygon from "../../components/icons/IconPolygon.tsx";
+import { ChainInfo } from "../../types/global";
+import TokenInfo from "./token_info.ts";
 
 export enum ChainID {
   Ethereum = 1,
@@ -47,6 +49,10 @@ export const SupportedNetworks: ChainInfo[] = [
         address: import.meta.env.VITE_ETHEREUM_CORE_ADDRESS,
         abi: CoreABI,
       },
+      token: {
+        address: import.meta.env.VITE_ETHEREUM_TOKEN_ADDRESS,
+        abi: NativeTokenABI,
+      },
       badgeManager: {
         address: import.meta.env.VITE_ETHEREUM_BADGE_MGR_ADDRESS,
         abi: BadgeManagerABI,
@@ -58,6 +64,10 @@ export const SupportedNetworks: ChainInfo[] = [
       disputeManager: {
         address: import.meta.env.VITE_ETHEREUM_DISPUTE_MGR_ADDRESS,
         abi: DisputeManagerABI,
+      },
+      mediatorManager: {
+        address: import.meta.env.VITE_ETHEREUM_MEDIATOR_MGR_ADDRESS,
+        abi: MediatorManagerABI,
       },
       energon: {
         address: import.meta.env.VITE_ETHEREUM_ENERGON_ADDRESS,
@@ -175,8 +185,12 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
     contracts: {
       core: {
-        address: import.meta.env.VITE_ETHEREUM_CORE_ADDRESS,
+        address: import.meta.env.VITE_LOCALHOST_CORE_ADDRESS,
         abi: CoreABI,
+      },
+      token: {
+        address: import.meta.env.VITE_LOCALHOST_TOKEN_ADDRESS,
+        abi: NativeTokenABI,
       },
       badgeManager: {
         address: import.meta.env.VITE_LOCALHOST_BADGE_MGR_ADDRESS,
@@ -189,6 +203,10 @@ export const SupportedNetworks: ChainInfo[] = [
       disputeManager: {
         address: import.meta.env.VITE_LOCALHOST_DISPUTE_MGR_ADDRESS,
         abi: DisputeManagerABI,
+      },
+      mediatorManager: {
+        address: import.meta.env.VITE_LOCALHOST_MEDIATOR_MGR_ADDRESS,
+        abi: MediatorManagerABI,
       },
       energon: {
         address: import.meta.env.VITE_LOCALHOST_ENERGON_ADDRESS,

@@ -1,10 +1,10 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card.tsx";
 import { cn } from "../../libs/utils.ts";
 import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card.tsx";
 
-export function StatCard({
+export function InfoCard({
   title,
   title2,
   children,
@@ -29,7 +29,7 @@ export function StatCard({
         width
       )}
     >
-      <CardHeader className="px-3 py-2 pr-2 pt-1 pb-[3px]">
+      <CardHeader className="px-2 py-2 pr-2 pt-1 pb-[3px]">
         <CardTitle className="text-[11px] tracking-wide font-light text-gray-400 flex items-center justify-between gap-2">
           <div className="overflow-auto scrollbar-hide">
             <div className="flex flex-1 gap-1">
@@ -61,7 +61,7 @@ export function StatCard({
       </CardHeader>
       <CardContent
         data-click-trigger={!rmDataClickTrigger ? 1 : 0}
-        className="px-3 py-0 pb-2 tracking-wide text-chinese-green"
+        className="px-2 py-0 pb-2 tracking-wide text-chinese-green"
       >
         {children}
       </CardContent>

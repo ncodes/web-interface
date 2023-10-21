@@ -1,4 +1,8 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+import { getChain, getChains } from "../hooks/connectors/networks.ts";
+import { cn } from "../libs/utils.ts";
+import { ChainInfo } from "../types/global";
 import {
   DropdownArrow,
   DropdownMenu,
@@ -8,10 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
-import { cn } from "../libs/utils.ts";
-import { ReactNode, useCallback, useEffect, useState } from "react";
-import { getChain, getChains } from "../hooks/connectors/networks.ts";
-import { ChainInfo } from "../types/global";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
@@ -28,7 +28,7 @@ function DropdownMenuItemCustom({
     <DropdownMenuItem
       onSelect={onSelect}
       className={cn(
-        "flex items-center gap-2 font-normal text-[13px] px-2 py-2 transition-all duration-300 focus:scale-x-105 focus:bg-chinese-green cursor-pointer rounded-none",
+        "flex items-center gap-2 font-normal text-[13px] px-2 py-2 transition-all duration-300 focus:scale-x-105 focus:bg-chinese-green cursor-pointer rounded-xl",
         className
       )}
     >
@@ -75,12 +75,20 @@ export function NetworkSelector() {
             <span className="hidden md:inline">
               {curChain?.altDisplayName || curChain?.displayName}
             </span>
-            <span className="relative -left-1 top-[0px]">
-              {open ? <ChevronUp /> : <ChevronDown />}
+
+            <span
+              className={cn(
+                "relative -left-1 top-[0px] transition-all duration-300",
+                {
+                  "rotate-180": open,
+                }
+              )}
+            >
+              <ChevronDown />
             </span>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[152px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 px-0 py-0">
+        <DropdownMenuContent className="w-[170px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 py-1 px-2">
           {getChains(
             false,
             true,

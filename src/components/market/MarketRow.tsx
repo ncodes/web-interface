@@ -24,19 +24,19 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import { FollowMarket } from "./FollowMarket.tsx";
 import { AssetTip } from "./AssetTip.tsx";
 import { BadgePill } from "./BadgePill.tsx";
+import { FollowMarket } from "./FollowMarket.tsx";
+import { InfoCard } from "./InfoCard.tsx";
 import { ManageMarketSheet } from "./ManageMarketSheet.tsx";
 import { PriceChange } from "./PriceChange.tsx";
-import { StatCard } from "./StatCard.tsx";
 
 export function MarketRow({
   market,
   ownerMode,
   noFocus,
   className,
-  onFollowUpdate
+  onFollowUpdate,
 }: {
   market: Market;
   className?: string;
@@ -128,7 +128,7 @@ export function MarketRow({
                 data-click-trigger="1"
                 className="py-[8px] flex gap-2 md:px-2"
               >
-                <StatCard
+                <InfoCard
                   title={`Price (${market.base})`}
                   width="w-auto"
                   tip={`The price of 1 ${market.base} in USD`}
@@ -143,9 +143,9 @@ export function MarketRow({
                     </span>
                     <USDAmountToolTip v={parseFloat(market.lowestPriceUsd)} />
                   </span>
-                </StatCard>
+                </InfoCard>
 
-                <StatCard
+                <InfoCard
                   title="Total Liquidity"
                   title2=""
                   tip={`The total amount of ${market.base} in the market`}
@@ -161,8 +161,8 @@ export function MarketRow({
                       v={parseFloat(market.totalLiquidityUsd)}
                     />
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="24hrs Volume"
                   title2=""
                   tip={`The total volume of ${market.base} traded in the last 24hrs`}
@@ -170,8 +170,8 @@ export function MarketRow({
                   <span className="text-gray-200" data-click-trigger="1">
                     ${approxNumber(parseFloat(market.volume24h), 3)}
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="Commission"
                   title2="(%)"
                   tip={`The commission reserved for the market owner`}
@@ -179,8 +179,8 @@ export function MarketRow({
                   <span className="text-gray-200" data-click-trigger="1">
                     {market.commission / 100}
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="Offer Only"
                   title2=""
                   width="w-[125px]"
@@ -189,8 +189,8 @@ export function MarketRow({
                   <span className="text-gray-200" data-click-trigger="1">
                     {market.offerOnly ? "YES" : "NO"}
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="PUT Open"
                   title2=""
                   width="w-[125px]"
@@ -199,8 +199,8 @@ export function MarketRow({
                   <span className="text-gray-200" data-click-trigger="1">
                     {market.permPut ? "NO" : "YES"}
                   </span>
-                </StatCard>
-                <StatCard
+                </InfoCard>
+                <InfoCard
                   title="SWAP Open"
                   title2=""
                   tip={`Is the market open to the public for swapping liquidity?`}
@@ -208,7 +208,7 @@ export function MarketRow({
                   <span className="text-gray-200" data-click-trigger="1">
                     {market.permSwap ? "NO" : "YES"}
                   </span>
-                </StatCard>
+                </InfoCard>
               </div>
             </ScrollAreaHorizontal>
           </ScrollOverflowIndicator>
@@ -313,7 +313,12 @@ export function MarketRow({
               </Button>
             </span>
           )}
-          {!ownerMode && <FollowMarket marketAddress={market.address} onFollowUpdate={onFollowUpdate} />}
+          {!ownerMode && (
+            <FollowMarket
+              marketAddress={market.address}
+              onFollowUpdate={onFollowUpdate}
+            />
+          )}
           {ownerMode && (
             <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu

@@ -40,7 +40,7 @@ import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { StatCard } from "../market/StatCard.tsx";
+import { InfoCard } from "../market/InfoCard.tsx";
 import CommitVotePopOver from "../swap/CommitVotePopOver.tsx";
 import RevealVotePopOver from "../swap/RevealVotePopOver.tsx";
 import { Button } from "../ui/Button.tsx";
@@ -253,7 +253,7 @@ export function DisputeRow({
                   className="flex-1 flex py-2 px-2 gap-2"
                   data-click-trigger="1"
                 >
-                  <StatCard
+                  <InfoCard
                     title={`Disputer Request`}
                     tip={`The outcome the dispute creator is seeking (release or cancel)`}
                     width="min-w-[160px]"
@@ -261,8 +261,8 @@ export function DisputeRow({
                     <span className="text-gray-200">
                       {dispute.wantRelease ? "RELEASE" : "CANCEL"}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`No. of Mediators`}
                     tip={`The total number of mediators required for this dispute`}
                     width="min-w-[160px]"
@@ -273,8 +273,8 @@ export function DisputeRow({
                         ({dispute.numMediatorsDrafted} drafted)
                       </span>
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Current Phase`}
                     tip={`The current phase of the dispute`}
                     width="min-w-[160px]"
@@ -302,8 +302,8 @@ export function DisputeRow({
                         getDisputeStatus(dispute)
                       ) && <>Verdict Executed</>}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Next Phase`}
                     tip={`The next phase of the dispute`}
                     width="min-w-[160px]"
@@ -327,8 +327,8 @@ export function DisputeRow({
                         getDisputeStatus(dispute)
                       ) && <>-</>}
                     </span>
-                  </StatCard>
-                  <StatCard
+                  </InfoCard>
+                  <InfoCard
                     title={`Next Phase In`}
                     tip={`The countdown to the next phase of the dispute`}
                     width="w-[150px]"
@@ -355,7 +355,7 @@ export function DisputeRow({
                     {["released", "stalled", "cancelled"].includes(
                       getDisputeStatus(dispute)
                     ) && <>-</>}
-                  </StatCard>
+                  </InfoCard>
                 </div>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>

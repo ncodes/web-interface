@@ -1,5 +1,5 @@
-import TokenInfo from "../hooks/connectors/token_info.ts";
 import React from "react";
+import TokenInfo from "../hooks/connectors/token_info.ts";
 import { AssetType, Events } from "./enums.ts";
 
 interface ContractInfo<ABIType> {
@@ -28,11 +28,13 @@ interface ChainInfo {
 declare global {
   type ContractNames =
     | "core"
+    | "token"
     | "energon"
     | "nft"
     | "badgeManager"
     | "marketCore"
-    | "disputeManager";
+    | "disputeManager"
+    | "mediatorManager";
 
   interface User {
     email: string;
@@ -409,4 +411,16 @@ declare global {
     markAsPaid?: boolean;
     release?: boolean;
   }
+
+  type MediatorPool = {
+    name: string;
+    description: string;
+    id: number;
+    reqBond: string;
+    draftReward: string;
+    winReward: string;
+    noVoteSlashBP: number;
+    loseVoteSlashBP: number;
+    numDraftees: number;
+  };
 }

@@ -1,4 +1,7 @@
+import { ChevronDown } from "lucide-react";
+import React, { ReactNode, useState } from "react";
 import { cn } from "../libs/utils.ts";
+import useRegion from "./region/useRegion.ts";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,9 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
 import { ScrollArea } from "./ui/scroll-area.tsx";
-import React, { ReactNode, useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import useRegion from "./region/useRegion.ts";
 
 function DropdownMenuItemCustom({
   children,
@@ -23,7 +23,7 @@ function DropdownMenuItemCustom({
     <DropdownMenuItem
       onSelect={onSelect}
       className={cn(
-        "flex items-center gap-2 font-normal text-[13px] px-2 py-2 transition-all duration-300 focus:scale-x-105 focus:bg-chinese-green cursor-pointer rounded-none",
+        "flex items-center gap-2 font-normal text-[13px] px-2 py-2 transition-all duration-300 focus:scale-x-105 focus:bg-chinese-green cursor-pointer rounded-xl mx-1 my-1",
         className,
         {
           "scale-x-105 bg-chinese-green text-accent-foreground": false,
@@ -61,8 +61,15 @@ export function RegionSelector() {
         <span className="font-normal text-lg mt-[1px] tracking-wider">
           {currentRegion}
         </span>
-        <div className="pl-1 flex items-center relative">
-          {open ? <ChevronUp /> : <ChevronDown />}
+        <div
+          className={cn(
+            "pl-1 flex items-center relative transition-all duration-300",
+            {
+              "rotate-180": open,
+            }
+          )}
+        >
+          <ChevronDown />
         </div>
       </div>
     </RegionSelectorMenu>
@@ -85,7 +92,7 @@ export function RegionSelectorMenu({
       <DropdownMenuTrigger className="outline-0 ring-0">
         {children}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="DropdownMenuContent min-w-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-700/80 text-gray-200 px-0 py-0">
+      <DropdownMenuContent className="w-auto DropdownMenuContent min-w-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-700/80 text-gray-200 py-0 px-1">
         <ScrollArea className="h-[200px]" type="scroll">
           {getRegions(currentRegion ? [currentRegion] : []).map((r) => (
             <DropdownMenuItemCustom

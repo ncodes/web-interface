@@ -1,24 +1,24 @@
 import React, { ReactNode, useState } from "react";
+import { NavLink } from "react-router-dom";
+import useTranslate from "../i18n/useTranslate.ts";
+import { cn } from "../libs/utils.ts";
+import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
+import { IconFlagChina } from "./icons/IconFlagChina.tsx";
+import { IconFlagFrance } from "./icons/IconFlagFrance.tsx";
+import { IconFlagIndia } from "./icons/IconFlagIndia.tsx";
+import { IconFlagItaly } from "./icons/IconFlagItaly.tsx";
+import { IconFlagJapan } from "./icons/IconFlagJapan.tsx";
+import { IconFlagSKorea } from "./icons/IconFlagSKorea.tsx";
+import { IconFlagSpain } from "./icons/IconFlagSpain.tsx";
+import { IconFlagUK } from "./icons/IconFlagUK.tsx";
+import { IconGlobalLine } from "./icons/IconGlobalLine.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
-import { cn } from "../libs/utils.ts";
-import { IconGlobalLine } from "./icons/IconGlobalLine.tsx";
-import { IconFlagSpain } from "./icons/IconFlagSpain.tsx";
-import { IconFlagItaly } from "./icons/IconFlagItaly.tsx";
-import { IconFlagFrance } from "./icons/IconFlagFrance.tsx";
-import { IconFlagSKorea } from "./icons/IconFlagSKorea.tsx";
-import { IconFlagJapan } from "./icons/IconFlagJapan.tsx";
-import { IconFlagChina } from "./icons/IconFlagChina.tsx";
-import { IconFlagUK } from "./icons/IconFlagUK.tsx";
-import { IconFlagIndia } from "./icons/IconFlagIndia.tsx";
 import { ScrollArea } from "./ui/scroll-area.tsx";
-import useTranslate from "../i18n/useTranslate.ts";
-import { NavLink } from "react-router-dom";
-import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
 
 function DropdownMenuItemCustom({
   children,
@@ -36,10 +36,10 @@ function DropdownMenuItemCustom({
         cacheLocale(locale);
       }}
       className={cn(
-        "flex items-center gap-2 font-normal text-[13px] px-2 py-2 transition-all duration-300 focus:scale-x-105 focus:bg-chinese-green cursor-pointer rounded-none",
+        "flex items-center gap-2 font-normal text-[13px] px-2 py-2 transition-all duration-300 focus:scale-x-105 focus:bg-chinese-green cursor-pointer rounded-xl mx-1",
         className,
         {
-          "scale-x-105 bg-chinese-green text-accent-foreground":
+          "scale-x-105 bg-chinese-green text-accent-foreground my-1":
             i18n.language === locale,
         }
       )}
@@ -81,7 +81,7 @@ export function LanguageSelectorMenu({
       <DropdownMenuTrigger className="outline-0 ring-0">
         {children}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[152px] outline-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 px-0 py-0">
+      <DropdownMenuContent className="w-[152px] outline-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 py-0 px-1">
         <ScrollArea className="h-[300px]" type="scroll">
           <DropdownMenuItemCustom locale="en">
             <IconFlagUK width="25" /> English
