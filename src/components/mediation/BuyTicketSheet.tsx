@@ -157,7 +157,7 @@ export function BuyTicketSheet(props: {
               </SheetTitle>
             </div>
           </SheetHeader>
-          <div className="px-3 text-white h-full mt-3">
+          <div className="px-3 text-white h-[70vh] md:h-[82vh] xl:h-full pt-3 xl:pt-0 xl:mt-3 overflow-auto">
             <div className="flex gap-2">
               <InfoCard
                 title={`Pool ID`}
@@ -245,7 +245,7 @@ export function BuyTicketSheet(props: {
                   <div className="flex flex-col gap-1 border-b border-gray-800 pb-4">
                     <span className="text-sm text-gray-200">Win Reward</span>
                     <span className="font-light text-sm text-gray-400">
-                      Amount earned per correctly predicting a dispute's
+                      Amount earned for correctly predicting a dispute's
                       outcome.
                     </span>
                     <span className="text-sm text-chinese-green">
@@ -267,7 +267,7 @@ export function BuyTicketSheet(props: {
                     </span>
                   </div>
 
-                  <div className="flex flex-col gap-1 border-b border-gray-800 pb-4">
+                  <div className="flex flex-col gap-1 pb-4">
                     <span className="text-sm text-gray-200">
                       No Vote Penalty
                     </span>
@@ -293,6 +293,7 @@ export function BuyTicketSheet(props: {
             <span className="sr-only">Close</span>
           </div>
         </div>
+
         <div className="flex flex-col gap-1 text-white p-2 py-3 border-t border-gray-800">
           {!approved && pool && (
             <Button

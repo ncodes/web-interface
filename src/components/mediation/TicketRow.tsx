@@ -1,4 +1,5 @@
 import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   CheckCircle,
   Circle,
@@ -10,14 +11,18 @@ import {
 } from "lucide-react";
 import moment from "moment";
 import { BaseSyntheticEvent, useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useMediatorManagerContract from "../../hooks/services/contracts/useMediatorManagerContract.ts";
+import { useToast } from "../../hooks/toast/toast.tsx";
 import { getTicketStatus } from "../../libs/api_utils.ts";
-import { formatToHighDenom } from "../../libs/helpers.ts";
+import { delay, formatToHighDenom, isDev } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { CountDown } from "../Countdown.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
 import { InfoCard } from "../market/InfoCard.tsx";
 import { Button } from "../ui/Button.tsx";
 import {
@@ -49,6 +54,89 @@ export function TicketRow({
   className?: string;
 }) {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { getChainInfo } = useConnectorContext();
+  const { notifySuccess, notifyError } = useToast();
+  const { join, cancelTicket, drainTicket, humanizeErrors } =
+    useMediatorManagerContract();
+  const [joining, setJoining] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [draining, setDraining] = useState(false);
+
+  async function doJoinPool() {
+    try {
+      setJoining(true);
+
+      const [txHash] = await join(BigInt(ticket.index));
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Ticket has joined the pool successfully`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      await queryClient.refetchQueries(["getTicketsOwned"]);
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setJoining(false);
+    }
+  }
+
+  async function doCancelTicket() {
+    try {
+      setCancelling(true);
+
+      const [txHash] = await cancelTicket(BigInt(ticket.index));
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Ticket was cancelled successfully`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      await queryClient.refetchQueries(["getTicketsOwned"]);
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setCancelling(false);
+    }
+  }
+
+  async function doDrainTicket() {
+    try {
+      setDraining(true);
+
+      const [txHash] = await drainTicket(BigInt(ticket.index));
+      await delay(5000);
+
+      const explorer = getChainInfo().blockExplorer;
+      notifySuccess(`Ticket was drained successfully`, {
+        duration: 5000,
+        links: [
+          { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
+        ],
+      });
+
+      await queryClient.refetchQueries(["getTicketsOwned"]);
+    } catch (error) {
+      const msg = humanizeErrors(error);
+      notifyError(msg);
+      if (isDev()) console.error(error);
+    } finally {
+      setDraining(false);
+    }
+  }
 
   return (
     <div
@@ -183,16 +271,17 @@ export function TicketRow({
                 tip={<TicketTipMaturing />}
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
-                <span>
-                  This ticket is maturing{" "}
+                <span className="flex gap-1">
+                  <span>This ticket will mature in:</span>
                   <span className="font-medium">
-                    (
                     <CountDown
                       isoDate={ticket.matureAt}
                       className="[&>span.time]:text-chinese-green"
+                      onDone={async () => {
+                        await queryClient.refetchQueries(["getTicketsOwned"]);
+                      }}
                       full
                     />
-                    )
                   </span>
                 </span>
                 <IconInfoCircle width="15" className="hidden xs:inline" />
@@ -207,12 +296,15 @@ export function TicketRow({
                 tip={<TicketTipMatured />}
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
-                <span>
-                  This ticket has matured. Join a pool{" "}
+                <span className="flex gap-1">
+                  <span>This ticket has matured. Join a pool</span>
                   <CountDown
                     prefix=" before "
                     isoDate={ticket.joinBy}
-                    className="[&>span.time]:text-chinese-green"
+                    className="[&>span.time]:text-chinese-green [&>span.time]:font-medium"
+                    onDone={async () => {
+                      await queryClient.refetchQueries(["getTicketsOwned"]);
+                    }}
                     full
                   />
                 </span>
@@ -267,16 +359,18 @@ export function TicketRow({
                 tip={<TicketTipCancelling />}
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
-                <span>
-                  This ticket will be cancelled in&nbsp;{" "}
+                <span className="flex gap-1">
+                  <span>Bond can be drained in: </span>
                   <span className="font-medium">
                     <CountDown
                       isoDate={ticket.cancelAt}
                       className="[&>span.time]:text-chinese-green"
+                      onDone={async () => {
+                        await queryClient.refetchQueries(["getTicketsOwned"]);
+                      }}
                       full
                     />
                   </span>
-                  .
                 </span>
                 <IconInfoCircle width="15" className="hidden xs:inline" />
               </ToolTip>
@@ -335,10 +429,19 @@ export function TicketRow({
                 variant="default"
                 size="sm"
                 rounded="lg"
-                className="text-xs md:text-sm"
+                className="w-[100px] text-xs md:text-sm"
                 scale="sm"
+                disabled={joining}
+                onClick={doJoinPool}
               >
-                Join Pool
+                {!joining && <>Join Pool</>}
+                {joining && (
+                  <IconSpinner
+                    width="20"
+                    className="animate-spin"
+                    fill="fill-gray-800"
+                  />
+                )}
               </Button>
             )}
 
@@ -349,10 +452,19 @@ export function TicketRow({
                 variant="outline"
                 size="sm"
                 rounded="lg"
-                className="text-xs md:text-sm"
+                className="w-[100px] text-xs md:text-sm"
                 scale="sm"
+                disabled={cancelling}
+                onClick={doCancelTicket}
               >
-                Cancel
+                {!cancelling && <>Cancel</>}
+                {cancelling && (
+                  <IconSpinner
+                    width="20"
+                    className="animate-spin"
+                    fill="fill-gray-200"
+                  />
+                )}
               </Button>
             )}
 
@@ -361,10 +473,19 @@ export function TicketRow({
                 variant="outline"
                 size="sm"
                 rounded="lg"
-                className="text-xs md:text-sm"
+                className="w-[100px] text-xs md:text-sm"
                 scale="sm"
+                disabled={draining}
+                onClick={doDrainTicket}
               >
-                Drain
+                {!draining && <>Drain</>}
+                {draining && (
+                  <IconSpinner
+                    width="20"
+                    className="animate-spin"
+                    fill="fill-gray-200"
+                  />
+                )}
               </Button>
             )}
           </div>

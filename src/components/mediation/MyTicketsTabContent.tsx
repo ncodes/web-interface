@@ -1,34 +1,26 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import { Paginator } from "../Paginator.tsx";
-import { TicketRow } from "./TicketRow.tsx";
-import useStore from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../../libs/RequestError.ts";
 import { PlugZapIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { RequestError } from "../../libs/RequestError.ts";
+import { Paginator } from "../Paginator.tsx";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
+import { TicketRow } from "./TicketRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function MyTicketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
   const { listTickets } = useTicketService();
+  const loaderProgress = useStore((state) => state.loaderProgress);
   const ticketFilter = useStore((state) => state.ticketFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
-  const {
-    isLoading,
-    isSuccess,
-    isRefetching,
-    isError,
-    fetchStatus,
-    isRefetchError,
-    data,
-    error,
-  } = useQuery({
+  const fetchTickets = useQuery({
     queryKey: [
       "getTicketsOwned",
       {
@@ -42,28 +34,33 @@ export function MyTicketsTabContent() {
     queryFn: listTickets,
     keepPreviousData: true,
     enabled: !!address,
+    refetchInterval: 10000,
   });
 
   useEffect(() => {
-    if ((fetchStatus != "idle" && isLoading) || isRefetching)
-      setLoaderProgress && setLoaderProgress(50);
-    else setLoaderProgress && setLoaderProgress(100);
+    const { isLoading, isRefetching } = fetchTickets;
+    if (isLoading) setLoaderProgress && setLoaderProgress(50);
+    if (!(isRefetching || isLoading) && loaderProgress == 50)
+      setLoaderProgress?.(100);
   }, [
-    isError,
-    isLoading,
+    fetchTickets.isError,
+    fetchTickets.isLoading,
     setLoaderProgress,
-    isRefetching,
-    isRefetchError,
-    fetchStatus,
+    fetchTickets.isRefetching,
+    fetchTickets.isRefetchError,
+    fetchTickets.fetchStatus,
   ]);
 
   return (
     <TabsContent value="my-tickets" className="p-0 m-0 flex flex-col gap-3 ">
-      {isLoading && fetchStatus != "idle" && <RowSkeleton />}
+      {fetchTickets.isLoading && fetchTickets.fetchStatus != "idle" && (
+        <RowSkeleton />
+      )}
 
-      {isError && (
+      {fetchTickets.isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
-          <ErrorIcon className="w-[20px]" /> {(error as RequestError)?.message}
+          <ErrorIcon className="w-[20px]" />{" "}
+          {(fetchTickets.error as RequestError)?.message}
         </div>
       )}
 
@@ -73,39 +70,41 @@ export function MyTicketsTabContent() {
         </div>
       )}
 
-      {!isLoading && isSuccess && data?.tickets?.length > 0 && (
-        <div className="flex flex-col gap-3 min-h-[500px]">
-          <div className="flex flex-col gap-3">
-            <Paginator
-              curPage={offset}
-              total={data?.meta?.queryCount}
-              limit={limit}
-              onNext={() => setOffset(offset + limit)}
-              onPrev={() => setOffset(offset - limit)}
-            />
-            <div className="flex flex-col gap-3 p-3 pt-0">
-              {data?.tickets.map((ticket: Ticket) => (
-                <TicketRow
-                  ticket={ticket}
-                  key={`${ticket.owner}:${ticket.index}`}
-                />
-              ))}
+      {!fetchTickets.isLoading &&
+        fetchTickets.isSuccess &&
+        fetchTickets.data?.tickets?.length > 0 && (
+          <div className="flex flex-col gap-3 min-h-[500px]">
+            <div className="flex flex-col gap-3">
+              <Paginator
+                curPage={offset}
+                total={fetchTickets.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + limit)}
+                onPrev={() => setOffset(offset - limit)}
+              />
+              <div className="flex flex-col gap-3 p-3 pt-0">
+                {fetchTickets.data?.tickets.map((ticket: Ticket) => (
+                  <TicketRow
+                    ticket={ticket}
+                    key={`${ticket.owner}:${ticket.index}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col justify-end">
+              <Paginator
+                className="border-t rounded-b-3xl"
+                curPage={offset}
+                total={fetchTickets.data?.meta?.queryCount}
+                limit={limit}
+                onNext={() => setOffset(offset + limit)}
+                onPrev={() => setOffset(offset - limit)}
+              />
             </div>
           </div>
-          <div className="flex-1 flex flex-col justify-end">
-            <Paginator
-              className="border-t rounded-b-3xl"
-              curPage={offset}
-              total={data?.meta?.queryCount}
-              limit={limit}
-              onNext={() => setOffset(offset + limit)}
-              onPrev={() => setOffset(offset - limit)}
-            />
-          </div>
-        </div>
-      )}
+        )}
 
-      {!isLoading && data?.tickets?.length == 0 && (
+      {!fetchTickets.isLoading && fetchTickets.data?.tickets?.length == 0 && (
         <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
           No ticket found
         </div>

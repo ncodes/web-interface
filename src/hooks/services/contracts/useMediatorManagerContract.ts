@@ -25,6 +25,37 @@ export default function useMediatorManagerContract() {
   }
 
   /**
+   * Join a ticket to it's assigned pool
+   * @param ticketId The ticket ID
+   * @returns
+   */
+  async function join(ticketId: bigint) {
+    return simulateAndWriteContract("mediatorManager", "join", [ticketId]);
+  }
+
+  /**
+   * Cancel a ticket
+   * @param ticketId The ticket ID
+   * @returns
+   */
+  async function cancelTicket(ticketId: bigint) {
+    return simulateAndWriteContract("mediatorManager", "cancelTicket", [
+      ticketId,
+    ]);
+  }
+
+  /**
+   * Drain a ticket of its bond
+   * @param ticketId The ticket ID
+   * @returns
+   */
+  async function drainTicket(ticketId: bigint) {
+    return simulateAndWriteContract("mediatorManager", "drainTicket", [
+      ticketId,
+    ]);
+  }
+
+  /**
    * Parse transaction error into human-friendly message
    * @param error The error object
    */
@@ -35,6 +66,9 @@ export default function useMediatorManagerContract() {
   return {
     purchaseTicket,
     getTicketPrice,
+    join,
+    cancelTicket,
+    drainTicket,
     humanizeErrors,
   };
 }

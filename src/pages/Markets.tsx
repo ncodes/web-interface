@@ -70,7 +70,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
             </div>
           </ScrollOverflowIndicator>
         </ScrollAreaHorizontal>
-        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
+        <div className="flex shrink-0 gap-2 items-center justify-end">
           <Button
             variant="ghost"
             size="icon"

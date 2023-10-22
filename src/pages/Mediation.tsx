@@ -1,5 +1,4 @@
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { TicketIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
@@ -22,6 +21,7 @@ import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import useStore from "../hooks/store/useStore.ts";
 import Layout from "./Layout.tsx";
 
+import { IconPlus } from "../components/icons/IconPlus.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 function MediationTabs({ defaultTab }: { defaultTab?: string }) {
@@ -68,7 +68,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
             </div>
           </ScrollAreaHorizontal>
         </ScrollOverflowIndicator>
-        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
+        <div className="flex shrink-0 gap-2 items-center justify-end">
           <div className="hidden md:inline">
             {connected && (
               <Button
@@ -76,9 +76,9 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
                 onClick={() => {
                   toggleOpenState("buyTicketSheet");
                 }}
-                className="gap-2 transition-all duration-500 hover:scale-x-105"
+                className="gap-2 transition-all duration-500 hover:scale-x-105 "
               >
-                <TicketIcon width="20px" /> Buy Ticket
+                <IconPlus width="20px" /> Buy Ticket
               </Button>
             )}
           </div>
@@ -96,7 +96,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
                     toggleOpenState("buyTicketSheet");
                   }}
                 >
-                  <TicketIcon width="20px" /> Buy Ticket
+                  <IconPlus width="20px" /> Buy Ticket
                 </DropdownMenuItem>
                 {currentTab == "my-tickets" && (
                   <DropdownMenuItem

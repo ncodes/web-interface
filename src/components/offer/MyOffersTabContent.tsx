@@ -77,7 +77,7 @@ export function MyOffersTabContent() {
         </div>
       )}
 
-      {!offers.isLoading && offers.isSuccess && (
+      {!offers.isLoading && offers.isSuccess && !!offers.data.length && (
         <div className="flex flex-col gap-3 min-h-[500px]">
           <div className="flex flex-col gap-3">
             <Paginator

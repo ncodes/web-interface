@@ -321,12 +321,13 @@ export function getTicketStatus(ticket: Ticket) {
   if (!joined && drained) return TicketState.Drained;
   if (!joined && moment(matureAt).isAfter(moment()))
     return TicketState.Maturing;
-  if (!joined && matured) return TicketState.Matured;
+  if (!joined && matured && !drafted && !cancelling && !cancelled && !expired)
+    return TicketState.Matured;
   if (joined && !drafted) return TicketState.Joined;
   if (joined && drafted) return TicketState.Drafted;
-  if (!joined && expired) return TicketState.Expired;
   if (!joined && cancelling) return TicketState.Cancelling;
   if (!joined && cancelled) return TicketState.Cancelled;
+  if (!joined && expired) return TicketState.Expired;
 }
 
 /**
