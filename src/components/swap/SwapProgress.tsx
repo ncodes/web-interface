@@ -1,41 +1,41 @@
-import { Label } from "../ui/label.tsx";
-import { ToolTip } from "../ToolTip.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Button } from "../ui/Button.tsx";
-import { CheckCircle, MessageSquare, XCircle } from "lucide-react";
-import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
-import {
-  countDisputeVotes,
-  getDisputeStatus,
-  getPayer,
-  isInDispute,
-  isDisputer,
-  isSwapCounterparty,
-  isSwapDraftee,
-  isSwapParticipant,
-  isDisputed,
-  getDisputeOutcome,
-  isSwapDisputeExecuted,
-  isLastDisputeStalled,
-} from "../../libs/api_utils.ts";
-import { CountDown } from "../Countdown.tsx";
-import { cn } from "../../libs/utils.ts";
-import { useState } from "react";
-import IconConflict from "../icons/IconConflict.tsx";
-import useStore from "../../hooks/store/useStore.ts";
-import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
+import { CheckCircle, MessageSquare, XCircle } from "lucide-react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { markOrderAsPaidFunc } from "./functions/markOrderAsPaidFunc.ts";
-import { releaseOrderFunc } from "./functions/releaseOrderFunc.ts";
-import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
-import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
-import AppealPopOver from "./AppealPopOver.tsx";
 import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { useToast } from "../../hooks/useToast.tsx";
+import {
+  countDisputeVotes,
+  getDisputeOutcome,
+  getDisputeStatus,
+  getPayer,
+  isDisputed,
+  isDisputer,
+  isInDispute,
+  isLastDisputeStalled,
+  isSwapCounterparty,
+  isSwapDisputeExecuted,
+  isSwapDraftee,
+  isSwapParticipant,
+} from "../../libs/api_utils.ts";
+import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
+import { CountDown } from "../Countdown.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import IconConflict from "../icons/IconConflict.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Label } from "../ui/label.tsx";
+import AppealPopOver from "./AppealPopOver.tsx";
+import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
+import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
+import { markOrderAsPaidFunc } from "./functions/markOrderAsPaidFunc.ts";
+import { releaseOrderFunc } from "./functions/releaseOrderFunc.ts";
 
 export function SwapProgress({
   swap,

@@ -1,19 +1,18 @@
-import { EditRow } from "./EditRow.tsx";
-import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
-import { Button } from "../ui/Button.tsx";
-import { useState } from "react";
-import _ from "lodash";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import {
   delay,
   isDev,
   splitAndCleanBadges,
   splitBadgeFromPath,
 } from "../../libs/helpers.ts";
-import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { Button } from "../ui/Button.tsx";
+import { EditFieldWithLabel } from "./EditFieldWithLabel.tsx";
+import { EditRow } from "./EditRow.tsx";
 
 export function EditBadgeRequirements({
   market,

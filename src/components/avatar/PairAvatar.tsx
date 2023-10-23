@@ -1,7 +1,7 @@
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.tsx";
+import { ReactNode } from "react";
 import { cn } from "../../libs/utils.ts";
 import { ToolTip } from "../ToolTip.tsx";
-import { ReactNode } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.tsx";
 
 export function PairAvatar(props: {
   baseSrc: string;
@@ -25,7 +25,7 @@ export function PairAvatar(props: {
             className={cn("img1 w-[30px] h-[30px] md:w-[40px] md:h-[40px]", {
               "md:w-[40px] md:h-[40px]": props.size == "default" || !props.size,
               "md:w-[25px] md:h-[25px]": props.size == "sm",
-              "border-gray-700 border": !props.noBorder,
+              "border-gray-950 border": !props.noBorder,
             })}
           >
             <AvatarImage
@@ -56,7 +56,7 @@ export function PairAvatar(props: {
                 "md:w-[40px] md:h-[40px]":
                   props.size == "default" || !props.size,
                 "md:w-[25px] md:h-[25px]": props.size == "sm",
-                "border-gray-700 border": !props.noBorder,
+                "border-transparent border": !props.noBorder,
               }
             )}
           >

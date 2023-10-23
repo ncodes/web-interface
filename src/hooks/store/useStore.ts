@@ -26,6 +26,7 @@ export interface MarketFilter {
   liquidityUsd?: string;
   merchantLp?: boolean;
   kycLp?: boolean;
+  query?: string;
   kycTaker?: boolean;
   offer?: boolean;
   address?: string;

@@ -1,13 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useToast } from "../../hooks/toast/toast.tsx";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import { deriveLiquidityAddress, isDev } from "../../libs/helpers.ts";
 import { Avatar } from "../avatar/Avatar.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function GrantedPaymentMethodRow({
   method,

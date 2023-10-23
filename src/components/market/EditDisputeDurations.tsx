@@ -1,13 +1,13 @@
-import { useState } from "react";
-import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
-import { EditRow } from "./EditRow.tsx";
-import { EditFieldWithLabelAndSlider } from "./EditFieldWithLabelAndSlider.tsx";
-import { Button } from "../ui/Button.tsx";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import { delay, humanizeDur2, isDev } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { Button } from "../ui/Button.tsx";
+import { EditFieldWithLabelAndSlider } from "./EditFieldWithLabelAndSlider.tsx";
+import { EditRow } from "./EditRow.tsx";
 
 export function EditDisputeDurations({
   market,

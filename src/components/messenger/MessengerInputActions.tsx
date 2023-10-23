@@ -13,7 +13,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import { useFileService } from "../../hooks/services/backend/useFileService.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
+import { useToast } from "../../hooks/useToast.tsx";
 import { humanizeBytes } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";

@@ -7,8 +7,8 @@ import FollowCodec, {
   FollowPayload,
 } from "../../hooks/messenger/codecs/FollowCodec";
 import useMessenger from "../../hooks/messenger/useMessenger";
-import { useToast } from "../../hooks/toast/toast";
 import useForceUpdate from "../../hooks/useForceUpdate";
+import { useToast } from "../../hooks/useToast";
 import { isDev } from "../../libs/helpers";
 import { cn } from "../../libs/utils";
 import IconHeart from "../icons/IconHeart";

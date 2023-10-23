@@ -1,6 +1,6 @@
-import { ToastType } from "../../hooks/toast/toast.tsx";
-import { cn } from "../../libs/utils.ts";
 import { ReactNode } from "react";
+import { ToastType } from "../../hooks/useToast.tsx";
+import { cn } from "../../libs/utils.ts";
 
 /**
  * The toast content

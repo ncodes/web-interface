@@ -1,12 +1,9 @@
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion.tsx";
-import { Textarea } from "../ui/textarea.tsx";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Button } from "../ui/Button.tsx";
-import IconSpinner from "../icons/IconSpinner.tsx";
+import { useLocation } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import {
   delay,
   isDev,
@@ -14,11 +11,14 @@ import {
   splitBadgeFromPath,
 } from "../../libs/helpers.ts";
 import IconCaution from "../icons/IconCaution.tsx";
-import { useToast } from "../../hooks/toast/toast.tsx";
-import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
-import { useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion.tsx";
+import { Textarea } from "../ui/textarea.tsx";
 
 export function ManageLiquidityRequiredBadges({
   liquidity,

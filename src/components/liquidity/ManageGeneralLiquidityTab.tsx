@@ -6,9 +6,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Address } from "viem";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import { isSynth } from "../../libs/api_utils.ts";
 import {
   delay,

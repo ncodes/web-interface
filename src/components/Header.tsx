@@ -1,13 +1,13 @@
-import { MobileMenuActivator } from "./MobileMenuActivator.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { cn } from "../libs/utils.ts";
+import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import { LanguageSelector } from "./LanguageSelector.tsx";
+import { MobileMenuActivator } from "./MobileMenuActivator.tsx";
 import { NavHelpButton } from "./NavHelpButton.tsx";
 import { NavNotificationButton } from "./NavNotificationButton.tsx";
-import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
-import { NetworkSelector } from "./NetworkSelector.tsx";
 import { NavSearchButton } from "./NavSearchButton.tsx";
-import { cn } from "../libs/utils.ts";
+import { NetworkSelector } from "./NetworkSelector.tsx";
 import { InputActivatedSearchBox } from "./search/InputActivatedSearchBox.tsx";
-import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 
 export function Header(props: { onClick: () => void; height?: string }) {
   const { connected } = useConnectorContext();
@@ -16,7 +16,7 @@ export function Header(props: { onClick: () => void; height?: string }) {
     <header className={cn("flex -mt-[1px]", props.height)}>
       <MobileMenuActivator onClick={props.onClick} />
       <InputActivatedSearchBox />
-      <div className="flex-1 flex justify-end items-center gap-4 ">
+      <div className="flex-1 flex justify-end items-center gap-4 -mt-3 xl:-mt-2">
         <NavSearchButton />
         <LanguageSelector />
         <NavHelpButton />

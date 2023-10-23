@@ -1,18 +1,18 @@
-import { Textarea } from "../ui/textarea.tsx";
+import { useMutation } from "@tanstack/react-query";
 import { InfoIcon } from "lucide-react";
-import { ToolTip } from "../ToolTip.tsx";
-import { Button } from "../ui/Button.tsx";
+import { useCallback, useEffect, useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import {
   InstructionsWithGrantSigResponse,
   useInstructionsService,
 } from "../../hooks/services/backend/useInstructionsService.ts";
-import { useCallback, useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import { isDev } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Textarea } from "../ui/textarea.tsx";
 
 export function LiquidityInstruction() {
   const { updateInstructions } = useInstructionsService();

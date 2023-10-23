@@ -1,124 +1,13 @@
-import { PairAvatar } from "./avatar/PairAvatar.tsx";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card.tsx";
-import { ScrollAreaHorizontal } from "./ui/scroll-area.tsx";
-import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
 import { useQuery } from "@tanstack/react-query";
 import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../libs/RequestError.ts";
-import {
-  approxNumber,
-  formatToHighDenom,
-  formatToMoney,
-} from "../libs/helpers.ts";
-import { PriceChange } from "./market/PriceChange.tsx";
-import { ActivityStreamRowSkeleton } from "./ActivityStreamRowSkeleton.tsx";
-import { ActivityStreamRowPlaceholder } from "./ActivityStreamRowPlaceholder.tsx";
-import { useSwapService } from "../hooks/services/backend/useSwapService.ts";
-import { ToolTip } from "./ToolTip.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-
-function PopularMarketRow(props: { market: Market }) {
-  return (
-    <div className="flex gap-x-4 items-center px-3 py-2 cursor-pointer hover:opacity-80 text-[14px]">
-      <PairAvatar
-        base="BTC"
-        quote="UNI"
-        baseSrc="/images/icons/asset-icons/btc.svg"
-        quoteSrc="/images/icons/asset-icons/uni.svg"
-      />
-      <div className="flex items-center w-[70px]">
-        <div className="flex flex-col font-normal tracking-wider text-gray-200 text-[13px]">
-          <span>{props.market.base}</span>
-          <span>{props.market.quote}</span>
-        </div>
-      </div>
-      <ScrollAreaHorizontal className="flex-1">
-        <div className="flex-1 flex gap-2 text-right justify-end">
-          <Card className="w-[80px] xxs:w-[110px] text-right shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg">
-            <CardHeader className="px-3 py-2 pb-0">
-              <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex justify-end gap-2">
-                <span>Price</span>
-                <span className="text-green-400 hidden xxs:inline">
-                  <PriceChange priceChange={props.market.priceChange} />
-                </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-3 py-0 pb-2 tracking-wide text-chinese-green">
-              ${formatToMoney(props.market.lowestPriceUsd)}
-            </CardContent>
-          </Card>
-          <Card className="hidden md:inline w-[100px] shrink-0 text-right border border-card-border bg-card-background shadow-gray-900  shadow-lg">
-            <CardHeader className="px-3 py-2 pb-0">
-              <CardTitle className="text-xs tracking-wider font-light text-gray-400">
-                <span>24hr Vol.</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-white px-3 py-0 pb-2 tracking-wide">
-              ${approxNumber(props.market.volume24h)}
-            </CardContent>
-          </Card>
-        </div>
-      </ScrollAreaHorizontal>
-    </div>
-  );
-}
-
-function RecentTradeRow(props: { swap: Swap }) {
-  return (
-    <div className="flex gap-x-4 py-2 cursor-pointer items-center hover:opacity-80 text-[14px] px-3">
-      <PairAvatar
-        base="BTC"
-        quote="UNI"
-        baseSrc="/images/icons/asset-icons/btc.svg"
-        quoteSrc="/images/icons/asset-icons/uni.svg"
-      />
-      <div className="flex items-center">
-        <div className="flex flex-col font-normal tracking-wider text-gray-200 text-[13px]">
-          <span>{props.swap.base}</span>
-          <span>{props.swap.quote}</span>
-        </div>
-      </div>
-      <ScrollAreaHorizontal className="flex-1">
-        <div className="flex-1 flex gap-2 text-right justify-end">
-          <Card className="w-[80px] xxs:w-[110px] text-right shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg">
-            <CardHeader className="px-3 py-2 pb-0">
-              <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex justify-end gap-2">
-                <span>Price</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-3 py-0 pb-2 tracking-wide text-chinese-green">
-              <ToolTip
-                tip={`${formatToHighDenom(
-                  props.swap.price,
-                  props.swap.market.quoteDecimals
-                )} ${props.swap.market.quote}`}
-              >
-                ${formatToMoney(props.swap.priceUsd)}
-              </ToolTip>
-            </CardContent>
-          </Card>
-          <Card className="hidden md:inline w-[100px] shrink-0 text-right border border-card-border bg-card-background shadow-gray-900  shadow-lg">
-            <CardHeader className="px-3 py-2 pb-0">
-              <CardTitle className="text-xs tracking-wider font-light text-gray-400">
-                <span>Qty.</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-white px-3 py-0 pb-2 tracking-wide">
-              <ToolTip
-                tip={`${formatToHighDenom(
-                  props.swap.amount,
-                  props.swap.market.baseDecimals
-                )} ${props.swap.market.base}`}
-              >
-                ${formatToMoney(props.swap.amountUsd)}
-              </ToolTip>
-            </CardContent>
-          </Card>
-        </div>
-      </ScrollAreaHorizontal>
-    </div>
-  );
-}
+import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
+import { useSwapService } from "../hooks/services/backend/useSwapService.ts";
+import { RequestError } from "../libs/RequestError.ts";
+import { ActivityStreamRowPlaceholder } from "./ActivityStreamRowPlaceholder.tsx";
+import { ActivityStreamRowSkeleton } from "./ActivityStreamRowSkeleton.tsx";
+import { PopularMarketRow } from "./PopularMarketRow.tsx";
+import { RecentTradeRow } from "./RecentTradeRow.tsx";
 
 export function ActivityStream() {
   const { getChainInfo } = useConnectorContext();

@@ -1,6 +1,6 @@
-import { useToast } from "../../hooks/toast/toast.tsx";
-import { shortenAddress } from "../../libs/helpers.ts";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useToast } from "../../hooks/useToast.tsx";
+import { shortenAddress } from "../../libs/helpers.ts";
 import IconCopy from "../icons/IconCopy.tsx";
 
 export function TabContentHeader(props: { address: string }) {

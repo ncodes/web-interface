@@ -1,20 +1,32 @@
-import { PairAvatar } from "../avatar/PairAvatar.tsx";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card.tsx";
-import { PriceChange } from "../market/PriceChange.tsx";
-import { approxNumber, formatToMoney } from "../../libs/helpers.ts";
 import { NavLink } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useSearchHistory from "../../hooks/useSearchHistory.ts";
+import { approxNumber, formatToMoney } from "../../libs/helpers.ts";
+import { PairAvatar } from "../avatar/PairAvatar.tsx";
+import { PriceChange } from "../market/PriceChange.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card.tsx";
 
-export function SearchBoxItem({ market }: { market: Partial<Market> }) {
+export function SearchBoxItem({ market }: { market: Market }) {
+  const { getChainInfo } = useConnectorContext();
+  const { add: addHistory } = useSearchHistory(getChainInfo().queryName);
+
   return (
-    <NavLink to={`/market/${market.address}`}>
-      <div className="flex py-2 px-3 gap-2 items-center hover:bg-gray-950 cursor-pointer">
+    <NavLink
+      to={`/market/${market.address}`}
+      onClick={(e) => {
+        addHistory({
+          type: "market",
+          marketAddress: market.address,
+        });
+      }}
+    >
+      <div className="flex py-2 px-3 gap-2 items-center hover:bg-gray-800 cursor-pointer">
         <PairAvatar
-          base="BTC"
-          quote="UNI"
-          baseSrc="/images/icons/asset-icons/btc.svg"
-          quoteSrc="/images/icons/asset-icons/uni.svg"
-          className="[&>span>img]:w-[32px]"
-          className2="[&>span>img]:w-[32px] !-ml-3"
+          base={market.base}
+          quote={market.quote}
+          baseSrc={market.baseLogo}
+          quoteSrc={market.quoteLogo}
+          className2="!-ml-2"
         />
         <div>
           <div className="text-sm">

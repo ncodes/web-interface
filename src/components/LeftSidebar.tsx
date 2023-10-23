@@ -1,22 +1,22 @@
-import { RegionSelector } from "./RegionSelector.tsx";
-import { Navigation } from "./Navigation.tsx";
-import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
-import { cn } from "../libs/utils.ts";
 import { useEffect, useState } from "react";
-import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
+import { cn } from "../libs/utils.ts";
 import { IconQuestionCircle } from "./NavHelpButton.tsx";
+import { NavOrdinaryLink } from "./NavOrdinaryLink.tsx";
+import { Navigation } from "./Navigation.tsx";
+import { RegionSelector } from "./RegionSelector.tsx";
+import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 
+import { useLockedBody, useMediaQuery } from "usehooks-ts";
+import useStore from "../hooks/store/useStore.ts";
 import { LanguageSelectorMobile } from "./LanguageSelector.tsx";
 import { IconDoubleChevronBack } from "./icons/IconDoubleChevronBack.tsx";
 import { IconSearch } from "./icons/IconSearch.tsx";
-import useStore from "../hooks/store/useStore.ts";
-import { useLockedBody, useMediaQuery } from "usehooks-ts";
 
 function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
   return (
     <div
       className={cn(
-        "xl:hidden fixed overflow-hidden w-screen h-screen bg-black/50 left-0 top-0 z-[15] md:z-[20] ",
+        "xl:hidden fixed overflow-hidden w-screen h-screen bg-black/50 left-0 top-0 z-[15] xl:z-[20] ",
         { hidden: !props.open }
       )}
       onClick={props.onClick}
@@ -58,9 +58,9 @@ export function LeftSidebar(props: {
           }
         )}
       >
-        <div className="fixed w-[250px] xl:left-0 flex flex-col flex-1 h-screen bg-background">
+        <div className="fixed w-[250px] xl:left-0 flex flex-col flex-1 h-screen bg-background border-r xl:border-none border-gray-800">
           <div className="flex-col py-[28px] pt-[18px] flex-1 flex ">
-            <header className="flex gap-4 -ml-[5px] pl-8">
+            <header className="flex gap-4 -ml-[5px] pl-8 -mt-[3px]">
               <a href="#" className="pt-[6px]">
                 <img src="/images/logo-mark-w.svg" alt="logo" />
               </a>

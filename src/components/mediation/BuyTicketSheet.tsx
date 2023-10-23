@@ -7,8 +7,8 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import { useMiscService } from "../../hooks/services/backend/useMiscService.ts";
 import useMediatorManagerContract from "../../hooks/services/contracts/useMediatorManagerContract.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import { delay, formatToHighDenom, isDev } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";

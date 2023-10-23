@@ -10,8 +10,8 @@ import { Address, decodeEventLog } from "viem";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
+import { useToast } from "../../hooks/useToast.tsx";
 import {
   canExecuteOffer as canExecOffer,
   isERC20,

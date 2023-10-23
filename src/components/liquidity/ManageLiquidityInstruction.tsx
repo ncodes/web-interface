@@ -1,23 +1,23 @@
+import { useMutation } from "@tanstack/react-query";
+import { InfoIcon } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import {
+  InstructionsWithGrantSigResponse,
+  useInstructionsService,
+} from "../../hooks/services/backend/useInstructionsService.ts";
+import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
+import { useToast } from "../../hooks/useToast.tsx";
+import { delay, isDev } from "../../libs/helpers.ts";
+import { ToolTip } from "../ToolTip.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion.tsx";
 import { Textarea } from "../ui/textarea.tsx";
-import { ToolTip } from "../ToolTip.tsx";
-import { InfoIcon } from "lucide-react";
-import { Button } from "../ui/Button.tsx";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { useToast } from "../../hooks/toast/toast.tsx";
-import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
-import {
-  InstructionsWithGrantSigResponse,
-  useInstructionsService,
-} from "../../hooks/services/backend/useInstructionsService.ts";
-import { useCallback, useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { delay, isDev } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function ManageLiquidityInstruction({
   liquidity,

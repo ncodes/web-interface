@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { Location } from "react-router-dom";
 import { TransactionReceipt, decodeEventLog } from "viem";
-import { Options } from "../../../hooks/toast/toast.tsx";
+import { Options } from "../../../hooks/useToast.tsx";
 import { delay, isDev } from "../../../libs/helpers.ts";
 import { ChainInfo } from "../../../types/global";
 

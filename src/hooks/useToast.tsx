@@ -1,6 +1,6 @@
-import toast, { ToastPosition } from "react-hot-toast";
-import { ToastBar } from "../../components/toast/ToastBar.tsx";
 import { ReactNode } from "react";
+import toast, { ToastPosition } from "react-hot-toast";
+import { ToastBar } from "../components/toast/ToastBar.tsx";
 
 export enum ToastType {
   Default,

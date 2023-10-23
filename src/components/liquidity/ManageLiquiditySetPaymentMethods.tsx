@@ -1,24 +1,24 @@
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
+import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
+import { useToast } from "../../hooks/useToast.tsx";
+import { delay, deriveLiquidityAddress, isDev } from "../../libs/helpers.ts";
+import { InputWrapper } from "../InputWrapper.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion.tsx";
-import { InputWrapper } from "../InputWrapper.tsx";
-import { Button } from "../ui/Button.tsx";
-import { useEffect, useState } from "react";
-import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
-import { useQuery } from "@tanstack/react-query";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { delay, deriveLiquidityAddress, isDev } from "../../libs/helpers.ts";
-import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
 import { Label } from "../ui/label.tsx";
 import { GrantedPaymentMethodRow } from "./GrantedPaymentMethodRow.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { ToolTip } from "../ToolTip.tsx";
 import { PaymentMethodSelector } from "./PaymentMethodSelector.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function ManageLiquiditySetPaymentMethods({
   liquidity,

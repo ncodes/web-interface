@@ -21,7 +21,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
+import { useToast } from "../../hooks/useToast.tsx";
 import {
   getDisputeOutcome,
   getDisputeStatus,

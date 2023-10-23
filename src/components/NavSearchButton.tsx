@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { IconSearch } from "./icons/IconSearch.tsx";
 import SearchBox from "./search/SearchBox.tsx";
-import { useState } from "react";
 export function NavSearchButton() {
   const [open, setOpen] = useState(false);
 

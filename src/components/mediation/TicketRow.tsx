@@ -13,7 +13,7 @@ import moment from "moment";
 import { BaseSyntheticEvent, useState } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMediatorManagerContract from "../../hooks/services/contracts/useMediatorManagerContract.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
+import { useToast } from "../../hooks/useToast.tsx";
 import { getTicketStatus } from "../../libs/api_utils.ts";
 import { delay, formatToHighDenom, isDev } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";

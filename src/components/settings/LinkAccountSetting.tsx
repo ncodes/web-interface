@@ -1,16 +1,16 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { useToast } from "../../hooks/toast/toast.tsx";
+import { StoreAccessTokenKey, StoreEmailKey } from "../../constants.ts";
+import { createSignatureMessage } from "../../hooks/connectors/common.ts";
 import { useAuthService } from "../../hooks/services/backend/useAuthService.ts";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createSignatureMessage } from "../../hooks/connectors/common.ts";
-import { Alert } from "../Alert.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Input } from "../ui/Input.tsx";
-import { Button } from "../ui/Button.tsx";
-import IconCheckCircle from "../icons/IconCheckCircle.tsx";
-import { StoreAccessTokenKey, StoreEmailKey } from "../../constants.ts";
 import useStore from "../../hooks/store/useStore.ts";
+import { useToast } from "../../hooks/useToast.tsx";
+import { Alert } from "../Alert.tsx";
+import IconCheckCircle from "../icons/IconCheckCircle.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Input } from "../ui/Input.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 

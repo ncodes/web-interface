@@ -15,7 +15,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useToast } from "../../hooks/toast/toast.tsx";
+import { useToast } from "../../hooks/useToast.tsx";
 import {
   canExecuteOffer,
   isOfferExpired,
