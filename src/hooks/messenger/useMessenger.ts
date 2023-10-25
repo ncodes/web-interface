@@ -17,7 +17,13 @@ import EthCrypto from "eth-crypto";
 import { randomBytes } from "ethers/lib.esm/utils";
 import moment from "moment";
 import forge from "node-forge";
-import { Chain, WalletClient, createWalletClient, http } from "viem";
+import {
+  Chain,
+  WalletClient,
+  createWalletClient,
+  getAddress,
+  http,
+} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { hardhat } from "wagmi/chains";
 import db, { ContentType, Message } from "../../components/messenger/db.ts";
@@ -36,6 +42,7 @@ import ReadReceiptCodec, {
   ContentTypeReadReceipt,
   isReadReceipt,
 } from "./codecs/ReadReceiptCodec.ts";
+import SwapRatingCodec from "./codecs/SwapRatingCodec.ts";
 import SwapStatusCodec, {
   ContentTypeSwapStatus,
   SwapStatusTypeId,
@@ -54,7 +61,7 @@ import {
  * @returns
  */
 export default function useMessenger() {
-  const version = "172"; // TODO: use 1 in production
+  const version = "178"; // TODO: use 1 in production
 
   /**
    * Make a key for storing the keys
@@ -95,6 +102,7 @@ export default function useMessenger() {
     client.registerCodec(new RemoteAttachmentCodec());
     client.registerCodec(new AttachmentCodec());
     client.registerCodec(new FollowCodec());
+    client.registerCodec(new SwapRatingCodec());
   }
 
   /**
@@ -838,6 +846,7 @@ export default function useMessenger() {
    * @returns Returns the convo and a client for writing to the mailbox
    */
   async function getMailbox(chain: Chain, address: string) {
+    address = getAddress(address);
     const entropy = forge.md.sha512
       .create()
       .update(`mailbox_address:${address}`)
@@ -875,12 +884,17 @@ export default function useMessenger() {
   async function readMailbox(
     chain: Chain,
     address: string,
-    type?: ContentTypeId,
-    reverse = false,
-    cb?: (msg: DecodedMessage) => Promise<boolean>
+    options: {
+      type?: ContentTypeId;
+      reverse?: boolean;
+      limit?: number;
+      cb?: (msg: DecodedMessage) => Promise<boolean>;
+    }
   ): Promise<void> {
+    address = getAddress(address);
+    const { type, reverse, limit, cb } = options || {};
     const { convo } = await getMailbox(chain, address);
-    const messages = await convo.messages({});
+    const messages = await convo.messages({ limit });
     for (const msg of reverse ? messages.reverse() : messages) {
       if (type && !msg.contentType.sameAs(type)) continue;
       if (await cb?.(msg)) break;

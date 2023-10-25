@@ -1,16 +1,16 @@
-import { Label } from "../ui/label.tsx";
-import { ToolTip } from "../ToolTip.tsx";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import { LiquidityEventItem } from "./LiquidityEventItem.tsx";
 import { useQuery } from "@tanstack/react-query";
-import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
-import { Skeleton } from "../ui/skeleton.tsx";
 import { ErrorIcon } from "react-hot-toast";
+import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { RequestError } from "../../libs/RequestError.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { Label } from "../ui/label.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
+import { Skeleton } from "../ui/skeleton.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { LiquidityEventItem } from "./LiquidityEventItem.tsx";
 
 export function ActivityLogSkeleton() {
   return (
@@ -49,25 +49,35 @@ export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
           <InfoCircledIcon width="20px" className="relative top-[1px]" />
         </ToolTip>
       </Label>
-      <div className="relative bg-card-background divide-y divide-gray-800 border rounded-2xl mt-5 border-card-border w-full min-h-[300px]">
+      <div className="bg-card-background  divide-gray-800 border rounded-2xl mt-5 border-card-border w-full">
         {events.isLoading && (
-          <span className="absolute w-full">
+          <div className="h-[100px] xl:h-[400px]">
             <ActivityLogSkeleton />
-            <ActivityLogSkeleton />
-          </span>
+            <span className="hidden lg:block">
+              <ActivityLogSkeleton />
+              <ActivityLogSkeleton />
+              <ActivityLogSkeleton />
+            </span>
+          </div>
         )}
 
         {events.isError && (
-          <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+          <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px]">
             <ErrorIcon className="w-[20px]" />{" "}
             {(events.error as RequestError)?.message}
           </div>
         )}
 
-        <ScrollOverflowIndicator side="bottom">
-          <ScrollArea type="scroll" className="h-[400px]">
-            {!events.isLoading && events.isSuccess && (
-              <>
+        {!events.isLoading && events.isSuccess && events.data.length == 0 && (
+          <div className="h-[100px] flex xl:h-[400px] w-full items-center gap-2 text-gray-400 justify-center font-light">
+            No events found
+          </div>
+        )}
+
+        {!events.isLoading && events.isSuccess && events.data.length > 0 && (
+          <ScrollOverflowIndicator side="bottom">
+            <ScrollArea type="scroll" className="h-[300px] lg:h-[400px]">
+              <div className="divide-y divide-gray-800">
                 {events.data?.map((event: Event) => (
                   <LiquidityEventItem
                     event={event}
@@ -76,10 +86,10 @@ export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
                     key={`${event.creator}-${event.action}`}
                   />
                 ))}
-              </>
-            )}
-          </ScrollArea>
-        </ScrollOverflowIndicator>
+              </div>
+            </ScrollArea>
+          </ScrollOverflowIndicator>
+        )}
       </div>
     </div>
   );

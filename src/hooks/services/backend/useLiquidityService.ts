@@ -1,8 +1,6 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import moment from "moment";
-import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
-import { Events } from "../../../types/enums.ts";
+import { handleAxiosError } from "../../../libs/helpers.ts";
 import { LiquidityFilter } from "../../store/useStore.ts";
 export interface ListLiquidityParams {
   provider?: string;
@@ -119,82 +117,6 @@ export function useLiquidityService() {
         },
         headers,
       });
-
-      // TODO: delete mocks
-      resp.data.data = [] as any;
-      resp.data.data[0] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        action: Events.LiquidityAdd,
-        amount: "10000000000000000000",
-        price: "1531000000000000000000",
-        createdAt: moment().subtract(1, "day").toISOString(),
-      } as unknown as Event;
-      resp.data.data[1] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92262",
-        action: Events.LiquidityRemove,
-        amount: "10000000000000000000",
-        price: "1531000000000000000000",
-        createdAt: moment().subtract(2, "day").toISOString(),
-      } as unknown as Event;
-      resp.data.data[2] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92263",
-        action: Events.LiquiditySwap,
-        amount: "10000000000000000000",
-        price: "1531000000000000000000",
-        createdAt: moment().subtract(2, "day").toISOString(),
-        swap: {
-          amount: powOf(12, 18).toString(),
-          price: powOf(3, 18).toString(),
-          cost: 34510,
-        } as Swap,
-      } as unknown as Event;
-      resp.data.data[3] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        action: Events.LiquidityOffer,
-        createdAt: moment().subtract(2, "day").toISOString(),
-        offer: {
-          amount: "10000000000000000000",
-          price: "1531000000000000000000",
-          deadline: moment().subtract(1, "day").toISOString(),
-        } as Offer,
-      } as unknown as Event;
-      resp.data.data[4] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92263",
-        action: Events.LiquidityPause,
-        createdAt: moment().subtract(2, "day").toISOString(),
-        paused: false,
-      } as unknown as Event;
-      resp.data.data[5] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92261",
-        action: Events.LiquidityManagerUpdate,
-        createdAt: moment().subtract(2, "day").toISOString(),
-        manager: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-      } as unknown as Event;
-      resp.data.data[6] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92223",
-        action: Events.LiquidityTargetUpdate,
-        createdAt: moment().subtract(2, "day").toISOString(),
-        target: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92234",
-      } as unknown as Event;
-      resp.data.data[7] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        action: Events.LiquidityPriceUpdate,
-        createdAt: moment().subtract(2, "day").toISOString(),
-        price: powOf(3342, 18).toString(),
-      } as unknown as Event;
-      resp.data.data[8] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        action: Events.LiquiditySwapLimitUpdate,
-        createdAt: moment().subtract(2, "day").toISOString(),
-        minSwap: powOf(100, 18).toString(),
-        maxSwap: powOf(200, 18).toString(),
-      } as unknown as Event;
-      resp.data.data[9] = {
-        creator: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        action: Events.LiquidityTimeToPayUpdate,
-        createdAt: moment().subtract(2, "day").toISOString(),
-        timeToPay: 86400,
-      } as unknown as Event;
 
       return Promise.resolve(resp.data.data);
     } catch (e) {

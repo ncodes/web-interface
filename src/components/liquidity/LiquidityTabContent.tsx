@@ -1,18 +1,18 @@
+import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { RequestError } from "../../libs/RequestError.ts";
+import { isEqlStr } from "../../libs/helpers.ts";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { SwapSheet } from "../swap/SwapSheet.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { LiquidityEventLog } from "./LiquidityEventLog.tsx";
-import { RecentReviews } from "./RecentReviews.tsx";
-import { SwapSheet } from "../swap/SwapSheet.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
-import { useParams } from "react-router-dom";
-import useStore from "../../hooks/store/useStore.ts";
-import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../../libs/RequestError.ts";
+import { LiquidityProviderReviewViewer } from "./LiquidityProviderReviewViewer.tsx";
 import { LiquidityRow } from "./LiquidityRow.tsx";
-import { isEqlStr } from "../../libs/helpers.ts";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function LiquidityTabContent({
   setLiquidity,
@@ -78,7 +78,9 @@ export function LiquidityTabContent({
 
             <div className="flex flex-col gap-5 lg:gap-0 lg:flex-row pt-5 px-3">
               <LiquidityEventLog liquidity={liquidity.data as Liquidity} />
-              <RecentReviews />
+              <LiquidityProviderReviewViewer
+                liquidity={liquidity.data as Liquidity}
+              />
             </div>
           </>
         )}

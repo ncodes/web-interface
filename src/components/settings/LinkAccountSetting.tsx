@@ -119,7 +119,10 @@ export function LinkAccountSetting() {
 
       {linked && (
         <div>
-          <Alert icon={<IconCheckCircle />} className="!text-sm">
+          <Alert
+            icon={<IconCheckCircle width="20px" height="20px" />}
+            className="!text-sm"
+          >
             <div className="flex justify-between items-center">
               <span className="grow-0 break-all flex flex-col">
                 <span>Your wallet is linked to</span>

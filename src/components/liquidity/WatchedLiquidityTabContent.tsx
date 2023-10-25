@@ -90,12 +90,10 @@ export function WatchedLiquidityTabContent() {
         .identityKey as PrivateKey;
       const liquidities: { [k: string]: boolean } = {};
 
-      await readMailbox(
-        chain,
-        address,
-        ContentTypeFollow,
-        false,
-        async (msg) => {
+      await readMailbox(chain, address, {
+        type: ContentTypeFollow,
+        reverse: false,
+        cb: async (msg) => {
           const content = msg.content as FollowPayload;
           const { signature, market, provider, lid, unfollow } = content;
 
@@ -112,8 +110,8 @@ export function WatchedLiquidityTabContent() {
           }
 
           return false;
-        }
-      );
+        },
+      });
 
       setWatchedLiquidities(
         Object.keys(liquidities).map((v) => {
@@ -235,7 +233,7 @@ export function WatchedLiquidityTabContent() {
               Initialize Chat
             </Label>
             <div className="text-gray-300 text-[13px] px-3 py-3 font-light tracking-wide">
-              Liquidity watching relies on the chat feature. You need to
+              Liquidity watching relies on the chat system. You need to
               initialize your wallet for chat before you can see the liquidities
               you are currently watching.
             </div>

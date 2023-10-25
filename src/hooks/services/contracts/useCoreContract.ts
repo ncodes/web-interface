@@ -299,7 +299,7 @@ export default function useCoreContract() {
    * Get an order
    * @param orderId The order ID
    */
-  async function getOrder(orderId: number): Promise<OrderStruct> {
+  async function getOrder(orderId: bigint): Promise<OrderStruct> {
     return readContract("core", "getOrder", [orderId]);
   }
 

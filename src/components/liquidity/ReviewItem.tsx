@@ -1,16 +1,21 @@
 import { ThumbsDown, ThumbsUp } from "lucide-react";
+import moment from "moment";
+import { shortenAddress } from "../../libs/helpers";
+import { FetchedUserHoverCard } from "../FetchedUserHoverCard";
 
 export function ReviewItem({
   initiator,
   good,
   msg,
+  createdAt,
 }: {
   initiator: string;
-  good?: boolean;
-  msg?: string;
+  good: boolean;
+  msg: string;
+  createdAt: number;
 }) {
   return (
-    <div className="flex items-center gap-2 tracking-wider px-3 py-3 text-gray-200 font-light text-sm">
+    <div className="flex  gap-2 tracking-wider px-3 py-3 text-gray-200 font-light text-sm">
       <span className="shrink-0">
         {!good && (
           <span className="bg-red-600 block rounded-full p-[5px]">
@@ -28,11 +33,18 @@ export function ReviewItem({
           <div className="flex justify-between">
             <div className="flex flex-col w-full">
               <div className="flex gap-2 items-center">
-                <span className="text-gray-500 text-xs font-medium">
-                  {/*<UserHoverCard>@{shortenAddress(initiator)}:</UserHoverCard>*/}
+                <span className="text-gray-400 text-xs font-light">
+                  <FetchedUserHoverCard
+                    address={initiator}
+                    className="cursor-pointer"
+                  >
+                    {shortenAddress(initiator)}
+                  </FetchedUserHoverCard>
                 </span>
                 <span>
-                  <span className="text-xs text-gray-400">2 days ago</span>
+                  <span className="text-xs text-gray-400">
+                    {moment.unix(createdAt).fromNow(true)}
+                  </span>
                 </span>
               </div>
               <span>{msg}</span>

@@ -63,12 +63,10 @@ export function FollowLiquidity({
       try {
         let follow = false;
 
-        await readMailbox(
-          chain,
-          address,
-          ContentTypeFollow,
-          true,
-          async (msg) => {
+        await readMailbox(chain, address, {
+          type: ContentTypeFollow,
+          reverse: true,
+          cb: async (msg) => {
             const content = msg.content as FollowPayload;
             if (
               content.type == "liquidity" &&
@@ -89,8 +87,8 @@ export function FollowLiquidity({
               return true;
             }
             return false;
-          }
-        );
+          },
+        });
 
         setFollowing(follow);
         setLoading(false);
@@ -245,7 +243,7 @@ export function FollowLiquidity({
               Watch Liquidity
             </Label>
             <div className="text-gray-300 text-[13px] px-3 py-3 font-light tracking-wide">
-              Watching relies on the chat feature. You need to initialize your
+              Watching relies on the chat system. You need to initialize your
               wallet for chat before you can watch a liquidity.
             </div>
             <div>

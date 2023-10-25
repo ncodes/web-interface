@@ -10,6 +10,7 @@ import {
 } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
 import ScrollOverflowIndicator from "./ScrollOverflowIndicator.tsx";
+import { UserHoverCardReviewSheetTrigger } from "./UserHoverCardReviewSheetTrigger.tsx";
 import EmojiAvatar from "./avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "./avatar/useAvatar.tsx";
 import IconCopyFilled from "./icons/IconCopyFilled.tsx";
@@ -52,7 +53,7 @@ export function UserHoverCard({
         <HoverCardPortal>
           <HoverCardContent className="rounded-2xl bg-modal-background border-gray-600 text-gray-200 p-0">
             <div className="p-3 py-2 text-sm flex items-center gap-2 border-b border-gray-700">
-              <EmojiAvatar size={AvatarSize.Small} randomStr="abcen" />
+              <EmojiAvatar size={AvatarSize.Small} randomStr={user?.address} />
               <div>
                 <div className="flex items-center gap-1">
                   <span>{shortenAddress(user?.address)}</span>
@@ -99,9 +100,12 @@ export function UserHoverCard({
                   width="w-full"
                   rmDataClickTrigger
                 >
-                  <span className="text-gray-200">
-                    {formatToMoney(user?.totalSwaps || "0")}
-                  </span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-200">
+                      {formatToMoney(user?.totalSwaps || "0")}
+                    </span>
+                    <UserHoverCardReviewSheetTrigger user={user} />
+                  </div>
                 </InfoCard>
                 <InfoCard
                   title="Completion Rate"

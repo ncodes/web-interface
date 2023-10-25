@@ -32,6 +32,7 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Label } from "../ui/label.tsx";
 import AppealPopOver from "./AppealPopOver.tsx";
+import { SwapRateCallout } from "./SwapRateCallout.tsx";
 import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
 import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
 import { markOrderAsPaidFunc } from "./functions/markOrderAsPaidFunc.ts";
@@ -89,7 +90,7 @@ export function SwapProgress({
 
   useInterval(
     async () => {
-      const order = await getOrder(swap.orderId);
+      const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, cancel: order?.cancelled });
     },
     (showAwaitingPaymentSection || showSendPaymentSection) &&
@@ -100,7 +101,7 @@ export function SwapProgress({
 
   useInterval(
     async () => {
-      const order = await getOrder(swap.orderId);
+      const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, markAsPaid: order?.paid });
     },
     showSendPaymentSection && !disableButtons.markAsPaid ? 5000 : null
@@ -132,7 +133,7 @@ export function SwapProgress({
 
   useInterval(
     async () => {
-      const order = await getOrder(swap.orderId);
+      const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, release: order?.released });
     },
     (showDisputedSection ||
@@ -618,6 +619,7 @@ export function SwapProgress({
           )}
           {/* ---- end when waiting for release -- */}
           {/* -- end when payer -- */}
+
           {/* ---- when swap was released -- */}
           {showSwapReleasedSection && (
             <>
@@ -628,9 +630,11 @@ export function SwapProgress({
                 The swap is complete. Any locked asset has been transferred to
                 the intended counterparty.
               </div>
+              <SwapRateCallout swap={swap} />
             </>
           )}
           {/* ---- end when swap was released -- */}
+
           {/* ---- when swap was cancelled -- */}
           {showSwapCancelledSection && (
             <>
@@ -641,6 +645,7 @@ export function SwapProgress({
                 The swap has been cancelled. Any locked asset has be returned
                 back to initial owner.
               </div>
+              <SwapRateCallout swap={swap} />
             </>
           )}
           {/* ---- end when swap was cancelled -- */}

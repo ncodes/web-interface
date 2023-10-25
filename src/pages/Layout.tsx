@@ -8,6 +8,7 @@ import { Footer } from "../components/Footer.tsx";
 import { Header } from "../components/Header.tsx";
 import { LeftSidebar } from "../components/LeftSidebar.tsx";
 import { NotificationSheet } from "../components/NotificationSheet.tsx";
+import { ReviewViewerSheet } from "../components/ReviewViewerSheet.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
@@ -122,6 +123,7 @@ export default function Layout({
 
         <SearchSheetBox />
         <NotificationSheet />
+        <ReviewViewerSheet />
       </div>
     </div>
   );

@@ -78,12 +78,10 @@ export function WatchedMarketContent() {
         .identityKey as PrivateKey;
       const markets: { [k: string]: boolean } = {};
 
-      await readMailbox(
-        chain,
-        address,
-        ContentTypeFollow,
-        false,
-        async (msg) => {
+      await readMailbox(chain, address, {
+        type: ContentTypeFollow,
+        reverse: false,
+        cb: async (msg) => {
           const content = msg.content as FollowPayload;
 
           if (content.type == "market") {
@@ -99,8 +97,8 @@ export function WatchedMarketContent() {
           }
 
           return false;
-        }
-      );
+        },
+      });
 
       setWatchedMarkets(Object.keys(markets));
       setLoading(false);
@@ -219,7 +217,7 @@ export function WatchedMarketContent() {
               Initialize Chat
             </Label>
             <div className="text-gray-300 text-[13px] px-3 py-3 font-light tracking-wide">
-              Market watching relies on the chat feature. You need to initialize
+              Market watching relies on the chat system. You need to initialize
               your wallet for chat before you can see the markets you are
               currently watching.
             </div>

@@ -28,8 +28,8 @@ import IconEdit from "../icons/IconEdit.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { IconMarket } from "../icons/IconMarket.tsx";
 import IconOffer from "../icons/IconOffer.tsx";
+import IconReview from "../icons/IconReview.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
-import { IconStarSmile } from "../icons/IconStarSmile.tsx";
 import { BadgePill } from "../market/BadgePill.tsx";
 import { FollowLiquidity } from "../market/FollowLiquidity.tsx";
 import { InfoCard } from "../market/InfoCard.tsx";
@@ -45,7 +45,6 @@ import {
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { Skeleton } from "../ui/skeleton.tsx";
 import { ManageLiquiditySheet } from "./ManageLiquiditySheet.tsx";
-import { ReviewViewerSheet } from "./ReviewViewerSheet.tsx";
 import { VerifiedBadge } from "./VerifiedBadge.tsx";
 
 function ProviderInfoSkeleton() {
@@ -176,13 +175,18 @@ export function LiquidityRow({
                   <ToolTip tip="Click to open reviews">
                     <div className="flex items-center gap-1 text-yellow-200">
                       <span>
-                        <IconStarSmile width="15px" />
+                        <IconReview width="15px" />
                       </span>
-                      <span
+                      <Button
+                        variant="link"
                         onClick={() => {
-                          toggleOpenState("reviewSheet");
+                          toggleOpenState(
+                            "reviewSheet",
+                            undefined,
+                            liquidity.provider
+                          );
                         }}
-                        className="text-blue-200 text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4"
+                        className="text-blue-200 p-0 h-auto text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4 -mt-1"
                       >
                         {getProvider.data?.completionRate}% (
                         {approxNumber(getProvider.data?.totalSwaps)} swap
@@ -190,7 +194,7 @@ export function LiquidityRow({
                           ? "s"
                           : ""}
                         )
-                      </span>
+                      </Button>
                     </div>
                   </ToolTip>
                 </div>
@@ -678,12 +682,6 @@ export function LiquidityRow({
         open={openManageLiquiditySheet}
         onOpenChange={(open) => {
           setOpenManageLiquiditySheet(open);
-        }}
-      />
-      <ReviewViewerSheet
-        open={openState.reviewSheet || false}
-        onOpenChange={() => {
-          toggleOpenState && toggleOpenState("reviewSheet");
         }}
       />
       <SwapOfferCreatorSheet liquidity={liquidity} />

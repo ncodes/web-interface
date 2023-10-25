@@ -1,3 +1,8 @@
+import moment from "moment/moment";
+import { Dispatch, SetStateAction } from "react";
+import { useInterval } from "usehooks-ts";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
 import {
   getPayer,
   isDisputed,
@@ -6,16 +11,11 @@ import {
   isSwapDisputeExecuted,
 } from "../../libs/api_utils.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
-import { Button } from "../ui/Button.tsx";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import moment from "moment/moment";
 import { CountDown } from "../Countdown.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { Button } from "../ui/Button.tsx";
 import AppealPopOver from "./AppealPopOver.tsx";
 import { SwapRowLinks } from "./SwapRowLinks.tsx";
-import { Dispatch, SetStateAction } from "react";
-import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
-import { useInterval } from "usehooks-ts";
-import useDisputeManagerContract from "../../hooks/services/contracts/useDisputeManagerContract.ts";
 
 export default function SwapRowLayer3({
   swap,
@@ -45,7 +45,7 @@ export default function SwapRowLayer3({
 
   useInterval(
     async () => {
-      const order = await getOrder(swap.orderId);
+      const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, cancel: order?.cancelled });
     },
     showCancelBtn && !disableButtons.cancel ? 3000 : null
@@ -61,7 +61,7 @@ export default function SwapRowLayer3({
 
   useInterval(
     async () => {
-      const order = await getOrder(swap.orderId);
+      const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, markAsPaid: order?.paid });
     },
     showPaidBtn && !disableButtons.markAsPaid && showPaidBtn ? 3000 : null
@@ -76,7 +76,7 @@ export default function SwapRowLayer3({
 
   useInterval(
     async () => {
-      const order = await getOrder(swap.orderId);
+      const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, release: order?.released });
     },
     showReleaseBtn && !disableButtons.release ? 3000 : null

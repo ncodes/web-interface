@@ -44,7 +44,7 @@ export function SearchInput(props: {
         <Button
           variant="link"
           className="absolute text-chinese-green cursor-pointer right-0 hover:scale-110 transition-all duration-300"
-          onClick={(e) => {
+          onClick={() => {
             setValue("");
             ref.current?.focus();
           }}

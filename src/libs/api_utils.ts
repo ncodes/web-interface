@@ -350,7 +350,7 @@ export function isSwapParticipant(swap: Swap, address: string) {
  * @param swap The swap object
  * @param address The address to check
  */
-export function isSwapCounterparty(swap: Swap, address: string) {
+export function isSwapCounterparty(swap: {provider:string, taker:string}, address: string) {
   return isEqlStr(swap.provider, address) || isEqlStr(swap.taker, address);
 }
 

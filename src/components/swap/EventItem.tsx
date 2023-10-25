@@ -1,24 +1,24 @@
+import { useQuery } from "@tanstack/react-query";
+import moment from "moment/moment";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { isDisputeDraftee, isDisputed } from "../../libs/api_utils.ts";
+import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
+import { Events } from "../../types/enums.ts";
+import { ToolTip } from "../ToolTip.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
-import moment from "moment/moment";
-import { Events } from "../../types/enums.ts";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { useQuery } from "@tanstack/react-query";
-import { ToolTip } from "../ToolTip.tsx";
-import { isDisputed, isDisputeDraftee } from "../../libs/api_utils.ts";
+import { EventContentSwapCancelled } from "./event/EventContentSwapCancelled.tsx";
+import { EventContentSwapCommitted } from "./event/EventContentSwapCommitted.tsx";
+import { EventContentSwapDisputed } from "./event/EventContentSwapDisputed.tsx";
+import { EventContentSwapDrafted } from "./event/EventContentSwapDrafted.tsx";
+import { EventContentSwapExecuted } from "./event/EventContentSwapExecuted.tsx";
 import { EventContentSwapNew } from "./event/EventContentSwapNew.tsx";
 import { EventContentSwapPaid } from "./event/EventContentSwapPaid.tsx";
 import { EventContentSwapReleased } from "./event/EventContentSwapReleased.tsx";
-import { EventContentSwapCancelled } from "./event/EventContentSwapCancelled.tsx";
-import { EventContentSwapDisputed } from "./event/EventContentSwapDisputed.tsx";
-import { EventContentSwapDrafted } from "./event/EventContentSwapDrafted.tsx";
-import { EventContentSwapCommitted } from "./event/EventContentSwapCommitted.tsx";
 import { EventContentSwapRevealed } from "./event/EventContentSwapRevealed.tsx";
-import { EventContentSwapExecuted } from "./event/EventContentSwapExecuted.tsx";
 import { EventContentSwapUndrafted } from "./event/EventContentSwapUndrafted.tsx";
-import { UserHoverCard } from "../UserHoverCard.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
   const { getUser } = useUserService();
@@ -47,7 +47,7 @@ export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
                   </UserHoverCard>
                   {isEqlStr(address, event.creator) && (
                     <ToolTip tip="You">
-                      <span className="bg-gray-700 rounded-sm px-[4px] pr-[2px] font-medium text-gray-400 text-[9px]">
+                      <span className="bg-gray-700 rounded-sm px-[4px] font-medium text-gray-400 text-[9px]">
                         YOU
                       </span>
                     </ToolTip>
@@ -62,7 +62,7 @@ export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
                   {isDisputed(swap) &&
                     isDisputeDraftee(swap.disputes[0], event.creator) && (
                       <ToolTip tip="Mediator">
-                        <span className="bg-chinese-green rounded-sm px-[4px] pr-[2px] font-medium text-gray-900 text-[9px]">
+                        <span className="bg-chinese-green rounded-sm px-[4px] font-medium text-gray-900 text-[9px]">
                           M
                         </span>
                       </ToolTip>
