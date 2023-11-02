@@ -3,8 +3,8 @@ import CoreABI from "../../abi/Core.json";
 import DisputeManagerABI from "../../abi/DisputeManager.json";
 import EnergonABI from "../../abi/Energon.json";
 import MarketCoreABI from "../../abi/MarketCore.json";
-import NftABI from "../../abi/NFT.json";
 import MediatorManagerABI from "../../abi/MediatorManager.json";
+import NftABI from "../../abi/NFT.json";
 import NativeTokenABI from "../../abi/Token.json";
 import IconBSC from "../../components/icons/BSC.tsx";
 import IconArbitrum from "../../components/icons/IconArbitrum.tsx";
@@ -33,7 +33,8 @@ export const SupportedNetworks: ChainInfo[] = [
     queryName: "ethereum",
     chainId: ChainID.Ethereum,
     symbol: "ETH",
-    rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL ?? "",
+    apiUrl: import.meta.env.VITE_ETHEREUM_API_URI,
+    rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL,
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,
     tokenInfo: new TokenInfo({
@@ -84,6 +85,7 @@ export const SupportedNetworks: ChainInfo[] = [
     queryName: "polygon",
     chainId: ChainID.Polygon,
     symbol: "MATIC",
+    apiUrl: import.meta.env.VITE_POLYGON_API_URI,
     rpcUrl: import.meta.env.VITE_POLYGON_RPC_URL ?? "",
     blockExplorer: "https://polygonscan.com",
     logoPath: IconPolygon,
@@ -101,6 +103,7 @@ export const SupportedNetworks: ChainInfo[] = [
     queryName: "optimism",
     chainId: ChainID.Optimism,
     symbol: "ETH",
+    apiUrl: import.meta.env.VITE_OPTIMISM_API_URI,
     rpcUrl: import.meta.env.VITE_OPTIMISM_RPC_URL ?? "",
     blockExplorer: "https://optimistic.etherscan.io",
     logoPath: IconOptimism,
@@ -119,6 +122,7 @@ export const SupportedNetworks: ChainInfo[] = [
     queryName: "binance-chain",
     chainId: ChainID.Binance,
     symbol: "BNB",
+    apiUrl: import.meta.env.VITE_BINANCE_API_URI,
     rpcUrl: import.meta.env.VITE_BINANCE_RPC_URL ?? "",
     blockExplorer: "https://bscscan.com",
     logoPath: IconBSC,
@@ -136,6 +140,7 @@ export const SupportedNetworks: ChainInfo[] = [
     queryName: "arbitrum",
     chainId: ChainID.Arbitrum,
     symbol: "ETH",
+    apiUrl: import.meta.env.VITE_ARBITRUM_API_URI,
     rpcUrl: import.meta.env.VITE_ARBITRUM_RPC_URL ?? "",
     blockExplorer: "https://arbiscan.io",
     logoPath: IconArbitrum,
@@ -154,6 +159,7 @@ export const SupportedNetworks: ChainInfo[] = [
     testnet: true,
     chainId: ChainID.Goerli,
     symbol: "ETH",
+    apiUrl: import.meta.env.VITE_GOERLI_API_URI,
     rpcUrl: import.meta.env.VITE_GOERLI_RPC_URL ?? "",
     blockExplorer: "https://goerli.etherscan.io",
     logoPath: IconEthereum,
@@ -172,6 +178,7 @@ export const SupportedNetworks: ChainInfo[] = [
     testnet: true,
     chainId: ChainID.Hardhat,
     symbol: "ETH",
+    apiUrl: import.meta.env.VITE_LOCALHOST_API_URI,
     rpcUrl: import.meta.env.VITE_LOCALHOST_RPC_URL ?? "",
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,

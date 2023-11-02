@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
 import { useVisibilityChange } from "@uidotdev/usehooks";
+import { useEffect, useState } from "react";
 
 export default function useWindowFocus() {
   const documentVisible = useVisibilityChange();
   const [focus, setFocus] = useState(document.hasFocus());
-  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const onFocus = () => setFocus(true);

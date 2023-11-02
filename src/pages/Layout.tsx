@@ -1,8 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useMediaQuery } from "usehooks-ts";
+import { useLocation } from "react-router-dom";
+import { useInterval, useMediaQuery } from "usehooks-ts";
 import { AccountLinker } from "../components/AccountLinker.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { Header } from "../components/Header.tsx";
@@ -12,8 +13,10 @@ import { ReviewViewerSheet } from "../components/ReviewViewerSheet.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
 import { useUserService } from "../hooks/services/backend/useUserService.ts";
 import useStore from "../hooks/store/useStore.ts";
+import useWindowFocus from "../hooks/useWindowFocus.ts";
 import { cn } from "../libs/utils.ts";
 
 export default function Layout({
@@ -26,20 +29,37 @@ export default function Layout({
   bodyContainerClassName?: string;
 }) {
   const headerHeight = 55;
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isXl = useMediaQuery("(min-width: 1280px)");
-  const { address } = useConnectorContext();
+  const { address, getChainInfo } = useConnectorContext();
+  const user = useStore((state) => state.user);
+  const windowFocus = useWindowFocus();
   const setUser = useStore((state) => state.setUser);
-  const { getUser } = useUserService();
+  const { getUser, logOnlineStatus, registerDevice } = useUserService();
   const accessToken = localStorage.getItem(StoreAccessTokenKey);
+  const { subscribeForWebPush } = useNotificationService();
   const ref = useRef(null);
   const { scrollY } = useScroll();
+  const [scrollYPos, setScrollYPos] = useState(0);
+
   const query = useQuery({
     queryKey: ["getUser", { address }],
     queryFn: getUser,
     enabled: !!accessToken && !!address,
   });
-  const [scrollYPos, setScrollYPos] = useState(0);
+
+  const subscribeMutation = useMutation({
+    mutationFn: subscribeForWebPush,
+  });
+
+  const logOnlineStatusMutation = useMutation({
+    mutationFn: logOnlineStatus,
+  });
+
+  const registerDeviceMutation = useMutation({
+    mutationFn: registerDevice,
+  });
 
   useEffect(() => {
     if (query.isLoading) return;
@@ -54,9 +74,61 @@ export default function Layout({
     setScrollYPos(val);
   });
 
-  const openMobileMenu = useCallback(() => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  }, [mobileMenuOpen]);
+  // Log online status every 10 seconds.
+  useInterval(() => {
+    if (!user || !windowFocus) return;
+
+    const orderMatch = location.pathname.match(/\/swap\/([0-9]+)/);
+    const orderId = orderMatch ? parseInt(orderMatch[1]) : undefined;
+    const offerMatch = location.pathname.match(/\/offer\/([0-9]+)/);
+    const offerId = offerMatch ? parseInt(offerMatch[1]) : undefined;
+
+    logOnlineStatusMutation.mutate({
+      net: getChainInfo().queryName,
+      orderId,
+      offerId,
+    });
+  }, determineOnlineStatusReportDelay());
+
+  // Register user devices
+  useEffect(() => {
+    if (!user) return;
+    registerDeviceMutation.mutate();
+  }, [user]);
+
+  // Subscribe for web push notifications.
+  useEffect(() => {
+    if (!address) return;
+    if ("serviceWorker" in navigator)
+      registerServiceWorker().catch(console.error);
+  }, [address]);
+
+  // Register service worker.
+  async function registerServiceWorker() {
+    try {
+      const { serviceWorker: sw } = navigator;
+      const register = await sw.register("/worker.js", { scope: "/" });
+      const subscription = await register.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: import.meta.env.VITE_VAPID_PUBLIC_KEY,
+      });
+
+      subscribeMutation.mutate({
+        subscription,
+        address,
+        net: getChainInfo().queryName,
+      });
+    } catch (error) {
+      console.error("Failed to subscribe user for notification: ", error);
+    }
+  }
+
+  // Determine duration to wait before reporting online status.
+  function determineOnlineStatusReportDelay() {
+    if (location.pathname.match(/\/swap\/([0-9]+)/)) return 5000;
+    if (location.pathname.match(/\/offer\/([0-9]+)/)) return 5000;
+    return 10000;
+  }
 
   return (
     <div>
@@ -64,7 +136,6 @@ export default function Layout({
         <title>Dashboard</title>
         <body className="bg-background" />
       </Helmet>
-
       <div ref={ref} className="container-x flex h-screen text-white text ">
         <LeftSidebar
           open={mobileMenuOpen}
@@ -77,7 +148,12 @@ export default function Layout({
 
         <div className="flex flex-col flex-1 pt-3 z-10">
           <div>
-            <Header onClick={openMobileMenu} height={`h-[${headerHeight}px]`} />
+            <Header
+              onClick={() => {
+                setMobileMenuOpen(!mobileMenuOpen);
+              }}
+              height={`h-[${headerHeight}px]`}
+            />
           </div>
           <div className="flex flex-1">
             <div className="flex-1 flex flex-col mt-3">

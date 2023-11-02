@@ -20,6 +20,7 @@ import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Progress } from "../ui/progress.tsx";
 import { MessengerInputAction } from "./MessengerInputAction.tsx";
+import { SendChatButton } from "./SendChatButton.tsx";
 
 type PreparedFileInfo = {
   formData: FormData;
@@ -33,15 +34,19 @@ type PreparedFileInfo = {
 export function MessengerInputActions({
   client,
   disabled,
+  disableSendButton,
   swap,
   convos,
   onFileUpload,
+  onSend,
 }: {
   client: Client;
   disabled: boolean;
+  disableSendButton?: boolean;
   swap: Swap;
   convos: Conversation[];
   onFileUpload?: () => void;
+  onSend?: () => void;
 }) {
   const [files, setFiles] = useState<File[] | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -291,54 +296,59 @@ export function MessengerInputActions({
         </div>
       )}
 
-      <div className="flex gap-2 px-3 items-center mt-3">
-        <MessengerInputAction
-          disabled={disabled || uploading}
-          onClick={() => {
-            imageInputRef.current?.click();
-          }}
-        >
-          <ImagePlus width="20" />
-        </MessengerInputAction>
-        <MessengerInputAction
-          disabled={disabled || uploading}
-          onClick={() => {
-            videoInputRef.current?.click();
-          }}
-        >
-          <VideoIcon width="30" />
-        </MessengerInputAction>
-        <MessengerInputAction
-          disabled={disabled || uploading}
-          onClick={() => {
-            docInputRef.current?.click();
-          }}
-        >
-          <FileIcon width="20" />
-        </MessengerInputAction>
-        <Input
-          ref={imageInputRef}
-          type="file"
-          multiple
-          accept="image/png, image/jpeg, image/jpg"
-          style={{ display: "none" }}
-          onChange={handleImageFileChange}
-        />
-        <Input
-          ref={videoInputRef}
-          type="file"
-          accept="video/mp4, video/quicktime, video/wmv"
-          style={{ display: "none" }}
-          onChange={handleVideoFileChange}
-        />
-        <Input
-          ref={docInputRef}
-          type="file"
-          accept="application/pdf"
-          multiple
-          style={{ display: "none" }}
-          onChange={handleDocFileChange}
-        />
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2 px-3 items-center mt-3">
+          <MessengerInputAction
+            disabled={disabled || uploading}
+            onClick={() => {
+              imageInputRef.current?.click();
+            }}
+          >
+            <ImagePlus width="20" />
+          </MessengerInputAction>
+          <MessengerInputAction
+            disabled={disabled || uploading}
+            onClick={() => {
+              videoInputRef.current?.click();
+            }}
+          >
+            <VideoIcon width="30" />
+          </MessengerInputAction>
+          <MessengerInputAction
+            disabled={disabled || uploading}
+            onClick={() => {
+              docInputRef.current?.click();
+            }}
+          >
+            <FileIcon width="20" />
+          </MessengerInputAction>
+          <Input
+            ref={imageInputRef}
+            type="file"
+            multiple
+            accept="image/png, image/jpeg, image/jpg"
+            style={{ display: "none" }}
+            onChange={handleImageFileChange}
+          />
+          <Input
+            ref={videoInputRef}
+            type="file"
+            accept="video/mp4, video/quicktime, video/wmv"
+            style={{ display: "none" }}
+            onChange={handleVideoFileChange}
+          />
+          <Input
+            ref={docInputRef}
+            type="file"
+            accept="application/pdf"
+            multiple
+            style={{ display: "none" }}
+            onChange={handleDocFileChange}
+          />
+        </div>
+        <div className="pr-4">
+          <SendChatButton disabled={disableSendButton} onSend={onSend} />
+        </div>
       </div>
     </div>
   );

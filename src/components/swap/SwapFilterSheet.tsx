@@ -1,4 +1,6 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactNode, useEffect, useState } from "react";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import {
   Sheet,
   SheetContent,
@@ -6,13 +8,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import { Cross2Icon } from "@radix-ui/react-icons";
 
-import { SwapFilterContent } from "./SwapFilterContent.tsx";
 import { useLocation } from "react-router-dom";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import { SwapFilterContent } from "./SwapFilterContent.tsx";
 
 export function SwapFilterSheet({
   active,
@@ -72,7 +72,7 @@ export function SwapFilterSheet({
             onOpen && onOpen(false);
           }}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </SheetContent>

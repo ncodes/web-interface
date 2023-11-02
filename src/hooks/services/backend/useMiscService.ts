@@ -1,6 +1,7 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 export interface GetCryptoRateParams {
   net: string;
@@ -16,6 +17,8 @@ export interface GetMediatorPoolsParams {
  * useMiscService provides access to v1/misc endpoint
  */
 export function useMiscService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * Get crypto USD rate
    */
@@ -28,9 +31,9 @@ export function useMiscService() {
 
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/misc/crypto-rate/${
-          params.net
-        }/${params.symbolOrAddress}`,
+        url: `${getChainInfo().apiUrl}/v1/misc/crypto-rate/${params.net}/${
+          params.symbolOrAddress
+        }`,
         headers,
       });
 
@@ -52,9 +55,7 @@ export function useMiscService() {
 
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/misc/synth-rate/${
-          params.symbol
-        }`,
+        url: `${getChainInfo().apiUrl}/v1/misc/synth-rate/${params.symbol}`,
         headers,
       });
 

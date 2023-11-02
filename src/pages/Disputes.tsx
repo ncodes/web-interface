@@ -84,7 +84,7 @@ export default function Disputes() {
   const loc = useLocation();
 
   const rightSide = connected ? (
-    <div className="flex w-full h-full justify-between flex-col pt-2">
+    <div className="flex w-full h-full justify-between flex-col pt-3">
       <DisputeFilter ownerMode={loc.pathname == "/my/liquidity"} />
       <div className="relative">
         <div className="text-gray-200 bottom-0 w-full">

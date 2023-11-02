@@ -1,7 +1,8 @@
-import { handleAxiosError } from "../../../libs/helpers.ts";
-import axios, { AxiosResponse } from "axios";
 import { QueryFunctionContext } from "@tanstack/react-query";
+import axios, { AxiosResponse } from "axios";
 import { StoreAccessTokenKey } from "../../../constants.ts";
+import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 type UpdateInstructionsBody = {
   net: string;
@@ -55,6 +56,8 @@ export type InstructionsWithGrantSigResponse = InstructionsResponse & {
  * useInstructionsService provides access to v1/instructions endpoint
  */
 export function useInstructionsService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * Update instructions for the authenticated user
    * @param body The request body
@@ -70,7 +73,7 @@ export function useInstructionsService() {
       const resp = await axios({
         method: "put",
         data: JSON.stringify(body),
-        url: `${import.meta.env.VITE_API_URI}/v1/instructions`,
+        url: `${getChainInfo().apiUrl}/v1/instructions`,
         headers: {
           "content-type": "application/json",
           ...headers,

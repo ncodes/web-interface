@@ -1,6 +1,7 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { DisputeFilter } from "../../store/useStore.ts";
 
 export interface ListDisputeParams {
@@ -17,6 +18,8 @@ export type ListDisputeIDs = "getDisputesAsParticipant";
  * useDisputeService provides access to v1/disputes endpoints
  */
 export function useDisputeService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * List disputes
    * @param ctx
@@ -30,7 +33,7 @@ export function useDisputeService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/disputes`,
+        url: `${getChainInfo().apiUrl}/v1/disputes`,
         params: {
           ...disputeFilter,
           net: "ethereum" || network, // TODO: remove mock

@@ -1,11 +1,13 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
-import { QueryFunctionContext } from "@tanstack/react-query";
 
 /**
  * useAssetService provides access to v1/assets endpoint
  */
 export function useAssetService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * Get swappable token list
    */
@@ -18,7 +20,7 @@ export function useAssetService() {
 
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/assets/${params.network}`,
+        url: `${getChainInfo().apiUrl}/v1/assets/${params.network}`,
         headers,
       });
 

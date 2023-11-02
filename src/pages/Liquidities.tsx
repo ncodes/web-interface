@@ -95,7 +95,7 @@ export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
   const loc = useLocation();
 
   const rightSide = connected ? (
-    <div className="flex w-full justify-between flex-col pt-2">
+    <div className="flex w-full justify-between flex-col pt-3">
       <LiquidityFilter ownerMode={loc.pathname == "/my/liquidity"} />
       <div className="relative">
         <div className="text-gray-200">

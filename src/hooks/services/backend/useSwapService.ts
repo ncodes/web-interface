@@ -1,6 +1,7 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
-import { QueryFunctionContext } from "@tanstack/react-query";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { SwapFilter } from "../../store/useStore.ts";
 
 export type ListSwapIDs = "getSwapsAsParticipant" | "getRecentSwaps";
@@ -28,6 +29,8 @@ interface GetSwapEventParams {
  * useSwapService provides access to v1/swaps endpoints
  */
 export function useSwapService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * List swaps
    * @param ctx
@@ -41,7 +44,7 @@ export function useSwapService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/swaps`,
+        url: `${getChainInfo().apiUrl}/v1/swaps`,
         params: {
           ...swapFilter,
           net: "ethereum" || network, // TODO: remove mock
@@ -88,7 +91,7 @@ export function useSwapService() {
       const headers = {};
       const resp = await axios<{ data: Swap }>({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/swaps/${orderId}`,
+        url: `${getChainInfo().apiUrl}/v1/swaps/${orderId}`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
         },
@@ -113,7 +116,7 @@ export function useSwapService() {
       const headers = {};
       const resp = await axios<{ data: Event[] }>({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/swaps/${orderId}/events`,
+        url: `${getChainInfo().apiUrl}/v1/swaps/${orderId}/events`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
         },

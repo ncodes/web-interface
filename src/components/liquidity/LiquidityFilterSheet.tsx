@@ -1,3 +1,4 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactNode, useEffect, useState } from "react";
 import {
   Sheet,
@@ -6,12 +7,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet.tsx";
-import { Cross2Icon } from "@radix-ui/react-icons";
 
-import { LiquidityFilterContent } from "./LiquidityFilterContent.tsx";
 import { useLocation } from "react-router-dom";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import { LiquidityFilterContent } from "./LiquidityFilterContent.tsx";
 
 export function LiquidityFilterSheet({
   active,
@@ -70,7 +70,7 @@ export function LiquidityFilterSheet({
             onOpen && onOpen(false);
           }}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </SheetContent>

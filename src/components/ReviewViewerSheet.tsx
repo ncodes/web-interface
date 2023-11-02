@@ -30,7 +30,7 @@ export function ReviewViewerSheet() {
   const [, sheetSide, styles] = useSheetInfo();
   const client = useRef<Client | undefined>();
   const [loading, setLoading] = useState(false);
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const { getOrder } = useCoreContract();
   const forceUpdate = useForceUpdate();
   const openState = useStore((state) => state.openState);
@@ -240,7 +240,7 @@ export function ReviewViewerSheet() {
             toggleOpenState && toggleOpenState("reviewSheet");
           }}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </SheetContent>

@@ -91,7 +91,7 @@ export function SearchSheetBox(props: { children?: React.ReactNode }) {
               toggleOpenState && toggleOpenState("searchSheet");
             }}
           >
-            <Cross2Icon className="h-6 w-6" />
+            <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
             <span className="sr-only">Close</span>
           </div>
         </div>

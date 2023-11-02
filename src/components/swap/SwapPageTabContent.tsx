@@ -8,7 +8,6 @@ import useStore from "../../hooks/store/useStore.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isSwapParticipant } from "../../libs/api_utils.ts";
 import { RowSkeleton } from "../RowSkeleton.tsx";
-import { MessengerSheet } from "../messenger/MessengerSheet.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { SwapDisputes } from "./SwapDisputes.tsx";
 import { SwapInformation } from "./SwapInformation.tsx";
@@ -30,6 +29,7 @@ export function SwapPageTabContent({
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { getChainInfo, address } = useConnectorContext();
   const { orderId } = useParams<{ orderId: string }>();
+  const user = useStore((state) => state.user);
   const fullLoadCount = useStore((state) => state.fullLoadCount);
   const { getSwap } = useSwapService();
 
@@ -71,7 +71,7 @@ export function SwapPageTabContent({
       { network: getChainInfo().queryName, offerId: swap.data?.offerId },
     ],
     queryFn: markAsRead,
-    enabled: swap.data?.offerId !== undefined,
+    enabled: !!user && swap.data?.offerId !== undefined,
     refetchInterval: false,
     onSuccess: async () => {
       await queryClient.refetchQueries(["countUnreadOffer"]);
@@ -110,25 +110,13 @@ export function SwapPageTabContent({
             )}
 
             <div className="flex flex-col md:gap-5 md:flex-row px-3">
-              <SwapProgress
-                swap={swap.data}
-                onRequestOpenChat={() => {
-                  if (isXl) return;
-                  setOpenMessengerSheet(true);
-                }}
-              />
+              <SwapProgress swap={swap.data} />
               <SwapInformation swap={swap.data} />
             </div>
           </>
         )}
 
-      <MessengerSheet
-        swap={swap.data as Swap}
-        open={openMessengerSheet}
-        onOpenChange={(open) => {
-          setOpenMessengerSheet(open);
-        }}
-      />
+      {/* <MessengerSheet swap={swap.data as Swap} /> */}
     </TabsContent>
   );
 }

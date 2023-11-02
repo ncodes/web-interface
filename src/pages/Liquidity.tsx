@@ -40,6 +40,7 @@ function LiquidityPage({
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const { market, provider, lid } = useParams();
   const { address, getChainInfo } = useConnectorContext();
+  const user = useStore((state) => state.user);
   const { countUnread } = useOfferService();
   const unreadOfferCount = useQuery({
     queryKey: [
@@ -52,7 +53,7 @@ function LiquidityPage({
       },
     ],
     queryFn: countUnread,
-    enabled: !!address,
+    enabled: !!address && !!user,
   });
 
   return (
@@ -189,7 +190,7 @@ export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
         />
       }
       rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
+        <div className="flex w-full h-full justify-between flex-col pt-3">
           {(currentTab == "liquidity" || !currentTab) && (
             <SwapSheetWrapper liquidity={liquidity} />
           )}

@@ -30,7 +30,7 @@ interface LiquidityInfo {
 
 export function WatchedLiquidityTabContent() {
   const { wallet, address, chain, getChainInfo } = useConnectorContext();
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const client = useRef<Client | undefined>();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);

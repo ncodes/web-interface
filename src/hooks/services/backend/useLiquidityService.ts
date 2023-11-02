@@ -1,6 +1,7 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { LiquidityFilter } from "../../store/useStore.ts";
 export interface ListLiquidityParams {
   provider?: string;
@@ -29,6 +30,8 @@ interface GetLiquidityParams {
  * useLiquidityService provides access to v1/liquidities endpoints
  */
 export function useLiquidityService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * List liquidities
    * @param ctx
@@ -56,7 +59,7 @@ export function useLiquidityService() {
 
       const resp = await axios({
         method: "post",
-        url: `${import.meta.env.VITE_API_URI}/v1/liquidities`,
+        url: `${getChainInfo().apiUrl}/v1/liquidities`,
         data: payload,
         headers,
       });

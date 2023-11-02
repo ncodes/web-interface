@@ -1,22 +1,20 @@
-import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import Layout from "./Layout.tsx";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu.tsx";
-import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { Messenger } from "../components/messenger/Messenger.tsx";
-import { SwapPageTabContent } from "../components/swap/SwapPageTabContent.tsx";
-import { Footer } from "../components/Footer.tsx";
-import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-import { isSwapParticipant } from "../libs/api_utils.ts";
 import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import { Footer } from "../components/Footer.tsx";
+import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
+import { Messenger } from "../components/messenger/Messenger.tsx";
+import { MessengerSheet } from "../components/messenger/MessengerSheet.tsx";
+import { ChatButton } from "../components/swap/ChatButton.tsx";
+import { SwapPageTabContent } from "../components/swap/SwapPageTabContent.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
+import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { isSwapParticipant } from "../libs/api_utils.ts";
+import Layout from "./Layout.tsx";
 
 function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
+  const [swap, setSwap] = useState<Swap | undefined>();
+  const { address } = useConnectorContext();
   return (
     <Tabs
       defaultValue="my-swaps"
@@ -35,22 +33,17 @@ function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
             </div>
           </ScrollAreaHorizontal>
         </ScrollOverflowIndicator>
-        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
-                <DotsVerticalIcon />
-              </span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0"></DropdownMenuContent>
-          </DropdownMenu>
+        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end xl:invisible">
+          {swap && <ChatButton address={address} swap={swap as Swap} />}
         </div>
       </TabsList>
       <SwapPageTabContent
         onSwapFetched={(swap) => {
           onSwapFetched && onSwapFetched(swap);
+          setSwap(swap);
         }}
       />
+      <MessengerSheet swap={swap} />
     </Tabs>
   );
 }
@@ -62,7 +55,7 @@ export default function Swap() {
 
   const messenger =
     swap && isSwapParticipant(swap, address) ? (
-      <div className="flex w-full h-full justify-between flex-col pt-2">
+      <div className="flex w-full h-full justify-between flex-col pt-3">
         {isXl && <Messenger sheetMode={false} swap={swap} />}
         <div className="relative">
           <div className="text-gray-200 bottom-0 w-full">

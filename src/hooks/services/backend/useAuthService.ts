@@ -1,10 +1,13 @@
-import { handleAxiosError } from "../../../libs/helpers.ts";
 import axios from "axios";
+import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 /**
  * useAuthService provides access to v1/auth endpoint
  */
 export function useAuthService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * auth registers a new user and links their wallet address to their email
    * @param message - The message that was signed
@@ -17,7 +20,7 @@ export function useAuthService() {
     try {
       const resp = await axios({
         method: "post",
-        url: `${import.meta.env.VITE_API_URI}/v1/auth`,
+        url: `${getChainInfo().apiUrl}/v1/auth`,
         headers: { "Content-Type": "application/json" },
         data: JSON.stringify({ msg: message, sig: signature }),
       });

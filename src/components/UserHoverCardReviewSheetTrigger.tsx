@@ -17,7 +17,7 @@ import { Button } from "./ui/Button.tsx";
 export function UserHoverCardReviewSheetTrigger({ user }: { user: User }) {
   const client = useRef<Client | undefined>();
   const forceUpdate = useForceUpdate();
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const { wallet, address, chain } = useConnectorContext();
   const [loading, setLoading] = useState(false);
   const toggleOpenState = useStore((state) => state.toggleOpenState);

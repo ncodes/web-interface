@@ -30,7 +30,7 @@ export function LiquidityProviderReviewViewer({
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const client = useRef<Client | undefined>();
   const [loading, setLoading] = useState(false);
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const { getOrder } = useCoreContract();
   const forceUpdate = useForceUpdate();
   const openState = useStore((state) => state.openState);

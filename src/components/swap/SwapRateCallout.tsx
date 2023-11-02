@@ -33,7 +33,7 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
   const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isOkay, setIsOkay] = useState(false);
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const client = useRef<Client | undefined>();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");

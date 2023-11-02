@@ -24,7 +24,7 @@ import { MarketRow } from "./MarketRow.tsx";
 
 export function WatchedMarketContent() {
   const { wallet, address, chain, getChainInfo } = useConnectorContext();
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const { loadKeys, initClient, readMailbox } = useMessenger();
   const [loading, setLoading] = useState(true);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

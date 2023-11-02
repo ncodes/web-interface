@@ -19,6 +19,7 @@ export function MyOffersTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
   const [offset, setOffset] = useState(0);
+  const user = useStore((state) => state.user);
   const [limit] = useState(10);
   const { markAsRead } = useOfferService();
   const queryClient = useQueryClient();
@@ -41,7 +42,7 @@ export function MyOffersTabContent() {
   useQuery({
     queryKey: ["markAsRead", { network: getChainInfo().queryName }],
     queryFn: markAsRead,
-    enabled: !!address,
+    enabled: !!address && !!user,
     onSuccess: async () => {
       await queryClient.refetchQueries(["countUnreadOffer"]);
     },
@@ -77,7 +78,7 @@ export function MyOffersTabContent() {
         </div>
       )}
 
-      {!offers.isLoading && offers.isSuccess && !!offers.data.length && (
+      {!offers.isLoading && offers.isSuccess && !!offers.data.offers.length && (
         <div className="flex flex-col gap-3 min-h-[500px]">
           <div className="flex flex-col gap-3">
             <Paginator
@@ -89,7 +90,10 @@ export function MyOffersTabContent() {
             />
             <div className="flex flex-col gap-3 p-3 pt-0">
               {offers.data?.offers.map((offer: Offer) => (
-                <OfferRow offer={offer} />
+                <OfferRow
+                  offer={offer}
+                  key={`${offer.network}:${offer.offerId}`}
+                />
               ))}
             </div>
           </div>

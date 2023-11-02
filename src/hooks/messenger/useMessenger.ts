@@ -25,7 +25,6 @@ import {
   http,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { hardhat } from "wagmi/chains";
 import db, { ContentType, Message } from "../../components/messenger/db.ts";
 import { isDev, isEqlStr, sha1, uint8ArrayToB64 } from "../../libs/helpers.ts";
 import DeliveryReceiptCodec, {
@@ -61,7 +60,7 @@ import {
  * @returns
  */
 export default function useMessenger() {
-  const version = "178"; // TODO: use 1 in production
+  const version = "179"; // TODO: use 1 in production
 
   /**
    * Make a key for storing the keys
@@ -237,7 +236,7 @@ export default function useMessenger() {
 
   /**
    * Create conversations for each swap counterparties.
-   * If a counterparty is not on XMPT, it will not create a conversation.
+   * If a counterparty is not on XMTP, it will not create a conversation.
    * If client address is a counterparty, it will not create a conversation.
    * @param client The XMTP client
    * @param swap
@@ -292,6 +291,7 @@ export default function useMessenger() {
    * @param client The XMTP client
    * @param conversation The conversation to load messages from
    * @param ignoreOwnMessages Ignore own messages
+   * @returns The last message loaded
    */
   async function loadMessagesFromConvoToDB(
     client: Client,
@@ -317,6 +317,8 @@ export default function useMessenger() {
     for (const msg of messages) {
       await processMessage(client, peerAddress, msg, ignoreOwnMessages);
     }
+
+    return messages.length ? messages[messages.length - 1] : null;
   }
 
   /**
@@ -486,7 +488,7 @@ export default function useMessenger() {
    * Get messages from the database
    * @param convoIds The conversation ids to get messages from
    */
-  async function getMessagesFromDB(convoIds: string[]) {
+  async function getMessagesFromDB(convoIds: string[]): Promise<Message[]> {
     const messages = await db.messages
       .where("conversationId")
       .anyOf(convoIds)
@@ -709,6 +711,25 @@ export default function useMessenger() {
   }
 
   /**
+   * Send read receipt for a single message
+   * @param client The XMTP client
+   * @param msg The message to send the read receipt for
+   * @returns 
+   */
+  async function sendReadReceiptForMessage(client: Client, msg: Message) {
+    const convo = (await client.conversations.list()).find((c) => {
+      return getConvoId(c) == msg.conversationId;
+    });
+    if (!convo) return;
+    const { msgId, from, contentType } = msg;
+    return sendReadReceipt(
+      client.address,
+      { id: msgId, senderAddress: from, contentType: contentType },
+      [convo]
+    );
+  }
+
+  /**
    * Send a message to a conversation
    * @param client The XMTP client
    * @param conversation The conversation to send the message to
@@ -860,7 +881,7 @@ export default function useMessenger() {
       transport: http(),
     });
     const client = await Client.create(walletClient, {
-      env: chain === hardhat ? "dev" : isDev() ? "dev" : "production",
+      env: isDev() ? "local" : "production",
     });
     applyCodecToClient(client);
     const convo: Conversation = await client.conversations.newConversation(
@@ -918,6 +939,7 @@ export default function useMessenger() {
     processMessage,
     sendDeliveryReceipt,
     sendReadReceipt,
+    sendReadReceiptForMessage,
     relayMessageToConvos,
     relayConvoToConvos,
     sendSwapStatus,

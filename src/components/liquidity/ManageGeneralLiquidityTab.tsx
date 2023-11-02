@@ -402,7 +402,7 @@ export function ManageGeneralLiquidityTab({
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={onClick}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </div>

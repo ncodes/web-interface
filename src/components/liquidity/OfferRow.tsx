@@ -1,12 +1,6 @@
 import { DotsVerticalIcon, TimerIcon } from "@radix-ui/react-icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  CheckCircle,
-  Clock2Icon,
-  LucideTimerOff,
-  MessageCircle,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle, Clock2Icon, LucideTimerOff, XCircle } from "lucide-react";
 import moment from "moment/moment";
 import { BaseSyntheticEvent, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -78,7 +72,6 @@ export function OfferRow({
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-  const [openChat, setOpenChat] = useState(false);
   const toggleOpenState = useStore((s) => s.toggleOpenState);
   const [disableButtons, setDisableButtons] = useState<ButtonEnableState>({
     accept: false,
@@ -741,28 +734,8 @@ export function OfferRow({
                 </Button>
               </NavLink>
             </span>
-            <span
-              className={cn("border-gray-800 shrink-0 border-l", {
-                "xl:hidden": location.pathname.match("^/offer/"),
-              })}
-            >
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1 font-light"
-                onClick={() => {
-                  setOpenChat(true);
-                }}
-              >
-                <MessageCircle width="20px" />{" "}
-                <span className="font-medium text-gray-200">Open Chat</span>
-                <div className="rounded-full h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center bg-red-600 text-[10px] text-white">
-                  2
-                </div>
-              </Button>
-            </span>
 
-            <span className="lg:hidden ">
+            <span className="lg:hidden border-l border-gray-800 shrink-0">
               <DropdownMenu
                 onOpenChange={(open) => {
                   setMoreMenuOpen(open);
@@ -809,15 +782,7 @@ export function OfferRow({
         </div>
       </div>
 
-      {offer && (
-        <MessengerSheet
-          offer={offer}
-          open={openChat}
-          onOpenChange={(open) => {
-            setOpenChat(open);
-          }}
-        />
-      )}
+      {offer && <MessengerSheet offer={offer} />}
 
       {renderOfferCreatorSheet && (
         <SwapOfferCreatorSheet liquidity={offer.liquidity} offer={offer} />

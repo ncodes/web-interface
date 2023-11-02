@@ -12,7 +12,7 @@ export function IdentityInitializer({
   onInitialized: (client: Client) => void;
 }) {
   const { saveKeys, loadKeys, initClient } = useMessenger();
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const { wallet, address } = useConnectorContext();
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);

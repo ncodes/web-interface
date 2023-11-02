@@ -26,7 +26,7 @@ export function FollowMarket({
   onFollowUpdate?: () => void;
 }) {
   const { wallet, address, chain, getChainInfo } = useConnectorContext();
-  const env = isDev() ? "dev" : "production";
+  const env = isDev() ? "local" : "production";
   const [open, setOpen] = useState(false);
   const { loadKeys, initClient, getMailbox, readMailbox } = useMessenger();
   const [loading, setLoading] = useState(true);

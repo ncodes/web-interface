@@ -22,6 +22,7 @@ export function OfferTabContent({
   const { getChainInfo, address } = useConnectorContext();
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
+  const user = useStore((state) => state.user);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
   const offer = useQuery({
@@ -63,7 +64,7 @@ export function OfferTabContent({
       { network: getChainInfo().queryName, offerId: offer.data?.offerId },
     ],
     queryFn: markAsRead,
-    enabled: !!address,
+    enabled: !!address && !!user,
     refetchInterval: false,
     onSuccess: async () => {
       await queryClient.refetchQueries(["countUnreadOffer"]);

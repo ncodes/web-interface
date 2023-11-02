@@ -33,3 +33,7 @@ export enum AssetType {
   ERC721,
   ERC1155,
 }
+
+export enum NotificationType {
+  TypeChatNotification = "chat:new-message",
+}

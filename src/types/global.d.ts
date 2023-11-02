@@ -18,6 +18,7 @@ interface ChainInfo {
   chainId: number;
   testnet?: boolean;
   symbol: string;
+  apiUrl: string;
   rpcUrl: string;
   blockExplorer: string;
   logoPath: React.Element;
@@ -334,6 +335,18 @@ declare global {
     updatedAt: string;
     market: Market;
     drafts: Draft[];
+  }
+
+  interface Notification {
+    network: string;
+    id: string;
+    type: NotificationType;
+    userId: string;
+    title: string;
+    body: string;
+    orderId: number;
+    offerId: number;
+    read: boolean;
   }
 
   interface TicketStats {

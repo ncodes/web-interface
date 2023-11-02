@@ -7,6 +7,7 @@ import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import useStore from "../hooks/store/useStore.ts";
 
 type NavPageLinkProps = {
   iconFile?: string;
@@ -57,10 +58,11 @@ export function Navigation() {
   const { connected, address, getChainInfo } = useConnectorContext();
   const { pathname } = useLocation();
   const { countUnread } = useOfferService();
+  const user = useStore((state) => state.user);
   const unreadOfferCount = useQuery({
     queryKey: ["countUnreadOffer", { network: getChainInfo().queryName }],
     queryFn: countUnread,
-    enabled: !!address,
+    enabled: !!address && !!user,
   });
 
   return (

@@ -13,10 +13,10 @@ export function Header(props: { onClick: () => void; height?: string }) {
   const { connected } = useConnectorContext();
 
   return (
-    <header className={cn("flex -mt-[1px]", props.height)}>
+    <header className={cn("flex items-center", props.height)}>
       <MobileMenuActivator onClick={props.onClick} />
       <InputActivatedSearchBox />
-      <div className="flex-1 flex justify-end items-center gap-4 -mt-3 xl:-mt-2">
+      <div className="flex-1 flex justify-end items-center gap-4">
         <NavSearchButton />
         <LanguageSelector />
         <NavHelpButton />

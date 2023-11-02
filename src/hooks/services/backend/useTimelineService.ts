@@ -1,8 +1,9 @@
-import axios from "axios";
-import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
 import { QueryFunctionContext } from "@tanstack/react-query";
-import { Events } from "../../../types/enums.ts";
+import axios from "axios";
 import moment from "moment/moment";
+import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
+import { Events } from "../../../types/enums.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 export interface GetParams {
   network: string;
@@ -17,6 +18,8 @@ export interface GetParams {
  * useTimelineService provides access to v1/timelines endpoints
  */
 export function useTimelineService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * Get timeline events
    * @param ctx
@@ -31,7 +34,7 @@ export function useTimelineService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/timelines`,
+        url: `${getChainInfo().apiUrl}/v1/timelines`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
           markets,

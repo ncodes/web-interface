@@ -2,6 +2,7 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { OfferFilter } from "../../store/useStore.ts";
 
 export interface ListOfferParams {
@@ -41,6 +42,8 @@ export type ListOfferIDs =
  * useOfferService provides access to v1/offers endpoints
  */
 export function useOfferService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * List offers
    * @param ctx
@@ -54,7 +57,7 @@ export function useOfferService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/offers`,
+        url: `${getChainInfo().apiUrl}/v1/offers`,
         params: {
           ...offerFilter,
           net: "ethereum" || network, // TODO: remove mock
@@ -90,7 +93,7 @@ export function useOfferService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/offers/${offerId}/events`,
+        url: `${getChainInfo().apiUrl}/v1/offers/${offerId}/events`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
           offset,
@@ -121,7 +124,7 @@ export function useOfferService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/offers/${offerId}`,
+        url: `${getChainInfo().apiUrl}/v1/offers/${offerId}`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
         },
@@ -154,7 +157,7 @@ export function useOfferService() {
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/offers/count-unread`,
+        url: `${getChainInfo().apiUrl}/v1/offers/count-unread`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
           marketAddress,
@@ -185,7 +188,7 @@ export function useOfferService() {
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
       const resp = await axios({
         method: "put",
-        url: `${import.meta.env.VITE_API_URI}/v1/offers/mark-read`,
+        url: `${getChainInfo().apiUrl}/v1/offers/mark-read`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
           marketAddress,

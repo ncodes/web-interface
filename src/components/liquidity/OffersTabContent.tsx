@@ -20,6 +20,7 @@ export function OffersTabContent({
 }) {
   const { getChainInfo, address } = useConnectorContext();
   const { market, provider, lid } = useParams();
+  const user = useStore((state) => state.user);
   const { listOffers } = useOfferService();
   const { getLiquidity } = useLiquidityService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
@@ -72,7 +73,7 @@ export function OffersTabContent({
       },
     ],
     queryFn: markAsRead,
-    enabled: !!address,
+    enabled: !!address && !!user,
     onSuccess: async () => {
       await queryClient.refetchQueries(["countUnreadOffer"]);
     },

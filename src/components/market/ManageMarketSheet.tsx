@@ -1,4 +1,10 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactNode, useEffect, useState } from "react";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
+import { BasicMarketInfoSheetHeader } from "../BasicMarketInfoSheetHeader.tsx";
+import { Accordion } from "../ui/accordion.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import {
   Sheet,
   SheetContent,
@@ -6,20 +12,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet.tsx";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { Accordion } from "../ui/accordion.tsx";
-import { BasicMarketInfoSheetHeader } from "../BasicMarketInfoSheetHeader.tsx";
+import { EditBadgeRequirements } from "./EditBadgeRequirements.tsx";
 import { EditCommission } from "./EditCommission.tsx";
 import { EditDisputeDurations } from "./EditDisputeDurations.tsx";
 import { EditMarketManager } from "./EditMarketManager.tsx";
 import { EditOfferOnlyMode } from "./EditOfferOnlyMode.tsx";
-import { EditZeroPricedLiquidity } from "./EditZeroPricedLiquidity.tsx";
-import { EditBadgeRequirements } from "./EditBadgeRequirements.tsx";
-import { EditTransferOwnership } from "./EditTransferOwnership.tsx";
 import { EditRenounceOwnership } from "./EditRenounceOwnership.tsx";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { cn } from "../../libs/utils.ts";
-import { ScrollArea } from "../ui/scroll-area.tsx";
+import { EditTransferOwnership } from "./EditTransferOwnership.tsx";
+import { EditZeroPricedLiquidity } from "./EditZeroPricedLiquidity.tsx";
 
 export function ManageMarketSheet({
   market,
@@ -99,7 +99,7 @@ export function ManageMarketSheet({
             onOpen && onOpen(false);
           }}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </SheetContent>

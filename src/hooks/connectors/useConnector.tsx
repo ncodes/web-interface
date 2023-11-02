@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getChain, ChainID } from "./networks";
+import {
+  Address,
+  SimulateContractReturnType,
+  TransactionReceipt,
+  WalletClient,
+} from "viem";
 import {
   Chain,
   erc20ABI,
@@ -11,14 +16,9 @@ import {
   useSwitchNetwork,
   useWalletClient,
 } from "wagmi";
-import {
-  Address,
-  SimulateContractReturnType,
-  TransactionReceipt,
-  WalletClient,
-} from "viem";
-import { ChainInfo } from "../../types/global";
 import { isDev } from "../../libs/helpers.ts";
+import { ChainInfo } from "../../types/global";
+import { ChainID, getChain } from "./networks";
 
 export interface IConnector {
   defaultNetwork: number;

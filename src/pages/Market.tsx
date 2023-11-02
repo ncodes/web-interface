@@ -250,7 +250,7 @@ export default function Market() {
     <Layout
       body={<MarketTabs />}
       rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-2">
+        <div className="flex w-full h-full justify-between flex-col pt-3">
           <LiquidityFilter />
           <div className="relative">
             <div className="text-gray-200 bottom-0 w-full">

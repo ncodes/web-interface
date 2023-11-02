@@ -1,6 +1,7 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
-import { QueryFunctionContext } from "@tanstack/react-query";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { TicketFilter } from "../../store/useStore.ts";
 
 export interface ListTicketParams {
@@ -23,6 +24,8 @@ export interface GetStatParams {
  * useTicketService provides access to v1/tickets endpoints
  */
 export function useTicketService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * List tickets
    * @param ctx
@@ -36,7 +39,7 @@ export function useTicketService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/tickets`,
+        url: `${getChainInfo().apiUrl}/v1/tickets`,
         params: {
           ...ticketFilter,
           net: "ethereum" || network, // TODO: remove mock
@@ -80,7 +83,7 @@ export function useTicketService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/tickets/stats`,
+        url: `${getChainInfo().apiUrl}/v1/tickets/stats`,
         headers,
         params: {
           net: "ethereum" || net, // TODO: remove mock

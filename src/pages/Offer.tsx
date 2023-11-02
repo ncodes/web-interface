@@ -1,24 +1,22 @@
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { Messenger } from "../components/messenger/Messenger.tsx";
 import { OfferTabContent } from "../components/offer/OfferTabContent.tsx";
+import { ChatButton } from "../components/swap/ChatButton.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import Layout from "./Layout.tsx";
 
 function Page({
-  setOffer,
+  setOffer: extSetOffer,
 }: {
   setOffer: Dispatch<SetStateAction<Offer | undefined>>;
 }) {
+  const [offer, setOffer] = useState<Offer | undefined>();
+  const { address } = useConnectorContext();
+
   return (
     <Tabs
       defaultValue="offers"
@@ -37,18 +35,16 @@ function Page({
             </div>
           </ScrollAreaHorizontal>
         </ScrollOverflowIndicator>
-        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
-                <DotsVerticalIcon />
-              </span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0"></DropdownMenuContent>
-          </DropdownMenu>
+        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end xl:hidden">
+          {offer && <ChatButton address={address} offer={offer} />}
         </div>
       </TabsList>
-      <OfferTabContent setOffer={setOffer} />
+      <OfferTabContent
+        setOffer={(offer) => {
+          setOffer(offer);
+          extSetOffer(offer);
+        }}
+      />
     </Tabs>
   );
 }
@@ -58,7 +54,7 @@ export default function Offer() {
   const [offer, setOffer] = useState<Offer | undefined>();
 
   const rightSide = connected ? (
-    <div className="flex w-full h-full justify-between flex-col pt-2">
+    <div className="flex w-full h-full justify-between flex-col pt-3">
       <Messenger sheetMode={false} offer={offer} />
       <div className="relative">
         <div className="text-gray-200 bottom-0 w-full">

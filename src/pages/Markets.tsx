@@ -142,7 +142,7 @@ export default function Markets({ defaultTab }: { defaultTab?: string }) {
     <Layout
       body={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
-        <div className="flex w-full justify-between flex-col pt-2">
+        <div className="flex w-full justify-between flex-col pt-3">
           <MarketFilter />
           <div className="relative">
             <div className="text-gray-200 bottom-0 w-full">

@@ -1,6 +1,7 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { delay, handleAxiosError } from "../../../libs/helpers.ts";
-import { QueryFunctionContext } from "@tanstack/react-query";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { GrantSigInfo } from "./useInstructionsService.ts";
 
 export interface GetPaymentMethodsParams {
@@ -19,6 +20,8 @@ export interface GetPaymentMethodGrantSignatureParams {
  * usePaymentService provides access to v1/payments endpoints
  */
 export function usePaymentService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * Get payment methods
    * @param ctx - The query function context
@@ -32,7 +35,7 @@ export function usePaymentService() {
       const { network } = params;
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/payments/methods`,
+        url: `${getChainInfo().apiUrl}/v1/payments/methods`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
         },

@@ -1,6 +1,7 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { MarketFilter } from "../../store/useStore.ts";
 
 export type ListMarketsIDs =
@@ -31,6 +32,8 @@ interface GetTopMarketsParams {
  * useMarketService provides access to v1/markets endpoints
  */
 export function useMarketService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * Get markets
    */
@@ -43,7 +46,7 @@ export function useMarketService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/markets`,
+        url: `${getChainInfo().apiUrl}/v1/markets`,
         params: {
           ...marketFilter,
           net: "ethereum" || network, // TODO: remove mock
@@ -75,7 +78,7 @@ export function useMarketService() {
       const headers = {};
       const resp = await axios({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/markets/${market}`,
+        url: `${getChainInfo().apiUrl}/v1/markets/${market}`,
         params: {
           net: "ethereum" || network, // TODO: remove mock,
         },
@@ -100,7 +103,7 @@ export function useMarketService() {
       const headers = {};
       const resp = await axios<{ data: Market[] }>({
         method: "get",
-        url: `${import.meta.env.VITE_API_URI}/v1/markets/top`,
+        url: `${getChainInfo().apiUrl}/v1/markets/top`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
           limit,

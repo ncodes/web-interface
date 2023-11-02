@@ -1,15 +1,17 @@
 import { Cross2Icon } from "@radix-ui/react-icons";
-import React, { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
 import useStore from "../hooks/store/useStore.ts";
 import { useSheetInfo } from "../hooks/useSheetInfo.ts";
 import { cn } from "../libs/utils.ts";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card.tsx";
+import { NotificationItem } from "./NotificationItem.tsx";
+import { ToolTip } from "./ToolTip.tsx";
+import IconInboxChecked from "./icons/IconInboxChecked.tsx";
+import IconSpinner from "./icons/IconSpinner.tsx";
+import { UnreadMessageCount } from "./messenger/UnreadMessageCount.tsx";
+import { Button } from "./ui/Button.tsx";
 import { ScrollArea } from "./ui/scroll-area.tsx";
 import {
   Sheet,
@@ -19,48 +21,49 @@ import {
   SheetTrigger,
 } from "./ui/sheet.tsx";
 
-function NotificationItem() {
-  return (
-    <Card className="w-full shrink-0 border border-card-border bg-card-background shadow-gray-900 shadow-lg hover:border-gray-600 transition-all duration-500 cursor-pointer">
-      <CardHeader className="p-0 ">
-        <CardTitle className="text-gray-300 text-xs tracking-wide p-2 px-3 font-medium border-b border-gray-800 cursor-pointer">
-          NEW ORDER
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-2 px-3 text-white font-extralight text-sm">
-        A new swap was created for your liquidity.
-      </CardContent>
-      <CardFooter className="border-t border-gray-800 p-0  font-light text-sm text-center">
-        <a
-          href="#"
-          className="text-chinese-green block rounded-b-xl w-full py-1 px-3 hover:text-gray-200 hover:bg-gray-800  transition-all duration-500 "
-        >
-          View Order
-        </a>
-      </CardFooter>
-    </Card>
-  );
-}
-
-export function NotificationSheet(props: {
-  children?: React.ReactNode;
-  onOpen?: (open: boolean) => void;
-}) {
+export function NotificationSheet(props: { children?: React.ReactNode }) {
   const [, sheetSide, styles] = useSheetInfo();
-  const [open, setOpen] = useState(false);
+  const { address, getChainInfo } = useConnectorContext();
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
+  const { getNotifications, markNotificationsAsRead } =
+    useNotificationService();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    setOpen(openState.notificationSheet ?? open);
-  }, [openState.notificationSheet]);
+  const getNotesQuery = useQuery({
+    queryKey: [
+      "getNotifications",
+      {
+        net: getChainInfo().queryName,
+        limit: 25,
+      },
+    ],
+    queryFn: getNotifications,
+    enabled: !!address && openState.notificationSheet,
+    refetchInterval: 10000,
+  });
+
+  const markAsReadMutation = useMutation({
+    mutationFn: markNotificationsAsRead,
+  });
+
+  async function doMarkAllAsRead() {
+    await markAsReadMutation.mutateAsync({ net: getChainInfo().queryName });
+    await getNotesQuery.refetch();
+    await queryClient.refetchQueries(["countNotifications"]);
+  }
+
+  function hasUnread() {
+    if (!getNotesQuery.data) return false;
+    return getNotesQuery.data.some((note) => {
+      return !note.read;
+    });
+  }
 
   return (
     <Sheet
-      open={open}
-      onOpenChange={(open) => {
-        setOpen(open);
-        props.onOpen && props.onOpen(open);
+      open={openState.notificationSheet}
+      onOpenChange={() => {
         toggleOpenState && toggleOpenState("notificationSheet");
       }}
     >
@@ -68,42 +71,85 @@ export function NotificationSheet(props: {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 h-[90vh] md:h-[100vh]"
         )}
         side={sheetSide}
       >
-        <SheetHeader className="flex pr-[50px] border-b border-gray-800">
+        <SheetHeader className="flex pr-[40px] border-b border-gray-800">
           <div className="text-white">
-            <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
-              Notifications
-              <span className="bg-red-600 rounded-full w-5 h-5 text-xs flex items-center justify-center font-light">
-                6
-              </span>
+            <SheetTitle className="flex justify-between items-center text-gray-100 tracking-wide p-3 pl-5">
+              <div className="flex items-center gap-2">
+                Notifications
+                <UnreadMessageCount disableUnmark />
+              </div>
+              <div className="">
+                <Button
+                  variant="link"
+                  className="h-auto p-0 font-light text-xs relative top-0.5 text-gray-400 transition-all duration-300 hover:text-chinese-green hover:scale-110"
+                  disabled={!hasUnread() || markAsReadMutation.isLoading}
+                  onClick={() => {
+                    doMarkAllAsRead();
+                  }}
+                >
+                  {!markAsReadMutation.isLoading && (
+                    <ToolTip tip="Mark all as read" allowPropagation>
+                      <IconInboxChecked width="20" />
+                    </ToolTip>
+                  )}
+                  {markAsReadMutation.isLoading && (
+                    <IconSpinner
+                      width="20"
+                      fill="fill-gray-500"
+                      className="animate-spin"
+                    />
+                  )}
+                </Button>
+              </div>
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="px-3 text-white pt-3 h-full">
-          <ScrollArea type="scroll" className="h-full pb-10">
-            <div className="flex flex-col gap-3">
-              <NotificationItem />
-              <NotificationItem />
-              <NotificationItem />
-              <NotificationItem />
-              <NotificationItem />
-              <NotificationItem />
-              <NotificationItem />
-              <NotificationItem />
-              <NotificationItem />
-            </div>
+        <div className="px-3 text-white h-full">
+          <ScrollArea
+            type="scroll"
+            className="h-full"
+            viewportClassName="[&>div]:h-full"
+          >
+            {!getNotesQuery.isLoading &&
+              !getNotesQuery.isRefetching &&
+              getNotesQuery.data?.length === 0 && (
+                <div className="w-full h-full flex justify-center items-center font-light text-gray-400 ">
+                  Nothing here yet.
+                </div>
+              )}
+
+            {getNotesQuery.isLoading && (
+              <div className="w-full h-full flex justify-center items-center font-light text-gray-400 ">
+                <IconSpinner
+                  width="20"
+                  fill="fill-gray-500"
+                  className="animate-spin"
+                />
+              </div>
+            )}
+
+            {!getNotesQuery.isLoading &&
+              getNotesQuery.isSuccess &&
+              getNotesQuery.data?.length > 0 && (
+                <div className="flex flex-col gap-3 py-3 pb-10">
+                  {getNotesQuery.data.map((note) => (
+                    <NotificationItem key={note.id} note={note} />
+                  ))}
+                </div>
+              )}
           </ScrollArea>
         </div>
         <div
-          className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+          className="absolute text-gray-200 right-4 top-3 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary "
           onClick={() => {
             toggleOpenState && toggleOpenState("notificationSheet");
           }}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </SheetContent>

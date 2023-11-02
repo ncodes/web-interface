@@ -1,6 +1,7 @@
 import axios, { AxiosProgressEvent } from "axios";
 import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 export interface UploadParams {
   net: string;
@@ -13,6 +14,8 @@ export interface UploadParams {
  * useFileService provides access to v1/files endpoint
  */
 export function useFileService() {
+  const { getChainInfo } = useConnectorContext();
+
   /**
    * Get a user
    */

@@ -7,7 +7,8 @@ type OpenStateKey =
   | "notificationSheet"
   | "reviewSheet"
   | "settingsSheet"
-  | "buyTicketSheet";
+  | "buyTicketSheet"
+  | "messengerSheet";
 
 type OpenState = {
   [key in OpenStateKey]: boolean;
@@ -121,7 +122,7 @@ export interface IStore {
   setCurrentTab?: (tab: string) => void;
 
   // Open state toggling for sheets and modals
-  openStateContext: OpenStateContext;
+  openStateContext: Partial<OpenStateContext>;
   openState: OpenState;
   toggleOpenState: (
     key: OpenStateKey,
@@ -197,6 +198,7 @@ const useStore = create<IStore>((set, get) => ({
     reviewSheet: false,
     settingsSheet: false,
     buyTicketSheet: false,
+    messengerSheet: false,
   },
   toggleOpenState: (key: OpenStateKey, activeTab?: string, ctx?: unknown) => {
     set((state) => ({
@@ -222,6 +224,7 @@ const useStore = create<IStore>((set, get) => ({
         reviewSheet: false,
         settingsSheet: false,
         buyTicketSheet: false,
+        messengerSheet: false,
       },
     });
   },

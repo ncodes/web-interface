@@ -1,4 +1,8 @@
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { ReactNode, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { cn } from "../../libs/utils.ts";
 import {
   Sheet,
   SheetContent,
@@ -7,10 +11,6 @@ import {
   SheetTrigger,
 } from "../ui/sheet.tsx";
 import { MarketFilterContent } from "./MarketFilterContent.tsx";
-import { Cross2Icon } from "@radix-ui/react-icons";
-import { useLocation } from "react-router-dom";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { cn } from "../../libs/utils.ts";
 
 export function MarketFilterSheet({
   active,
@@ -68,7 +68,7 @@ export function MarketFilterSheet({
             onOpen && onOpen(false);
           }}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </SheetContent>

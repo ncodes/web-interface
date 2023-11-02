@@ -20,7 +20,6 @@ import {
   isSwapCounterparty,
   isSwapDisputeExecuted,
   isSwapDraftee,
-  isSwapParticipant,
 } from "../../libs/api_utils.ts";
 import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
@@ -32,19 +31,14 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Label } from "../ui/label.tsx";
 import AppealPopOver from "./AppealPopOver.tsx";
+import { ChatButton } from "./ChatButton.tsx";
 import { SwapRateCallout } from "./SwapRateCallout.tsx";
 import { appealOrderFunc } from "./functions/appealOrderFunc.ts";
 import { cancelOrderFunc } from "./functions/cancelOrderFunc.tsx";
 import { markOrderAsPaidFunc } from "./functions/markOrderAsPaidFunc.ts";
 import { releaseOrderFunc } from "./functions/releaseOrderFunc.ts";
 
-export function SwapProgress({
-  swap,
-  onRequestOpenChat,
-}: {
-  swap: Swap;
-  onRequestOpenChat: () => void;
-}) {
+export function SwapProgress({ swap }: { swap: Swap }) {
   const location = useLocation();
   const queryClient = useQueryClient();
   const { address, getChainInfo } = useConnectorContext();
@@ -249,22 +243,9 @@ export function SwapProgress({
             </ToolTip>
           </span>
         </div>
-        <div className="h-[42px]">
-          {address && isSwapParticipant(swap, address) ? (
-            <Button
-              variant="ghost"
-              className="flex font-semibold items-center gap-1 text-chinese-green"
-              onClick={onRequestOpenChat}
-            >
-              <MessageSquare width="20px" /> Chat
-              <div className="rounded-full h-[20px] min-w-[20px] px-[5px] leading-[20px] flex justify-center items-center  bg-red-600 text-[10px]">
-                2
-              </div>
-            </Button>
-          ) : (
-            <>&nbsp;</>
-          )}
-        </div>
+        <span className="xl:hidden">
+          <ChatButton address={address} swap={swap} disableUnmark />
+        </span>
       </div>
       <div>
         <div className="bg-card-background border rounded-2xl border-card-border w-full mt-3 pb-5">

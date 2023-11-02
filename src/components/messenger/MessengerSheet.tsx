@@ -1,25 +1,22 @@
 import { Cross2Icon } from "@radix-ui/react-icons";
-import React, { useEffect } from "react";
+import useStore from "../../hooks/store/useStore.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
 import { Sheet, SheetContent } from "../ui/sheet.tsx";
 import { Messenger } from "./Messenger.tsx";
 
-export function MessengerSheet(props: {
-  open: boolean;
-  swap?: Swap;
-  offer?: Offer;
-  onOpenChange?: (open) => void;
-}) {
+export function MessengerSheet(props: { swap?: Swap; offer?: Offer }) {
   const [, sheetSide, styles] = useSheetInfo();
-  const [open, setOpen] = React.useState(props.open);
-
-  useEffect(() => {
-    setOpen(props.open);
-  }, [props.open]);
+  const openState = useStore((state) => state.openState);
+  const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   return (
-    <Sheet open={open} onOpenChange={props.onOpenChange}>
+    <Sheet
+      open={openState.messengerSheet}
+      onOpenChange={() => {
+        toggleOpenState && toggleOpenState("messengerSheet");
+      }}
+    >
       <SheetContent
         className={cn(
           styles,
@@ -32,11 +29,10 @@ export function MessengerSheet(props: {
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {
-            setOpen(false);
-            props.onOpenChange && props.onOpenChange(false);
+            toggleOpenState && toggleOpenState("messengerSheet");
           }}
         >
-          <Cross2Icon className="h-6 w-6" />
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
           <span className="sr-only">Close</span>
         </div>
       </SheetContent>
