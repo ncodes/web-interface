@@ -13,6 +13,10 @@ export interface GetMediatorPoolsParams {
   network: string;
 }
 
+interface GetSynthRateParams {
+  symbol: string;
+}
+
 /**
  * useMiscService provides access to v1/misc endpoint
  */
@@ -78,7 +82,7 @@ export function useMiscService() {
       const { network } = params;
       const headers = {};
 
-      const apiUrl = import.meta.env.VITE_API_URI;
+      const apiUrl = getChainInfo().apiUrl;
       const resp = await axios({
         method: "get",
         url: `${apiUrl}/v1/misc/${network}/mediator-pools`,

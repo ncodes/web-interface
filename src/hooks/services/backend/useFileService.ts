@@ -29,9 +29,7 @@ export function useFileService() {
 
       const resp = await axios({
         method: "post",
-        url: `${
-          import.meta.env.VITE_API_URI
-        }/v1/files/upload/${net}/${orderId}`,
+        url: `${getChainInfo().apiUrl}/v1/files/upload/${net}/${orderId}`,
         headers,
         data,
         onUploadProgress,

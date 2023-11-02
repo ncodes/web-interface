@@ -33,10 +33,8 @@ export function LiquidityProviderReviewViewer({
   const env = isDev() ? "local" : "production";
   const { getOrder } = useCoreContract();
   const forceUpdate = useForceUpdate();
-  const openState = useStore((state) => state.openState);
   const { wallet, address, chain } = useConnectorContext();
   const { loadKeys, initClient, readMailbox } = useMessenger();
-  const openStateContext = useStore((state) => state.openStateContext);
   const [initializing, setInitializing] = useState(false);
   const [reviews, setReviews] = useState<SwapRatingPayload[]>([]);
 
@@ -106,7 +104,7 @@ export function LiquidityProviderReviewViewer({
   }
 
   return (
-    <div className="lg:px-5 flex-1 flex flex-col">
+    <div className="lg:pl-5 flex-1 flex flex-col">
       <span className="px-3 text-xl flex items-center gap-1 justify-between font-medium">
         <div className="flex items-center gap-2">
           <span>Recent Reviews</span>{" "}

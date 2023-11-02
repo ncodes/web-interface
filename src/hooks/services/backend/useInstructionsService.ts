@@ -103,9 +103,7 @@ export function useInstructionsService() {
       const { net, address } = body;
       const resp = await axios({
         method: "get",
-        url: `${
-          import.meta.env.VITE_API_URI
-        }/v1/instructions/${net}/${address}`,
+        url: `${getChainInfo().apiUrl}/v1/instructions/${net}/${address}`,
         headers,
       });
 

@@ -8,8 +8,8 @@ import * as humanizeDuration from "humanize-duration";
 import _ from "lodash";
 import forge from "node-forge";
 import numeral from "numeral";
+import prettyBytes from "pretty-bytes";
 import { twMerge } from "tailwind-merge";
-import prettyBytes from 'pretty-bytes';
 import { AssetType } from "../types/enums.ts";
 import { RequestError } from "./RequestError.ts";
 
@@ -428,10 +428,9 @@ export function sha1(str: string | Uint8Array) {
   return forge.md.sha1.create().update(msg.toHex()).digest().toHex();
 }
 
-export function humanizeBytes(bytes: number|string) {
+export function humanizeBytes(bytes: number | string) {
   return prettyBytes(Number(bytes));
 }
-
 
 export function uint8ArrayToB64(bytes: Uint8Array) {
   return Buffer.from(bytes).toString("base64");

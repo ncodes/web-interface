@@ -59,9 +59,7 @@ export function usePaymentService() {
       const { network } = params;
       const resp = await axios({
         method: "get",
-        url: `${
-          import.meta.env.VITE_API_URI
-        }/v1/payments/methods/grant-signature`,
+        url: `${getChainInfo().apiUrl}/v1/payments/methods/grant-signature`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
           badge: params.badge,

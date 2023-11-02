@@ -86,7 +86,7 @@ export function useLiquidityService() {
       const resp = await axios({
         method: "get",
         url: `${
-          import.meta.env.VITE_API_URI
+          getChainInfo().apiUrl
         }/v1/liquidities/${market}/${provider}/${lid}`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
@@ -113,7 +113,7 @@ export function useLiquidityService() {
       const resp = await axios<{ data: Event[] }>({
         method: "get",
         url: `${
-          import.meta.env.VITE_API_URI
+          getChainInfo().apiUrl
         }/v1/liquidities/${market}/${provider}/${lid}/events`,
         params: {
           net: "ethereum" || network, // TODO: remove mock
