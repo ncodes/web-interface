@@ -115,7 +115,10 @@ export function LiquidityRow({
           >
             <div data-click-trigger="1">
               {!ownerMode && (
-                <UserHoverCard user={getProvider.data as User}>
+                <UserHoverCard
+                  user={getProvider.data as User}
+                  liquidity={liquidity}
+                >
                   <EmojiAvatar
                     size={AvatarSize.Small}
                     randomStr={liquidity.provider}
@@ -159,14 +162,36 @@ export function LiquidityRow({
               {!ownerMode && !getProvider.isLoading && !getProvider.isError && (
                 <div
                   data-click-trigger="1"
-                  className="w-full md:w-[150px] flex items-center md:items-start md:flex-col justify-between md:justify-start"
+                  className="w-full md:w-[150px] flex gap-1 items-center md:items-start md:flex-col justify-between md:justify-start"
                 >
                   <span
                     data-click-trigger="1"
                     className="flex text-gray-100 items-center gap-1"
                   >
-                    <span data-click-trigger="1">
-                      {shortenAddress(liquidity.provider)}
+                    <span
+                      data-click-trigger="1"
+                      className="flex text-sm items-center gap-2"
+                    >
+                      <span>{shortenAddress(liquidity.provider)}</span>
+                      {liquidity.online && (
+                        <ToolTip tip="Online">
+                          <span className="flex items-center gap-1 text-green-400">
+                            <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
+                            <span className="font-light text-[10px]">on</span>
+                          </span>
+                        </ToolTip>
+                      )}
+                      {!liquidity.online && (
+                        <ToolTip
+                          tip={`Last Seen: ${moment(
+                            liquidity.lastTimeOnline
+                          ).fromNow()}`}
+                        >
+                          <span className="flex items-center gap-1 text-gray-400">
+                            <span className="h-2 w-2 rounded-full bg-gray-400"></span>
+                          </span>
+                        </ToolTip>
+                      )}
                     </span>
                     {isMerchant(getProvider.data?.badges || []) && (
                       <VerifiedBadge />

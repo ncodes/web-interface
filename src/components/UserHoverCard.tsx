@@ -27,10 +27,12 @@ export function UserHoverCard({
   children,
   className,
   user,
+  liquidity,
 }: {
   children?: ReactNode;
   className?: string;
   user: User;
+  liquidity?: Liquidity;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -130,8 +132,20 @@ export function UserHoverCard({
                       : "0"}
                   </span>
                 </InfoCard>
+                {liquidity && (
+                  <InfoCard
+                    title="Last Seen"
+                    tip={`The last time the user was online`}
+                    width="w-full"
+                    rmDataClickTrigger
+                  >
+                    <span className="text-gray-200">
+                      {moment(liquidity?.lastTimeOnline).fromNow()}
+                    </span>
+                  </InfoCard>
+                )}
                 <InfoCard
-                  title="Last Active"
+                  title="Last Swap"
                   tip={`The last time the user participated in a swap`}
                   width="w-full"
                   rmDataClickTrigger

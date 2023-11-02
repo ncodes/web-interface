@@ -168,6 +168,8 @@ declare global {
     maxSwapUsd: number;
     createdAt: string;
     updatedAt: string;
+    online: boolean;
+    lastTimeOnline: string;
     market: Market;
   }
 

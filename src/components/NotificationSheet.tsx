@@ -7,6 +7,7 @@ import useStore from "../hooks/store/useStore.ts";
 import { useSheetInfo } from "../hooks/useSheetInfo.ts";
 import { cn } from "../libs/utils.ts";
 import { NotificationItem } from "./NotificationItem.tsx";
+import ScrollOverflowIndicator from "./ScrollOverflowIndicator.tsx";
 import { ToolTip } from "./ToolTip.tsx";
 import IconInboxChecked from "./icons/IconInboxChecked.tsx";
 import IconSpinner from "./icons/IconSpinner.tsx";
@@ -108,40 +109,42 @@ export function NotificationSheet(props: { children?: React.ReactNode }) {
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="px-3 text-white h-full">
-          <ScrollArea
-            type="scroll"
-            className="h-full"
-            viewportClassName="[&>div]:h-full"
-          >
-            {!getNotesQuery.isLoading &&
-              !getNotesQuery.isRefetching &&
-              getNotesQuery.data?.length === 0 && (
+        <div className="px-3 text-white h-full  pb-10">
+          <ScrollOverflowIndicator side="bottom" className="h-full">
+            <ScrollArea
+              type="scroll"
+              className="h-full"
+              viewportClassName="[&>div]:h-full"
+            >
+              {!getNotesQuery.isLoading &&
+                !getNotesQuery.isRefetching &&
+                getNotesQuery.data?.length === 0 && (
+                  <div className="w-full h-full flex justify-center items-center font-light text-gray-400 ">
+                    Nothing here yet.
+                  </div>
+                )}
+
+              {getNotesQuery.isLoading && (
                 <div className="w-full h-full flex justify-center items-center font-light text-gray-400 ">
-                  Nothing here yet.
+                  <IconSpinner
+                    width="20"
+                    fill="fill-gray-500"
+                    className="animate-spin"
+                  />
                 </div>
               )}
 
-            {getNotesQuery.isLoading && (
-              <div className="w-full h-full flex justify-center items-center font-light text-gray-400 ">
-                <IconSpinner
-                  width="20"
-                  fill="fill-gray-500"
-                  className="animate-spin"
-                />
-              </div>
-            )}
-
-            {!getNotesQuery.isLoading &&
-              getNotesQuery.isSuccess &&
-              getNotesQuery.data?.length > 0 && (
-                <div className="flex flex-col gap-3 py-3 pb-10">
-                  {getNotesQuery.data.map((note) => (
-                    <NotificationItem key={note.id} note={note} />
-                  ))}
-                </div>
-              )}
-          </ScrollArea>
+              {!getNotesQuery.isLoading &&
+                getNotesQuery.isSuccess &&
+                getNotesQuery.data?.length > 0 && (
+                  <div className="flex flex-col gap-3 py-3 pb-10">
+                    {getNotesQuery.data.map((note) => (
+                      <NotificationItem key={note.id} note={note} />
+                    ))}
+                  </div>
+                )}
+            </ScrollArea>
+          </ScrollOverflowIndicator>
         </div>
         <div
           className="absolute text-gray-200 right-4 top-3 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary "
