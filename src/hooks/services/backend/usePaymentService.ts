@@ -1,6 +1,6 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import { delay, handleAxiosError } from "../../../libs/helpers.ts";
+import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { GrantSigInfo } from "./useInstructionsService.ts";
 
@@ -30,7 +30,6 @@ export function usePaymentService() {
     ctx: QueryFunctionContext<[string, GetPaymentMethodsParams]>
   ): Promise<PaymentMethod[]> {
     try {
-      await delay(2000);
       const [, params] = ctx.queryKey;
       const { network } = params;
       const resp = await axios({
@@ -54,7 +53,6 @@ export function usePaymentService() {
     ctx: QueryFunctionContext<[string, GetPaymentMethodGrantSignatureParams]>
   ): Promise<GrantSigInfo> {
     try {
-      await delay(2000);
       const [, params] = ctx.queryKey;
       const { network } = params;
       const resp = await axios({

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import moment from "moment";
 import { NavLink } from "react-router-dom";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
@@ -80,7 +81,7 @@ export function NotificationItem({ note }: { note: Notification }) {
         <CardHeader className="p-0 ">
           <CardTitle
             className={cn(
-              "text-gray-300 text-xs tracking-wide p-2 px-3 font-medium border-b border-gray-900 cursor-pointer",
+              "text-gray-300 text-[13px] tracking-wide p-2 px-3 font-normal border-b border-gray-900 cursor-pointer",
               {
                 "text-chinese-green": !note.read,
               }
@@ -89,9 +90,14 @@ export function NotificationItem({ note }: { note: Notification }) {
             {humanizedNoteType[note.type]}
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-2 px-3 pb-3 text-gray-300 font-extralight text-xs">
+        <CardContent className="p-2 px-3 text-gray-300 font-extralight text-xs">
           {note.body.replace(/<\/?a[^>].*>.*?/g, "")}
         </CardContent>
+        <div className="px-3 pb-3">
+          <span className="text-gray-400 font-light text-xs">
+            {moment(note.createdAt).fromNow()}
+          </span>
+        </div>
       </Card>
     </NavLink>
   );

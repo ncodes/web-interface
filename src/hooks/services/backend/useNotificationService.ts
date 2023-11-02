@@ -1,7 +1,7 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { StoreAccessTokenKey } from "../../../constants.ts";
-import { delay, handleAxiosError } from "../../../libs/helpers.ts";
+import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 export interface SubscribeForWebPushParams {
@@ -87,8 +87,6 @@ export function useNotificationService() {
       params,
       headers,
     });
-
-    await delay(3000);
 
     return Promise.resolve(resp.data.data);
   }

@@ -1,11 +1,23 @@
-import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
-import { useLocation, useNavigate } from "react-router-dom";
-import useStore, { LiquidityFilter } from "../../hooks/store/useStore.ts";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { validators } from "tailwind-merge";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
+import useStore, { LiquidityFilter } from "../../hooks/store/useStore.ts";
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
-import { Accordion } from "../ui/accordion.tsx";
-import { FilterItem } from "../FilterItem.tsx";
 import { cn } from "../../libs/utils.ts";
+import { FilterItem } from "../FilterItem.tsx";
+import Input2 from "../Input2.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Accordion } from "../ui/accordion.tsx";
+import { Label } from "../ui/label.tsx";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import {
   Select,
   SelectContent,
@@ -13,19 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select.tsx";
-import { validators } from "tailwind-merge";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group.tsx";
-import { ToolTip } from "../ToolTip.tsx";
-import { Label } from "../ui/label.tsx";
-import { Button } from "../ui/Button.tsx";
-import Input2 from "../Input2.tsx";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
-import { useQuery } from "@tanstack/react-query";
 import { PaymentMethodSelector } from "./PaymentMethodSelector.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 interface Errors {
   price?: string;
@@ -523,6 +523,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
       <div className="px-5 py-5 border-t border-gray-800">
         <Button
           size="full"
+          variant="outline"
           onClick={() => {
             const cloned = { ...values };
             if (!cloned.price) {

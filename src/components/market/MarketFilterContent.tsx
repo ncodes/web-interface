@@ -617,6 +617,7 @@ export function MarketFilterContent() {
       <div className="px-5 py-5 border-t border-gray-800">
         <Button
           size="full"
+          variant="outline"
           onClick={() => {
             const cloned = { ...values };
             if (!cloned.price) {

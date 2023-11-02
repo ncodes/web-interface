@@ -349,6 +349,7 @@ declare global {
     orderId: number;
     offerId: number;
     read: boolean;
+    createdAt: string;
   }
 
   interface TicketStats {

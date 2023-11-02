@@ -169,6 +169,7 @@ export function OfferFilterContent() {
       <div className="px-5 py-5">
         <Button
           size="full"
+          variant="outline"
           onClick={() => {
             const cloned = { ...values };
             navigate({
