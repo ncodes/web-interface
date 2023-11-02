@@ -520,7 +520,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
           </Accordion>
         </ScrollArea>
       </ScrollOverflowIndicator>
-      <div className="px-5 py-5 border-t border-gray-800">
+      <div className="px-5 py-5">
         <Button
           size="full"
           variant="outline"
