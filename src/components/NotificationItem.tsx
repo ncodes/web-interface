@@ -71,7 +71,7 @@ export function NotificationItem({ note }: { note: Notification }) {
     >
       <Card
         className={cn(
-          "w-full shrink-0 border  border-card-border bg-card-background shadow-gray-900 shadow-lg hover:border-gray-500 transition-all duration-500 cursor-pointer",
+          "w-full shrink-0 border   border-gray-900 bg-card-background shadow-gray-900 shadow-lg border-b-gray-800 hover:border-gray-700 transition-all duration-500 cursor-pointer",
           {
             "border-chinese-green hover:border-chinese-green": !note.read,
           }
@@ -80,7 +80,7 @@ export function NotificationItem({ note }: { note: Notification }) {
         <CardHeader className="p-0 ">
           <CardTitle
             className={cn(
-              "text-gray-300 text-xs tracking-wide p-2 px-3 font-medium border-b border-gray-800 cursor-pointer",
+              "text-gray-300 text-xs tracking-wide p-2 px-3 font-medium border-b border-gray-900 cursor-pointer",
               {
                 "text-chinese-green": !note.read,
               }
