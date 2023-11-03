@@ -10,8 +10,8 @@ export function PopularMarketRow(props: { market: Market }) {
       <PairAvatar
         base="BTC"
         quote="UNI"
-        baseSrc="/images/icons/asset-icons/btc.svg"
-        quoteSrc="/images/icons/asset-icons/uni.svg"
+        baseSrc={props.market.baseLogo}
+        quoteSrc={props.market.quoteLogo}
       />
       <div className="flex items-center min-w-[30px] ">
         <div className="flex flex-col font-normal tracking-wider text-gray-200 text-[13px]">

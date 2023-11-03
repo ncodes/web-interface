@@ -10,8 +10,8 @@ export function RecentTradeRow(props: { swap: Swap }) {
       <PairAvatar
         base="BTC"
         quote="UNI"
-        baseSrc="/images/icons/asset-icons/btc.svg"
-        quoteSrc="/images/icons/asset-icons/uni.svg"
+        baseSrc={props.swap.market.baseLogo}
+        quoteSrc={props.swap.market.quoteLogo}
       />
       <div className="flex items-center">
         <div className="flex flex-col font-normal tracking-wider text-gray-200 text-[13px]">
