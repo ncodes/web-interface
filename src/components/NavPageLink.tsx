@@ -22,7 +22,8 @@ export function NavPageLink(props: NavPageLinkProps) {
           {
             "font-light text-gray-300 fill-gray-300  hover:text-gray-200":
               !props.active,
-            "text-white fill-chinese-green scale-x-105": props.active,
+            "text-white fill-chinese-green scale-x-105 bg-gray-900 rounded-full":
+              props.active,
           }
         )}
       >
