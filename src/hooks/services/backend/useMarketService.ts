@@ -55,7 +55,7 @@ export function useMarketService() {
           creator:
             id == "getMarketsByCreator" && params.connectedAddress
               ? params.connectedAddress
-              : undefined,
+              : marketFilter.creator,
         },
         headers,
       });

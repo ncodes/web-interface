@@ -16,7 +16,6 @@ export function MarketsTabContent() {
   const { listMarkets } = useMarketService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
-  const fullLoadCount = useStore((state) => state.fullLoadCount);
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
@@ -26,7 +25,7 @@ export function MarketsTabContent() {
       "getMarkets",
       {
         network: getChainInfo().queryName,
-        marketFilter: marketFilter,
+        marketFilter: { ...marketFilter, creator: import.meta.env.VITE_OPERATOR_MARKET_CREATOR },
         limit,
         offset,
       },

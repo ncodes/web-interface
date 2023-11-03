@@ -503,21 +503,6 @@ export function MarketFilterContent() {
             </FilterItem>
 
             <FilterItem
-              title="By Creator"
-              tip="Find a market by its creator's address"
-            >
-              <Input2
-                type="text"
-                placeholder="e.g. 0x0..."
-                className="pl-2"
-                value={values.creator || ""}
-                onChange={(e) => {
-                  setValues({ ...values, creator: e.target.value });
-                }}
-              />
-            </FilterItem>
-
-            <FilterItem
               title="PUT Permissioned"
               tip="Find markets that require or don't require liquidity providers to be allowlisted before they can add liquidity"
             >
