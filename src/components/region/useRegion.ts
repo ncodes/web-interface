@@ -9,7 +9,7 @@ import { ReactElement, SVGProps } from "react";
 function getRegionIcon(
   region: string
 ): (props: SVGProps<SVGSVGElement>) => ReactElement {
-  const found = regions.find((r) => r.name === region);
+  const found = regions.find((r) => r.name === region || r.value === region);
   if (!found) throw new Error(`Region ${region} not found`);
   return found.icon;
 }
@@ -19,7 +19,7 @@ function getRegionIcon(
  * @param region
  */
 function getRegion(region: string): Region {
-  const found = regions.find((r) => r.name === region);
+  const found = regions.find((r) => r.name === region || r.value === region);
   if (!found) throw new Error(`Region ${region} not found`);
   return found;
 }

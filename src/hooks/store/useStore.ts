@@ -33,6 +33,7 @@ export interface MarketFilter {
   address?: string;
   creator?: string;
   permSwap?: boolean;
+  regions?: string;
   permPut?: boolean;
   putBadges?: string;
   swapBadges?: string;

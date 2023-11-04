@@ -14,18 +14,26 @@ import { MarketRow } from "./MarketRow.tsx";
 export function MarketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
   const { listMarkets } = useMarketService();
+  const currentRegion = useStore((state) => state.currentRegion);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
   const [limit] = useState(60);
+  const regionBadge = import.meta.env.VITE_REGION_BADGE;
   const fetchMarkets = useQuery({
     queryKey: [
       "getMarkets",
       {
         network: getChainInfo().queryName,
-        marketFilter: { ...marketFilter, creator: import.meta.env.VITE_OPERATOR_MARKET_CREATOR },
+        marketFilter: {
+          ...marketFilter,
+          creator: import.meta.env.VITE_OPERATOR_MARKET_CREATOR,
+          regions: currentRegion
+            ? `${regionBadge}/${currentRegion}`
+            : undefined,
+        },
         limit,
         offset,
       },
