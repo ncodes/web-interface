@@ -12,6 +12,7 @@ import { IconFlagSKorea } from "./icons/IconFlagSKorea.tsx";
 import { IconFlagSpain } from "./icons/IconFlagSpain.tsx";
 import { IconFlagUK } from "./icons/IconFlagUK.tsx";
 import { IconGlobalLine } from "./icons/IconGlobalLine.tsx";
+import { Button } from "./ui/Button.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,16 +56,17 @@ export function LanguageSelector() {
 
   return (
     <LanguageSelectorMenu onOpenChange={setOpen}>
-      <div
+      <Button
+        variant="ghost"
         className={cn(
-          "hidden md:flex justify-center items-center h-[40px] w-[40px] rounded-full border border-gray-600 hover:bg-gray-800 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110",
+          "hidden justify-center items-center p-0 h-[40px] w-[40px] rounded-full border border-gray-600 hover:bg-gray-800 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110",
           {
             "scale-110 border-chinese-green": open,
           }
         )}
       >
         <IconGlobalLine />
-      </div>
+      </Button>
     </LanguageSelectorMenu>
   );
 }
@@ -78,7 +80,7 @@ export function LanguageSelectorMenu({
 }) {
   return (
     <DropdownMenu onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger className="outline-0 ring-0">
+      <DropdownMenuTrigger className="outline-0 ring-0" asChild>
         {children}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[152px] outline-0 tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 py-0 px-1">
@@ -122,7 +124,7 @@ export function LanguageSelectorMobile() {
         label="Language"
         svg={<IconGlobalLine />}
         className={cn(
-          "outline-0 ring-0 relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
+          "hidden outline-0 ring-0 relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
           { "text-white ml-[2px]": open }
         )}
       />

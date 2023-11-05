@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
@@ -16,7 +17,7 @@ import { BalanceCard, NativeTokenWrapper } from "./BalanceCard.tsx";
 import { TabContentHeader } from "./TabContentHeader.tsx";
 
 export function GeneralTab(props: { address: string }) {
-  const [sheetHeight] = useSheetInfo();
+  const [sheetHeight] = useSheetInfo("h-[50vh]");
   const { getBalance, getTokenBalance, getChainInfo, address } =
     useConnectorContext();
   const [nativeBalance, setNativeBalance] = useState(BigInt(0));
@@ -27,11 +28,11 @@ export function GeneralTab(props: { address: string }) {
     setEnabledSafeMode: s.setEnabledSafeMode,
   }));
 
-  // useInterval(async () => {
-  //   fetchNativeBalance();
-  //   fetchWrappedBalance();
-  //   fetchP2pBalance();
-  // }, 15000);
+  useInterval(async () => {
+    fetchNativeBalance();
+    fetchWrappedBalance();
+    fetchP2pBalance();
+  }, 15000);
 
   useEffect(() => {
     fetchNativeBalance();
