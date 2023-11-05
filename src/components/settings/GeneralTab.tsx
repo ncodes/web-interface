@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { formatToHighDenom } from "../../libs/helpers.ts";
 import { TabsContent } from "../ui/Tabs.tsx";
 import {
   Accordion,
@@ -9,15 +12,54 @@ import {
 } from "../ui/accordion.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
 import { Switch } from "../ui/switch.tsx";
-import { BalanceCard, BalanceCardLink } from "./BalanceCard.tsx";
+import { BalanceCard, NativeTokenWrapper } from "./BalanceCard.tsx";
 import { TabContentHeader } from "./TabContentHeader.tsx";
 
 export function GeneralTab(props: { address: string }) {
   const [sheetHeight] = useSheetInfo();
+  const { getBalance, getTokenBalance, getChainInfo, address } =
+    useConnectorContext();
+  const [nativeBalance, setNativeBalance] = useState(BigInt(0));
+  const [wrappedBalance, setWrappedBalance] = useState(BigInt(0));
+  const [p2pBalance, setP2pBalance] = useState(BigInt(0));
   const { enabledSafeMode, setEnabledSafeMode } = useStore((s) => ({
     enabledSafeMode: s.enabledSafeMode,
     setEnabledSafeMode: s.setEnabledSafeMode,
   }));
+
+  // useInterval(async () => {
+  //   fetchNativeBalance();
+  //   fetchWrappedBalance();
+  //   fetchP2pBalance();
+  // }, 15000);
+
+  useEffect(() => {
+    fetchNativeBalance();
+    fetchWrappedBalance();
+    fetchP2pBalance();
+  }, []);
+
+  async function fetchNativeBalance() {
+    const bal = await getBalance();
+    setNativeBalance(bal);
+  }
+
+  async function fetchWrappedBalance() {
+    const netInfo = getChainInfo();
+    if (!netInfo || !netInfo.tokenInfo.address) return;
+    const bal = await getTokenBalance(netInfo.tokenInfo.address, address);
+    setWrappedBalance(bal);
+  }
+
+  async function fetchP2pBalance() {
+    const netInfo = getChainInfo();
+    if (!netInfo || !netInfo.contracts?.token) return;
+    const bal = await getTokenBalance(
+      netInfo.contracts["token"].address,
+      address
+    );
+    setP2pBalance(bal);
+  }
 
   return (
     <TabsContent value="general" className={`p-0 mt-0 pb-20 ${sheetHeight}`}>
@@ -28,13 +70,38 @@ export function GeneralTab(props: { address: string }) {
             <AccordionItem className="" value="balances">
               <AccordionContent className="tracking-wide">
                 <div className="flex flex-col gap-4 box-border min-w-full float-left">
-                  <BalanceCard symbol="ETH" balance="12.5">
-                    <BalanceCardLink title="Convert to WETH" />
+                  <BalanceCard
+                    symbol="ETH"
+                    balance={formatToHighDenom(nativeBalance)}
+                  >
+                    <NativeTokenWrapper
+                      title={`Wrap to ${getChainInfo().tokenInfo?.symbol}`}
+                      curBalance={nativeBalance}
+                      onDone={() => {
+                        fetchNativeBalance();
+                        fetchWrappedBalance();
+                      }}
+                      wrap
+                    />
                   </BalanceCard>
-                  <BalanceCard symbol="WETH" balance="345.32">
-                    <BalanceCardLink title="Convert to ETH" />
+                  <BalanceCard
+                    symbol="WETH"
+                    balance={formatToHighDenom(wrappedBalance)}
+                  >
+                    <NativeTokenWrapper
+                      title={`Unwrap to ${getChainInfo().symbol}`}
+                      curBalance={wrappedBalance}
+                      wrap={false}
+                      onDone={() => {
+                        fetchNativeBalance();
+                        fetchWrappedBalance();
+                      }}
+                    />
                   </BalanceCard>
-                  <BalanceCard symbol="P2P" balance="34,000" />
+                  <BalanceCard
+                    symbol="P2P"
+                    balance={formatToHighDenom(p2pBalance)}
+                  />
                   {/*<BalanceCard symbol="POUCH (P2P)" balance="34,000" />*/}
                 </div>
               </AccordionContent>

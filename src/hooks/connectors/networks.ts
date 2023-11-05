@@ -4,6 +4,7 @@ import DisputeManagerABI from "../../abi/DisputeManager.json";
 import EnergonABI from "../../abi/Energon.json";
 import MarketCoreABI from "../../abi/MarketCore.json";
 import MediatorManagerABI from "../../abi/MediatorManager.json";
+import WETHABI from "../../abi/WETH.json";
 import NftABI from "../../abi/NFT.json";
 import NativeTokenABI from "../../abi/Token.json";
 import IconBSC from "../../components/icons/BSC.tsx";
@@ -41,6 +42,7 @@ export const SupportedNetworks: ChainInfo[] = [
       address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
       name: "WETH",
       symbol: "WETH",
+      abi: WETHABI,
       decimals: 18,
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/optimism/assets/0x4200000000000000000000000000000000000006/logo.png",
@@ -93,6 +95,7 @@ export const SupportedNetworks: ChainInfo[] = [
       address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
       name: "WMATIC",
       symbol: "WMATIC",
+      abi: WETHABI,
       decimals: 18,
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/polygon/assets/0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270/logo.png",
@@ -112,6 +115,7 @@ export const SupportedNetworks: ChainInfo[] = [
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
+      abi: WETHABI,
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
@@ -131,6 +135,7 @@ export const SupportedNetworks: ChainInfo[] = [
       name: "WBNB",
       symbol: "WBNB",
       decimals: 18,
+      abi: WETHABI,
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/smartchain/assets/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c/logo.png",
     }),
@@ -149,6 +154,7 @@ export const SupportedNetworks: ChainInfo[] = [
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
+      abi: WETHABI,
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/optimism/assets/0x4200000000000000000000000000000000000006/logo.png",
     }),
@@ -168,6 +174,7 @@ export const SupportedNetworks: ChainInfo[] = [
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
+      abi: WETHABI,
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
@@ -183,10 +190,11 @@ export const SupportedNetworks: ChainInfo[] = [
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,
     tokenInfo: new TokenInfo({
-      address: "0x000",
+      address: "0xB0f05d25e41FbC2b52013099ED9616f1206Ae21B",
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
+      abi: WETHABI,
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),

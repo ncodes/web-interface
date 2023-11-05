@@ -40,6 +40,17 @@ export interface IConnector {
     args?,
     noWait?: boolean
   ): Promise<[Address, TransactionReceipt]>;
+  sendTransaction(
+    to: string,
+    value: bigint,
+    noWait?: boolean,
+    confirmations?: number
+  ): Promise<Address>;
+  withdrawWrappedToken(
+    amount: bigint,
+    noWait?: boolean,
+    confirmations?: number
+  ): Promise<Address>;
   getTokenBalance(
     tokenAddress: Address | string,
     accountAddress: Address | string
@@ -274,6 +285,36 @@ export default function useConnector() {
   }
 
   /**
+   * Send transaction
+   * @param to The recipient's address
+   * @param value The amount to be sent
+   * @param noWait If true, the function will not wait for the transaction to be mined
+   * @param confirmations The number of confirmations to wait for
+   * @returns
+   */
+  async function sendTransaction(
+    to: string,
+    value: bigint,
+    noWait = false,
+    confirmations = 2
+  ) {
+    if (!publicClient) throw new Error("no provider found");
+    if (!walletClient) throw new Error("wallet not connected");
+    const txHash = await walletClient.sendTransaction({
+      account: walletClient.account,
+      to: to as Address,
+      value,
+    });
+    if (!noWait) {
+      await publicClient.waitForTransactionReceipt({
+        hash: txHash,
+        confirmations: isDev() ? 1 : confirmations,
+      });
+    }
+    return txHash;
+  }
+
+  /**
    * Simulate a contract call
    * @param name - The name of the contract
    * @param targetFunc - The target function to be called
@@ -383,6 +424,39 @@ export default function useConnector() {
     return [txHash, receipt];
   }
 
+  /**
+   * Withdraw wrapped token
+   * @param amount The amount to be withdrawn
+   * @param noWait If true, the function will not wait for the transaction to be mined
+   * @param confirmations The number of confirmations to wait for
+   * @returns
+   */
+  async function withdrawWrappedToken(
+    amount: bigint,
+    noWait = false,
+    confirmations = 2
+  ) {
+    if (!publicClient) throw new Error("no provider found");
+    if (!walletClient) throw new Error("wallet not connected");
+    const netInfo = getChainInfo();
+    const [address] = await walletClient.getAddresses();
+    const { request } = await publicClient.simulateContract({
+      address: netInfo.tokenInfo.address as Address,
+      abi: netInfo.tokenInfo.abi,
+      functionName: "withdraw",
+      args: [amount],
+      account: address,
+    });
+    const txHash = await walletClient.writeContract(request);
+    if (!noWait) {
+      await publicClient.waitForTransactionReceipt({
+        hash: txHash,
+        confirmations: isDev() ? 1 : confirmations,
+      });
+    }
+    return txHash;
+  }
+
   // Get the current chain info.
   // If wallet is not connected, the chain info of the default network is returned.
   // @throws Error if default network is not set
@@ -416,6 +490,8 @@ export default function useConnector() {
     simulateContract,
     simulateAndWriteContract,
     writeContract,
+    sendTransaction,
+    withdrawWrappedToken,
 
     // ERC20 operations
     getTokenBalance,

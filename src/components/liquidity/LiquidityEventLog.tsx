@@ -83,7 +83,7 @@ export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
                     event={event}
                     liquidity={liquidity}
                     market={liquidity?.market}
-                    key={`${event.creator}-${event.action}`}
+                    key={`${event.creator}-${event.action}-${event.createdAt}`}
                   />
                 ))}
               </div>

@@ -7,6 +7,7 @@ export default class TokenInfo {
   symbol?: string;
   decimals?: number;
   logoURI?: string;
+  abi?: any;
 
   constructor(props: Partial<TokenInfo>) {
     return Object.assign(this, props);
