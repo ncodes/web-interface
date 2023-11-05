@@ -24,7 +24,7 @@ export function Header(props: { onClick: () => void; height?: string }) {
         {connected && <NetworkSelector />}
         <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
         <ConnectWalletButton
-          className="lg:hidden xs:min-w-[120px]"
+          className="lg:hidden md:min-w-[120px]"
           label="Connect"
         />
       </div>

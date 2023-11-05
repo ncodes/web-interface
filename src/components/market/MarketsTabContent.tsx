@@ -15,6 +15,7 @@ export function MarketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
   const { listMarkets } = useMarketService();
   const currentRegion = useStore((state) => state.currentRegion);
+  const enabledSafeMode = useStore((state) => state.enabledSafeMode);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
   const marketFilter = useStore((state) => state.marketFilter);
@@ -33,6 +34,8 @@ export function MarketsTabContent() {
           regions: currentRegion
             ? `${regionBadge}/${currentRegion}`
             : undefined,
+          kycLp: enabledSafeMode ? true : marketFilter.kycLp,
+          kycTaker: enabledSafeMode ? true : marketFilter.kycTaker,
         },
         limit,
         offset,

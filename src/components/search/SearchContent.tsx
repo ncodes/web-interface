@@ -84,17 +84,19 @@ export function SearchContent({
           {!queryResult && (
             <div>
               <div>
-                <div className="flex justify-between items-center p-3 py-3 pb-1 ">
-                  <span className="font-medium text-gray-100 tracking-wider text-sm rounded-full">
-                    Recent Search
-                  </span>
-                  {marketHistory && marketHistory?.data?.markets.length && (
-                    <span className="font-light text-xs text-gray-300 tracking-wider">
-                      {marketHistory.data.markets.length} Result
-                      {marketHistory.data.markets.length > 1 && "s"}
+                {!!marketHistory?.data?.markets.length && (
+                  <div className="flex justify-between items-center p-3 py-3 pb-1 ">
+                    <span className="font-medium text-gray-100 tracking-wider text-sm rounded-full">
+                      Recent Search
                     </span>
-                  )}
-                </div>
+                    {marketHistory && !!marketHistory?.data?.markets.length && (
+                      <span className="font-light text-xs text-gray-300 tracking-wider">
+                        {marketHistory.data.markets.length} Result
+                        {marketHistory.data.markets.length > 1 && "s"}
+                      </span>
+                    )}
+                  </div>
+                )}
 
                 <div className="divide-y divide-gray-900">
                   {marketHistory.isLoading &&

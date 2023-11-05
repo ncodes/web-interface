@@ -37,7 +37,7 @@ export function SearchBoxItem({ market }: { market: Market }) {
           </div>
         </div>
         <div className="flex-1 flex gap-2 justify-end">
-          <Card className="w-[130px] text-right shrink-0 border border-card-border bg-card-background shadow-gray-900  shadow-lg">
+          <Card className="w-[130px] text-right shrink-0 border border-card-border/60 border-b-gray-700 bg-card-background shadow-none">
             <CardHeader className="px-3 py-2 pb-0">
               <CardTitle className="text-xs tracking-wide font-light text-gray-400 flex justify-end gap-2">
                 <span>Price</span>
@@ -50,7 +50,7 @@ export function SearchBoxItem({ market }: { market: Market }) {
               ${formatToMoney(market.lowestPriceUsd || "0")}
             </CardContent>
           </Card>
-          <Card className="hidden md:inline w-[83px] shrink-0 text-right border border-card-border bg-card-background shadow-gray-900  shadow-lg">
+          <Card className="hidden md:inline w-[83px] shrink-0 text-right border border-card-border/60 border-b-gray-700 bg-card-background shadow-none">
             <CardHeader className="px-3 py-2 pb-0">
               <CardTitle className="text-xs tracking-wider font-light text-gray-400">
                 <span>24hr Vol.</span>

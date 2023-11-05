@@ -1,13 +1,13 @@
+import { useAccount, useBalance } from "wagmi";
 import EmojiAvatar from "../../../components/avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../../../components/avatar/useAvatar";
-import { useAccount, useBalance } from "wagmi";
+import { SettingsSheet } from "../../../components/settings/SettingsSheet.tsx";
 import {
   formatToMoney,
   shortenAddress,
   shortenAddress2,
 } from "../../../libs/helpers.ts";
 import useStore from "../../store/useStore.ts";
-import { SettingsSheet } from "../../../components/settings/SettingsSheet.tsx";
 
 // Component for rendering amount and symbol
 function Amount(props: { balance: string; symbol: string }) {
@@ -36,13 +36,13 @@ export const ConnectedButton = (props: ConnectedProps) => {
   return (
     <div>
       <div
-        className="flex [&>*]:cursor-pointer items-center justify-between  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-3 xs:pr-1"
+        className="flex [&>*]:cursor-pointer items-center h-[37px] justify-between  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-3 pr-1"
         onClick={() => {
           toggleOpenState && toggleOpenState("settingsSheet");
         }}
       >
         <p
-          className="hidden xs:inline max-w-[80px] xxs:max-w-[120px] py-[8px] px-[12px] text-[#001029] font-normal text-[14px]
+          className="hidden md:inline max-w-[80px] xxs:max-w-[120px] py-[8px] px-[12px] text-[#001029] font-normal text-[14px]
         tracking-[0.19px] bg-[#8DB90C] rounded-full"
         >
           <Amount
@@ -58,7 +58,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
             {shortenAddress2(address as string)}
           </span>
         </p>
-        <div>
+        <div className="pl-1 md:pl-1">
           <EmojiAvatar size={AvatarSize.Small} randomStr={address as string} />
         </div>
       </div>

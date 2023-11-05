@@ -1,7 +1,7 @@
-import { Button } from "./ui/Button.tsx";
 import { ConnectKitButton } from "connectkit";
 import { ConnectedButton } from "../hooks/connectors/components/ConnectedButton.tsx";
 import { IconWallet } from "./icons/IconWallet.tsx";
+import { Button } from "./ui/Button.tsx";
 
 interface ConnectedProps {
   show: () => void;
@@ -43,10 +43,16 @@ export function ConnectWalletButton(props: {
                 <Connect
                   showIcon={props.showIcon}
                   label={props.label}
-                  show={show}
+                  show={() => {
+                    show?.();
+                  }}
                 />
               ) : (
-                <Connected show={show} />
+                <Connected
+                  show={() => {
+                    show?.();
+                  }}
+                />
               )}
             </span>
           );

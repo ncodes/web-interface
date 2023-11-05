@@ -111,16 +111,6 @@ export function useMarketService() {
         headers,
       });
 
-      // TODO: remove mock
-      resp.data.data.push({ ...resp.data.data[0] });
-      resp.data.data[1].address = "m1";
-      resp.data.data.push({ ...resp.data.data[0] });
-      resp.data.data[2].address = "m2";
-      resp.data.data.push({ ...resp.data.data[0] });
-      resp.data.data[3].address = "m3";
-      resp.data.data.push({ ...resp.data.data[0] });
-      resp.data.data[4].address = "m4";
-
       return Promise.resolve(resp.data.data);
     } catch (e) {
       return Promise.reject(handleAxiosError(e as never));

@@ -106,8 +106,12 @@ export interface IStore {
   setUser: (user: User | undefined | null) => void;
 
   // Region state
-  currentRegion?: string;
-  setCurrentRegion?: (region: string) => void;
+  currentRegion: string;
+  setCurrentRegion: (region: string) => void;
+
+  // Safe mode state
+  enabledSafeMode: boolean;
+  setEnabledSafeMode: (enabled: boolean) => void;
 
   // Top loading state
   loaderProgress: number;
@@ -119,8 +123,8 @@ export interface IStore {
   setLoading: (id: string, updates: LoadingState) => void;
 
   // Current tab
-  currentTab?: string;
-  setCurrentTab?: (tab: string) => void;
+  currentTab: string;
+  setCurrentTab: (tab: string) => void;
 
   // Open state toggling for sheets and modals
   openStateContext: Partial<OpenStateContext>;
@@ -190,6 +194,14 @@ const useStore = create<IStore>((set, get) => ({
 
   currentTab: "",
   setCurrentTab: (tab: string) => set({ currentTab: tab }),
+
+  enabledSafeMode: JSON.parse(
+    localStorage.getItem("enabledSafeMode") || "false"
+  ),
+  setEnabledSafeMode: (enabled: boolean) => {
+    localStorage.setItem("enabledSafeMode", JSON.stringify(enabled));
+    set({ enabledSafeMode: enabled });
+  },
 
   openStateContext: {},
   openState: {

@@ -1,4 +1,4 @@
-import { formatToHighDenom, formatToMoney } from "../libs/helpers.ts";
+import { approxNumber, formatToHighDenom } from "../libs/helpers.ts";
 import { ToolTip } from "./ToolTip.tsx";
 import { PairAvatar } from "./avatar/PairAvatar.tsx";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card.tsx";
@@ -34,7 +34,7 @@ export function RecentTradeRow(props: { swap: Swap }) {
                   props.swap.market.quoteDecimals
                 )} ${props.swap.market.quote}`}
               >
-                ${formatToMoney(props.swap.priceUsd)}
+                ${approxNumber(props.swap.priceUsd)}
               </ToolTip>
             </CardContent>
           </Card>
@@ -51,7 +51,7 @@ export function RecentTradeRow(props: { swap: Swap }) {
                   props.swap.market.baseDecimals
                 )} ${props.swap.market.base}`}
               >
-                ${formatToMoney(props.swap.amountUsd)}
+                ${approxNumber(props.swap.amountUsd)}
               </ToolTip>
             </CardContent>
           </Card>

@@ -1,4 +1,6 @@
 import { ReactElement } from "react";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { Button } from "../ui/Button.tsx";
 import {
   Card,
   CardContent,
@@ -6,8 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Button } from "../ui/Button.tsx";
 
 export function BalanceCard(props: {
   symbol?: string;
@@ -16,7 +16,7 @@ export function BalanceCard(props: {
   children?: ReactElement;
 }) {
   return (
-    <Card className="w-full shrink-0 border border-card-border bg-card-background shadow-gray-900 shadow-lg">
+    <Card className="w-full shrink-0 border border-card-border/70 border-b-gray-700 bg-card-background shadow-gray-900 shadow-lg">
       <CardHeader className="p-0">
         <CardTitle className="text-center p-0 tracking-wider font-normal h-0 pt-3 float-right">
           {!props.hideHelp && (
@@ -31,7 +31,7 @@ export function BalanceCard(props: {
         <p>{props.balance}</p>
       </CardContent>
       {props.children && (
-        <CardFooter className="border-t border-card-border py-0 px-0 font-light text-sm text-center">
+        <CardFooter className="border-t border-card-border/50 py-0 px-0 font-light text-sm text-center">
           {props.children}
         </CardFooter>
       )}

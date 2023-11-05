@@ -15,7 +15,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet.tsx";
 import { AccountTab } from "./AccountTab.tsx";
-import { BalancesTab } from "./BalancesTab.tsx";
+import { GeneralTab } from "./GeneralTab.tsx";
 import { RulesTab } from "./RulesTab.tsx";
 import { SettingsFooter } from "./SettingsFooter.tsx";
 
@@ -55,17 +55,17 @@ export function SettingsSheet(props: {
         </SheetHeader>
         <div className="px-0 text-white h-full">
           <Tabs
-            defaultValue={currentTab || "balances"}
+            defaultValue={currentTab || "general"}
             className="w-full h-full transition-all duration-500"
           >
             <ScrollOverflowIndicator>
               <ScrollAreaHorizontal type="scroll">
                 <TabsList className="justify-start px-3 py-2 border-b border-modal-border">
                   <TabsTrigger
-                    value="balances"
+                    value="general"
                     className="font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium"
                   >
-                    Balances
+                    General
                   </TabsTrigger>
                   <TabsTrigger
                     value="account"
@@ -82,7 +82,7 @@ export function SettingsSheet(props: {
                 </TabsList>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>
-            <BalancesTab address={address} />
+            <GeneralTab address={address} />
             <AccountTab />
             <RulesTab />
             <SettingsFooter
