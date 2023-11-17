@@ -1,4 +1,5 @@
 import React from "react";
+import { Address } from "viem";
 import TokenInfo from "../hooks/connectors/token_info.ts";
 import { AssetType, Events } from "./enums.ts";
 
@@ -439,4 +440,23 @@ declare global {
     loseVoteSlashBP: number;
     numDraftees: number;
   };
+
+  type CoreContractState = [
+    instantSwapFeeBp: {
+      fixedNFTSwapFee: bigint;
+      fixedSynthSwapFee: bigint;
+      instantNFTSwapFeeBp: bigint;
+      instantSwapFeeBp: bigint;
+      maxOpenDisputes: bigint;
+      maxOpenOrders: bigint;
+      stableSwapFeeBp: bigint;
+      synthSwapFeeBp: bigint;
+    },
+    minTimeToPay: bigint,
+    orderGraceDur: bigint,
+    numOrders: bigint,
+    feePoolTxInterval: bigint,
+    inventor: Address,
+    ammSwapRouter: Address,
+  ];
 }

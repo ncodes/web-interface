@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { humanizeDur2 } from "../../libs/helpers.ts";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
+import { humanizeDur, humanizeDur2 } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
 import Input2 from "../Input2.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
@@ -19,13 +21,24 @@ export function ManageLiqEditPaymentTime({
     setErr: Dispatch<SetStateAction<string>>,
   ) => void;
 }) {
-  const [duration, setDuration] = useState(liquidity?.timeToPay || 900);
+  const [duration, setDuration] = useState(liquidity?.timeToPay || 0);
   const [focused, setFocused] = useState(false);
   const [err, setErr] = useState("");
+  const { state } = useCoreContract();
+  const { ready } = useConnectorContext();
+  const [minTimeToPay, setMinTimeToPay] = useState(900);
 
   useEffect(() => {
     onValueChanged && onValueChanged(duration, err, setErr);
   }, [duration, err]);
+
+  useEffect(() => {
+    if (!ready) return;
+    state().then((state) => {
+      setMinTimeToPay(Number(state[1]));
+      if (!duration) setDuration(Number(state[1]));
+    });
+  }, [ready]);
 
   return (
     <FilterItem
@@ -44,20 +57,32 @@ export function ManageLiqEditPaymentTime({
           isFocused={focused}
           disabled={disabled}
           onChange={(e) => {
-            setDuration(parseInt(e.target.value));
+            const value = parseInt(e.target.value) || 0;
+            setDuration(value);
+            setErr(
+              value < minTimeToPay
+                ? `Too Low (min: ${humanizeDur(minTimeToPay)})`
+                : "",
+            );
           }}
           after={
             <div>
               <div className="p-3 pt-1">
                 <Slider
-                  value={[duration || 1800]}
-                  min={900}
+                  value={[duration]}
+                  min={minTimeToPay}
+                  defaultValue={[minTimeToPay || 1800]}
                   max={3600}
                   disabled={disabled}
                   step={1}
                   onValueChange={(value) => {
                     setFocused(true);
                     setDuration(value[0]);
+                    setErr(
+                      value[0] < minTimeToPay
+                        ? `Too Low (min: ${humanizeDur(minTimeToPay)})`
+                        : "",
+                    );
                   }}
                   onMouseLeave={() => {
                     setFocused(false);

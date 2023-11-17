@@ -52,8 +52,8 @@ export default function useCoreContract() {
       BigNumberish,
       BigNumberish,
       BigNumberish,
-      BigNumberish
-    ] = [0, 0, 0, 0, 0]
+      BigNumberish,
+    ] = [0, 0, 0, 0, 0],
   ) {
     const res = await simulateAndWriteContract(
       "core",
@@ -67,7 +67,7 @@ export default function useCoreContract() {
         wantOrIds,
         wantAndIds,
         limits,
-      ]
+      ],
     );
     return res[0];
   }
@@ -93,7 +93,7 @@ export default function useCoreContract() {
     maxPrice: BigNumberish,
     ids: BigNumberish[] = [],
     txDeadline: BigNumberish,
-    operator: BigNumberish = 0
+    operator: BigNumberish = 0,
   ) {
     return await simulateAndWriteContract("core", "swapQuoteForBase", [
       marketId,
@@ -129,7 +129,7 @@ export default function useCoreContract() {
     price: BigNumberish,
     ids: BigNumberish[] = [],
     txDeadline: BigNumberish,
-    operator: BigNumberish = "0"
+    operator: BigNumberish = "0",
   ) {
     return await simulateAndWriteContract("core", "createOffer", [
       marketId,
@@ -158,7 +158,7 @@ export default function useCoreContract() {
     amount: BigNumberish,
     price: BigNumberish,
     ids: BigNumberish[] = [],
-    txDeadline: BigNumberish
+    txDeadline: BigNumberish,
   ) {
     return await simulateAndWriteContract("core", "updateOffer", [
       offerId,
@@ -220,12 +220,12 @@ export default function useCoreContract() {
   async function setSwapBadgeForLiquidity(
     market: string,
     lid: BigNumberish,
-    swapBadges: string[][]
+    swapBadges: string[][],
   ) {
     const res = await simulateAndWriteContract(
       "core",
       "setSwapBadgeForLiquidity",
-      [market, lid, swapBadges]
+      [market, lid, swapBadges],
     );
     return res[0];
   }
@@ -245,7 +245,7 @@ export default function useCoreContract() {
     lid: number,
     taker: string,
     orderAmt: BigNumberish,
-    orderPrice: BigNumberish
+    orderPrice: BigNumberish,
   ): Promise<{
     protocolFee: bigint;
     marketFee: bigint;
@@ -255,7 +255,7 @@ export default function useCoreContract() {
     const res: [bigint, bigint, bigint, bigint] = await readContract(
       "core",
       "computeSwapFee",
-      [mid, provider, lid, taker, orderAmt, orderPrice]
+      [mid, provider, lid, taker, orderAmt, orderPrice],
     );
     return {
       protocolFee: res[0],
@@ -301,6 +301,10 @@ export default function useCoreContract() {
    */
   async function getOrder(orderId: bigint): Promise<OrderStruct> {
     return readContract("core", "getOrder", [orderId]);
+  }
+
+  function state(): Promise<CoreContractState> {
+    return readContract("core", "state", []);
   }
 
   /**
@@ -357,5 +361,6 @@ export default function useCoreContract() {
     unacceptOffer,
     executeOffer,
     updateOffer,
+    state,
   };
 }
