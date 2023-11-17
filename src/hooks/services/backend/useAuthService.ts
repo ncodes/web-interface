@@ -15,7 +15,7 @@ export function useAuthService() {
    */
   async function auth(
     message: string,
-    signature: string
+    signature: string,
   ): Promise<{ token: string; user: User }> {
     try {
       const resp = await axios({

@@ -47,6 +47,7 @@ export default function Layout({
     queryKey: ["getUser", { address }],
     queryFn: getUser,
     enabled: !!accessToken && !!address,
+    refetchInterval: 60000,
   });
 
   const subscribeMutation = useMutation({
