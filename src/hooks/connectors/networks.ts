@@ -102,7 +102,7 @@ export const SupportedNetworks: ChainInfo[] = [
     blockExplorer: "https://polygonscan.com",
     logoPath: IconPolygon,
     wrappedTokenInfo: new TokenInfo({
-      address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      address: import.meta.env.VITE_POLYGON_WRAPPED_TOKEN_ADDRESS,
       name: "WMATIC",
       symbol: "WMATIC",
       abi: WETHABI,
@@ -121,7 +121,7 @@ export const SupportedNetworks: ChainInfo[] = [
     blockExplorer: "https://optimistic.etherscan.io",
     logoPath: IconOptimism,
     wrappedTokenInfo: new TokenInfo({
-      address: "0x4200000000000000000000000000000000000006",
+      address: import.meta.env.VITE_OPTIMISM_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
@@ -141,7 +141,7 @@ export const SupportedNetworks: ChainInfo[] = [
     blockExplorer: "https://bscscan.com",
     logoPath: IconBSC,
     wrappedTokenInfo: new TokenInfo({
-      address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+      address: import.meta.env.VITE_BINANCE_WRAPPED_TOKEN_ADDRESS,
       name: "WBNB",
       symbol: "WBNB",
       decimals: 18,
@@ -160,7 +160,7 @@ export const SupportedNetworks: ChainInfo[] = [
     blockExplorer: "https://arbiscan.io",
     logoPath: IconArbitrum,
     wrappedTokenInfo: new TokenInfo({
-      address: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+      address: import.meta.env.VITE_ARBITRUM_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
@@ -180,7 +180,7 @@ export const SupportedNetworks: ChainInfo[] = [
     blockExplorer: "https://sepolia.etherscan.io",
     logoPath: IconEthereum,
     wrappedTokenInfo: new TokenInfo({
-      address: "0x4263541D13298963498ff1f83d992812Ef3d2E73",
+      address: import.meta.env.VITE_SEPOLIA_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
@@ -234,7 +234,7 @@ export const SupportedNetworks: ChainInfo[] = [
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,
     wrappedTokenInfo: new TokenInfo({
-      address: "0xf5059a5D33d5853360D16C683c16e67980206f36",
+      address: import.meta.env.VITE_LOCALHOST_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
@@ -288,7 +288,7 @@ export const SupportedNetworks: ChainInfo[] = [
 export function getChains(
   testnetOnly = false,
   ignoreTestnet = false,
-  ignore: number[] = []
+  ignore: number[] = [],
 ) {
   let supported = SupportedNetworks;
 
@@ -298,7 +298,7 @@ export function getChains(
 
   return supported
     .filter(
-      (s) => !ignore.includes(s.chainId) && (!ignoreTestnet || !s.testnet)
+      (s) => !ignore.includes(s.chainId) && (!ignoreTestnet || !s.testnet),
     )
     .map((s) => s.chainId);
 }
