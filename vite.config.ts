@@ -1,4 +1,3 @@
-import inject from "@rollup/plugin-inject";
 import react from "@vitejs/plugin-react-swc";
 import { Buffer } from "buffer";
 import { defineConfig } from "vite";
@@ -18,11 +17,6 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
 
   return {
     define,
-    build: {
-      rollupOptions: {
-        plugins: [inject({ Buffer: ["Buffer", "Buffer"] })],
-      },
-    },
     plugins: [react()],
   };
 });
