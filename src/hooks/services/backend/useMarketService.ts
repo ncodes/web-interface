@@ -38,7 +38,7 @@ export function useMarketService() {
    * Get markets
    */
   async function listMarkets(
-    ctx: QueryFunctionContext<[ListMarketsIDs, ListMarketsParams]>
+    ctx: QueryFunctionContext<[ListMarketsIDs, ListMarketsParams]>,
   ): Promise<{ markets: Market[]; meta: { queryCount: number } }> {
     try {
       const [id, params] = ctx.queryKey;
@@ -70,7 +70,7 @@ export function useMarketService() {
    * Get market
    */
   async function getMarket(
-    ctx: QueryFunctionContext<[GetMarketID, GetMarketParams]>
+    ctx: QueryFunctionContext<[GetMarketID, GetMarketParams]>,
   ): Promise<Market> {
     try {
       const [, params] = ctx.queryKey;
@@ -95,7 +95,7 @@ export function useMarketService() {
    * Get top markets
    */
   async function getTopMarkets(
-    ctx: QueryFunctionContext<[string, GetTopMarketsParams]>
+    ctx: QueryFunctionContext<[string, GetTopMarketsParams]>,
   ): Promise<Market[]> {
     try {
       const [, params] = ctx.queryKey;

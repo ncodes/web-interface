@@ -28,45 +28,45 @@ export interface IConnector {
   simulateContract(
     name: ContractNames,
     targetFunc: string,
-    args?
+    args?,
   ): Promise<SimulateContractReturnType<any, string, Chain, undefined>>;
   writeContract(
     name: ContractNames,
     targetFunc: string,
-    args?
+    args?,
   ): Promise<Address>;
   simulateAndWriteContract(
     name: ContractNames,
     targetFunc: string,
     args?,
-    noWait?: boolean
+    noWait?: boolean,
   ): Promise<[Address, TransactionReceipt]>;
   sendTransaction(
     to: string,
     value: bigint,
     noWait?: boolean,
-    confirmations?: number
+    confirmations?: number,
   ): Promise<Address>;
   withdrawWrappedToken(
     amount: bigint,
     noWait?: boolean,
-    confirmations?: number
+    confirmations?: number,
   ): Promise<Address>;
   getTokenBalance(
     tokenAddress: Address | string,
-    accountAddress: Address | string
+    accountAddress: Address | string,
   ): Promise<bigint>;
   approveAllowance(
     tokenAddress: Address,
     spenderAddress: Address,
     amount: bigint,
     noWait?: boolean,
-    confirmations?: number
+    confirmations?: number,
   ): Promise<`0x${string}`>;
   getTokenAllowance(
     tokenAddress: Address | string,
     accountAddress: Address | string,
-    spenderAddress: Address | string
+    spenderAddress: Address | string,
   ): Promise<bigint>;
   getTokenSupply(tokenAddress: Address): Promise<bigint>;
   humanizeErc20Errors(error: { message: string } | unknown): string;
@@ -134,7 +134,7 @@ export default function useConnector() {
         address !== undefined &&
         chainId !== undefined &&
         walletClient != undefined &&
-        chain !== undefined
+        chain !== undefined,
     );
   }, [publicClient, connected, address, chainId, chain, walletClient]);
 
@@ -147,7 +147,7 @@ export default function useConnector() {
       return Promise.resolve();
     } catch (error) {
       return Promise.reject(
-        new Error(`failed to disconnect: ${(error as Error).message}`)
+        new Error(`failed to disconnect: ${(error as Error).message}`),
       );
     }
   }
@@ -199,7 +199,7 @@ export default function useConnector() {
    */
   async function getTokenBalance(
     tokenAddress: Address | string,
-    accountAddress: Address | string
+    accountAddress: Address | string,
   ): Promise<bigint> {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
@@ -234,7 +234,7 @@ export default function useConnector() {
   async function getTokenAllowance(
     tokenAddress: Address | string,
     accountAddress: Address | string,
-    spenderAddress: Address | string
+    spenderAddress: Address | string,
   ): Promise<bigint> {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
@@ -259,7 +259,7 @@ export default function useConnector() {
     spenderAddress: Address,
     amount: bigint,
     noWait = false,
-    confirmations = 2
+    confirmations = 2,
   ) {
     if (!walletClient) throw new Error("wallet not connected");
     const netInfo = getChain(chainId as number);
@@ -297,7 +297,7 @@ export default function useConnector() {
     to: string,
     value: bigint,
     noWait = false,
-    confirmations = 2
+    confirmations = 2,
   ) {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
@@ -324,7 +324,7 @@ export default function useConnector() {
   async function simulateContract(
     name: ContractNames,
     targetFunc: string,
-    args: unknown[] = []
+    args: unknown[] = [],
   ) {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
@@ -349,7 +349,7 @@ export default function useConnector() {
   async function readContract<T>(
     name: ContractNames,
     targetFunc: string,
-    args: unknown[] = []
+    args: unknown[] = [],
   ): Promise<T> {
     if (!publicClient) throw new Error("no provider found");
     const netInfo = getChain(chainId as number);
@@ -371,7 +371,7 @@ export default function useConnector() {
   async function writeContract(
     name: ContractNames,
     targetFunc: string,
-    args: unknown[] = []
+    args: unknown[] = [],
   ): Promise<Address> {
     if (!walletClient) throw new Error("wallet not connected");
     const netInfo = getChain(chainId as number);
@@ -399,7 +399,7 @@ export default function useConnector() {
     targetFunc: string,
     args: unknown[] = [],
     noWait = false,
-    confirmations = 2
+    confirmations = 2,
   ) {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
@@ -435,7 +435,7 @@ export default function useConnector() {
   async function withdrawWrappedToken(
     amount: bigint,
     noWait = false,
-    confirmations = 2
+    confirmations = 2,
   ) {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");

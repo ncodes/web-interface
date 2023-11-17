@@ -16,7 +16,7 @@ export function ManageLiqEditPaymentTime({
   onValueChanged?: (
     value: number,
     err: string,
-    setErr: Dispatch<SetStateAction<string>>
+    setErr: Dispatch<SetStateAction<string>>,
   ) => void;
 }) {
   const [duration, setDuration] = useState(liquidity?.timeToPay || 900);
