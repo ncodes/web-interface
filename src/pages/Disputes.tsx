@@ -1,6 +1,6 @@
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { DisputeFilter } from "../components/dispute/DisputeFilter.tsx";
@@ -81,11 +81,10 @@ function DisputeTabs({ defaultTab }: { defaultTab?: string }) {
 
 export default function Disputes() {
   const { connected } = useConnectorContext();
-  const loc = useLocation();
 
   const rightSide = connected ? (
     <div className="flex w-full h-full justify-between flex-col pt-3">
-      <DisputeFilter ownerMode={loc.pathname == "/my/liquidity"} />
+      <DisputeFilter />
       <div className="relative">
         <div className="text-gray-200 bottom-0 w-full">
           <Footer />

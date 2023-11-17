@@ -163,7 +163,7 @@ export default function Layout({
                   <div
                     className={cn(
                       "z-0 border border-gray-800 rounded-3xl bg-vampire-black",
-                      bodyContainerClassName
+                      bodyContainerClassName,
                     )}
                   >
                     {body}
@@ -186,7 +186,7 @@ export default function Layout({
                     }}
                     transition={{ ease: "linear", duration: 0.1 }}
                     className={cn(
-                      `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`
+                      `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`,
                     )}
                   >
                     {rightSide}

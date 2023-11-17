@@ -41,7 +41,7 @@ const SheetPortal = ({
   className,
   ...props
 }: SheetPrimitive.DialogPortalProps & { className?: string }) => (
-  <SheetPrimitive.Portal className={cn(className)} {...props} />
+  <SheetPrimitive.Portal  {...props} />
 );
 SheetPortal.displayName = SheetPrimitive.Portal.displayName;
 
@@ -157,5 +157,6 @@ export {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 };
+

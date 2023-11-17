@@ -7,11 +7,14 @@ const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
 
 const DialogPortal = ({
-  className,
   ...props
-}: DialogPrimitive.DialogPortalProps) => (
-  <DialogPrimitive.Portal className={cn(className, "hidden")} {...props} />
-);
+}: DialogPrimitive.DialogPortalProps & {className?:string}) => {
+  const [container, setContainer] = React.useState(null);
+  return <div className={cn(props.className, "hidden")}>
+    <DialogPrimitive.Portal {...props} container={container}  />
+    <div ref={setContainer as any} />
+    </div>
+};
 DialogPortal.displayName = DialogPrimitive.Portal.displayName;
 
 const DialogOverlay = React.forwardRef<
@@ -115,5 +118,6 @@ export {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 };
+

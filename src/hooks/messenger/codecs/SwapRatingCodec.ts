@@ -35,7 +35,6 @@ export default class SwapRatingCodec implements ContentCodec<any> {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   decode(content: { content: any }) {
     return decode(content.content);
   }

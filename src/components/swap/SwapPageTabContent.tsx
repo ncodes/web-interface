@@ -1,8 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ErrorIcon } from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { useMediaQuery } from "usehooks-ts";
 import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { RequestError } from "../../libs/RequestError.ts";
@@ -22,8 +21,6 @@ export function SwapPageTabContent({
 }: {
   onSwapFetched?: (swap: Swap) => void;
 }) {
-  const [openMessengerSheet, setOpenMessengerSheet] = useState(false);
-  const isXl = useMediaQuery("(min-width: 1280px)");
   const { markAsRead } = useOfferService();
   const queryClient = useQueryClient();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);

@@ -1,23 +1,23 @@
-import { Events } from "../../types/enums.ts";
 import { useQuery } from "@tanstack/react-query";
+import moment from "moment";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
+import { Events } from "../../types/enums.ts";
+import { ToolTip } from "../ToolTip.tsx";
+import { UserHoverCard } from "../UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
-import moment from "moment";
-import { ToolTip } from "../ToolTip.tsx";
 import { EventContentLiquidityAdd } from "./event/EventContentLiquidityAdd.tsx";
-import { EventContentLiquidityRemove } from "./event/EventContentLiquidityRemove.tsx";
-import { EventContentLiquiditySwap } from "./event/EventContentLiquiditySwap.tsx";
+import { EventContentLiquidityManagerUpdate } from "./event/EventContentLiquidityManagerUpdate.tsx";
 import { EventContentLiquidityNewOffer } from "./event/EventContentLiquidityNewOffer.tsx";
 import { EventContentLiquidityPause } from "./event/EventContentLiquidityPause.tsx";
-import { EventContentLiquidityManagerUpdate } from "./event/EventContentLiquidityManagerUpdate.tsx";
-import { EventContentLiquidityTargetUpdate } from "./event/EventContentLiquidityTargetUpdate.tsx";
 import { EventContentLiquidityPriceUpdate } from "./event/EventContentLiquidityPriceUpdate.tsx";
+import { EventContentLiquidityRemove } from "./event/EventContentLiquidityRemove.tsx";
+import { EventContentLiquiditySwap } from "./event/EventContentLiquiditySwap.tsx";
 import { EventContentLiquiditySwapLimitUpdate } from "./event/EventContentLiquiditySwapLimitUpdate.tsx";
+import { EventContentLiquidityTargetUpdate } from "./event/EventContentLiquidityTargetUpdate.tsx";
 import { EventContentLiquidityTimeToPayUpdate } from "./event/EventContentLiquidityTimeToPayUpdate.tsx";
-import { UserHoverCard } from "../UserHoverCard.tsx";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 
 export function LiquidityEventItem({
   event,
@@ -74,22 +74,22 @@ export function LiquidityEventItem({
 
               {/* Liquidity: Add */}
               {event.action == Events.LiquidityAdd && (
-                <EventContentLiquidityAdd event={event} market={market} />
+                <EventContentLiquidityAdd event={event} market={market} liquidity={liquidity} />
               )}
 
               {/* Liquidity: Remove */}
               {event.action == Events.LiquidityRemove && (
-                <EventContentLiquidityRemove event={event} market={market} />
+                <EventContentLiquidityRemove event={event} market={market} liquidity={liquidity} />
               )}
 
               {/* Liquidity: Swap */}
               {event.action == Events.LiquiditySwap && (
-                <EventContentLiquiditySwap swap={event.swap} market={market} />
+                <EventContentLiquiditySwap swap={event.swap} market={market} liquidity={liquidity} />
               )}
 
               {/* Liquidity: New Offer */}
               {event.action == Events.LiquidityOffer && (
-                <EventContentLiquidityNewOffer event={event} market={market} />
+                <EventContentLiquidityNewOffer event={event} market={market} liquidity={liquidity} />
               )}
 
               {/* Liquidity: Pause */}
@@ -102,6 +102,7 @@ export function LiquidityEventItem({
                 <EventContentLiquidityManagerUpdate
                   event={event}
                   market={market}
+                  liquidity={liquidity}
                 />
               )}
 
@@ -110,6 +111,7 @@ export function LiquidityEventItem({
                 <EventContentLiquidityTargetUpdate
                   event={event}
                   market={market}
+                  liquidity={liquidity}
                 />
               )}
 
@@ -118,6 +120,7 @@ export function LiquidityEventItem({
                 <EventContentLiquidityPriceUpdate
                   event={event}
                   market={market}
+                  liquidity={liquidity}
                 />
               )}
 
@@ -126,6 +129,7 @@ export function LiquidityEventItem({
                 <EventContentLiquiditySwapLimitUpdate
                   event={event}
                   market={market}
+                  liquidity={liquidity}
                 />
               )}
 
@@ -134,6 +138,7 @@ export function LiquidityEventItem({
                 <EventContentLiquidityTimeToPayUpdate
                   event={event}
                   market={market}
+                  liquidity={liquidity}
                 />
               )}
             </div>

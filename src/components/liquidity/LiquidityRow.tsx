@@ -75,7 +75,7 @@ export function LiquidityRow({
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
-  const { openState, toggleOpenState } = useStore((state) => ({
+  const {  toggleOpenState } = useStore((state) => ({
     openState: state.openState,
     toggleOpenState: state.toggleOpenState,
   }));

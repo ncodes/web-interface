@@ -9,7 +9,6 @@ export default class TokenInfo {
   symbol?: string;
   decimals?: number;
   logoURI?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abi?: any;
 
   constructor(props: Partial<TokenInfo>) {

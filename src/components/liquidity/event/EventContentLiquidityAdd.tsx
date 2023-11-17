@@ -1,6 +1,6 @@
+import { NavLink } from "react-router-dom";
 import { formatToHighDenom } from "../../../libs/helpers.ts";
 import { cn } from "../../../libs/utils.ts";
-import { NavLink } from "react-router-dom";
 
 export function EventContentLiquidityAdd(props: {
   event: Event;
