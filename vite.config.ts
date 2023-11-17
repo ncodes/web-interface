@@ -11,6 +11,11 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       global: { Buffer: Buffer },
     };
   }
+
+  if (command == "build") {
+    globalThis.Buffer = Buffer;
+  }
+
   return {
     define,
     build: {
