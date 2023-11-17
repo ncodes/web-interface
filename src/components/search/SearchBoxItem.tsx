@@ -13,7 +13,7 @@ export function SearchBoxItem({ market }: { market: Market }) {
   return (
     <NavLink
       to={`/market/${market.address}`}
-      onClick={(e) => {
+      onClick={() => {
         addHistory({
           type: "market",
           marketAddress: market.address,

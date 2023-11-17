@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { getChain, getChains } from "../hooks/connectors/networks.ts";
 import { cn } from "../libs/utils.ts";

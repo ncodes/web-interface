@@ -1,8 +1,7 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import { Input } from "../ui/Input.tsx";
-import { Button } from "../ui/Button.tsx";
-import { BalanceCard, BalanceCardLink } from "./BalanceCard.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { Button } from "../ui/Button.tsx";
+import { Input } from "../ui/Input.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
 
 export function FeePouchTab() {
   const [sheetHeight] = useSheetInfo();
@@ -13,9 +12,9 @@ export function FeePouchTab() {
       className={`w-full h-full mt-3 px-0 ${sheetHeight}`}
     >
       <div className="flex flex-col px-5">
-        <BalanceCard symbol="Pouch (P2P)" balance="34.50" hideHelp>
-          <BalanceCardLink title="Withdraw" />
-        </BalanceCard>
+        {/* <BalanceCard symbol="Pouch (P2P)" balance="34.50" hideHelp> */}
+          {/* <BalanceCardLink title="Withdraw" /> */}
+        {/* </BalanceCard> */}
         <div className="flex flex-col gap-2 mt-5 text-left">
           <h1 className="font-normal tracking-wider text-[18px]">Fund Pouch</h1>
           <p className="font-light text-[13px] text-gray-400 tracking-wide">

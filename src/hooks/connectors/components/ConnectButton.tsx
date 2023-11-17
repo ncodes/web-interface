@@ -1,5 +1,5 @@
-import { ConnectedButton } from "./ConnectedButton";
 import { ConnectKitButton } from "connectkit";
+import { ConnectedButton } from "./ConnectedButton";
 
 interface ConnectProps {
   show: () => void;
@@ -31,7 +31,7 @@ export function ConnectButton() {
       {({ isConnected, show }) => {
         return (
           <span className="connect-btn">
-            {!isConnected ? <Connect show={show} /> : <Connected show={show} />}
+            {!isConnected ? <Connect show={show as () => void} /> : <Connected show={show as () => void} />}
           </span>
         );
       }}

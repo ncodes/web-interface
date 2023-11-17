@@ -57,9 +57,9 @@ export default function useMediatorManagerContract() {
 
   /**
    * Parse transaction error into human-friendly message
-   * @param error The error object
+   * @param _error The error object
    */
-  function humanizeErrors(error: { message: string } | unknown): string {
+  function humanizeErrors(_error: { message: string } | unknown): string {
     return "Transaction failed";
   }
 

@@ -130,7 +130,6 @@ export function toBN(val: BigNumberish) {
  * Handle AXIOS error
  * @param error - The error object
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 export function handleAxiosError(error: {
   response: AxiosResponse;
   request: unknown;
