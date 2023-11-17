@@ -9,7 +9,7 @@ import {
 import useMessenger from "../hooks/messenger/useMessenger.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useForceUpdate from "../hooks/useForceUpdate.ts";
-import { isDev, isEqlStr } from "../libs/helpers.ts";
+import { isEqlStr } from "../libs/helpers.ts";
 import { ToolTip } from "./ToolTip.tsx";
 import IconReview from "./icons/IconReview.tsx";
 import { Button } from "./ui/Button.tsx";
@@ -17,19 +17,18 @@ import { Button } from "./ui/Button.tsx";
 export function UserHoverCardReviewSheetTrigger({ user }: { user: User }) {
   const client = useRef<Client | undefined>();
   const forceUpdate = useForceUpdate();
-  const env = isDev() ? "local" : "production";
   const { wallet, address, chain } = useConnectorContext();
   const [loading, setLoading] = useState(false);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
-  const { loadKeys, initClient, readMailbox } = useMessenger();
+  const { loadKeys, initClient, readMailbox, getEnv } = useMessenger();
   const [count, setCount] = useState({ ok: 0, notOk: 0 });
 
   // Auto-initialize client if keys are present.
   useEffect(() => {
     if (!wallet) return;
-    const hasKey = !!loadKeys(env, address);
+    const hasKey = !!loadKeys(getEnv(), address);
     if (!hasKey) return;
-    initClient(env, wallet).then((cl) => {
+    initClient(getEnv(), wallet).then((cl) => {
       client.current = cl;
       forceUpdate.forceUpdate();
     });

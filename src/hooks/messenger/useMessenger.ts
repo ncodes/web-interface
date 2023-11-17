@@ -26,7 +26,13 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import db, { ContentType, Message } from "../../components/messenger/db.ts";
-import { isDev, isEqlStr, sha1, uint8ArrayToB64 } from "../../libs/helpers.ts";
+import {
+  isDev,
+  isEqlStr,
+  isLocal,
+  sha1,
+  uint8ArrayToB64,
+} from "../../libs/helpers.ts";
 import DeliveryReceiptCodec, {
   ContentTypeDeliveryReceipt,
   isDeliveryReceipt,
@@ -60,7 +66,7 @@ import {
  * @returns
  */
 export default function useMessenger() {
-  const version = "1"; 
+  const version = "1";
 
   /**
    * Make a key for storing the keys
@@ -112,7 +118,7 @@ export default function useMessenger() {
    */
   async function initClient(
     env: "local" | "dev" | "production",
-    wallet: WalletClient
+    wallet: WalletClient,
   ) {
     const opts: Partial<ClientOptions> = { env };
     const address = (await wallet.getAddresses())[0];
@@ -162,7 +168,7 @@ export default function useMessenger() {
     network: string,
     orderId: number,
     draftee: string,
-    address: string
+    address: string,
   ) {
     return `mediation_msgs_${version}:${network}:${orderId}:${address.toLowerCase()}:${draftee.toLowerCase()}`;
   }
@@ -178,7 +184,7 @@ export default function useMessenger() {
     network: string,
     orderId: number,
     counterparty: string,
-    mediator: string
+    mediator: string,
   ) {
     return `mediation_msgs_${version}:${network}:${orderId}:${counterparty.toLowerCase()}:${mediator.toLowerCase()}`;
   }
@@ -193,7 +199,7 @@ export default function useMessenger() {
   function createConversation(
     client: Client,
     peerAddress: string,
-    convoId: string
+    convoId: string,
   ): Promise<Conversation> {
     return client.conversations.newConversation(peerAddress, {
       conversationId: convoId,
@@ -210,7 +216,7 @@ export default function useMessenger() {
    */
   async function createOrGetConvoWithMediator(
     client: Client,
-    dispute: Dispute
+    dispute: Dispute,
   ) {
     const conversations: Conversation[] = [];
     const seen: { [key: string]: boolean } = {};
@@ -225,10 +231,10 @@ export default function useMessenger() {
             dispute.network,
             dispute.orderId,
             draftee.owner,
-            client.address
+            client.address,
           ),
           metadata: {},
-        })
+        }),
       );
     }
     return conversations;
@@ -243,7 +249,7 @@ export default function useMessenger() {
    */
   async function createConversationsWithCounterparts(
     client: Client,
-    swap: Swap
+    swap: Swap,
   ) {
     const conversations: Conversation[] = [];
     const seen: { [key: string]: boolean } = {};
@@ -258,10 +264,10 @@ export default function useMessenger() {
             swap.network,
             swap.orderId,
             addr,
-            client.address
+            client.address,
           ),
           metadata: {},
-        })
+        }),
       );
     }
     return conversations;
@@ -278,7 +284,7 @@ export default function useMessenger() {
     conversation: Conversation,
     msg: unknown,
     timestamp?: Date,
-    contentType?: ContentTypeId
+    contentType?: ContentTypeId,
   ) {
     return conversation.prepareMessage(msg, {
       contentType,
@@ -296,7 +302,7 @@ export default function useMessenger() {
   async function loadMessagesFromConvoToDB(
     client: Client,
     conversation: Conversation,
-    ignoreOwnMessages = false
+    ignoreOwnMessages = false,
   ) {
     if (!conversation) return;
 
@@ -333,7 +339,7 @@ export default function useMessenger() {
       sentAt?: number;
       sent?: Date;
     },
-    convoId?: string
+    convoId?: string,
   ) {
     const parts: unknown[] = [];
 
@@ -365,7 +371,7 @@ export default function useMessenger() {
     client: Client,
     peerAddress: string,
     msg: DecodedMessage,
-    ignoreOwnMessages = false
+    ignoreOwnMessages = false,
   ) {
     msg.recipientAddress = peerAddress;
 
@@ -384,7 +390,7 @@ export default function useMessenger() {
           if (q.receivers?.includes(msg.senderAddress.toLowerCase())) return;
           q.status = "delivered";
           q.receivers = (q.readers || []).concat(
-            msg.senderAddress.toLowerCase()
+            msg.senderAddress.toLowerCase(),
           );
         });
       return;
@@ -416,7 +422,7 @@ export default function useMessenger() {
 
       const attachment = await RemoteAttachmentCodec.load<Attachment>(
         content,
-        client
+        client,
       );
 
       const { mimeType, data, filename } = attachment;
@@ -533,7 +539,7 @@ export default function useMessenger() {
     clientAddress: string,
     peerAddress: string,
     conversations: Conversation[],
-    message: DecodedMessage
+    message: DecodedMessage,
   ) {
     for (const conversation of conversations) {
       const msgHash = getContentHash(
@@ -542,7 +548,7 @@ export default function useMessenger() {
           content: message.content,
           sentAt: moment(message.sent).unix(),
         },
-        getConvoId(conversation)
+        getConvoId(conversation),
       );
 
       // If message is already copied, skip
@@ -583,7 +589,7 @@ export default function useMessenger() {
         } as MessageRelayPayload,
         {
           contentType: ContentTypeMessageRelay,
-        }
+        },
       );
 
       await db.copiedMessages.add({ msgHash, createdAt: new Date() });
@@ -600,7 +606,7 @@ export default function useMessenger() {
   async function relayConvoToConvos(
     clientAddress: string,
     convo: Conversation,
-    conversations: Conversation[]
+    conversations: Conversation[],
   ) {
     const messages = await convo.messages({});
     for (const msg of messages) {
@@ -608,7 +614,7 @@ export default function useMessenger() {
         clientAddress,
         convo.peerAddress,
         conversations,
-        msg
+        msg,
       );
     }
   }
@@ -622,19 +628,19 @@ export default function useMessenger() {
   async function sendSwapStatus(
     id: string,
     status: string,
-    conversation: Conversation
+    conversation: Conversation,
   ) {
     const messages = await conversation.messages({});
 
     // Find swap-status message
     const existing = messages.find(
-      (msg) => isSwapStatusType(msg.contentType) && msg.content.id == id
+      (msg) => isSwapStatusType(msg.contentType) && msg.content.id == id,
     );
     if (existing) return;
 
     await conversation.send(
       { id, status },
-      { contentType: ContentTypeSwapStatus }
+      { contentType: ContentTypeSwapStatus },
     );
   }
 
@@ -647,7 +653,7 @@ export default function useMessenger() {
   async function sendDeliveryReceipt(
     clientAddress: string,
     msg: { id: string; senderAddress: string; contentType: ContentType },
-    convos: Conversation[]
+    convos: Conversation[],
   ) {
     // If message is a delivery or receive receipt, skip
     if (isDeliveryReceipt(msg.contentType) || isReadReceipt(msg.contentType)) {
@@ -668,7 +674,7 @@ export default function useMessenger() {
 
       void convo.send(
         { msgId: msg.id, timestamp: moment().unix() },
-        { contentType: ContentTypeDeliveryReceipt }
+        { contentType: ContentTypeDeliveryReceipt },
       );
     }
   }
@@ -682,7 +688,7 @@ export default function useMessenger() {
   async function sendReadReceipt(
     clientAddress: string,
     msg: { id: string; senderAddress: string; contentType: ContentType },
-    convos: Conversation[]
+    convos: Conversation[],
   ) {
     // If message is a read or delivery receipt, skip
     if (isReadReceipt(msg.contentType) || isDeliveryReceipt(msg.contentType)) {
@@ -705,7 +711,7 @@ export default function useMessenger() {
 
       void convo.send(
         { msgId: msg.id, timestamp: moment().unix() },
-        { contentType: ContentTypeReadReceipt }
+        { contentType: ContentTypeReadReceipt },
       );
     }
   }
@@ -714,7 +720,7 @@ export default function useMessenger() {
    * Send read receipt for a single message
    * @param client The XMTP client
    * @param msg The message to send the read receipt for
-   * @returns 
+   * @returns
    */
   async function sendReadReceiptForMessage(client: Client, msg: Message) {
     const convo = (await client.conversations.list()).find((c) => {
@@ -725,7 +731,7 @@ export default function useMessenger() {
     return sendReadReceipt(
       client.address,
       { id: msgId, senderAddress: from, contentType: contentType },
-      [convo]
+      [convo],
     );
   }
 
@@ -744,7 +750,7 @@ export default function useMessenger() {
     msg: string | { [key: string]: never } | RemoteAttachment,
     sentAt?: Date,
     ignoreDupCheck = false,
-    metadata?: { [key: string]: string }
+    metadata?: { [key: string]: string },
   ) {
     if (!conversation) return;
 
@@ -771,7 +777,7 @@ export default function useMessenger() {
       convoMsg = createPreparedMessage(
         conversation,
         msg as string,
-        now.toDate()
+        now.toDate(),
       );
       dbMsg = {
         ...dbMsg,
@@ -794,7 +800,7 @@ export default function useMessenger() {
         conversation,
         msg,
         now.toDate(),
-        ContentTypeRemoteAttachment
+        ContentTypeRemoteAttachment,
       );
     }
 
@@ -889,7 +895,7 @@ export default function useMessenger() {
       {
         conversationId: `mailbox:${version}`,
         metadata: {},
-      }
+      },
     );
     return { convo, client };
   }
@@ -910,7 +916,7 @@ export default function useMessenger() {
       reverse?: boolean;
       limit?: number;
       cb?: (msg: DecodedMessage) => Promise<boolean>;
-    }
+    },
   ): Promise<void> {
     address = getAddress(address);
     const { type, reverse, limit, cb } = options || {};
@@ -920,6 +926,14 @@ export default function useMessenger() {
       if (type && !msg.contentType.sameAs(type)) continue;
       if (await cb?.(msg)) break;
     }
+  }
+
+  /**
+   * Get the client environment
+   * @returns
+   */
+  function getEnv() {
+    return isDev() ? (isLocal() ? "local" : "dev") : "production";
   }
 
   return {
@@ -945,5 +959,6 @@ export default function useMessenger() {
     sendSwapStatus,
     getMailbox,
     readMailbox,
+    getEnv,
   };
 }

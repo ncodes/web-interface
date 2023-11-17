@@ -11,7 +11,7 @@ import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { getSwapCounterpart } from "../../libs/api_utils.ts";
-import { isDev, shortenAddress } from "../../libs/helpers.ts";
+import { shortenAddress } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { IconStarSmile } from "../icons/IconStarSmile.tsx";
@@ -33,13 +33,13 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
   const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isOkay, setIsOkay] = useState(false);
-  const env = isDev() ? "local" : "production";
   const client = useRef<Client | undefined>();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [initializing, setInitializing] = useState(false);
   const { wallet, address, chain, getChainInfo } = useConnectorContext();
-  const { loadKeys, initClient, getMailbox, readMailbox } = useMessenger();
+  const { loadKeys, initClient, getMailbox, readMailbox, getEnv } =
+    useMessenger();
   const forceUpdate = useForceUpdate();
   const { notifyError, notifySuccess } = useToast();
   const [canRender, setCanRender] = useState(false);
@@ -48,12 +48,12 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
   // Auto-initialize client if keys are present.
   useEffect(() => {
     if (!wallet) return;
-    const hasKey = !!loadKeys(env, address);
+    const hasKey = !!loadKeys(getEnv(), address);
     if (!hasKey) {
       setLoading(false);
       return;
     }
-    initClient(env, wallet).then((cl) => {
+    initClient(getEnv(), wallet).then((cl) => {
       client.current = cl;
       forceUpdate.forceUpdate();
     });
@@ -93,7 +93,7 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
   async function initialize() {
     try {
       setInitializing(true);
-      client.current = await initClient(env, wallet);
+      client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
       console.error("Failed to initialize wallet", error);

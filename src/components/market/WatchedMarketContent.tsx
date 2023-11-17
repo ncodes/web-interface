@@ -13,7 +13,7 @@ import { useMarketService } from "../../hooks/services/backend/useMarketService.
 import useStore from "../../hooks/store/useStore.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import { RequestError } from "../../libs/RequestError.ts";
-import { isDev, isEqlStr } from "../../libs/helpers.ts";
+import { isEqlStr } from "../../libs/helpers.ts";
 import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -24,8 +24,7 @@ import { MarketRow } from "./MarketRow.tsx";
 
 export function WatchedMarketContent() {
   const { wallet, address, chain, getChainInfo } = useConnectorContext();
-  const env = isDev() ? "local" : "production";
-  const { loadKeys, initClient, readMailbox } = useMessenger();
+  const { loadKeys, initClient, readMailbox, getEnv } = useMessenger();
   const [loading, setLoading] = useState(true);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
@@ -56,12 +55,12 @@ export function WatchedMarketContent() {
   // Auto-initialize client if keys are present.
   useEffect(() => {
     if (!wallet) return;
-    const hasKey = !!loadKeys(env, address);
+    const hasKey = !!loadKeys(getEnv(), address);
     if (!hasKey) {
       setLoading(false);
       return;
     }
-    initClient(env, wallet).then((cl) => {
+    initClient(getEnv(), wallet).then((cl) => {
       client.current = cl;
       forceUpdate.forceUpdate();
     });
@@ -125,7 +124,7 @@ export function WatchedMarketContent() {
   async function initialize() {
     try {
       setInitializing(true);
-      client.current = await initClient(env, wallet);
+      client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
       console.error("Failed to initialize wallet", error);

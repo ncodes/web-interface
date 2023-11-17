@@ -9,7 +9,6 @@ import FollowCodec, {
 import useMessenger from "../../hooks/messenger/useMessenger";
 import useForceUpdate from "../../hooks/useForceUpdate";
 import { useToast } from "../../hooks/useToast";
-import { isDev } from "../../libs/helpers";
 import { cn } from "../../libs/utils";
 import IconHeart from "../icons/IconHeart";
 import IconSpinner from "../icons/IconSpinner";
@@ -26,9 +25,9 @@ export function FollowMarket({
   onFollowUpdate?: () => void;
 }) {
   const { wallet, address, chain, getChainInfo } = useConnectorContext();
-  const env = isDev() ? "local" : "production";
   const [open, setOpen] = useState(false);
-  const { loadKeys, initClient, getMailbox, readMailbox } = useMessenger();
+  const { loadKeys, initClient, getMailbox, readMailbox, getEnv } =
+    useMessenger();
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(false);
   const client = useRef<Client | undefined>();
@@ -39,12 +38,12 @@ export function FollowMarket({
   // Auto-initialize client if keys are present.
   useEffect(() => {
     if (!wallet) return;
-    const hasKey = !!loadKeys(env, address);
+    const hasKey = !!loadKeys(getEnv(), address);
     if (!hasKey) {
       setLoading(false);
       return;
     }
-    initClient(env, wallet).then((cl) => {
+    initClient(getEnv(), wallet).then((cl) => {
       client.current = cl;
       forceUpdate.forceUpdate();
     });
@@ -96,7 +95,7 @@ export function FollowMarket({
 
   // Ensure that the client is initialized for messaging.
   async function ensureInitialized() {
-    const hasKey = !!loadKeys(env, address);
+    const hasKey = !!loadKeys(getEnv(), address);
     if (!hasKey) return false;
     if (hasKey && !client.current) {
       await initialize();
@@ -109,7 +108,7 @@ export function FollowMarket({
   async function initialize() {
     try {
       setInitializing(true);
-      client.current = await initClient(env, wallet);
+      client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
       setOpen(false);
     } catch (error) {
@@ -206,7 +205,7 @@ export function FollowMarket({
               "flex h-full cursor-pointer border-l border-gray-800 items-center px-2 pb-0 hover:text-chinese-green text-gray-400 transition-all duration-300 hover:scale-110",
               {
                 "text-chinese-green": open,
-              }
+              },
             )}
             onClick={(e) => {
               e.preventDefault();

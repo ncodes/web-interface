@@ -14,7 +14,7 @@ import useStore from "../hooks/store/useStore.ts";
 import useForceUpdate from "../hooks/useForceUpdate.ts";
 import { useSheetInfo } from "../hooks/useSheetInfo.ts";
 import { isSwapCounterparty } from "../libs/api_utils.ts";
-import { isDev, isEqlStr, shortenAddress } from "../libs/helpers.ts";
+import { isEqlStr, shortenAddress } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
 import { ReviewViewerSheetItem } from "./ReviewViewerSheetItem.tsx";
 import ScrollOverflowIndicator from "./ScrollOverflowIndicator.tsx";
@@ -30,13 +30,12 @@ export function ReviewViewerSheet() {
   const [, sheetSide, styles] = useSheetInfo();
   const client = useRef<Client | undefined>();
   const [loading, setLoading] = useState(false);
-  const env = isDev() ? "local" : "production";
   const { getOrder } = useCoreContract();
   const forceUpdate = useForceUpdate();
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const { wallet, address, chain } = useConnectorContext();
-  const { loadKeys, initClient, readMailbox } = useMessenger();
+  const { loadKeys, initClient, readMailbox, getEnv } = useMessenger();
   const openStateContext = useStore((state) => state.openStateContext);
   const targetAddress = openStateContext.reviewSheet as string;
   const [initializing, setInitializing] = useState(false);
@@ -46,12 +45,12 @@ export function ReviewViewerSheet() {
   // Auto-initialize client if keys are present.
   useEffect(() => {
     if (!wallet) return;
-    const hasKey = !!loadKeys(env, address);
+    const hasKey = !!loadKeys(getEnv(), address);
     if (!hasKey) {
       setLoading(false);
       return;
     }
-    initClient(env, wallet).then((cl) => {
+    initClient(getEnv(), wallet).then((cl) => {
       client.current = cl;
       forceUpdate.forceUpdate();
     });
@@ -104,7 +103,7 @@ export function ReviewViewerSheet() {
   async function initialize() {
     try {
       setInitializing(true);
-      client.current = await initClient(env, wallet);
+      client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
       console.error("Failed to initialize wallet", error);
@@ -125,7 +124,7 @@ export function ReviewViewerSheet() {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 h-[90vh] md:h-[100vh]"
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 h-[90vh] md:h-[100vh]",
         )}
         side={sheetSide}
       >

@@ -2,7 +2,6 @@ import { Client } from "@xmtp/xmtp-js";
 import { useEffect, useRef, useState } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMessenger from "../../hooks/messenger/useMessenger.ts";
-import { isDev } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 
@@ -11,8 +10,7 @@ export function IdentityInitializer({
 }: {
   onInitialized: (client: Client) => void;
 }) {
-  const {  loadKeys, initClient } = useMessenger();
-  const env = isDev() ? "local" : "production";
+  const { loadKeys, initClient, getEnv } = useMessenger();
   const { wallet, address } = useConnectorContext();
   const [loading, setLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
@@ -20,7 +18,7 @@ export function IdentityInitializer({
 
   useEffect(() => {
     if (!address) return;
-    const key = loadKeys(env, address);
+    const key = loadKeys(getEnv(), address);
     if (key) {
       if (!client.current) {
         void initializeWallet();
@@ -36,7 +34,7 @@ export function IdentityInitializer({
       if (!wallet || client.current) return;
       setLoading(true);
 
-      client.current = await initClient(env, wallet);
+      client.current = await initClient(getEnv(), wallet);
 
       setLoading(false);
       setInitialized(true);

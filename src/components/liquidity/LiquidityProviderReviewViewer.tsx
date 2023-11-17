@@ -12,7 +12,7 @@ import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import { isSwapCounterparty } from "../../libs/api_utils.ts";
-import { cn, isDev, isEqlStr } from "../../libs/helpers.ts";
+import { cn, isEqlStr } from "../../libs/helpers.ts";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -30,23 +30,22 @@ export function LiquidityProviderReviewViewer({
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const client = useRef<Client | undefined>();
   const [loading, setLoading] = useState(false);
-  const env = isDev() ? "local" : "production";
   const { getOrder } = useCoreContract();
   const forceUpdate = useForceUpdate();
   const { wallet, address, chain } = useConnectorContext();
-  const { loadKeys, initClient, readMailbox } = useMessenger();
+  const { loadKeys, initClient, readMailbox, getEnv } = useMessenger();
   const [initializing, setInitializing] = useState(false);
   const [reviews, setReviews] = useState<SwapRatingPayload[]>([]);
 
   // Auto-initialize client if keys are present.
   useEffect(() => {
     if (!wallet) return;
-    const hasKey = !!loadKeys(env, address);
+    const hasKey = !!loadKeys(getEnv(), address);
     if (!hasKey) {
       setLoading(false);
       return;
     }
-    initClient(env, wallet).then((cl) => {
+    initClient(getEnv(), wallet).then((cl) => {
       client.current = cl;
       forceUpdate.forceUpdate();
     });
@@ -94,7 +93,7 @@ export function LiquidityProviderReviewViewer({
   async function initialize() {
     try {
       setInitializing(true);
-      client.current = await initClient(env, wallet);
+      client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
       console.error("Failed to initialize wallet", error);
@@ -133,7 +132,7 @@ export function LiquidityProviderReviewViewer({
           {
             "flex justify-center items-center":
               client.current && !loading && reviews.length == 0,
-          }
+          },
         )}
       >
         {client.current && !loading && reviews.length > 0 && (

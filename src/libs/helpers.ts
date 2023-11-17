@@ -17,6 +17,10 @@ export function isDev() {
   return import.meta.env.VITE_ENV === "development";
 }
 
+export function isLocal() {
+  return import.meta.env.VITE_LOCAL === "true";
+}
+
 // pow10 returns 10^decimals
 export function pow10(decimals: number) {
   return BigNumber.from(10).pow(decimals);
