@@ -1,4 +1,4 @@
-import * as approx from "approximate-number";
+import approx from "approximate-number";
 import { AxiosResponse } from "axios";
 import { clsx, type ClassValue } from "clsx";
 import Decimal from "decimal.js";
@@ -32,7 +32,7 @@ export function powOf(n: BigNumberish, power: number) {
   return toBN(
     toDec(n.toString())
       .mul(toDec(pow10(power).toString()))
-      .toFixed(0)
+      .toFixed(0),
   );
 }
 
@@ -51,7 +51,7 @@ export function toHD(
   amount: BigNumberish | Decimal,
   decimals = 18,
   places = 8,
-  stripZeros = true
+  stripZeros = true,
 ) {
   return toHDD(amount, decimals, places, stripZeros).toFixed();
 }
@@ -67,7 +67,7 @@ export function toHDD(
   amount: BigNumberish | Decimal,
   decimals = 18,
   places = 8,
-  stripZeros = true
+  stripZeros = true,
 ) {
   let val: Decimal = toDec(amount).div(toDec(10).pow(decimals));
   if (places > 0) val = val.toDecimalPlaces(places);
@@ -137,7 +137,7 @@ export function handleAxiosError(error: {
   if (error.response) {
     return new RequestError(
       error.response.status,
-      error.response.data.error.message
+      error.response.data.error.message,
     );
   } else if (error.request) {
     return new RequestError(500, "request error");
@@ -156,7 +156,7 @@ export function handleAxiosError(error: {
 export function formatToHighDenom(
   v: BigNumberish,
   decimals = 18,
-  format = undefined
+  format = undefined,
 ) {
   return formatToMoney(formatUnits(v, decimals), format);
 }
@@ -170,7 +170,7 @@ export function formatToHighDenom(
 export function formatToMoney(
   v: string | number,
   format = undefined,
-  places = 6
+  places = 6,
 ) {
   if (!v) return;
   if (toDec(v).lt(1)) return trimZeros(toDec(v).toFixed(places));
@@ -189,7 +189,7 @@ export function shortenAddress(address: string, lLen = 6, rLen = 4) {
   if (!address) return address;
   return `${address.substring(0, lLen)}...${address.substring(
     address.length,
-    address.length - rLen
+    address.length - rLen,
   )}`;
 }
 
@@ -220,11 +220,11 @@ export function approxNumber(num: number | string, precision?: number) {
 export function toHighDenomAndApprox(
   v: BigNumberish,
   decimals = 18,
-  precision?: number
+  precision?: number,
 ) {
   return approxNumber(
     toDec(v.toString()).div(toDec(10).pow(decimals)).toNumber(),
-    precision
+    precision,
   );
 }
 
@@ -243,7 +243,7 @@ export function isTrue(val: string | boolean) {
  */
 export function rmUndefinedAndNull(
   obj: { [key: string]: any },
-  includeEmptyString = false
+  includeEmptyString = false,
 ) {
   Object.keys(obj).forEach((key) => {
     if (
@@ -362,7 +362,7 @@ export function isEmpty(amt: string | number | undefined) {
  * @param tokenType
  */
 export function tokenTypeToAssetType(
-  tokenType: "ERC20" | "SYNTHETIC" | "ERC721" | "ERC1155"
+  tokenType: "ERC20" | "SYNTHETIC" | "ERC721" | "ERC1155",
 ) {
   if (tokenType == "ERC20") return AssetType.ERC20;
   if (tokenType == "SYNTHETIC") return AssetType.SYNTH;
@@ -383,7 +383,7 @@ export function delay(ms: number) {
 export function splitAndCleanBadges(badges: string) {
   return _.map(
     _.filter(badges.split(","), (v) => v != ""),
-    (v) => v.trim().replaceAll(" ", "")
+    (v) => v.trim().replaceAll(" ", ""),
   );
 }
 
@@ -409,12 +409,12 @@ export function deriveLiquidityAddress(liquidity: Liquidity) {
     ethers.utils.keccak256(
       ethers.utils.defaultAbiCoder.encode(
         ["address", "uint256"],
-        [liquidity.provider, liquidity.lid]
-      )
+        [liquidity.provider, liquidity.lid],
+      ),
     ),
     ethers.utils.keccak256(
-      ethers.utils.toUtf8Bytes("Liquidity(address provider, uint256 lid)")
-    )
+      ethers.utils.toUtf8Bytes("Liquidity(address provider, uint256 lid)"),
+    ),
   );
 }
 

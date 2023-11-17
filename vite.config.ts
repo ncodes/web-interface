@@ -3,7 +3,7 @@ import { Buffer } from "buffer";
 import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
+export default defineConfig(({ command }) => {
   let define = {};
   if (command != "build") {
     define = {
