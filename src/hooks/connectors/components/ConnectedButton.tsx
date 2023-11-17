@@ -8,6 +8,7 @@ import {
   shortenAddress2,
 } from "../../../libs/helpers.ts";
 import useStore from "../../store/useStore.ts";
+import useWindowFocus from "../../useWindowFocus.ts";
 
 // Component for rendering amount and symbol
 function Amount(props: { balance: string; symbol: string }) {
@@ -27,9 +28,10 @@ interface ConnectedProps {
 
 export const ConnectedButton = (props: ConnectedProps) => {
   const { address } = useAccount();
+  const windowFocus = useWindowFocus();
   const balance = useBalance({
     address,
-    watch: true,
+    enabled: !!address && windowFocus,
   });
   const toggleOpenState = useStore((state) => state.toggleOpenState);
 

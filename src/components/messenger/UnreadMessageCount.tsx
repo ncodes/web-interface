@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
 import { useNotificationService } from "../../hooks/services/backend/useNotificationService";
+import useStore from "../../hooks/store/useStore";
 import useWindowFocus from "../../hooks/useWindowFocus";
 
 export function UnreadMessageCount({
@@ -16,6 +17,7 @@ export function UnreadMessageCount({
   type?: string;
 }) {
   const { address, getChainInfo } = useConnectorContext();
+  const user = useStore((state) => state.user);
   const { countNotifications, markNotificationsAsRead } =
     useNotificationService();
   const isWindowFocus = useWindowFocus();
@@ -32,7 +34,7 @@ export function UnreadMessageCount({
       },
     ],
     queryFn: countNotifications,
-    enabled: !!address,
+    enabled: !!address && !!user,
     refetchInterval: 10000,
   });
 

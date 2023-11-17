@@ -60,7 +60,7 @@ export function useOfferService() {
         url: `${getChainInfo().apiUrl}/v1/offers`,
         params: {
           ...offerFilter,
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           offset,
           limit,
           creatorOrProvider:
@@ -95,7 +95,7 @@ export function useOfferService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/offers/${offerId}/events`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           offset,
           limit,
         },
@@ -126,15 +126,11 @@ export function useOfferService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/offers/${offerId}`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
         },
         headers,
       });
 
-      // TODO: remove mock
-      // resp.data.data[0].creator = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-      // resp.data.data[0].accepted = true;
-      // resp.data.data[0].deadline = moment().add(20, "s").toISOString();
 
       return Promise.resolve(resp.data.data);
     } catch (e) {
@@ -159,7 +155,7 @@ export function useOfferService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/offers/count-unread`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           marketAddress,
           provider,
           lid,
@@ -190,7 +186,7 @@ export function useOfferService() {
         method: "put",
         url: `${getChainInfo().apiUrl}/v1/offers/mark-read`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           marketAddress,
           provider,
           lid,

@@ -1,20 +1,13 @@
-import { WagmiConfig, createConfig, Chain } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import useConnector from "../useConnector.tsx";
+import { WagmiConfig, createConfig } from "wagmi";
 import { ConnectorContext } from "../context.tsx";
-import {
-  arbitrum,
-  bsc,
-  goerli,
-  hardhat,
-  mainnet,
-  optimism,
-  polygon,
-} from "viem/chains";
+import { chains } from "../networks.ts";
+import useConnector from "../useConnector.tsx";
 
 interface ConnectorProviderProps {
   appName: string;
   infuraId: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
 }
 
@@ -32,23 +25,13 @@ export default function ConnectorProvider({
   appName,
   infuraId,
 }: ConnectorProviderProps) {
-  const chains: Chain[] = [
-    mainnet,
-    polygon,
-    bsc,
-    optimism,
-    arbitrum,
-    goerli,
-    hardhat,
-  ];
-
   const config = createConfig(
     getDefaultConfig({
       walletConnectProjectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
       appName,
       infuraId,
-      chains,
-      appDescription: "Joint is a decentralized P2P exchange for tokens",
+      chains: chains,
+      appDescription: "Joint is a decentralized P2P exchange protocol",
       appUrl: import.meta.env.VITE_APP_URL,
       appIcon: import.meta.env.VITE_APP_ICON,
     })

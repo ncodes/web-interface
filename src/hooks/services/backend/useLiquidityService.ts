@@ -48,7 +48,7 @@ export function useLiquidityService() {
 
       const payload = {
         ...liquidityFilter,
-        net: "ethereum" || network, // TODO: remove mock
+        net: network,
         offset,
         limit,
       };
@@ -89,7 +89,7 @@ export function useLiquidityService() {
           getChainInfo().apiUrl
         }/v1/liquidities/${market}/${provider}/${lid}`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
         },
         headers,
       });
@@ -116,7 +116,7 @@ export function useLiquidityService() {
           getChainInfo().apiUrl
         }/v1/liquidities/${market}/${provider}/${lid}/events`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
         },
         headers,
       });

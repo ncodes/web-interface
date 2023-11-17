@@ -49,7 +49,7 @@ export function useMarketService() {
         url: `${getChainInfo().apiUrl}/v1/markets`,
         params: {
           ...marketFilter,
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           offset,
           limit,
           creator:
@@ -80,7 +80,7 @@ export function useMarketService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/markets/${market}`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock,
+          net: network,
         },
         headers,
       });
@@ -105,7 +105,7 @@ export function useMarketService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/markets/top`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           limit,
         },
         headers,

@@ -75,12 +75,15 @@ export function NativeTokenWrapper({
   async function doAction() {
     try {
       const netInfo = getChainInfo();
-      if (!netInfo || !netInfo.tokenInfo?.address) return;
+      if (!netInfo || !netInfo.wrappedTokenInfo?.address) return;
 
       setLoading(true);
 
       if (wrap) {
-        await sendTransaction(netInfo.tokenInfo?.address, BigInt(toLD(amount)));
+        await sendTransaction(
+          netInfo.wrappedTokenInfo?.address,
+          BigInt(toLD(amount))
+        );
       } else {
         await withdrawWrappedToken(BigInt(toLD(amount)));
       }

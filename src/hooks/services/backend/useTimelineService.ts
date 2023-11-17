@@ -36,7 +36,7 @@ export function useTimelineService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/timelines`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           markets,
           wallets,
           liquidities,

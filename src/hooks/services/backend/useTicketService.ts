@@ -42,7 +42,7 @@ export function useTicketService() {
         url: `${getChainInfo().apiUrl}/v1/tickets`,
         params: {
           ...ticketFilter,
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           offset,
           limit,
           owner:
@@ -86,7 +86,7 @@ export function useTicketService() {
         url: `${getChainInfo().apiUrl}/v1/tickets/stats`,
         headers,
         params: {
-          net: "ethereum" || net, // TODO: remove mock
+          net,
           owner,
         },
       });

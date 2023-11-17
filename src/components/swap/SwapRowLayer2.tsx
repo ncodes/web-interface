@@ -1,4 +1,7 @@
-import { cn } from "../../libs/utils.ts";
+import { TimerIcon } from "@radix-ui/react-icons";
+import { CheckCircle, XCircle } from "lucide-react";
+import moment from "moment/moment";
+import { SwapPageState } from "../../hooks/store/useStore.ts";
 import {
   getPayer,
   getSwapDisputeOutcome,
@@ -11,17 +14,14 @@ import {
   isSwapParticipant,
 } from "../../libs/api_utils.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
-import IconSpinner from "../icons/IconSpinner.tsx";
-import { ToolTip } from "../ToolTip.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { cn } from "../../libs/utils.ts";
 import { CountDown } from "../Countdown.tsx";
-import { CheckCircle, XCircle } from "lucide-react";
-import IconConflict from "../icons/IconConflict.tsx";
-import moment from "moment/moment";
-import { TimerIcon } from "@radix-ui/react-icons";
-import { SwapRowLinks } from "./SwapRowLinks.tsx";
-import { SwapPageState } from "../../hooks/store/useStore.ts";
 import { IDBadge } from "../IDBadge.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import IconConflict from "../icons/IconConflict.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
+import { SwapRowLinks } from "./SwapRowLinks.tsx";
 
 export default function SwapRowLayer2({
   swap,

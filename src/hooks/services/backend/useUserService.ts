@@ -68,7 +68,7 @@ export function useUserService() {
         method: "post",
         data: {
           ...params,
-          net: "ethereum" || params.net, // TODO: remove mock
+          net:  params.net, 
         },
         headers,
       });

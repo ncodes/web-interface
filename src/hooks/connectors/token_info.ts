@@ -1,3 +1,5 @@
+import { isEqlStr } from "../../libs/helpers";
+
 /**
  * TokenInfo describes an ERC20-like token EVM chain
  */
@@ -7,6 +9,7 @@ export default class TokenInfo {
   symbol?: string;
   decimals?: number;
   logoURI?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abi?: any;
 
   constructor(props: Partial<TokenInfo>) {
@@ -18,6 +21,6 @@ export default class TokenInfo {
    * @param o - The other object
    */
   isEqual(o: TokenInfo) {
-    return this.address?.toLowerCase() === o.address?.toLowerCase();
+    return isEqlStr(this.address, o.address);
   }
 }

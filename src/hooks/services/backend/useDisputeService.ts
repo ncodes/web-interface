@@ -36,7 +36,7 @@ export function useDisputeService() {
         url: `${getChainInfo().apiUrl}/v1/disputes`,
         params: {
           ...disputeFilter,
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           offset,
           limit,
           participant:

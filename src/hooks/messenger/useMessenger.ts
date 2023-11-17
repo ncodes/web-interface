@@ -60,7 +60,7 @@ import {
  * @returns
  */
 export default function useMessenger() {
-  const version = "179"; // TODO: use 1 in production
+  const version = "1"; 
 
   /**
    * Make a key for storing the keys

@@ -47,8 +47,11 @@ export function GeneralTab(props: { address: string }) {
 
   async function fetchWrappedBalance() {
     const netInfo = getChainInfo();
-    if (!netInfo || !netInfo.tokenInfo.address) return;
-    const bal = await getTokenBalance(netInfo.tokenInfo.address, address);
+    if (!netInfo || !netInfo.wrappedTokenInfo.address) return;
+    const bal = await getTokenBalance(
+      netInfo.wrappedTokenInfo.address,
+      address
+    );
     setWrappedBalance(bal);
   }
 
@@ -76,7 +79,9 @@ export function GeneralTab(props: { address: string }) {
                     balance={formatToHighDenom(nativeBalance)}
                   >
                     <NativeTokenWrapper
-                      title={`Wrap to ${getChainInfo().tokenInfo?.symbol}`}
+                      title={`Wrap to ${
+                        getChainInfo().wrappedTokenInfo?.symbol
+                      }`}
                       curBalance={nativeBalance}
                       onDone={() => {
                         fetchNativeBalance();

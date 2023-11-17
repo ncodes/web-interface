@@ -119,15 +119,17 @@ export function LanguageSelectorMobile() {
   const [open, setOpen] = useState(false);
   return (
     <LanguageSelectorMenu onOpenChange={setOpen}>
-      <NavOrdinaryLink
-        href="#"
-        label="Language"
-        svg={<IconGlobalLine />}
-        className={cn(
-          "hidden outline-0 ring-0 relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
-          { "text-white ml-[2px]": open }
-        )}
-      />
+      <span>
+        <NavOrdinaryLink
+          href="#"
+          label="Language"
+          svg={<IconGlobalLine />}
+          className={cn(
+            "hidden outline-0 ring-0 relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
+            { "text-white ml-[2px]": open }
+          )}
+        />
+      </span>
     </LanguageSelectorMenu>
   );
 }

@@ -5,7 +5,7 @@ import { useMiscService } from "./services/backend/useMiscService.ts";
 import { useConnectorContext } from "./connectors/useConnectorContext.tsx";
 
 export function useBaseQuoteRate(
-  { base, baseType, quote, quoteType }: Market,
+  { base, baseType, baseAddress, quoteAddress, quote, quoteType }: Market,
   baseEnabled: boolean,
   quoteEnabled: boolean
 ) {
@@ -17,7 +17,7 @@ export function useBaseQuoteRate(
       "getBaseRate",
       {
         net: getChainInfo().queryName,
-        symbolOrAddress: base, // TODO: use baseAddress for this ONLY!
+        symbolOrAddress: baseAddress, 
         symbol: base,
       },
     ],
@@ -35,7 +35,7 @@ export function useBaseQuoteRate(
       "getQuoteRate",
       {
         net: getChainInfo().queryName,
-        symbolOrAddress: quote, // TODO: use quoteAddress for this ONLY!
+        symbolOrAddress: quoteAddress, 
         symbol: quote,
       },
     ],

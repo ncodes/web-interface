@@ -1,12 +1,22 @@
+import {
+  Chain,
+  arbitrum,
+  bsc,
+  hardhat,
+  mainnet,
+  optimism,
+  polygon,
+  sepolia,
+} from "viem/chains";
 import BadgeManagerABI from "../../abi/BadgeManager.json";
 import CoreABI from "../../abi/Core.json";
 import DisputeManagerABI from "../../abi/DisputeManager.json";
 import EnergonABI from "../../abi/Energon.json";
 import MarketCoreABI from "../../abi/MarketCore.json";
 import MediatorManagerABI from "../../abi/MediatorManager.json";
-import WETHABI from "../../abi/WETH.json";
 import NftABI from "../../abi/NFT.json";
 import NativeTokenABI from "../../abi/Token.json";
+import WETHABI from "../../abi/WETH.json";
 import IconBSC from "../../components/icons/BSC.tsx";
 import IconArbitrum from "../../components/icons/IconArbitrum.tsx";
 import IconEthereum from "../../components/icons/IconEthereum.tsx";
@@ -15,15 +25,15 @@ import IconPolygon from "../../components/icons/IconPolygon.tsx";
 import { ChainInfo } from "../../types/global";
 import TokenInfo from "./token_info.ts";
 
-export enum ChainID {
-  Ethereum = 1,
-  Goerli = 5,
-  Hardhat = 31337,
-  Polygon = 137,
-  Optimism = 10,
-  Arbitrum = 42161,
-  Binance = 56,
-}
+export const chains: Chain[] = [
+  mainnet,
+  polygon,
+  bsc,
+  optimism,
+  arbitrum,
+  sepolia,
+  hardhat,
+];
 
 /**
  * Mapping of supported networks' information
@@ -32,13 +42,13 @@ export const SupportedNetworks: ChainInfo[] = [
   {
     displayName: "Ethereum",
     queryName: "ethereum",
-    chainId: ChainID.Ethereum,
+    chainId: mainnet.id,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_ETHEREUM_API_URI,
     rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL,
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,
-    tokenInfo: new TokenInfo({
+    wrappedTokenInfo: new TokenInfo({
       address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
       name: "WETH",
       symbol: "WETH",
@@ -85,13 +95,13 @@ export const SupportedNetworks: ChainInfo[] = [
   {
     displayName: "Polygon",
     queryName: "polygon",
-    chainId: ChainID.Polygon,
+    chainId: polygon.id,
     symbol: "MATIC",
     apiUrl: import.meta.env.VITE_POLYGON_API_URI,
     rpcUrl: import.meta.env.VITE_POLYGON_RPC_URL ?? "",
     blockExplorer: "https://polygonscan.com",
     logoPath: IconPolygon,
-    tokenInfo: new TokenInfo({
+    wrappedTokenInfo: new TokenInfo({
       address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
       name: "WMATIC",
       symbol: "WMATIC",
@@ -104,13 +114,13 @@ export const SupportedNetworks: ChainInfo[] = [
   {
     displayName: "Optimism",
     queryName: "optimism",
-    chainId: ChainID.Optimism,
+    chainId: optimism.id,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_OPTIMISM_API_URI,
     rpcUrl: import.meta.env.VITE_OPTIMISM_RPC_URL ?? "",
     blockExplorer: "https://optimistic.etherscan.io",
     logoPath: IconOptimism,
-    tokenInfo: new TokenInfo({
+    wrappedTokenInfo: new TokenInfo({
       address: "0x4200000000000000000000000000000000000006",
       name: "WETH",
       symbol: "WETH",
@@ -124,13 +134,13 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Binance Chain",
     altDisplayName: "BSC",
     queryName: "binance-chain",
-    chainId: ChainID.Binance,
+    chainId: bsc.id,
     symbol: "BNB",
     apiUrl: import.meta.env.VITE_BINANCE_API_URI,
     rpcUrl: import.meta.env.VITE_BINANCE_RPC_URL ?? "",
     blockExplorer: "https://bscscan.com",
     logoPath: IconBSC,
-    tokenInfo: new TokenInfo({
+    wrappedTokenInfo: new TokenInfo({
       address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
       name: "WBNB",
       symbol: "WBNB",
@@ -143,13 +153,13 @@ export const SupportedNetworks: ChainInfo[] = [
   {
     displayName: "Arbitrum",
     queryName: "arbitrum",
-    chainId: ChainID.Arbitrum,
+    chainId: arbitrum.id,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_ARBITRUM_API_URI,
     rpcUrl: import.meta.env.VITE_ARBITRUM_RPC_URL ?? "",
     blockExplorer: "https://arbiscan.io",
     logoPath: IconArbitrum,
-    tokenInfo: new TokenInfo({
+    wrappedTokenInfo: new TokenInfo({
       address: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       name: "WETH",
       symbol: "WETH",
@@ -160,17 +170,17 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
-    displayName: "Goerli",
-    queryName: "goerli",
+    displayName: "Sepolia",
+    queryName: "sepolia",
     testnet: true,
-    chainId: ChainID.Goerli,
+    chainId: sepolia.id,
     symbol: "ETH",
-    apiUrl: import.meta.env.VITE_GOERLI_API_URI,
-    rpcUrl: import.meta.env.VITE_GOERLI_RPC_URL ?? "",
-    blockExplorer: "https://goerli.etherscan.io",
+    apiUrl: import.meta.env.VITE_SEPOLIA_API_URI,
+    rpcUrl: import.meta.env.VITE_SEPOLIA_RPC_URL ?? "",
+    blockExplorer: "https://sepolia.etherscan.io",
     logoPath: IconEthereum,
-    tokenInfo: new TokenInfo({
-      address: "0x00",
+    wrappedTokenInfo: new TokenInfo({
+      address: "0x4263541D13298963498ff1f83d992812Ef3d2E73",
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
@@ -178,19 +188,53 @@ export const SupportedNetworks: ChainInfo[] = [
       logoURI:
         "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png",
     }),
+    contracts: {
+      core: {
+        address: import.meta.env.VITE_SEPOLIA_CORE_ADDRESS,
+        abi: CoreABI,
+      },
+      token: {
+        address: import.meta.env.VITE_SEPOLIA_TOKEN_ADDRESS,
+        abi: NativeTokenABI,
+      },
+      badgeManager: {
+        address: import.meta.env.VITE_SEPOLIA_BADGE_MGR_ADDRESS,
+        abi: BadgeManagerABI,
+      },
+      marketCore: {
+        address: import.meta.env.VITE_SEPOLIA_MARKET_CORE_ADDRESS,
+        abi: MarketCoreABI,
+      },
+      disputeManager: {
+        address: import.meta.env.VITE_SEPOLIA_DISPUTE_MGR_ADDRESS,
+        abi: DisputeManagerABI,
+      },
+      mediatorManager: {
+        address: import.meta.env.VITE_SEPOLIA_MEDIATOR_MGR_ADDRESS,
+        abi: MediatorManagerABI,
+      },
+      energon: {
+        address: import.meta.env.VITE_SEPOLIA_ENERGON_ADDRESS,
+        abi: EnergonABI,
+      },
+      nft: {
+        address: import.meta.env.VITE_SEPOLIA_NFT_ADDRESS,
+        abi: NftABI,
+      },
+    },
   },
   {
     displayName: "Hardhat",
     queryName: "localhost",
     testnet: true,
-    chainId: ChainID.Hardhat,
+    chainId: hardhat.id,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_LOCALHOST_API_URI,
     rpcUrl: import.meta.env.VITE_LOCALHOST_RPC_URL ?? "",
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,
-    tokenInfo: new TokenInfo({
-      address: "0xB0f05d25e41FbC2b52013099ED9616f1206Ae21B",
+    wrappedTokenInfo: new TokenInfo({
+      address: "0xf5059a5D33d5853360D16C683c16e67980206f36",
       name: "WETH",
       symbol: "WETH",
       decimals: 18,
@@ -263,7 +307,16 @@ export function getChains(
  * Get a chain by its chain ID
  * @param id - The chain ID
  */
-export function getChain(id: number) {
+export function getChain(id: number | string) {
   if (!id) return;
+  if (typeof id === "string") return getChainByName(id);
   return SupportedNetworks.find((s) => s.chainId === id);
+}
+
+/**
+ * Get a chain by its query name
+ * @param name - The query name
+ */
+function getChainByName(name: string) {
+  return SupportedNetworks.find((s) => s.queryName === name);
 }

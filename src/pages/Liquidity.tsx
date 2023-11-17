@@ -191,7 +191,7 @@ export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
       }
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-3">
-          {(currentTab == "liquidity" || !currentTab) && (
+          {(currentTab == "liquidity" || !currentTab) && liquidity && (
             <SwapSheetWrapper liquidity={liquidity} />
           )}
           {currentTab == "offers" && liquidity && (

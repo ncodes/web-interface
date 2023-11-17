@@ -22,7 +22,7 @@ interface ChainInfo {
   rpcUrl: string;
   blockExplorer: string;
   logoPath: React.Element;
-  tokenInfo: TokenInfo;
+  wrappedTokenInfo: TokenInfo;
   contracts?: Contracts;
 }
 

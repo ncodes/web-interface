@@ -36,7 +36,7 @@ export function usePaymentService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/payments/methods`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
         },
       });
       return Promise.resolve(resp.data.data);
@@ -59,7 +59,7 @@ export function usePaymentService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/payments/methods/grant-signature`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           badge: params.badge,
           address: params.address,
           liquidityAddress: params.liquidityAddress,

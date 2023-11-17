@@ -5,6 +5,7 @@ import {
   TransactionReceipt,
   WalletClient,
 } from "viem";
+import { hardhat } from "viem/chains";
 import {
   Chain,
   erc20ABI,
@@ -18,7 +19,7 @@ import {
 } from "wagmi";
 import { isDev } from "../../libs/helpers.ts";
 import { ChainInfo } from "../../types/global";
-import { ChainID, getChain } from "./networks";
+import { getChain } from "./networks";
 
 export interface IConnector {
   defaultNetwork: number;
@@ -94,9 +95,9 @@ export interface IConnector {
  * @returns
  */
 export default function useConnector() {
-  const defaultNetwork = ChainID[import.meta.env.VITE_DEFAULT_NETWORK]
-    ? parseInt(ChainID[import.meta.env.VITE_DEFAULT_NETWORK])
-    : ChainID.Hardhat;
+  const defaultNetwork = (
+    getChain(import.meta.env.VITE_DEFAULT_NETWORK) ?? getChain(hardhat.id)
+  )?.chainId;
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [chainId, setChainId] = useState<number | undefined>(undefined);
@@ -441,8 +442,8 @@ export default function useConnector() {
     const netInfo = getChainInfo();
     const [address] = await walletClient.getAddresses();
     const { request } = await publicClient.simulateContract({
-      address: netInfo.tokenInfo.address as Address,
-      abi: netInfo.tokenInfo.abi,
+      address: netInfo.wrappedTokenInfo.address as Address,
+      abi: netInfo.wrappedTokenInfo.abi,
       functionName: "withdraw",
       args: [amount],
       account: address,

@@ -47,7 +47,7 @@ export function useSwapService() {
         url: `${getChainInfo().apiUrl}/v1/swaps`,
         params: {
           ...swapFilter,
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
           offset,
           limit,
           address:
@@ -93,7 +93,7 @@ export function useSwapService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/swaps/${orderId}`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
         },
         headers,
       });
@@ -118,7 +118,7 @@ export function useSwapService() {
         method: "get",
         url: `${getChainInfo().apiUrl}/v1/swaps/${orderId}/events`,
         params: {
-          net: "ethereum" || network, // TODO: remove mock
+          net: network,
         },
         headers,
       });

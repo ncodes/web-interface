@@ -333,7 +333,7 @@ export function isMerchant(badges: string[]) {
  * @return false if either string is undefined
  * @return true if the strings are equal
  */
-export function isEqlStr(a: string, b: string) {
+export function isEqlStr(a?: string, b?: string) {
   if (a == undefined || b == undefined) return false;
   return a.toLowerCase() === b.toLowerCase();
 }
