@@ -8,12 +8,12 @@ export default defineConfig(() => {
     define: {},
     server: {
       rollupOptions: {
-        plugins: [inject({ Buffer: ["Buffer", "Buffer"] })],
+        plugins: [inject({ Buffer: ["Buffer", "buffer"] })],
       },
     },
     build: {
       rollupOptions: {
-        plugins: [inject({ Buffer: ["Buffer", "Buffer"] })],
+        plugins: [inject({ Buffer: ["Buffer", "buffer"] })],
       },
     },
     plugins: [react()],
