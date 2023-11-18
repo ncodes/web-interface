@@ -13,8 +13,10 @@ import { twMerge } from "tailwind-merge";
 import { AssetType } from "../types/enums.ts";
 import { RequestError } from "./RequestError.ts";
 
-export function isDev() {
-  return import.meta.env.VITE_ENV === "development";
+export function isDev(ignoreLocal = false) {
+  return (
+    import.meta.env.VITE_ENV === "development" || (!ignoreLocal && isLocal())
+  );
 }
 
 export function isLocal() {
