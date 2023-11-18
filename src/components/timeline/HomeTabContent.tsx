@@ -4,6 +4,7 @@ import { Fragment, useEffect } from "react";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useTimelineService } from "../../hooks/services/backend/useTimelineService.ts";
+import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
@@ -25,6 +26,8 @@ export function HomeTabContent() {
   const { getChainInfo } = useConnectorContext();
   const { get } = useTimelineService();
   const [{ y }] = useWindowScroll();
+  const mounted = useMounted(1000);
+
   const events = useInfiniteQuery({
     queryKey: [
       "getTimelineEvents",
@@ -32,6 +35,7 @@ export function HomeTabContent() {
     ],
     queryFn: get,
     keepPreviousData: true,
+    enabled: mounted,
     getNextPageParam: (lastPage) => {
       return lastPage.events.length > 0 ? lastPage.events[0].sn : undefined;
     },

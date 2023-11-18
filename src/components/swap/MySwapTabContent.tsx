@@ -1,16 +1,16 @@
-import { TabsContent } from "../ui/Tabs.tsx";
-import { Paginator } from "../Paginator.tsx";
-import { SwapRow } from "./SwapRow.tsx";
-import { RowSkeleton } from "../RowSkeleton.tsx";
-import { ErrorIcon } from "react-hot-toast";
-import { RequestError } from "../../libs/RequestError.ts";
-import { PlugZapIcon } from "lucide-react";
-import useStore from "../../hooks/store/useStore.ts";
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
-
+import { PlugZapIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useSwapService } from "../../hooks/services/backend/useSwapService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import useMounted from "../../hooks/useMounted.ts";
+import { RequestError } from "../../libs/RequestError.ts";
+import { Paginator } from "../Paginator.tsx";
+import { RowSkeleton } from "../RowSkeleton.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
+import { SwapRow } from "./SwapRow.tsx";
 
 export function MySwapTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -20,6 +20,8 @@ export function MySwapTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
+  const mounted = useMounted(1000);
+
   const {
     isLoading,
     isSuccess,
@@ -42,7 +44,7 @@ export function MySwapTabContent() {
     ],
     queryFn: listSwaps,
     keepPreviousData: false,
-    enabled: !!address,
+    enabled: mounted && !!address,
     refetchInterval: 10000,
   });
 

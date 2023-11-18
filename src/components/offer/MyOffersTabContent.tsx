@@ -11,6 +11,7 @@ import { OfferRow } from "../liquidity/OfferRow.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useMounted from "../../hooks/useMounted.ts";
 
 export function MyOffersTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -22,6 +23,7 @@ export function MyOffersTabContent() {
   const user = useStore((state) => state.user);
   const [limit] = useState(10);
   const { markAsRead } = useOfferService();
+  const mounted = useMounted(1000);
   const queryClient = useQueryClient();
   const offers = useQuery({
     queryKey: [
@@ -36,13 +38,13 @@ export function MyOffersTabContent() {
     ],
     queryFn: listOffers,
     keepPreviousData: true,
-    enabled: !!address,
+    enabled: mounted && !!address,
   });
 
   useQuery({
     queryKey: ["markAsRead", { network: getChainInfo().queryName }],
     queryFn: markAsRead,
-    enabled: !!address && !!user,
+    enabled: mounted && !!address && !!user,
     onSuccess: async () => {
       await queryClient.refetchQueries(["countUnreadOffer"]);
     },

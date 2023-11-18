@@ -12,6 +12,7 @@ import { TabsContent } from "../ui/Tabs.tsx";
 import { MarketRow } from "./MarketRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useMounted from "../../hooks/useMounted.ts";
 
 export function MyMarketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -21,6 +22,8 @@ export function MyMarketsTabContent() {
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
+  const mounted = useMounted(1000);
+
   const fetchMarkets = useQuery({
     queryKey: [
       "getMarketsByCreator",
@@ -34,7 +37,7 @@ export function MyMarketsTabContent() {
     ],
     queryFn: listMarkets,
     keepPreviousData: true,
-    enabled: !!address,
+    enabled: mounted && !!address,
   });
 
   useEffect(() => {

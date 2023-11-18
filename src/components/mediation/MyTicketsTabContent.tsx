@@ -11,6 +11,7 @@ import { TabsContent } from "../ui/Tabs.tsx";
 import { TicketRow } from "./TicketRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useMounted from "../../hooks/useMounted.ts";
 
 export function MyTicketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -20,6 +21,8 @@ export function MyTicketsTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
+  const mounted = useMounted(1000);
+
   const fetchTickets = useQuery({
     queryKey: [
       "getTicketsOwned",
@@ -33,7 +36,7 @@ export function MyTicketsTabContent() {
     ],
     queryFn: listTickets,
     keepPreviousData: true,
-    enabled: !!address,
+    enabled: mounted && !!address,
     refetchInterval: 10000,
   });
 

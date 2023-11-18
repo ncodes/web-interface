@@ -1,6 +1,6 @@
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
@@ -23,6 +23,7 @@ import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import useStore from "../hooks/store/useStore.ts";
 import Layout from "./Layout.tsx";
+import useMounted from "../hooks/useMounted.ts";
 
 function LiquidityPage({
   defaultTab,
@@ -42,6 +43,8 @@ function LiquidityPage({
   const { address, getChainInfo } = useConnectorContext();
   const user = useStore((state) => state.user);
   const { countUnread } = useOfferService();
+  const mounted = useMounted(1000);
+
   const unreadOfferCount = useQuery({
     queryKey: [
       "countUnreadOffer",
@@ -53,7 +56,7 @@ function LiquidityPage({
       },
     ],
     queryFn: countUnread,
-    enabled: !!address && !!user,
+    enabled: mounted && !!address && !!user,
   });
 
   return (

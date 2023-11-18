@@ -3,6 +3,7 @@ import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
 import { useSwapService } from "../hooks/services/backend/useSwapService.ts";
+import useMounted from "../hooks/useMounted.ts";
 import { RequestError } from "../libs/RequestError.ts";
 import { ActivityStreamRowPlaceholder } from "./ActivityStreamRowPlaceholder.tsx";
 import { ActivityStreamRowSkeleton } from "./ActivityStreamRowSkeleton.tsx";
@@ -14,14 +15,17 @@ export function ActivityStream() {
   const { getTopMarkets } = useMarketService();
   const { listSwaps } = useSwapService();
   const limit = 5;
+  const mounted = useMounted(1000);
   const markets = useQuery({
     queryKey: ["getTopMarkets", { network: getChainInfo().queryName, limit }],
     queryFn: getTopMarkets,
+    enabled: mounted,
   });
 
   const swaps = useQuery({
     queryKey: ["getRecentSwaps", { network: getChainInfo().queryName, limit }],
     queryFn: listSwaps,
+    enabled: mounted,
   });
 
   return (
@@ -53,7 +57,7 @@ export function ActivityStream() {
                     key={i}
                     className="hidden xl:flex"
                   />
-                )
+                ),
               )}
             </>
           )}
@@ -95,7 +99,7 @@ export function ActivityStream() {
                       key={i}
                       className="hidden xl:flex"
                     />
-                  )
+                  ),
                 )}
               </>
             )}

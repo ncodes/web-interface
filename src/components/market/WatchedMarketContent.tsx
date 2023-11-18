@@ -12,6 +12,7 @@ import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
+import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
 import { Paginator } from "../Paginator.tsx";
@@ -36,6 +37,8 @@ export function WatchedMarketContent() {
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
+  const mounted = useMounted(1000);
+
   const fetchMarkets = useQuery({
     queryKey: [
       "getMarketsByAddresses",
@@ -49,7 +52,7 @@ export function WatchedMarketContent() {
     queryFn: listMarkets,
     keepPreviousData: !!watchedMarkets.length,
     refetchInterval: 10000,
-    enabled: !!watchedMarkets.length,
+    enabled: mounted && !!watchedMarkets.length,
   });
 
   // Auto-initialize client if keys are present.

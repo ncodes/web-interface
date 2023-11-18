@@ -5,6 +5,7 @@ import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import useStore from "../../hooks/store/useStore.ts";
+import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
 import { Paginator } from "../Paginator.tsx";
@@ -19,6 +20,8 @@ export function MyLiquidityTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
+  const mounted = useMounted(1000);
+
   const {
     isLoading,
     isSuccess,
@@ -41,7 +44,7 @@ export function MyLiquidityTabContent() {
     ],
     queryFn: listLiquidities,
     keepPreviousData: true,
-    enabled: !!address,
+    enabled: mounted && !!address,
   });
 
   useEffect(() => {

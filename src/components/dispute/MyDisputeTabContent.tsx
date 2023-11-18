@@ -11,6 +11,7 @@ import { TabsContent } from "../ui/Tabs.tsx";
 import { DisputeRow } from "./DisputeRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useMounted from "../../hooks/useMounted.ts";
 
 export function MyDisputeTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -19,6 +20,7 @@ export function MyDisputeTabContent() {
   const disputeFilter = useStore((state) => state.disputeFilter);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const [offset, setOffset] = useState(0);
+  const mounted = useMounted(1000);
   const [limit] = useState(10);
   const {
     isLoading,
@@ -42,7 +44,7 @@ export function MyDisputeTabContent() {
     ],
     keepPreviousData: true,
     queryFn: listDisputes,
-    enabled: !!address,
+    enabled: mounted && !!address,
     refetchInterval: 10000,
   });
 

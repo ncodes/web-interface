@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
 import useStore from "../../hooks/store/useStore.ts";
+import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { OfferRow } from "../liquidity/OfferRow.tsx";
@@ -25,13 +26,15 @@ export function OfferTabContent({
   const user = useStore((state) => state.user);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
+  const mounted = useMounted(1000);
+
   const offer = useQuery({
     queryKey: [
       "getOffer",
       { network: getChainInfo().queryName, offerId: parseInt(id as string) },
     ],
     queryFn: getOffer,
-    enabled: !!id,
+    enabled: mounted && !!id,
     refetchInterval: 15000,
   });
 

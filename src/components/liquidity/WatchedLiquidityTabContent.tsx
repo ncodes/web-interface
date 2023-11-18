@@ -12,6 +12,7 @@ import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
+import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
 import { Paginator } from "../Paginator.tsx";
@@ -41,6 +42,7 @@ export function WatchedLiquidityTabContent() {
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
   const liquidityFilter = useStore((state) => state.liquidityFilter);
+  const mounted = useMounted(1000);
   const [watchedLiquidities, setWatchedLiquidities] = useState<LiquidityInfo[]>(
     [],
   );
@@ -61,7 +63,7 @@ export function WatchedLiquidityTabContent() {
     queryFn: listLiquidities,
     keepPreviousData: !!watchedLiquidities.length,
     refetchInterval: 10000,
-    enabled: !!watchedLiquidities.length,
+    enabled: mounted && !!watchedLiquidities.length,
   });
 
   // Auto-initialize client if keys are present.

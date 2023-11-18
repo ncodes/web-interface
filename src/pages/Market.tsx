@@ -25,6 +25,7 @@ import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx
 import { useLiquidityService } from "../hooks/services/backend/useLiquidityService.ts";
 import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
 import useStore from "../hooks/store/useStore.ts";
+import useMounted from "../hooks/useMounted.ts";
 import { RequestError } from "../libs/RequestError.ts";
 import { isEqlStr } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
@@ -42,6 +43,7 @@ function MarketTabs() {
   const { id } = useParams();
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
+  const mounted = useMounted(1000);
 
   const market = useQuery({
     queryKey: [
@@ -49,7 +51,7 @@ function MarketTabs() {
       { network: getChainInfo().queryName, market: id as string },
     ],
     queryFn: getMarket,
-    enabled: !!id,
+    enabled: mounted && !!address && !!id,
   });
 
   const liquidities = useQuery({

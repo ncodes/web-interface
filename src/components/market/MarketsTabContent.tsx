@@ -4,6 +4,7 @@ import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
+import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
 import { Paginator } from "../Paginator.tsx";
@@ -20,7 +21,7 @@ export function MarketsTabContent() {
   const loaderProgress = useStore((state) => state.loaderProgress);
   const marketFilter = useStore((state) => state.marketFilter);
   const [offset, setOffset] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
+  const mounted = useMounted(1000);
   const [limit] = useState(60);
   const regionBadge = import.meta.env.VITE_REGION_BADGE;
   const fetchMarkets = useQuery({
@@ -43,13 +44,9 @@ export function MarketsTabContent() {
     ],
     queryFn: listMarkets,
     keepPreviousData: true,
-    enabled: isMounted,
+    enabled: mounted,
     refetchInterval: 10000,
   });
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     setOffset(0);

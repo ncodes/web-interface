@@ -15,6 +15,7 @@ import { SwapRow } from "./SwapRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
+import useMounted from "../../hooks/useMounted.ts";
 
 export function SwapPageTabContent({
   onSwapFetched,
@@ -29,6 +30,7 @@ export function SwapPageTabContent({
   const user = useStore((state) => state.user);
   const fullLoadCount = useStore((state) => state.fullLoadCount);
   const { getSwap } = useSwapService();
+  const mounted = useMounted(1000);
 
   // Fetch swap
   const swap = useQuery({
@@ -37,7 +39,7 @@ export function SwapPageTabContent({
       { network: getChainInfo().queryName, orderId: orderId as string },
     ],
     queryFn: getSwap,
-    enabled: !!orderId,
+    enabled: mounted && !!orderId,
     refetchInterval: 10000,
   });
 
@@ -68,7 +70,7 @@ export function SwapPageTabContent({
       { network: getChainInfo().queryName, offerId: swap.data?.offerId },
     ],
     queryFn: markAsRead,
-    enabled: !!user && swap.data?.offerId !== undefined,
+    enabled: mounted && !!user && swap.data?.offerId !== undefined,
     refetchInterval: false,
     onSuccess: async () => {
       await queryClient.refetchQueries(["countUnreadOffer"]);
