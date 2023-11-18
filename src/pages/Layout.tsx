@@ -170,9 +170,14 @@ export default function Layout({
     return 10000;
   }
 
+  // Check native NFT ownership.
   async function checkNativeNFTOwnership() {
-    const count = await nativeNftBalance(address);
-    setUserHasNativeNFT(count > 0);
+    try {
+      const count = await nativeNftBalance(address);
+      setUserHasNativeNFT(count > 0);
+    } catch (error) {
+      console.error("Failed to check native NFT ownership: ", error);
+    }
   }
 
   return (
