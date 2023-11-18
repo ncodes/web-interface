@@ -414,14 +414,13 @@ export function SwapOfferCreatorContent({
       await approveAllowance(
         market.quoteAddress as Address,
         getChainInfo().contracts?.core.address as Address,
-        await getTokenSupply(market.baseAddress as Address),
+        await getTokenSupply(market.quoteAddress as Address),
       );
       await delay(5000);
       notifySuccess("Allowance successfully approved", { duration: 5000 });
     } catch (error) {
       const msg = humanizeErc20Errors(error);
       notifyError(msg);
-      console.log("ERROR:", error);
       if (isDev()) console.error(error);
     } finally {
       setApproveLoading(false);
