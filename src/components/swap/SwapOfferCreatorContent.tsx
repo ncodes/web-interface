@@ -307,7 +307,7 @@ export function SwapOfferCreatorContent({
       const allowance = await getTokenAllowance(
         market.quoteAddress,
         address,
-        getChainInfo().contracts?.core.address
+        getChainInfo().contracts?.core.address,
       );
 
       const maxQuoteAmtLD = toLD(maxQuoteAmount, market.quoteDecimals);
@@ -343,7 +343,7 @@ export function SwapOfferCreatorContent({
       lid,
       address,
       amt,
-      price
+      price,
     );
 
     let symbol: string;
@@ -414,13 +414,14 @@ export function SwapOfferCreatorContent({
       await approveAllowance(
         market.quoteAddress as Address,
         getChainInfo().contracts?.core.address as Address,
-        await getTokenSupply(market.baseAddress as Address)
+        await getTokenSupply(market.baseAddress as Address),
       );
       await delay(5000);
       notifySuccess("Allowance successfully approved", { duration: 5000 });
     } catch (error) {
       const msg = humanizeErc20Errors(error);
       notifyError(msg);
+      console.log("ERROR:", error);
       if (isDev()) console.error(error);
     } finally {
       setApproveLoading(false);
@@ -445,7 +446,7 @@ export function SwapOfferCreatorContent({
         amt,
         toLD(maxPrice, quoteDecimals),
         [],
-        0 // TODO: use moment().add(expireDuration, "s").unix()
+        0, // TODO: use moment().add(expireDuration, "s").unix()
       );
 
       // Give backend a chance to process tx
@@ -502,7 +503,7 @@ export function SwapOfferCreatorContent({
         amt,
         price,
         [],
-        expireDuration
+        expireDuration,
       );
 
       // Give backend a chance to process tx
@@ -536,7 +537,7 @@ export function SwapOfferCreatorContent({
       setLoading(true);
       const [txHash, txReceipt] = await executeOffer(
         BigInt(offer.offerId),
-        BigInt(0) // TODO: use moment().add(expireDuration, "s").unix()
+        BigInt(0), // TODO: use moment().add(expireDuration, "s").unix()
       );
 
       // Give backend a chance to process tx
@@ -603,7 +604,7 @@ export function SwapOfferCreatorContent({
         amt,
         price,
         [],
-        expireDuration
+        expireDuration,
       );
 
       // Give backend a chance to process tx
@@ -783,7 +784,7 @@ export function SwapOfferCreatorContent({
                         <span className="text-gray-300">Min: </span>
                         {formatToHighDenom(
                           liquidity.minSwap,
-                          market.baseDecimals
+                          market.baseDecimals,
                         )}
                       </span>
                     )}
@@ -791,7 +792,7 @@ export function SwapOfferCreatorContent({
                       <span className="text-gray-300">Max: </span>
                       {formatToHighDenom(
                         getMaxBaseAmount(),
-                        market.baseDecimals
+                        market.baseDecimals,
                       )}
                     </span>
                   </div>
@@ -957,7 +958,7 @@ export function SwapOfferCreatorContent({
       <div
         className={cn(
           "flex flex-col gap-2 p-3 w-full border-t border-gray-800 bg-card-background",
-          { "absolute bottom-0 w-full": !inSheet }
+          { "absolute bottom-0 w-full": !inSheet },
         )}
       >
         {(!offerMode || canExecuteOffer(offer)) &&

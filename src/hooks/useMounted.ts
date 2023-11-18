@@ -1,17 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function useMounted(delay = 0) {
-  const mounted = useRef(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
-      mounted.current = true;
+      setMounted(true);
     }, delay);
 
     return () => {
-      mounted.current = false;
+      setMounted(false);
     };
   }, []);
 
-  return mounted.current;
+  return mounted;
 }
