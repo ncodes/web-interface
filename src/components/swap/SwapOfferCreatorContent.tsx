@@ -154,11 +154,13 @@ export function SwapOfferCreatorContent({
     void setInitialExpireDuration();
   }, []);
 
-  // Update quote balance every 10 seconds
-  useInterval(() => {
-    if (!ready) return;
-    void getQuoteBalance();
-  }, 10000);
+  // Update quote balance every minute
+  useInterval(
+    () => {
+      void getQuoteBalance();
+    },
+    ready ? 60000 : null,
+  );
 
   // Update quote balance on mount
   useEffect(() => {

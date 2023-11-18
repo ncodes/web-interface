@@ -7,7 +7,7 @@ import { useConnectorContext } from "./connectors/useConnectorContext.tsx";
 export function useBaseQuoteRate(
   { base, baseType, baseAddress, quoteAddress, quote, quoteType }: Market,
   baseEnabled: boolean,
-  quoteEnabled: boolean
+  quoteEnabled: boolean,
 ) {
   const { getCryptoRate, getSynthRate } = useMiscService();
   const { getChainInfo } = useConnectorContext();
@@ -17,15 +17,15 @@ export function useBaseQuoteRate(
       "getBaseRate",
       {
         net: getChainInfo().queryName,
-        symbolOrAddress: baseAddress, 
+        symbolOrAddress: baseAddress,
         symbol: base,
       },
     ],
     queryFn: isERC20(baseType)
       ? getCryptoRate
       : isSynth(baseType)
-      ? getSynthRate
-      : getCryptoRate,
+        ? getSynthRate
+        : getCryptoRate,
     refetchInterval: 60000,
     enabled: baseEnabled,
   });
@@ -35,15 +35,15 @@ export function useBaseQuoteRate(
       "getQuoteRate",
       {
         net: getChainInfo().queryName,
-        symbolOrAddress: quoteAddress, 
+        symbolOrAddress: quoteAddress,
         symbol: quote,
       },
     ],
     queryFn: isERC20(quoteType)
       ? getCryptoRate
       : isSynth(quoteType)
-      ? getSynthRate
-      : getCryptoRate,
+        ? getSynthRate
+        : getCryptoRate,
     refetchInterval: 60000,
     enabled: quoteEnabled,
   });
