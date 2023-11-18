@@ -3,7 +3,6 @@ import axios from "axios";
 import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
-import { OfferFilter } from "../../store/useStore.ts";
 
 export interface ListOfferParams {
   network: string;
@@ -49,7 +48,7 @@ export function useOfferService() {
    * @param ctx
    */
   async function listOffers(
-    ctx: QueryFunctionContext<[ListOfferIDs, ListOfferParams]>
+    ctx: QueryFunctionContext<[ListOfferIDs, ListOfferParams]>,
   ): Promise<{ offers: Offer[]; meta: { queryCount: number } }> {
     try {
       const [id, params] = ctx.queryKey;
@@ -85,7 +84,7 @@ export function useOfferService() {
    * @param ctx The query context
    */
   async function getEvents(
-    ctx: QueryFunctionContext<[string, GetOfferEventsParams]>
+    ctx: QueryFunctionContext<[string, GetOfferEventsParams]>,
   ): Promise<{ events: Event[]; meta: { queryCount: number } }> {
     try {
       const [, params] = ctx.queryKey;
@@ -116,7 +115,7 @@ export function useOfferService() {
    * @param ctx The query context
    */
   async function getOffer(
-    ctx: QueryFunctionContext<[string, GetOfferParams]>
+    ctx: QueryFunctionContext<[string, GetOfferParams]>,
   ): Promise<Offer> {
     try {
       const [, params] = ctx.queryKey;
@@ -131,7 +130,6 @@ export function useOfferService() {
         headers,
       });
 
-
       return Promise.resolve(resp.data.data);
     } catch (e) {
       return Promise.reject(handleAxiosError(e as never));
@@ -143,7 +141,7 @@ export function useOfferService() {
    * @param ctx
    */
   async function countUnread(
-    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>
+    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>,
   ): Promise<{ asProvider: number; asOfferer: number }> {
     try {
       const [, params] = ctx.queryKey;
@@ -174,7 +172,7 @@ export function useOfferService() {
    * @param ctx
    */
   async function markAsRead(
-    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>
+    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>,
   ): Promise<void> {
     try {
       const [, params] = ctx.queryKey;

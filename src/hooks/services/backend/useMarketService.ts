@@ -2,7 +2,6 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
-import { MarketFilter } from "../../store/useStore.ts";
 
 export type ListMarketsIDs =
   | "getMarkets"

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { validators } from "tailwind-merge";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
-import useStore, { LiquidityFilter } from "../../hooks/store/useStore.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
@@ -135,7 +135,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
     if (selectedPayMethod) return;
     if (!payMethods.data) return;
     setSelectedPayMethod(
-      payMethods.data.find((m) => m.badge == values.payment_method)
+      payMethods.data.find((m) => m.badge == values.payment_method),
     );
   }, [payMethods.data]);
 
@@ -424,7 +424,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
                   {
                     "!border-chinese-green ring-2 ring-chinese-green":
                       openPayMethodSelector,
-                  }
+                  },
                 )}
                 open={openPayMethodSelector}
                 setOpen={setOpenPayMethodSelector}
@@ -539,7 +539,7 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
             navigate({
               pathname: location.pathname,
               search: new URLSearchParams(
-                rmUndefinedAndNull(cloned, true)
+                rmUndefinedAndNull(cloned, true),
               ).toString(),
             });
           }}

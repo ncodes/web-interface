@@ -1,7 +1,7 @@
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useStore, { DisputeFilter } from "../../hooks/store/useStore.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
@@ -76,11 +76,11 @@ export function DisputeFilterContent() {
     filter.status = query.get("status") as string;
     filter.fromDate = moment(
       query.get("from_date") as string,
-      "MM/DD/YYYY"
+      "MM/DD/YYYY",
     ).toISOString();
     filter.toDate = moment(
       query.get("to_date") as string,
-      "MM/DD/YYYY"
+      "MM/DD/YYYY",
     ).toISOString();
 
     setDisputeFilter && setDisputeFilter(filter);
@@ -227,7 +227,7 @@ export function DisputeFilterContent() {
             navigate({
               pathname: "/my/disputes",
               search: new URLSearchParams(
-                rmUndefinedAndNull(cloned, true)
+                rmUndefinedAndNull(cloned, true),
               ).toString(),
             });
           }}

@@ -2,7 +2,6 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
-import { LiquidityFilter } from "../../store/useStore.ts";
 export interface ListLiquidityParams {
   provider?: string;
   network: string;
@@ -37,7 +36,7 @@ export function useLiquidityService() {
    * @param ctx
    */
   async function listLiquidities(
-    ctx: QueryFunctionContext<[ListLiquidityIDs, ListLiquidityParams]>
+    ctx: QueryFunctionContext<[ListLiquidityIDs, ListLiquidityParams]>,
   ): Promise<{ liquidities: Liquidity[]; meta: { queryCount: number } }> {
     try {
       const [id, params] = ctx.queryKey;
@@ -77,7 +76,7 @@ export function useLiquidityService() {
    * Get liquidity
    */
   async function getLiquidity(
-    ctx: QueryFunctionContext<[GetLiquidityIDs, GetLiquidityParams]>
+    ctx: QueryFunctionContext<[GetLiquidityIDs, GetLiquidityParams]>,
   ): Promise<Liquidity> {
     try {
       const [, params] = ctx.queryKey;
@@ -104,7 +103,7 @@ export function useLiquidityService() {
    * Get liquidity events
    */
   async function getEvents(
-    ctx: QueryFunctionContext<[GetLiquidityEventsIDs, GetLiquidityParams]>
+    ctx: QueryFunctionContext<[GetLiquidityEventsIDs, GetLiquidityParams]>,
   ): Promise<Event[]> {
     try {
       const [, params] = ctx.queryKey;

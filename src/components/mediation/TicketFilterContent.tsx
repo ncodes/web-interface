@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useStore, { TicketFilter } from "../../hooks/store/useStore.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
@@ -160,7 +160,7 @@ export function TicketFilterContent() {
             navigate({
               pathname: "/my/tickets",
               search: new URLSearchParams(
-                rmUndefinedAndNull(cloned, true)
+                rmUndefinedAndNull(cloned, true),
               ).toString(),
             });
           }}

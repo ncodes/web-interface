@@ -2,7 +2,6 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
-import { DisputeFilter } from "../../store/useStore.ts";
 
 export interface ListDisputeParams {
   network: string;
@@ -25,7 +24,7 @@ export function useDisputeService() {
    * @param ctx
    */
   async function listDisputes(
-    ctx: QueryFunctionContext<[ListDisputeIDs, ListDisputeParams]>
+    ctx: QueryFunctionContext<[ListDisputeIDs, ListDisputeParams]>,
   ): Promise<{ disputes: Dispute[]; meta: { queryCount: number } }> {
     try {
       const [id, params] = ctx.queryKey;

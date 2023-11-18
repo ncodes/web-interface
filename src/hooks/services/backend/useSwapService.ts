@@ -2,7 +2,6 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
-import { SwapFilter } from "../../store/useStore.ts";
 
 export type ListSwapIDs = "getSwapsAsParticipant" | "getRecentSwaps";
 export interface ListSwapParams {
@@ -36,7 +35,7 @@ export function useSwapService() {
    * @param ctx
    */
   async function listSwaps(
-    ctx: QueryFunctionContext<[ListSwapIDs, ListSwapParams]>
+    ctx: QueryFunctionContext<[ListSwapIDs, ListSwapParams]>,
   ): Promise<{ swaps: Swap[]; meta: { queryCount: number } }> {
     try {
       const [id, params] = ctx.queryKey;
@@ -83,7 +82,7 @@ export function useSwapService() {
    * @param ctx The query context
    */
   async function getSwap(
-    ctx: QueryFunctionContext<[string, GetSwapParams]>
+    ctx: QueryFunctionContext<[string, GetSwapParams]>,
   ): Promise<Swap> {
     try {
       const [, params] = ctx.queryKey;
@@ -108,7 +107,7 @@ export function useSwapService() {
    * Get liquidity events
    */
   async function getEvents(
-    ctx: QueryFunctionContext<[GetSwapEventsIDs, GetSwapEventParams]>
+    ctx: QueryFunctionContext<[GetSwapEventsIDs, GetSwapEventParams]>,
   ): Promise<Event[]> {
     try {
       const [, params] = ctx.queryKey;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { validators } from "tailwind-merge";
-import useStore, { MarketFilter } from "../../hooks/store/useStore.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
@@ -618,7 +618,7 @@ export function MarketFilterContent() {
             navigate({
               pathname: loc.pathname,
               search: new URLSearchParams(
-                rmUndefinedAndNull(cloned, true)
+                rmUndefinedAndNull(cloned, true),
               ).toString(),
             });
           }}

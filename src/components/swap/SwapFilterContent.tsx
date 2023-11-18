@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useStore, { SwapFilter } from "../../hooks/store/useStore.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
@@ -68,11 +68,11 @@ export function SwapFilterContent() {
     filter.status = query.get("status") as string;
     filter.fromDate = moment(
       query.get("from_date") as string,
-      "MM/DD/YYYY"
+      "MM/DD/YYYY",
     ).toISOString();
     filter.toDate = moment(
       query.get("to_date") as string,
-      "MM/DD/YYYY"
+      "MM/DD/YYYY",
     ).toISOString();
 
     setSwapFilter && setSwapFilter(filter);
@@ -217,7 +217,7 @@ export function SwapFilterContent() {
             navigate({
               pathname: "/my/swaps",
               search: new URLSearchParams(
-                rmUndefinedAndNull(cloned, true)
+                rmUndefinedAndNull(cloned, true),
               ).toString(),
             });
           }}

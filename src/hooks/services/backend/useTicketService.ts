@@ -2,7 +2,6 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
-import { TicketFilter } from "../../store/useStore.ts";
 
 export interface ListTicketParams {
   network: string;
@@ -31,7 +30,7 @@ export function useTicketService() {
    * @param ctx
    */
   async function listTickets(
-    ctx: QueryFunctionContext<[ListTicketIDs, ListTicketParams]>
+    ctx: QueryFunctionContext<[ListTicketIDs, ListTicketParams]>,
   ): Promise<{ tickets: Ticket[]; meta: { queryCount: number } }> {
     try {
       const [id, params] = ctx.queryKey;
@@ -75,7 +74,7 @@ export function useTicketService() {
    * @param ctx The query object
    */
   async function getStats(
-    ctx: QueryFunctionContext<[GetStatIDs, GetStatParams]>
+    ctx: QueryFunctionContext<[GetStatIDs, GetStatParams]>,
   ): Promise<TicketStats> {
     try {
       const [, params] = ctx.queryKey;

@@ -1,7 +1,6 @@
 import { TimerIcon } from "@radix-ui/react-icons";
 import { CheckCircle, XCircle } from "lucide-react";
 import moment from "moment/moment";
-import { SwapPageState } from "../../hooks/store/useStore.ts";
 import {
   getPayer,
   getSwapDisputeOutcome,
@@ -161,9 +160,9 @@ export default function SwapRowLayer2({
         {
           "flex-col md:flex-row md:justify-between pr-3": isSwapParticipant(
             swap,
-            address
+            address,
           ),
-        }
+        },
       )}
     >
       {address && isSwapParticipant(swap, address) && (

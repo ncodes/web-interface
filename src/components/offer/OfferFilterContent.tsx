@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useStore, { SwapFilter } from "../../hooks/store/useStore.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
@@ -64,11 +64,11 @@ export function OfferFilterContent() {
     filter.status = query.get("status") as string;
     filter.fromDate = moment(
       query.get("from_date") as string,
-      "MM/DD/YYYY"
+      "MM/DD/YYYY",
     ).toISOString();
     filter.toDate = moment(
       query.get("to_date") as string,
-      "MM/DD/YYYY"
+      "MM/DD/YYYY",
     ).toISOString();
 
     setOfferFilter && setOfferFilter(filter);
@@ -175,7 +175,7 @@ export function OfferFilterContent() {
             navigate({
               pathname: "/my/offers",
               search: new URLSearchParams(
-                rmUndefinedAndNull(cloned, true)
+                rmUndefinedAndNull(cloned, true),
               ).toString(),
             });
           }}

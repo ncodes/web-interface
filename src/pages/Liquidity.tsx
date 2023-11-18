@@ -1,6 +1,6 @@
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
@@ -22,8 +22,8 @@ import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import useStore from "../hooks/store/useStore.ts";
-import Layout from "./Layout.tsx";
 import useMounted from "../hooks/useMounted.ts";
+import Layout from "./Layout.tsx";
 
 function LiquidityPage({
   defaultTab,
