@@ -459,4 +459,94 @@ declare global {
     inventor: Address,
     ammSwapRouter: Address,
   ];
+
+  type ProtocolFees = {
+    instantSwapFeeBp: number;
+    syntheticSwapFeeBp: number;
+    stableSwapFeeBp: number;
+    fixedSynthSwapFee: number;
+    fixedNFTSwapFee: number;
+    instantNFTSwapFeeBp: number;
+  };
+  export interface MarketFilter {
+    base?: string;
+    quote?: string;
+    price?: string;
+    priceUsd?: string;
+    liquidity?: string;
+    liquidityUsd?: string;
+    merchantLp?: boolean;
+    kycLp?: boolean;
+    query?: string;
+    kycTaker?: boolean;
+    offer?: boolean;
+    address?: string;
+    creator?: string;
+    permSwap?: boolean;
+    regions?: string;
+    permPut?: boolean;
+    putBadges?: string;
+    swapBadges?: string;
+  }
+
+  export interface LiquidityFilter {
+    base?: string;
+    quote?: string;
+    market?: string;
+    provider?: string;
+    paused?: boolean;
+    price?: string;
+    liquidities?: { marketAddress: string; provider: string; lid: number }[];
+    priceUsd?: string;
+    amount?: string;
+    amountUsd?: string;
+    kycLp?: boolean;
+    kycTaker?: boolean;
+    swapBadges?: string;
+    paymentMethods?: string;
+  }
+
+  export interface SwapFilter {
+    base?: string;
+    quote?: string;
+    marketAddress?: string;
+    type?: string;
+    status?: string;
+    fromDate?: string;
+    toDate?: string;
+  }
+
+  export interface OfferFilter {
+    marketAddress?: string;
+    provider?: string;
+    lid?: number;
+    creator?: string;
+    status?: string;
+    fromDate?: string;
+    toDate?: string;
+  }
+
+  export interface DisputeFilter {
+    marketAddress?: string;
+    participant?: string;
+    creator?: string;
+    defendant?: string;
+    orderId?: number;
+    disputeId?: number;
+    status?: string;
+    fromDate?: string;
+    toDate?: string;
+  }
+
+  export interface TicketFilter {
+    poolId?: number;
+    orderId?: number;
+    disputeId?: number;
+    owner?: string;
+    status?: string;
+  }
+
+  export interface SwapPageState {
+    revealPhaseEnded?: boolean;
+  }
 }

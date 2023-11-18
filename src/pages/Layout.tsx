@@ -13,8 +13,10 @@ import { ReviewViewerSheet } from "../components/ReviewViewerSheet.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useMiscService } from "../hooks/services/backend/useMiscService.ts";
 import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
 import { useUserService } from "../hooks/services/backend/useUserService.ts";
+import useNFTContract from "../hooks/services/contracts/useNFTContract.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useWindowFocus from "../hooks/useWindowFocus.ts";
 import { cn } from "../libs/utils.ts";
@@ -30,24 +32,37 @@ export default function Layout({
 }) {
   const headerHeight = 55;
   const location = useLocation();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
   const isXl = useMediaQuery("(min-width: 1280px)");
-  const { address, getChainInfo } = useConnectorContext();
+  const { address, ready, getChainInfo } = useConnectorContext();
   const user = useStore((state) => state.user);
+  const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
   const windowFocus = useWindowFocus();
   const setUser = useStore((state) => state.setUser);
+  const setProtoFee = useStore((state) => state.setProtoFee);
   const { getUser, logOnlineStatus, registerDevice } = useUserService();
   const accessToken = localStorage.getItem(StoreAccessTokenKey);
   const { subscribeForWebPush } = useNotificationService();
+  const { getProtocolFees } = useMiscService();
   const ref = useRef(null);
   const { scrollY } = useScroll();
   const [scrollYPos, setScrollYPos] = useState(0);
+  const { balanceOf: nativeNftBalance } = useNFTContract();
+  // const mounted = useMounted(1000);
 
-  const query = useQuery({
+  const authedUserQuery = useQuery({
     queryKey: ["getUser", { address }],
     queryFn: getUser,
     enabled: !!accessToken && !!address,
     refetchInterval: 60000,
+  });
+
+  const protoFeeQuery = useQuery({
+    queryKey: ["getProtocolFees", { network: getChainInfo().queryName }],
+    queryFn: getProtocolFees,
+    // enabled: mounted && !!address,
+    enabled: false,
+    refetchInterval: 300 * 1000,
   });
 
   const subscribeMutation = useMutation({
@@ -62,14 +77,38 @@ export default function Layout({
     mutationFn: registerDevice,
   });
 
+  // Set authed user.
   useEffect(() => {
-    if (query.isLoading) return;
-    setUser(query.isSuccess ? query.data : null);
-  }, [query.data, query.isLoading, query.isSuccess, setUser]);
+    if (authedUserQuery.isLoading) return;
+    setUser(authedUserQuery.isSuccess ? authedUserQuery.data : null);
+  }, [
+    authedUserQuery.data,
+    authedUserQuery.isLoading,
+    authedUserQuery.isSuccess,
+    setUser,
+  ]);
 
+  // Set protocol fee
   useEffect(() => {
-    setMobileMenuOpen(isXl);
+    if (!protoFeeQuery.data) return;
+    setProtoFee(protoFeeQuery.data);
+  }, [protoFeeQuery.isSuccess, protoFeeQuery.data]);
+
+  // Set mobile menu open state based on screen size.
+  useEffect(() => {
+    setLeftSideMenuOpen(isXl);
   }, [isXl]);
+
+  // Check native NFT Ownership on wallet change.
+  useEffect(() => {
+    if (!ready) return;
+    checkNativeNFTOwnership();
+  }, [ready, address]);
+
+  // Check native NFT Ownership every 5 minutes.
+  useInterval(() => {
+    checkNativeNFTOwnership();
+  }, 300 * 1000);
 
   useMotionValueEvent(scrollY, "change", (val) => {
     setScrollYPos(val);
@@ -131,6 +170,11 @@ export default function Layout({
     return 10000;
   }
 
+  async function checkNativeNFTOwnership() {
+    const count = await nativeNftBalance(address);
+    setUserHasNativeNFT(count > 0);
+  }
+
   return (
     <div>
       <Helmet>
@@ -139,11 +183,11 @@ export default function Layout({
       </Helmet>
       <div ref={ref} className="container-x flex h-screen text-white text ">
         <LeftSidebar
-          open={mobileMenuOpen}
+          open={leftSideMenuOpen}
           headerHeight={headerHeight}
           scrollYPos={scrollYPos}
           closeRequested={() => {
-            setMobileMenuOpen(false);
+            setLeftSideMenuOpen(false);
           }}
         />
 
@@ -151,7 +195,7 @@ export default function Layout({
           <div>
             <Header
               onClick={() => {
-                setMobileMenuOpen(!mobileMenuOpen);
+                setLeftSideMenuOpen(!leftSideMenuOpen);
               }}
               height={`h-[${headerHeight}px]`}
             />

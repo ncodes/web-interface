@@ -18,92 +18,18 @@ type OpenStateContext = {
   [key in OpenStateKey]: unknown;
 };
 
-export interface MarketFilter {
-  base?: string;
-  quote?: string;
-  price?: string;
-  priceUsd?: string;
-  liquidity?: string;
-  liquidityUsd?: string;
-  merchantLp?: boolean;
-  kycLp?: boolean;
-  query?: string;
-  kycTaker?: boolean;
-  offer?: boolean;
-  address?: string;
-  creator?: string;
-  permSwap?: boolean;
-  regions?: string;
-  permPut?: boolean;
-  putBadges?: string;
-  swapBadges?: string;
-}
-
-export interface LiquidityFilter {
-  base?: string;
-  quote?: string;
-  market?: string;
-  provider?: string;
-  paused?: boolean;
-  price?: string;
-  liquidities?: { marketAddress: string; provider: string; lid: number }[];
-  priceUsd?: string;
-  amount?: string;
-  amountUsd?: string;
-  kycLp?: boolean;
-  kycTaker?: boolean;
-  swapBadges?: string;
-  paymentMethods?: string;
-}
-
-export interface SwapFilter {
-  base?: string;
-  quote?: string;
-  marketAddress?: string;
-  type?: string;
-  status?: string;
-  fromDate?: string;
-  toDate?: string;
-}
-
-export interface OfferFilter {
-  marketAddress?: string;
-  provider?: string;
-  lid?: number;
-  creator?: string;
-  status?: string;
-  fromDate?: string;
-  toDate?: string;
-}
-
-export interface DisputeFilter {
-  marketAddress?: string;
-  participant?: string;
-  creator?: string;
-  defendant?: string;
-  orderId?: number;
-  disputeId?: number;
-  status?: string;
-  fromDate?: string;
-  toDate?: string;
-}
-
-export interface TicketFilter {
-  poolId?: number;
-  orderId?: number;
-  disputeId?: number;
-  owner?: string;
-  status?: string;
-}
-
-export interface SwapPageState {
-  revealPhaseEnded?: boolean;
-}
-
 export interface IStore {
   // Authenticated user state
   user: User | undefined | null;
   setUser: (user: User | undefined | null) => void;
+
+  // Connected wallet state
+  walletHasNativeNFT: boolean;
+  setUserHasNativeNFT: (enabled: boolean) => void;
+
+  // Protocol fees
+  protoFee: ProtocolFees;
+  setProtoFee: (fees: ProtocolFees) => void;
 
   // Region state
   currentRegion: string;
@@ -132,7 +58,7 @@ export interface IStore {
   toggleOpenState: (
     key: OpenStateKey,
     activeTab?: string,
-    ctx?: unknown
+    ctx?: unknown,
   ) => void;
   resetOpenState: () => void;
 
@@ -169,6 +95,20 @@ const useStore = create<IStore>((set, get) => ({
   user: undefined,
   setUser: (user: User | undefined | null) => set({ user }),
 
+  walletHasNativeNFT: false,
+  setUserHasNativeNFT: (enabled: boolean) =>
+    set({ walletHasNativeNFT: enabled }),
+
+  protoFee: {
+    instantNFTSwapFeeBp: 0,
+    instantSwapFeeBp: 0,
+    syntheticSwapFeeBp: 0,
+    stableSwapFeeBp: 0,
+    fixedNFTSwapFee: 0,
+    fixedSynthSwapFee: 0,
+  },
+  setProtoFee: (fees: ProtocolFees) => set({ protoFee: fees }),
+
   loaderProgress: 0,
   fullLoadCount: 0,
   setLoaderProgress: (progress: number) => {
@@ -196,7 +136,7 @@ const useStore = create<IStore>((set, get) => ({
   setCurrentTab: (tab: string) => set({ currentTab: tab }),
 
   enabledSafeMode: JSON.parse(
-    localStorage.getItem("enabledSafeMode") || "false"
+    localStorage.getItem("enabledSafeMode") || "false",
   ),
   setEnabledSafeMode: (enabled: boolean) => {
     localStorage.setItem("enabledSafeMode", JSON.stringify(enabled));

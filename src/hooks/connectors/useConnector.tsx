@@ -4,10 +4,13 @@ import {
   SimulateContractReturnType,
   TransactionReceipt,
   WalletClient,
+  createPublicClient,
+  http,
 } from "viem";
 import { hardhat } from "viem/chains";
 import {
   Chain,
+  PublicClient,
   erc20ABI,
   useAccount,
   useDisconnect,
@@ -24,7 +27,12 @@ import { getChain } from "./networks";
 export interface IConnector {
   defaultNetwork: number;
 
-  readContract<T>(name: ContractNames, targetFunc: string, args?): Promise<T>;
+  readContract<T>(
+    name: ContractNames,
+    targetFunc: string,
+    args?,
+    useAltRpc?,
+  ): Promise<T>;
   simulateContract(
     name: ContractNames,
     targetFunc: string,
@@ -345,16 +353,32 @@ export default function useConnector() {
    * @param name - The name of the contract
    * @param targetFunc - The target function to be called
    * @param args - The arguments to be passed to the target function
+   * @param useAltRpc - If true, the function will use the RPC endpoint specified in the networks.ts file
    */
   async function readContract<T>(
     name: ContractNames,
     targetFunc: string,
     args: unknown[] = [],
+    useAltRpc = false,
   ): Promise<T> {
-    if (!publicClient) throw new Error("no provider found");
+    let client = publicClient;
+
+    if (useAltRpc) {
+      const chainInfo = getChainInfo();
+      const chain = chains.find((c) => c.id === chainInfo.chainId);
+      if (!chain) throw new Error("unknown chain");
+      chain.rpcUrls.default.http = [chainInfo.rpcUrl];
+      chain.rpcUrls.public.http = chain.rpcUrls.default.http;
+      client = createPublicClient({
+        chain: chains.find((c) => c.id === (chainId as number)),
+        transport: http(),
+      }) as PublicClient;
+    }
+
+    if (!client) throw new Error("no provider found");
     const netInfo = getChain(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
-    return publicClient.readContract({
+    return client.readContract({
       address: netInfo.contracts[name].address as Address,
       abi: netInfo.contracts[name].abi,
       functionName: targetFunc as never,

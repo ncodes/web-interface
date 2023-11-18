@@ -17,6 +17,10 @@ interface GetSynthRateParams {
   symbol: string;
 }
 
+export interface GetProtocolFeesParams {
+  network: string;
+}
+
 /**
  * useMiscService provides access to v1/misc endpoint
  */
@@ -27,7 +31,7 @@ export function useMiscService() {
    * Get crypto USD rate
    */
   async function getCryptoRate(
-    ctx: QueryFunctionContext<[string, GetCryptoRateParams]>
+    ctx: QueryFunctionContext<[string, GetCryptoRateParams]>,
   ): Promise<number> {
     try {
       const [, params] = ctx.queryKey;
@@ -51,7 +55,7 @@ export function useMiscService() {
    * Get synthetic USD rate
    */
   async function getSynthRate(
-    ctx: QueryFunctionContext<[string, GetSynthRateParams]>
+    ctx: QueryFunctionContext<[string, GetSynthRateParams]>,
   ): Promise<number> {
     try {
       const [, params] = ctx.queryKey;
@@ -75,7 +79,7 @@ export function useMiscService() {
    * @returns
    */
   async function getMediatorPools(
-    ctx: QueryFunctionContext<[string, GetMediatorPoolsParams]>
+    ctx: QueryFunctionContext<[string, GetMediatorPoolsParams]>,
   ): Promise<MediatorPool[]> {
     try {
       const [, params] = ctx.queryKey;
@@ -95,9 +99,36 @@ export function useMiscService() {
     }
   }
 
+  /**
+   * Get protocol fees
+   * @param ctx The query function context
+   * @returns
+   */
+  async function getProtocolFees(
+    ctx: QueryFunctionContext<[string, GetProtocolFeesParams]>,
+  ): Promise<ProtocolFees> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { network } = params;
+      const headers = {};
+
+      const apiUrl = getChainInfo().apiUrl;
+      const resp = await axios({
+        method: "get",
+        url: `${apiUrl}/v1/misc/${network}/protocol-fees`,
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     getCryptoRate,
     getSynthRate,
     getMediatorPools,
+    getProtocolFees,
   };
 }

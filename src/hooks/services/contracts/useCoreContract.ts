@@ -256,6 +256,7 @@ export default function useCoreContract() {
       "core",
       "computeSwapFee",
       [mid, provider, lid, taker, orderAmt, orderPrice],
+      true,
     );
     return {
       protocolFee: res[0],
