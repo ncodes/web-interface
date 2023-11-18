@@ -679,7 +679,12 @@ export function SwapOfferCreatorContent({
           {/* IN Amount (QUOTE) */}
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
-              <span className="pl-4 text-gray-200 tracking-wide">In</span>
+              <span className="flex gap-2 items-center">
+                <span className="pl-4 text-gray-200 tracking-wide">In</span>
+                <span className="text-gray-500 font-light text-xs">
+                  - {market.quote}
+                </span>
+              </span>
               <span className="font-extralight text-xs text-blue-300 pr-5">
                 ${formatToMoney(quoteAmountUsd) || "0"}
               </span>
@@ -762,7 +767,12 @@ export function SwapOfferCreatorContent({
           {/* OUT Amount (BASE) */}
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
-              <span className="pl-4 text-gray-200 tracking-wide">Out</span>
+              <span className="flex gap-2 items-center">
+                <span className="pl-4 text-gray-200 tracking-wide">Out</span>
+                <span className="text-gray-500 font-light text-xs">
+                  - {market.base}
+                </span>
+              </span>
               <span className="font-extralight text-xs text-blue-300 pr-5">
                 ${formatToMoney(amountUsd) || "0"}
               </span>
