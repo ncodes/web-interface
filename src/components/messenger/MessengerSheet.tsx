@@ -21,7 +21,7 @@ export function MessengerSheet(props: { swap?: Swap; offer?: Offer }) {
         className={cn(
           styles,
           "w-full border-l focus-visible:outline-0 overflow-hidden border-gray-800 pt-0 px-0 pb-0",
-          "h-[90vh] md:h-screen"
+          "h-[70vh] md:h-screen",
         )}
         side={sheetSide}
       >
