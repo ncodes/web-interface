@@ -67,7 +67,7 @@ export function MarketsTabContent() {
   }, [marketFilter]);
 
   return (
-    <TabsContent value="markets" className="p-0 m-0 flex flex-col gap-3">
+    <TabsContent value="markets" className="p-0 m-0 flex flex-1 flex-col gap-3">
       <Helmet>
         <title>{`Markets - Joint`}</title>
       </Helmet>
@@ -86,8 +86,8 @@ export function MarketsTabContent() {
       {!fetchMarkets.isLoading &&
         fetchMarkets.isSuccess &&
         fetchMarkets.data?.markets?.length > 0 && (
-          <div className="flex flex-col gap-3 min-h-[300px] xl:min-h-[610px]">
-            <div className="flex flex-col gap-3">
+          <div className="flex flex-col flex-1 gap-3 min-h-[300px] xl:min-h-[610px]">
+            <div className="flex flex-col flex-1 gap-3">
               <Paginator
                 curPage={offset}
                 total={fetchMarkets.data?.meta?.queryCount}

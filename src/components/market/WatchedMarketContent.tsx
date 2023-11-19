@@ -140,7 +140,7 @@ export function WatchedMarketContent() {
   return (
     <TabsContent
       value="watched-markets"
-      className="p-0 m-0 flex flex-col gap-3"
+      className="p-0 m-0 flex flex-1 flex-col gap-3"
     >
       <Helmet>
         <title>{`Watched Markets - Joint`}</title>
@@ -173,8 +173,8 @@ export function WatchedMarketContent() {
         !loading &&
         fetchMarkets.isSuccess &&
         fetchMarkets.data?.markets?.length > 0 && (
-          <div className="flex flex-col gap-3 min-h-[500px]">
-            <div className="flex flex-col gap-3">
+          <div className="flex flex-col flex-1 gap-3 min-h-[500px]">
+            <div className="flex flex-col flex-1 gap-3">
               <Paginator
                 curPage={offset}
                 total={fetchMarkets.data?.meta?.queryCount}

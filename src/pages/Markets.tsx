@@ -31,7 +31,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   return (
     <Tabs
       defaultValue={defaultTab || "markets"}
-      className="w-full h-full transition-all duration-500 "
+      className="w-full transition-all duration-500  flex flex-1 flex-col"
       onValueChange={(value) => {
         setCurrentTab(value);
       }}
@@ -141,6 +141,7 @@ export default function Markets({ defaultTab }: { defaultTab?: string }) {
   return (
     <Layout
       title="Markets - Joint"
+      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
         <div className="flex w-full justify-between flex-col pt-3">
