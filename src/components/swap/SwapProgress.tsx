@@ -244,11 +244,11 @@ export function SwapProgress({ swap }: { swap: Swap }) {
           </span>
         </div>
         <span className="xl:hidden">
-          <ChatButton address={address} swap={swap} disableUnmark />
+          <ChatButton address={address} swap={swap} disableUnmark hideLabel />
         </span>
       </div>
       <div>
-        <div className="bg-card-background border rounded-2xl border-card-border w-full mt-3 pb-5">
+        <div className="bg-card-background border-none rounded-2xl border-card-border w-full mt-3 md:mt-2 xl:mt-5 pb-5">
           {/* -- when not payer -- */}
           {/* ---- when awaiting payment -- */}
           {showAwaitingPaymentSection && (

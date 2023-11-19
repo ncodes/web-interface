@@ -9,7 +9,7 @@ import { isSwapParticipant } from "../../libs/api_utils.ts";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { SwapDisputes } from "./SwapDisputes.tsx";
-import { SwapInformation } from "./SwapInformation.tsx";
+import { SwapInformation } from "./SwapInformation.1.tsx";
 import { SwapProgress } from "./SwapProgress.tsx";
 import { SwapRow } from "./SwapRow.tsx";
 
@@ -94,7 +94,7 @@ export function SwapPageTabContent({
       {!swap.isLoading && swap.isSuccess && (
         <SwapRow
           swap={swap.data}
-          className="rounded-none border-x-0 border-t-0"
+          className="rounded-none border-b-gray-700 border-x-0 border-t-0"
           noFocus
         />
       )}

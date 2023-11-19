@@ -14,11 +14,13 @@ export function ChatButton({
   swap,
   offer,
   disableUnmark,
+  hideLabel,
 }: {
   address: string;
   swap?: Swap;
   offer?: Offer;
   disableUnmark?: boolean;
+  hideLabel?: boolean;
 }) {
   const isXl = useMediaQuery("(min-width: 1280px)");
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -29,13 +31,13 @@ export function ChatButton({
         (offer && isOfferCounterparty(offer, address))) ? (
         <Button
           variant="ghost"
-          className="flex font-semibold items-center gap-1 text-chinese-green"
+          className="flex font-semibold items-center gap-1 text-gray-300"
           onClick={() => {
             if (isXl) return;
             toggleOpenState && toggleOpenState("messengerSheet");
           }}
         >
-          <MessageSquare width="20px" /> Chat
+          <MessageSquare width="20px" /> {!hideLabel && "Chat"}
           {(swap?.orderId || offer?.offerId) && (
             <UnreadMessageCount
               orderId={swap?.orderId}

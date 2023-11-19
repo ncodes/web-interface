@@ -85,7 +85,7 @@ export function Messenger({
   const [client, setClient] = useState<Client | null>(null);
   const [readableConvosIds, setReadableConvoIds] = useState<string[]>([]);
   const [conversation, setConversation] = useState<Conversation | undefined>(
-    undefined
+    undefined,
   );
   const [mediatorsConvo, setMediatorsConvo] = useState<Conversation[]>([]);
   const [countPartsConvo, setCountPartsConvo] = useState<Conversation[]>([]);
@@ -170,7 +170,7 @@ export function Messenger({
       conversation: Conversation,
       onCreated?: (stream: MessageStream) => void,
       onMessage?: (msg: DecodedMessage) => void,
-      onError?: (err: unknown) => void
+      onError?: (err: unknown) => void,
     ) => {
       const convoId = getConvoId(conversation);
       if (streams.current[convoId]) return;
@@ -195,7 +195,7 @@ export function Messenger({
         onError?.(e);
       }
     },
-    [streams]
+    [streams],
   );
 
   // As a swap/offer counterparty, process incoming messages from counterparty conversation.
@@ -243,7 +243,7 @@ export function Messenger({
               client.address,
               conversation.peerAddress,
               mediatorsConvo,
-              message
+              message,
             );
           }
 
@@ -252,7 +252,7 @@ export function Messenger({
         },
         (err) => {
           console.error("counterparty conversation stream error:", err);
-        }
+        },
       );
     };
 
@@ -401,7 +401,7 @@ export function Messenger({
           },
           (err) => {
             console.error("mediator conversation stream error:", err);
-          }
+          },
         );
       };
 
@@ -435,7 +435,7 @@ export function Messenger({
 
       // Add conversations to the readable list to allow them to be read from DB.
       setReadableConvoIds(
-        _.uniq([...readableConvosIds, ...convos.map((c) => getConvoId(c))])
+        _.uniq([...readableConvosIds, ...convos.map((c) => getConvoId(c))]),
       );
 
       // Subscribe to conversation topics to receive notifications
@@ -493,7 +493,7 @@ export function Messenger({
           },
           (err) => {
             console.error("counterpart conversation stream error:", err);
-          }
+          },
         );
       };
       void createConvoStream();
@@ -518,7 +518,7 @@ export function Messenger({
       await sendSwapStatus(
         `dispute-start-${dispId}`,
         `Dispute #${dispId} has started`,
-        conversation
+        conversation,
       );
     };
 
@@ -537,7 +537,7 @@ export function Messenger({
       await sendSwapStatus(
         `dispute-ended-${dispId}`,
         `Dispute #${dispId} has concluded`,
-        conversation
+        conversation,
       );
     };
 
@@ -558,7 +558,7 @@ export function Messenger({
         await sendSwapStatus(
           `dispute-start-${dispId}`,
           `Dispute #${dispId} has started`,
-          convo
+          convo,
         );
       }
     };
@@ -643,13 +643,13 @@ export function Messenger({
       <div
         className={cn(
           "absolute overflow-hidden flex flex-col text-gray-200 w-full h-full bg-card-background",
-          { "rounded-xl border-card-border border": !sheetMode }
+          { "rounded-xl border-card-border/30 border": !sheetMode },
         )}
       >
         <div
           className={cn(
-            "flex gap-2 items-center justify-between select-none p-3 py-3 border-card-border bg-card-background border-b text-xl drop-shadow-3xl",
-            { "pr-10": sheetMode }
+            "flex gap-2 items-center justify-between select-none p-3 py-3 border-card-border/50 bg-card-background border-b text-xl drop-shadow-3xl",
+            { "pr-10": sheetMode },
           )}
         >
           <span className="flex items-center gap-1 tracking-wider">
@@ -786,7 +786,7 @@ export function Messenger({
                           </>
                         )}
                         {[SwapStatusTypeId].includes(
-                          msg.contentType?.typeId as string
+                          msg.contentType?.typeId as string,
                         ) && <MessageItemSwapStatus msg={msg} />}
                       </div>
                     ))}
@@ -798,7 +798,7 @@ export function Messenger({
           <div
             className={cn(
               "flex shrink-0 p-2 pb-0 px-0 gap-2 items-center border-t border-gray-700 bg-card-background",
-              { "rounded-b-xl": !sheetMode }
+              { "rounded-b-xl": !sheetMode },
             )}
           >
             <div className="w-full">
@@ -819,7 +819,7 @@ export function Messenger({
                       if (e.key == "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         handleSendMsg(e.currentTarget.value).catch(
-                          console.error
+                          console.error,
                         );
                         setTextMsg("");
                       }

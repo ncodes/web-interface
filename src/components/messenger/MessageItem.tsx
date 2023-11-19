@@ -66,14 +66,14 @@ export function MessageItem({
 
   function getTitle(sender: string) {
     if (isEqlStr(sender, address)) return "You";
-    
+
     if (swap && isSwapCounterparty(swap, sender)) {
       if (isProvider(swap, sender)) return "Liquidity Provider";
       return "Taker";
     }
     if (swap && isSwapDraftee(swap, sender))
       return `Mediator#${getDrafteeIndex(swap, sender)}`;
-    
+
     if (offer && isEqlStr(offer.provider, sender)) return "Liquidity Provider";
     if (offer && isEqlStr(offer.creator, sender)) return "Offerer";
     return "";
@@ -91,7 +91,7 @@ export function MessageItem({
               <span className="select-none flex gap-2">
                 <span
                   className={cn(
-                    `px-[5px] text-[10px] rounded-xl rounded-tl-none rounded-bl-md text-gray-100`
+                    `px-[5px] text-[10px] rounded-xl rounded-tl-none rounded-bl-md text-gray-100`,
                   )}
                   style={{ background: getBgColor(from) }}
                 >
@@ -148,7 +148,7 @@ export function MessageItem({
 
       {mine && (
         <div className="flex gap-2 animate-in slide-in-from-right-56">
-          <div className="flex flex-col bg-gray-800/60 border border-gray-700/50 flex-1 rounded-xl rounded-tr-none px-2 pb-2">
+          <div className="flex flex-col bg-gray-900/60 border border-gray-700/50 flex-1 rounded-xl rounded-tr-none px-2 pb-2">
             <span className="flex justify-between text-xs pt-1 pb-1 font-normal tracking-wide">
               <span className="text-gray-500 h-[16px] font-light gap-1 flex items-center">
                 <Clock width="10" className="text-gray-400" />
@@ -157,7 +157,7 @@ export function MessageItem({
               <span className="select-none flex gap-1">
                 <span
                   className={cn(
-                    `px-[5px] text-[10px] rounded-xl rounded-tr-none rounded-br-md`
+                    `px-[5px] text-[10px] rounded-xl rounded-tr-none rounded-br-md`,
                   )}
                   style={{ background: getBgColor(from) }}
                 >
