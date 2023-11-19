@@ -60,7 +60,7 @@ export function Navigation() {
             iconClassName="w-[25px]"
             icon={<IconExchange width="25" />}
             label="Swaps"
-            active={pathname.match("^/my/swap(s|)") != null}
+            active={pathname.match("^/(my/)?swap(s|)") != null}
             to="/my/swaps"
           />
         </li>
