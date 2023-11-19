@@ -90,7 +90,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
     (showAwaitingPaymentSection || showSendPaymentSection) &&
       !disableButtons.cancel
       ? 5000
-      : null
+      : null,
   );
 
   useInterval(
@@ -98,14 +98,14 @@ export function SwapProgress({ swap }: { swap: Swap }) {
       const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, markAsPaid: order?.paid });
     },
-    showSendPaymentSection && !disableButtons.markAsPaid ? 5000 : null
+    showSendPaymentSection && !disableButtons.markAsPaid ? 5000 : null,
   );
 
   const showDisputedSection =
     address &&
     isInDispute(swap) &&
     !["awaiting_exec", "executed", "abandoned"].includes(
-      getDisputeStatus(swap.disputes[0])
+      getDisputeStatus(swap.disputes[0]),
     );
 
   const showDisputedAndAwaitingExecSection =
@@ -115,7 +115,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
     isDisputed(swap) &&
     !swap.disputes[0]?.orderReleased &&
     ["awaiting_exec", "released", "cancelled", "stalled"].includes(
-      getDisputeStatus(swap.disputes[0])
+      getDisputeStatus(swap.disputes[0]),
     );
 
   const showPaymentMadeSection =
@@ -135,7 +135,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
       showPaymentMadeSection) &&
       !disableButtons.release
       ? 5000
-      : null
+      : null,
   );
 
   const showAwaitingReleaseSection =
@@ -157,7 +157,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
       showAwaitingPaymentSection &&
       !disableButtons.appeal
       ? 5000
-      : null
+      : null,
   );
 
   const showSwapReleasedSection =
@@ -181,7 +181,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
       setLoading,
       humanizeErrors,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 
@@ -196,7 +196,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
       setLoading,
       humanizeErrors,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 
@@ -211,7 +211,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
       setLoading,
       humanizeErrors,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 
@@ -228,7 +228,7 @@ export function SwapProgress({ swap }: { swap: Swap }) {
       setLoading,
       humanizeErrorsDM,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 

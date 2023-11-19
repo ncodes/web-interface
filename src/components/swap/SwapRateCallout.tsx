@@ -30,7 +30,6 @@ import { Textarea } from "../ui/textarea.tsx";
 
 export function SwapRateCallout({ swap }: { swap: Swap }) {
   const maxChars = 240;
-  const [hovered, setHovered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isOkay, setIsOkay] = useState(false);
   const client = useRef<Client | undefined>();
@@ -162,32 +161,27 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
         }}
         asChild
       >
-        <div
-          className="flex flex-col gap-2 px-5 mt-5"
-          onMouseOver={() => {
-            if (isRated) return;
-            setHovered(true);
-          }}
-          onMouseOut={() => {
-            if (isRated) return;
-            setHovered(false);
-          }}
-        >
-          <div className="text-sm font-light text-gray-400">
-            Are you satisfied?
+        <div className="flex flex-col gap-2 px-5 mt-5">
+          <div className="flex justify-between items-center">
+            <div className="text-sm font-light  text-gray-400">
+              Are you satisfied?
+            </div>
+            <span className="text-gray-600 font-light text-xs">
+              No gas required
+            </span>
           </div>
           <Button
             variant="outline"
             size="full"
             disabled={isRated}
-            className="flex gap-1 text-sm border border-gray-800 rounded-xl font-medium"
+            className={cn(
+              "flex duration-[5000ms] gap-1 text-gray-800 bg-gradient-to-tl from-red-400 to-chinese-green hover:bg-transparent text-sm border border-chinese-green hover:border-gray-100 hover:text-gray-800 rounded-xl font-medium",
+              { "animate-pulse": !isRated },
+            )}
           >
             <IconStarSmile
               width="20px"
-              className={cn("transition-all duration-300", {
-                "text-chinese-green": !hovered,
-                "text-gray-800": hovered,
-              })}
+              className={cn("transition-all duration-300")}
             />
             <span>
               {!isRated && <span>Rate </span>}
