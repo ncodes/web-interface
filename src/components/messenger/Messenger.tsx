@@ -797,7 +797,7 @@ export function Messenger({
           </div>
           <div
             className={cn(
-              "flex shrink-0 p-2 pb-0 px-0 gap-2 items-center border-t border-gray-700 bg-card-background",
+              "flex shrink-0 p-2 pb-0 px-0 gap-2 items-center border-t border-gray-800 bg-card-background",
               { "rounded-b-xl": !sheetMode },
             )}
           >
