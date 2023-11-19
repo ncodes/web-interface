@@ -16,7 +16,7 @@ function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
   return (
     <div
       className={cn(
-        "xl:hidden fixed overflow-hidden w-screen h-screen bg-black/50 left-0 top-0 z-[15] xl:z-[20] ",
+        "xl:hidden fixed overflow-hidden w-screen h-[100svh] bg-black/50 left-0 top-0 z-[15] xl:z-[20] ",
         { hidden: !props.open },
       )}
       onClick={props.onClick}
@@ -52,13 +52,13 @@ export function LeftSidebar(props: {
       />
       <div
         className={cn(
-          "w-[250px] left-0 flex absolute xl:relative z-[15] xl:z-[10] border-r xl:border-r-0 border-gray-800 xl:pl-0 xl:bg-transparent h-screen transition-left duration-150",
+          "w-[250px] left-0 flex absolute xl:relative z-[15] xl:z-[10] border-r xl:border-r-0 border-gray-800 xl:pl-0 xl:bg-transparent h-[100svh] transition-left duration-150",
           {
             "absolute top-0 -left-[280px] z-[6]  ": !openOverlay,
           },
         )}
       >
-        <div className="fixed w-[250px] xl:left-0 flex flex-col flex-1 h-screen bg-background border-r xl:border-none border-gray-800">
+        <div className="fixed w-[250px] xl:left-0 flex flex-col flex-1 h-[100svh] bg-background border-r xl:border-none border-gray-800">
           <div className="flex-col py-[28px] pt-[18px] flex-1 flex ">
             <header className="flex gap-4 -ml-[5px] pl-8 -mt-[3px]">
               <a href="#" className="pt-[6px]">
