@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Client, PrivateKey, Signature } from "@xmtp/xmtp-js";
 import { PlugZapIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import FollowCodec, {
@@ -141,6 +142,10 @@ export function WatchedMarketContent() {
       value="watched-markets"
       className="p-0 m-0 flex flex-col gap-3"
     >
+      <Helmet>
+        <title>{`Watched Markets - Joint`}</title>
+      </Helmet>
+
       {((fetchMarkets.isLoading &&
         !fetchMarkets.isRefetching &&
         fetchMarkets.fetchStatus != "idle") ||

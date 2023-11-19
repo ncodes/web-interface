@@ -10,6 +10,7 @@ import Layout from "./Layout.tsx";
 export default function Timeline() {
   return (
     <Layout
+      title="Timeline - Joint"
       bodyContainerClassName="min-h-[96%] xl:min-h-full"
       body={
         <Tabs

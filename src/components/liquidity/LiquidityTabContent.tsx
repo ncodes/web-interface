@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { RequestError } from "../../libs/RequestError.ts";
-import { isEqlStr } from "../../libs/helpers.ts";
+import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { SwapSheet } from "../swap/SwapSheet.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
@@ -57,6 +58,16 @@ export function LiquidityTabContent({
       value="liquidity"
       className="p-3 pt-0 mt-0 px-0 flex flex-col gap-3"
     >
+      {liquidity.data && (
+        <Helmet>
+          <title>
+            Liquidity -{" "}
+            {`${liquidity.data.market.base}/${liquidity.data.market.quote} `} -{" "}
+            {shortenAddress(liquidity.data.provider)} - Joint
+          </title>
+        </Helmet>
+      )}
+
       <div>
         {liquidity.isLoading && (
           <RowSkeleton className="h-[300px] xl:h-[610px]" />

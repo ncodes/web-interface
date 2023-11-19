@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import { useMediaQuery } from "usehooks-ts";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
@@ -20,6 +21,9 @@ function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
       defaultValue="my-swaps"
       className="w-full h-full transition-all duration-500"
     >
+      <Helmet>
+        <title>{`Swap #${swap?.orderId} - Joint`}</title>
+      </Helmet>
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollOverflowIndicator className="[&::before]:rounded-tr-none w-full">
           <ScrollAreaHorizontal type="scroll" className="w-full">
@@ -68,6 +72,7 @@ export default function Swap() {
   return (
     <Layout
       bodyContainerClassName="lg:min-h-full"
+      title="Swap #0"
       body={
         <div className="flex flex-col">
           <SwapPage

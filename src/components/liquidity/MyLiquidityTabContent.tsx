@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
@@ -65,6 +66,10 @@ export function MyLiquidityTabContent() {
       value="my-liquidities"
       className="p-0 m-0 flex flex-col flex-1 gap-3"
     >
+      <Helmet>
+        <title>{`Watched Liquidity - Joint`}</title>
+      </Helmet>
+
       {isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
 
       {isError && (

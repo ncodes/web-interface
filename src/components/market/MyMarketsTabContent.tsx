@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
@@ -59,6 +60,10 @@ export function MyMarketsTabContent() {
 
   return (
     <TabsContent value="my-markets" className="p-0 m-0 flex flex-col gap-3">
+      <Helmet>
+        <title>{`My Markets - Joint`}</title>
+      </Helmet>
+
       {fetchMarkets.isLoading && (
         <RowSkeleton className="h-[300px] xl:h-[610px]" />
       )}

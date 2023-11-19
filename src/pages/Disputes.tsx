@@ -95,6 +95,7 @@ export default function Disputes() {
 
   return (
     <Layout
+      title="Disputes - Joint"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<DisputeTabs />}
       rightSide={rightSide}

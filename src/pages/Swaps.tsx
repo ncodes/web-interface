@@ -95,6 +95,7 @@ export default function Swaps() {
 
   return (
     <Layout
+      title="My Swaps - Joint"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<SwapTabs />}
       rightSide={rightSide}

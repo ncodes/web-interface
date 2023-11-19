@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
@@ -124,6 +125,12 @@ function MarketTabs() {
         value="markets"
         className="relative p-3 px-0 mt-0 pt-0 pb-0 gap-3 flex flex-col flex-1"
       >
+        {market.data && (
+          <Helmet>
+            <title>{`${market?.data?.base} - ${market?.data?.quote} Market - Joint`}</title>
+          </Helmet>
+        )}
+
         {/* MARKET INFO */}
 
         {market.isLoading && <RowSkeleton />}
@@ -254,6 +261,7 @@ function MarketTabs() {
 export default function Market() {
   return (
     <Layout
+      title="Market - Joint"
       body={<MarketTabs />}
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       rightSide={

@@ -107,6 +107,7 @@ export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
 
   return (
     <Layout
+      title="My Liquidity - Joint"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<LiquidityTabs defaultTab={defaultTab} />}
       rightSide={rightSide}

@@ -140,6 +140,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
 export default function Markets({ defaultTab }: { defaultTab?: string }) {
   return (
     <Layout
+      title="Markets - Joint"
       body={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
         <div className="flex w-full justify-between flex-col pt-3">

@@ -2,6 +2,7 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import { PlugZapIcon } from "lucide-react";
 import { ReactNode, useEffect } from "react";
+import Helmet from "react-helmet";
 import { NavLink } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
@@ -70,6 +71,10 @@ export function TicketsStatsTabContent() {
       value="ticket-stats"
       className="min-h-full p-0 m-0 pt-0 flex flex-col gap-3"
     >
+      <Helmet>
+        <title>{`Ticket Stats - Joint`}</title>
+      </Helmet>
+
       {!address && (
         <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px] xl:h-[610px]">
           <PlugZapIcon className="w-[20px]" /> Connect your wallet

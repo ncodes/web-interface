@@ -25,10 +25,14 @@ export default function Layout({
   body,
   rightSide,
   bodyContainerClassName,
+  title,
+  description,
 }: {
   body?: React.ReactNode;
   rightSide?: React.ReactNode;
   bodyContainerClassName?: string;
+  title: string;
+  description?: string;
 }) {
   const headerHeight = 55;
   const location = useLocation();
@@ -183,7 +187,16 @@ export default function Layout({
   return (
     <div>
       <Helmet>
-        <title>Dashboard</title>
+        <title>{title}</title>
+        <meta
+          name="description"
+          content={
+            description ||
+            "Joint is an innovative, simple to use DeFi protocol for peer-to-peer trading. " +
+              "Swap cryptocurrencies, NFTs for cash, and vice versa."
+          }
+        />
+        <meta name="theme-color" content="#030507" />
         <body className="bg-background" />
       </Helmet>
       <div ref={ref} className="container-x flex h-screen text-white text ">

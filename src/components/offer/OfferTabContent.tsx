@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
@@ -75,7 +76,16 @@ export function OfferTabContent({
   });
 
   return (
-    <TabsContent value="offers" className="p-0 m-0 px-0 flex flex-col gap-3">
+    <TabsContent
+      value="offers"
+      className="p-0 m-0 px-0 flex flex-1 flex-col gap-3"
+    >
+      {offer.data && (
+        <Helmet>
+          <title>{`Offer #${offer.data?.offerId} - Joint`}</title>
+        </Helmet>
+      )}
+
       <div className="p-0 m-0">
         {offer.isLoading && <RowSkeleton />}
 

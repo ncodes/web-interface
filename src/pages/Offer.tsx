@@ -20,7 +20,7 @@ function Page({
   return (
     <Tabs
       defaultValue="offers"
-      className="w-full h-full transition-all duration-500"
+      className="w-full h-full flex flex-1 flex-col transition-all duration-500"
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollOverflowIndicator className="[&::before]:rounded-tr-none w-full">
@@ -64,5 +64,12 @@ export default function Offer() {
     </div>
   ) : null;
 
-  return <Layout body={<Page setOffer={setOffer} />} rightSide={rightSide} />;
+  return (
+    <Layout
+      title="Offer - Joint"
+      bodyContainerClassName="min-h-[96%] xl:min-h-full"
+      body={<Page setOffer={setOffer} />}
+      rightSide={rightSide}
+    />
+  );
 }

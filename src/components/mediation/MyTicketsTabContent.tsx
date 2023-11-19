@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
@@ -59,6 +60,9 @@ export function MyTicketsTabContent() {
       value="my-tickets"
       className="p-0 m-0 flex flex-col flex-1 gap-3 "
     >
+      <Helmet>
+        <title>{`My Tickets - Joint`}</title>
+      </Helmet>
       {fetchTickets.isLoading && (
         <RowSkeleton className="h-[300px] xl:h-[610px]" />
       )}

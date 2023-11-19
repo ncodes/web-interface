@@ -95,6 +95,7 @@ export default function Offers() {
 
   return (
     <Layout
+      title="Offers - Joint"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<OfferTabs />}
       rightSide={rightSide}

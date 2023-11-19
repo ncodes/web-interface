@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useMarketService } from "../../hooks/services/backend/useMarketService.ts";
@@ -67,6 +68,10 @@ export function MarketsTabContent() {
 
   return (
     <TabsContent value="markets" className="p-0 m-0 flex flex-col gap-3">
+      <Helmet>
+        <title>{`Markets - Joint`}</title>
+      </Helmet>
+
       {fetchMarkets.isLoading && (
         <RowSkeleton className="h-[300px] xl:h-[610px]" />
       )}

@@ -1,7 +1,10 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import { useOfferService } from "../../hooks/services/backend/useOfferService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { RequestError } from "../../libs/RequestError.ts";
@@ -9,9 +12,6 @@ import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { OfferRow } from "./OfferRow.tsx";
-
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 
 export function OffersTabContent({
   setLiquidity,
@@ -100,6 +100,12 @@ export function OffersTabContent({
 
   return (
     <TabsContent value="offers" className="p-0 m-0 flex flex-col flex-1 gap-3">
+      {offers.data && (
+        <Helmet>
+          <title>Liquidity Offers - Joint</title>
+        </Helmet>
+      )}
+
       {offers.isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
 
       {offers.isError && (

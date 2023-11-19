@@ -145,6 +145,7 @@ export default function Mediation({ defaultTab }: { defaultTab?: string }) {
 
   return (
     <Layout
+      title="My Tickets - Joint"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<MediationTabs defaultTab={defaultTab} />}
       rightSide={rightSide}

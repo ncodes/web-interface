@@ -17,7 +17,7 @@ function Overlay(props: { open: undefined | boolean; onClick: () => void }) {
     <div
       className={cn(
         "xl:hidden fixed overflow-hidden w-screen h-screen bg-black/50 left-0 top-0 z-[15] xl:z-[20] ",
-        { hidden: !props.open }
+        { hidden: !props.open },
       )}
       onClick={props.onClick}
     />
@@ -55,7 +55,7 @@ export function LeftSidebar(props: {
           "w-[250px] left-0 flex absolute xl:relative z-[15] xl:z-[10] border-r xl:border-r-0 border-gray-800 xl:pl-0 xl:bg-transparent h-screen transition-left duration-150",
           {
             "absolute top-0 -left-[280px] z-[6]  ": !openOverlay,
-          }
+          },
         )}
       >
         <div className="fixed w-[250px] xl:left-0 flex flex-col flex-1 h-screen bg-background border-r xl:border-none border-gray-800">
@@ -100,7 +100,8 @@ export function LeftSidebar(props: {
                 }}
               />
               <NavOrdinaryLink
-                href="#"
+                href="https://docs.joint.exchange"
+                target="_blank"
                 label="Help & Support"
                 svg={<IconQuestionCircle />}
                 className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[2px]"
