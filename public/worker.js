@@ -1,7 +1,7 @@
 self.addEventListener("push", function (e) {
   const data = e.data.json();
 
-  let url = "https://joint-dapp-dev.vercel.app";
+  let url = import.meta.env.VITE_APP_URL;
   if (data.orderId !== undefined && data.orderId != null) {
     url = `${url}/swap/${data.orderId}`;
   } else if (data.offerId !== undefined && data.offerId != null) {
