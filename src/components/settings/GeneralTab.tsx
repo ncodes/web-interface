@@ -70,7 +70,7 @@ export function GeneralTab(props: { address: string }) {
       <TabContentHeader address={props.address} />
       <ScrollArea type="scroll" className="h-full">
         <div className="mb-5 overflow-auto scrollbar-hide px-5 pt-3 flex flex-col ">
-          <Accordion type="multiple" defaultValue={["balances"]}>
+          <Accordion type="multiple" defaultValue={["balances", "safety"]}>
             <AccordionItem className="" value="balances">
               <AccordionContent className="tracking-wide">
                 <div className="flex flex-col gap-4 box-border min-w-full float-left">
@@ -118,8 +118,9 @@ export function GeneralTab(props: { address: string }) {
               </AccordionTrigger>
               <AccordionContent className="tracking-wide">
                 <div className="font-light text-gray-100 text-sm">
-                  With safe mode, you will only see markets where the liquidity
-                  providers and swappers have completed KYC verification.
+                  With safe mode enabled, you will only see markets where the
+                  liquidity providers and swappers have completed KYC
+                  verification.
                 </div>
                 <div className="mt-3">
                   <Switch

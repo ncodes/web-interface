@@ -26,7 +26,7 @@ export async function appealOrderFunc(
   swap: Swap,
   appealOrder: (
     orderId: bigint,
-    wantRelease: boolean
+    wantRelease: boolean,
   ) => Promise<[`0x${string}`, TransactionReceipt]>,
   wantRelease: boolean,
   getChainInfo: () => ChainInfo,
@@ -37,14 +37,14 @@ export async function appealOrderFunc(
   setLoading: (id: string, loading: LoadingState) => void,
   humanizeErrors: (error: { message: string } | unknown) => string,
   notifySuccess: (msg: ReactNode, options?: Options) => void,
-  notifyError: (msg: ReactNode, options?: Options) => void
+  notifyError: (msg: ReactNode, options?: Options) => void,
 ) {
   try {
     setLoading(swap.orderId.toFixed(), { ...loading, appealOrder: true });
 
     const [txHash, txReceipt] = await appealOrder(
       BigInt(swap.orderId),
-      wantRelease
+      wantRelease,
     );
 
     const event = decodeEventLog({

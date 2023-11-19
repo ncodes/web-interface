@@ -8,7 +8,7 @@ export function LiquidityFilter({ ownerMode }: { ownerMode?: boolean }) {
         <LucideFilter width="18" className="text-gray-500" />{" "}
         <span>Filter Liquidities</span>
       </h1>
-      <div className="bg-card-background border border-gray-800 rounded-2xl w-full ">
+      <div className="border border-gray-800 rounded-2xl w-full ">
         <LiquidityFilterContent ownerMode={ownerMode} />
       </div>
     </div>

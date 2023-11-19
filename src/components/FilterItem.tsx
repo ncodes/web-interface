@@ -1,12 +1,12 @@
 import React from "react";
+import { cn } from "../libs/utils.ts";
+import { ToolTip } from "./ToolTip.tsx";
+import IconInfoCircle from "./icons/IconInfoCircle.tsx";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion.tsx";
-import { cn } from "../libs/utils.ts";
-import { ToolTip } from "./ToolTip.tsx";
-import IconInfoCircle from "./icons/IconInfoCircle.tsx";
 
 export function FilterItem({
   title,
@@ -24,7 +24,7 @@ export function FilterItem({
   error?: string;
 }) {
   return (
-    <AccordionItem value={title} className={cn(className)}>
+    <AccordionItem value={title} className={cn("border-none", className)}>
       <AccordionTrigger className="px-5 py-3 tracking-wider">
         <div className="flex items-center gap-2">
           <span>{title}</span>

@@ -8,8 +8,8 @@ export function DisputeFilter() {
         <LucideFilter width="18" className="text-gray-500" />{" "}
         <span>Filter Disputes</span>
       </h1>
-      <div className="bg-card-background border border-gray-800 rounded-2xl w-full ">
-        <DisputeFilterContent  />
+      <div className="border border-gray-800 rounded-2xl w-full ">
+        <DisputeFilterContent />
       </div>
     </div>
   );

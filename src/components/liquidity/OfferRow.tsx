@@ -190,7 +190,7 @@ export function OfferRow({
         data-click-trigger="1"
         className={cn(
           "border bg-card-background border-card-border transition-all duration-300 rounded-xl hover:border-chinese-green cursor-pointer border-b-gray-600",
-          className
+          className,
         )}
       >
         {/* Level 1 */}
@@ -326,7 +326,7 @@ export function OfferRow({
                     <span className="flex gap-1" data-click-trigger="1">
                       {formatToHighDenom(
                         offer.price,
-                        offer.market.quoteDecimals
+                        offer.market.quoteDecimals,
                       )}
                       <USDAmountToolTip v={offer.priceUsd} />
                     </span>
@@ -341,7 +341,7 @@ export function OfferRow({
                     >
                       {formatToHighDenom(
                         offer.amount,
-                        offer.market.baseDecimals
+                        offer.market.baseDecimals,
                       )}
                       <USDAmountToolTip v={offer.amountUsd} />
                     </span>
@@ -353,7 +353,7 @@ export function OfferRow({
                     >
                       <ToolTip
                         tip={moment(offer.deadline).format(
-                          "DD MMM YYYY, h:mm:ss a"
+                          "DD MMM YYYY, h:mm:ss a",
                         )}
                       >
                         <span
@@ -538,7 +538,7 @@ export function OfferRow({
         >
           <div
             data-click-trigger="1"
-            className="flex items-center w-full gap-2 px-1 overflow-hidden pr-1"
+            className="flex items-center w-full gap-2 px-1 overflow-hidden pr-1 py-1"
           >
             {/* offer is pending */}
             {address && isOfferPending(offer) && (
@@ -701,7 +701,7 @@ export function OfferRow({
                 "hidden md:inline border-gray-800 border-l shrink-0",
                 {
                   "!hidden": !offer.swap || offer.swap.orderId == undefined,
-                }
+                },
               )}
             >
               <NavLink to={`/swap/${offer.swap?.orderId}`}>
@@ -719,7 +719,7 @@ export function OfferRow({
                 "hidden md:inline border-gray-800 border-l shrink-0",
                 {
                   "!hidden": location.pathname.match("^/liquidity"),
-                }
+                },
               )}
             >
               <NavLink
@@ -745,7 +745,7 @@ export function OfferRow({
                   <span
                     className={cn(
                       "px-2 py-3 outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                      { "scale-x-105 text-chinese-green": moreMenuOpen }
+                      { "scale-x-105 text-chinese-green": moreMenuOpen },
                     )}
                   >
                     <DotsVerticalIcon />

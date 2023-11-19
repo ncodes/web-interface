@@ -73,7 +73,7 @@ export function BuyTicketSheet(props: {
       const allowance = await getTokenAllowance(
         getChainInfo().contracts?.token.address,
         address,
-        getChainInfo().contracts?.mediatorManager.address
+        getChainInfo().contracts?.mediatorManager.address,
       );
       setApproved(allowance >= BigInt(ticketPrice + BigInt(pool.reqBond)));
     };
@@ -89,7 +89,7 @@ export function BuyTicketSheet(props: {
       await approveAllowance(
         getChainInfo().contracts?.token.address,
         getChainInfo().contracts?.mediatorManager.address,
-        await getTokenSupply(getChainInfo().contracts?.token.address)
+        await getTokenSupply(getChainInfo().contracts?.token.address),
       );
 
       await delay(5000);
@@ -145,7 +145,7 @@ export function BuyTicketSheet(props: {
       <SheetContent
         className={cn(
           styles,
-          "flex py-0 flex-col gap-0 justify-between w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "flex py-0 flex-col gap-0 justify-between w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
         )}
         side={sheetSide}
       >

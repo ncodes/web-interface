@@ -50,7 +50,7 @@ export default function SwapRowLayer3({
       const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, cancel: order?.cancelled });
     },
-    showCancelBtn && !disableButtons.cancel ? 3000 : null
+    showCancelBtn && !disableButtons.cancel ? 3000 : null,
   );
 
   const showPaidBtn =
@@ -63,14 +63,12 @@ export default function SwapRowLayer3({
 
   useInterval(
     async () => {
-      console.log("AA");
       const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, markAsPaid: order?.paid });
-      console.log(order.paid);
     },
     windowFocus && showPaidBtn && !disableButtons.markAsPaid && showPaidBtn
       ? 3000
-      : null
+      : null,
   );
 
   const showReleaseBtn =
@@ -85,7 +83,7 @@ export default function SwapRowLayer3({
       const order = await getOrder(BigInt(swap.orderId));
       setDisableButtons({ ...disableButtons, release: order?.released });
     },
-    windowFocus && showReleaseBtn && !disableButtons.release ? 3000 : null
+    windowFocus && showReleaseBtn && !disableButtons.release ? 3000 : null,
   );
 
   const showAppealBtn =
@@ -97,14 +95,13 @@ export default function SwapRowLayer3({
 
   useInterval(
     async () => {
-      console.log("A");
       const dispute = await getRecentDispute(BigInt(swap.orderId));
       setDisableButtons({
         ...disableButtons,
         appeal: !!dispute && !dispute?.executed,
       });
     },
-    windowFocus && showAppealBtn && !disableButtons.appeal ? 3000 : null
+    windowFocus && showAppealBtn && !disableButtons.appeal ? 3000 : null,
   );
 
   return (

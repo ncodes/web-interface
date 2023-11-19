@@ -55,20 +55,23 @@ export function MyTicketsTabContent() {
   ]);
 
   return (
-    <TabsContent value="my-tickets" className="p-0 m-0 flex flex-col gap-3 ">
-      {fetchTickets.isLoading && fetchTickets.fetchStatus != "idle" && (
-        <RowSkeleton />
+    <TabsContent
+      value="my-tickets"
+      className="p-0 m-0 flex flex-col flex-1 gap-3 "
+    >
+      {fetchTickets.isLoading && (
+        <RowSkeleton className="h-[300px] xl:h-[610px]" />
       )}
 
       {fetchTickets.isError && (
-        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" />{" "}
           {(fetchTickets.error as RequestError)?.message}
         </div>
       )}
 
       {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
+        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px] xl:h-[610px]">
           <PlugZapIcon className="w-[20px]" /> Connect your wallet
         </div>
       )}
@@ -76,8 +79,8 @@ export function MyTicketsTabContent() {
       {!fetchTickets.isLoading &&
         fetchTickets.isSuccess &&
         fetchTickets.data?.tickets?.length > 0 && (
-          <div className="flex flex-col gap-3 min-h-[500px]">
-            <div className="flex flex-col gap-3">
+          <div className="flex flex-col flex-1 gap-3 min-h-[300px] xl:min-h-[610px]">
+            <div className="flex flex-col flex-1 gap-3">
               <Paginator
                 curPage={offset}
                 total={fetchTickets.data?.meta?.queryCount}
@@ -108,7 +111,7 @@ export function MyTicketsTabContent() {
         )}
 
       {!fetchTickets.isLoading && fetchTickets.data?.tickets?.length == 0 && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+        <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
           No ticket found
         </div>
       )}

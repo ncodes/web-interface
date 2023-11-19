@@ -157,34 +157,37 @@ export function WatchedLiquidityTabContent() {
   return (
     <TabsContent
       value="watched-liquidities"
-      className="p-0 m-0 flex flex-col gap-3"
+      className="p-0 m-0 flex flex-col flex-1 gap-3"
     >
       {((fetchLiqs.isLoading &&
         !fetchLiqs.isRefetching &&
         fetchLiqs.fetchStatus != "idle") ||
         loading) &&
         client.current && (
-          <div className="h-[300px]">
+          <div className="h-[300px] xl:h-[610px]">
             <RowSkeleton />
           </div>
         )}
+
       {fetchLiqs.isError && (
-        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" />{" "}
           {(fetchLiqs.error as RequestError)?.message}
         </div>
       )}
+
       {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
+        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light h-[300px] xl:h-[610px]">
           <PlugZapIcon className="w-[20px]" /> Connect your wallet
         </div>
       )}
+
       {!fetchLiqs.isLoading &&
         !loading &&
         fetchLiqs.isSuccess &&
         fetchLiqs.data?.liquidities?.length > 0 && (
-          <div className="flex flex-col gap-3 min-h-[500px]">
-            <div className="flex flex-col gap-3">
+          <div className="flex flex-col flex-1 gap-3 min-h-[610px]">
+            <div className="flex flex-col flex-1 gap-3">
               <Paginator
                 curPage={offset}
                 total={fetchLiqs.data?.meta?.queryCount}
@@ -222,44 +225,45 @@ export function WatchedLiquidityTabContent() {
         (watchedLiquidities.length == 0 ||
           fetchLiqs.data?.liquidities.length == 0) &&
         !loading && (
-          <div className="flex items-center justify-center font-light text-gray-400 h-[510px]">
+          <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
             No liquidity found
           </div>
         )}
 
-      {!client.current && (
-        <div className="p-3 pt-0">
-          <div className="w-6/12 m-auto text-center h-[300px] flex flex-col justify-center items-center">
-            <Label className="text-white tracking-wider px-3 pt-2 text-sm">
-              Initialize Chat
-            </Label>
-            <div className="text-gray-300 text-[13px] px-3 py-3 font-light tracking-wide">
-              Liquidity watching relies on the chat system. You need to
-              initialize your wallet for chat before you can see the liquidities
-              you are currently watching.
+      {(!fetchLiqs.isLoading || fetchLiqs.fetchStatus == "idle") &&
+        !client.current && (
+          <div className="p-3 pt-0">
+            <div className="w-6/12 m-auto text-center h-[300px] xl:h-[610px] flex flex-col justify-center items-center">
+              <Label className="text-white tracking-wider px-3 pt-2 text-sm">
+                Initialize Chat
+              </Label>
+              <div className="text-gray-300 text-[13px] px-3 py-3 font-light tracking-wide">
+                Liquidity watching relies on the chat system. You need to
+                initialize your wallet for chat before you can see the
+                liquidities you are currently watching.
+              </div>
+              <Button
+                variant="outline"
+                className="w-[200px] tracking-wider text-gray-200"
+                disabled={initializing}
+                onClick={() => {
+                  initialize();
+                }}
+              >
+                {!initializing && <>Initialize</>}
+                {initializing && (
+                  <>
+                    <IconSpinner
+                      width="20"
+                      className="animate-spin"
+                      fill="fill-gray-100"
+                    />
+                  </>
+                )}
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              className="w-[200px] tracking-wider text-gray-200"
-              disabled={initializing}
-              onClick={() => {
-                initialize();
-              }}
-            >
-              {!initializing && <>Initialize</>}
-              {initializing && (
-                <>
-                  <IconSpinner
-                    width="20"
-                    className="animate-spin"
-                    fill="fill-gray-100"
-                  />
-                </>
-              )}
-            </Button>
           </div>
-        </div>
-      )}
+        )}
     </TabsContent>
   );
 }

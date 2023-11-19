@@ -1,17 +1,17 @@
-import { ReactNode, useEffect } from "react";
-import { ToolTip } from "../ToolTip.tsx";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { NavLink } from "react-router-dom";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import { TabsContent } from "../ui/Tabs.tsx";
-import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
 import { useQuery } from "@tanstack/react-query";
-import useStore from "../../hooks/store/useStore.ts";
-import { Skeleton } from "../ui/skeleton.tsx";
-import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
 import { PlugZapIcon } from "lucide-react";
+import { ReactNode, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { ToolTip } from "../ToolTip.tsx";
+import { TabsContent } from "../ui/Tabs.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
+import { Skeleton } from "../ui/skeleton.tsx";
 
 function InfoCard({
   title,
@@ -53,19 +53,12 @@ export function TicketsStatsTabContent() {
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { address, network } = useConnectorContext();
   const { getStats } = useTicketService();
-  const {
-    isLoading,
-    data,
-    isRefetching,
-    isSuccess,
-    fetchStatus,
-    isRefetchError,
-    isError,
-  } = useQuery({
-    queryKey: ["getStats", { net: network, owner: address }],
-    queryFn: getStats,
-    enabled: !!address,
-  });
+  const { isLoading, data, isRefetching, isSuccess, isRefetchError, isError } =
+    useQuery({
+      queryKey: ["getStats", { net: network, owner: address }],
+      queryFn: getStats,
+      enabled: !!address,
+    });
 
   useEffect(() => {
     if (isLoading || isRefetching) setLoaderProgress && setLoaderProgress(50);
@@ -75,16 +68,16 @@ export function TicketsStatsTabContent() {
   return (
     <TabsContent
       value="ticket-stats"
-      className="min-h-[400px] p-0 m-0 pt-0 flex flex-col gap-3"
+      className="min-h-full p-0 m-0 pt-0 flex flex-col gap-3"
     >
       {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
+        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px] xl:h-[610px]">
           <PlugZapIcon className="w-[20px]" /> Connect your wallet
         </div>
       )}
 
       {address && (
-        <div className="p-3">
+        <div className="p-3 min-h-[300px] xl:min-h-[610px]">
           <div className="flex gap-4 flex-col lg:flex-row">
             <div className="flex-1 bg-card-background border border-card-border rounded-xl">
               <div className="px-5 justify-between border-b border-gray-700/70 py-3 flex items-center gap-1">
@@ -122,7 +115,7 @@ export function TicketsStatsTabContent() {
               tip="The current price for purchasing 1 ticket"
             >
               <div className="text-center text-chinese-green relative flex flex-col justify-center items-center">
-                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {isLoading && <InfoSkeleton />}
                 {!isLoading && isSuccess && (
                   <>
                     <span className="text-lg md:text-3xl">
@@ -141,7 +134,7 @@ export function TicketsStatsTabContent() {
               tip="The total amount of tickets yet to be sold"
             >
               <div className="text-center text-chinese-green relative flex flex-col justify-center items-center">
-                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {isLoading && <InfoSkeleton />}
                 {!isLoading && isSuccess && (
                   <span className="flex flex-col text-lg md:text-3xl">
                     <span>{formatToMoney(data?.ticketAvailable || "0")}</span>
@@ -159,7 +152,7 @@ export function TicketsStatsTabContent() {
               tip="The total amount of bond locked for all tickets"
             >
               <div className="text-center text-chinese-green relative flex flex-col items-center">
-                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {isLoading && <InfoSkeleton />}
                 {!isLoading && isSuccess && (
                   <span className="flex flex-col text-lg md:text-3xl">
                     <span>
@@ -176,7 +169,7 @@ export function TicketsStatsTabContent() {
 
             <InfoCard title="Tickets Owned" tip="The number of tickets you own">
               <div className="text-center text-chinese-green relative flex flex-col items-center text-lg md:text-3xl">
-                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {isLoading && <InfoSkeleton />}
                 {!isLoading && isSuccess && <span>{data?.owner?.total}</span>}
               </div>
             </InfoCard>
@@ -186,7 +179,7 @@ export function TicketsStatsTabContent() {
               tip="The total amount of bond locked in tickets owned by you"
             >
               <div className="text-center text-chinese-green relative flex flex-col items-center">
-                {isLoading && fetchStatus != "idle" && <InfoSkeleton />}
+                {isLoading && <InfoSkeleton />}
                 {!isLoading && isSuccess && (
                   <span className="flex flex-col text-lg md:text-3xl">
                     <span>

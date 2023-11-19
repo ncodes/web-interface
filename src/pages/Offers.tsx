@@ -27,7 +27,7 @@ function OfferTabs({ defaultTab }: { defaultTab?: string }) {
   return (
     <Tabs
       defaultValue={defaultTab || "offers"}
-      className="w-full h-full transition-all duration-500"
+      className="flex flex-col flex-1 w-full h-full transition-all duration-500"
       onValueChange={(value) => {
         setCurrentTab(value);
       }}
@@ -93,5 +93,11 @@ export default function Offers() {
     </div>
   ) : null;
 
-  return <Layout body={<OfferTabs />} rightSide={rightSide} />;
+  return (
+    <Layout
+      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
+      body={<OfferTabs />}
+      rightSide={rightSide}
+    />
+  );
 }

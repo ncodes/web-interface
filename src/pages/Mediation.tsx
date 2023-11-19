@@ -38,7 +38,7 @@ function MediationTabs({ defaultTab }: { defaultTab?: string }) {
   return (
     <Tabs
       value={defaultTab || "my-tickets"}
-      className="w-full h-full transition-all duration-500"
+      className="flex flex-col flex-1 w-full h-full transition-all duration-500"
       onValueChange={(value) => {
         setCurrentTab(value);
       }}
@@ -145,6 +145,7 @@ export default function Mediation({ defaultTab }: { defaultTab?: string }) {
 
   return (
     <Layout
+      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<MediationTabs defaultTab={defaultTab} />}
       rightSide={rightSide}
     />

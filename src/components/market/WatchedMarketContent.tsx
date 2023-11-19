@@ -146,7 +146,7 @@ export function WatchedMarketContent() {
         fetchMarkets.fetchStatus != "idle") ||
         loading) &&
         client.current && (
-          <div className="h-[300px]">
+          <div className="h-[300px] xl:h-[610px]">
             <RowSkeleton />
           </div>
         )}
@@ -158,7 +158,7 @@ export function WatchedMarketContent() {
         </div>
       )}
 
-      {!address && (
+      {mounted && !address && (
         <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
           <PlugZapIcon className="w-[20px]" /> Connect your wallet
         </div>
@@ -207,14 +207,14 @@ export function WatchedMarketContent() {
         (watchedMarkets.length == 0 ||
           fetchMarkets.data?.markets.length == 0) &&
         !loading && (
-          <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+          <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
             No market found
           </div>
         )}
 
       {!client.current && (
         <div className="p-3 pt-0">
-          <div className="w-6/12 m-auto text-center h-[300px] flex flex-col justify-center items-center">
+          <div className="w-6/12 m-auto text-center h-[300px] xl:h-[610px] flex flex-col justify-center items-center">
             <Label className="text-white tracking-wider px-3 pt-2 text-sm">
               Initialize Chat
             </Label>

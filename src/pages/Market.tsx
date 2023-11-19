@@ -90,7 +90,7 @@ function MarketTabs() {
   return (
     <Tabs
       defaultValue="markets"
-      className="w-full h-full transition-all duration-500 "
+      className="flex flex-col flex-1 w-full transition-all duration-500"
     >
       <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
         <ScrollAreaHorizontal type="scroll" className="w-full">
@@ -122,17 +122,18 @@ function MarketTabs() {
       {/* Tab Content */}
       <TabsContent
         value="markets"
-        className="p-3 px-0 mt-0 pt-0 pb-0 flex flex-col gap-3"
+        className="relative p-3 px-0 mt-0 pt-0 pb-0 gap-3 flex flex-col flex-1"
       >
         {/* MARKET INFO */}
 
         {market.isLoading && <RowSkeleton />}
         {market.isError && (
-          <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+          <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px]">
             <ErrorIcon className="w-[20px]" />{" "}
             {(market.error as RequestError)?.message}
           </div>
         )}
+
         {!market.isLoading && market.isSuccess && (
           <MarketRow
             market={market.data}
@@ -173,28 +174,31 @@ function MarketTabs() {
             )}
         </div>
 
-        <div>
+        <div className="flex flex-col flex-1">
           {liquidities.isLoading && !market.isLoading && !market.isError && (
             <RowSkeleton />
           )}
+
           {liquidities.isError && (
             <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
               <ErrorIcon className="w-[20px]" />{" "}
               {(liquidities.error as RequestError)?.message}
             </div>
           )}
+
           {!liquidities.isLoading &&
             liquidities.data?.liquidities?.length == 0 && (
               <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
                 No liquidity found
               </div>
             )}
+
           {!liquidities.isLoading &&
             liquidities.isSuccess &&
             !market.isLoading &&
             !market.isError && (
-              <div className="flex flex-col gap-3 min-h-[300px]">
-                <div className="flex flex-col gap-3">
+              <div className="flex flex-col flex-1 gap-3">
+                <div className="flex flex-1 flex-col gap-3">
                   <Paginator
                     curPage={offset}
                     total={liquidities.data?.meta?.queryCount}
@@ -251,6 +255,7 @@ export default function Market() {
   return (
     <Layout
       body={<MarketTabs />}
+      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       rightSide={
         <div className="flex w-full h-full justify-between flex-col pt-3">
           <LiquidityFilter />

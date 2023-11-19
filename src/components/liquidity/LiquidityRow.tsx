@@ -75,7 +75,7 @@ export function LiquidityRow({
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
   const [openSwapSheet, setOpenSwapSheet] = useState(false);
-  const {  toggleOpenState } = useStore((state) => ({
+  const { toggleOpenState } = useStore((state) => ({
     openState: state.openState,
     toggleOpenState: state.toggleOpenState,
   }));
@@ -93,7 +93,7 @@ export function LiquidityRow({
         const canTrigger = e.target.getAttribute("data-click-trigger");
         if (canTrigger && canTrigger == "1" && !noFocus) {
           navigate(
-            `/liquidity/${liquidity.marketAddress}/${liquidity.provider}/${liquidity.lid}`
+            `/liquidity/${liquidity.marketAddress}/${liquidity.provider}/${liquidity.lid}`,
           );
         }
       }}
@@ -105,7 +105,7 @@ export function LiquidityRow({
           {
             "hover:border-chinese-green cursor-pointer": !noFocus,
           },
-          className
+          className,
         )}
       >
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
@@ -184,7 +184,7 @@ export function LiquidityRow({
                       {!liquidity.online && (
                         <ToolTip
                           tip={`Last Seen: ${moment(
-                            liquidity.lastTimeOnline
+                            liquidity.lastTimeOnline,
                           ).fromNow()}`}
                         >
                           <span className="flex items-center gap-1 text-gray-400">
@@ -208,7 +208,7 @@ export function LiquidityRow({
                           toggleOpenState(
                             "reviewSheet",
                             undefined,
-                            liquidity.provider
+                            liquidity.provider,
                           );
                         }}
                         className="text-blue-200 p-0 h-auto text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4 -mt-1"
@@ -333,7 +333,7 @@ export function LiquidityRow({
                       <span data-click-trigger="1">
                         {formatToHighDenom(
                           liquidity.price,
-                          liquidity.market.quoteDecimals
+                          liquidity.market.quoteDecimals,
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.priceUsd} />
@@ -348,7 +348,7 @@ export function LiquidityRow({
                       <span className="text-gray-200">
                         {formatToHighDenom(
                           liquidity.amount,
-                          liquidity.market.baseDecimals
+                          liquidity.market.baseDecimals,
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.amountUsd} />
@@ -363,7 +363,7 @@ export function LiquidityRow({
                       <span className="text-gray-200">
                         {formatToHighDenom(
                           liquidity.minSwap,
-                          liquidity.market.baseDecimals
+                          liquidity.market.baseDecimals,
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.minSwapUsd} />
@@ -379,7 +379,7 @@ export function LiquidityRow({
                       <span className="text-gray-200">
                         {formatToHighDenom(
                           liquidity.maxSwap,
-                          liquidity.market.baseDecimals
+                          liquidity.market.baseDecimals,
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.maxSwapUsd} />
@@ -654,7 +654,7 @@ export function LiquidityRow({
                   <span
                     className={cn(
                       "px-2 py-3 outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                      { "scale-x-105 text-chinese-green": moreMenuOpen }
+                      { "scale-x-105 text-chinese-green": moreMenuOpen },
                     )}
                   >
                     <DotsVerticalIcon />

@@ -28,7 +28,7 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
   return (
     <Tabs
       defaultValue={defaultTab || "my-liquidities"}
-      className="w-full h-full transition-all duration-500"
+      className="w-full h-full transition-all duration-500 flex flex-col flex-1"
       onValueChange={(value) => {
         setCurrentTab(value);
       }}
@@ -107,6 +107,7 @@ export default function Liquidities({ defaultTab }: { defaultTab?: string }) {
 
   return (
     <Layout
+      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<LiquidityTabs defaultTab={defaultTab} />}
       rightSide={rightSide}
     />

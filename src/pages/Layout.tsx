@@ -206,13 +206,13 @@ export default function Layout({
             />
           </div>
           <div className="flex flex-1">
-            <div className="flex-1 flex flex-col mt-3">
+            <div className="flex-1 relative flex flex-col mt-3">
               <AccountLinker />
               <div className="relative flex-1 flex flex-col">
                 <div className="absolute w-full h-full">
                   <div
                     className={cn(
-                      "z-0 border border-gray-800 rounded-3xl bg-vampire-black",
+                      "z-0 border border-gray-800 rounded-3xl bg-vampire-black ",
                       bodyContainerClassName,
                     )}
                   >

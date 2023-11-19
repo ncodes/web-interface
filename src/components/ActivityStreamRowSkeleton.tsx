@@ -1,8 +1,13 @@
+import { cn } from "../libs/helpers.ts";
 import { Skeleton } from "./ui/skeleton.tsx";
 
-export function ActivityStreamRowSkeleton() {
+export function ActivityStreamRowSkeleton({
+  className,
+}: {
+  className?: string;
+}) {
   return (
-    <div className="flex p-2 gap-2">
+    <div className={cn("flex p-2 gap-2", className)}>
       <div className="flex">
         <Skeleton className="w-[40px] h-[40px] rounded-full" />
         <Skeleton className="w-[40px] h-[40px] rounded-full -ml-3" />

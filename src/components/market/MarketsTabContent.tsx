@@ -67,10 +67,12 @@ export function MarketsTabContent() {
 
   return (
     <TabsContent value="markets" className="p-0 m-0 flex flex-col gap-3">
-      {fetchMarkets.isLoading && <RowSkeleton />}
+      {fetchMarkets.isLoading && (
+        <RowSkeleton className="h-[300px] xl:h-[610px]" />
+      )}
 
       {fetchMarkets.isError && (
-        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" />{" "}
           {(fetchMarkets.error as RequestError)?.message}
         </div>
@@ -79,7 +81,7 @@ export function MarketsTabContent() {
       {!fetchMarkets.isLoading &&
         fetchMarkets.isSuccess &&
         fetchMarkets.data?.markets?.length > 0 && (
-          <div className="flex flex-col gap-3 min-h-[500px]">
+          <div className="flex flex-col gap-3 min-h-[300px] xl:min-h-[610px]">
             <div className="flex flex-col gap-3">
               <Paginator
                 curPage={offset}
@@ -112,7 +114,7 @@ export function MarketsTabContent() {
         )}
 
       {!fetchMarkets.isLoading && fetchMarkets.data?.markets?.length == 0 && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+        <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
           No market found
         </div>
       )}

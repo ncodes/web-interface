@@ -58,17 +58,19 @@ export function LiquidityTabContent({
       className="p-3 pt-0 mt-0 px-0 flex flex-col gap-3"
     >
       <div>
-        {liquidity.isLoading && <RowSkeleton />}
+        {liquidity.isLoading && (
+          <RowSkeleton className="h-[300px] xl:h-[610px]" />
+        )}
 
         {liquidity.isError && (
-          <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+          <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
             <ErrorIcon className="w-[20px]" />{" "}
             {(liquidity.error as RequestError)?.message}
           </div>
         )}
 
         {!liquidity.isLoading && liquidity.isSuccess && (
-          <>
+          <div className="min-h-[300px] xl:min-h-[610px]">
             <LiquidityRow
               liquidity={liquidity.data}
               noFocus={true}
@@ -82,7 +84,7 @@ export function LiquidityTabContent({
                 liquidity={liquidity.data as Liquidity}
               />
             </div>
-          </>
+          </div>
         )}
       </div>
 

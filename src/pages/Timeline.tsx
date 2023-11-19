@@ -10,10 +10,11 @@ import Layout from "./Layout.tsx";
 export default function Timeline() {
   return (
     <Layout
+      bodyContainerClassName="min-h-[96%] xl:min-h-full"
       body={
         <Tabs
           defaultValue="home"
-          className="w-full h-auto transition-all duration-500"
+          className="w-full transition-all duration-500"
         >
           <ScrollAreaHorizontal type="scroll">
             <TabsList className="justify-start px-3 py-2 border-b border-modal-border pt-0">
@@ -46,7 +47,7 @@ export default function Timeline() {
         <div className="flex w-full h-full justify-between flex-col pt-3">
           <ActivityStream />
           <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
+            <div className="text-gray-200 bottom-0 border-t border-gray-900 w-full">
               <Footer />
             </div>
           </div>

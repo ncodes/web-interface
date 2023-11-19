@@ -61,24 +61,27 @@ export function MyLiquidityTabContent() {
   ]);
 
   return (
-    <TabsContent value="my-liquidities" className="p-0 m-0 flex flex-col gap-3">
-      {isLoading && fetchStatus != "idle" && <RowSkeleton />}
+    <TabsContent
+      value="my-liquidities"
+      className="p-0 m-0 flex flex-col flex-1 gap-3"
+    >
+      {isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
 
       {isError && (
-        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" /> {(error as RequestError)?.message}
         </div>
       )}
 
       {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
+        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light h-[300px] xl:h-[610px]">
           <PlugZapIcon className="w-[20px]" /> Connect your wallet
         </div>
       )}
 
       {address && !isLoading && isSuccess && data?.liquidities?.length > 0 && (
-        <div className="flex flex-col gap-3 min-h-[500px]">
-          <div className="flex flex-col gap-3">
+        <div className="flex flex-col flex-1 gap-3 min-h-[610px]">
+          <div className="flex flex-col flex-1 gap-3">
             <Paginator
               curPage={offset}
               total={data?.meta?.queryCount}
@@ -110,7 +113,7 @@ export function MyLiquidityTabContent() {
       )}
 
       {!isLoading && data?.liquidities?.length == 0 && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[370px]">
+        <div className="flex items-center justify-center font-light text-gray-400 h-[300px] lg:h-[480px] xl:h-[610px]">
           No liquidity found
         </div>
       )}

@@ -27,7 +27,6 @@ export function MyDisputeTabContent() {
     isSuccess,
     isRefetching,
     isError,
-    fetchStatus,
     isRefetchError,
     data,
     error,
@@ -55,24 +54,27 @@ export function MyDisputeTabContent() {
   }, [isError, isLoading, setLoaderProgress, isRefetching, isRefetchError]);
 
   return (
-    <TabsContent value="my-disputes" className="p-0 m-0 flex flex-col gap-3">
-      {isLoading && fetchStatus != "idle" && <RowSkeleton />}
+    <TabsContent
+      value="my-disputes"
+      className="p-0 m-0 flex flex-col flex-1 gap-3"
+    >
+      {isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
 
       {isError && (
-        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" /> {(error as RequestError)?.message}
         </div>
       )}
 
       {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
+        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px] xl:h-[610px]">
           <PlugZapIcon className="w-[20px]" /> Connect your wallet
         </div>
       )}
 
       {!isLoading && isSuccess && data?.disputes?.length > 0 && (
-        <div className="flex flex-col gap-3 min-h-[500px]">
-          <div className="flex flex-col gap-3">
+        <div className="flex flex-col flex-1 gap-3 min-h-[300px] xl:min-h-[610px]">
+          <div className="flex flex-col flex-1 gap-3">
             <Paginator
               curPage={offset}
               total={data?.meta?.queryCount}
@@ -103,7 +105,7 @@ export function MyDisputeTabContent() {
       )}
 
       {!isLoading && data?.disputes?.length == 0 && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[370px]">
+        <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
           No dispute found
         </div>
       )}

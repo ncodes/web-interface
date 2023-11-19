@@ -99,11 +99,11 @@ export function OffersTabContent({
   ]);
 
   return (
-    <TabsContent value="offers" className="p-0 m-0 flex flex-col gap-3">
-      {offers.isLoading && offers.fetchStatus != "idle" && <RowSkeleton />}
+    <TabsContent value="offers" className="p-0 m-0 flex flex-col flex-1 gap-3">
+      {offers.isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
 
       {offers.isError && (
-        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px]">
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" />{" "}
           {(offers.error as RequestError)?.message}
         </div>
@@ -112,8 +112,8 @@ export function OffersTabContent({
       {!offers.isLoading &&
         offers.isSuccess &&
         offers.data?.offers?.length > 0 && (
-          <div className="flex flex-col gap-3 min-h-[500px]">
-            <div className="flex flex-col gap-3">
+          <div className="flex flex-col flex-1 gap-3 min-h-[300px] xl:min-h-[610px]">
+            <div className="flex flex-col gap-3 flex-1">
               <Paginator
                 curPage={offset}
                 total={offers.data?.meta?.queryCount}
@@ -140,8 +140,8 @@ export function OffersTabContent({
           </div>
         )}
 
-      {!offers.isLoading && offers.data?.offers?.length == 0 && (
-        <div className="flex items-center justify-center font-light text-gray-400 h-[300px]">
+      {false && !offers.isLoading && offers.data?.offers?.length == 0 && (
+        <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
           No offer found
         </div>
       )}

@@ -7,7 +7,6 @@ import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import IconOffer from "../components/icons/IconOffer.tsx";
 import { LiquidityTabContent } from "../components/liquidity/LiquidityTabContent.tsx";
 import { OffersTabContent } from "../components/liquidity/OffersTabContent.tsx";
-import { SwapOfferCreatorContent } from "../components/swap/SwapOfferCreatorContent.tsx";
 import { SwapOfferCreatorSheet } from "../components/swap/SwapOfferCreatorSheet.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
@@ -17,13 +16,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
-import { Label } from "../components/ui/label.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useMounted from "../hooks/useMounted.ts";
+import { CreateOfferWrapper } from "./CreateOfferWrapper.tsx";
 import Layout from "./Layout.tsx";
+import { SwapSheetWrapper } from "./SwapSheetWrapper.tsx";
 
 function LiquidityPage({
   defaultTab,
@@ -62,7 +62,7 @@ function LiquidityPage({
   return (
     <Tabs
       defaultValue={defaultTab || "liquidity"}
-      className="w-full h-full transition-all duration-500"
+      className="flex flex-col flex-1 w-full h-full transition-all duration-500"
       onValueChange={(value) => {
         setCurrentTab(value);
         onTabChanged && onTabChanged(value);
@@ -144,44 +144,13 @@ function LiquidityPage({
   );
 }
 
-function SwapSheetWrapper({ liquidity }: { liquidity: Liquidity | undefined }) {
-  return (
-    <div className="flex flex-col pt-3">
-      <Label className="text-xl">Swap</Label>
-      <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
-        {!!liquidity && (
-          <SwapOfferCreatorContent
-            liquidity={liquidity}
-            market={liquidity.market}
-            inBody={true}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
-function CreateOfferWrapper({ liquidity }: { liquidity?: Liquidity }) {
-  return (
-    <div className="flex flex-col pt-3">
-      <Label className="text-xl">Create Offer</Label>
-      <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
-        <SwapOfferCreatorContent
-          liquidity={liquidity as Liquidity}
-          market={liquidity?.market as Market}
-          inBody
-        />
-      </div>
-    </div>
-  );
-}
-
 export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
   const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
   const [liquidity, setLiquidity] = useState<Liquidity>();
 
   return (
     <Layout
+      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={
         <LiquidityPage
           defaultTab={currentTab}
