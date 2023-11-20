@@ -1,7 +1,7 @@
+import CopyToClipboard from "react-copy-to-clipboard";
+import { shortenAddress } from "../libs/helpers.ts";
 import { PairAvatar } from "./avatar/PairAvatar.tsx";
 import IconCopyFilled from "./icons/IconCopyFilled.tsx";
-import { shortenAddress } from "../libs/helpers.ts";
-import CopyToClipboard from "react-copy-to-clipboard";
 
 export function BasicMarketInfoSheetHeader({ market }: { market: Market }) {
   return (
@@ -9,8 +9,8 @@ export function BasicMarketInfoSheetHeader({ market }: { market: Market }) {
       <PairAvatar
         base="BTC"
         quote="UNI"
-        baseSrc="/images/icons/asset-icons/btc.svg"
-        quoteSrc="/images/icons/asset-icons/uni.svg"
+        baseSrc={market.baseLogo}
+        quoteSrc={market.quoteLogo}
         size="sm"
         noBorder={true}
       />
