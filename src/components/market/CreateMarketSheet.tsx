@@ -83,7 +83,7 @@ export function CreateMarketSheet({
         permissions.permPut,
         permissions.permSwap,
         (commission || 0) * 100,
-        0
+        0,
       );
       await delay(5000);
       const explorer = getChainInfo().blockExplorer;
@@ -120,7 +120,7 @@ export function CreateMarketSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
         )}
         side={sheetSide}
       >

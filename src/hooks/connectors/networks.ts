@@ -1,5 +1,4 @@
 import {
-  Chain,
   arbitrum,
   bsc,
   hardhat,
@@ -25,16 +24,6 @@ import IconPolygon from "../../components/icons/IconPolygon.tsx";
 import { ChainInfo } from "../../types/global";
 import TokenInfo from "./token_info.ts";
 
-export const chains: Chain[] = [
-  // mainnet,
-  // polygon,
-  // bsc,
-  // optimism,
-  // arbitrum,
-  sepolia,
-  hardhat,
-];
-
 /**
  * Mapping of supported networks' information
  */
@@ -44,6 +33,7 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Ethereum",
     queryName: "ethereum",
     chainId: mainnet.id,
+    chain: mainnet,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_ETHEREUM_API_URI,
     rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL,
@@ -98,6 +88,7 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Polygon",
     queryName: "polygon",
     chainId: polygon.id,
+    chain: polygon,
     symbol: "MATIC",
     apiUrl: import.meta.env.VITE_POLYGON_API_URI,
     rpcUrl: import.meta.env.VITE_POLYGON_RPC_URL ?? "",
@@ -118,6 +109,7 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Optimism",
     queryName: "optimism",
     chainId: optimism.id,
+    chain: optimism,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_OPTIMISM_API_URI,
     rpcUrl: import.meta.env.VITE_OPTIMISM_RPC_URL ?? "",
@@ -139,6 +131,7 @@ export const SupportedNetworks: ChainInfo[] = [
     altDisplayName: "BSC",
     queryName: "binance-chain",
     chainId: bsc.id,
+    chain: bsc,
     symbol: "BNB",
     apiUrl: import.meta.env.VITE_BINANCE_API_URI,
     rpcUrl: import.meta.env.VITE_BINANCE_RPC_URL ?? "",
@@ -159,6 +152,7 @@ export const SupportedNetworks: ChainInfo[] = [
     displayName: "Arbitrum",
     queryName: "arbitrum",
     chainId: arbitrum.id,
+    chain: arbitrum,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_ARBITRUM_API_URI,
     rpcUrl: import.meta.env.VITE_ARBITRUM_RPC_URL ?? "",
@@ -179,6 +173,7 @@ export const SupportedNetworks: ChainInfo[] = [
     queryName: "sepolia",
     testnet: true,
     chainId: sepolia.id,
+    chain: sepolia,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_SEPOLIA_API_URI,
     rpcUrl: import.meta.env.VITE_SEPOLIA_RPC_URL ?? "",
@@ -233,6 +228,7 @@ export const SupportedNetworks: ChainInfo[] = [
     queryName: "localhost",
     testnet: true,
     chainId: hardhat.id,
+    chain: hardhat,
     symbol: "ETH",
     apiUrl: import.meta.env.VITE_LOCALHOST_API_URI,
     rpcUrl: import.meta.env.VITE_LOCALHOST_RPC_URL ?? "",
@@ -285,7 +281,34 @@ export const SupportedNetworks: ChainInfo[] = [
 ];
 
 /**
- * Get IDs of all supported chains
+ * Get IDs of all supported networks
+ * @param testnetOnly Indicate whether to only return testnet chains
+ * @param ignoreTestnet Indicate whether to ignore testnet chains
+ * @param ignore - Optionally specify an ID to omit in the result
+ */
+export function getChainsID(
+  testnetOnly = false,
+  ignoreTestnet = false,
+  ignore: number[] = [],
+) {
+  let supported = SupportedNetworks;
+
+  if (testnetOnly) {
+    supported = supported.filter((s) => s.testnet);
+  }
+
+  return supported
+    .filter(
+      (s) =>
+        !s.disabled &&
+        !ignore.includes(s.chainId) &&
+        (!ignoreTestnet || !s.testnet),
+    )
+    .map((s) => s.chainId);
+}
+
+/**
+ * Get chain object of all supported network
  * @param testnetOnly Indicate whether to only return testnet chains
  * @param ignoreTestnet Indicate whether to ignore testnet chains
  * @param ignore - Optionally specify an ID to omit in the result
@@ -308,7 +331,7 @@ export function getChains(
         !ignore.includes(s.chainId) &&
         (!ignoreTestnet || !s.testnet),
     )
-    .map((s) => s.chainId);
+    .map((s) => s.chain);
 }
 
 /**

@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import { getChain, getChains } from "../hooks/connectors/networks.ts";
+import { getChain, getChainsID } from "../hooks/connectors/networks.ts";
 import { cn } from "../libs/utils.ts";
 import { ChainInfo } from "../types/global";
 import {
@@ -29,7 +29,7 @@ function DropdownMenuItemCustom({
       onSelect={onSelect}
       className={cn(
         "flex items-center gap-2 font-normal text-[13px] px-2 py-2 transition-all duration-300 focus:scale-x-105 focus:bg-chinese-green cursor-pointer rounded-xl",
-        className
+        className,
       )}
     >
       {children}
@@ -41,7 +41,7 @@ export function NetworkSelector() {
   const [open, setOpen] = useState(false);
   const { switchNetwork, chainId, defaultNetwork } = useConnectorContext();
   const [curChain, setCurChain] = useState<ChainInfo | undefined>(
-    getChain(defaultNetwork)
+    getChain(defaultNetwork),
   );
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function NetworkSelector() {
     async (chainId: number) => {
       await switchNetwork(chainId);
     },
-    [switchNetwork]
+    [switchNetwork],
   );
 
   return (
@@ -65,7 +65,7 @@ export function NetworkSelector() {
               "md:w-[152px] flex gap-2 justify-between border items-center transition-all duration-500 hover:cursor-pointer hover:bg-gray-800 hover:scale-x-105 hover:border-chinese-green p-2 px-2 pr-1 rounded-full border-gray-600",
               {
                 "scale-105 border-chinese-green bg-gray-800": open,
-              }
+              },
             )}
           >
             {curChain?.logoPath({
@@ -81,7 +81,7 @@ export function NetworkSelector() {
                 "relative -left-1 top-[0px] transition-all duration-300",
                 {
                   "rotate-180": open,
-                }
+                },
               )}
             >
               <ChevronDown />
@@ -89,10 +89,10 @@ export function NetworkSelector() {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[170px] tracking-wide shadow-xl drop-shadow-2xl rounded-2xl bg-modal-background border-gray-600 text-gray-200 py-1 px-2">
-          {getChains(
+          {getChainsID(
             false,
             true,
-            curChain?.chainId ? [curChain?.chainId] : []
+            curChain?.chainId ? [curChain?.chainId] : [],
           ).map((chainId) => (
             <DropdownMenuItemCustom
               key={chainId}
@@ -111,10 +111,10 @@ export function NetworkSelector() {
           <DropdownMenuLabel className="font-extralight tracking-wider text-gray-300 text-xs">
             Testnets
           </DropdownMenuLabel>
-          {getChains(
+          {getChainsID(
             true,
             false,
-            curChain?.chainId ? [curChain?.chainId] : []
+            curChain?.chainId ? [curChain?.chainId] : [],
           ).map((chainId) => (
             <DropdownMenuItemCustom
               key={chainId}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Address } from "viem";
+import { Address, Chain } from "viem";
 import TokenInfo from "../hooks/connectors/token_info.ts";
 import { AssetType, Events } from "./enums.ts";
 
@@ -17,6 +17,7 @@ interface ChainInfo {
   altDisplayName?: string; // Used for displaying the chain name in the UI if displayName is too long
   queryName: string; // Used for identifying the chain on the backend
   chainId: number;
+  chain: Chain,
   disabled?: boolean;
   testnet?: boolean;
   symbol: string;

@@ -19,6 +19,10 @@ export function isDev(ignoreLocal = false) {
   );
 }
 
+export function isProd() {
+  return import.meta.env.VITE_ENV === "production";
+}
+
 export function isLocal() {
   return import.meta.env.VITE_LOCAL === "true";
 }
