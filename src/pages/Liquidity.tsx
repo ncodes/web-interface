@@ -147,6 +147,7 @@ function LiquidityPage({
 export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
   const [currentTab, setCurrentTab] = useState(defaultTab || "liquidity");
   const [liquidity, setLiquidity] = useState<Liquidity>();
+  const { address } = useConnectorContext();
 
   return (
     <Layout
@@ -163,19 +164,21 @@ export default function Liquidity({ defaultTab }: { defaultTab?: string }) {
         />
       }
       rightSide={
-        <div className="flex w-full h-full justify-between flex-col pt-3">
-          {(currentTab == "liquidity" || !currentTab) && liquidity && (
-            <SwapSheetWrapper liquidity={liquidity} />
-          )}
-          {currentTab == "offers" && liquidity && (
-            <CreateOfferWrapper liquidity={liquidity} />
-          )}
-          <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
-              <Footer />
+        address ? (
+          <div className="flex w-full h-full justify-between flex-col pt-3">
+            {(currentTab == "liquidity" || !currentTab) && liquidity && (
+              <SwapSheetWrapper liquidity={liquidity} />
+            )}
+            {currentTab == "offers" && liquidity && (
+              <CreateOfferWrapper liquidity={liquidity} />
+            )}
+            <div className="relative">
+              <div className="text-gray-200 bottom-0 w-full">
+                <Footer />
+              </div>
             </div>
           </div>
-        </div>
+        ) : null
       }
     />
   );
