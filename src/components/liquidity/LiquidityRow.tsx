@@ -4,7 +4,6 @@ import { ChevronRight, PlayCircle } from "lucide-react";
 import moment from "moment";
 import { BaseSyntheticEvent, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import {
@@ -12,7 +11,6 @@ import {
   cleanBadgeName,
   formatToHighDenom,
   humanizeDur,
-  isEqlStr,
   isMerchant,
   shortenAddress,
 } from "../../libs/helpers.ts";
@@ -73,7 +71,6 @@ export function LiquidityRow({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { address } = useConnectorContext();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
@@ -582,7 +579,7 @@ export function LiquidityRow({
               </span>
             )}
 
-            {!isEqlStr(liquidity.provider, address) && (
+            {!ownerMode && (
               <span className="hidden lg:inline border-l border-gray-800 shrink-0">
                 <Button
                   variant="link"
