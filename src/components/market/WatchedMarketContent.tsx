@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Client, PrivateKey, Signature } from "@xmtp/xmtp-js";
-import { PlugZapIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
@@ -16,6 +15,7 @@ import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -163,11 +163,7 @@ export function WatchedMarketContent() {
         </div>
       )}
 
-      {mounted && !address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {!fetchMarkets.isLoading &&
         !loading &&

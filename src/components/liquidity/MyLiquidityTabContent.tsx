@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
@@ -9,6 +8,7 @@ import useStore from "../../hooks/store/useStore.ts";
 import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
@@ -70,7 +70,9 @@ export function MyLiquidityTabContent() {
         <title>{`Watched Liquidity - Joint`}</title>
       </Helmet>
 
-      {isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
+      {address && isLoading && (
+        <RowSkeleton className="h-[300px] xl:h-[610px]" />
+      )}
 
       {isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
@@ -78,11 +80,7 @@ export function MyLiquidityTabContent() {
         </div>
       )}
 
-      {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light h-[300px] xl:h-[610px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {address && !isLoading && isSuccess && data?.liquidities?.length > 0 && (
         <div className="flex flex-col flex-1 gap-3 min-h-[610px]">

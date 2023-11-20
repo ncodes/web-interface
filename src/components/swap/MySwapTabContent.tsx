@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
@@ -11,6 +10,7 @@ import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { SwapRow } from "./SwapRow.tsx";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 
 export function MySwapTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -58,7 +58,9 @@ export function MySwapTabContent() {
       value="my-swaps"
       className="p-0 m-0 flex flex-col flex-1 gap-3"
     >
-      {isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
+      {address && isLoading && (
+        <RowSkeleton className="h-[300px] xl:h-[610px]" />
+      )}
 
       {isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
@@ -66,11 +68,7 @@ export function MySwapTabContent() {
         </div>
       )}
 
-      {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light h-[300px] xl:h-[610px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {!isLoading && isSuccess && data?.swaps?.length > 0 && (
         <div className="flex flex-col flex-1 gap-3 min-h-[300px] xl:min-h-[610px]">

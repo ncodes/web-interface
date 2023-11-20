@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
@@ -14,6 +13,7 @@ import { MarketRow } from "./MarketRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMounted from "../../hooks/useMounted.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 
 export function MyMarketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -78,11 +78,7 @@ export function MyMarketsTabContent() {
         </div>
       )}
 
-      {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light h-[300px] xl:h-[610px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {!fetchMarkets.isLoading &&
         fetchMarkets.isSuccess &&

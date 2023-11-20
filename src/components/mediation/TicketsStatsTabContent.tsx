@@ -1,6 +1,5 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
-import { PlugZapIcon } from "lucide-react";
 import { ReactNode, useEffect } from "react";
 import Helmet from "react-helmet";
 import { NavLink } from "react-router-dom";
@@ -8,6 +7,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import { useTicketService } from "../../hooks/services/backend/useTicketService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
@@ -75,11 +75,7 @@ export function TicketsStatsTabContent() {
         <title>{`Ticket Stats - Joint`}</title>
       </Helmet>
 
-      {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px] xl:h-[610px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {address && (
         <div className="p-3 min-h-[300px] xl:min-h-[610px]">

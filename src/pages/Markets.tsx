@@ -10,7 +10,7 @@ import { MarketFilter } from "../components/market/MarketFilter.tsx";
 import { MarketFilterSheet } from "../components/market/MarketFilterSheet.tsx";
 import { MarketsTabContent } from "../components/market/MarketsTabContent.tsx";
 import { MyMarketsTabContent } from "../components/market/MyMarketsTabContent.tsx";
-import { WatchedMarketContent } from "../components/market/WatchedMarketContent.tsx";
+import { WatchedMarketContent } from "../components/market/WatchedMarketContent.1.tsx";
 import { Button } from "../components/ui/Button.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import {

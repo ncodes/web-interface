@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Client, PrivateKey, Signature } from "@xmtp/xmtp-js";
-import { PlugZapIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
@@ -15,6 +14,7 @@ import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr } from "../../libs/helpers.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -176,11 +176,7 @@ export function WatchedLiquidityTabContent() {
         </div>
       )}
 
-      {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light h-[300px] xl:h-[610px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {!fetchLiqs.isLoading &&
         !loading &&
@@ -230,7 +226,8 @@ export function WatchedLiquidityTabContent() {
           </div>
         )}
 
-      {(!fetchLiqs.isLoading || fetchLiqs.fetchStatus == "idle") &&
+      {address &&
+        (!fetchLiqs.isLoading || fetchLiqs.fetchStatus == "idle") &&
         !client.current && (
           <div className="p-3 pt-0">
             <div className="w-6/12 m-auto text-center h-[300px] xl:h-[610px] flex flex-col justify-center items-center">

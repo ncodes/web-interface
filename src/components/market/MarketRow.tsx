@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { BaseSyntheticEvent, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import {
   approxNumber,
   formatToHighDenom,
@@ -45,6 +46,7 @@ export function MarketRow({
   onFollowUpdate?: () => void;
 }) {
   const location = useLocation();
+  const { address } = useConnectorContext();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openEditMarketSheet, setOpenEditMarketSheet] = useState(false);
   const navigate = useNavigate();
@@ -56,7 +58,7 @@ export function MarketRow({
         {
           "hover:border-chinese-green cursor-pointer": !noFocus,
         },
-        className
+        className,
       )}
       onClick={(e: BaseSyntheticEvent) => {
         const canTrigger = e.target.getAttribute("data-click-trigger");
@@ -138,7 +140,7 @@ export function MarketRow({
                     <span data-click-trigger="1">
                       {formatToHighDenom(
                         market.lowestPrice,
-                        market.quoteDecimals
+                        market.quoteDecimals,
                       )}
                     </span>
                     <USDAmountToolTip v={parseFloat(market.lowestPriceUsd)} />
@@ -154,7 +156,7 @@ export function MarketRow({
                     <span className="text-gray-200" data-click-trigger="1">
                       {formatToHighDenom(
                         market.totalLiquidity,
-                        market.baseDecimals
+                        market.baseDecimals,
                       )}
                     </span>
                     <USDAmountToolTip
@@ -313,7 +315,7 @@ export function MarketRow({
               </Button>
             </span>
           )}
-          {!ownerMode && (
+          {address && !ownerMode && (
             <FollowMarket
               marketAddress={market.address}
               onFollowUpdate={onFollowUpdate}
@@ -330,7 +332,7 @@ export function MarketRow({
                   <span
                     className={cn(
                       "outline-0 px-2 py-3 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                      { "scale-x-105 text-chinese-green": moreMenuOpen }
+                      { "scale-x-105 text-chinese-green": moreMenuOpen },
                     )}
                   >
                     <DotsVerticalIcon />

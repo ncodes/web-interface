@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
@@ -13,6 +12,7 @@ import { TicketRow } from "./TicketRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMounted from "../../hooks/useMounted.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 
 export function MyTicketsTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -63,7 +63,7 @@ export function MyTicketsTabContent() {
       <Helmet>
         <title>{`My Tickets - Joint`}</title>
       </Helmet>
-      {fetchTickets.isLoading && (
+      {address && fetchTickets.isLoading && (
         <RowSkeleton className="h-[300px] xl:h-[610px]" />
       )}
 
@@ -74,11 +74,7 @@ export function MyTicketsTabContent() {
         </div>
       )}
 
-      {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px] xl:h-[610px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {!fetchTickets.isLoading &&
         fetchTickets.isSuccess &&

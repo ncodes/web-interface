@@ -1,4 +1,5 @@
 import { ConnectKitButton } from "connectkit";
+import React from "react";
 import { ConnectedButton } from "../hooks/connectors/components/ConnectedButton.tsx";
 import { IconWallet } from "./icons/IconWallet.tsx";
 import { Button } from "./ui/Button.tsx";
@@ -32,6 +33,7 @@ export function ConnectWalletButton(props: {
   showIcon?: boolean;
   className?: string;
   label?: string;
+  children?: React.ReactElement;
 }) {
   return (
     <span className={props.className}>
@@ -40,13 +42,23 @@ export function ConnectWalletButton(props: {
           return (
             <span className="connect-btn">
               {!isConnected ? (
-                <Connect
-                  showIcon={props.showIcon}
-                  label={props.label}
-                  show={() => {
-                    show?.();
-                  }}
-                />
+                <>
+                  {!props.children ? (
+                    <Connect
+                      showIcon={props.showIcon}
+                      label={props.label}
+                      show={() => {
+                        show?.();
+                      }}
+                    />
+                  ) : (
+                    React.cloneElement(props.children, {
+                      onClick: () => {
+                        show?.();
+                      },
+                    })
+                  )}
+                </>
               ) : (
                 <Connected
                   show={() => {

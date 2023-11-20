@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { PlugZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ErrorIcon } from "react-hot-toast";
 import { useDisputeService } from "../../hooks/services/backend/useDisputeService.ts";
@@ -12,6 +11,7 @@ import { DisputeRow } from "./DisputeRow.tsx";
 
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMounted from "../../hooks/useMounted.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 
 export function MyDisputeTabContent() {
   const { getChainInfo, address } = useConnectorContext();
@@ -58,7 +58,9 @@ export function MyDisputeTabContent() {
       value="my-disputes"
       className="p-0 m-0 flex flex-col flex-1 gap-3"
     >
-      {isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
+      {address && isLoading && (
+        <RowSkeleton className="h-[300px] xl:h-[610px]" />
+      )}
 
       {isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px] xl:h-[610px]">
@@ -66,11 +68,7 @@ export function MyDisputeTabContent() {
         </div>
       )}
 
-      {!address && (
-        <div className="flex select-none items-center gap-2 text-chinese-green justify-center font-light  h-[300px] xl:h-[610px]">
-          <PlugZapIcon className="w-[20px]" /> Connect your wallet
-        </div>
-      )}
+      {!address && <MainContainerConnectButton />}
 
       {!isLoading && isSuccess && data?.disputes?.length > 0 && (
         <div className="flex flex-col flex-1 gap-3 min-h-[300px] xl:min-h-[610px]">

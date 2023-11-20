@@ -36,7 +36,6 @@ function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openAddLiquiditySheet, setOpenAddLiquiditySheet] = useState(false);
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
-  const fullLoadCount = useStore((state) => state.fullLoadCount);
   const liquidityFilter = useStore((state) => state.liquidityFilter);
   const { getChainInfo, address } = useConnectorContext();
   const { getMarket } = useMarketService();
@@ -52,7 +51,7 @@ function MarketTabs() {
       { network: getChainInfo().queryName, market: id as string },
     ],
     queryFn: getMarket,
-    enabled: mounted && !!address && !!id,
+    enabled: mounted && !!id,
   });
 
   const liquidities = useQuery({
@@ -76,7 +75,6 @@ function MarketTabs() {
   });
 
   useEffect(() => {
-    if (fullLoadCount > 0) return; // no need to show loader if data is already cached
     if (market.isLoading || market.isRefetching)
       setLoaderProgress && setLoaderProgress(50);
     else setLoaderProgress && setLoaderProgress(100);

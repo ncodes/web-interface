@@ -106,7 +106,9 @@ export function OffersTabContent({
         </Helmet>
       )}
 
-      {offers.isLoading && <RowSkeleton className="h-[300px] xl:h-[610px]" />}
+      {address && offers.isLoading && (
+        <RowSkeleton className="h-[300px] xl:h-[610px]" />
+      )}
 
       {offers.isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[300px] xl:h-[610px]">
