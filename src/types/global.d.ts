@@ -17,6 +17,7 @@ interface ChainInfo {
   altDisplayName?: string; // Used for displaying the chain name in the UI if displayName is too long
   queryName: string; // Used for identifying the chain on the backend
   chainId: number;
+  disabled?: boolean;
   testnet?: boolean;
   symbol: string;
   apiUrl: string;

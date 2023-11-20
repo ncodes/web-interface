@@ -26,11 +26,11 @@ import { ChainInfo } from "../../types/global";
 import TokenInfo from "./token_info.ts";
 
 export const chains: Chain[] = [
-  mainnet,
-  polygon,
-  bsc,
-  optimism,
-  arbitrum,
+  // mainnet,
+  // polygon,
+  // bsc,
+  // optimism,
+  // arbitrum,
   sepolia,
   hardhat,
 ];
@@ -40,6 +40,7 @@ export const chains: Chain[] = [
  */
 export const SupportedNetworks: ChainInfo[] = [
   {
+    disabled: true,
     displayName: "Ethereum",
     queryName: "ethereum",
     chainId: mainnet.id,
@@ -93,6 +94,7 @@ export const SupportedNetworks: ChainInfo[] = [
     },
   },
   {
+    disabled: true,
     displayName: "Polygon",
     queryName: "polygon",
     chainId: polygon.id,
@@ -112,6 +114,7 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
+    disabled: true,
     displayName: "Optimism",
     queryName: "optimism",
     chainId: optimism.id,
@@ -131,6 +134,7 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
+    disabled: true,
     displayName: "Binance Chain",
     altDisplayName: "BSC",
     queryName: "binance-chain",
@@ -151,6 +155,7 @@ export const SupportedNetworks: ChainInfo[] = [
     }),
   },
   {
+    disabled: true,
     displayName: "Arbitrum",
     queryName: "arbitrum",
     chainId: arbitrum.id,
@@ -298,7 +303,10 @@ export function getChains(
 
   return supported
     .filter(
-      (s) => !ignore.includes(s.chainId) && (!ignoreTestnet || !s.testnet),
+      (s) =>
+        !s.disabled &&
+        !ignore.includes(s.chainId) &&
+        (!ignoreTestnet || !s.testnet),
     )
     .map((s) => s.chainId);
 }
