@@ -4,6 +4,7 @@ import { ChevronRight, PlayCircle } from "lucide-react";
 import moment from "moment";
 import { BaseSyntheticEvent, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import {
@@ -11,6 +12,7 @@ import {
   cleanBadgeName,
   formatToHighDenom,
   humanizeDur,
+  isEqlStr,
   isMerchant,
   shortenAddress,
 } from "../../libs/helpers.ts";
@@ -71,6 +73,7 @@ export function LiquidityRow({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { address } = useConnectorContext();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
@@ -579,18 +582,20 @@ export function LiquidityRow({
               </span>
             )}
 
-            <span className="hidden lg:inline border-l border-gray-800 shrink-0">
-              <Button
-                variant="link"
-                rounded="none"
-                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-                onClick={() => {
-                  toggleOpenState("createOfferSheet");
-                }}
-              >
-                Create Offer
-              </Button>
-            </span>
+            {!isEqlStr(liquidity.provider, address) && (
+              <span className="hidden lg:inline border-l border-gray-800 shrink-0">
+                <Button
+                  variant="link"
+                  rounded="none"
+                  className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                  onClick={() => {
+                    toggleOpenState("createOfferSheet");
+                  }}
+                >
+                  Create Offer
+                </Button>
+              </span>
+            )}
 
             {ownerMode && (
               <span className="hidden lg:inline border-gray-800 border-l shrink-0">
