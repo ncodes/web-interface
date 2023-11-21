@@ -128,7 +128,7 @@ export function LiquidityProviderReviewViewer({
 
       <div
         className={cn(
-          "relative flex-1 bg-card-background  border rounded-2xl mt-4 border-card-border w-full",
+          "relative flex-1 bg-card-background  rounded-2xl mt-4  w-full",
           {
             "flex justify-center items-center":
               client.current && !loading && reviews.length == 0,

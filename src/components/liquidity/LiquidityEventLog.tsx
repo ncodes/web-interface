@@ -49,7 +49,7 @@ export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
           <InfoCircledIcon width="20px" className="relative top-[1px]" />
         </ToolTip>
       </Label>
-      <div className="bg-card-background  divide-gray-800 border rounded-2xl mt-5 border-card-border w-full">
+      <div className="bg-card-background   border-none divide-gray-800 rounded-2xl mt-5  w-full">
         {events.isLoading && (
           <div className="h-[100px] xl:h-[400px]">
             <ActivityLogSkeleton />
@@ -77,7 +77,7 @@ export function LiquidityEventLog({ liquidity }: { liquidity: Liquidity }) {
         {!events.isLoading && events.isSuccess && events.data.length > 0 && (
           <ScrollOverflowIndicator side="bottom">
             <ScrollArea type="scroll" className="h-[300px] lg:h-[400px]">
-              <div className="divide-y divide-gray-800">
+              <div className="divide-y divide-gray-800/50">
                 {events.data?.map((event: Event) => (
                   <LiquidityEventItem
                     event={event}
