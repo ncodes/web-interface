@@ -148,7 +148,7 @@ export function OffersTabContent({
           </div>
         )}
 
-      {false && !offers.isLoading && offers.data?.offers?.length == 0 && (
+      {!offers.isLoading && offers.data?.offers?.length == 0 && (
         <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
           No offer found
         </div>
