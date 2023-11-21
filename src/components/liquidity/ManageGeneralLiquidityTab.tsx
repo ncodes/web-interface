@@ -87,15 +87,23 @@ export function ManageGeneralLiquidityTab({
         await getTokenAllowance(
           market.baseAddress as Address,
           address as Address,
-          getChainInfo().contracts?.core.address as Address
-        )
+          getChainInfo().contracts?.core.address as Address,
+        ),
       );
     })();
   }, [amount, allowLoading]);
 
   useEffect(() => {
     validate();
-  }, [amount, price, minSwapAmount, maxSwapAmount, paymentTime, target, pause]);
+  }, [
+    amount.value,
+    price,
+    minSwapAmount,
+    maxSwapAmount,
+    paymentTime,
+    target,
+    pause,
+  ]);
 
   useEffect(() => {
     setHasAllowance(hasEnoughAllowance());
@@ -107,7 +115,9 @@ export function ManageGeneralLiquidityTab({
     const { newAmt, deduct } = getAmountChange();
     if (deduct || newAmt == "0") return true;
     return toDec(allowance).gte(
-      toDec((amount.value as string) || "0").mul(powOfD(1, market.baseDecimals))
+      toDec((amount.value as string) || "0").mul(
+        powOfD(1, market.baseDecimals),
+      ),
     );
   }
 
@@ -148,8 +158,6 @@ export function ManageGeneralLiquidityTab({
     if (isEmpty(amount.value) || (isZero(amount.value) && !liquidity)) {
       ready = false;
       amount.setErr && amount.setErr("Amount is required");
-    } else {
-      amount.setErr && amount.setErr("");
     }
 
     if (isZero(price.value)) {
@@ -184,7 +192,7 @@ export function ManageGeneralLiquidityTab({
       await approveAllowance(
         market.baseAddress as Address,
         getChainInfo().contracts?.core.address as Address,
-        await getTokenSupply(market.baseAddress as Address)
+        await getTokenSupply(market.baseAddress as Address),
       );
       notifySuccess("Allowance successfully approved", { duration: 5000 });
     } catch (error) {
@@ -231,7 +239,7 @@ export function ManageGeneralLiquidityTab({
         values.price,
         [],
         [],
-        [values.minSwap, values.maxSwap, values.paymentTime, 0, values.paused]
+        [values.minSwap, values.maxSwap, values.paymentTime, 0, values.paused],
       );
 
       await delay(5000);
@@ -241,7 +249,7 @@ export function ManageGeneralLiquidityTab({
         !liquidity
           ? "Liquidity successfully added"
           : "Liquidity successfully updated",
-        { duration: 5000 }
+        { duration: 5000 },
       );
 
       close && close();
@@ -286,8 +294,9 @@ export function ManageGeneralLiquidityTab({
                 disabled={addLoading}
                 baseUsdRate={baseUsdRate.data as number}
                 onValueChanged={(value, err, setErr) => {
+                  // console.log(">>", err);
                   setAmount({ value, err, setErr });
-                  validate();
+                  // validate();
                 }}
               />
 

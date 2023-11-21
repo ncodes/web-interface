@@ -31,7 +31,7 @@ export function ManageLiqEditAmount({
   onValueChanged?: (
     value: string,
     err: string,
-    setErr: Dispatch<SetStateAction<string>>
+    setErr: Dispatch<SetStateAction<string>>,
   ) => void;
 }) {
   const [focused, setFocused] = useState(false);
@@ -39,7 +39,7 @@ export function ManageLiqEditAmount({
   const [amount, setAmount] = useState(
     liquidity
       ? toDec(liquidity.amount).div(powOfD(1, market.baseDecimals)).toFixed()
-      : ""
+      : "",
   );
   const [err, setErr] = useState("");
   const { getTokenBalance, address } = useConnectorContext();
@@ -54,7 +54,6 @@ export function ManageLiqEditAmount({
 
   useEffect(() => {
     if (!amount) return setErr("");
-
     const amountLD = toLDD(amount, market.baseDecimals);
     if (amountLD.gt(toDec(curBaseBalance))) {
       setErr("Insufficient balance");
@@ -85,7 +84,7 @@ export function ManageLiqEditAmount({
               {
                 "border-card-border": !focused,
                 "border-chinese-green ring-2 ring-chinese-green": focused,
-              }
+              },
             )}
           >
             <div className="flex justify-between px-3 pt-1 text-[10px] text-gray-400 tracking-wider">
@@ -96,7 +95,7 @@ export function ManageLiqEditAmount({
                     BAL:{" "}
                     {formatToHighDenom(
                       toBN(curBaseBalance),
-                      market.baseDecimals
+                      market.baseDecimals,
                     )}
                   </span>
                   <span>
@@ -108,7 +107,7 @@ export function ManageLiqEditAmount({
                         setAmount(
                           toDec(curBaseBalance)
                             .div(powOf(1, market.baseDecimals).toString())
-                            .toFixed()
+                            .toFixed(),
                         );
                       }}
                     >
@@ -135,7 +134,7 @@ export function ManageLiqEditAmount({
                     formatToMoney(
                       toDec(baseUsdRate)
                         .mul(parseFloat(amount))
-                        .toFixed(baseUsdRate < 1 ? 4 : 2)
+                        .toFixed(baseUsdRate < 1 ? 4 : 2),
                     )}
                 </span>
               )}
