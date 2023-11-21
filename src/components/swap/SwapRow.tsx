@@ -36,7 +36,7 @@ export function SwapRow({
   const navigate = useNavigate();
   const { address, getChainInfo } = useConnectorContext();
   const [, setDisputeId] = useState<number | undefined>(
-    swap.disputes.length ? swap.disputes[0].disputeId : undefined
+    swap.disputes.length ? swap.disputes[0].disputeId : undefined,
   );
   const { cancelOrder, markOrderAsPaid, releaseOrder, humanizeErrors } =
     useCoreContract();
@@ -68,7 +68,7 @@ export function SwapRow({
       setLoading,
       humanizeErrors,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 
@@ -83,7 +83,7 @@ export function SwapRow({
       setLoading,
       humanizeErrors,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 
@@ -98,7 +98,7 @@ export function SwapRow({
       setLoading,
       humanizeErrors,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 
@@ -115,7 +115,7 @@ export function SwapRow({
       setLoading,
       humanizeErrorsDM,
       notifySuccess,
-      notifyError
+      notifyError,
     );
   }
 
@@ -123,8 +123,8 @@ export function SwapRow({
     <div
       className="select-none"
       onClick={(e: BaseSyntheticEvent) => {
-        const canTrigger = e.target.getAttribute("data-click-trigger");
-        if (canTrigger && canTrigger == "1" && !noFocus) {
+        const canTrigger = e.target.getAttribute("data-click-trigger") == "1";
+        if (canTrigger && !swap.market.instant && !noFocus) {
           navigate(`/swap/${swap.orderId}`);
         }
       }}
@@ -134,9 +134,10 @@ export function SwapRow({
         className={cn(
           "border bg-card-background border-card-border transition-all duration-300 rounded-xl border-b-gray-600",
           {
-            "hover:border-chinese-green cursor-pointer": !noFocus,
+            "hover:border-chinese-green cursor-pointer":
+              !noFocus && !swap.market.instant,
           },
-          className
+          className,
         )}
       >
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
@@ -196,7 +197,7 @@ export function SwapRow({
                       <span>
                         {formatToHighDenom(
                           swap.price,
-                          swap.market.quoteDecimals
+                          swap.market.quoteDecimals,
                         )}
                       </span>
                       <USDAmountToolTip v={swap.priceUsd} />
@@ -213,7 +214,7 @@ export function SwapRow({
                       <span>
                         {formatToHighDenom(
                           swap.amount,
-                          swap.market.baseDecimals
+                          swap.market.baseDecimals,
                         )}
                       </span>
                       <USDAmountToolTip v={swap.amountUsd} />
