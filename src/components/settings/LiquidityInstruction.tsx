@@ -49,7 +49,7 @@ export function LiquidityInstruction() {
       });
   }, []);
 
-  const onPublish = useCallback(
+  const doPublish = useCallback(
     async (data: InstructionsWithGrantSigResponse) => {
       try {
         setTxLoading(true);
@@ -72,14 +72,14 @@ export function LiquidityInstruction() {
         setTxLoading(false);
       }
     },
-    [update.isSuccess, update.data]
+    [update.isSuccess, update.data],
   );
 
   return (
     <div>
       <div className="font-light text-gray-100 text-sm">
-        Provide takers with essential instructions for engaging with all your
-        liquidity.
+        Provide takers with essential instructions for engaging with your
+        liquidity across all markets.
       </div>
       <div className="mt-1">
         <div className="flex justify-end text-xs text-gray-400">
@@ -144,7 +144,7 @@ export function LiquidityInstruction() {
             update
               .mutateAsync()
               .then((data) => {
-                onPublish(data).catch(console.error);
+                doPublish(data).catch(console.error);
               })
               .catch((e) => {
                 notifyError("Failed to update instructions: " + e.message);
