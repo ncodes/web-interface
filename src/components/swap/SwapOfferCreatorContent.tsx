@@ -62,7 +62,7 @@ export function SwapOfferCreatorContent({
   liquidity,
   market,
   offer,
-  inBody: inSheet,
+  inBody,
   offerMode,
 }: {
   liquidity: Liquidity;
@@ -643,11 +643,11 @@ export function SwapOfferCreatorContent({
   return (
     <div
       className={cn("text-white flex flex-col justify-between overflow-auto", {
-        "overflow-auto h-full": !inSheet,
+        "overflow-auto h-full": !inBody,
       })}
     >
       <div className="flex-1 h-[90vh] xl:h-[100vh]">
-        {!inSheet && (
+        {!inBody && (
           <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-900">
             <span className="flex gap-2 items-center text-sm">
               <span>
@@ -931,7 +931,7 @@ export function SwapOfferCreatorContent({
 
         <div
           className={cn("p-5 pt-0 px-3 relative mt-3", {
-            "pb-[100px]": !inSheet,
+            "pb-[100px]": !inBody,
           })}
         >
           <Accordion type="single" collapsible>
@@ -968,8 +968,8 @@ export function SwapOfferCreatorContent({
 
       <div
         className={cn(
-          "flex flex-col gap-2 p-3 w-full border-t border-gray-800 bg-card-background",
-          { "absolute bottom-0 w-full": !inSheet },
+          "flex flex-col gap-2 p-3 w-full border-t border-gray-700 bg-card-background",
+          { "absolute bottom-0 w-full": !inBody, "border-gray-900": inBody },
         )}
       >
         {(!offerMode || canExecuteOffer(offer)) &&

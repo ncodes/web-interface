@@ -9,7 +9,7 @@ export function SwapSheetWrapper({
   return (
     <div className="flex flex-col pt-3">
       <Label className="text-xl">Swap</Label>
-      <div className="border border-gray-700 bg-card-background rounded-xl mt-3 overflow-hidden">
+      <div className=" bg-card-background rounded-xl mt-3 overflow-hidden">
         {!!liquidity && (
           <SwapOfferCreatorContent
             liquidity={liquidity}

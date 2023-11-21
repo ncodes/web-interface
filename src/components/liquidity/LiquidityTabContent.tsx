@@ -86,7 +86,7 @@ export function LiquidityTabContent({
               liquidity={liquidity.data}
               noFocus={true}
               ownerMode={isEqlStr(liquidity.data.provider, address)}
-              className="rounded-none border-x-0 border-t-0"
+              className="rounded-none border-b-gray-800 border-x-0 border-t-0"
             />
 
             <div className="flex flex-col gap-5 lg:gap-0 lg:flex-row pt-5 px-3">

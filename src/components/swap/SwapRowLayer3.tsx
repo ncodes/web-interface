@@ -107,7 +107,7 @@ export default function SwapRowLayer3({
   return (
     <div
       data-click-trigger="1"
-      className="flex justify-between border-t border-card-border"
+      className="flex justify-between border-t border-gray-800"
     >
       <div data-click-trigger="1" className="pt-1 pl-1 flex gap-1">
         {/* Buttons for swap counterparties  */}

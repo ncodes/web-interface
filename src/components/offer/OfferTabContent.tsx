@@ -100,7 +100,7 @@ export function OfferTabContent({
           <div className=" pr-0 flex-1 ">
             <OfferRow
               offer={offer.data}
-              className="rounded-none border-r-0 border-l-0 border-t-0 border-b hover:border-b-card-border"
+              className="rounded-none border-r-0 border-l-0 border-t-0 border-b-gray-800 hover:border-b-gray-800"
             />
             <div className="flex flex-col md:items-center gap-5 px-3 md:px-5 py-5">
               {events.isLoading && <OfferEventRowSkeleton />}

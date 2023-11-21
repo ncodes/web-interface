@@ -78,7 +78,7 @@ export function TicketsStatsTabContent() {
       {!address && <MainContainerConnectButton />}
 
       {address && (
-        <div className="p-3 min-h-[300px] xl:min-h-[610px]">
+        <div className="flex flex-col gap-4 p-3 min-h-[300px] xl:min-h-[610px]">
           <div className="flex gap-4 flex-col lg:flex-row">
             <div className="flex-1 bg-card-background border border-card-border rounded-xl">
               <div className="px-5 justify-between border-b border-gray-700/70 py-3 flex items-center gap-1">

@@ -142,7 +142,7 @@ function MarketTabs() {
         {!market.isLoading && market.isSuccess && (
           <MarketRow
             market={market.data}
-            className="rounded-none border-x-0 border-t-0"
+            className="rounded-none border-b-gray-800 border-x-0 border-t-0"
             ownerMode={
               !market.data.renounced && isEqlStr(market.data?.creator, address)
             }

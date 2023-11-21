@@ -534,7 +534,7 @@ export function OfferRow({
         {/* Level 3 */}
         <div
           data-click-trigger="1"
-          className="flex justify-between border-t border-card-border"
+          className="flex justify-between border-t border-t-gray-800"
         >
           <div
             data-click-trigger="1"

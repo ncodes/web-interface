@@ -94,7 +94,7 @@ export function SwapPageTabContent({
       {!swap.isLoading && swap.isSuccess && (
         <SwapRow
           swap={swap.data}
-          className="rounded-none border-b-gray-700 border-x-0 border-t-0"
+          className="rounded-none border-b-gray-800 border-x-0 border-t-0"
           noFocus
         />
       )}
