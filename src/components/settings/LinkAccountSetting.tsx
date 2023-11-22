@@ -56,7 +56,7 @@ export function LinkAccountSetting() {
 
     setDisabled(true);
 
-    const msg = createSignatureMessage(address, email);
+    const msg = createSignatureMessage(address, email, "24 hours");
     const sig = await sign(msg.toString("utf-8"))
       .catch((e) => {
         simpleError(e.message, { position: "top-center", duration: 5000 });
