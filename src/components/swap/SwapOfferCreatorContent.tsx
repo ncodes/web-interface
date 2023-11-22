@@ -655,13 +655,13 @@ export function SwapOfferCreatorContent({
               </span>
               <span className="flex  flex-co items-center gap-2">
                 <span>
-                  {formatToHighDenom(price, market.quoteDecimals)}{" "}
+                  {formatToHighDenom(liquidity.price, market.quoteDecimals)}{" "}
                   {market.quote}
                 </span>
                 <span className="text-gray-500 text-xs">
                   <span>$</span>
                   <span>
-                    {toHDD(price, market.quoteDecimals)
+                    {toHDD(liquidity.price, market.quoteDecimals)
                       .mul(quoteUsdRate.data || 0)
                       .toFixed(2)}
                   </span>
