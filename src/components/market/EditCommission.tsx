@@ -14,7 +14,7 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
   const { setCommission: write, humanizeErrors } = useMarketContract();
   const [loading, setLoading] = useState(false);
   const [commission, setCommission] = useState(
-    (props.market.commission || 0) / 100
+    (props.market.commission || 0) / 100,
   );
   const [err, setErr] = useState("");
   const { notifySuccess, notifyError } = useToast();
@@ -26,7 +26,7 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
       const txHash = await write(props.market.address, commission * 100);
       const blockExplorer = getChainInfo().blockExplorer;
       await delay(5000);
-      notifySuccess("Successfully created a market", {
+      notifySuccess("Successfully updated market commission", {
         duration: 5000,
         links: [
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
