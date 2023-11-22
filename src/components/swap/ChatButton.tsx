@@ -17,6 +17,7 @@ export function ChatButton({
   disableUnmark,
   hideLabel,
   className,
+  showInXl,
 }: {
   address: string;
   swap?: Swap;
@@ -24,6 +25,7 @@ export function ChatButton({
   disableUnmark?: boolean;
   hideLabel?: boolean;
   className?: string;
+  showInXl?: boolean;
 }) {
   const isXl = useMediaQuery("(min-width: 1280px)");
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -39,7 +41,7 @@ export function ChatButton({
             className,
           )}
           onClick={() => {
-            if (isXl) return;
+            if (isXl && !showInXl) return;
             toggleOpenState && toggleOpenState("messengerSheet");
           }}
         >

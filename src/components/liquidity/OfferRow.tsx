@@ -737,8 +737,8 @@ export function OfferRow({
             </span>
 
             <span
-              className={cn("xl:hidden border-gray-800 border-l shrink-0", {
-                "!hidden": location.pathname.match("^/liquidity"),
+              className={cn("border-gray-800 border-l shrink-0", {
+                "!hidden": location.pathname.match("^/offer"),
               })}
             >
               {offer && (
@@ -746,6 +746,7 @@ export function OfferRow({
                   address={address}
                   offer={offer}
                   className="rounded-none text-gray-400 hover:bg-transparent hover:text-chinese-green font-light text-xs"
+                  showInXl
                 />
               )}
             </span>
