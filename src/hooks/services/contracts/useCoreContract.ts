@@ -321,8 +321,11 @@ export default function useCoreContract() {
       // updateFungibleLiquidity: MKT_BADGE_REQ
       if (error.message.includes("OC: MKT_BADGE_REQ"))
         return "Permission denied: Missing one or more market badges";
+
       if (error.message.includes("OC: LOW_TTP"))
         return "Payment time is too short";
+
+      if (error.message.includes("OC: LOW_LIQ")) return "Not enough liquidity";
 
       // swapQuoteForBase
       if (error.message.includes("OC: OFFER_EXPIRED_TX"))

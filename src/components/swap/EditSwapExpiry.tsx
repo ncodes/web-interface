@@ -21,7 +21,7 @@ export function EditSwapExpiry({
   onValueChanged?: (
     value: number,
     err: string,
-    setErr: Dispatch<SetStateAction<string>>
+    setErr: Dispatch<SetStateAction<string>>,
   ) => void;
 }) {
   const [duration, setDuration] = useState(defaultValue || 1800);
@@ -66,14 +66,16 @@ export function EditSwapExpiry({
           containerClassName="w-[150px]"
           isFocused={focused}
           onChange={(e) => {
-            setDuration(parseInt(e.target.value));
+            const value = parseInt(e.target.value);
+            setDuration(value);
+            setErr(value < 300 ? "Min: 5 minutes" : "");
           }}
           after={
             <div>
               <div className="p-3 pt-0 pb-2">
                 <Slider
                   value={[duration]}
-                  min={0}
+                  min={300}
                   max={3600}
                   step={1}
                   disabled={disabled}

@@ -93,6 +93,7 @@ export function SwapOfferCreatorContent({
   } = useConnectorContext();
   const [expireDuration, setExpireDuration] = useState(1800);
   const queryClient = useQueryClient();
+  const [otherErr, setOtherErr] = useState("");
   const { notifyError, notifySuccess } = useToast();
   const resetOpenState = useStore((state) => state.resetOpenState);
   const [amountInputFocused, setAmountInputFocused] = useState(false);
@@ -259,6 +260,7 @@ export function SwapOfferCreatorContent({
     if (isZero(amount)) return setCanDo(false);
     if (!offerMode && !hasAllowance) return setCanDo(false);
     if (loading) return setCanDo(false);
+    if (otherErr) return setCanDo(false);
     setCanDo(true);
   }, [
     quoteBal,
@@ -268,6 +270,7 @@ export function SwapOfferCreatorContent({
     quoteAmountErr,
     hasAllowance,
     loading,
+    otherErr,
   ]);
 
   // Adjust max price and max quote amount when slippage and quote amount change
@@ -495,6 +498,8 @@ export function SwapOfferCreatorContent({
             ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
             : toLD(amount, baseDecimals)
           : toLD(amount, baseDecimals);
+
+      console.log(amt);
 
       const [, txReceipt] = await createOffer(
         address,
@@ -956,8 +961,9 @@ export function SwapOfferCreatorContent({
                   defaultValue={expireDuration}
                   offerMode={!!offer || offerMode}
                   canExecOffer={canExecuteOffer(offer)}
-                  onValueChanged={(val) => {
+                  onValueChanged={(val, err) => {
                     setExpireDuration(val);
+                    setOtherErr(err);
                   }}
                 />
               </AccordionContent>
