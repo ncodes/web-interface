@@ -37,6 +37,7 @@ import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { InfoCard } from "../market/InfoCard.tsx";
 import { MessengerSheet } from "../messenger/MessengerSheet.tsx";
+import { ChatButton } from "../swap/ChatButton.tsx";
 import { SwapOfferCreatorSheet } from "../swap/SwapOfferCreatorSheet.tsx";
 import { Button } from "../ui/Button.tsx";
 import {
@@ -735,7 +736,21 @@ export function OfferRow({
               </NavLink>
             </span>
 
-            <span className="lg:hidden border-l border-gray-800 shrink-0">
+            <span
+              className={cn("xl:hidden border-gray-800 border-l shrink-0", {
+                "!hidden": location.pathname.match("^/liquidity"),
+              })}
+            >
+              {offer && (
+                <ChatButton
+                  address={address}
+                  offer={offer}
+                  className="rounded-none text-gray-400 hover:bg-transparent hover:text-chinese-green font-light text-xs"
+                />
+              )}
+            </span>
+
+            <span className="lg:hidden border-l border-gray-800 shrink-0 ">
               <DropdownMenu
                 onOpenChange={(open) => {
                   setMoreMenuOpen(open);
