@@ -7,20 +7,24 @@ export function SwapInput({
   avatar,
   avatarFallback,
   value,
+  type,
   setValue,
   onFocused,
   className,
   disabled,
+  step,
   afterInput,
   autoFocus,
 }: {
   avatar: string;
   avatarFallback: string;
   value?: string;
+  type?: string;
   setValue?: (value: string) => void;
   onFocused?: (focused: boolean) => void;
   className?: string;
   disabled?: boolean;
+  step?: string;
   afterInput?: ReactNode;
   autoFocus?: boolean;
 }) {
@@ -34,7 +38,7 @@ export function SwapInput({
           "border-chinese-green scale-[1.005] ring-2 ring-chinese-green":
             focus && !disabled,
         },
-        className
+        className,
       )}
     >
       <Avatar
@@ -44,9 +48,10 @@ export function SwapInput({
         fallback={avatarFallback}
       />
       <Input
-        type="number"
+        type={type ?? "number"}
         variant="ghost"
         placeholder="0.0"
+        step={step ?? "any"}
         autoFocus={autoFocus}
         value={value}
         disabled={disabled}

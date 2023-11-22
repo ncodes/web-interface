@@ -139,8 +139,8 @@ export function SwapOfferCreatorContent({
     };
 
     const setInitialPrice = async () => {
-      if (!offer) return setPrice(liquidity.price);
-      setPrice(offer.price);
+      if (!offer) return setPrice(toHD(liquidity.price, market.quoteDecimals));
+      setPrice(toHD(offer.price, market.quoteDecimals));
     };
 
     const setInitialExpireDuration = () => {
@@ -221,7 +221,7 @@ export function SwapOfferCreatorContent({
       if (quoteAmount == "") return setAmount("");
       if (isZero(price)) return setQuoteAmount("0");
 
-      let amount = toDec(quoteAmount).div(toHD(price, market.quoteDecimals));
+      let amount = toDec(quoteAmount).div(price);
 
       const feeInfo = await computeFeeInfo(amount.toFixed());
       setFeeInfo(feeInfo);
@@ -246,10 +246,9 @@ export function SwapOfferCreatorContent({
         totalFeeBp = feeInfo.protoFeeBps + market.commission;
       }
 
-      const priceHD = toHD(price, market.quoteDecimals);
       const amtD = toDec(amount);
       const feePct = totalFeeBp / 100 / 100;
-      const newQuoteAmt = amtD.div(1 - feePct).mul(priceHD);
+      const newQuoteAmt = amtD.div(1 - feePct).mul(price);
       setQuoteAmount(trimZeros(newQuoteAmt.toFixed(8)));
     })();
   }, [amount, price]);
@@ -348,7 +347,7 @@ export function SwapOfferCreatorContent({
       lid,
       address,
       amt,
-      price,
+      toLD(price, market.quoteDecimals),
     );
 
     let symbol: string;
@@ -495,11 +494,9 @@ export function SwapOfferCreatorContent({
       const amt =
         price != "0"
           ? !isSynth(baseType)
-            ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
+            ? toLD(quoteAmt.div(price), baseDecimals)
             : toLD(amount, baseDecimals)
           : toLD(amount, baseDecimals);
-
-      console.log(amt);
 
       const [, txReceipt] = await createOffer(
         address,
@@ -507,7 +504,7 @@ export function SwapOfferCreatorContent({
         constants.AddressZero,
         liquidity.lid,
         amt,
-        price,
+        toLD(price, market.quoteDecimals),
         [],
         expireDuration,
       );
@@ -601,14 +598,14 @@ export function SwapOfferCreatorContent({
       const amt =
         price != "0"
           ? !isSynth(baseType)
-            ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
+            ? toLD(quoteAmt.div(price), baseDecimals)
             : toLD(amount, baseDecimals)
           : toLD(amount, baseDecimals);
 
       const [txHash] = await updateOffer(
         BigInt(offer.offerId),
         amt,
-        price,
+        toLD(price, market.quoteDecimals),
         [],
         expireDuration,
       );
@@ -753,16 +750,27 @@ export function SwapOfferCreatorContent({
           {offerMode && (
             <div className="flex flex-col gap-1">
               <div className="flex justify-between items-center">
-                <span className="pl-4 text-gray-200 tracking-wide">Price</span>
+                <span className="flex gap-2 items-center">
+                  <span className="pl-4 text-gray-200 tracking-wide">
+                    Price
+                  </span>
+                  <span className="text-gray-500 font-light text-xs">
+                    - {market.quote}
+                  </span>
+                </span>
+                <span className="font-extralight text-xs text-blue-300 pr-5">
+                  ${formatToMoney(offer?.priceUsd) || "0"}
+                </span>
               </div>
               <div className="flex flex-col">
                 <SwapInput
                   avatar={market.quoteLogo}
                   avatarFallback={market.quote}
-                  value={toHD(price, market.quoteDecimals)}
+                  // value={toHD(price, market.quoteDecimals)}
+                  value={price}
                   onFocused={setAmountInputFocused}
                   setValue={(v) => {
-                    setPrice(toLD(v || "0", market.quoteDecimals));
+                    setPrice(v);
                   }}
                   disabled={loading || canExecuteOffer(offer)}
                 />
