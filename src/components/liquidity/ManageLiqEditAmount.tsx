@@ -54,6 +54,7 @@ export function ManageLiqEditAmount({
 
   useEffect(() => {
     if (!amount) return setErr("");
+    if (isSynth(market.baseType)) return;
     const amountLD = toLDD(amount, market.baseDecimals);
     if (amountLD.gt(toDec(curBaseBalance))) {
       setErr("Insufficient balance");

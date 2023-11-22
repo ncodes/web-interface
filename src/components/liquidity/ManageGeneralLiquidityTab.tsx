@@ -158,6 +158,8 @@ export function ManageGeneralLiquidityTab({
     if (isEmpty(amount.value) || (isZero(amount.value) && !liquidity)) {
       ready = false;
       amount.setErr && amount.setErr("Amount is required");
+    } else {
+      amount.setErr && amount.setErr("");
     }
 
     if (isZero(price.value)) {
@@ -294,9 +296,7 @@ export function ManageGeneralLiquidityTab({
                 disabled={addLoading}
                 baseUsdRate={baseUsdRate.data as number}
                 onValueChanged={(value, err, setErr) => {
-                  // console.log(">>", err);
                   setAmount({ value, err, setErr });
-                  // validate();
                 }}
               />
 
