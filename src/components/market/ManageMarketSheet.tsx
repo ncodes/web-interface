@@ -57,7 +57,7 @@ export function ManageMarketSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
         )}
         side={sheetSide}
       >
@@ -72,7 +72,7 @@ export function ManageMarketSheet({
           <BasicMarketInfoSheetHeader market={market} />
           <div>
             <ScrollArea className={cn(sheetHeight)}>
-              <Accordion type="single" className="mt-0">
+              <Accordion type="single" collapsible className="mt-0">
                 <EditCommission market={market} close={close} />
 
                 <EditDisputeDurations market={market} close={close} />
