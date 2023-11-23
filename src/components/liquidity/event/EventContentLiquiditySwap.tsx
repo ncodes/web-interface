@@ -1,8 +1,8 @@
+import { NavLink } from "react-router-dom";
 import { formatToHighDenom, formatToMoney } from "../../../libs/helpers.ts";
 import { cn } from "../../../libs/utils.ts";
-import { NavLink } from "react-router-dom";
-import { ShortenAddress } from "../../ShortenAddress.tsx";
 import { FetchedUserHoverCard } from "../../FetchedUserHoverCard.tsx";
+import { ShortenAddress } from "../../ShortenAddress.tsx";
 
 export function EventContentLiquiditySwap(props: {
   market: Market;
@@ -20,7 +20,7 @@ export function EventContentLiquiditySwap(props: {
             <span className="text-chinese-green">
               {formatToHighDenom(
                 props.swap.amount || "0",
-                props.market.baseDecimals
+                props.market.baseDecimals,
               )}{" "}
               {props.market.base}{" "}
             </span>
@@ -36,7 +36,7 @@ export function EventContentLiquiditySwap(props: {
             <span className="text-chinese-green">
               {formatToHighDenom(
                 props.swap.amount || "0",
-                props.market.baseDecimals
+                props.market.baseDecimals,
               )}{" "}
               {props.market.base}{" "}
             </span>
@@ -69,7 +69,7 @@ export function EventContentLiquiditySwap(props: {
           Price:{" "}
           {formatToHighDenom(
             props.swap.price || "0",
-            props.market.quoteDecimals
+            props.market.quoteDecimals,
           )}{" "}
           {props.market.quote} / {props.market.base}
         </span>

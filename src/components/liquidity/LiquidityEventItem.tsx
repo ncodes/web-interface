@@ -74,22 +74,38 @@ export function LiquidityEventItem({
 
               {/* Liquidity: Add */}
               {event.action == Events.LiquidityAdd && (
-                <EventContentLiquidityAdd event={event} market={market} liquidity={liquidity} />
+                <EventContentLiquidityAdd
+                  event={event}
+                  market={market}
+                  liquidity={liquidity}
+                />
               )}
 
               {/* Liquidity: Remove */}
               {event.action == Events.LiquidityRemove && (
-                <EventContentLiquidityRemove event={event} market={market} liquidity={liquidity} />
+                <EventContentLiquidityRemove
+                  event={event}
+                  market={market}
+                  liquidity={liquidity}
+                />
               )}
 
               {/* Liquidity: Swap */}
               {event.action == Events.LiquiditySwap && (
-                <EventContentLiquiditySwap swap={event.swap} market={market} liquidity={liquidity} />
+                <EventContentLiquiditySwap
+                  swap={event.swap}
+                  market={market}
+                  liquidity={liquidity}
+                />
               )}
 
               {/* Liquidity: New Offer */}
               {event.action == Events.LiquidityOffer && (
-                <EventContentLiquidityNewOffer event={event} market={market} liquidity={liquidity} />
+                <EventContentLiquidityNewOffer
+                  event={event}
+                  market={market}
+                  liquidity={liquidity}
+                />
               )}
 
               {/* Liquidity: Pause */}

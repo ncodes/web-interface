@@ -340,7 +340,7 @@ export function isSwapParticipant(swap: Swap, address: string) {
     isEqlStr(swap.provider, address) ||
     isEqlStr(swap.taker, address) ||
     swap.disputes.some((d) =>
-      d.draftees.some((dr) => isEqlStr(dr.owner, address))
+      d.draftees.some((dr) => isEqlStr(dr.owner, address)),
     )
   );
 }
@@ -350,7 +350,10 @@ export function isSwapParticipant(swap: Swap, address: string) {
  * @param swap The swap object
  * @param address The address to check
  */
-export function isSwapCounterparty(swap: {provider:string, taker:string}, address: string) {
+export function isSwapCounterparty(
+  swap: { provider: string; taker: string },
+  address: string,
+) {
   return isEqlStr(swap.provider, address) || isEqlStr(swap.taker, address);
 }
 
@@ -387,7 +390,7 @@ export function canExecuteOffer(offer: Offer | undefined) {
 export function isSwapDraftee(swap: Swap, address: string, recent = false) {
   if (recent) return isDisputeDraftee(swap.disputes[0], address);
   return swap.disputes.some((d) =>
-    d.draftees.some((dr) => isEqlStr(dr.owner, address))
+    d.draftees.some((dr) => isEqlStr(dr.owner, address)),
   );
 }
 
@@ -441,7 +444,7 @@ export function isSwapDisputeExecuted(swap: Swap) {
 export function isCommitter(dispute: Dispute, address: string) {
   return dispute.commits.some(
     (c) =>
-      isEqlStr(c.committer, address) && c.ticketIndex == dispute.ticketIndex
+      isEqlStr(c.committer, address) && c.ticketIndex == dispute.ticketIndex,
   );
 }
 
@@ -452,7 +455,8 @@ export function isCommitter(dispute: Dispute, address: string) {
  */
 export function isRevealer(dispute: Dispute, address: string) {
   return dispute.reveals.some(
-    (r) => isEqlStr(r.revealer, address) && r.ticketIndex == dispute.ticketIndex
+    (r) =>
+      isEqlStr(r.revealer, address) && r.ticketIndex == dispute.ticketIndex,
   );
 }
 
