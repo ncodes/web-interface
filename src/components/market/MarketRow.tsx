@@ -131,9 +131,9 @@ export function MarketRow({
                 className="py-[8px] flex gap-2 md:px-2"
               >
                 <InfoCard
-                  title={`Price (${market.base})`}
+                  title={`Price (${market.quote})`}
                   width="w-auto"
-                  tip={`The price of 1 ${market.base} in USD`}
+                  tip={`The price of 1 ${market.base} in ${market.quote}`}
                   title2={<PriceChange priceChange={market.priceChange} />}
                 >
                   <span className="flex gap-1" data-click-trigger="1">
