@@ -15,7 +15,6 @@ import {
 import { EditBadgeRequirements } from "./EditBadgeRequirements.tsx";
 import { EditCommission } from "./EditCommission.tsx";
 import { EditDisputeDurations } from "./EditDisputeDurations.tsx";
-import { EditMarketManager } from "./EditMarketManager.tsx";
 import { EditOfferOnlyMode } from "./EditOfferOnlyMode.tsx";
 import { EditRenounceOwnership } from "./EditRenounceOwnership.tsx";
 import { EditTransferOwnership } from "./EditTransferOwnership.tsx";
@@ -83,7 +82,7 @@ export function ManageMarketSheet({
 
                 <EditBadgeRequirements market={market} close={close} />
 
-                <EditMarketManager market={market} close={close} />
+                {/* <EditMarketManager market={market} close={close} /> */}
 
                 <EditTransferOwnership market={market} close={close} />
 

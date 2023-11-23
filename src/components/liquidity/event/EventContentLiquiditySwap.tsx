@@ -19,14 +19,14 @@ export function EventContentLiquiditySwap(props: {
             <span>Swapped</span>
             <span className="text-chinese-green">
               {formatToHighDenom(
-                props.swap.amount || "0",
+                props.swap?.amount || "0",
                 props.market.baseDecimals,
               )}{" "}
               {props.market.base}{" "}
             </span>
             <span>liquidity for</span>
             <span className="text-chinese-green">
-              {formatToMoney(props.swap.cost || "0")} {props.market.quote}
+              {formatToMoney(props.swap?.cost || "0")} {props.market.quote}
             </span>
           </>
         )}
@@ -35,14 +35,14 @@ export function EventContentLiquiditySwap(props: {
             <span>Swapped</span>
             <span className="text-chinese-green">
               {formatToHighDenom(
-                props.swap.amount || "0",
+                props.swap?.amount || "0",
                 props.market.baseDecimals,
               )}{" "}
               {props.market.base}{" "}
             </span>
             <span>for</span>
             <span className="text-chinese-green">
-              {formatToMoney(props.swap.cost || "0")} {props.market.quote}
+              {formatToMoney(props.swap?.cost || "0")} {props.market.quote}
             </span>{" "}
             from{" "}
             <FetchedUserHoverCard
