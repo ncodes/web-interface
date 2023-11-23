@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useLiquidityService } from "../../hooks/services/backend/useLiquidityService.ts";
 import useStore from "../../hooks/store/useStore.ts";
+import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { isEqlStr, shortenAddress } from "../../libs/helpers.ts";
 import { RowSkeleton } from "../RowSkeleton.tsx";
@@ -25,6 +26,7 @@ export function LiquidityTabContent({
   const { getLiquidity } = useLiquidityService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { market, provider, lid } = useParams();
+  const mounted = useMounted(1000);
 
   const liquidity = useQuery({
     queryKey: [
@@ -37,7 +39,7 @@ export function LiquidityTabContent({
       },
     ],
     queryFn: getLiquidity,
-    enabled: !!market && !!provider && !!lid,
+    enabled: mounted && !!market && !!provider && !!lid,
   });
 
   useEffect(() => {
