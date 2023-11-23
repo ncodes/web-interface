@@ -68,7 +68,7 @@ export function EventContentLiquiditySwap(props: {
         <span className="text-[10px] relative text-gray-400 bg-gray-800 rounded-full px-2 py-[1px] pb-[3px]">
           Price:{" "}
           {formatToHighDenom(
-            props.swap.price || "0",
+            props.swap?.price || "0",
             props.market.quoteDecimals,
           )}{" "}
           {props.market.quote} / {props.market.base}
