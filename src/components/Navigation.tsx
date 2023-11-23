@@ -42,7 +42,7 @@ export function Navigation() {
             iconClassName="w-[25px]"
             label="Markets"
             icon={<IconMarketCoin width="25" />}
-            active={pathname.match("^/market") != null}
+            active={pathname.match("^/(my/)?market") != null}
             to="/markets"
           />
         </li>
