@@ -267,7 +267,7 @@ export function ManageGeneralLiquidityTab({
   return (
     <TabsContent
       value="general"
-      className={`p-0 mt-0 overflow-auto ${sheetHeight}`}
+      className={`p-0 mt-0 overflow-auto ${sheetHeight} xl:h-screen`}
     >
       <div>
         <ScrollArea className="h-full pb-[200px]">
