@@ -209,55 +209,60 @@ export default function Layout({
           }}
         />
 
-        <div className="flex flex-col flex-1 pt-3 z-10">
-          <div>
-            <Header
-              onClick={() => {
-                setLeftSideMenuOpen(!leftSideMenuOpen);
-              }}
-              height={`h-[${headerHeight}px]`}
-            />
-          </div>
-          <div className="flex flex-1">
-            <div className="flex-1 relative flex flex-col mt-3">
-              <AccountLinker />
-              <div className="relative flex-1 flex flex-col">
-                <div className="absolute w-full h-full">
-                  <div
-                    className={cn(
-                      "z-0 border border-gray-800 rounded-3xl bg-vampire-black ",
-                      bodyContainerClassName,
-                    )}
-                  >
-                    {body}
-                  </div>
-                  <div className="xl:hidden">
-                    <Footer />
-                  </div>
-                </div>
-              </div>
+        <div className="flex flex-col flex-1 z-10">
+          <div className="flex flex-col flex-1 pt-3">
+            <div>
+              <Header
+                onClick={() => {
+                  setLeftSideMenuOpen(!leftSideMenuOpen);
+                }}
+                height={`h-[${headerHeight}px]`}
+              />
             </div>
-            {rightSide && (
-              <div className="w-[400px] relative hidden xl:flex flex-col">
-                <div
-                  className={`fixed h-full flex flex-col flex-1`}
-                  style={{ paddingBottom: `${headerHeight}px` }}
-                >
-                  <motion.div
-                    animate={{
-                      marginTop: scrollYPos > 50 ? -55 : 0,
-                    }}
-                    transition={{ ease: "linear", duration: 0.1 }}
-                    className={cn(
-                      `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`,
-                    )}
-                  >
-                    {rightSide}
-                  </motion.div>
+            <div className="flex flex-1">
+              <div className="flex-1 relative flex flex-col mt-3">
+                <AccountLinker />
+                <div className="relative flex-1 flex flex-col">
+                  <div className="absolute w-full h-full">
+                    <div
+                      className={cn(
+                        "z-0 border border-gray-800 rounded-3xl bg-vampire-black ",
+                        bodyContainerClassName,
+                      )}
+                    >
+                      {body}
+                    </div>
+                    <div className="xl:hidden">
+                      <Footer />
+                    </div>
+                  </div>
                 </div>
               </div>
-            )}
+              {rightSide && (
+                <div className="w-[400px] relative hidden xl:flex flex-col">
+                  <div
+                    className={`fixed h-full flex flex-col flex-1`}
+                    style={{ paddingBottom: `${headerHeight}px` }}
+                  >
+                    <motion.div
+                      animate={{
+                        marginTop: scrollYPos > 50 ? -55 : 0,
+                      }}
+                      transition={{ ease: "linear", duration: 0.1 }}
+                      className={cn(
+                        `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`,
+                      )}
+                    >
+                      {rightSide}
+                    </motion.div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+          {/* <div className="flex justify-center">
+            <Footer />
+          </div> */}
         </div>
 
         <SearchSheetBox />
