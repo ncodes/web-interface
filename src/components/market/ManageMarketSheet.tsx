@@ -77,13 +77,13 @@ export function ManageMarketSheet({
 
                 <EditDisputeDurations market={market} close={close} />
 
-                <EditMarketManager market={market} close={close} />
-
                 <EditOfferOnlyMode market={market} close={close} />
 
                 <EditZeroPricedLiquidity market={market} close={close} />
 
                 <EditBadgeRequirements market={market} close={close} />
+
+                <EditMarketManager market={market} close={close} />
 
                 <EditTransferOwnership market={market} close={close} />
 
