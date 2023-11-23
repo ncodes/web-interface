@@ -470,7 +470,7 @@ export function SwapOfferCreatorContent({
         amt,
         toLD(maxPrice, quoteDecimals),
         [],
-        BigInt(expireDuration),
+        BigInt(moment().add(expireDuration, "seconds").unix()),
       );
 
       // Give backend a chance to process tx
