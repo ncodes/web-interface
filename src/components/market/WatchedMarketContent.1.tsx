@@ -64,6 +64,7 @@ export function WatchedMarketContent() {
       setLoading(false);
       return;
     }
+
     initClient(getEnv(), wallet).then((cl) => {
       client.current = cl;
       forceUpdate.forceUpdate();

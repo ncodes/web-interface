@@ -92,6 +92,7 @@ export function SwapOfferCreatorContent({
     getTokenAllowance,
   } = useConnectorContext();
   const [expireDuration, setExpireDuration] = useState(1800);
+  const [initExpireDuration, setInitExpireDuration] = useState(expireDuration);
   const queryClient = useQueryClient();
   const [otherErr, setOtherErr] = useState("");
   const { notifyError, notifySuccess } = useToast();
@@ -106,6 +107,7 @@ export function SwapOfferCreatorContent({
   const [quoteBal, setQuoteBal] = useState<bigint>(0n);
   const [canDo, setCanDo] = useState(false);
   const [amount, setAmount] = useState("");
+  const [initAmount, setInitAmount] = useState("");
   const [slippageAmount, setSlippageAmount] = useState(amount);
   const [quoteAmount, setQuoteAmount] = useState("");
   const [amountErr, setAmountErr] = useState("");
@@ -127,15 +129,18 @@ export function SwapOfferCreatorContent({
 
   // Compute and set initial values
   useEffect(() => {
-    const setInitialAmount = async () => {
+    const setInitialAmountInOfferMode = async () => {
       if (!offer) return setAmount("");
 
-      // In offer mode, use offer amount as initial amount minus any fees
+      // Compute fee
       let amount = toHDD(offer.amount, market.baseDecimals);
       const feeInfo = await computeFeeInfo(amount.toFixed());
       setFeeInfo(feeInfo);
+
+      // Deduct fee from initial amount before setting amount
       if (feeInfo.symbol == market.base) amount = amount.sub(feeInfo.total);
       setAmount(trimZeros(amount.toFixed(8)));
+      setInitAmount(trimZeros(amount.toFixed(8)));
     };
 
     const setInitialPrice = async () => {
@@ -144,13 +149,18 @@ export function SwapOfferCreatorContent({
     };
 
     const setInitialExpireDuration = () => {
-      if (!offer) return setExpireDuration(1800);
-      if (offer && canExecuteOffer(offer)) return setExpireDuration(1800);
+      function set(v: number) {
+        setExpireDuration(v);
+        setInitExpireDuration(v);
+      }
+
+      if (!offer) return set(1800);
+      if (offer && canExecuteOffer(offer)) return set(1800);
       const expDur = moment(offer?.deadline).diff(moment(), "seconds");
-      setExpireDuration(expDur);
+      set(expDur);
     };
 
-    void setInitialAmount();
+    void setInitialAmountInOfferMode();
     void setInitialPrice();
     void setInitialExpireDuration();
   }, []);
@@ -222,7 +232,6 @@ export function SwapOfferCreatorContent({
       if (isZero(price)) return setQuoteAmount("0");
 
       let amount = toDec(quoteAmount).div(price);
-
       const feeInfo = await computeFeeInfo(amount.toFixed());
       setFeeInfo(feeInfo);
 
@@ -253,11 +262,21 @@ export function SwapOfferCreatorContent({
     })();
   }, [amount, price]);
 
-  // Determine if swap can be executed
+  function isOfferChanged() {
+    return (
+      offer &&
+      (initAmount != amount ||
+        toHD(offer.price, market.quoteDecimals) != price ||
+        initExpireDuration != expireDuration)
+    );
+  }
+
+  // Determine if the action can be executed
   useEffect(() => {
     if (amountErr || quoteAmountErr) return setCanDo(false);
     if (isZero(amount)) return setCanDo(false);
     if (!offerMode && !hasAllowance) return setCanDo(false);
+    if (offerMode && !isOfferChanged()) return setCanDo(false);
     if (loading) return setCanDo(false);
     if (otherErr) return setCanDo(false);
     setCanDo(true);
@@ -270,6 +289,7 @@ export function SwapOfferCreatorContent({
     hasAllowance,
     loading,
     otherErr,
+    expireDuration,
   ]);
 
   // Adjust max price and max quote amount when slippage and quote amount change
@@ -389,6 +409,7 @@ export function SwapOfferCreatorContent({
   function reset() {
     setQuoteAmount("");
     setAmount("");
+    setInitAmount("");
     setFeeInfo({
       protocol: "0",
       market: "0",
@@ -489,7 +510,7 @@ export function SwapOfferCreatorContent({
   async function doCreateOffer() {
     try {
       setLoading(true);
-      const { address, quoteDecimals, baseType, baseDecimals } = market;
+      const { address, baseType, baseDecimals } = market;
       const quoteAmt = toDec(quoteAmount);
       const amt =
         price != "0"
@@ -540,7 +561,7 @@ export function SwapOfferCreatorContent({
       setLoading(true);
       const [txHash, txReceipt] = await executeOffer(
         BigInt(offer.offerId),
-        BigInt(0), // TODO: use moment().add(expireDuration, "s").unix()
+        BigInt(expireDuration),
       );
 
       // Give backend a chance to process tx
@@ -593,7 +614,7 @@ export function SwapOfferCreatorContent({
       if (!offer) return;
       setLoading(true);
 
-      const { quoteDecimals, baseType, baseDecimals } = market;
+      const { baseType, baseDecimals } = market;
       const quoteAmt = toDec(quoteAmount);
       const amt =
         price != "0"
@@ -759,7 +780,7 @@ export function SwapOfferCreatorContent({
                   </span>
                 </span>
                 <span className="font-extralight text-xs text-blue-300 pr-5">
-                  ${formatToMoney(offer?.priceUsd) || "0"}
+                  ${formatToMoney(offer?.priceUsd || "0")}
                 </span>
               </div>
               <div className="flex flex-col">

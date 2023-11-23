@@ -18,6 +18,7 @@ import { randomBytes } from "ethers/lib.esm/utils";
 import moment from "moment";
 import forge from "node-forge";
 import {
+  Address,
   Chain,
   WalletClient,
   createWalletClient,
@@ -874,22 +875,27 @@ export default function useMessenger() {
    */
   async function getMailbox(chain: Chain, address: string) {
     address = getAddress(address);
+
     const entropy = forge.md.sha512
       .create()
       .update(`mailbox_address:${address}`)
       .digest()
       .toHex();
     const identity = EthCrypto.createIdentity(Buffer.from(entropy, "utf8"));
-    const account = privateKeyToAccount(identity.privateKey as `0x${string}`);
+    const account = privateKeyToAccount(identity.privateKey as Address);
     const walletClient = createWalletClient({
       account,
       chain,
       transport: http(),
     });
+
     const client = await Client.create(walletClient, {
-      env: isDev() ? "local" : "production",
+      env: getEnv(),
+      useSnaps: false,
     });
+
     applyCodecToClient(client);
+
     const convo: Conversation = await client.conversations.newConversation(
       address,
       {

@@ -131,7 +131,7 @@ export function OfferTabContent({
                       {events.data?.events?.map((event) => (
                         <OfferEvent
                           event={event}
-                          key={`${event.creator}:${event.action}`}
+                          key={`${event.creator}:${event.action}:${event.createdAt}`}
                         />
                       ))}
                     </div>
