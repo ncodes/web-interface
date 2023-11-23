@@ -276,7 +276,7 @@ export function SwapOfferCreatorContent({
     if (amountErr || quoteAmountErr) return setCanDo(false);
     if (isZero(amount)) return setCanDo(false);
     if (!offerMode && !hasAllowance) return setCanDo(false);
-    if (offerMode && !isOfferChanged()) return setCanDo(false);
+    if (offerMode && offer && !isOfferChanged()) return setCanDo(false);
     if (loading) return setCanDo(false);
     if (otherErr) return setCanDo(false);
     setCanDo(true);
@@ -470,7 +470,7 @@ export function SwapOfferCreatorContent({
         amt,
         toLD(maxPrice, quoteDecimals),
         [],
-        0, // TODO: use moment().add(expireDuration, "s").unix()
+        BigInt(expireDuration),
       );
 
       // Give backend a chance to process tx
