@@ -1,7 +1,7 @@
-import { formatToHighDenom } from "../../../libs/helpers.ts";
 import { NavLink } from "react-router-dom";
-import { ShortenAddress } from "../../ShortenAddress.tsx";
+import { formatToHighDenom } from "../../../libs/helpers.ts";
 import { FetchedUserHoverCard } from "../../FetchedUserHoverCard.tsx";
+import { ShortenAddress } from "../../ShortenAddress.tsx";
 
 export function EventContentOfferCreate(props: {
   amount: string;

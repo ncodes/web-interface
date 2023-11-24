@@ -1,5 +1,5 @@
-import { formatToHighDenom } from "../../../libs/helpers.ts";
 import { NavLink } from "react-router-dom";
+import { formatToHighDenom } from "../../../libs/helpers.ts";
 
 export function EventContentOfferAccept(props: {
   amount: string;

@@ -62,9 +62,9 @@ export default function OfferEvent({ event }: { event: Event }) {
             {/* Offer: Accepted */}
             {event.action == Events.OfferAccept && (
               <EventContentOfferAccept
-                amount={event.amount}
+                amount={event.offer.amount}
                 market={event.market}
-                price={event.price}
+                price={event.offer.price}
                 liquidity={event.offer.liquidity}
               />
             )}
@@ -90,7 +90,7 @@ export default function OfferEvent({ event }: { event: Event }) {
               />
             )}
 
-            {/* Offer: Cancelled */}
+            {/* Offer: Executed */}
             {event.action == Events.OfferExecute && (
               <EventContentOfferExecuted
                 amount={event.swap?.amount || "0"}

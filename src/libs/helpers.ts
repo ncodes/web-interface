@@ -166,9 +166,10 @@ export function handleAxiosError(error: {
 export function formatToHighDenom(
   v: BigNumberish,
   decimals = 18,
-  format = undefined,
+  format?: string | number,
+  places?: number,
 ) {
-  return formatToMoney(formatUnits(v, decimals), format);
+  return formatToMoney(formatUnits(v, decimals), format, places);
 }
 
 /**
@@ -179,7 +180,7 @@ export function formatToHighDenom(
  */
 export function formatToMoney(
   v: string | number,
-  format = undefined,
+  format?: string | number,
   places = 6,
 ) {
   if (!v) return;
