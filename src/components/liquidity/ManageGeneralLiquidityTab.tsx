@@ -169,7 +169,13 @@ export function ManageGeneralLiquidityTab({
       price.setErr && price.setErr("");
     }
 
-    if (liquidity) {
+    ready = ready ? (minSwapAmount.err ? false : true) : ready;
+    ready = ready ? (maxSwapAmount.err ? false : true) : ready;
+    ready = ready ? (paymentTime.err ? false : true) : ready;
+    ready = ready ? (target.err ? false : true) : ready;
+
+    // Check if anything changed
+    if (ready && liquidity) {
       const values = getValues();
       if (
         values.amount == liquidity.amount &&

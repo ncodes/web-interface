@@ -309,7 +309,7 @@ export function MarketRow({
                 onClick={() => {
                   setOpenEditMarketSheet(true);
                 }}
-                className="text-xs px-2 text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
               >
                 <IconSettingsOutline width="15px" /> Manage
               </Button>

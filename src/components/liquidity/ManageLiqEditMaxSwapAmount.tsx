@@ -21,14 +21,14 @@ export function ManageLiqEditMaxSwapAmount({
   onValueChanged?: (
     value: string,
     err: string,
-    setErr: Dispatch<SetStateAction<string>>
+    setErr: Dispatch<SetStateAction<string>>,
   ) => void;
 }) {
   const [focused, setFocused] = useState(false);
   const [maxSwap, setMaxSwap] = useState(
     liquidity && liquidity.maxSwap != "0"
       ? toHD(liquidity.maxSwap, market.baseDecimals)
-      : ""
+      : "",
   );
   const [err, setErr] = useState("");
 
@@ -37,7 +37,12 @@ export function ManageLiqEditMaxSwapAmount({
     if (amount == undefined || isZero(amount) || !maxSwap) return setErr("");
     if (toDec(maxSwap).gt(toDec(amount || "0"))) {
       setErr(`Must not be greater than ${formatToMoney(amount as string)}`);
-    } else if (toDec(maxSwap).lte(toDec(minSwap || "0"))) {
+    } else if (
+      !isZero(maxSwap) &&
+      !isZero(minSwap) &&
+      minSwap != "" &&
+      toDec(maxSwap).lte(toDec(minSwap || "0"))
+    ) {
       setErr(`Must be greater than ${formatToMoney(minSwap as string)}`);
     } else {
       setErr("");
@@ -65,7 +70,7 @@ export function ManageLiqEditMaxSwapAmount({
               {
                 "border-card-border": !focused,
                 "border-chinese-green ring-2 ring-chinese-green": focused,
-              }
+              },
             )}
           >
             <div className="pt-1 flex justify-between">
