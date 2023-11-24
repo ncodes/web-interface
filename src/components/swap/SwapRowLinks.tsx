@@ -67,7 +67,7 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
             <span
               className={cn(
                 "px-2 py-3 outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                { "scale-x-105 text-chinese-green": moreMenuOpen }
+                { "scale-x-105 text-chinese-green": moreMenuOpen },
               )}
             >
               <DotsVerticalIcon />
@@ -97,7 +97,7 @@ export function SwapRowLinks({ swap }: { swap: Swap }) {
         </DropdownMenu>
       </span>
 
-      {location.pathname.includes("/swaps") && (
+      {location.pathname.includes("/swaps") && !swap.instant && (
         <span className="flex border-l border-gray-800 pl-1">
           <NavLink to={`/swap/${swap.orderId}`}>
             <Button
