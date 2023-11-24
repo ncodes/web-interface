@@ -9,7 +9,6 @@ import { AvatarSize } from "../avatar/useAvatar.tsx";
 import { EventContentOfferAccept } from "./event/EventContentOfferAccept.tsx";
 import { EventContentOfferCancel } from "./event/EventContentOfferCancel.tsx";
 import { EventContentOfferCreate } from "./event/EventContentOfferCreate.tsx";
-import { EventContentOfferExecuted } from "./event/EventContentOfferExecuted.tsx";
 import { EventContentOfferUnaccept } from "./event/EventContentOfferUnaccept.tsx";
 import { EventContentOfferUpdate } from "./event/EventContentOfferUpdate.tsx";
 
@@ -91,15 +90,15 @@ export default function OfferEvent({ event }: { event: Event }) {
             )}
 
             {/* Offer: Cancelled */}
-            {event.action == Events.OfferExecute && (
+            {/* {event.action == Events.OfferExecute && (
               <EventContentOfferExecuted
-                amount={event.swap.amount}
+                amount={event.swap?.amount}
                 market={event.market}
                 price={event.offer.price}
                 liquidity={event.offer.liquidity}
                 swap={event.swap}
               />
-            )}
+            )} */}
           </div>
         </div>
       </div>
