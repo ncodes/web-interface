@@ -7,7 +7,6 @@ export function EventContentOfferExecuted(props: {
   amount: string;
   market: Market;
   liquidity: Liquidity;
-  swap: Swap;
   price: string;
   inTimeline?: boolean;
 }) {
