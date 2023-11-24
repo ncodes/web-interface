@@ -193,8 +193,8 @@ export function SwapOfferCreatorContent({
         amtErrMsg = "Below minimum amount";
       }
 
-      const mxSwap = getMaxBaseAmount();
-      if (amt.mul(denom).gt(toDec(mxSwap))) {
+      const mxSwap = toDec(getMaxBaseAmount());
+      if (!mxSwap.isZero() && amt.mul(denom).gt(mxSwap)) {
         amtErrMsg = "Above maximum amount";
       }
     }
@@ -276,7 +276,8 @@ export function SwapOfferCreatorContent({
     if (amountErr || quoteAmountErr) return setCanDo(false);
     if (isZero(amount)) return setCanDo(false);
     if (!offerMode && !hasAllowance) return setCanDo(false);
-    if (offerMode && offer && !isOfferChanged()) return setCanDo(false);
+    if (offerMode && offer && !canExecuteOffer(offer) && !isOfferChanged())
+      return setCanDo(false);
     if (loading) return setCanDo(false);
     if (otherErr) return setCanDo(false);
     setCanDo(true);
@@ -561,7 +562,7 @@ export function SwapOfferCreatorContent({
       setLoading(true);
       const [txHash, txReceipt] = await executeOffer(
         BigInt(offer.offerId),
-        BigInt(expireDuration),
+        BigInt(moment().add(expireDuration, "seconds").unix()),
       );
 
       // Give backend a chance to process tx
