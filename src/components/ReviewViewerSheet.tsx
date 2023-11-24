@@ -155,7 +155,10 @@ export function ReviewViewerSheet() {
                       <IconStarSmile width="20px" />
                     </span>
                     <span>
-                      {(count.ok / (count.ok + count.notOk)) * 100 || 0}%
+                      {(
+                        (count.ok / (count.ok + count.notOk)) * 100 || 0
+                      ).toFixed(0)}
+                      %
                     </span>
                   </div>
                 </ToolTip>
