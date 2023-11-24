@@ -7,6 +7,7 @@ import { ChatButton } from "../components/swap/ChatButton.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { isEqlStr } from "../libs/helpers.ts";
 import Layout from "./Layout.tsx";
 
 function Page({
@@ -50,19 +51,22 @@ function Page({
 }
 
 export default function Offer() {
-  const { connected } = useConnectorContext();
+  const { connected, address } = useConnectorContext();
   const [offer, setOffer] = useState<Offer | undefined>();
 
-  const rightSide = connected ? (
-    <div className="flex w-full h-full justify-between flex-col pt-3">
-      <Messenger sheetMode={false} offer={offer} />
-      <div className="relative">
-        <div className="text-gray-200 bottom-0 w-full">
-          <Footer />
+  const rightSide =
+    connected &&
+    (isEqlStr(address, offer?.creator) ||
+      isEqlStr(address, offer?.provider)) ? (
+      <div className="flex w-full h-full justify-between flex-col pt-3">
+        <Messenger sheetMode={false} offer={offer} />
+        <div className="relative">
+          <div className="text-gray-200 bottom-0 w-full">
+            <Footer />
+          </div>
         </div>
       </div>
-    </div>
-  ) : null;
+    ) : null;
 
   return (
     <Layout
