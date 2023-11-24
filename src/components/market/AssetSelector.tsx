@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
 import { UseQueryResult } from "@tanstack/react-query";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
-import IconInfoCircle from "../icons/IconInfoCircle.tsx";
-import { Button } from "../ui/Button.tsx";
-import { cn } from "../../libs/utils.ts";
-import { Avatar } from "../avatar/Avatar.tsx";
-import { Input } from "../ui/Input.tsx";
-import { ScrollArea } from "../ui/scroll-area.tsx";
-import { AssetSelectorItem } from "./AssetSelectorItem.tsx";
-import { Skeleton } from "../ui/skeleton.tsx";
+import { useEffect, useState } from "react";
 import { ErrorIcon } from "react-hot-toast";
+import { isAddress } from "viem";
 import { RequestError } from "../../libs/RequestError.ts";
+import { shortenAddress } from "../../libs/helpers.ts";
+import { cn } from "../../libs/utils.ts";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
+import { Avatar } from "../avatar/Avatar.tsx";
+import IconInfoCircle from "../icons/IconInfoCircle.tsx";
+import { IconPlus } from "../icons/IconPlus.tsx";
+import { Button } from "../ui/Button.tsx";
+import { Input } from "../ui/Input.tsx";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
+import { Skeleton } from "../ui/skeleton.tsx";
+import { AssetSelectorItem } from "./AssetSelectorItem.tsx";
 
 function AssetSelectorRowSkeleton() {
   return (
@@ -63,8 +66,11 @@ export function AssetSelector(props: {
   };
 
   useEffect(() => {
+    console.log(filter);
     if (filter.length) {
-      setPages([applyFilter(props.assetsQuery.data || [])]);
+      const filtered = applyFilter(props.assetsQuery.data || []);
+      console.log("filtered", filtered, pages);
+      setPages([filtered]);
     } else {
       setData(props.assetsQuery.data || []);
       setPages([props.assetsQuery.data?.slice(0, pageLimit) || []]);
@@ -74,6 +80,10 @@ export function AssetSelector(props: {
   useEffect(() => {
     if (!open) setPages([[]]);
   }, [open]);
+
+  function isEmpty() {
+    return pages.length == 0 || pages[0].length == 0;
+  }
 
   return (
     <Popover
@@ -104,7 +114,7 @@ export function AssetSelector(props: {
             <div
               className={cn(
                 "flex gap-2 items-center min-w-[120px] max-w-[170px] pl-3 pr-2 justify-between rounded-full bg-card-background border border-gray-600 cursor-pointer hover:bg-gray-600 hover:scale-105",
-                { "bg-gray-600 scale-105 border-gray-500": open }
+                { "bg-gray-600 scale-105 border-gray-500": open },
               )}
             >
               <div className="text-xl font-medium overflow-auto scrollbar-hide tracking-wide">
@@ -127,8 +137,9 @@ export function AssetSelector(props: {
           <div className="px-3 py-3">
             <Input
               type="text"
-              className="py-5 px-3 text-gray-200"
+              className="py-5 px-3 text-gray-200 rounded-xl"
               placeholder="Search token (ex: WETH, 0xAbC)"
+              value={filter}
               onChange={(e) => {
                 setFilter(e.target.value);
               }}
@@ -136,11 +147,14 @@ export function AssetSelector(props: {
           </div>
           <ScrollOverflowIndicator
             side="bottom"
+            className={cn({
+              "[&>span.grad-indicator]:hidden": isEmpty(),
+            })}
             onScroll={(progress) => {
               if (progress < 30) return;
               const newPage = data.slice(
                 pages.length * pageLimit,
-                pages.length * pageLimit + pageLimit
+                pages.length * pageLimit + pageLimit,
               );
               if (!newPage.length) return;
               setPages([...pages, newPage]);
@@ -148,20 +162,45 @@ export function AssetSelector(props: {
           >
             <ScrollArea
               type="scroll"
-              className="text-gray-200 border-t border-gray-700 h-[400px]"
+              className={cn(
+                "text-gray-200 transition-all duration-300 border-t border-gray-700",
+                {
+                  "h-[200px] md:h-[400px]": !isEmpty(),
+                  "h-[200px]": isEmpty(),
+                },
+              )}
             >
+              {props.assetsQuery.isSuccess &&
+                !isAddress(filter) &&
+                isEmpty() && (
+                  <div className="text-center tracking-wider font-light text-gray-400 text-sm mt-20">
+                    No asset found
+                  </div>
+                )}
+
+              {props.assetsQuery.isSuccess &&
+                isAddress(filter) &&
+                isEmpty() && (
+                  <div className="flex justify-center font-light text-gray-400 text-sm mt-16">
+                    <Button variant="outline" className="flex gap-2">
+                      <span>
+                        <IconPlus />
+                      </span>
+                      <span>Use {shortenAddress(filter)}</span>
+                    </Button>
+                  </div>
+                )}
+
               {props.assetsQuery.isLoading &&
                 props.assetsQuery.fetchStatus != "idle" && (
                   <AssetSelectorRowSkeleton />
                 )}
-
               {props.assetsQuery.isError && (
                 <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[100px]">
                   <ErrorIcon className="w-[20px]" />{" "}
                   {(props.assetsQuery.error as RequestError)?.message}
                 </div>
               )}
-
               <div className="divide-y">
                 {props.assetsQuery.isSuccess &&
                   props.assetsQuery.data.length > 0 && (
