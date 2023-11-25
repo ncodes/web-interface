@@ -197,7 +197,7 @@ export function CreateMarketSheet({
             </div>
           </div>
 
-          <div>
+          <div className="hidden">
             <div className="flex gap-2 flex-col p-5 pb-0">
               <div className="flex items-center gap-2">
                 <span className="tracking-wide">Permissions</span>
