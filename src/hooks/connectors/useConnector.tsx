@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Address,
-  SimulateContractReturnType,
-  TransactionReceipt,
-  WalletClient,
-  createPublicClient,
-  http,
-} from "viem";
+import { Address, TransactionReceipt, createPublicClient, http } from "viem";
 import { hardhat } from "viem/chains";
 import {
-  Chain,
   PublicClient,
   erc20ABI,
   useAccount,
@@ -22,81 +14,8 @@ import {
 } from "wagmi";
 import { isDev } from "../../libs/helpers.ts";
 import { ChainInfo } from "../../types/global";
+import { IConnector } from "./interface.ts";
 import { getChain } from "./networks";
-
-export interface IConnector {
-  defaultNetwork: number;
-
-  readContract<T>(
-    name: ContractNames,
-    targetFunc: string,
-    args?,
-    useAltRpc?,
-  ): Promise<T>;
-  simulateContract(
-    name: ContractNames,
-    targetFunc: string,
-    args?,
-  ): Promise<SimulateContractReturnType<any, string, Chain, undefined>>;
-  writeContract(
-    name: ContractNames,
-    targetFunc: string,
-    args?,
-  ): Promise<Address>;
-  simulateAndWriteContract(
-    name: ContractNames,
-    targetFunc: string,
-    args?,
-    noWait?: boolean,
-  ): Promise<[Address, TransactionReceipt]>;
-  sendTransaction(
-    to: string,
-    value: bigint,
-    noWait?: boolean,
-    confirmations?: number,
-  ): Promise<Address>;
-  withdrawWrappedToken(
-    amount: bigint,
-    noWait?: boolean,
-    confirmations?: number,
-  ): Promise<Address>;
-  getTokenBalance(
-    tokenAddress: Address | string,
-    accountAddress: Address | string,
-  ): Promise<bigint>;
-  approveAllowance(
-    tokenAddress: Address,
-    spenderAddress: Address,
-    amount: bigint,
-    noWait?: boolean,
-    confirmations?: number,
-  ): Promise<`0x${string}`>;
-  getTokenAllowance(
-    tokenAddress: Address | string,
-    accountAddress: Address | string,
-    spenderAddress: Address | string,
-  ): Promise<bigint>;
-  getTokenSupply(tokenAddress: Address): Promise<bigint>;
-  humanizeErc20Errors(error: { message: string } | unknown): string;
-
-  connected: boolean;
-  disconnect: () => Promise<void>;
-  getBalance: () => Promise<bigint>;
-  ready: boolean;
-  address: string;
-
-  sign: (msg: string) => Promise<string>;
-  signedData: string;
-  signStatus: string;
-
-  wallet: WalletClient;
-  switchNetwork: (id: number) => Promise<void>;
-  chainId: number;
-  chains: Chain[];
-  chain: Chain;
-  network: string;
-  getChainInfo(): ChainInfo;
-}
 
 /**
  * UseConnector provides wallet connection functionalities.
@@ -291,6 +210,52 @@ export default function useConnector() {
     }
 
     return txHash;
+  }
+
+  /**
+   * Get ERC20 token name
+   * @param tokenAddress - The token address
+   * @returns
+   */
+  async function getTokenName(tokenAddress: Address | string): Promise<string> {
+    if (!publicClient) throw new Error("no provider found");
+    return publicClient.readContract({
+      address: tokenAddress as Address,
+      abi: erc20ABI,
+      functionName: "name",
+    });
+  }
+
+  /**
+   * Get ERC20 token decimals
+   * @param tokenAddress - The token address
+   * @returns
+   */
+  async function getTokenDecimals(
+    tokenAddress: Address | string,
+  ): Promise<number> {
+    if (!publicClient) throw new Error("no provider found");
+    return publicClient.readContract({
+      address: tokenAddress as Address,
+      abi: erc20ABI,
+      functionName: "decimals",
+    });
+  }
+
+  /**
+   * Get ERC20 token symbol
+   * @param tokenAddress - The token address
+   * @returns
+   */
+  async function getTokenSymbol(
+    tokenAddress: Address | string,
+  ): Promise<string> {
+    if (!publicClient) throw new Error("no provider found");
+    return publicClient.readContract({
+      address: tokenAddress as Address,
+      abi: erc20ABI,
+      functionName: "symbol",
+    });
   }
 
   /**
@@ -523,6 +488,9 @@ export default function useConnector() {
     getTokenSupply,
     getTokenAllowance,
     approveAllowance,
+    getTokenName,
+    getTokenDecimals,
+    getTokenSymbol,
     humanizeErc20Errors,
 
     // Wallet operations

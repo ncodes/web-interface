@@ -21,6 +21,11 @@ export interface GetProtocolFeesParams {
   network: string;
 }
 
+export interface GetTokenInfoParams {
+  network?: string;
+  address: string;
+}
+
 /**
  * useMiscService provides access to v1/misc endpoint
  */
@@ -125,10 +130,37 @@ export function useMiscService() {
     }
   }
 
+  /**
+   * Get token information
+   * @param ctx The query function context
+   * @returns
+   */
+  async function getTokenInfo(
+    ctx: QueryFunctionContext<[string, GetTokenInfoParams]>,
+  ): Promise<TokenInfo> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { network, address } = params;
+      const headers = {};
+
+      const apiUrl = getChainInfo().apiUrl;
+      const resp = await axios({
+        method: "get",
+        url: `${apiUrl}/v1/misc/token-info/${network || "-"}/${address}`,
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     getCryptoRate,
     getSynthRate,
     getMediatorPools,
     getProtocolFees,
+    getTokenInfo,
   };
 }

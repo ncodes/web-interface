@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
 import { cn } from "../../libs/utils.ts";
-import { Avatar } from "../avatar/Avatar.tsx";
 import { ToolTip } from "../ToolTip.tsx";
+import { Avatar } from "../avatar/Avatar.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 
 export function AssetSelectorItem({
@@ -28,7 +28,7 @@ export function AssetSelectorItem({
       }}
       className={cn(
         "asset-item flex py-2 gap-3 px-3 transition-all duration-150 border-gray-900 items-center cursor-pointer",
-        { "bg-chinese-green scale-x-[1.03]": hover }
+        { "bg-chinese-green scale-x-[1.03]": hover },
       )}
     >
       <div className="shrink-0">
@@ -54,7 +54,7 @@ export function AssetSelectorItem({
       <div
         className={cn(
           "flex-1 shrink-0 flex justify-end text-gray-500 cursor-pointer transition-all duration-300",
-          { "text-gray-800": hover }
+          { "text-gray-800": hover },
         )}
       >
         <div className="relative w-[22px] h-[20px]">

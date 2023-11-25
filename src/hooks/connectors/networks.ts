@@ -22,7 +22,7 @@ import IconEthereum from "../../components/icons/IconEthereum.tsx";
 import IconOptimism from "../../components/icons/IconOptimism.tsx";
 import IconPolygon from "../../components/icons/IconPolygon.tsx";
 import { ChainInfo } from "../../types/global";
-import TokenInfo from "./token_info.ts";
+import NetTokenInfo from "./net_token_info.ts";
 
 /**
  * Mapping of supported networks' information
@@ -39,7 +39,7 @@ export const SupportedNetworks: ChainInfo[] = [
     rpcUrl: import.meta.env.VITE_ETHEREUM_RPC_URL,
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,
-    wrappedTokenInfo: new TokenInfo({
+    wrappedTokenInfo: new NetTokenInfo({
       address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
       name: "WETH",
       symbol: "WETH",
@@ -94,7 +94,7 @@ export const SupportedNetworks: ChainInfo[] = [
     rpcUrl: import.meta.env.VITE_POLYGON_RPC_URL ?? "",
     blockExplorer: "https://polygonscan.com",
     logoPath: IconPolygon,
-    wrappedTokenInfo: new TokenInfo({
+    wrappedTokenInfo: new NetTokenInfo({
       address: import.meta.env.VITE_POLYGON_WRAPPED_TOKEN_ADDRESS,
       name: "WMATIC",
       symbol: "WMATIC",
@@ -115,7 +115,7 @@ export const SupportedNetworks: ChainInfo[] = [
     rpcUrl: import.meta.env.VITE_OPTIMISM_RPC_URL ?? "",
     blockExplorer: "https://optimistic.etherscan.io",
     logoPath: IconOptimism,
-    wrappedTokenInfo: new TokenInfo({
+    wrappedTokenInfo: new NetTokenInfo({
       address: import.meta.env.VITE_OPTIMISM_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",
@@ -137,7 +137,7 @@ export const SupportedNetworks: ChainInfo[] = [
     rpcUrl: import.meta.env.VITE_BINANCE_RPC_URL ?? "",
     blockExplorer: "https://bscscan.com",
     logoPath: IconBSC,
-    wrappedTokenInfo: new TokenInfo({
+    wrappedTokenInfo: new NetTokenInfo({
       address: import.meta.env.VITE_BINANCE_WRAPPED_TOKEN_ADDRESS,
       name: "WBNB",
       symbol: "WBNB",
@@ -158,7 +158,7 @@ export const SupportedNetworks: ChainInfo[] = [
     rpcUrl: import.meta.env.VITE_ARBITRUM_RPC_URL ?? "",
     blockExplorer: "https://arbiscan.io",
     logoPath: IconArbitrum,
-    wrappedTokenInfo: new TokenInfo({
+    wrappedTokenInfo: new NetTokenInfo({
       address: import.meta.env.VITE_ARBITRUM_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",
@@ -179,7 +179,7 @@ export const SupportedNetworks: ChainInfo[] = [
     rpcUrl: import.meta.env.VITE_SEPOLIA_RPC_URL ?? "",
     blockExplorer: "https://sepolia.etherscan.io",
     logoPath: IconEthereum,
-    wrappedTokenInfo: new TokenInfo({
+    wrappedTokenInfo: new NetTokenInfo({
       address: import.meta.env.VITE_SEPOLIA_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",
@@ -234,7 +234,7 @@ export const SupportedNetworks: ChainInfo[] = [
     rpcUrl: import.meta.env.VITE_LOCALHOST_RPC_URL ?? "",
     blockExplorer: "https://etherscan.io",
     logoPath: IconEthereum,
-    wrappedTokenInfo: new TokenInfo({
+    wrappedTokenInfo: new NetTokenInfo({
       address: import.meta.env.VITE_LOCALHOST_WRAPPED_TOKEN_ADDRESS,
       name: "WETH",
       symbol: "WETH",

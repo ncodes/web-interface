@@ -1,7 +1,9 @@
-import { UseQueryResult } from "@tanstack/react-query";
+import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { ErrorIcon } from "react-hot-toast";
 import { isAddress } from "viem";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useMiscService } from "../../hooks/services/backend/useMiscService.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { shortenAddress } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
@@ -10,6 +12,7 @@ import { ToolTip } from "../ToolTip.tsx";
 import { Avatar } from "../avatar/Avatar.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { IconPlus } from "../icons/IconPlus.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
@@ -47,29 +50,26 @@ export function AssetSelector(props: {
   image: string;
   onSelected: (asset: AssetInfo) => void;
 }) {
+  const { getTokenName, getTokenSymbol, getTokenDecimals } =
+    useConnectorContext();
   const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [data, setData] = useState<AssetInfo[]>(props.assetsQuery.data || []);
   const pageLimit = 20;
   const [pages, setPages] = useState<AssetInfo[][]>([data.slice(0, pageLimit)]);
+  const { getTokenInfo } = useMiscService();
+  const [loading, setLoading] = useState(false);
+  const [fetchCustomAsset, setFetchCustomAsset] = useState(false);
 
-  const applyFilter = (data: AssetInfo[]) => {
-    return data.filter((asset) => {
-      return (
-        asset?.symbol?.toLowerCase().includes(filter.toLowerCase()) ||
-        asset?.name?.toLowerCase().includes(filter.toLowerCase()) ||
-        (asset?.address.startsWith("0x") &&
-          asset?.address?.toLowerCase().includes(filter.toLowerCase())) ||
-        asset?.type?.toLowerCase().includes(filter.toLowerCase())
-      );
-    });
-  };
+  const customAssetQuery = useQuery({
+    queryKey: ["getCustomAsset", { address: filter }],
+    enabled: fetchCustomAsset,
+    queryFn: getTokenInfo,
+  });
 
   useEffect(() => {
-    console.log(filter);
     if (filter.length) {
       const filtered = applyFilter(props.assetsQuery.data || []);
-      console.log("filtered", filtered, pages);
       setPages([filtered]);
     } else {
       setData(props.assetsQuery.data || []);
@@ -81,8 +81,68 @@ export function AssetSelector(props: {
     if (!open) setPages([[]]);
   }, [open]);
 
+  useEffect(() => {
+    if (!filteredAddrNotInList()) {
+      setFetchCustomAsset(false);
+      return;
+    }
+    setFetchCustomAsset(true);
+    console.log("fetch");
+  }, [props.assetsQuery.data, filter, pages]);
+
+  console.log(customAssetQuery.data);
+
+  function applyFilter(data: AssetInfo[]) {
+    return data.filter((asset) => {
+      return (
+        asset?.symbol?.toLowerCase().includes(filter.toLowerCase()) ||
+        asset?.name?.toLowerCase().includes(filter.toLowerCase()) ||
+        (asset?.address.startsWith("0x") &&
+          asset?.address?.toLowerCase().includes(filter.toLowerCase())) ||
+        asset?.type?.toLowerCase().includes(filter.toLowerCase())
+      );
+    });
+  }
+
   function isEmpty() {
     return pages.length == 0 || pages[0].length == 0;
+  }
+
+  function filteredAddrNotInList() {
+    return props.assetsQuery.isSuccess && isAddress(filter) && isEmpty();
+  }
+
+  async function useUnlisted() {
+    try {
+      setLoading(true);
+      const name = await getTokenName(filter);
+      const symbol = await getTokenSymbol(filter);
+      const decimals = await getTokenDecimals(filter);
+      props?.onSelected({
+        name,
+        symbol,
+        decimals,
+        address: filter,
+        type: "ERC20",
+        logoURI:
+          "https://storage.googleapis.com/joint-images/token-logos/unknown.svg",
+        price: 0,
+      });
+    } catch (e) {
+      props?.onSelected({
+        name: "UNKNOWN",
+        symbol: "UNKNW",
+        decimals: 18,
+        address: filter,
+        type: "ERC20",
+        logoURI:
+          "https://storage.googleapis.com/joint-images/token-logos/unknown.svg",
+        price: 0,
+      });
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
   }
 
   return (
@@ -178,33 +238,75 @@ export function AssetSelector(props: {
                   </div>
                 )}
 
-              {props.assetsQuery.isSuccess &&
-                isAddress(filter) &&
-                isEmpty() && (
-                  <div className="flex justify-center font-light text-gray-400 text-sm mt-16">
-                    <Button variant="outline" className="flex gap-2">
+              {filteredAddrNotInList() && !customAssetQuery.data && (
+                <div className="flex gap-3 flex-col items-center justify-center font-light text-gray-400 text-sm mt-7">
+                  <span className="px-[22px] select-none text-gray-500 text-center leading-5 text-[13px]">
+                    This address was not found in the list maintained by Joint
+                    Labs or our providers.
+                  </span>
+                  <Button
+                    onClick={useUnlisted}
+                    variant="outline"
+                    disabled={loading}
+                    className="flex w-[210px] gap-2"
+                  >
+                    {!loading && (
                       <span>
                         <IconPlus />
                       </span>
-                      <span>Use {shortenAddress(filter)}</span>
-                    </Button>
-                  </div>
-                )}
+                    )}
+                    {loading && (
+                      <IconSpinner
+                        width="20"
+                        className="animate-spin"
+                        fill="fill-gray-400"
+                      />
+                    )}
+                    <span>Use {shortenAddress(filter)}</span>
+                  </Button>
+                </div>
+              )}
 
               {props.assetsQuery.isLoading &&
                 props.assetsQuery.fetchStatus != "idle" && (
                   <AssetSelectorRowSkeleton />
                 )}
+
               {props.assetsQuery.isError && (
                 <div className="flex items-center gap-2 text-red-300 justify-center font-light  h-[100px]">
                   <ErrorIcon className="w-[20px]" />{" "}
                   {(props.assetsQuery.error as RequestError)?.message}
                 </div>
               )}
+
               <div className="divide-y">
                 {props.assetsQuery.isSuccess &&
                   props.assetsQuery.data.length > 0 && (
                     <>
+                      {fetchCustomAsset && customAssetQuery.isSuccess && (
+                        <AssetSelectorItem
+                          key={`${customAssetQuery.data.symbol}:${filter}`}
+                          asset={customAssetQuery.data}
+                          onClick={(asset: AssetInfo) => {
+                            props.onSelected && props.onSelected(asset);
+                            setOpen(!open);
+                          }}
+                          tip={
+                            <>
+                              {customAssetQuery.data.type == "ERC20" && (
+                                <>An ERC20 token representing on-chain value</>
+                              )}
+                              {customAssetQuery.data.type == "SYNTHETIC" && (
+                                <>
+                                  A synthetic asset representing off-chain value
+                                  (ex: national currency)
+                                </>
+                              )}
+                            </>
+                          }
+                        />
+                      )}
+
                       {pages.map((page) => {
                         return page.map((asset) => {
                           return (

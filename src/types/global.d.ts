@@ -1,6 +1,6 @@
 import React from "react";
 import { Address, Chain } from "viem";
-import TokenInfo from "../hooks/connectors/token_info.ts";
+import NetTokenInfo from "../hooks/connectors/net_token_info.ts";
 import { AssetType, Events } from "./enums.ts";
 
 interface ContractInfo<ABIType> {
@@ -17,7 +17,7 @@ interface ChainInfo {
   altDisplayName?: string; // Used for displaying the chain name in the UI if displayName is too long
   queryName: string; // Used for identifying the chain on the backend
   chainId: number;
-  chain: Chain,
+  chain: Chain;
   disabled?: boolean;
   testnet?: boolean;
   symbol: string;
@@ -25,7 +25,7 @@ interface ChainInfo {
   rpcUrl: string;
   blockExplorer: string;
   logoPath: React.Element;
-  wrappedTokenInfo: TokenInfo;
+  wrappedTokenInfo: NetTokenInfo;
   contracts?: Contracts;
 }
 
@@ -413,7 +413,7 @@ declare global {
     decimals: number;
     logoURI: string;
     price: number; // Used in dev mode only
-    isSynthetic: boolean; // Used to identify synthetic tokens
+    isSynthetic?: boolean; // Used to identify synthetic tokens
   }
 
   interface PaymentMethod {
@@ -470,6 +470,18 @@ declare global {
     fixedNFTSwapFee: number;
     instantNFTSwapFeeBp: number;
   };
+
+  type TokenInfo = {
+    price: number;
+    decimals: number;
+    logoURI: string;
+    symbol: string;
+    address: string;
+    type: "ERC20" | "SYNTHETIC";
+    isContract?: boolean;
+    name: string;
+  };
+
   export interface MarketFilter {
     base?: string;
     quote?: string;
