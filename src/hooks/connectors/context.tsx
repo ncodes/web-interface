@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import { IConnector } from "./useConnector";
+import { IConnector } from "./interface";
 
 export const ConnectorContext = createContext<IConnector>({} as IConnector);
