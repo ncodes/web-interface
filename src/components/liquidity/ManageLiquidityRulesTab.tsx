@@ -1,5 +1,6 @@
-import { TabsContent } from "../ui/Tabs.tsx";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
+import { TabsContent } from "../ui/Tabs.tsx";
 import { Accordion } from "../ui/accordion.tsx";
 import { ManageLiquidityInstruction } from "./ManageLiquidityInstruction.tsx";
 import { ManageLiquidityRequiredBadges } from "./ManageLiquidityRequiredBadges.tsx";
@@ -14,14 +15,18 @@ export default function ManageLiquidityRulesTab({
   return (
     <TabsContent
       value="rules"
-      className={`p-0 mt-0 h-full overflow-auto ${sheetHeight}`}
+      className={`p-0 mt-0 overflow-auto ${sheetHeight}  xl:h-screen`}
     >
-      <div className="">
-        <Accordion type="single" defaultValue="instruction">
+      <ScrollArea className={`${sheetHeight}`}>
+        <Accordion
+          type="single"
+          defaultValue="instruction"
+          className="lg:pb-32 xl:pb-0"
+        >
           <ManageLiquidityInstruction liquidity={liquidity} />
           <ManageLiquidityRequiredBadges liquidity={liquidity} />
         </Accordion>
-      </div>
+      </ScrollArea>
     </TabsContent>
   );
 }
