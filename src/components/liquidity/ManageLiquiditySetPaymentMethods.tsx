@@ -112,7 +112,7 @@ export function ManageLiquiditySetPaymentMethods({
   }
 
   async function filterGrantedPaymentMethod(
-    methods: PaymentMethod[]
+    methods: PaymentMethod[],
   ): Promise<PaymentMethod[]> {
     const enabled: PaymentMethod[] = [];
     for (const method of methods) {
@@ -123,7 +123,7 @@ export function ManageLiquiditySetPaymentMethods({
             address,
             badgeParts[0],
             badgeParts[1],
-            deriveLiquidityAddress(liquidity)
+            deriveLiquidityAddress(liquidity),
           )) == "1"
         ) {
           enabled.push(method);
@@ -181,7 +181,7 @@ export function ManageLiquiditySetPaymentMethods({
                 }}
                 filterMethods={(method) => {
                   return !grantedPaymentMethods.find(
-                    (enabledMethod) => enabledMethod.badge === method.badge
+                    (enabledMethod) => enabledMethod.badge === method.badge,
                   );
                 }}
               />
@@ -203,6 +203,7 @@ export function ManageLiquiditySetPaymentMethods({
               <div className="mt-3 flex flex-col gap-1">
                 {grantedPaymentMethods.map((method) => (
                   <GrantedPaymentMethodRow
+                    key={method.badge + method.name}
                     method={method}
                     liquidity={liquidity}
                   />

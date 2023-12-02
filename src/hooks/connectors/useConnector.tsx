@@ -1,3 +1,4 @@
+import { ChainInfo, ContractNames, getChain } from "@jointlabs/chains-info";
 import { useEffect, useState } from "react";
 import { Address, TransactionReceipt, createPublicClient, http } from "viem";
 import { hardhat } from "viem/chains";
@@ -13,9 +14,7 @@ import {
   useWalletClient,
 } from "wagmi";
 import { isDev } from "../../libs/helpers.ts";
-import { ChainInfo } from "../../types/global";
 import { IConnector } from "./interface.ts";
-import { getChain } from "./networks";
 
 /**
  * UseConnector provides wallet connection functionalities.
@@ -332,6 +331,7 @@ export default function useConnector() {
       const chainInfo = getChainInfo();
       const chain = chains.find((c) => c.id === chainInfo.chainId);
       if (!chain) throw new Error("unknown chain");
+      if (!chainInfo.rpcUrl) throw new Error("unknown rpc url");
       chain.rpcUrls.default.http = [chainInfo.rpcUrl];
       chain.rpcUrls.public.http = chain.rpcUrls.default.http;
       client = createPublicClient({

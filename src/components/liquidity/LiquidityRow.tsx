@@ -23,6 +23,7 @@ import { UserHoverCard } from "../UserHoverCard.tsx";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { PairAvatar } from "../avatar/PairAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
+import { BadgePill } from "../badge/BadgePill.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
 import IconEdit from "../icons/IconEdit.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
@@ -30,7 +31,6 @@ import { IconMarket } from "../icons/IconMarket.tsx";
 import IconOffer from "../icons/IconOffer.tsx";
 import IconReview from "../icons/IconReview.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
-import { BadgePill } from "../market/BadgePill.tsx";
 import { FollowLiquidity } from "../market/FollowLiquidity.tsx";
 import { InfoCard } from "../market/InfoCard.tsx";
 import { SwapOfferCreatorSheet } from "../swap/SwapOfferCreatorSheet.tsx";
@@ -111,7 +111,7 @@ export function LiquidityRow({
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
           <div
             data-click-trigger="1"
-            className="md:w-[200px] flex gap-2 px-3 py-0 items-center shrink-0 border-r border-gray-800"
+            className="md:w-[220px] flex gap-2 px-3 py-0 items-center shrink-0 border-r border-gray-800"
           >
             <div data-click-trigger="1">
               {!ownerMode && (
@@ -139,7 +139,7 @@ export function LiquidityRow({
               className="flex py-3 md:py-0 w-full md:w-auto flex-col xxs:flex-row md:flex-col justify-start xxs:justify-between md:justify-start z-[6] xxs:items-center md:items-start"
               data-click-trigger="1"
             >
-              {getProvider.isError && (
+              {getProvider.isError && !getProvider.isLoading && (
                 <div className="w-[130px]">
                   <div className="flex text-xs items-center gap-1 text-red-500">
                     <IconCaution

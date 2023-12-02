@@ -1,44 +1,42 @@
-import React from "react";
-import { Address, Chain } from "viem";
-import NetTokenInfo from "../hooks/connectors/net_token_info.ts";
+import { Address } from "viem";
 import { AssetType, Events } from "./enums.ts";
 
-interface ContractInfo<ABIType> {
-  address: string;
-  abi: ABIType;
-}
+// interface ContractInfo<ABIType> {
+//   address: string;
+//   abi: ABIType;
+// }
 
-type Contracts = {
-  [key in ContractNames]: ContractInfo;
-};
+// type Contracts = {
+//   [key in ContractNames]: ContractInfo;
+// };
 
-interface ChainInfo {
-  displayName: string; // The primary name of the chain
-  altDisplayName?: string; // Used for displaying the chain name in the UI if displayName is too long
-  queryName: string; // Used for identifying the chain on the backend
-  chainId: number;
-  chain: Chain;
-  disabled?: boolean;
-  testnet?: boolean;
-  symbol: string;
-  apiUrl: string;
-  rpcUrl: string;
-  blockExplorer: string;
-  logoPath: React.Element;
-  wrappedTokenInfo: NetTokenInfo;
-  contracts?: Contracts;
-}
+// interface ChainInfo {
+//   displayName: string; // The primary name of the chain
+//   altDisplayName?: string; // Used for displaying the chain name in the UI if displayName is too long
+//   queryName: string; // Used for identifying the chain on the backend
+//   chainId: number;
+//   chain: Chain;
+//   disabled?: boolean;
+//   testnet?: boolean;
+//   symbol: string;
+//   apiUrl: string;
+//   rpcUrl: string;
+//   blockExplorer: string;
+//   logoPath: React.Element;
+//   wrappedTokenInfo: NetTokenInfo;
+//   contracts?: Contracts;
+// }
 
 declare global {
-  type ContractNames =
-    | "core"
-    | "token"
-    | "energon"
-    | "nft"
-    | "badgeManager"
-    | "marketCore"
-    | "disputeManager"
-    | "mediatorManager";
+  // type ContractNames =
+  //   | "core"
+  //   | "token"
+  //   | "energon"
+  //   | "nft"
+  //   | "badgeManager"
+  //   | "marketCore"
+  //   | "disputeManager"
+  //   | "mediatorManager";
 
   interface User {
     email: string;

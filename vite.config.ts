@@ -1,6 +1,7 @@
 import react from "@vitejs/plugin-react-swc";
 import { Buffer } from "buffer";
 import "dotenv/config";
+import { resolve } from "path";
 import replaceInFile from "replace-in-file";
 import { defineConfig } from "vite";
 
@@ -34,14 +35,17 @@ export default defineConfig(({ command }) => {
     globalThis.Buffer = Buffer;
   }
 
-  // replaceInFile.sync({
-  //   files: "./public/worker.js",
-  //   from: "process.env.VITE_APP_URL",
-  //   to: process.env.VITE_APP_URL,
-  // });
-
   return {
     define,
+    resolve: {
+      alias: [
+        {
+          find: "@/icons",
+          replacement: resolve(__dirname, "./src/components/icons"),
+        },
+        { find: "@", replacement: resolve(__dirname, "./src") },
+      ],
+    },
     plugins: [replaceWorkerEnv(), react()],
   };
 });

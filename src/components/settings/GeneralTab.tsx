@@ -58,10 +58,9 @@ export function GeneralTab(props: { address: string }) {
   async function fetchP2pBalance() {
     const netInfo = getChainInfo();
     if (!netInfo || !netInfo.contracts?.token) return;
-    const bal = await getTokenBalance(
-      netInfo.contracts["token"].address,
-      address,
-    );
+    const tokenAddr = netInfo.contracts["token"].address;
+    if (!tokenAddr) throw new Error("token address not found");
+    const bal = await getTokenBalance(tokenAddr as string, address);
     setP2pBalance(bal);
   }
 

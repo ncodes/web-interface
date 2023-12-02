@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
+import { Address } from "viem";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useMiscService } from "../../hooks/services/backend/useMiscService.ts";
 import useMediatorManagerContract from "../../hooks/services/contracts/useMediatorManagerContract.ts";
@@ -71,9 +72,9 @@ export function BuyTicketSheet(props: {
 
     const verifyAllowance = async () => {
       const allowance = await getTokenAllowance(
-        getChainInfo().contracts?.token.address,
+        getChainInfo().contracts?.token?.address as string,
         address,
-        getChainInfo().contracts?.mediatorManager.address,
+        getChainInfo().contracts?.mediatorManager?.address as string,
       );
       setApproved(allowance >= BigInt(ticketPrice + BigInt(pool.reqBond)));
     };
@@ -87,9 +88,11 @@ export function BuyTicketSheet(props: {
       setApproveLoading(true);
 
       await approveAllowance(
-        getChainInfo().contracts?.token.address,
-        getChainInfo().contracts?.mediatorManager.address,
-        await getTokenSupply(getChainInfo().contracts?.token.address),
+        getChainInfo().contracts?.token?.address as Address,
+        getChainInfo().contracts?.mediatorManager?.address as Address,
+        await getTokenSupply(
+          getChainInfo().contracts?.token?.address as Address,
+        ),
       );
 
       await delay(5000);

@@ -329,10 +329,13 @@ export function SwapOfferCreatorContent({
       if (isZero(maxQuoteAmount)) return setHasAllowance(false);
       if (!isERC20(market.quoteType)) return setHasAllowance(true);
 
+      const tokenAddr = getChainInfo().contracts?.core.address;
+      if (!tokenAddr) throw new Error("token address not found");
+
       const allowance = await getTokenAllowance(
         market.quoteAddress,
         address,
-        getChainInfo().contracts?.core.address,
+        tokenAddr,
       );
 
       const maxQuoteAmtLD = toLD(maxQuoteAmount, market.quoteDecimals);

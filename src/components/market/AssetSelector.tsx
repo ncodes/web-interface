@@ -87,10 +87,7 @@ export function AssetSelector(props: {
       return;
     }
     setFetchCustomAsset(true);
-    console.log("fetch");
   }, [props.assetsQuery.data, filter, pages]);
-
-  console.log(customAssetQuery.data);
 
   function applyFilter(data: AssetInfo[]) {
     return data.filter((asset) => {

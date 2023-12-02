@@ -1,9 +1,9 @@
+import { ChainInfo } from "@jointlabs/chains-info";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { Location } from "react-router-dom";
 import { Options } from "../../../hooks/useToast.tsx";
 import { delay, isDev } from "../../../libs/helpers.ts";
-import { ChainInfo } from "../../../types/global";
 
 /**
  * Release an order
@@ -29,7 +29,7 @@ export async function releaseOrderFunc(
   setLoading: (id: string, loading: LoadingState) => void,
   humanizeErrors: (error: { message: string } | unknown) => string,
   notifySuccess: (msg: ReactNode, options?: Options) => void,
-  notifyError: (msg: ReactNode, options?: Options) => void
+  notifyError: (msg: ReactNode, options?: Options) => void,
 ) {
   try {
     setLoading(swap.orderId.toFixed(), { ...loading, releaseOrder: true });

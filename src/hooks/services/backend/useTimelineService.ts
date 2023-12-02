@@ -1,6 +1,6 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import moment from "moment/moment";
+import moment from "moment";
 import { handleAxiosError, powOf } from "../../../libs/helpers.ts";
 import { Events } from "../../../types/enums.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
@@ -25,9 +25,10 @@ export function useTimelineService() {
    * @param ctx
    */
   async function get(
-    ctx: QueryFunctionContext<[string, GetParams]>
+    ctx: QueryFunctionContext<[string, GetParams]>,
   ): Promise<{ events: Event[]; meta: { queryCount: number } }> {
     try {
+      console.log(`${getChainInfo().apiUrl}/v1/timelines`);
       const lastSerial = ctx.pageParam as number;
       const [, params] = ctx.queryKey;
       const { network, liquidities, markets, wallets, limit } = params;

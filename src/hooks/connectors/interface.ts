@@ -1,3 +1,4 @@
+import { ChainInfo, ContractNames } from "@jointlabs/chains-info";
 import {
   Address,
   Chain,
@@ -5,7 +6,6 @@ import {
   TransactionReceipt,
   WalletClient,
 } from "viem";
-import { ChainInfo } from "../../types/global";
 
 export interface IConnector {
   defaultNetwork: number;

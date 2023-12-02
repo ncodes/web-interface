@@ -320,7 +320,10 @@ export default function useCoreContract() {
 
       // updateFungibleLiquidity: MKT_BADGE_REQ
       if (error.message.includes("OC: MKT_BADGE_REQ"))
-        return "Permission denied: Missing one or more market badges";
+        return "Permission denied: You don't have a badge required by the market creator";
+
+      if (error.message.includes("OC: LP_BADGE_REQ"))
+        return "Permission denied: You don't have a badge required by the liquidity provider";
 
       if (error.message.includes("OC: LOW_TTP"))
         return "Payment time is too short";

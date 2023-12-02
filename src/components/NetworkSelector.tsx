@@ -1,8 +1,7 @@
+import { ChainInfo, getChain, getChainsID } from "@jointlabs/chains-info";
 import { ChevronDown } from "lucide-react";
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import { getChain, getChainsID } from "../hooks/connectors/networks.ts";
 import { cn } from "../libs/utils.ts";
-import { ChainInfo } from "../types/global";
 import {
   DropdownArrow,
   DropdownMenu,

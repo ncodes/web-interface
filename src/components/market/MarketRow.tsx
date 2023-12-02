@@ -14,6 +14,7 @@ import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import { USDAmountToolTip } from "../USDAmountToolTip.tsx";
 import { PairAvatar } from "../avatar/PairAvatar.tsx";
+import { BadgePill } from "../badge/BadgePill.tsx";
 import IconCopyFilled from "../icons/IconCopyFilled.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { IconSettingsOutline } from "../icons/IconSettingsOutline.tsx";
@@ -26,7 +27,6 @@ import {
 } from "../ui/dropdown-menu.tsx";
 import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
 import { AssetTip } from "./AssetTip.tsx";
-import { BadgePill } from "./BadgePill.tsx";
 import { FollowMarket } from "./FollowMarket.tsx";
 import { InfoCard } from "./InfoCard.tsx";
 import { ManageMarketSheet } from "./ManageMarketSheet.tsx";

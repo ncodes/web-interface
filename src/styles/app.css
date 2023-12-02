@@ -92,13 +92,13 @@
         @apply hover:text-chinese-green;
       }
     }
-    
+
     video::-webkit-media-controls {
-         visibility: hidden;
+      visibility: hidden;
     }
 
     video::-webkit-media-controls-enclosure {
-         visibility: visible;
+      visibility: visible;
     }
   }
 
@@ -178,4 +178,8 @@
   .address-mention-decoration {
     @apply text-gray-300 underline decoration-dashed decoration-gray-500;
   }
+}
+
+.badge-chinese-green {
+  @apply bg-chinese-green text-gray-900 px-1 rounded;
 }

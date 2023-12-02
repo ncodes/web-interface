@@ -1,9 +1,9 @@
+import { TransactionExecutionError } from "viem";
+import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import {
   GrantSigInfo,
   NewGrantValues,
 } from "../backend/useInstructionsService.ts";
-import { TransactionExecutionError } from "viem";
-import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
 /**
  * Providers utilities for reading and writing to the badge manager contract
@@ -16,7 +16,7 @@ export default function useBadgeMgrContract() {
    * @param address  The address of the grantee
    */
   async function loadInstruction(
-    address: string
+    address: string,
   ): Promise<Instructions | undefined> {
     const hasBadge = await readContract<boolean>("badgeManager", "hasBadge", [
       address,
@@ -29,7 +29,7 @@ export default function useBadgeMgrContract() {
     const cid = await readContract<string>(
       "badgeManager",
       "getGranteeMetaValue",
-      [import.meta.env.VITE_INSTRUCTION_BADGE, "", address, "hash"]
+      [import.meta.env.VITE_INSTRUCTION_BADGE, "", address, "hash"],
     );
 
     try {
@@ -52,7 +52,7 @@ export default function useBadgeMgrContract() {
       const res = await simulateAndWriteContract(
         "badgeManager",
         "grantBadgeBySig",
-        [...values, sigInfo.sig]
+        [...values, sigInfo.sig],
       );
       return res[0];
     } else {
@@ -60,7 +60,7 @@ export default function useBadgeMgrContract() {
       const res = await simulateAndWriteContract(
         "badgeManager",
         "upsertGranteeMetaBySig",
-        [...values, sigInfo.sig]
+        [...values, sigInfo.sig],
       );
       return res[0];
     }
@@ -91,7 +91,7 @@ export default function useBadgeMgrContract() {
     address: string,
     badge: string,
     path: string,
-    key: string
+    key: string,
   ) {
     return await readContract<string>("badgeManager", "getGranteeMetaValue", [
       badge,
