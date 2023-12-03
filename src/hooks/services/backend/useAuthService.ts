@@ -1,4 +1,5 @@
 import axios from "axios";
+import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 
@@ -53,8 +54,32 @@ export function useAuthService() {
     }
   }
 
+  /**
+   * Delete current or all sessions
+   * @param all If set, deletes all sessions for the user
+   */
+  async function deleteSession(all: boolean): Promise<void> {
+    try {
+      const headers = { "Content-Type": "application/json" };
+      const token = localStorage.getItem(StoreAccessTokenKey);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+
+      await axios({
+        method: "delete",
+        url: `${getChainInfo().apiUrl}/v1/auth/session`,
+        params: all ? { all: "true" } : undefined,
+        headers,
+      });
+
+      return Promise.resolve(undefined);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     auth,
     verifyEmail,
+    deleteSession,
   };
 }

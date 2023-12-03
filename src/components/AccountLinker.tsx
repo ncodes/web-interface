@@ -1,3 +1,4 @@
+import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../hooks/store/useStore.ts";
 import IconCaution from "./icons/IconCaution.tsx";
@@ -10,11 +11,11 @@ export function AccountLinker() {
     toggleOpenState: state.toggleOpenState,
   }));
 
-  if (user === undefined) return null;
+  const userToken = localStorage.getItem(StoreAccessTokenKey);
 
   return (
     <>
-      {!user && connected && (
+      {!userToken && connected && (
         <div className="select-none pt-2 py-2 bg-card-background rounded-3xl mb-2 px-3 md:px-3 border border-card-border flex items-center gap-3">
           <span>
             <IconCaution

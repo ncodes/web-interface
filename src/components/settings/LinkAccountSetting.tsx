@@ -23,7 +23,7 @@ export function LinkAccountSetting() {
   const { setUser } = useStore((state) => ({ setUser: state.setUser }));
   const { sign, address } = useConnectorContext();
   const { simpleError } = useToast();
-  const { auth, verifyEmail } = useAuthService();
+  const { auth, verifyEmail, deleteSession } = useAuthService();
   const [loading, setLoading] = useState(false);
   const [verifyMode, setVerifyMode] = useState<boolean>(false);
   const [err, setErr] = useState<string>("");
@@ -38,6 +38,12 @@ export function LinkAccountSetting() {
   const verifyEmailMutation = useMutation({
     mutationFn: (data: { userId: string; otp: string }) => {
       return verifyEmail(data.userId, data.otp);
+    },
+  });
+
+  const deleteSessionMutation = useMutation({
+    mutationFn: (all: boolean) => {
+      return deleteSession(all);
     },
   });
 
@@ -95,7 +101,10 @@ export function LinkAccountSetting() {
 
       void onLinked(data.user, data.token);
     } catch (error) {
-      simpleError("Failed to link wallet");
+      simpleError("Failed to link wallet", {
+        position: "top-center",
+        duration: 5000,
+      });
       if (isDev()) console.error(error);
     } finally {
       setLoading(false);
@@ -121,7 +130,10 @@ export function LinkAccountSetting() {
       if ((error as { message: string }).message == "invalid otp") {
         setErr("Invalid code");
       } else {
-        simpleError("Failed to verify code");
+        simpleError("Failed to verify code", {
+          position: "top-center",
+          duration: 5000,
+        });
         if (isDev()) console.error(error);
       }
     } finally {
@@ -137,6 +149,23 @@ export function LinkAccountSetting() {
     setLinked(true);
     setVerifyMode(false);
     setUser(user);
+  }
+
+  async function doUnlink() {
+    try {
+      setLoading(true);
+      await deleteSessionMutation.mutateAsync(false);
+      simpleError("Successfully unlinked wallet");
+    } catch (error) {
+      setLoading(false);
+      simpleError("Failed to unlink wallet");
+      if (isDev()) console.error(error);
+      return;
+    }
+
+    localStorage.removeItem(StoreAccessTokenKey);
+    setLinked(false);
+    setLoading(false);
   }
 
   return (
@@ -233,14 +262,24 @@ export function LinkAccountSetting() {
                 <b>{fetchUser.data?.email}</b>
               </span>
               <span className="shrink-0">
-                <Button
-                  onClick={() => setLinked(false)}
-                  variant="link"
-                  rounded="md"
-                  size="sm"
-                >
-                  Unlink
-                </Button>
+                {loading && (
+                  <IconSpinner
+                    className="animate-spin"
+                    fill="fill-gray-500"
+                    width="20"
+                  />
+                )}
+
+                {!loading && (
+                  <Button
+                    onClick={doUnlink}
+                    variant="link"
+                    rounded="md"
+                    size="sm"
+                  >
+                    Unlink
+                  </Button>
+                )}
               </span>
             </div>
           </Alert>
