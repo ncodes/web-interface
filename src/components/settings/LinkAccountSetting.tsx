@@ -1,52 +1,64 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StoreAccessTokenKey, StoreEmailKey } from "../../constants.ts";
 import { createSignatureMessage } from "../../hooks/connectors/common.ts";
 import { useAuthService } from "../../hooks/services/backend/useAuthService.ts";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { Alert } from "../Alert.tsx";
 import IconCheckCircle from "../icons/IconCheckCircle.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { Button } from "../ui/Button.tsx";
-import { Input } from "../ui/Input.tsx";
 
+import { ChevronLeft } from "lucide-react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { cn, isDev } from "../../libs/helpers.ts";
+import Input2 from "../Input2.tsx";
+import IconSpinner from "../icons/IconSpinner.tsx";
 
 export function LinkAccountSetting() {
-  const [email, setEmail] = useState("");
-  const [disabled, setDisabled] = useState(false);
+  const [value, setValue] = useState("");
   const [linked, setLinked] = useState(false);
   const { setUser } = useStore((state) => ({ setUser: state.setUser }));
   const { sign, address } = useConnectorContext();
   const { simpleError } = useToast();
-  const setLoaderProgress = useStore((state) => state.setLoaderProgress);
-  const { auth } = useAuthService();
+  const { auth, verifyEmail } = useAuthService();
+  const [loading, setLoading] = useState(false);
+  const [verifyMode, setVerifyMode] = useState<boolean>(false);
+  const [err, setErr] = useState<string>("");
   const { getUser } = useUserService();
-  const queryUserByAddress = useQuery({
-    queryKey: ["getUser", { address }],
-    queryFn: getUser,
-    enabled: !!address,
-  });
+
   const authMutation = useMutation({
     mutationFn: (data: { msg: string; sig: string }) => {
       return auth(data.msg, data.sig);
     },
   });
 
-  useEffect(() => {
-    if (queryUserByAddress.isSuccess) {
-      const { email } = queryUserByAddress.data;
-      setEmail(email || localStorage.getItem(StoreEmailKey) || "");
-      setLinked(email !== undefined);
-    } else {
-      setEmail(localStorage.getItem(StoreEmailKey) || "");
-    }
-  }, [queryUserByAddress.data, queryUserByAddress.isSuccess]);
+  const verifyEmailMutation = useMutation({
+    mutationFn: (data: { userId: string; otp: string }) => {
+      return verifyEmail(data.userId, data.otp);
+    },
+  });
 
-  const linkWallet = useCallback(async () => {
-    if (!email?.trim()) {
+  const fetchUser = useQuery({
+    queryKey: ["getUser", { address }],
+    queryFn: getUser,
+    enabled: !!address,
+  });
+
+  useEffect(() => {
+    if (fetchUser.data) {
+      const { email } = fetchUser.data;
+      setValue(email || localStorage.getItem(StoreEmailKey) || "");
+      if (!verifyMode) setLinked(email !== undefined);
+    } else {
+      setValue(localStorage.getItem(StoreEmailKey) || "");
+    }
+  }, [fetchUser.data]);
+
+  async function doLinkWallet() {
+    if (!value?.trim()) {
       simpleError("Please enter a valid email", {
         position: "top-center",
         duration: 5000,
@@ -54,65 +66,157 @@ export function LinkAccountSetting() {
       return;
     }
 
-    setDisabled(true);
+    setLoading(true);
 
-    const msg = createSignatureMessage(address, email, "24 hours");
+    const msg = createSignatureMessage(address, value, "24 hours");
     const sig = await sign(msg.toString("utf-8"))
       .catch((e) => {
         simpleError(e.message, { position: "top-center", duration: 5000 });
       })
-      .finally(() => {
-        setDisabled(false);
+      .catch(() => {
+        setLoading(false);
       });
-    if (!sig) return;
 
-    setLoaderProgress && setLoaderProgress(50);
+    if (!sig) {
+      setLoading(false);
+      return;
+    }
 
-    const data = await authMutation.mutateAsync({
-      msg: msg.toString("hex"),
-      sig,
-    });
+    try {
+      const data = await authMutation.mutateAsync({
+        msg: msg.toString("hex"),
+        sig,
+      });
 
-    localStorage.setItem(StoreAccessTokenKey, data.token);
-    localStorage.setItem(StoreEmailKey, data.user.email);
-    setEmail(data.user.email);
+      if (!data.token) {
+        setVerifyMode(true);
+        return;
+      }
+
+      void onLinked(data.user, data.token);
+    } catch (error) {
+      simpleError("Failed to link wallet");
+      if (isDev()) console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function doVerifyOTP() {
+    try {
+      setLoading(true);
+      if (!authMutation.data?.user) return;
+      const data = await verifyEmailMutation.mutateAsync({
+        userId: authMutation.data.user.id,
+        otp: value,
+      });
+
+      if (!data.token) {
+        setVerifyMode(true);
+        return;
+      }
+
+      void onLinked(data.user, data.token);
+    } catch (error) {
+      if ((error as { message: string }).message == "invalid otp") {
+        setErr("Invalid code");
+      } else {
+        simpleError("Failed to verify code");
+        if (isDev()) console.error(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function onLinked(user: User, token: string) {
+    localStorage.setItem(StoreAccessTokenKey, token);
+    localStorage.setItem(StoreEmailKey, user.email);
+    await fetchUser.refetch();
+    setValue(user.email);
     setLinked(true);
-    setUser(data.user);
-    setLoaderProgress && setLoaderProgress(100);
-  }, [address, authMutation, email, setLoaderProgress, sign, simpleError]);
+    setVerifyMode(false);
+    setUser(user);
+  }
 
   return (
     <>
       <div className="font-light text-gray-300 text-sm">
-        Use Joint's Account server to link your wallet to your email account to
-        receive trade notifications and important news.
+        Link your wallet to an email account to receive trade notifications.
       </div>
       {!linked && (
-        <div>
+        <div className="transition-all duration-300">
           <Alert icon={<IconInfoCircle />}>
-            A signature request will be initiated. No gas fee or blockchain
-            transaction is required.
+            {!verifyMode && (
+              <>
+                A signature request will be initiated. No gas fee or blockchain
+                transaction is required.
+              </>
+            )}
+            {verifyMode && (
+              <>
+                A code has been sent to the email address you provided. Enter
+                the code below to verify your email.
+              </>
+            )}
           </Alert>
-          <div className="flex gap-2 mt-4">
-            <Input
-              type="email"
-              value={email}
-              disabled={disabled}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              variant="primary"
-              placeholder="satoshi@btc.com"
-            />
-            <Button
-              variant="default"
-              rounded="md"
-              disabled={disabled}
-              size="sm"
-              onClick={linkWallet}
-            >
-              Authorize
-            </Button>
+          <div className="flex gap-2 mt-5">
+            <div className="flex w-full flex-col">
+              <div className="font-light items-center flex justify-between text-xs mb-2 ml-1 text-gray-500 tracking-wide">
+                <span>
+                  {!verifyMode && "Enter your email address"}
+                  {verifyMode && "Enter Code"}
+                </span>
+                {verifyMode && (
+                  <span
+                    className="flex items-center text-gray-600 cursor-pointer hover:opacity-90"
+                    onClick={() => {
+                      setVerifyMode(false);
+                      setErr("");
+                      setValue(
+                        fetchUser.data?.emailUnverified ||
+                          localStorage.getItem(StoreEmailKey) ||
+                          "",
+                      );
+                    }}
+                  >
+                    <ChevronLeft width="15" />
+                    <span>back</span>
+                  </span>
+                )}
+              </div>
+              <Input2
+                type={verifyMode ? "number" : "email"}
+                value={value}
+                disabled={loading}
+                placeholder={verifyMode ? "000000" : "satoshi@btc.com"}
+                onChange={(e) => {
+                  setValue(
+                    !verifyMode ? e.target.value : e.target.value.slice(0, 6),
+                  );
+                }}
+                containerClassName={cn("pr-1", { "!border-red-500": !!err })}
+                err={err}
+                afterInput={
+                  <Button
+                    variant="default"
+                    rounded="xl"
+                    disabled={loading}
+                    size="sm"
+                    onClick={verifyMode ? doVerifyOTP : doLinkWallet}
+                  >
+                    {loading && (
+                      <IconSpinner
+                        className="animate-spin"
+                        fill="fill-gray-900"
+                        width="20"
+                      />
+                    )}
+                    {!loading && (verifyMode ? "Verify" : "Link")}
+                  </Button>
+                }
+              />
+            </div>
           </div>
         </div>
       )}
@@ -126,7 +230,7 @@ export function LinkAccountSetting() {
             <div className="flex justify-between items-center">
               <span className="grow-0 break-all flex flex-col">
                 <span>Your wallet is linked to</span>
-                <b>{queryUserByAddress?.data?.email}</b>
+                <b>{fetchUser.data?.email}</b>
               </span>
               <span className="shrink-0">
                 <Button
@@ -135,7 +239,7 @@ export function LinkAccountSetting() {
                   rounded="md"
                   size="sm"
                 >
-                  Re-link
+                  Unlink
                 </Button>
               </span>
             </div>

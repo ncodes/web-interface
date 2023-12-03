@@ -1,48 +1,14 @@
 import { Address } from "viem";
 import { AssetType, Events } from "./enums.ts";
 
-// interface ContractInfo<ABIType> {
-//   address: string;
-//   abi: ABIType;
-// }
-
-// type Contracts = {
-//   [key in ContractNames]: ContractInfo;
-// };
-
-// interface ChainInfo {
-//   displayName: string; // The primary name of the chain
-//   altDisplayName?: string; // Used for displaying the chain name in the UI if displayName is too long
-//   queryName: string; // Used for identifying the chain on the backend
-//   chainId: number;
-//   chain: Chain;
-//   disabled?: boolean;
-//   testnet?: boolean;
-//   symbol: string;
-//   apiUrl: string;
-//   rpcUrl: string;
-//   blockExplorer: string;
-//   logoPath: React.Element;
-//   wrappedTokenInfo: NetTokenInfo;
-//   contracts?: Contracts;
-// }
-
 declare global {
-  // type ContractNames =
-  //   | "core"
-  //   | "token"
-  //   | "energon"
-  //   | "nft"
-  //   | "badgeManager"
-  //   | "marketCore"
-  //   | "disputeManager"
-  //   | "mediatorManager";
-
   interface User {
+    id: string;
     email: string;
     address: string;
     locale: string;
     timezone: string;
+    emailUnverified: string;
     role: string;
 
     totalSwaps: number;

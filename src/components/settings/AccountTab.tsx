@@ -1,3 +1,4 @@
+import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { TabsContent } from "../ui/Tabs.tsx";
 import {
   Accordion,
@@ -6,7 +7,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion.tsx";
 import { LinkAccountSetting } from "./LinkAccountSetting.tsx";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 
 export function AccountTab() {
   const [sheetHeight] = useSheetInfo();

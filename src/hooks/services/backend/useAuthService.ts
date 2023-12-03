@@ -16,7 +16,7 @@ export function useAuthService() {
   async function auth(
     message: string,
     signature: string,
-  ): Promise<{ token: string; user: User }> {
+  ): Promise<{ token?: string; user: User }> {
     try {
       const resp = await axios({
         method: "post",
@@ -30,7 +30,31 @@ export function useAuthService() {
     }
   }
 
+  /**
+   * Verify the email address of a user
+   * @param userId The user id
+   * @param otp The one time password sent to the user
+   * @returns
+   */
+  async function verifyEmail(
+    userId: string,
+    otp: string,
+  ): Promise<{ token?: string; user: User }> {
+    try {
+      const resp = await axios({
+        method: "put",
+        url: `${getChainInfo().apiUrl}/v1/auth/verify-email`,
+        headers: { "Content-Type": "application/json" },
+        data: JSON.stringify({ userId, otp }),
+      });
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     auth,
+    verifyEmail,
   };
 }
