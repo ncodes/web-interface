@@ -155,10 +155,16 @@ export function LinkAccountSetting() {
     try {
       setLoading(true);
       await deleteSessionMutation.mutateAsync(false);
-      simpleError("Successfully unlinked wallet");
+      simpleError("Successfully unlinked wallet", {
+        position: "top-center",
+        duration: 5000,
+      });
     } catch (error) {
       setLoading(false);
-      simpleError("Failed to unlink wallet");
+      simpleError("Failed to unlink wallet", {
+        position: "top-center",
+        duration: 5000,
+      });
       if (isDev()) console.error(error);
       return;
     }
