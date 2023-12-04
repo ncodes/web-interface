@@ -6,7 +6,7 @@ import { Button } from "./ui/Button.tsx";
 
 export function AccountLinker() {
   const { connected } = useConnectorContext();
-  const { toggleOpenState, user } = useStore((state) => ({
+  const { toggleOpenState } = useStore((state) => ({
     user: state.user,
     toggleOpenState: state.toggleOpenState,
   }));
