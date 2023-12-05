@@ -1,7 +1,9 @@
-import { WagmiConfig, createConfig } from "wagmi";
+import { getChains } from "@jointlabs/chains-info";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import useConnector from "../useConnector.tsx";
+import { Chain } from "viem";
+import { WagmiConfig, createConfig } from "wagmi";
 import { ConnectorContext } from "../context.tsx";
+import useConnector from "../useConnector.tsx";
 
 interface ConnectorProviderProps {
   appName: string;
@@ -28,10 +30,11 @@ export default function ConnectorProvider({
       walletConnectProjectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
       appName,
       infuraId,
-      appDescription: "Joint is a decentralized P2P exchange for tokens",
+      chains: getChains() as Chain[],
+      appDescription: "Joint is a decentralized P2P exchange protocol",
       appUrl: import.meta.env.VITE_APP_URL,
       appIcon: import.meta.env.VITE_APP_ICON,
-    })
+    }),
   );
 
   return (

@@ -3,91 +3,183 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    font-family: Mitr, system-ui, sans-serif;
+  }
 
-    html {
-        font-family: Mitr, system-ui, sans-serif;
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 75 80% 64%;
+    --primary-foreground: 214 56% 10%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 75 80% 64%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+
+    --ring: 217.2 32.6% 17.5%;
+  }
+
+  .container-x {
+    @apply lg:w-full mx-auto px-2 xxs:px-5 md:px-10;
+  }
+
+  .toast-modal {
+    @apply px-4 py-4 pb-2 w-full md:w-[400px] lg:w-[450px] md:min-w-[310px] break-all;
+    border-radius: 10px;
+
+    .label {
+      @apply inline-block font-normal text-[18px];
     }
 
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 222.2 84% 4.9%;
-
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
-
-        --popover: 0 0% 100%;
-        --popover-foreground: 222.2 84% 4.9%;
-
-        --card: 0 0% 100%;
-        --card-foreground: 222.2 84% 4.9%;
-
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-
-        --primary: 75 80% 64%;
-        --primary-foreground: 214 56% 10%;
-
-        --secondary: 210 40% 96.1%;
-        --secondary-foreground: 222.2 47.4% 11.2%;
-
-        --accent: 210 40% 96.1%;
-        --accent-foreground: 222.2 47.4% 11.2%;
-
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 210 40% 98%;
-
-        --ring: 215 20.2% 65.1%;
-
-        --radius: 0.5rem;
-
-
+    .message {
+      @apply text-[17px] text-white font-light;
     }
 
-    .dark {
-        --background: 222.2 84% 4.9%;
-        --foreground: 210 40% 98%;
-
-        --muted: 217.2 32.6% 17.5%;
-        --muted-foreground: 215 20.2% 65.1%;
-
-        --popover: 222.2 84% 4.9%;
-        --popover-foreground: 210 40% 98%;
-
-        --card: 222.2 84% 4.9%;
-        --card-foreground: 210 40% 98%;
-
-        --border: 217.2 32.6% 17.5%;
-        --input: 217.2 32.6% 17.5%;
-
-        --primary: 210 40% 98%;
-        --primary-foreground: 222.2 47.4% 11.2%;
-
-        --secondary: 217.2 32.6% 17.5%;
-        --secondary-foreground: 210 40% 98%;
-
-        --accent: 217.2 32.6% 17.5%;
-        --accent-foreground: 210 40% 98%;
-
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 85.7% 97.3%;
-
-        --ring: 217.2 32.6% 17.5%;
+    .links {
+      a {
+        @apply hover:text-chinese-green;
+      }
     }
 
-    .container-x {
-        @apply lg:w-full mx-auto px-5 md:px-10 ;
+    video::-webkit-media-controls {
+      visibility: hidden;
     }
+
+    video::-webkit-media-controls-enclosure {
+      visibility: visible;
+    }
+  }
+
+  .toast-modal.success {
+    background: #060c13;
+    border: 1px solid #282c1a;
+    box-shadow: 0 0 7px 2px rgba(224, 255, 134, 0.07);
+    @apply text-chinese-green/80;
+
+    .label {
+      @apply text-chinese-green;
+    }
+  }
+
+  .toast-modal.error {
+    background: #060c13;
+    border: 1px solid #3b0406;
+    box-shadow: 0 0 7px 2px rgba(62, 6, 12, 0.51);
+    @apply text-[#F32D3F]/80;
+
+    .label {
+      @apply text-[#F32D3F];
+    }
+  }
+
+  .toast-modal.default {
+    background: #060c13;
+    border: 1px solid #2e2e2e;
+    box-shadow: 0 0 7px 2px rgba(35, 62, 91, 0.45);
+    @apply text-[#FFFFFF];
+
+    .label {
+      @apply text-[#FFFFFF];
+    }
+  }
+
+  .DropdownMenuContent {
+    width: var(--radix-dropdown-menu-trigger-width);
+    max-height: var(--radix-dropdown-menu-content-available-height);
+  }
 }
 
 @layer utilities {
-    /* For Webkit-based browsers (Chrome, Safari and Opera) */
-    .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-    }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    @apply appearance-none;
+  }
 
-    /* For IE, Edge and Firefox */
-    .scrollbar-hide {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+  /* For Webkit-based browsers (Chrome, Safari and Opera) */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scroll-gradient-right {
+    @apply relative;
+
+    &::before {
+      @apply absolute w-[30px] rounded-r-2xl from-10% h-full right-0 z-[5] bg-gradient-to-l from-gray-950;
+      content: "";
     }
+  }
+
+  .scroll-gradient-down {
+    @apply relative;
+
+    span.grad-indicator {
+      @apply block w-full absolute z-[6] rounded-b-2xl  bottom-0 from-10% h-[30px] bg-gradient-to-t from-gray-950 scale-[.998];
+    }
+  }
+
+  .address-mention-decoration {
+    @apply text-gray-300 underline decoration-dashed decoration-gray-500;
+  }
+}
+
+.badge-chinese-green {
+  @apply bg-chinese-green text-gray-900 px-1 rounded;
 }

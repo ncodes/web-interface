@@ -1,7 +1,8 @@
-import { Button } from "./ui/Button.tsx";
 import { ConnectKitButton } from "connectkit";
+import React from "react";
 import { ConnectedButton } from "../hooks/connectors/components/ConnectedButton.tsx";
 import { IconWallet } from "./icons/IconWallet.tsx";
+import { Button } from "./ui/Button.tsx";
 
 interface ConnectedProps {
   show: () => void;
@@ -13,7 +14,7 @@ function Connect(props: {
   show: () => void;
 }) {
   return (
-    <Button size="full" onClick={props.show} {...props}>
+    <Button size="full" onClick={props.show}>
       {props.showIcon && <IconWallet className="mr-3" />}
       {props.label || "Connect Wallet"}
     </Button>
@@ -32,6 +33,7 @@ export function ConnectWalletButton(props: {
   showIcon?: boolean;
   className?: string;
   label?: string;
+  children?: React.ReactElement;
 }) {
   return (
     <span className={props.className}>
@@ -40,13 +42,29 @@ export function ConnectWalletButton(props: {
           return (
             <span className="connect-btn">
               {!isConnected ? (
-                <Connect
-                  showIcon={props.showIcon}
-                  label={props.label}
-                  show={show}
-                />
+                <>
+                  {!props.children ? (
+                    <Connect
+                      showIcon={props.showIcon}
+                      label={props.label}
+                      show={() => {
+                        show?.();
+                      }}
+                    />
+                  ) : (
+                    React.cloneElement(props.children, {
+                      onClick: () => {
+                        show?.();
+                      },
+                    })
+                  )}
+                </>
               ) : (
-                <Connected show={show} />
+                <Connected
+                  show={() => {
+                    show?.();
+                  }}
+                />
               )}
             </span>
           );

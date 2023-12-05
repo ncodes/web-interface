@@ -19,6 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "paths": { "@/*": ["./src/*"], "@/icons/*": ["./src/components/icons/*"] }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

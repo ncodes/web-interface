@@ -1,0 +1,108 @@
+import React, { createRef, ReactElement, useEffect } from "react";
+import { cn } from "../libs/utils.ts";
+
+export default function ScrollOverflowIndicator({
+  children,
+  side = "right",
+  className,
+  onScroll,
+}: {
+  children: ReactElement;
+  side?: "bottom" | "right";
+  className?: string;
+  onScroll?: (progress: number) => void;
+}) {
+  const [progress, setProgress] = React.useState(0);
+  const ref = createRef<HTMLDivElement>();
+
+  useEffect(() => {
+    if (!ref || !ref.current) return;
+    const viewPort = ref.current.querySelector(
+      "div[data-radix-scroll-area-viewport]"
+    );
+    if (!viewPort) return;
+    if (side == "right") {
+      onScrollX({
+        currentTarget: {
+          clientWidth: viewPort.clientWidth,
+          scrollWidth: viewPort.scrollWidth,
+          scrollLeft: viewPort.scrollLeft,
+        },
+      });
+    } else {
+      onScrollY({
+        currentTarget: {
+          clientHeight: viewPort.clientHeight,
+          scrollHeight: viewPort.scrollHeight,
+          scrollTop: viewPort.scrollTop,
+        },
+      });
+    }
+  }, [side]);
+
+  useEffect(() => {
+    onScroll && onScroll(progress);
+  }, [progress]);
+
+  const onScrollX = (e: {
+    currentTarget: {
+      clientWidth: number;
+      scrollWidth: number;
+      scrollLeft: number;
+    };
+  }) => {
+    const containerWidth = e.currentTarget.clientWidth;
+    const scrollWidth = e.currentTarget.scrollWidth;
+    const scrollLeft = e.currentTarget.scrollLeft;
+    if (containerWidth != scrollWidth)
+      setProgress(
+        Math.ceil(((scrollLeft + containerWidth) / scrollWidth) * 100)
+      );
+    else setProgress(100);
+  };
+
+  const onScrollY = (e: {
+    currentTarget: {
+      clientHeight: number;
+      scrollHeight: number;
+      scrollTop: number;
+    };
+  }) => {
+    const containerHeight = e.currentTarget.clientHeight;
+    const scrollHeight = e.currentTarget.scrollHeight;
+    const scrollTop = e.currentTarget.scrollTop;
+    if (containerHeight != scrollHeight)
+      setProgress(
+        Math.ceil(((scrollTop + containerHeight) / scrollHeight) * 100)
+      );
+    else setProgress(100);
+  };
+
+  return (
+    <div
+      data-click-trigger="1"
+      className={cn(
+        {
+          "scroll-gradient-right": side == "right" && progress < 100,
+          "scroll-gradient-down": side == "bottom" && progress < 100,
+        },
+        className
+      )}
+    >
+      {side == "bottom" && (
+        <span
+          className={cn(
+            "hidden select-none grad-indicator text-center font-extralight text-xs text-gray-500 pt-2",
+            { hidden: progress == 100 }
+          )}
+        >
+          Scroll down
+        </span>
+      )}
+      {React.cloneElement(children, {
+        ref: ref,
+        onScroll: side == "right" ? onScrollX : onScrollY,
+      })}
+    </div>
+  );
+}

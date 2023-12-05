@@ -1,4 +1,5 @@
-import { ToastType } from "../../hooks/toast/toast.tsx";
+import { ReactNode } from "react";
+import { ToastType } from "../../hooks/useToast.tsx";
 import { cn } from "../../libs/utils.ts";
 
 /**
@@ -8,7 +9,7 @@ import { cn } from "../../libs/utils.ts";
 export function ToastBar(props: {
   type?: number;
   label?: string;
-  message: string;
+  message: ReactNode;
   links?: { href: string; label: string }[];
 }) {
   return (
@@ -25,9 +26,9 @@ export function ToastBar(props: {
       <div className="flex-shrink-0">
         <img
           src={cn({
-            "/images/errormark.svg": props.type === ToastType.Error,
-            "/images/checkmark.svg": props.type === ToastType.Success,
-            "/images/noticemark.svg": props.type === ToastType.Default,
+            "/images/icons/errormark.svg": props.type === ToastType.Error,
+            "/images/icons/checkmark.svg": props.type === ToastType.Success,
+            "/images/icons/noticemark.svg": props.type === ToastType.Default,
           })}
           width="20px"
           height="20px"

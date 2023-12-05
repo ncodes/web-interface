@@ -1,0 +1,274 @@
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
+import { useLocation } from "react-router-dom";
+import { useInterval, useMediaQuery } from "usehooks-ts";
+import { AccountLinker } from "../components/AccountLinker.tsx";
+import { Footer } from "../components/Footer.tsx";
+import { Header } from "../components/Header.tsx";
+import { LeftSidebar } from "../components/LeftSidebar.tsx";
+import { NotificationSheet } from "../components/NotificationSheet.tsx";
+import { ReviewViewerSheet } from "../components/ReviewViewerSheet.tsx";
+import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
+import { StoreAccessTokenKey } from "../constants.ts";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useMiscService } from "../hooks/services/backend/useMiscService.ts";
+import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
+import { useUserService } from "../hooks/services/backend/useUserService.ts";
+import useNFTContract from "../hooks/services/contracts/useNFTContract.ts";
+import useStore from "../hooks/store/useStore.ts";
+import useWindowFocus from "../hooks/useWindowFocus.ts";
+import { cn } from "../libs/utils.ts";
+
+export default function Layout({
+  body,
+  rightSide,
+  bodyContainerClassName,
+  title,
+  description,
+}: {
+  body?: React.ReactNode;
+  rightSide?: React.ReactNode;
+  bodyContainerClassName?: string;
+  title: string;
+  description?: string;
+}) {
+  const headerHeight = 55;
+  const location = useLocation();
+  const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
+  const isXl = useMediaQuery("(min-width: 1280px)");
+  const { address, ready, getChainInfo } = useConnectorContext();
+  const user = useStore((state) => state.user);
+  const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
+  const windowFocus = useWindowFocus();
+  const setUser = useStore((state) => state.setUser);
+  const setProtoFee = useStore((state) => state.setProtoFee);
+  const { getUser, logOnlineStatus, registerDevice } = useUserService();
+  const accessToken = localStorage.getItem(StoreAccessTokenKey);
+  const { subscribeForWebPush } = useNotificationService();
+  const { getProtocolFees } = useMiscService();
+  const ref = useRef(null);
+  const { scrollY } = useScroll();
+  const [scrollYPos, setScrollYPos] = useState(0);
+  const { balanceOf: nativeNftBalance } = useNFTContract();
+  // const mounted = useMounted(1000);
+
+  const authedUserQuery = useQuery({
+    queryKey: ["getUser", { address }],
+    queryFn: getUser,
+    enabled: !!accessToken && !!address,
+    refetchInterval: 60000,
+  });
+
+  const protoFeeQuery = useQuery({
+    queryKey: ["getProtocolFees", { network: getChainInfo().queryName }],
+    queryFn: getProtocolFees,
+    // enabled: mounted && !!address,
+    enabled: false,
+    refetchInterval: 300 * 1000,
+  });
+
+  const subscribeMutation = useMutation({
+    mutationFn: subscribeForWebPush,
+  });
+
+  const logOnlineStatusMutation = useMutation({
+    mutationFn: logOnlineStatus,
+  });
+
+  const registerDeviceMutation = useMutation({
+    mutationFn: registerDevice,
+  });
+
+  // Set authed user.
+  useEffect(() => {
+    if (authedUserQuery.isLoading) return;
+    setUser(authedUserQuery.isSuccess ? authedUserQuery.data : null);
+  }, [
+    authedUserQuery.data,
+    authedUserQuery.isLoading,
+    authedUserQuery.isSuccess,
+    setUser,
+  ]);
+
+  // Set protocol fee
+  useEffect(() => {
+    if (!protoFeeQuery.data) return;
+    setProtoFee(protoFeeQuery.data);
+  }, [protoFeeQuery.isSuccess, protoFeeQuery.data]);
+
+  // Set mobile menu open state based on screen size.
+  useEffect(() => {
+    setLeftSideMenuOpen(isXl);
+  }, [isXl]);
+
+  // Check native NFT Ownership on wallet change.
+  useEffect(() => {
+    if (!ready) return;
+    checkNativeNFTOwnership();
+  }, [ready, address]);
+
+  // Check native NFT Ownership every 5 minutes.
+  useInterval(() => {
+    checkNativeNFTOwnership();
+  }, 300 * 1000);
+
+  useMotionValueEvent(scrollY, "change", (val) => {
+    setScrollYPos(val);
+  });
+
+  // Log online status every 10 seconds.
+  useInterval(() => {
+    if (!user || !windowFocus) return;
+
+    const orderMatch = location.pathname.match(/\/swap\/([0-9]+)/);
+    const orderId = orderMatch ? parseInt(orderMatch[1]) : undefined;
+    const offerMatch = location.pathname.match(/\/offer\/([0-9]+)/);
+    const offerId = offerMatch ? parseInt(offerMatch[1]) : undefined;
+
+    logOnlineStatusMutation.mutate({
+      net: getChainInfo().queryName,
+      orderId,
+      offerId,
+    });
+  }, determineOnlineStatusReportDelay());
+
+  // Register user devices
+  useEffect(() => {
+    if (!user) return;
+    registerDeviceMutation.mutate();
+  }, [user]);
+
+  // Subscribe for web push notifications.
+  useEffect(() => {
+    if (!address) return;
+    if ("serviceWorker" in navigator)
+      registerServiceWorker().catch(console.error);
+  }, [address]);
+
+  // Register service worker.
+  async function registerServiceWorker() {
+    try {
+      const { serviceWorker: sw } = navigator;
+      const register = await sw.register("/worker.js", { scope: "/" });
+      const subscription = await register.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: import.meta.env.VITE_VAPID_PUBLIC_KEY,
+      });
+
+      subscribeMutation.mutate({
+        subscription,
+        address,
+        net: getChainInfo().queryName,
+      });
+    } catch (error) {
+      console.error("Failed to subscribe user for notification: ", error);
+    }
+  }
+
+  // Determine duration to wait before reporting online status.
+  function determineOnlineStatusReportDelay() {
+    if (location.pathname.match(/\/swap\/([0-9]+)/)) return 5000;
+    if (location.pathname.match(/\/offer\/([0-9]+)/)) return 5000;
+    return 10000;
+  }
+
+  // Check native NFT ownership.
+  async function checkNativeNFTOwnership() {
+    try {
+      const count = await nativeNftBalance(address);
+      setUserHasNativeNFT(count > 0);
+    } catch (error) {
+      console.error("Failed to check native NFT ownership: ", error);
+    }
+  }
+
+  return (
+    <div>
+      <Helmet>
+        <title>{title}</title>
+        <meta
+          name="description"
+          content={
+            description ||
+            "Joint is an innovative, simple to use DeFi protocol for peer-to-peer trading. " +
+              "Swap cryptocurrencies, NFTs for cash, and vice versa."
+          }
+        />
+        <meta name="theme-color" content="#030507" />
+        <body className="bg-background" />
+      </Helmet>
+      <div ref={ref} className="container-x flex h-screen text-white text ">
+        <LeftSidebar
+          open={leftSideMenuOpen}
+          headerHeight={headerHeight}
+          scrollYPos={scrollYPos}
+          closeRequested={() => {
+            setLeftSideMenuOpen(false);
+          }}
+        />
+
+        <div className="flex flex-col flex-1 z-10">
+          <div className="flex flex-col flex-1 pt-3">
+            <div>
+              <Header
+                onClick={() => {
+                  setLeftSideMenuOpen(!leftSideMenuOpen);
+                }}
+                height={`h-[${headerHeight}px]`}
+              />
+            </div>
+            <div className="flex flex-1">
+              <div className="flex-1 relative flex flex-col mt-3">
+                <AccountLinker />
+                <div className="relative flex-1 flex flex-col">
+                  <div className="absolute w-full h-full">
+                    <div
+                      className={cn(
+                        "z-0 border border-gray-800 rounded-3xl bg-vampire-black ",
+                        bodyContainerClassName,
+                      )}
+                    >
+                      {body}
+                    </div>
+                    <div className="xl:hidden">
+                      <Footer />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {rightSide && (
+                <div className="w-[400px] relative hidden xl:flex flex-col">
+                  <div
+                    className={`fixed h-full flex flex-col flex-1`}
+                    style={{ paddingBottom: `${headerHeight}px` }}
+                  >
+                    <motion.div
+                      animate={{
+                        marginTop: scrollYPos > 50 ? -55 : 0,
+                      }}
+                      transition={{ ease: "linear", duration: 0.1 }}
+                      className={cn(
+                        `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`,
+                      )}
+                    >
+                      {rightSide}
+                    </motion.div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          {/* <div className="flex justify-center">
+            <Footer />
+          </div> */}
+        </div>
+
+        <SearchSheetBox />
+        <NotificationSheet />
+        <ReviewViewerSheet />
+      </div>
+    </div>
+  );
+}
