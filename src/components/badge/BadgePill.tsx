@@ -64,7 +64,7 @@ export function BadgePill({
       >
         <ScrollArea
           type="scroll"
-          className={cn("", sheetHeight, "xl:h-[100dvh]")}
+          className={cn("", sheetHeight, "xl:h-[100svh]")}
         >
           <BadgeSheetContent badge={name.toLowerCase()} />
         </ScrollArea>
