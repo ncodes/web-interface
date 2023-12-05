@@ -1,18 +1,24 @@
-import { useQuery } from "@tanstack/react-query";
+import { BadgeManifest, BadgeManifests } from "@jointlabs/chains-info";
 import DOMPurify from "dompurify";
 import { ChevronRight } from "lucide-react";
 import { marked } from "marked";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import {
-  BadgeManifest,
-  useBadgeService,
-} from "../../hooks/services/backend/useBadgeService.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { AuthInfo } from "./BadgeSheetContent.tsx";
+
+function findMatchInBadgeManifests(netManifests: BadgeManifest, badge: string) {
+  let manifest: BadgeManifest | undefined;
+  for (const key in netManifests) {
+    if (badge.match(new RegExp(key))) {
+      manifest = netManifests[key];
+    }
+  }
+  return manifest;
+}
 
 export function BadgeClaimAuthorization({
   badge,
@@ -23,16 +29,14 @@ export function BadgeClaimAuthorization({
   setAuthInfo: Dispatch<SetStateAction<AuthInfo>>;
   setManifest: Dispatch<SetStateAction<BadgeManifest | undefined>>;
 }) {
-  const { getBadgeManifest } = useBadgeService();
   const { sign, ready, getChainInfo } = useConnectorContext();
   const { notifyError } = useToast();
   const [loading, setLoading] = useState(false);
 
-  const manifest = useQuery({
-    queryKey: ["getBadgeManifest", { net: getChainInfo().queryName, badge }],
-    queryFn: getBadgeManifest,
-    retry: false,
-  });
+  const manifest = findMatchInBadgeManifests(
+    BadgeManifests[getChainInfo().queryName],
+    badge,
+  );
 
   function buildSigMsg(
     badge: string,
@@ -48,18 +52,18 @@ Timestamp: ${timestamp}`;
   }
 
   async function requestAuthorization() {
-    if (!manifest.data) return;
+    if (!manifest) return;
     try {
       setLoading(true);
       const timestamp = new Date().toISOString();
       const message = buildSigMsg(
         badge,
-        manifest.data?.issuer,
-        manifest.data?.issuerAddress,
+        manifest?.issuer,
+        manifest?.issuerAddress,
         timestamp,
       );
       const signature = await sign(message);
-      setManifest(manifest.data);
+      setManifest(manifest);
       setAuthInfo({ message, signature, timestamp });
     } catch (error) {
       notifyError((error as Error).message);
@@ -70,47 +74,32 @@ Timestamp: ${timestamp}`;
 
   return (
     <div className="flex flex-col h-full">
-      {manifest.isError && (
+      {!manifest && (
         <div className="flex gap-2 h-full items-center justify-center font-light text-gray-100">
           <span>
             <ErrorIcon />
           </span>
           <span className="relative -top-0.5">
-            {(manifest.error as any).message}
+            Badge manifest was not found
           </span>
         </div>
       )}
 
-      {manifest.isLoading && (
-        <div className="flex gap-2 h-full  items-center justify-center font-light text-sm text-gray-500">
-          <span>
-            <IconSpinner
-              width="20"
-              fill="fill-gray-600"
-              className="animate-spin"
-            />
-          </span>
-          <span>Fetching manifest</span>
-        </div>
-      )}
-
-      {manifest.isSuccess && (
+      {manifest && (
         <div className="flex h-full flex-col text-gray-200">
           <div className="w-full bg-gray-950 flex flex-col border-b border-gray-900 gap-3 justify-center items-center h-[150px]  cover">
             <div className="flex gap-2">
               <span>
-                <img src={manifest.data?.logoUrl} width="50" />
+                <img src={manifest?.logoUrl} width="50" />
               </span>
-              <span className="text-xl text-gray-100">
-                {manifest.data.name}
-              </span>
+              <span className="text-xl text-gray-100">{manifest.name}</span>
             </div>
             <div className="text-center tracking-wider font-light text-xs">
-              {manifest.data.shortDescription}
+              {manifest.shortDescription}
             </div>
           </div>
           <div className="flex-1 ">
-            {manifest.data.longDescriptions.slice(0, 3).map((desc) => (
+            {manifest.longDescriptions.slice(0, 3).map((desc) => (
               <div
                 className="flex gap-3 p-5 pb-2 px-3 pr-5 "
                 key={desc.substring(0, 5)}
