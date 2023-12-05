@@ -84,7 +84,12 @@ export default function Layout({
   // Set authed user.
   useEffect(() => {
     if (authedUserQuery.isLoading) return;
-    setUser(authedUserQuery.isSuccess ? authedUserQuery.data : null);
+    if (authedUserQuery.isSuccess) {
+      setUser(authedUserQuery.data);
+    } else {
+      setUser(undefined);
+      localStorage.removeItem(StoreAccessTokenKey);
+    }
   }, [
     authedUserQuery.data,
     authedUserQuery.isLoading,
