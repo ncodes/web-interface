@@ -67,7 +67,7 @@ export function MyLiquidityTabContent() {
       className="p-0 m-0 flex flex-col flex-1 gap-3"
     >
       <Helmet>
-        <title>{`Watched Liquidity - Joint`}</title>
+        <title>{`My Liquidity - Joint`}</title>
       </Helmet>
 
       {address && isLoading && (
