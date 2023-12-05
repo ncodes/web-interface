@@ -1,5 +1,5 @@
+import { BadgeManifest } from "@jointlabs/chains-info";
 import { useState } from "react";
-import { BadgeManifest } from "../../hooks/services/backend/useBadgeService.ts";
 import { BadgeClaimAuthorization } from "./BadgeClaimAuthorization.tsx";
 import { BadgeIssuerAppBrowser } from "./BadgeIssuerAppBrowser.tsx";
 
@@ -23,5 +23,11 @@ export function BadgeSheetContent({ badge }: { badge: string }) {
     );
   }
 
-  return <BadgeIssuerAppBrowser badge={badge} manifest={manifest} authInfo={authInfo} />;
+  return (
+    <BadgeIssuerAppBrowser
+      badge={badge}
+      manifest={manifest}
+      authInfo={authInfo}
+    />
+  );
 }

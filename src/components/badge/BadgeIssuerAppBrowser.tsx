@@ -1,10 +1,10 @@
 import { useConnectorContext } from "@/hooks/connectors/useConnectorContext.tsx";
-import { BadgeManifest } from "@/hooks/services/backend/useBadgeService.ts";
 import { NewGrantValues } from "@/hooks/services/backend/useInstructionsService.ts";
 import useBadgeMgrContract from "@/hooks/services/contracts/useBadgeMgrContract.ts";
 import { useToast } from "@/hooks/useToast.tsx";
 import IconSpinner from "@/icons/IconSpinner.tsx";
 import { delay, isDev } from "@/libs/helpers.ts";
+import { BadgeManifest } from "@jointlabs/chains-info";
 import { useEffect, useRef, useState } from "react";
 import { AuthInfo } from "./BadgeSheetContent.tsx";
 import { GrantBadgeSignatureMessage } from "./types.ts";
