@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/useToast.tsx";
 import IconSpinner from "@/icons/IconSpinner.tsx";
 import { delay, isDev } from "@/libs/helpers.ts";
 import { BadgeManifest } from "@jointlabs/chains-info";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useEffect, useRef, useState } from "react";
 import { AuthInfo } from "./BadgeSheetContent.tsx";
 import { GrantBadgeSignatureMessage } from "./types.ts";
@@ -13,10 +14,12 @@ export function BadgeIssuerAppBrowser({
   manifest,
   authInfo,
   badge,
+  close,
 }: {
   badge: string;
   manifest: BadgeManifest | undefined;
   authInfo: AuthInfo;
+  close: () => void;
 }) {
   const [loading, setLoading] = useState(true);
   const [loadingLabel, setLoadingLabel] = useState<string>("Loading...");
@@ -38,6 +41,9 @@ export function BadgeIssuerAppBrowser({
       if (event.origin !== import.meta.env.VITE_BADGE_ISSUER_URL) return;
       if (event.data.message == "call:grantBadgeBySig") {
         execGrantBySig(event.data.payload);
+      }
+      if (event.data.message == "modal:close") {
+        close?.();
       }
     };
 
@@ -100,34 +106,36 @@ export function BadgeIssuerAppBrowser({
   }
 
   return (
-    <div className="w-full h-full justify-center">
-      {loading && (
-        <div className="w-full  gap-2 h-full flex justify-center relative top-[35%]">
-          <span>
-            <IconSpinner
-              width="20"
-              className="animate-spin"
-              fill="fill-gray-500"
-            />
-          </span>
-          {loadingLabel && (
-            <span className="text-gray-500 font-light text-sm tracking-wider">
-              {loadingLabel}
+    <ScrollArea type="scroll" className="h-full overflow-auto">
+      <div className="w-full h-full justify-center">
+        {loading && (
+          <div className="w-full  gap-2 h-full flex justify-center relative top-[35%]">
+            <span>
+              <IconSpinner
+                width="20"
+                className="animate-spin"
+                fill="fill-gray-500"
+              />
             </span>
-          )}
-        </div>
-      )}
+            {loadingLabel && (
+              <span className="text-gray-500 font-light text-sm tracking-wider">
+                {loadingLabel}
+              </span>
+            )}
+          </div>
+        )}
 
-      <iframe
-        ref={iframeRef}
-        className="w-full h-screen"
-        allow="camera; microphone"
-        src={`${manifest?.claimPageUrl}/?badge=${badge}&authNetwork=${
-          getChainInfo().queryName
-        }&authSig=${authInfo.signature}&authMsg=${
-          authInfo.message
-        }&authTimestamp=${authInfo.timestamp}&authAddress=${address}`}
-      />
-    </div>
+        <iframe
+          ref={iframeRef}
+          className="w-full h-screen"
+          allow="camera; microphone"
+          src={`${manifest?.claimPageUrl}/?badge=${badge}&authNetwork=${
+            getChainInfo().queryName
+          }&authSig=${authInfo.signature}&authMsg=${
+            authInfo.message
+          }&authTimestamp=${authInfo.timestamp}&authAddress=${address}`}
+        />
+      </div>
+    </ScrollArea>
   );
 }
