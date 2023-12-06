@@ -11,8 +11,8 @@ export function InputActivatedSearchBox() {
     <SearchBox open={focus} query={query}>
       <div
         className={cn(
-          "relative hidden lg:flex lg:w-[230px] xl:w-[500px] transition-all duration-500 hover:scale-x-105",
-          { "scale-x-105": focus }
+          "relative hidden lg:flex lg:w-[350px] xl:w-[500px] transition-all duration-500 hover:scale-x-105",
+          { "scale-x-105": focus },
         )}
       >
         <SearchInput

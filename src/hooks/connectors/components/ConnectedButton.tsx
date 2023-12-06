@@ -1,6 +1,7 @@
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi";
 import EmojiAvatar from "../../../components/avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../../../components/avatar/useAvatar";
+import { IconSettingsOutline } from "../../../components/icons/IconSettingsOutline.tsx";
 import { SettingsSheet } from "../../../components/settings/SettingsSheet.tsx";
 import {
   formatToMoney,
@@ -8,7 +9,6 @@ import {
   shortenAddress2,
 } from "../../../libs/helpers.ts";
 import useStore from "../../store/useStore.ts";
-import useWindowFocus from "../../useWindowFocus.ts";
 
 // Component for rendering amount and symbol
 function Amount(props: { balance: string; symbol: string }) {
@@ -28,11 +28,6 @@ interface ConnectedProps {
 
 export const ConnectedButton = (props: ConnectedProps) => {
   const { address } = useAccount();
-  const windowFocus = useWindowFocus();
-  const balance = useBalance({
-    address,
-    enabled: !!address && windowFocus,
-  });
   const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   return (
@@ -44,15 +39,12 @@ export const ConnectedButton = (props: ConnectedProps) => {
         }}
       >
         <p
-          className="hidden md:inline max-w-[80px] xxs:max-w-[120px] py-[8px] px-[12px] text-[#001029] font-normal text-[14px]
-        tracking-[0.19px] bg-[#8DB90C] rounded-full"
+          className="hidden lg:flex py-[6px] px-[8px] ml-[4px] text-[#001029]
+        tracking-[0.19px]  rounded-full"
         >
-          <Amount
-            balance={balance?.data?.formatted || "0"}
-            symbol={balance?.data?.symbol || ""}
-          />
+          <IconSettingsOutline width="17" />
         </p>
-        <p className="hidden lg:inline-block address font-normal text-[14px] tracking-[0.22px] text-black">
+        <p className="hidden address lg:inline-block font-normal text-[14px] tracking-[0.22px] text-black">
           <span className="hidden lg:inline-block">
             {shortenAddress(address as string)}
           </span>

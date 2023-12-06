@@ -1,14 +1,15 @@
-import { useState } from "react";
+import useStore from "../hooks/store/useStore.ts";
 import { IconSearch } from "./icons/IconSearch.tsx";
-import SearchBox from "./search/SearchBox.tsx";
 export function NavSearchButton() {
-  const [open, setOpen] = useState(false);
+  const toggleOpenState = useStore((s) => s.toggleOpenState);
 
   return (
-    <SearchBox open={open} onOpen={setOpen}>
+    <div className="lg:hidden z-20">
       <span
-        onClick={() => setOpen(!open)}
-        className="hidden md:block lg:hidden border border-gray-600 rounded-full p-[7px] hover:border-chinese-green hover:text-chinese-green transition-all duration-500 cursor-pointer hover:scale-110 hover:bg-gray-800"
+        onClick={() => {
+          toggleOpenState && toggleOpenState("searchSheet");
+        }}
+        className="block border border-gray-600 rounded-full p-[7px] hover:border-chinese-green hover:text-chinese-green transition-all duration-500 cursor-pointer hover:scale-110 hover:bg-gray-800"
       >
         <div className="[&>svg]:scale-75 transition-all duration-500 hover:scale-110 w-[25px] h-[25px]">
           <IconSearch
@@ -18,6 +19,6 @@ export function NavSearchButton() {
           />
         </div>
       </span>
-    </SearchBox>
+    </div>
   );
 }

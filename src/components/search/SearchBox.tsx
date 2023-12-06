@@ -51,7 +51,7 @@ export default function SearchBox({
   });
 
   return (
-    <div className="hidden md:block z-[10] ">
+    <div className="z-[20]">
       {open && (
         <div
           className="fixed w-full h-full top-0 left-0 right-0"
@@ -80,7 +80,7 @@ export default function SearchBox({
                 transition: { delay: 0, ease: "easeInOut" },
               }}
               className={cn(
-                "overflow-hidden absolute bg-card-background md:w-[500px] xl:w-full min-h-[100px] border border-gray-700 ring-chinese-green rounded-xl mt-4"
+                "overflow-hidden absolute bg-card-background md:w-[500px] xl:w-full min-h-[100px] border border-gray-700 ring-chinese-green rounded-xl mt-4",
               )}
             >
               <SearchContent

@@ -55,7 +55,10 @@ export function SearchSheetBox(props: { children?: React.ReactNode }) {
     >
       <SheetTrigger>{props.children}</SheetTrigger>
       <SheetContent
-        className={cn(styles, "md:hidden w-full border-r-0 pt-0 py-0 px-0")}
+        className={cn(
+          styles,
+          "lg:hidden w-full border-l-0 border-r-0 pt-0 py-0 px-0 h-[70vh] md:h-[100vh]",
+        )}
         side={sheetSide}
       >
         <SheetHeader className="flex pl-2 pt-2 pr-[50px] border-b border-gray-800 pb-2">
@@ -74,8 +77,8 @@ export function SearchSheetBox(props: { children?: React.ReactNode }) {
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="h-[70vh] md:h-[100vh] overflow-auto">
-          <div className="px-1 text-white pt-2 h-full relative">
+        <div className="overflow-auto h-full">
+          <div className="px-1 text-white pt-2 h-full relative overflow-auto pb-[70px]">
             <SearchContent
               onQueryChange={(value) => setQuery(value)}
               queryResult={queryResult.data?.markets}
