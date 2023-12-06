@@ -3,24 +3,8 @@ import EmojiAvatar from "../../../components/avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../../../components/avatar/useAvatar";
 import { IconSettingsOutline } from "../../../components/icons/IconSettingsOutline.tsx";
 import { SettingsSheet } from "../../../components/settings/SettingsSheet.tsx";
-import {
-  formatToMoney,
-  shortenAddress,
-  shortenAddress2,
-} from "../../../libs/helpers.ts";
+import { shortenAddress, shortenAddress2 } from "../../../libs/helpers.ts";
 import useStore from "../../store/useStore.ts";
-
-// Component for rendering amount and symbol
-function Amount(props: { balance: string; symbol: string }) {
-  return (
-    <span className="flex gap-2">
-      <span className="font-medium text-gray-900 overflow-auto scrollbar-hide">
-        {formatToMoney(props.balance)}
-      </span>
-      <span className="hidden xxs:inline">{props.symbol}</span>
-    </span>
-  );
-}
 
 interface ConnectedProps {
   openWalletModal?: () => void;
