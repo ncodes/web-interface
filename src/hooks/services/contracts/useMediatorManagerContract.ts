@@ -59,7 +59,13 @@ export default function useMediatorManagerContract() {
    * Parse transaction error into human-friendly message
    * @param _error The error object
    */
-  function humanizeErrors(_error: { message: string } | unknown): string {
+  function humanizeErrors(error: { message: string } | unknown): string {
+    if (error instanceof Error) {
+      if (error.message.includes("transfer amount exceeds balance")) {
+        return "Insufficient balance to cover ticket price and bond";
+      }
+    }
+
     return "Transaction failed";
   }
 

@@ -1,11 +1,11 @@
+import { MediatorPools } from "@jointlabs/chains-info";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { Address } from "viem";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import { useMiscService } from "../../hooks/services/backend/useMiscService.ts";
 import useMediatorManagerContract from "../../hooks/services/contracts/useMediatorManagerContract.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
@@ -35,7 +35,6 @@ export function BuyTicketSheet(props: {
   const {
     getChainInfo,
     address,
-    connected,
     getTokenAllowance,
     approveAllowance,
     getTokenSupply,
@@ -48,14 +47,10 @@ export function BuyTicketSheet(props: {
   const [ticketPrice, setTicketPrice] = useState(BigInt(0));
   const [approveLoading, setApproveLoading] = useState(false);
   const [approved, setApproved] = useState(false);
-  const { getMediatorPools } = useMiscService();
+
   const { notifySuccess, notifyError } = useToast();
   const [loading, setLoading] = useState(false);
-  const mediatorPools = useQuery({
-    queryKey: ["getMediatorPools", { network: getChainInfo().queryName }],
-    queryFn: getMediatorPools,
-    enabled: connected,
-  });
+  const mediatorPools = MediatorPools[getChainInfo().queryName];
   const [pool, setPool] = useState<MediatorPool>();
 
   useEffect(() => {
@@ -166,9 +161,9 @@ export function BuyTicketSheet(props: {
                 title={`Pool ID`}
                 tip={`The mediation pool you want the ticket to operate in`}
               >
-                {mediatorPools.data && (
+                {mediatorPools && (
                   <PoolSelector
-                    pools={mediatorPools.data}
+                    pools={mediatorPools}
                     disabled={approveLoading || loading}
                     onSelect={(pool) => {
                       setPool(pool);

@@ -1,4 +1,3 @@
-import { Cross2Icon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ReactNode, useState } from "react";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
@@ -23,7 +22,7 @@ export function BadgePill({
   prefixClassName?: string;
   noOpen?: boolean;
 }) {
-  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[80vh]");
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[95vh]");
   const [open, setOpen] = useState(false);
 
   return (
@@ -58,25 +57,21 @@ export function BadgePill({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 p-0 m-0",
+          "w-full border-l focus-visible:outline-0 border-gray-800 pt-0 px-0 p-0 m-0",
         )}
         side={sheetSide}
       >
         <ScrollArea
           type="scroll"
-          className={cn("", sheetHeight, "xl:h-screen")}
+          className={cn("", sheetHeight, "xl:h-[100svh]")}
         >
-          <BadgeSheetContent badge={name.toLowerCase()} />
+          <BadgeSheetContent
+            badge={name.toLowerCase()}
+            close={() => {
+              setOpen(false);
+            }}
+          />
         </ScrollArea>
-        <div
-          className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
-          onClick={() => {
-            setOpen(false);
-          }}
-        >
-          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
-          <span className="sr-only">Close</span>
-        </div>
       </SheetContent>
     </Sheet>
   );

@@ -515,23 +515,6 @@ export function LiquidityRow({
                     className="flex items-center gap-2 px-2"
                     data-click-trigger="1"
                   >
-                    {liquidity.paymentMethods.map((badge) => (
-                      <BadgePill
-                        key={badge}
-                        noOpen={true}
-                        name={cleanBadgeName(badge).toUpperCase()}
-                        prefix="PM"
-                        className="bg-green-100 hover:bg-green-400 text-green-800"
-                        prefixClassName="text-green-800 bg-green-200"
-                        tip={
-                          <>
-                            Takers can pay or may expect to be paid using "
-                            <b>{cleanBadgeName(badge).toUpperCase()}</b>"
-                            payment method
-                          </>
-                        }
-                      />
-                    ))}
                     {liquidity.requiredSwapBadges.map((badge) => (
                       <BadgePill
                         key={badge}
@@ -556,6 +539,23 @@ export function LiquidityRow({
                           No badge required
                         </span>
                       )}
+                    {liquidity.paymentMethods.map((badge) => (
+                      <BadgePill
+                        key={badge}
+                        noOpen={true}
+                        name={cleanBadgeName(badge).toUpperCase()}
+                        prefix="PM"
+                        className="bg-green-100 hover:bg-green-400 text-green-800"
+                        prefixClassName="text-green-800 bg-green-200"
+                        tip={
+                          <>
+                            Takers can pay or may expect to be paid using "
+                            <b>{cleanBadgeName(badge).toUpperCase()}</b>"
+                            payment method
+                          </>
+                        }
+                      />
+                    ))}
                   </div>
                 </ScrollAreaHorizontal>
               </ScrollOverflowIndicator>

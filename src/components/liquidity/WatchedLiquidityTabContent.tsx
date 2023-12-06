@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Client, PrivateKey, Signature } from "@xmtp/xmtp-js";
 import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import FollowCodec, {
@@ -159,6 +160,10 @@ export function WatchedLiquidityTabContent() {
       value="watched-liquidities"
       className="p-0 m-0 flex flex-col flex-1 gap-3"
     >
+      <Helmet>
+        <title>{`Watched Liquidity - Joint`}</title>
+      </Helmet>
+
       {((fetchLiqs.isLoading &&
         !fetchLiqs.isRefetching &&
         fetchLiqs.fetchStatus != "idle") ||

@@ -79,32 +79,6 @@ export function useMiscService() {
   }
 
   /**
-   * Get mediator pools
-   * @param ctx The query function context
-   * @returns
-   */
-  async function getMediatorPools(
-    ctx: QueryFunctionContext<[string, GetMediatorPoolsParams]>,
-  ): Promise<MediatorPool[]> {
-    try {
-      const [, params] = ctx.queryKey;
-      const { network } = params;
-      const headers = {};
-
-      const apiUrl = getChainInfo().apiUrl;
-      const resp = await axios({
-        method: "get",
-        url: `${apiUrl}/v1/misc/${network}/mediator-pools`,
-        headers,
-      });
-
-      return Promise.resolve(resp.data.data);
-    } catch (e) {
-      return Promise.reject(handleAxiosError(e as never));
-    }
-  }
-
-  /**
    * Get protocol fees
    * @param ctx The query function context
    * @returns
@@ -159,7 +133,6 @@ export function useMiscService() {
   return {
     getCryptoRate,
     getSynthRate,
-    getMediatorPools,
     getProtocolFees,
     getTokenInfo,
   };

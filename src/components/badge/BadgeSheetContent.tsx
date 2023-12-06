@@ -9,7 +9,13 @@ export interface AuthInfo {
   timestamp?: string;
 }
 
-export function BadgeSheetContent({ badge }: { badge: string }) {
+export function BadgeSheetContent({
+  badge,
+  close,
+}: {
+  badge: string;
+  close: () => void;
+}) {
   const [authInfo, setAuthInfo] = useState<AuthInfo>({});
   const [manifest, setManifest] = useState<BadgeManifest | undefined>();
 
@@ -28,6 +34,7 @@ export function BadgeSheetContent({ badge }: { badge: string }) {
       badge={badge}
       manifest={manifest}
       authInfo={authInfo}
+      close={close}
     />
   );
 }
