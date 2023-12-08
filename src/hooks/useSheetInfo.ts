@@ -14,5 +14,5 @@ export function useSheetInfo(
         "bottom",
         "rounded-t-2xl !border-l-0 border-t !border-t-gray-600",
       ]
-    : ["h-[100svh] xl:h-auto", "right", ""];
+    : ["h-screen xl:h-auto", "right", ""];
 }
