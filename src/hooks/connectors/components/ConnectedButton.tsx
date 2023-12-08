@@ -17,7 +17,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
   return (
     <div>
       <div
-        className="flex [&>*]:cursor-pointer items-center h-[37px] justify-between  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-3 pr-1"
+        className="flex [&>*]:cursor-pointer justify-between items-center h-[37px]  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-1 pr-1"
         onClick={() => {
           toggleOpenState && toggleOpenState("settingsSheet");
         }}
@@ -36,7 +36,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
             {shortenAddress2(address as string)}
           </span>
         </p>
-        <div className="pl-1 md:pl-1">
+        <div className="pl-1 md:pl-2">
           <EmojiAvatar size={AvatarSize.Small} randomStr={address as string} />
         </div>
       </div>
