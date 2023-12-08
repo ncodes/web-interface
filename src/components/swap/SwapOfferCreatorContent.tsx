@@ -673,7 +673,7 @@ export function SwapOfferCreatorContent({
         "overflow-auto h-full": !inBody,
       })}
     >
-      <div className="flex-1 h-[90vh] xl:h-[100vh]">
+      <div className="flex-1 h-[90vh] xl:h-[100svh]">
         {!inBody && (
           <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-900">
             <span className="flex gap-2 items-center text-sm">
