@@ -3,34 +3,36 @@
 import { CalendarIcon } from "@radix-ui/react-icons";
 
 import { useState } from "react";
-import { Calendar } from "../ui/calendar.tsx";
-import { Button } from "../ui/Button.tsx";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
-import { cn } from "../../libs/utils.ts";
+import { cn } from "../libs/utils.ts";
+import { Button } from "./ui/Button.tsx";
+import { Calendar } from "./ui/calendar.tsx";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover.tsx";
 
 export function CalendarInput({
   className,
   onSelect,
   defaultValue,
+  onOpenChange,
 }: {
   className?: string;
   onSelect?: (date: Date) => void;
   defaultValue?: Date;
+  onOpenChange?: (open: boolean) => void;
 }) {
   const [date, setDate] = useState<Date | undefined>(
-    defaultValue || new Date()
+    defaultValue || new Date(),
   );
   return (
-    <Popover>
+    <Popover onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
           size="sm"
           rounded="md"
           className={cn(
-            "transition-all duration-500 hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:text-gray-800 data-[state=open]:bg-chinese-green data-[state=open]:scale-x-105 w-[180px] pl-3 text-left text-xs  font-normal",
+            "transition-all duration-500 hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:text-gray-800  w-[180px] pl-3 text-left text-xs font-normal",
             !date && "text-muted-foreground",
-            className
+            className,
           )}
         >
           {date ? date.toLocaleDateString() : <span>Pick a date</span>}
@@ -38,7 +40,7 @@ export function CalendarInput({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-auto p-0 bg-modal-background text-gray-200 border-gray-600"
+        className="w-auto p-0 bg-modal-background text-gray-200 border-gray-700"
         align="start"
       >
         <Calendar

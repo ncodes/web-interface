@@ -21,7 +21,7 @@ export function DisputeFilterSheet({
   onOpen?: (open: boolean) => void;
   children?: ReactNode;
 }) {
-  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[70svh]");
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[80svh]");
   const [open, setOpen] = useState(active);
   const loc = useLocation();
 

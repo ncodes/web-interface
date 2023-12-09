@@ -4,20 +4,15 @@ import { useNavigate } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
+import Calendar2 from "../Calendar2.tsx";
 import { FilterItem } from "../FilterItem.tsx";
+import Input2 from "../Input2.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import Select2 from "../Select2.tsx";
 import { Button } from "../ui/Button.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Accordion } from "../ui/accordion.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select.tsx";
-import { CalendarInput } from "./CalendarInput.tsx";
+import { SelectItem } from "../ui/select.tsx";
 
 interface Values {
   base?: string;
@@ -93,7 +88,7 @@ export function SwapFilterContent() {
               title="Base"
               tip="Find swaps matching the base token address or symbol"
             >
-              <Input
+              <Input2
                 type="text"
                 placeholder="e.g. 0x0..."
                 className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
@@ -107,7 +102,7 @@ export function SwapFilterContent() {
               title="Quote"
               tip="Find swaps matching the quote token address or symbol"
             >
-              <Input
+              <Input2
                 type="text"
                 placeholder="e.g. 0x0..."
                 className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
@@ -121,7 +116,7 @@ export function SwapFilterContent() {
               title="By Market ID"
               tip="Find swaps from a specific market matching the given address"
             >
-              <Input
+              <Input2
                 type="text"
                 placeholder="e.g. 0x0..."
                 className="pl-2  transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
@@ -134,21 +129,20 @@ export function SwapFilterContent() {
 
             <FilterItem title="Type" tip="Find swaps of a certain type">
               <div className="mr-1">
-                <Select
+                <Select2
                   value={values.type || ""}
+                  className="hover:scale-x-[1.03] focus:scale-x-[1.03]"
+                  placeholder="All"
                   onValueChange={(val) => {
                     setValues({ ...values, type: val });
                   }}
                 >
-                  <SelectTrigger className="w-[120px] transition-all duration-500 hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
-                    <SelectValue placeholder="All" />
-                  </SelectTrigger>
-                  <SelectContent>
+                  <>
                     <SelectItem value="">All</SelectItem>
                     <SelectItem value="instant">Instant</SelectItem>
                     <SelectItem value="interactive">Interactive</SelectItem>
-                  </SelectContent>
-                </Select>
+                  </>
+                </Select2>
               </div>
             </FilterItem>
 
@@ -157,24 +151,23 @@ export function SwapFilterContent() {
               tip="Find swaps based on their current status"
             >
               <div className="mr-1">
-                <Select
+                <Select2
                   value={values.status || ""}
+                  className="hover:scale-x-[1.03] focus:scale-x-[1.03]"
+                  placeholder="All"
                   onValueChange={(val) => {
                     setValues({ ...values, status: val });
                   }}
                 >
-                  <SelectTrigger className="w-[120px] transition-all duration-500 hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
-                    <SelectValue placeholder="All" />
-                  </SelectTrigger>
-                  <SelectContent>
+                  <>
                     <SelectItem value="">All</SelectItem>
                     <SelectItem value="unpaid">Unpaid</SelectItem>
                     <SelectItem value="paid">Paid</SelectItem>
                     <SelectItem value="released">Released</SelectItem>
                     <SelectItem value="disputed">Disputed</SelectItem>
                     <SelectItem value="cancelled">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
+                  </>
+                </Select2>
               </div>
             </FilterItem>
 
@@ -187,7 +180,7 @@ export function SwapFilterContent() {
                   <div className="text-xs text-gray-400 font-light">
                     From Date:
                   </div>
-                  <CalendarInput
+                  <Calendar2
                     className="w-full"
                     defaultValue={
                       values.from_date ? new Date(values.from_date) : undefined
@@ -200,11 +193,12 @@ export function SwapFilterContent() {
                     }}
                   />
                 </div>
+
                 <div className="flex flex-1 flex-col gap-2 tracking-wide">
                   <div className="text-xs text-gray-400 font-light">
                     To Date:
                   </div>
-                  <CalendarInput
+                  <Calendar2
                     className="w-full"
                     defaultValue={
                       values.to_date ? new Date(values.to_date) : undefined

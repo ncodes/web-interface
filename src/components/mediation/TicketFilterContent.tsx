@@ -4,18 +4,13 @@ import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
+import Input2 from "../Input2.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import Select2 from "../Select2.tsx";
 import { Button } from "../ui/Button.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Accordion } from "../ui/accordion.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select.tsx";
+import { SelectItem } from "../ui/select.tsx";
 
 interface Values {
   pool?: string;
@@ -82,7 +77,7 @@ export function TicketFilterContent() {
               title="By Pool ID"
               tip="Find tickets belonging to a pool"
             >
-              <Input
+              <Input2
                 type="number"
                 placeholder="e.g. 1234"
                 className="pl-2 !w-6/12"
@@ -100,7 +95,7 @@ export function TicketFilterContent() {
               title="By Order ID"
               tip="Search for a ticket using the ID of the order it is associated to."
             >
-              <Input
+              <Input2
                 type="number"
                 placeholder="e.g. 1234"
                 className="pl-2 !w-6/12"
@@ -118,7 +113,7 @@ export function TicketFilterContent() {
               title="By Dispute ID"
               tip="Find a ticket based on the ID of the dispute it's associated to."
             >
-              <Input
+              <Input2
                 type="number"
                 placeholder="e.g. 323"
                 className="pl-2 !w-6/12"
@@ -137,16 +132,16 @@ export function TicketFilterContent() {
               tip="Find tickets based on their current status"
             >
               <div className="mr-1 w-full">
-                <Select
+                <Select2
                   value={values.status || ""}
+                  placeholder="All"
+                  className="w-[200px]"
+                  triggerClassName="w-full"
                   onValueChange={(val) => {
                     setValues({ ...values, status: val });
                   }}
                 >
-                  <SelectTrigger className="!w-6/12 transition-all duration-500 hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
-                    <SelectValue placeholder="All" />
-                  </SelectTrigger>
-                  <SelectContent>
+                  <>
                     <SelectItem value="">All</SelectItem>
                     <SelectItem value="maturing">Maturing</SelectItem>
                     <SelectItem value="matured">Matured</SelectItem>
@@ -157,14 +152,14 @@ export function TicketFilterContent() {
                     <SelectItem value="slashed">Slashed</SelectItem>
                     <SelectItem value="cancelled">Cancelled</SelectItem>
                     <SelectItem value="drained">Drained</SelectItem>
-                  </SelectContent>
-                </Select>
+                  </>
+                </Select2>
               </div>
             </FilterItem>
           </Accordion>
         </ScrollArea>
       </ScrollOverflowIndicator>
-      <div className="px-5 py-5">
+      <div className="px-5 py-5 pt-2 xl:pt-3">
         <Button
           size="full"
           variant="outline"

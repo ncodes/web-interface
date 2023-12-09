@@ -4,20 +4,15 @@ import { useNavigate } from "react-router-dom";
 import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
+import Calendar2 from "../Calendar2.tsx";
 import { FilterItem } from "../FilterItem.tsx";
+import Input2 from "../Input2.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { CalendarInput } from "../swap/CalendarInput.tsx";
+import Select2 from "../Select2.tsx";
 import { Button } from "../ui/Button.tsx";
-import { Input } from "../ui/Input.tsx";
 import { Accordion } from "../ui/accordion.tsx";
 import { ScrollArea } from "../ui/scroll-area.tsx";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select.tsx";
+import { SelectItem } from "../ui/select.tsx";
 
 interface Values {
   market?: string;
@@ -102,7 +97,7 @@ export function DisputeFilterContent() {
                 title="By Creator"
                 tip="Find disputes created by an address"
               >
-                <Input
+                <Input2
                   type="text"
                   placeholder="e.g. 0x0..."
                   className="pl-2"
@@ -117,7 +112,7 @@ export function DisputeFilterContent() {
                 title="By Market ID"
                 tip="Find disputes by their market address or ID"
               >
-                <Input
+                <Input2
                   type="text"
                   placeholder="e.g. 0x0..."
                   className="pl-2"
@@ -132,7 +127,7 @@ export function DisputeFilterContent() {
                 title="By Order ID"
                 tip="Find disputes by their order ID"
               >
-                <Input
+                <Input2
                   type="number"
                   placeholder="e.g. 1234"
                   className="pl-2 !w-6/12"
@@ -147,7 +142,7 @@ export function DisputeFilterContent() {
               </FilterItem>
 
               <FilterItem title="By Dispute ID" tip="Find a dispute by its ID">
-                <Input
+                <Input2
                   type="number"
                   placeholder="e.g. 323"
                   className="pl-2 !w-6/12"
@@ -166,16 +161,16 @@ export function DisputeFilterContent() {
                 tip="Find disputes based on their current status"
               >
                 <div className="mr-1 w-full">
-                  <Select
+                  <Select2
                     value={values.status || ""}
+                    placeholder="All"
+                    className="w-[160px]"
+                    triggerClassName="w-full"
                     onValueChange={(val) => {
                       setValues({ ...values, status: val });
                     }}
                   >
-                    <SelectTrigger className="!w-6/12 transition-all duration-500 hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
-                      <SelectValue placeholder="All" />
-                    </SelectTrigger>
-                    <SelectContent>
+                    <>
                       <SelectItem value="">All</SelectItem>
                       <SelectItem value="draft">Draft Phase</SelectItem>
                       <SelectItem value="undraft">Undraft Phase</SelectItem>
@@ -187,8 +182,8 @@ export function DisputeFilterContent() {
                       <SelectItem value="stalled">Stalled</SelectItem>
                       <SelectItem value="redispute">Redisputed</SelectItem>
                       <SelectItem value="executed">Executed</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    </>
+                  </Select2>
                 </div>
               </FilterItem>
 
@@ -201,7 +196,7 @@ export function DisputeFilterContent() {
                     <div className="text-xs text-gray-400 font-light">
                       From Date:
                     </div>
-                    <CalendarInput
+                    <Calendar2
                       className="w-full"
                       defaultValue={
                         values.from_date
@@ -220,7 +215,7 @@ export function DisputeFilterContent() {
                     <div className="text-xs text-gray-400 font-light">
                       To Date:
                     </div>
-                    <CalendarInput
+                    <Calendar2
                       className="w-full"
                       defaultValue={
                         values.to_date ? new Date(values.to_date) : undefined
