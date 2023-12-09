@@ -11,7 +11,7 @@ export function SwapSheet(props: {
   open: boolean;
   onOpenChange?: (open) => void;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[90svh]");
   const [open, setOpen] = React.useState(props.open);
 
   useEffect(() => {
@@ -23,7 +23,8 @@ export function SwapSheet(props: {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0 border-gray-800 pt-0 px-0 h-[90vh] md:h-[100svh]"
+          "flex flex-col gap-0 pb-0 w-full border-l focus-visible:outline-0 border-gray-800 pt-0 px-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >

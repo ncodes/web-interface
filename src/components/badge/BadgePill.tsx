@@ -22,7 +22,7 @@ export function BadgePill({
   prefixClassName?: string;
   noOpen?: boolean;
 }) {
-  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[95vh]");
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[95svh]");
   const [open, setOpen] = useState(false);
 
   return (

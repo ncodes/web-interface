@@ -24,7 +24,7 @@ export function SettingsSheet(props: {
   onOpen?: (open: boolean) => void;
   openWalletManager?: () => void;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[90svh]");
   const { address } = useConnectorContext();
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -42,7 +42,8 @@ export function SettingsSheet(props: {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          "flex flex-col gap-0 pb-0 w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
@@ -53,10 +54,10 @@ export function SettingsSheet(props: {
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="px-0 text-white h-full">
+        <div className="flex-1 flex px-0 text-white">
           <Tabs
             defaultValue={currentTab || "general"}
-            className="w-full h-full transition-all duration-500"
+            className="flex flex-1 flex-col transition-all duration-500"
           >
             <ScrollOverflowIndicator>
               <ScrollAreaHorizontal type="scroll">
@@ -85,13 +86,15 @@ export function SettingsSheet(props: {
             <GeneralTab address={address} />
             <AccountTab />
             <RulesTab />
-            <SettingsFooter
-              openWalletManager={() => {
-                toggleOpenState && toggleOpenState("settingsSheet");
-                props.openWalletManager && props.openWalletManager();
-              }}
-            />
           </Tabs>
+        </div>
+        <div>
+          <SettingsFooter
+            openWalletManager={() => {
+              toggleOpenState && toggleOpenState("settingsSheet");
+              props.openWalletManager && props.openWalletManager();
+            }}
+          />
         </div>
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"

@@ -72,7 +72,7 @@ export function NotificationSheet(props: { children?: React.ReactNode }) {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 h-[90vh] md:h-[100vh]"
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 h-[90svh] md:h-[100svh]",
         )}
         side={sheetSide}
       >

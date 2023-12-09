@@ -6,7 +6,7 @@ import { Sheet, SheetContent } from "../ui/sheet.tsx";
 import { Messenger } from "./Messenger.tsx";
 
 export function MessengerSheet(props: { swap?: Swap; offer?: Offer }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[80svh]");
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
 
@@ -20,8 +20,8 @@ export function MessengerSheet(props: { swap?: Swap; offer?: Offer }) {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0 overflow-hidden border-gray-800 pt-0 px-0 pb-0",
-          "h-[80vh] md:h-screen",
+          "flex flex-col gap-0 w-full border-l focus-visible:outline-0 overflow-hidden border-gray-800 pt-0 px-0 pb-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >

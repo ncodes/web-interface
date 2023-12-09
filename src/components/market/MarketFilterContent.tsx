@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { validators } from "tailwind-merge";
 import useStore from "../../hooks/store/useStore.ts";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
@@ -50,7 +49,6 @@ interface Values {
 }
 
 export function MarketFilterContent() {
-  const [sheetHeight] = useSheetInfo();
   const query = useUrlQuery();
   const navigate = useNavigate();
   const loc = useLocation();
@@ -183,9 +181,13 @@ export function MarketFilterContent() {
   }, [query, setMarketFilter]);
 
   return (
-    <div>
-      <ScrollOverflowIndicator side="bottom">
-        <ScrollArea type="scroll" className={cn(sheetHeight)}>
+    <div className="h-full flex flex-col">
+      <ScrollOverflowIndicator side="bottom" className="h-full flex-1">
+        <ScrollArea
+          type="scroll"
+          viewportClassName="absolute xl:relative"
+          className="h-full relative"
+        >
           <Accordion type="multiple">
             <FilterItem
               title="Base"

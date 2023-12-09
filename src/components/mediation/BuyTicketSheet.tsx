@@ -12,9 +12,11 @@ import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { delay, formatToHighDenom, isDev } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { InfoCard } from "../market/InfoCard.tsx";
 import { Button } from "../ui/Button.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import {
   Sheet,
   SheetContent,
@@ -29,7 +31,7 @@ export function BuyTicketSheet(props: {
   onOpen?: (open: boolean) => void;
 }) {
   const { getTicketPrice } = useMediatorManagerContract();
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[90svh]");
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const {
@@ -144,68 +146,77 @@ export function BuyTicketSheet(props: {
         className={cn(
           styles,
           "flex py-0 flex-col gap-0 justify-between w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
-        <div className="flex-1">
-          <SheetHeader className="flex pr-[50px] border-b border-gray-800">
-            <div className="text-white">
-              <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
-                Purchase Ticket
-              </SheetTitle>
-            </div>
-          </SheetHeader>
-          <div className="px-3 text-white h-[70vh] md:h-[82vh] xl:h-full pt-3 xl:pt-0 xl:mt-3 overflow-auto">
-            <div className="flex gap-2">
-              <InfoCard
-                title={`Pool ID`}
-                tip={`The mediation pool you want the ticket to operate in`}
-              >
-                {mediatorPools && (
-                  <PoolSelector
-                    pools={mediatorPools}
-                    disabled={approveLoading || loading}
-                    onSelect={(pool) => {
-                      setPool(pool);
-                    }}
+        <SheetHeader className="flex pr-[50px] border-b border-gray-800">
+          <div className="text-white">
+            <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
+              Purchase Ticket
+            </SheetTitle>
+          </div>
+        </SheetHeader>
+
+        <div className="flex flex-col flex-1 px-3 text-white h-[70vh] md:h-[82vh] xl:h-full pt-3 xl:pt-0 xl:mt-3 overflow-auto">
+          <div className="flex gap-2">
+            <InfoCard
+              title={`Pool ID`}
+              tip={`The mediation pool you want the ticket to operate in`}
+            >
+              {mediatorPools && (
+                <PoolSelector
+                  pools={mediatorPools}
+                  disabled={approveLoading || loading}
+                  onSelect={(pool) => {
+                    setPool(pool);
+                  }}
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    rounded="xl"
+                    className="p-1 px-2 h-auto text-gray-100 text-sm"
                   >
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      rounded="xl"
-                      className="p-1 px-2 h-auto text-gray-100 text-sm"
-                    >
-                      {!pool && (
-                        <div className="flex items-center gap-1">
-                          <span>Choose Pool</span>
-                          <ChevronDown width="15" />
-                        </div>
-                      )}
-                      {pool && (
-                        <div className="flex gap-1">
-                          <span>{pool.name}</span>
-                          <span className="text-gray-500 font-light">
-                            (ID: {pool.id})
-                          </span>
-                        </div>
-                      )}
-                    </Button>
-                  </PoolSelector>
-                )}
-              </InfoCard>
-              <InfoCard
-                title={`Ticket Price`}
-                tip={`The unique ID of the pool this ticket will belong to.`}
+                    {!pool && (
+                      <div className="flex items-center gap-1">
+                        <span>Choose Pool</span>
+                        <ChevronDown width="15" />
+                      </div>
+                    )}
+                    {pool && (
+                      <div className="flex gap-1">
+                        <span>{pool.name}</span>
+                        <span className="text-gray-500 font-light">
+                          (ID: {pool.id})
+                        </span>
+                      </div>
+                    )}
+                  </Button>
+                </PoolSelector>
+              )}
+            </InfoCard>
+            <InfoCard
+              title={`Ticket Price`}
+              tip={`The unique ID of the pool this ticket will belong to.`}
+            >
+              <span className="mt-1 flex gap-1">
+                <span>{formatToHighDenom(ticketPrice, 18)}</span>
+                <span className="text-gray-300 font-light">P2P</span>
+              </span>
+            </InfoCard>
+          </div>
+          <div className="flex-1 mt-2 p-2 flex flex-col gap-3">
+            {pool && (
+              <ScrollOverflowIndicator
+                side="bottom"
+                className="h-full flex-1 [&>span.grad-indicator]:rounded-none"
               >
-                <span className="mt-1 flex gap-1">
-                  <span>{formatToHighDenom(ticketPrice, 18)}</span>
-                  <span className="text-gray-300 font-light">P2P</span>
-                </span>
-              </InfoCard>
-            </div>
-            <div className="mt-2 p-2 flex flex-col gap-3">
-              {pool && (
-                <>
+                <ScrollArea
+                  type="scroll"
+                  viewportClassName="absolute xl:relative"
+                  className="h-full relative"
+                >
                   <div className="flex flex-col gap-1 border-b border-gray-800 pb-4">
                     <span className="text-sm text-gray-200">Bond Amount</span>
                     <span className="font-light text-sm text-gray-400">
@@ -277,18 +288,9 @@ export function BuyTicketSheet(props: {
                       {pool.noVoteSlashBP / 100}%
                     </span>
                   </div>
-                </>
-              )}
-            </div>
-          </div>
-          <div
-            className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
-            onClick={() => {
-              toggleOpenState && toggleOpenState("buyTicketSheet");
-            }}
-          >
-            <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
-            <span className="sr-only">Close</span>
+                </ScrollArea>
+              </ScrollOverflowIndicator>
+            )}
           </div>
         </div>
 
@@ -325,6 +327,16 @@ export function BuyTicketSheet(props: {
               />
             )}
           </Button>
+        </div>
+
+        <div
+          className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+          onClick={() => {
+            toggleOpenState && toggleOpenState("buyTicketSheet");
+          }}
+        >
+          <Cross2Icon className="h-6 w-6 transition-all duration-300 hover:text-chinese-green hover:scale-110 cursor-pointer" />
+          <span className="sr-only">Close</span>
         </div>
       </SheetContent>
     </Sheet>

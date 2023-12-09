@@ -5,10 +5,12 @@ import useStore from "../../hooks/store/useStore.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
 import { rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { CalendarInput } from "../swap/CalendarInput.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
 import { Accordion } from "../ui/accordion.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import {
   Select,
   SelectContent,
@@ -75,98 +77,113 @@ export function OfferFilterContent() {
   }, [query, setOfferFilter]);
 
   return (
-    <div>
-      <Accordion type="multiple">
-        <FilterItem title="Offerer" tip="Find offers from a certain address">
-          <Input
-            type="text"
-            placeholder="e.g. 0x0..."
-            className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
-            value={values.creator || ""}
-            onChange={(e) => {
-              setValues({ ...values, creator: e.target.value });
-            }}
-          />
-        </FilterItem>
-        <FilterItem
-          title="By Market ID"
-          tip="Find offers from a specific market matching the given address"
+    <div className="flex flex-col h-full">
+      <ScrollOverflowIndicator side="bottom" className="flex-1 h-full">
+        <ScrollArea
+          type="scroll"
+          viewportClassName="absolute xl:relative"
+          className="h-full relative"
         >
-          <Input
-            type="text"
-            placeholder="e.g. 0x0..."
-            className="pl-2  transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
-            value={values.market || ""}
-            onChange={(e) => {
-              setValues({ ...values, market: e.target.value });
-            }}
-          />
-        </FilterItem>
-
-        <FilterItem
-          title="Status"
-          tip="Find swaps based on their current status"
-        >
-          <div className="mr-1">
-            <Select
-              value={values.status || ""}
-              onValueChange={(val) => {
-                setValues({ ...values, status: val });
-              }}
+          <Accordion type="multiple">
+            <FilterItem
+              title="Offerer"
+              tip="Find offers from a certain address"
             >
-              <SelectTrigger className="w-[120px] transition-all duration-500 hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All</SelectItem>
-                <SelectItem value="accepted">Accepted</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
-                <SelectItem value="executed">Executed</SelectItem>
-                <SelectItem value="expired">Expired</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </FilterItem>
+              <Input
+                type="text"
+                placeholder="e.g. 0x0..."
+                className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
+                value={values.creator || ""}
+                onChange={(e) => {
+                  setValues({ ...values, creator: e.target.value });
+                }}
+              />
+            </FilterItem>
+            <FilterItem
+              title="By Market ID"
+              tip="Find offers from a specific market matching the given address"
+            >
+              <Input
+                type="text"
+                placeholder="e.g. 0x0..."
+                className="pl-2  transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
+                value={values.market || ""}
+                onChange={(e) => {
+                  setValues({ ...values, market: e.target.value });
+                }}
+              />
+            </FilterItem>
 
-        <FilterItem
-          title="Date Range"
-          tip="Find swaps created within a certain date range"
-        >
-          <div className="flex w-full gap-3">
-            <div className="flex flex-1 flex-col gap-2 tracking-wide">
-              <div className="text-xs text-gray-400 font-light">From Date:</div>
-              <CalendarInput
-                className="w-full"
-                defaultValue={
-                  values.from_date ? new Date(values.from_date) : undefined
-                }
-                onSelect={(date) => {
-                  setValues({
-                    ...values,
-                    from_date: date.toLocaleDateString("en-US"),
-                  });
-                }}
-              />
-            </div>
-            <div className="flex flex-1 flex-col gap-2 tracking-wide">
-              <div className="text-xs text-gray-400 font-light">To Date:</div>
-              <CalendarInput
-                className="w-full"
-                defaultValue={
-                  values.to_date ? new Date(values.to_date) : undefined
-                }
-                onSelect={(date) => {
-                  setValues({
-                    ...values,
-                    to_date: date.toLocaleDateString("en-US"),
-                  });
-                }}
-              />
-            </div>
-          </div>
-        </FilterItem>
-      </Accordion>
-      <div className="px-5 py-5">
+            <FilterItem
+              title="Status"
+              tip="Find swaps based on their current status"
+            >
+              <div className="mr-1">
+                <Select
+                  value={values.status || ""}
+                  onValueChange={(val) => {
+                    setValues({ ...values, status: val });
+                  }}
+                >
+                  <SelectTrigger className="w-[120px] transition-all duration-500 hover:border-chinese-green hover:scale-x-105 data-[state=open]:border-chinese-green data-[state=open]:scale-x-105 focus:scale-x-105">
+                    <SelectValue placeholder="All" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">All</SelectItem>
+                    <SelectItem value="accepted">Accepted</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                    <SelectItem value="executed">Executed</SelectItem>
+                    <SelectItem value="expired">Expired</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </FilterItem>
+
+            <FilterItem
+              title="Date Range"
+              tip="Find swaps created within a certain date range"
+            >
+              <div className="flex w-full gap-3">
+                <div className="flex flex-1 flex-col gap-2 tracking-wide">
+                  <div className="text-xs text-gray-400 font-light">
+                    From Date:
+                  </div>
+                  <CalendarInput
+                    className="w-full"
+                    defaultValue={
+                      values.from_date ? new Date(values.from_date) : undefined
+                    }
+                    onSelect={(date) => {
+                      setValues({
+                        ...values,
+                        from_date: date.toLocaleDateString("en-US"),
+                      });
+                    }}
+                  />
+                </div>
+                <div className="flex flex-1 flex-col gap-2 tracking-wide">
+                  <div className="text-xs text-gray-400 font-light">
+                    To Date:
+                  </div>
+                  <CalendarInput
+                    className="w-full"
+                    defaultValue={
+                      values.to_date ? new Date(values.to_date) : undefined
+                    }
+                    onSelect={(date) => {
+                      setValues({
+                        ...values,
+                        to_date: date.toLocaleDateString("en-US"),
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </FilterItem>
+          </Accordion>
+        </ScrollArea>
+      </ScrollOverflowIndicator>
+      <div className="px-5 py-5 pt-0">
         <Button
           size="full"
           variant="outline"

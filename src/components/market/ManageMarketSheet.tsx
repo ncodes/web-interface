@@ -56,7 +56,7 @@ export function ManageMarketSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0",
         )}
         side={sheetSide}
       >

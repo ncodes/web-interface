@@ -77,8 +77,8 @@ export function SearchContent({
 
       <ScrollOverflowIndicator side="bottom" className="h-full">
         <ScrollArea
-          className="h-full md:h-[400px] relative "
-          viewportClassName="relative [&>div]:block [&>div]:h-full"
+          viewportClassName="absolute xl:relative"
+          className="h-full relative"
           type="scroll"
         >
           {!queryResult && (

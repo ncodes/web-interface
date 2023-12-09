@@ -1,4 +1,3 @@
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { TabsContent } from "../ui/Tabs.tsx";
 import {
   Accordion,
@@ -10,11 +9,13 @@ import { ScrollArea } from "../ui/scroll-area.tsx";
 import { LiquidityInstruction } from "./LiquidityInstruction.tsx";
 
 export function RulesTab() {
-  const [sheetHeight] = useSheetInfo();
-
   return (
-    <TabsContent value="rules" className={`w-full h-full px-0 ${sheetHeight}`}>
-      <ScrollArea type="scroll" className="h-full">
+    <TabsContent value="rules" className={`w-full h-full px-0`}>
+      <ScrollArea
+        type="scroll"
+        viewportClassName="absolute xl:relative"
+        className="h-full relative"
+      >
         <Accordion type="single" collapsible defaultValue="instructions">
           <AccordionItem className="mt-3" value="instructions">
             <AccordionTrigger className="px-5 text-lg pb-2 tracking-wide">

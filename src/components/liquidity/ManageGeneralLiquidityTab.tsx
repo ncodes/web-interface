@@ -7,7 +7,6 @@ import { Address } from "viem";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { useBaseQuoteRate } from "../../hooks/useBaseQuoteRate.ts";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { isSynth } from "../../libs/api_utils.ts";
 import {
@@ -50,7 +49,6 @@ export function ManageGeneralLiquidityTab({
   market: Market;
   close: () => void;
 }) {
-  const [sheetHeight] = useSheetInfo();
   const { updateFungibleLiquidity, humanizeErrors } = useCoreContract();
   const {
     getChainInfo,
@@ -271,112 +269,112 @@ export function ManageGeneralLiquidityTab({
   }
 
   return (
-    <TabsContent
-      value="general"
-      className={`p-0 mt-0 overflow-auto ${sheetHeight} xl:h-screen`}
-    >
-      <div>
-        <ScrollArea className="h-full pb-[200px]">
-          <div className=" text-white h-full">
-            {liquidity && (
-              <p className="p-5 py-3 font-light text-gray-300 text-sm">
-                Manage your liquidity. You can add, remove, restrict or pause
-                your liquidity.
-              </p>
-            )}
-            {!liquidity && (
-              <p className="p-5 py-3 font-light text-gray-300 text-sm">
-                Add liquidity to the market.
-              </p>
-            )}
-            <Accordion
-              value={_.uniq(accordionToOpen)}
-              onValueChange={(values) => {
-                setAccordionToOpen(_.uniq([...values]));
-              }}
-              type="multiple"
-            >
-              <ManageLiqEditAmount
-                market={market}
-                liquidity={liquidity}
-                disabled={addLoading}
-                baseUsdRate={baseUsdRate.data as number}
-                onValueChanged={(value, err, setErr) => {
-                  setAmount({ value, err, setErr });
+    <TabsContent value="general" className={`flex-1 p-0 mt-0`}>
+      <div className="flex flex-col text-white h-full">
+        <div className="flex-1">
+          <ScrollArea viewportClassName="absolute" className="h-full relative">
+            <div className=" text-white h-full ">
+              {liquidity && (
+                <p className="p-5 py-3 font-light text-gray-300 text-sm">
+                  Manage your liquidity. You can add, remove, restrict or pause
+                  your liquidity.
+                </p>
+              )}
+              {!liquidity && (
+                <p className="p-5 py-3 font-light text-gray-300 text-sm">
+                  Add liquidity to the market.
+                </p>
+              )}
+              <Accordion
+                value={_.uniq(accordionToOpen)}
+                onValueChange={(values) => {
+                  setAccordionToOpen(_.uniq([...values]));
                 }}
-              />
-
-              <ManageLiqEditPrice
-                liquidity={liquidity}
-                market={market}
-                disabled={addLoading}
-                baseUsdRate={baseUsdRate.data as number}
-                quoteUsdRate={quoteUsdRate.data as number}
-                onValueChanged={(value, err, setErr) => {
-                  setPrice({ value, err, setErr });
-                  validate();
-                }}
-              />
-
-              <ManageLiqEditMinSwapAmount
-                market={market}
-                disabled={addLoading}
-                baseUsdRate={baseUsdRate.data as number}
-                liquidity={liquidity}
-                liquidityEdits={{ amount: amount?.value as string }}
-                onValueChanged={(value, err, setErr) => {
-                  setMinSwapAmount({ value, err, setErr });
-                  validate();
-                }}
-              />
-
-              <ManageLiqEditMaxSwapAmount
-                market={market}
-                disabled={addLoading}
-                baseUsdRate={baseUsdRate.data as number}
-                liquidity={liquidity}
-                liquidityEdits={{
-                  amount: amount?.value as string,
-                  minSwap: minSwapAmount.value as string,
-                }}
-                onValueChanged={(value, err, setErr) => {
-                  setMaxSwapAmount({ value, err, setErr });
-                  validate();
-                }}
-              />
-
-              {!market.instant && (
-                <ManageLiqEditPaymentTime
+                type="multiple"
+              >
+                <ManageLiqEditAmount
                   market={market}
-                  disabled={addLoading}
                   liquidity={liquidity}
+                  disabled={addLoading}
+                  baseUsdRate={baseUsdRate.data as number}
                   onValueChanged={(value, err, setErr) => {
-                    setPaymentTime({ value, err, setErr });
+                    setAmount({ value, err, setErr });
                   }}
                 />
-              )}
 
-              <ManageLiqEditTarget
-                liquidity={liquidity}
-                disabled={addLoading}
-                market={market}
-                onValueChanged={(value, err, setErr) => {
-                  setTarget({ value, err, setErr });
-                }}
-              />
+                <ManageLiqEditPrice
+                  liquidity={liquidity}
+                  market={market}
+                  disabled={addLoading}
+                  baseUsdRate={baseUsdRate.data as number}
+                  quoteUsdRate={quoteUsdRate.data as number}
+                  onValueChanged={(value, err, setErr) => {
+                    setPrice({ value, err, setErr });
+                    validate();
+                  }}
+                />
 
-              <ManageLiqEditPause
-                liquidity={liquidity}
-                disabled={addLoading}
-                market={market}
-                onValueChanged={(value) => {
-                  setPause(value);
-                }}
-              />
-            </Accordion>
-          </div>
-        </ScrollArea>
-        <div className="bottom-0 bg-background absolute w-full p-3 border-t border-gray-800 flex flex-col gap-2">
+                <ManageLiqEditMinSwapAmount
+                  market={market}
+                  disabled={addLoading}
+                  baseUsdRate={baseUsdRate.data as number}
+                  liquidity={liquidity}
+                  liquidityEdits={{ amount: amount?.value as string }}
+                  onValueChanged={(value, err, setErr) => {
+                    setMinSwapAmount({ value, err, setErr });
+                    validate();
+                  }}
+                />
+
+                <ManageLiqEditMaxSwapAmount
+                  market={market}
+                  disabled={addLoading}
+                  baseUsdRate={baseUsdRate.data as number}
+                  liquidity={liquidity}
+                  liquidityEdits={{
+                    amount: amount?.value as string,
+                    minSwap: minSwapAmount.value as string,
+                  }}
+                  onValueChanged={(value, err, setErr) => {
+                    setMaxSwapAmount({ value, err, setErr });
+                    validate();
+                  }}
+                />
+
+                {!market.instant && (
+                  <ManageLiqEditPaymentTime
+                    market={market}
+                    disabled={addLoading}
+                    liquidity={liquidity}
+                    onValueChanged={(value, err, setErr) => {
+                      setPaymentTime({ value, err, setErr });
+                    }}
+                  />
+                )}
+
+                <ManageLiqEditTarget
+                  liquidity={liquidity}
+                  disabled={addLoading}
+                  market={market}
+                  onValueChanged={(value, err, setErr) => {
+                    setTarget({ value, err, setErr });
+                  }}
+                />
+
+                <ManageLiqEditPause
+                  liquidity={liquidity}
+                  disabled={addLoading}
+                  market={market}
+                  onValueChanged={(value) => {
+                    setPause(value);
+                  }}
+                />
+              </Accordion>
+            </div>
+          </ScrollArea>
+        </div>
+
+        <div className="w-full p-3 border-t border-gray-800 flex flex-col gap-2">
           {amount.value && !hasAllowance && (
             <Button
               size="full"

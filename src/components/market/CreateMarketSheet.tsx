@@ -33,7 +33,7 @@ export function CreateMarketSheet({
   active: boolean;
   onOpen: (open: boolean) => void;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[70svh]");
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [baseAsset, setBaseAsset] = useState<AssetInfo>();
@@ -120,7 +120,8 @@ export function CreateMarketSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          "flex flex-col w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
@@ -131,7 +132,8 @@ export function CreateMarketSheet({
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="flex gap-2 flex-col text-white h-full">
+
+        <div className="flex flex-1 gap-2 flex-col text-white h-full">
           <div className="flex">
             <div className="p-5 pb-0 flex-1">
               <AssetSelector

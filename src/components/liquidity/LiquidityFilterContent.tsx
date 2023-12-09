@@ -5,10 +5,8 @@ import { validators } from "tailwind-merge";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
 import useStore from "../../hooks/store/useStore.ts";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useUrlQuery } from "../../hooks/useUrlQuery.ts";
-import { isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
-import { cn } from "../../libs/utils.ts";
+import { cn, isTrue, rmUndefinedAndNull } from "../../libs/helpers.ts";
 import { FilterItem } from "../FilterItem.tsx";
 import Input2 from "../Input2.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
@@ -50,7 +48,6 @@ interface Values {
 }
 
 export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
-  const [sheetHeight] = useSheetInfo();
   const query = useUrlQuery();
   const navigate = useNavigate();
   const location = useLocation();
@@ -189,338 +186,344 @@ export function LiquidityFilterContent({ ownerMode }: { ownerMode?: boolean }) {
   }
 
   return (
-    <div>
-      <ScrollOverflowIndicator side="bottom">
-        <ScrollArea type="scroll" className={cn(sheetHeight)}>
-          <Accordion type="multiple">
-            <FilterItem
-              title="Base"
-              tip="Find liquidities matching the base token address or symbol"
-              className={cn({
-                hidden: location.pathname.includes("/market/"),
-              })}
-            >
-              <Input2
-                type="text"
-                placeholder="e.g. 0x0..."
-                className="pl-2"
-                value={values.base || ""}
-                onChange={(e) => {
-                  setValues({ ...values, base: e.target.value });
-                }}
-              />
-            </FilterItem>
-            <FilterItem
-              title="Quote"
-              tip="Find liquidities matching the quote token address or symbol"
-              className={cn({
-                hidden: location.pathname.includes("/market/"),
-              })}
-            >
-              <Input2
-                type="text"
-                placeholder="e.g. 0x0..."
-                className="pl-2"
-                value={values.quote || ""}
-                onChange={(e) => {
-                  setValues({ ...values, quote: e.target.value });
-                }}
-              />
-            </FilterItem>
-            <FilterItem
-              title="By Market ID"
-              tip="Find a market by its address or ID"
-              className={cn({
-                hidden: location.pathname.includes("/market/"),
-              })}
-            >
-              <Input2
-                type="text"
-                placeholder="e.g. 0x0..."
-                className="pl-2"
-                value={values.market || ""}
-                onChange={(e) => {
-                  setValues({ ...values, market: e.target.value });
-                }}
-              />
-            </FilterItem>
-
-            <FilterItem
-              title="By Creator"
-              tip="Find a market by its creator's address"
-              className={cn({ hidden: ownerMode })}
-            >
-              <Input2
-                type="text"
-                placeholder="e.g. 0x0..."
-                className="pl-2"
-                value={values.provider || ""}
-                onChange={(e) => {
-                  setValues({ ...values, provider: e.target.value });
-                }}
-              />
-            </FilterItem>
-            <FilterItem
-              title="Quote Price"
-              tip="Filter by price (QUOTE)"
-              className={cn({ hidden: !values.market })}
-            >
-              <div>
-                <Input2
-                  placeholder="0.00"
-                  className="w-[100px] px-2 pl-0"
-                  value={values.price || ""}
-                  onChange={(e) => {
-                    setValues({ ...values, price: e.target.value });
-                    if (validators.isNumber(e.target.value)) {
-                      setErrors({ price: "" });
-                    } else {
-                      setErrors({ price: "Must be a number" });
-                    }
-                  }}
-                  beforeInput={
-                    <div className="w-[50px] ml-[5px]">
-                      <Select
-                        value={values.price_cur || "USD"}
-                        onValueChange={(cur) => {
-                          setValues({ ...values, price_cur: cur });
-                        }}
-                      >
-                        <SelectTrigger className="border-none focus:border-0 focus:ring-0 data-[state=open]:border-none">
-                          <SelectValue placeholder="$" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="USD">$</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  }
-                  err={errors.price}
-                />
-              </div>
-              <div className="flex-1 px-3 flex">
-                <RadioGroup
-                  className="flex flex-1 items-center gap-3"
-                  value={values.price_lte}
-                  onValueChange={(value) => {
-                    setValues({
-                      ...values,
-                      price_lte: value,
-                    });
-                  }}
-                >
-                  <ToolTip tip={"Less than or equal to the amount"}>
-                    <span className="flex items-center gap-2">
-                      <RadioGroupItem value="lower" id="lower" />
-                      <Label
-                        htmlFor="lower"
-                        className="font-light tracking-wider"
-                      >
-                        {"<="}
-                      </Label>
-                    </span>
-                  </ToolTip>
-                  <ToolTip tip={"Greater than or equal to the amount"}>
-                    <span className="flex items-center gap-2">
-                      {" "}
-                      <RadioGroupItem value="higher" id="higher" />
-                      <Label
-                        htmlFor="higher"
-                        className="font-light tracking-wider"
-                      >
-                        {">="}
-                      </Label>
-                    </span>
-                  </ToolTip>
-                </RadioGroup>
-              </div>
-            </FilterItem>
-
-            <FilterItem
-              title="Available Liquidity"
-              tip="Find liquidities with certain amount of available liquidity"
-              className={cn({ hidden: values.market })}
-            >
-              <div>
-                <Input2
-                  className="w-[100px] px-2 pl-0"
-                  placeholder="0.00"
-                  value={values.amt || ""}
-                  onChange={(e) => {
-                    setValues({ ...values, amt: e.target.value });
-                    if (validators.isNumber(e.target.value)) {
-                      setErrors({ liquidity: "" });
-                    } else {
-                      setErrors({ liquidity: "Must be a number" });
-                    }
-                  }}
-                  beforeInput={
-                    <div className="w-[50px] ml-[5px]">
-                      <Select
-                        value={values.amt_cur || "USD"}
-                        onValueChange={(cur) => {
-                          setValues({ ...values, amt_cur: cur });
-                        }}
-                      >
-                        <SelectTrigger className="border-none focus:border-0 focus:ring-0 data-[state=open]:border-none">
-                          <SelectValue placeholder="$" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="USD">$</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  }
-                  err={errors.liquidity}
-                />
-              </div>
-              <div className="flex-1 px-3 flex">
-                <RadioGroup
-                  className="flex flex-1 items-center gap-3"
-                  value={values.amt_lte}
-                  onValueChange={(value) => {
-                    setValues({
-                      ...values,
-                      amt_lte: value,
-                    });
-                  }}
-                >
-                  <ToolTip tip={"Less than or equal to the amount"}>
-                    <span className="flex items-center gap-2">
-                      <RadioGroupItem value="lower" id="lower" />
-                      <Label
-                        htmlFor="lower"
-                        className="font-light tracking-wider"
-                      >
-                        {"<="}
-                      </Label>
-                    </span>
-                  </ToolTip>
-                  <ToolTip tip={"Greater than or equal to the amount"}>
-                    <span className="flex items-center gap-2">
-                      {" "}
-                      <RadioGroupItem value="higher" id="higher" />
-                      <Label
-                        htmlFor="higher"
-                        className="font-light tracking-wider"
-                      >
-                        {">="}
-                      </Label>
-                    </span>
-                  </ToolTip>
-                </RadioGroup>
-              </div>
-            </FilterItem>
-
-            <FilterItem
-              title="Payment Method"
-              tip="Find liquidities that accept a specific payment method"
-              className={cn({ hidden: values.market })}
-            >
-              <PaymentMethodSelector
-                contentClassName="!ml-0"
-                triggerClassName={cn(
-                  "border-solid border-card-border hover:border-card-border pl-4",
-                  {
-                    "!border-chinese-green ring-2 ring-chinese-green":
-                      openPayMethodSelector,
-                  },
-                )}
-                open={openPayMethodSelector}
-                setOpen={setOpenPayMethodSelector}
-                isLoading={isLoading()}
-                selected={selectedPayMethod}
-                payMethods={payMethods.data}
-                setSelected={(method) => {
-                  setSelectedPayMethod(method);
-                  setValues({ ...values, payment_method: method.badge });
-                }}
-              />
-            </FilterItem>
-
-            <FilterItem
-              title="KYC'D LP"
-              tip="Find liquidities where liquidity providers have completed KYC"
-              className={cn({ hidden: ownerMode })}
-            >
-              <RadioGroup
-                value={values.kyc_lp || "false"}
-                className="flex flex-1 gap-3"
-                onValueChange={(value) => {
-                  setValues({
-                    ...values,
-                    kyc_lp: (value === "true").toString(),
-                  });
-                }}
+    <div className="flex flex-col h-full">
+      <div className="flex-1">
+        <ScrollOverflowIndicator side="bottom" className="h-full">
+          <ScrollArea
+            type="scroll"
+            viewportClassName="absolute xl:relative"
+            className="h-full relative"
+          >
+            <Accordion type="multiple">
+              <FilterItem
+                title="Base"
+                tip="Find liquidities matching the base token address or symbol"
+                className={cn({
+                  hidden: location.pathname.includes("/market/"),
+                })}
               >
-                <span className="flex items-center gap-2">
-                  <RadioGroupItem value="false" id="no" />
-                  <Label htmlFor="all" className="font-light tracking-wider">
-                    No
-                  </Label>
-                </span>
-                <span className="flex items-center gap-2">
-                  {" "}
-                  <RadioGroupItem value="true" id="yes" />
-                  <Label htmlFor="yes" className="font-light tracking-wider">
-                    Yes
-                  </Label>
-                </span>
-              </RadioGroup>
-            </FilterItem>
-
-            <FilterItem
-              title="KYC'D Takers"
-              tip="Find liquidities where takers have completed KYC"
-              className={cn({ hidden: ownerMode })}
-            >
-              <RadioGroup
-                value={values.kyc_taker || "false"}
-                className="flex flex-1 gap-3"
-                onValueChange={(value) => {
-                  setValues({
-                    ...values,
-                    kyc_taker: (value === "true").toString(),
-                  });
-                }}
-              >
-                <span className="flex items-center gap-2">
-                  <RadioGroupItem value="false" id="no" />
-                  <Label htmlFor="all" className="font-light tracking-wider">
-                    No
-                  </Label>
-                </span>
-                <span className="flex items-center gap-2">
-                  {" "}
-                  <RadioGroupItem value="true" id="yes" />
-                  <Label htmlFor="yes" className="font-light tracking-wider">
-                    Yes
-                  </Label>
-                </span>
-              </RadioGroup>
-            </FilterItem>
-
-            <FilterItem
-              title="SWAP Badges"
-              className="border-none"
-              tip="Find liquidities that require takers to have one or more badges"
-            >
-              <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
                 <Input2
                   type="text"
-                  placeholder="e.g kyc, bitcoiner"
+                  placeholder="e.g. 0x0..."
                   className="pl-2"
-                  value={values.swap_badges || ""}
+                  value={values.base || ""}
                   onChange={(e) => {
-                    setValues({ ...values, swap_badges: e.target.value });
+                    setValues({ ...values, base: e.target.value });
                   }}
                 />
-              </RadioGroup>
-            </FilterItem>
-          </Accordion>
-        </ScrollArea>
-      </ScrollOverflowIndicator>
-      <div className="px-5 py-5">
+              </FilterItem>
+              <FilterItem
+                title="Quote"
+                tip="Find liquidities matching the quote token address or symbol"
+                className={cn({
+                  hidden: location.pathname.includes("/market/"),
+                })}
+              >
+                <Input2
+                  type="text"
+                  placeholder="e.g. 0x0..."
+                  className="pl-2"
+                  value={values.quote || ""}
+                  onChange={(e) => {
+                    setValues({ ...values, quote: e.target.value });
+                  }}
+                />
+              </FilterItem>
+              <FilterItem
+                title="By Market ID"
+                tip="Find a market by its address or ID"
+                className={cn({
+                  hidden: location.pathname.includes("/market/"),
+                })}
+              >
+                <Input2
+                  type="text"
+                  placeholder="e.g. 0x0..."
+                  className="pl-2"
+                  value={values.market || ""}
+                  onChange={(e) => {
+                    setValues({ ...values, market: e.target.value });
+                  }}
+                />
+              </FilterItem>
+
+              <FilterItem
+                title="By Creator"
+                tip="Find a market by its creator's address"
+                className={cn({ hidden: ownerMode })}
+              >
+                <Input2
+                  type="text"
+                  placeholder="e.g. 0x0..."
+                  className="pl-2"
+                  value={values.provider || ""}
+                  onChange={(e) => {
+                    setValues({ ...values, provider: e.target.value });
+                  }}
+                />
+              </FilterItem>
+              <FilterItem
+                title="Quote Price"
+                tip="Filter by price (QUOTE)"
+                className={cn({ hidden: !values.market })}
+              >
+                <div>
+                  <Input2
+                    placeholder="0.00"
+                    className="w-[100px] px-2 pl-0"
+                    value={values.price || ""}
+                    onChange={(e) => {
+                      setValues({ ...values, price: e.target.value });
+                      if (validators.isNumber(e.target.value)) {
+                        setErrors({ price: "" });
+                      } else {
+                        setErrors({ price: "Must be a number" });
+                      }
+                    }}
+                    beforeInput={
+                      <div className="w-[50px] ml-[5px]">
+                        <Select
+                          value={values.price_cur || "USD"}
+                          onValueChange={(cur) => {
+                            setValues({ ...values, price_cur: cur });
+                          }}
+                        >
+                          <SelectTrigger className="border-none focus:border-0 focus:ring-0 data-[state=open]:border-none">
+                            <SelectValue placeholder="$" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="USD">$</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    }
+                    err={errors.price}
+                  />
+                </div>
+                <div className="flex-1 px-3 flex">
+                  <RadioGroup
+                    className="flex flex-1 items-center gap-3"
+                    value={values.price_lte}
+                    onValueChange={(value) => {
+                      setValues({
+                        ...values,
+                        price_lte: value,
+                      });
+                    }}
+                  >
+                    <ToolTip tip={"Less than or equal to the amount"}>
+                      <span className="flex items-center gap-2">
+                        <RadioGroupItem value="lower" id="lower" />
+                        <Label
+                          htmlFor="lower"
+                          className="font-light tracking-wider"
+                        >
+                          {"<="}
+                        </Label>
+                      </span>
+                    </ToolTip>
+                    <ToolTip tip={"Greater than or equal to the amount"}>
+                      <span className="flex items-center gap-2">
+                        {" "}
+                        <RadioGroupItem value="higher" id="higher" />
+                        <Label
+                          htmlFor="higher"
+                          className="font-light tracking-wider"
+                        >
+                          {">="}
+                        </Label>
+                      </span>
+                    </ToolTip>
+                  </RadioGroup>
+                </div>
+              </FilterItem>
+
+              <FilterItem
+                title="Available Liquidity"
+                tip="Find liquidities with certain amount of available liquidity"
+                className={cn({ hidden: values.market })}
+              >
+                <div>
+                  <Input2
+                    className="w-[100px] px-2 pl-0"
+                    placeholder="0.00"
+                    value={values.amt || ""}
+                    onChange={(e) => {
+                      setValues({ ...values, amt: e.target.value });
+                      if (validators.isNumber(e.target.value)) {
+                        setErrors({ liquidity: "" });
+                      } else {
+                        setErrors({ liquidity: "Must be a number" });
+                      }
+                    }}
+                    beforeInput={
+                      <div className="w-[50px] ml-[5px]">
+                        <Select
+                          value={values.amt_cur || "USD"}
+                          onValueChange={(cur) => {
+                            setValues({ ...values, amt_cur: cur });
+                          }}
+                        >
+                          <SelectTrigger className="border-none focus:border-0 focus:ring-0 data-[state=open]:border-none">
+                            <SelectValue placeholder="$" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="USD">$</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    }
+                    err={errors.liquidity}
+                  />
+                </div>
+                <div className="flex-1 px-3 flex">
+                  <RadioGroup
+                    className="flex flex-1 items-center gap-3"
+                    value={values.amt_lte}
+                    onValueChange={(value) => {
+                      setValues({
+                        ...values,
+                        amt_lte: value,
+                      });
+                    }}
+                  >
+                    <ToolTip tip={"Less than or equal to the amount"}>
+                      <span className="flex items-center gap-2">
+                        <RadioGroupItem value="lower" id="lower" />
+                        <Label
+                          htmlFor="lower"
+                          className="font-light tracking-wider"
+                        >
+                          {"<="}
+                        </Label>
+                      </span>
+                    </ToolTip>
+                    <ToolTip tip={"Greater than or equal to the amount"}>
+                      <span className="flex items-center gap-2">
+                        {" "}
+                        <RadioGroupItem value="higher" id="higher" />
+                        <Label
+                          htmlFor="higher"
+                          className="font-light tracking-wider"
+                        >
+                          {">="}
+                        </Label>
+                      </span>
+                    </ToolTip>
+                  </RadioGroup>
+                </div>
+              </FilterItem>
+
+              <FilterItem
+                title="Payment Method"
+                tip="Find liquidities that accept a specific payment method"
+                className={cn({ hidden: values.market })}
+              >
+                <PaymentMethodSelector
+                  contentClassName="!ml-0"
+                  triggerClassName={cn(
+                    "border-solid border-card-border hover:border-card-border pl-4",
+                    {
+                      "!border-chinese-green ring-2 ring-chinese-green":
+                        openPayMethodSelector,
+                    },
+                  )}
+                  open={openPayMethodSelector}
+                  setOpen={setOpenPayMethodSelector}
+                  isLoading={isLoading()}
+                  selected={selectedPayMethod}
+                  payMethods={payMethods.data}
+                  setSelected={(method) => {
+                    setSelectedPayMethod(method);
+                    setValues({ ...values, payment_method: method.badge });
+                  }}
+                />
+              </FilterItem>
+
+              <FilterItem
+                title="KYC'D LP"
+                tip="Find liquidities where liquidity providers have completed KYC"
+                className={cn({ hidden: ownerMode })}
+              >
+                <RadioGroup
+                  value={values.kyc_lp || "false"}
+                  className="flex flex-1 gap-3"
+                  onValueChange={(value) => {
+                    setValues({
+                      ...values,
+                      kyc_lp: (value === "true").toString(),
+                    });
+                  }}
+                >
+                  <span className="flex items-center gap-2">
+                    <RadioGroupItem value="false" id="no" />
+                    <Label htmlFor="all" className="font-light tracking-wider">
+                      No
+                    </Label>
+                  </span>
+                  <span className="flex items-center gap-2">
+                    {" "}
+                    <RadioGroupItem value="true" id="yes" />
+                    <Label htmlFor="yes" className="font-light tracking-wider">
+                      Yes
+                    </Label>
+                  </span>
+                </RadioGroup>
+              </FilterItem>
+
+              <FilterItem
+                title="KYC'D Takers"
+                tip="Find liquidities where takers have completed KYC"
+                className={cn({ hidden: ownerMode })}
+              >
+                <RadioGroup
+                  value={values.kyc_taker || "false"}
+                  className="flex flex-1 gap-3"
+                  onValueChange={(value) => {
+                    setValues({
+                      ...values,
+                      kyc_taker: (value === "true").toString(),
+                    });
+                  }}
+                >
+                  <span className="flex items-center gap-2">
+                    <RadioGroupItem value="false" id="no" />
+                    <Label htmlFor="all" className="font-light tracking-wider">
+                      No
+                    </Label>
+                  </span>
+                  <span className="flex items-center gap-2">
+                    {" "}
+                    <RadioGroupItem value="true" id="yes" />
+                    <Label htmlFor="yes" className="font-light tracking-wider">
+                      Yes
+                    </Label>
+                  </span>
+                </RadioGroup>
+              </FilterItem>
+
+              <FilterItem
+                title="SWAP Badges"
+                className="border-none"
+                tip="Find liquidities that require takers to have one or more badges"
+              >
+                <RadioGroup defaultValue="false" className="flex flex-1 gap-3">
+                  <Input2
+                    type="text"
+                    placeholder="e.g kyc, bitcoiner"
+                    className="pl-2"
+                    value={values.swap_badges || ""}
+                    onChange={(e) => {
+                      setValues({ ...values, swap_badges: e.target.value });
+                    }}
+                  />
+                </RadioGroup>
+              </FilterItem>
+            </Accordion>
+          </ScrollArea>
+        </ScrollOverflowIndicator>
+      </div>
+      <div className="px-5 py-5 pt-0">
         <Button
           size="full"
           variant="outline"

@@ -84,7 +84,7 @@ export function ManageLiqEditMaxSwapAmount({
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
               />
-              {baseUsdRate && maxSwap && (
+              {!!baseUsdRate && maxSwap && (
                 <span className="max-w-[100px] text-[10px] text-gray-400 pr-3 relative top-[6px]">
                   ${formatToMoney(toDec(baseUsdRate).mul(maxSwap).toFixed(2))}
                 </span>

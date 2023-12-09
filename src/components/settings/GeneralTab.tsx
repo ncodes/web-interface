@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
-import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { formatToHighDenom } from "../../libs/helpers.ts";
 import { TabsContent } from "../ui/Tabs.tsx";
 import {
@@ -17,7 +16,6 @@ import { BalanceCard, NativeTokenWrapper } from "./BalanceCard.tsx";
 import { TabContentHeader } from "./TabContentHeader.tsx";
 
 export function GeneralTab(props: { address: string }) {
-  const [sheetHeight] = useSheetInfo("h-[50vh]");
   const { getBalance, getTokenBalance, getChainInfo, address } =
     useConnectorContext();
   const [nativeBalance, setNativeBalance] = useState(BigInt(0));
@@ -65,10 +63,14 @@ export function GeneralTab(props: { address: string }) {
   }
 
   return (
-    <TabsContent value="general" className={`p-0 mt-0 pb-20 ${sheetHeight}`}>
+    <TabsContent value="general" className="flex flex-col p-0 mt-0 h-full">
       <TabContentHeader address={props.address} />
-      <ScrollArea type="scroll" className="h-full">
-        <div className="mb-5 overflow-auto scrollbar-hide px-5 pt-3 flex flex-col ">
+      <div className="flex-1">
+        <ScrollArea
+          type="scroll"
+          viewportClassName="absolute xl:relative p-3"
+          className="h-full relative"
+        >
           <Accordion type="multiple" defaultValue={["balances", "safety"]}>
             <AccordionItem className="" value="balances">
               <AccordionContent className="tracking-wide">
@@ -134,8 +136,8 @@ export function GeneralTab(props: { address: string }) {
 
             {/* <FundPouch /> */}
           </Accordion>
-        </div>
-      </ScrollArea>
+        </ScrollArea>
+      </div>
     </TabsContent>
   );
 }

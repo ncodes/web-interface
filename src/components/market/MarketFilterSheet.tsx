@@ -21,7 +21,7 @@ export function MarketFilterSheet({
   onOpen?: (open: boolean) => void;
   children?: ReactNode;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo();
   const [open, setOpen] = useState(active);
   const loc = useLocation();
 
@@ -47,7 +47,8 @@ export function MarketFilterSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 py-0 px-0"
+          "flex flex-col w-full border-l focus-visible:outline-0  border-gray-800 py-0 px-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
@@ -58,7 +59,7 @@ export function MarketFilterSheet({
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="text-white">
+        <div className="flex-1 text-white">
           <MarketFilterContent />
         </div>
         <div
