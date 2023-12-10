@@ -16,7 +16,7 @@ export function SwapOfferCreatorSheet({
   liquidity: Liquidity;
   offer?: Offer;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[95svh]");
   const openState = useStore((state) => state.openState);
   const openStateContext = useStore((state) => state.openStateContext);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
@@ -26,7 +26,7 @@ export function SwapOfferCreatorSheet({
     () => {
       setReveal(true);
     },
-    !reveal ? 2000 : null
+    !reveal ? 2000 : null,
   );
 
   function canExecuteOffer(offer: Offer | undefined) {
@@ -49,7 +49,8 @@ export function SwapOfferCreatorSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "flex flex-col gap-0 pb-0 w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
@@ -73,13 +74,16 @@ export function SwapOfferCreatorSheet({
         </SheetHeader>
 
         {liquidity && (
-          <SwapOfferCreatorContent
-            liquidity={liquidity as Liquidity}
-            market={liquidity.market as Market}
-            offer={offer}
-            offerMode
-          />
+          <div className="flex flex-col flex-1">
+            <SwapOfferCreatorContent
+              liquidity={liquidity as Liquidity}
+              market={liquidity.market as Market}
+              offer={offer}
+              offerMode
+            />
+          </div>
         )}
+
         <div
           className="absolute cursor-pointer text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           onClick={() => {

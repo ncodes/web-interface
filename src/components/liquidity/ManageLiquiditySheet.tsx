@@ -1,13 +1,13 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet.tsx";
 import React, { useEffect } from "react";
-import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
-import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
-import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
-import { ManageGeneralLiquidityTab } from "./ManageGeneralLiquidityTab.tsx";
-import ManageLiquidityRulesTab from "./ManageLiquidityRulesTab.tsx";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
+import { Tabs, TabsList, TabsTrigger } from "../ui/Tabs.tsx";
+import { ScrollAreaHorizontal } from "../ui/scroll-area.tsx";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet.tsx";
+import { ManageGeneralLiquidityTab } from "./ManageGeneralLiquidityTab.tsx";
 import ManageLiquidityPaymentTab from "./ManageLiquidityPaymentTab.tsx";
+import ManageLiquidityRulesTab from "./ManageLiquidityRulesTab.tsx";
 
 export function ManageLiquiditySheet(props: {
   liquidity?: Liquidity;
@@ -15,7 +15,7 @@ export function ManageLiquiditySheet(props: {
   open: boolean;
   onOpenChange: (open) => void;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[90svh]");
   const [open, setOpen] = React.useState(props.open);
 
   useEffect(() => {
@@ -27,7 +27,8 @@ export function ManageLiquiditySheet(props: {
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0"
+          "flex flex-col gap-0 w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
@@ -45,9 +46,10 @@ export function ManageLiquiditySheet(props: {
             )}
           </div>
         </SheetHeader>
+
         <Tabs
           defaultValue={"general"}
-          className="w-full h-full transition-all duration-500"
+          className="flex flex-col w-full h-full transition-all duration-500"
         >
           <ScrollOverflowIndicator>
             <ScrollAreaHorizontal type="scroll">

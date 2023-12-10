@@ -32,6 +32,7 @@ import {
   trimZeros,
 } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
+import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconCaution from "../icons/IconCaution.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
@@ -44,6 +45,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion.tsx";
+import { ScrollArea } from "../ui/scroll-area.tsx";
 import { EditSwapExpiry } from "./EditSwapExpiry.tsx";
 import { EditSwapSlippage } from "./EditSwapSlippage.tsx";
 import { SwapInput } from "./SwapInput.tsx";
@@ -668,14 +670,10 @@ export function SwapOfferCreatorContent({
   }
 
   return (
-    <div
-      className={cn("text-white flex flex-col justify-between overflow-auto", {
-        "overflow-auto h-full": !inBody,
-      })}
-    >
-      <div className="flex-1 h-[90vh] xl:h-[100vh]">
+    <div className={cn("text-white flex flex-col flex-1")}>
+      <div className="flex flex-col flex-1">
         {!inBody && (
-          <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-900">
+          <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-800/60">
             <span className="flex gap-2 items-center text-sm">
               <span>
                 1 {market.base} <span className="text-gray-400">@</span>
@@ -703,312 +701,334 @@ export function SwapOfferCreatorContent({
           </div>
         )}
 
-        <div className="flex flex-col gap-5 px-4 pt-5 mb-5 ">
-          {/* IN Amount (QUOTE) */}
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between items-center">
-              <span className="flex gap-2 items-center">
-                <span className="pl-4 text-gray-200 tracking-wide">In</span>
-                <span className="text-gray-500 font-light text-xs">
-                  - {market.quote}
-                </span>
-              </span>
-              <span className="font-extralight text-xs text-blue-300 pr-5">
-                ${formatToMoney(quoteAmountUsd) || "0"}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <SwapInput
-                avatar={market.quoteLogo}
-                avatarFallback={market.quote}
-                value={quoteAmount}
-                setValue={setQuoteAmount}
-                onFocused={setQuoteAmountInputFocused}
-                disabled={loading || approveLoading || canExecuteOffer(offer)}
-                afterInput={
-                  isERC20(market.quoteType) &&
-                  quoteBal > 0 && (
-                    <span className="h-full flex justify-center items-center mr-3">
-                      <Button
-                        variant="link"
-                        className={cn("text-xs px-0 -mt-[4px] font-light", {
-                          hidden: canExecuteOffer(offer),
-                        })}
-                        onMouseUp={() => {
-                          setQuoteAmount(toHD(quoteBal, market.quoteDecimals));
-                          setQuoteAmountInputFocused(true);
-                        }}
-                        onClick={() => {
-                          setQuoteAmountInputFocused(false);
-                        }}
-                      >
-                        Max
-                      </Button>
+        <div className="flex flex-col flex-1">
+          <ScrollOverflowIndicator side="bottom" className="flex-1">
+            <ScrollArea
+              type="scroll"
+              viewportClassName="absolute xl:relative"
+              className="h-full relative"
+            >
+              <div className="flex flex-col flex-1  gap-5 px-3 pt-5 mb-5 ">
+                {/* IN Amount (QUOTE) */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex justify-between items-center">
+                    <span className="flex gap-2 items-center">
+                      <span className="pl-4 text-gray-200 tracking-wide">
+                        In
+                      </span>
+                      <span className="text-gray-500 font-light text-xs">
+                        - {market.quote}
+                      </span>
                     </span>
-                  )
-                }
-              />
-              <div className="flex justify-between">
-                {!isSynth(market.quoteType) && (
-                  <div className="flex flex-col text-gray-400 text-xs pl-3 pt-2">
-                    <span>
-                      <span className="text-gray-300">Balance: </span>
-                      {formatToHighDenom(quoteBal, market.quoteDecimals)}
+                    <span className="font-extralight text-xs text-blue-300 pr-5">
+                      ${formatToMoney(quoteAmountUsd) || "0"}
                     </span>
                   </div>
-                )}
-                <div>
-                  {quoteAmountErr && (
-                    <span className="flex items-center gap-1 text-red-500 text-xs font-light pt-1">
-                      <span>
-                        <IconCaution width="15" fillA="#cb0c2c" />
+                  <div className="flex flex-col">
+                    <SwapInput
+                      avatar={market.quoteLogo}
+                      avatarFallback={market.quote}
+                      value={quoteAmount}
+                      setValue={setQuoteAmount}
+                      onFocused={setQuoteAmountInputFocused}
+                      disabled={
+                        loading || approveLoading || canExecuteOffer(offer)
+                      }
+                      afterInput={
+                        isERC20(market.quoteType) &&
+                        quoteBal > 0 && (
+                          <span className="h-full flex justify-center items-center mr-3">
+                            <Button
+                              variant="link"
+                              className={cn(
+                                "text-xs px-0 -mt-[4px] font-light",
+                                {
+                                  hidden: canExecuteOffer(offer),
+                                },
+                              )}
+                              onMouseUp={() => {
+                                setQuoteAmount(
+                                  toHD(quoteBal, market.quoteDecimals),
+                                );
+                                setQuoteAmountInputFocused(true);
+                              }}
+                              onClick={() => {
+                                setQuoteAmountInputFocused(false);
+                              }}
+                            >
+                              Max
+                            </Button>
+                          </span>
+                        )
+                      }
+                    />
+                    <div className="flex justify-between">
+                      {!isSynth(market.quoteType) && (
+                        <div className="flex flex-col text-gray-400 text-xs pl-3 pt-2">
+                          <span>
+                            <span className="text-gray-300">Balance: </span>
+                            {formatToHighDenom(quoteBal, market.quoteDecimals)}
+                          </span>
+                        </div>
+                      )}
+                      <div>
+                        {quoteAmountErr && (
+                          <span className="flex items-center gap-1 text-red-500 text-xs font-light pt-1">
+                            <span>
+                              <IconCaution width="15" fillA="#cb0c2c" />
+                            </span>
+                            <span>{quoteAmountErr}</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Price (QUOTE) */}
+                {offerMode && (
+                  <div className="flex flex-col gap-1">
+                    <div className="flex justify-between items-center">
+                      <span className="flex gap-2 items-center">
+                        <span className="pl-4 text-gray-200 tracking-wide">
+                          Price
+                        </span>
+                        <span className="text-gray-500 font-light text-xs">
+                          - {market.quote}
+                        </span>
                       </span>
-                      <span>{quoteAmountErr}</span>
+                      <span className="font-extralight text-xs text-blue-300 pr-5">
+                        ${formatToMoney(offer?.priceUsd || "0")}
+                      </span>
+                    </div>
+                    <div className="flex flex-col">
+                      <SwapInput
+                        avatar={market.quoteLogo}
+                        avatarFallback={market.quote}
+                        // value={toHD(price, market.quoteDecimals)}
+                        value={price}
+                        onFocused={setAmountInputFocused}
+                        setValue={(v) => {
+                          setPrice(v);
+                        }}
+                        disabled={loading || canExecuteOffer(offer)}
+                      />
+                    </div>
+                  </div>
+                )}
+                {/* OUT Amount (BASE) */}
+                <div className="flex flex-col gap-1">
+                  <div className="flex justify-between items-center">
+                    <span className="flex gap-2 items-center">
+                      <span className="pl-4 text-gray-200 tracking-wide">
+                        Out
+                      </span>
+                      <span className="text-gray-500 font-light text-xs">
+                        - {market.base}
+                      </span>
                     </span>
-                  )}
+                    <span className="font-extralight text-xs text-blue-300 pr-5">
+                      ${formatToMoney(amountUsd) || "0"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <SwapInput
+                      avatar={market.baseLogo}
+                      avatarFallback={market.base}
+                      value={amount}
+                      setValue={setAmount}
+                      onFocused={setAmountInputFocused}
+                      disabled={
+                        loading || approveLoading || canExecuteOffer(offer)
+                      }
+                    />
+                    <div className="flex justify-between">
+                      <div>
+                        <div className="flex gap-2 text-gray-400 text-xs pl-3 pt-2">
+                          {!isZero(liquidity.minSwap) && (
+                            <span>
+                              <span className="text-gray-300">Min: </span>
+                              {formatToHighDenom(
+                                liquidity.minSwap,
+                                market.baseDecimals,
+                              )}
+                            </span>
+                          )}
+                          <span>
+                            <span className="text-gray-300">Max: </span>
+                            {formatToHighDenom(
+                              getMaxBaseAmount(),
+                              market.baseDecimals,
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        {amountErr && (
+                          <span className="flex items-center gap-1 text-red-500 text-xs font-light pt-1">
+                            <span>
+                              <IconCaution width="15" fillA="#cb0c2c" />
+                            </span>
+                            <span>{amountErr}</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Price (QUOTE) */}
-          {offerMode && (
-            <div className="flex flex-col gap-1">
-              <div className="flex justify-between items-center">
-                <span className="flex gap-2 items-center">
-                  <span className="pl-4 text-gray-200 tracking-wide">
-                    Price
-                  </span>
-                  <span className="text-gray-500 font-light text-xs">
-                    - {market.quote}
-                  </span>
-                </span>
-                <span className="font-extralight text-xs text-blue-300 pr-5">
-                  ${formatToMoney(offer?.priceUsd || "0")}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <SwapInput
-                  avatar={market.quoteLogo}
-                  avatarFallback={market.quote}
-                  // value={toHD(price, market.quoteDecimals)}
-                  value={price}
-                  onFocused={setAmountInputFocused}
-                  setValue={(v) => {
-                    setPrice(v);
-                  }}
-                  disabled={loading || canExecuteOffer(offer)}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* OUT Amount (BASE) */}
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between items-center">
-              <span className="flex gap-2 items-center">
-                <span className="pl-4 text-gray-200 tracking-wide">Out</span>
-                <span className="text-gray-500 font-light text-xs">
-                  - {market.base}
-                </span>
-              </span>
-              <span className="font-extralight text-xs text-blue-300 pr-5">
-                ${formatToMoney(amountUsd) || "0"}
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <SwapInput
-                avatar={market.baseLogo}
-                avatarFallback={market.base}
-                value={amount}
-                setValue={setAmount}
-                onFocused={setAmountInputFocused}
-                disabled={loading || approveLoading || canExecuteOffer(offer)}
-              />
-              <div className="flex justify-between">
-                <div>
-                  <div className="flex gap-2 text-gray-400 text-xs pl-3 pt-2">
-                    {!isZero(liquidity.minSwap) && (
+              <div className="m-5 my-0  rounded-2xl pb-3 bg-gray-900/80 tracking-wide">
+                <div className="flex pt-2 pb-2 px-3 justify-between text-xs text-blue-200 border-b border-gray-800">
+                  <span className="flex gap-1 items-center text-gray-400">
+                    <span className="shrink-0">Swap Fees</span>
+                    {offerMode && (
                       <span>
-                        <span className="text-gray-300">Min: </span>
-                        {formatToHighDenom(
-                          liquidity.minSwap,
-                          market.baseDecimals,
-                        )}
+                        <ToolTip
+                          tip={
+                            "The swap fee may change at the time of offer execution."
+                          }
+                        >
+                          <IconInfoCircle width="15" />
+                        </ToolTip>
                       </span>
                     )}
+                  </span>
+                  <span className="flex gap-1 flex-wrap text-right h-[20px] overflow-auto">
                     <span>
-                      <span className="text-gray-300">Max: </span>
-                      {formatToHighDenom(
-                        getMaxBaseAmount(),
-                        market.baseDecimals,
-                      )}
+                      {formatToMoney(feeInfo.total)} {feeInfo.symbol}
+                    </span>
+                    &nbsp;
+                    <span>(${formatToMoney(feeInfo.totalUsd) || "0"})</span>
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1 pt-2 text-gray-300 font-light">
+                  <div className="px-3 text-xs flex justify-between">
+                    <span>
+                      Market fee (
+                      {market.commission ? market.commission / 100 : 0}
+                      %)
+                    </span>
+                    <span>
+                      {toDec(feeInfo.market).lt(1)
+                        ? feeInfo.market
+                        : formatToMoney(feeInfo.market)}{" "}
+                      {feeInfo.symbol}
                     </span>
                   </div>
-                </div>
-                <div>
-                  {amountErr && (
-                    <span className="flex items-center gap-1 text-red-500 text-xs font-light pt-1">
-                      <span>
-                        <IconCaution width="15" fillA="#cb0c2c" />
-                      </span>
-                      <span>{amountErr}</span>
+
+                  <div className="px-3 text-xs flex justify-between">
+                    <span>
+                      Protocol fee (
+                      {feeInfo.protoFeeBps ? feeInfo.protoFeeBps / 100 : 0}%)
                     </span>
+                    <span>
+                      {toDec(feeInfo.protocol).lt(1)
+                        ? feeInfo.protocol
+                        : formatToMoney(feeInfo.protocol)}{" "}
+                      {feeInfo.symbol}
+                    </span>
+                  </div>
+
+                  {!!slippage && (
+                    <>
+                      <Separator.Root
+                        orientation="horizontal"
+                        className="border-t border-gray-800 my-1"
+                      />
+
+                      <div className="px-3 text-xs flex justify-between">
+                        <span className="text-gray-400">Slippage</span>
+                        <span className="text-blue-200">{slippage}%</span>
+                      </div>
+
+                      <div className="px-3 text-xs flex justify-between">
+                        <span>Expected Price</span>
+                        {amount != "" ? (
+                          <span className="flex gap-1">
+                            <span>
+                              {formatToHighDenom(price, market.quoteDecimals)}{" "}
+                            </span>
+                            {price != maxPrice && (
+                              <>
+                                <span> - </span>
+                                <span>
+                                  {formatToHighDenom(
+                                    maxPrice,
+                                    market.quoteDecimals,
+                                  )}{" "}
+                                </span>
+                              </>
+                            )}
+                            <span>{market.base}</span>
+                          </span>
+                        ) : (
+                          "0"
+                        )}
+                      </div>
+
+                      <div className="px-3 text-xs flex justify-between">
+                        <span>Expected Output</span>
+                        {slippageAmount != "" ? (
+                          <span className="flex gap-1">
+                            <span>{formatToMoney(slippageAmount)}</span>
+                            {amount != slippageAmount && (
+                              <>
+                                <span> - </span>
+                                <span>{formatToMoney(amount)}</span>
+                              </>
+                            )}
+                            <span>{market.base}</span>
+                          </span>
+                        ) : (
+                          "0"
+                        )}
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="m-5 my-0  rounded-2xl pb-3 bg-gray-900/80 tracking-wide">
-          <div className="flex pt-2 pb-2 px-3 justify-between text-xs text-blue-200 border-b border-gray-800">
-            <span className="flex gap-1 items-center text-gray-400">
-              <span className="shrink-0">Swap Fees</span>
-              {offerMode && (
-                <span>
-                  <ToolTip
-                    tip={
-                      "The swap fee may change at the time of offer execution."
-                    }
-                  >
-                    <IconInfoCircle width="15" />
-                  </ToolTip>
-                </span>
-              )}
-            </span>
-            <span className="flex gap-1 flex-wrap text-right h-[20px] overflow-auto">
-              <span>
-                {formatToMoney(feeInfo.total)} {feeInfo.symbol}
-              </span>
-              &nbsp;
-              <span>(${formatToMoney(feeInfo.totalUsd) || "0"})</span>
-            </span>
-          </div>
-          <div className="flex flex-col gap-1 pt-2 text-gray-300 font-light">
-            <div className="px-3 text-xs flex justify-between">
-              <span>
-                Market fee ({market.commission ? market.commission / 100 : 0}%)
-              </span>
-              <span>
-                {toDec(feeInfo.market).lt(1)
-                  ? feeInfo.market
-                  : formatToMoney(feeInfo.market)}{" "}
-                {feeInfo.symbol}
-              </span>
-            </div>
-
-            <div className="px-3 text-xs flex justify-between">
-              <span>
-                Protocol fee (
-                {feeInfo.protoFeeBps ? feeInfo.protoFeeBps / 100 : 0}%)
-              </span>
-              <span>
-                {toDec(feeInfo.protocol).lt(1)
-                  ? feeInfo.protocol
-                  : formatToMoney(feeInfo.protocol)}{" "}
-                {feeInfo.symbol}
-              </span>
-            </div>
-
-            {!!slippage && (
-              <>
-                <Separator.Root
-                  orientation="horizontal"
-                  className="border-t border-gray-800 my-1"
-                />
-
-                <div className="px-3 text-xs flex justify-between">
-                  <span className="text-gray-400">Slippage</span>
-                  <span className="text-blue-200">{slippage}%</span>
-                </div>
-
-                <div className="px-3 text-xs flex justify-between">
-                  <span>Expected Price</span>
-                  {amount != "" ? (
-                    <span className="flex gap-1">
-                      <span>
-                        {formatToHighDenom(price, market.quoteDecimals)}{" "}
-                      </span>
-                      {price != maxPrice && (
-                        <>
-                          <span> - </span>
-                          <span>
-                            {formatToHighDenom(maxPrice, market.quoteDecimals)}{" "}
-                          </span>
-                        </>
+              <div className={cn("p-5 pt-0 px-3 relative mt-3")}>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="advanced" className="border-none p-1">
+                    <AccordionTrigger className="transition-all duration-300 rounded-full hover:bg-gray-800 text-xs !text-gray-300 pb-1 tracking-wide p-1 px-3">
+                      <div className="flex items-center gap-2">
+                        <IconSettingsOutline width="15px" /> Advanced Settings
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-3 px-3 tracking-wide">
+                      {!offerMode && (
+                        <EditSwapSlippage
+                          disabled={loading || approveLoading}
+                          defaultValue={slippage}
+                          onValueChanged={(val) => {
+                            setSlippage(val);
+                          }}
+                        />
                       )}
-                      <span>{market.base}</span>
-                    </span>
-                  ) : (
-                    "0"
-                  )}
-                </div>
-
-                <div className="px-3 text-xs flex justify-between">
-                  <span>Expected Output</span>
-                  {slippageAmount != "" ? (
-                    <span className="flex gap-1">
-                      <span>{formatToMoney(slippageAmount)}</span>
-                      {amount != slippageAmount && (
-                        <>
-                          <span> - </span>
-                          <span>{formatToMoney(amount)}</span>
-                        </>
-                      )}
-                      <span>{market.base}</span>
-                    </span>
-                  ) : (
-                    "0"
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div
-          className={cn("p-5 pt-0 px-3 relative mt-3", {
-            "pb-[100px]": !inBody,
-          })}
-        >
-          <Accordion type="single" collapsible>
-            <AccordionItem value="advanced" className="border-none p-1">
-              <AccordionTrigger className="transition-all duration-300 rounded-full hover:bg-gray-800 text-xs !text-gray-300 pb-1 tracking-wide p-1 px-3">
-                <div className="flex items-center gap-2">
-                  <IconSettingsOutline width="15px" /> Advanced Settings
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="pt-3 px-3 tracking-wide">
-                {!offerMode && (
-                  <EditSwapSlippage
-                    disabled={loading || approveLoading}
-                    defaultValue={slippage}
-                    onValueChanged={(val) => {
-                      setSlippage(val);
-                    }}
-                  />
-                )}
-                <EditSwapExpiry
-                  disabled={loading || approveLoading}
-                  defaultValue={expireDuration}
-                  offerMode={!!offer || offerMode}
-                  canExecOffer={canExecuteOffer(offer)}
-                  onValueChanged={(val, err) => {
-                    setExpireDuration(val);
-                    setOtherErr(err);
-                  }}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+                      <EditSwapExpiry
+                        disabled={loading || approveLoading}
+                        defaultValue={expireDuration}
+                        offerMode={!!offer || offerMode}
+                        canExecOffer={canExecuteOffer(offer)}
+                        onValueChanged={(val, err) => {
+                          setExpireDuration(val);
+                          setOtherErr(err);
+                        }}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+            </ScrollArea>
+          </ScrollOverflowIndicator>
         </div>
       </div>
 
       <div
         className={cn(
           "flex flex-col gap-2 p-3 w-full border-t border-gray-700 bg-card-background",
-          { "absolute bottom-0 w-full": !inBody, "border-gray-900": inBody },
+          { "w-full": !inBody, "border-gray-900": inBody },
         )}
       >
         {(!offerMode || canExecuteOffer(offer)) &&

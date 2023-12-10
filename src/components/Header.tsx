@@ -1,4 +1,5 @@
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import useStore from "../hooks/store/useStore.ts";
 import { cn } from "../libs/utils.ts";
 import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import { LanguageSelector } from "./LanguageSelector.tsx";
@@ -11,6 +12,7 @@ import { InputActivatedSearchBox } from "./search/InputActivatedSearchBox.tsx";
 
 export function Header(props: { onClick: () => void; height?: string }) {
   const { connected } = useConnectorContext();
+  const user = useStore((state) => state.user);
 
   return (
     <header className={cn("flex items-center", props.height)}>
@@ -20,13 +22,10 @@ export function Header(props: { onClick: () => void; height?: string }) {
         <NavSearchButton />
         <LanguageSelector />
         <NavHelpButton />
-        {connected && <NavNotificationButton />}
+        {connected && !!user && <NavNotificationButton />}
         {connected && <NetworkSelector />}
         <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
-        <ConnectWalletButton
-          className="lg:hidden md:min-w-[120px]"
-          label="Connect"
-        />
+        <ConnectWalletButton className="lg:hidden" label="Connect" />
       </div>
     </header>
   );

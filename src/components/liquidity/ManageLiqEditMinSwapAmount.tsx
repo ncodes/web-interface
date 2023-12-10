@@ -21,14 +21,14 @@ export function ManageLiqEditMinSwapAmount({
   onValueChanged?: (
     value: string,
     err: string,
-    setErr: Dispatch<SetStateAction<string>>
+    setErr: Dispatch<SetStateAction<string>>,
   ) => void;
 }) {
   const [focused, setFocused] = useState(false);
   const [minSwap, setMinSwap] = useState(
     liquidity && liquidity.minSwap != "0"
       ? toHD(liquidity.minSwap, market.baseDecimals)
-      : ""
+      : "",
   );
   const [err, setErr] = useState("");
 
@@ -63,7 +63,7 @@ export function ManageLiqEditMinSwapAmount({
               {
                 "border-card-border": !focused,
                 "border-chinese-green ring-2 ring-chinese-green": focused,
-              }
+              },
             )}
           >
             <div className="pt-1 flex justify-between">
@@ -77,7 +77,7 @@ export function ManageLiqEditMinSwapAmount({
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
               />
-              {baseUsdRate && minSwap && (
+              {!!baseUsdRate && minSwap && (
                 <span className="max-w-[100px] text-[10px] text-gray-400 pr-3 relative top-[6px]">
                   ${formatToMoney(toDec(baseUsdRate).mul(minSwap).toFixed(2))}
                 </span>

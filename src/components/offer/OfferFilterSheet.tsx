@@ -3,7 +3,6 @@ import { ReactNode, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { cn } from "../../libs/utils.ts";
-import { ScrollArea } from "../ui/scroll-area.tsx";
 import {
   Sheet,
   SheetContent,
@@ -22,7 +21,7 @@ export function OfferFilterSheet({
   onOpen?: (open: boolean) => void;
   children?: ReactNode;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo(`h-[70svh]`);
   const [open, setOpen] = useState(active);
   const loc = useLocation();
 
@@ -48,7 +47,8 @@ export function OfferFilterSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0"
+          "flex flex-col gap-0 pb-0 w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
@@ -59,10 +59,8 @@ export function OfferFilterSheet({
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className=" text-white h-full">
-          <ScrollArea type="scroll" className="h-full pb-10">
-            <OfferFilterContent />
-          </ScrollArea>
+        <div className="flex-1 text-white h-full">
+          <OfferFilterContent />
         </div>
         <div
           className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"

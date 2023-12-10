@@ -124,7 +124,7 @@ export function ReviewViewerSheet() {
       <SheetContent
         className={cn(
           styles,
-          "w-full  border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 h-[80vh] md:h-full",
+          "flex flex-col w-full  border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 h-[80svh] md:h-[100svh]",
         )}
         side={sheetSide}
       >

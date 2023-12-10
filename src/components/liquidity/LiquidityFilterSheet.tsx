@@ -22,7 +22,7 @@ export function LiquidityFilterSheet({
   onOpen?: (open: boolean) => void;
   children?: ReactNode;
 }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[70svh]");
   const [open, setOpen] = useState(active);
   const loc = useLocation();
 
@@ -49,18 +49,17 @@ export function LiquidityFilterSheet({
       <SheetContent
         className={cn(
           styles,
-          "w-full border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0"
+          "w-full flex gap-0 flex-col border-l focus-visible:outline-0  border-gray-800 pt-0 px-0 pb-0",
+          sheetHeight,
         )}
         side={sheetSide}
       >
-        <SheetHeader className="flex pr-[50px] border-b border-gray-800">
-          <div className="text-white">
-            <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
-              Filter Liquidities
-            </SheetTitle>
-          </div>
+        <SheetHeader className="flex pr-[50px] border-b border-gray-800 m-0 p-0">
+          <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
+            Filter Liquidities
+          </SheetTitle>
         </SheetHeader>
-        <div className="text-white">
+        <div className="flex-1 text-white">
           <LiquidityFilterContent />
         </div>
         <div

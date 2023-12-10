@@ -5,7 +5,7 @@ import { useMediaQuery } from "usehooks-ts";
  * @returns [height, position, styles]
  */
 export function useSheetInfo(
-  smHeight = "h-[60vh]",
+  smHeight = "h-[60svh]",
 ): [string, "right" | "bottom", string] {
   const isSm = useMediaQuery("(max-width: 640px)");
   return isSm

@@ -77,8 +77,8 @@ export function SearchContent({
 
       <ScrollOverflowIndicator side="bottom" className="h-full">
         <ScrollArea
-          className="h-full md:h-[400px] relative "
-          viewportClassName="relative [&>div]:block [&>div]:h-full"
+          viewportClassName="absolute xl:relative"
+          className="h-full relative"
           type="scroll"
         >
           {!queryResult && (
@@ -138,7 +138,7 @@ export function SearchContent({
                 )}
 
                 {markets.isSuccess && markets.data.length == 0 && (
-                  <div className="flex items-center gap-2 text-gray-500 justify-center font-light  h-[100px]">
+                  <div className="flex items-center gap-2 text-gray-500 justify-center font-lightxw h-[100px]">
                     Not enough data
                   </div>
                 )}
@@ -173,7 +173,7 @@ export function SearchContent({
           )}
 
           {!reveal && (
-            <div className="fixed w-full z-10 top-0 flex bg-background justify-center items-center h-full">
+            <div className="xl:fixed w-full z-10 top-0 flex bg-background justify-center items-center h-full">
               <IconSpinner
                 width="30px"
                 fill="fill-gray-600"

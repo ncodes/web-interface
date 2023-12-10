@@ -17,7 +17,7 @@ import { SearchContent } from "./SearchContent.tsx";
 import { SearchInput } from "./SearchInput.tsx";
 
 export function SearchSheetBox(props: { children?: React.ReactNode }) {
-  const [, sheetSide, styles] = useSheetInfo();
+  const [sheetHeight, sheetSide, styles] = useSheetInfo("h-[80svh]");
   const [focus, setFocus] = useState(false);
   const [query, setQuery] = useState("");
   const openState = useStore((state) => state.openState);
@@ -55,7 +55,11 @@ export function SearchSheetBox(props: { children?: React.ReactNode }) {
     >
       <SheetTrigger>{props.children}</SheetTrigger>
       <SheetContent
-        className={cn(styles, "md:hidden w-full border-r-0 pt-0 py-0 px-0")}
+        className={cn(
+          styles,
+          "flex flex-col lg:hidden w-full border-l-0 border-r-0 pt-0 py-0 px-0 gap-0",
+          sheetHeight,
+        )}
         side={sheetSide}
       >
         <SheetHeader className="flex pl-2 pt-2 pr-[50px] border-b border-gray-800 pb-2">
@@ -74,17 +78,17 @@ export function SearchSheetBox(props: { children?: React.ReactNode }) {
             </SheetTitle>
           </div>
         </SheetHeader>
-        <div className="h-[70vh] md:h-[100vh] overflow-auto">
-          <div className="px-1 text-white pt-2 h-full relative">
-            <SearchContent
-              onQueryChange={(value) => setQuery(value)}
-              queryResult={queryResult.data?.markets}
-              queryLoading={
-                (queryResult.isLoading && queryResult.fetchStatus != "idle") ||
-                queryResult.isRefetching
-              }
-            />
-          </div>
+
+        <div className="overflow-auto h-full flex-1">
+          <SearchContent
+            onQueryChange={(value) => setQuery(value)}
+            queryResult={queryResult.data?.markets}
+            queryLoading={
+              (queryResult.isLoading && queryResult.fetchStatus != "idle") ||
+              queryResult.isRefetching
+            }
+          />
+
           <div
             className="absolute text-gray-200 right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
             onClick={() => {

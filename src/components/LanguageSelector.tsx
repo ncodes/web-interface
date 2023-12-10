@@ -42,7 +42,7 @@ function DropdownMenuItemCustom({
         {
           "scale-x-105 bg-chinese-green text-accent-foreground my-1":
             i18n.language === locale,
-        }
+        },
       )}
       asChild
     >
@@ -55,19 +55,21 @@ export function LanguageSelector() {
   const [open, setOpen] = useState(false);
 
   return (
-    <LanguageSelectorMenu onOpenChange={setOpen}>
-      <Button
-        variant="ghost"
-        className={cn(
-          "hidden justify-center items-center p-0 h-[40px] w-[40px] rounded-full border border-gray-600 hover:bg-gray-800 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110",
-          {
-            "scale-110 border-chinese-green": open,
-          }
-        )}
-      >
-        <IconGlobalLine />
-      </Button>
-    </LanguageSelectorMenu>
+    <div className="hidden">
+      <LanguageSelectorMenu onOpenChange={setOpen}>
+        <Button
+          variant="ghost"
+          className={cn(
+            "justify-center items-center p-0 h-[40px] w-[40px] rounded-full border border-gray-600 hover:bg-gray-800 cursor-pointer text-gray-200 hover:border-chinese-green hover:text-chinese-green transition-all duration-500 hover:scale-110",
+            {
+              "scale-110 border-chinese-green": open,
+            },
+          )}
+        >
+          <IconGlobalLine />
+        </Button>
+      </LanguageSelectorMenu>
+    </div>
   );
 }
 
@@ -126,7 +128,7 @@ export function LanguageSelectorMobile() {
           svg={<IconGlobalLine />}
           className={cn(
             "hidden outline-0 ring-0 relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]",
-            { "text-white ml-[2px]": open }
+            { "text-white ml-[2px]": open },
           )}
         />
       </span>

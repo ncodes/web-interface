@@ -640,6 +640,7 @@ export function Messenger({
           />
         </div>
       )}
+      
       <div
         className={cn(
           "absolute overflow-hidden flex flex-col text-gray-200 w-full h-full bg-card-background",
