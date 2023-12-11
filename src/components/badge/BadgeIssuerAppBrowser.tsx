@@ -5,7 +5,6 @@ import { useToast } from "@/hooks/useToast.tsx";
 import IconSpinner from "@/icons/IconSpinner.tsx";
 import { delay, isDev } from "@/libs/helpers.ts";
 import { BadgeManifest } from "@jointlabs/chains-info";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useEffect, useRef, useState } from "react";
 import { AuthInfo } from "./BadgeSheetContent.tsx";
 import { GrantBadgeSignatureMessage } from "./types.ts";
@@ -99,43 +98,40 @@ export function BadgeIssuerAppBrowser({
       const msg = humanizeErrors(error);
       notifyError(msg);
       if (isDev()) console.error(error);
-    } finally {
       setLoading(false);
       setLoadingLabel("");
     }
   }
 
   return (
-    <ScrollArea type="scroll" className="h-full overflow-auto">
-      <div className="w-full h-full justify-center">
-        {loading && (
-          <div className="w-full  gap-2 h-full flex justify-center relative top-[35%]">
-            <span>
-              <IconSpinner
-                width="20"
-                className="animate-spin"
-                fill="fill-gray-500"
-              />
+    <div className="flex flex-col h-[100svh]">
+      {loading && (
+        <div className="w-full gap-2 flex-1 flex justify-center items-center">
+          <span>
+            <IconSpinner
+              width="20"
+              className="animate-spin"
+              fill="fill-gray-500"
+            />
+          </span>
+          {loadingLabel && (
+            <span className="text-gray-500 font-light text-sm tracking-wider">
+              {loadingLabel}
             </span>
-            {loadingLabel && (
-              <span className="text-gray-500 font-light text-sm tracking-wider">
-                {loadingLabel}
-              </span>
-            )}
-          </div>
-        )}
+          )}
+        </div>
+      )}
 
-        <iframe
-          ref={iframeRef}
-          className="w-full h-screen"
-          allow="camera; microphone"
-          src={`${manifest?.claimPageUrl}/?badge=${badge}&authNetwork=${
-            getChainInfo().queryName
-          }&authSig=${authInfo.signature}&authMsg=${
-            authInfo.message
-          }&authTimestamp=${authInfo.timestamp}&authAddress=${address}`}
-        />
-      </div>
-    </ScrollArea>
+      <iframe
+        ref={iframeRef}
+        className="w-full flex-1 border-top md:border-t-0 border-transparent rounded-2xl md:rounded-none"
+        allow="camera; microphone"
+        src={`${manifest?.claimPageUrl}/?badge=${badge}&authNetwork=${
+          getChainInfo().queryName
+        }&authSig=${authInfo.signature}&authMsg=${
+          authInfo.message
+        }&authTimestamp=${authInfo.timestamp}&authAddress=${address}`}
+      />
+    </div>
   );
 }
