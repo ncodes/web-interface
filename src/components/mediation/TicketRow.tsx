@@ -297,7 +297,7 @@ export function TicketRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
                 <span className="flex gap-1">
-                  <span>This ticket has matured. Join a pool</span>
+                  <span>This ticket has matured. Join its pool</span>
                   <CountDown
                     prefix=" before "
                     isoDate={ticket.joinBy}

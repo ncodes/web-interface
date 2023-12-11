@@ -317,8 +317,10 @@ export function getTicketStatus(ticket: Ticket) {
     drafted,
     cancelling,
     cancelled,
+    slashed,
   } = ticket;
   if (!joined && drained) return TicketState.Drained;
+  if (slashed) return TicketState.Cancelled;
   if (!joined && moment(matureAt).isAfter(moment()))
     return TicketState.Maturing;
   if (!joined && matured && !drafted && !cancelling && !cancelled && !expired)
