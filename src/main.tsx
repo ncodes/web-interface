@@ -14,6 +14,7 @@ import Markets from "./pages/Markets.tsx";
 import Mediation from "./pages/Mediation.tsx";
 import Offer from "./pages/Offer.tsx";
 import Offers from "./pages/Offers.tsx";
+import Points from "./pages/Points.tsx";
 import Swap from "./pages/Swap.tsx";
 import Swaps from "./pages/Swaps.tsx";
 import Timeline from "./pages/Timeline.tsx";
@@ -112,6 +113,11 @@ const router = createBrowserRouter([
     element: <App page={<Offer />} />,
     errorElement: <RootErrorBoundary />,
   },
+  {
+    path: makePath("/points"),
+    element: <App page={<Points defaultTab="leaderboard" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
 ]);
 
 const queryClient = new QueryClient();
@@ -124,5 +130,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     >
       <RouterProvider router={router} />
     </ConnectorProvider>
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );

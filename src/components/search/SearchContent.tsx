@@ -105,6 +105,7 @@ export function SearchContent({
                     )}
 
                   {marketHistory.isSuccess &&
+                    !marketHistory.isLoading &&
                     marketHistory.data.markets.length > 0 && (
                       <div className="divide-y divide-gray-900 [&>div:last-child]:rounded-b-2xl">
                         {marketHistory.data.markets.map((market) => (

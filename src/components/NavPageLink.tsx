@@ -11,6 +11,10 @@ type NavPageLinkProps = {
   active?: boolean;
   to?: string;
   countBadge?: number;
+  activeClassName?: string;
+  inactiveClassName?: string;
+  activeIconClassName?: string;
+  inactiveIconClassName?: string;
 };
 
 export function NavPageLink(props: NavPageLinkProps) {
@@ -20,17 +24,17 @@ export function NavPageLink(props: NavPageLinkProps) {
         className={cn(
           "flex w-[200px] space-x-3 items-center hover:bg-gray-900 transition-all delay-100 duration-300 hover:cursor-pointer hover:rounded-full p-2 xl:p-3 px-4 pr-8 hover:scale-x-105",
           {
-            "font-light text-gray-300 fill-gray-300  hover:text-gray-200":
+            [`font-light text-gray-300 fill-gray-300  hover:text-gray-200 ${props.inactiveClassName}`]:
               !props.active,
-            "text-white fill-chinese-green scale-x-105 bg-gray-900 rounded-full":
+            [`text-white fill-chinese-green scale-x-105 bg-gray-900 rounded-full ${props.activeClassName}`]:
               props.active,
-          }
+          },
         )}
       >
         <span
           className={cn(
             "w-[24px] flex justify-center items-center",
-            props.iconClassName
+            props.iconClassName,
           )}
         >
           {!props.icon && (
@@ -43,8 +47,9 @@ export function NavPageLink(props: NavPageLinkProps) {
           {props.icon &&
             React.cloneElement(props.icon, {
               className: cn({
-                "text-gray-300": !props.active,
-                "text-chinese-green": props.active,
+                [`text-gray-300 ${props.inactiveIconClassName}`]: !props.active,
+                [`text-chinese-green ${props.activeIconClassName}`]:
+                  props.active,
               }),
             })}
         </span>

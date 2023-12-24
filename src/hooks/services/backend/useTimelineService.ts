@@ -28,7 +28,6 @@ export function useTimelineService() {
     ctx: QueryFunctionContext<[string, GetParams]>,
   ): Promise<{ events: Event[]; meta: { queryCount: number } }> {
     try {
-      console.log(`${getChainInfo().apiUrl}/v1/timelines`);
       const lastSerial = ctx.pageParam as number;
       const [, params] = ctx.queryKey;
       const { network, liquidities, markets, wallets, limit } = params;

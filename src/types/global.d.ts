@@ -11,6 +11,9 @@ declare global {
     emailUnverified: string;
     role: string;
 
+    referrer: string;
+    refCode: string;
+
     totalSwaps: number;
     completionRate: number;
     badges: string[];
@@ -526,5 +529,14 @@ declare global {
 
   export interface SwapPageState {
     revealPhaseEnded?: boolean;
+  }
+
+  export interface Point {
+    address: string;
+    totalPoints: string;
+    owner: Partial<User>;
+    rank: number;
+    createdAt: string;
+    point: string;
   }
 }

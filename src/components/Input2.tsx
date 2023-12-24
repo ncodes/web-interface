@@ -1,7 +1,7 @@
+import { ChangeEvent, FocusEvent, ReactNode, useEffect, useState } from "react";
 import { cn } from "../libs/utils.ts";
-import { Input } from "./ui/Input.tsx";
 import IconCaution from "./icons/IconCaution.tsx";
-import { ChangeEvent, useState, FocusEvent, ReactNode, useEffect } from "react";
+import { Input } from "./ui/Input.tsx";
 
 export default function Input2(props: {
   value?: string;
@@ -16,6 +16,7 @@ export default function Input2(props: {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement, Element>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   afterInput?: ReactNode;
   beforeInput?: ReactNode;
   after?: ReactNode;
@@ -35,7 +36,7 @@ export default function Input2(props: {
         {
           "border-card-border": !focused,
           "border-chinese-green ring-2 ring-chinese-green": focused,
-        }
+        },
       )}
     >
       <div className="flex pt-1 w-full">
@@ -50,7 +51,7 @@ export default function Input2(props: {
             spellCheck={props.spellCheck}
             className={cn(
               "bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0",
-              props.className
+              props.className,
             )}
             onChange={props.onChange}
             onFocus={(e) => {
@@ -61,6 +62,7 @@ export default function Input2(props: {
               setFocused(false);
               props.onBlur && props.onBlur(e);
             }}
+            onKeyDown={props.onKeyDown}
           />
         </div>
         {props.afterInput && props.afterInput}
