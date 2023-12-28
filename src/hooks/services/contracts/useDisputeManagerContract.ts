@@ -44,7 +44,7 @@ export default function useDisputeManagerContract() {
     orderId: number,
     ticketIdx: number,
     vote: string,
-    hash: string
+    hash: string,
   ) {
     return simulateAndWriteContract("disputeManager", "revealVote", [
       orderId,
@@ -61,7 +61,7 @@ export default function useDisputeManagerContract() {
    */
   async function getDispute(
     orderId: bigint,
-    disputeId: bigint
+    disputeId: bigint,
   ): Promise<DisputeStruct | undefined> {
     try {
       return await readContract("disputeManager", "getDispute", [
@@ -101,6 +101,9 @@ export default function useDisputeManagerContract() {
     if (error instanceof Error) {
       if (error.message.includes("DM: NOT_ALLOWED"))
         return "Cannot start a dispute at this time";
+
+      if (error.message.includes("DM: NOT_READY"))
+        return "Cannot perform this action at this time. Try again later";
     }
 
     return "Transaction failed";

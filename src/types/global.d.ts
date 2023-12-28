@@ -538,5 +538,7 @@ declare global {
     rank: number;
     createdAt: string;
     point: string;
+    referee: string;
+    referrer: string;
   }
 }

@@ -5,6 +5,7 @@ import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { LeaderboardTabContent } from "../components/leaderboard/LeaderboardTabContent.tsx";
 import { PointSearchBar } from "../components/leaderboard/PointSearchBar.tsx";
 import PointStream from "../components/leaderboard/PointStream.tsx";
+import { ReferralsTabContent } from "../components/leaderboard/ReferralsTabContent.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import Layout from "./Layout.tsx";
@@ -29,21 +30,21 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
                 value="leaderboard"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
-                  navigate("/leaderboard");
+                  navigate("/points");
                 }}
               >
                 Leaderboard
               </TabsTrigger>
-              {/* <TabsTrigger
-                value="my-markets"
+              <TabsTrigger
+                value="referrals"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/my/markets");
+                  navigate("/referrals");
                 }}
               >
-                My Markets
+                Referrals
               </TabsTrigger>
-              <TabsTrigger
+              {/* <TabsTrigger
                 value="watched-markets"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
@@ -62,6 +63,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
         </div>
       </TabsList>
       {currentTab == "leaderboard" && <LeaderboardTabContent />}
+      {currentTab == "referrals" && <ReferralsTabContent />}
     </Tabs>
   );
 }

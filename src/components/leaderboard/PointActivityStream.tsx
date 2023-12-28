@@ -6,8 +6,13 @@
 import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { ErrorIcon } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
 import { usePointService } from "../../hooks/services/backend/usePointService";
+import { useReferralService } from "../../hooks/services/backend/useReferralService";
 import useMounted from "../../hooks/useMounted";
+import { RequestError } from "../../libs/RequestError";
 import { shortenAddress } from "../../libs/helpers";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator";
 import EmojiAvatar from "../avatar/EmojiAvatar";
@@ -17,13 +22,24 @@ import { ScrollArea } from "../ui/scroll-area";
 
 export function PointActivityStream() {
   const { getLatestPoints } = usePointService();
+  const { getLatestPoints: getLatestReferralPoints } = useReferralService();
   const mounted = useMounted(1000);
+  const { address } = useConnectorContext();
   const [fromDate, setFromDate] = useState<string>("");
   const [points, setPoints] = useState<Point[]>([]);
+  const loc = useLocation();
+  const isPointsPage = loc.pathname.includes("/points");
 
   const fetchLatest = useQuery({
-    queryKey: ["getLatest", { limit: !fromDate ? 100 : 1, from: fromDate }],
-    queryFn: getLatestPoints,
+    queryKey: [
+      "getLatest",
+      {
+        limit: !fromDate ? 100 : 1,
+        from: fromDate,
+        referrer: isPointsPage ? undefined : address,
+      },
+    ],
+    queryFn: isPointsPage ? getLatestPoints : getLatestReferralPoints,
     enabled: mounted,
     refetchOnWindowFocus: false,
     refetchInterval: 10000,
@@ -41,6 +57,19 @@ export function PointActivityStream() {
 
   return (
     <div className="flex flex-col h-full relative">
+      {!fetchLatest.isLoading && points.length == 0 && (
+        <div className="flex h-full items-center justify-center font-light text-gray-400">
+          No result found
+        </div>
+      )}
+
+      {fetchLatest.isError && (
+        <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
+          <ErrorIcon className="w-[20px]" />{" "}
+          {(fetchLatest.error as RequestError)?.message}
+        </div>
+      )}
+
       <ScrollOverflowIndicator
         side="bottom"
         className="relative h-full flex-1 [&>span.grad-indicator]:rounded-none"
@@ -59,11 +88,13 @@ export function PointActivityStream() {
                 <div className="flex items-center space-x-4">
                   <EmojiAvatar
                     size={AvatarSize.Small}
-                    randomStr={point.address}
+                    randomStr={isPointsPage ? point.address : point.referee}
                   />
                   <div>
                     <h2 className="text-sm font-medium text-gray-300">
-                      {shortenAddress(point.address)}
+                      {shortenAddress(
+                        isPointsPage ? point.address : point.referee,
+                      )}
                     </h2>
                     <p className="text-xs text-gray-500">
                       {moment(point.createdAt).fromNow()}

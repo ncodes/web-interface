@@ -118,6 +118,11 @@ const router = createBrowserRouter([
     element: <App page={<Points defaultTab="leaderboard" />} />,
     errorElement: <RootErrorBoundary />,
   },
+  {
+    path: makePath("/referrals"),
+    element: <App page={<Points defaultTab="referrals" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
 ]);
 
 const queryClient = new QueryClient();
