@@ -10,7 +10,6 @@ import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
-import { Leaderboard } from "./Leaderboard.tsx";
 import { ReferralLeaderboard } from "./ReferralLeaderboard.tsx";
 
 export function ReferralsTabContent() {
@@ -25,7 +24,6 @@ export function ReferralsTabContent() {
   const fetchLeaderboard = useQuery({
     queryKey: ["getReferralLeaderboard", { referrer: address, limit }],
     queryFn: getLeaderboard,
-    keepPreviousData: false,
     enabled: mounted,
     refetchInterval: 10000,
   });
@@ -36,7 +34,6 @@ export function ReferralsTabContent() {
       { referrer: address, referee: searchParams.get("address") || undefined },
     ],
     queryFn: getLeaderboard,
-    keepPreviousData: false,
     enabled: mounted && !!searchParams.get("address"),
     refetchInterval: 10000,
   });

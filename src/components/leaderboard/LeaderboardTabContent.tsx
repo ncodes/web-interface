@@ -22,7 +22,6 @@ export function LeaderboardTabContent() {
   const fetchLeaderboard = useQuery({
     queryKey: ["getLeaderboard", { limit }],
     queryFn: getLeaderboard,
-    keepPreviousData: true,
     enabled: mounted,
     refetchInterval: 10000,
   });
@@ -33,7 +32,6 @@ export function LeaderboardTabContent() {
       { address: searchParams.get("address") || undefined },
     ],
     queryFn: getLeaderboard,
-    keepPreviousData: true,
     enabled: mounted && !!searchParams.get("address"),
     refetchInterval: 10000,
   });

@@ -106,10 +106,10 @@ export function Navigation() {
             icon={<GiftIcon width="40" />}
             iconClassName="w-[25px]"
             label="Points"
-            active={pathname.match("^/points") != null}
+            active={pathname.match("^/points|referrals") != null}
             inactiveIconClassName="text-orange-500"
-            inactiveClassName="text-orange-500"
-            activeClassName="text-gray-100"
+            inactiveClassName="text-orange-500 hover:text-orange-500"
+            activeClassName="text-gray-100 text-orange-500"
             activeIconClassName="text-orange-500"
             to="/points"
           />
