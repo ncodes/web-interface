@@ -22,6 +22,7 @@ export function ReferralsTabContent() {
   const { address } = useConnectorContext();
   const [limit] = useState(100);
   const [searchParams] = useSearchParams();
+  const { user } = useStore((state) => ({ user: state.user }));
 
   const fetchLB = useQuery({
     queryKey: ["getReferralLeaderboard", { referrer: address, limit }],
@@ -41,11 +42,15 @@ export function ReferralsTabContent() {
   });
 
   const fetchGetInfo = useQuery({
-    queryKey: ["getLeaderboard", { address }],
+    queryKey: ["getReferralInfo", { address }],
     queryFn: getInfo,
     enabled: mounted && !!address,
     refetchInterval: 60000,
   });
+
+  useEffect(() => {
+    fetchGetInfo.refetch();
+  }, [user]);
 
   // Update global progress bar
   useEffect(() => {
@@ -90,7 +95,7 @@ export function ReferralsTabContent() {
         </div>
       )}
 
-      {address && fetchGetInfo.data && (
+      {address && !fetchLB.isLoading && fetchGetInfo.data && (
         <div className="p-6">
           <ReferralInfo referralInfo={fetchGetInfo.data} />
         </div>
