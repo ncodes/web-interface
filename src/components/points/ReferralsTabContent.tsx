@@ -11,6 +11,7 @@ import { RequestError } from "../../libs/RequestError.ts";
 import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
+import ReferralInfo from "./ReferralInfo.tsx";
 import { ReferralLeaderboard } from "./ReferralLeaderboard.tsx";
 
 export function ReferralsTabContent() {
@@ -71,10 +72,7 @@ export function ReferralsTabContent() {
   ]);
 
   return (
-    <TabsContent
-      value="referrals"
-      className="p-0 m-0 flex flex-1 flex-col gap-3"
-    >
+    <TabsContent value="referrals" className="p-0 m-0 flex flex-1 flex-col">
       <Helmet>
         <title>{`Referrals - Joint`}</title>
       </Helmet>
@@ -92,6 +90,12 @@ export function ReferralsTabContent() {
         </div>
       )}
 
+      {address && fetchGetInfo.data && (
+        <div className="p-6">
+          <ReferralInfo referralInfo={fetchGetInfo.data} />
+        </div>
+      )}
+
       {address &&
         (!fetchLB.isLoading || !fetchAddrPoint.isLoading) &&
         (fetchLB.isSuccess || fetchAddrPoint.isSuccess) &&
@@ -102,7 +106,6 @@ export function ReferralsTabContent() {
               points={fetchLB.data?.points || []}
               addressPoint={fetchAddrPoint.data?.points || []}
               total={fetchLB.data?.total || 0}
-              referralInfo={fetchGetInfo.data}
             />
           </div>
         )}
