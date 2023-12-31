@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { LeaderboardTabContent } from "../components/leaderboard/LeaderboardTabContent.tsx";
-import { PointSearchBar } from "../components/leaderboard/PointSearchBar.tsx";
-import PointStream from "../components/leaderboard/PointStream.tsx";
-import { ReferralsTabContent } from "../components/leaderboard/ReferralsTabContent.tsx";
+import { EnergonConversionTabContent } from "../components/points/EnergonConversionTabContent.tsx";
+import { LeaderboardTabContent } from "../components/points/LeaderboardTabContent.tsx";
+import { PointSearchBar } from "../components/points/PointSearchBar.tsx";
+import PointStream from "../components/points/PointStream.tsx";
+import { ReferralsTabContent } from "../components/points/ReferralsTabContent.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import Layout from "./Layout.tsx";
@@ -13,6 +14,7 @@ import Layout from "./Layout.tsx";
 function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(defaultTab || "leaderboard");
+  const loc = useLocation();
 
   return (
     <Tabs
@@ -44,45 +46,51 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               >
                 Referrals
               </TabsTrigger>
-              {/* <TabsTrigger
-                value="watched-markets"
+              <TabsTrigger
+                value="energon"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
-                  navigate("/markets/watching");
+                  navigate("/energon");
                 }}
               >
-                Watching
-              </TabsTrigger> */}
+                Energon
+              </TabsTrigger>
             </div>
           </ScrollOverflowIndicator>
         </ScrollAreaHorizontal>
         <div className="flex shrink-0 gap-2 items-center justify-end">
-          <div className="hidden md:block">
-            <PointSearchBar />
-          </div>
+          {loc.pathname != "/energon" && (
+            <div className="hidden md:block">
+              <PointSearchBar />
+            </div>
+          )}
         </div>
       </TabsList>
       {currentTab == "leaderboard" && <LeaderboardTabContent />}
       {currentTab == "referrals" && <ReferralsTabContent />}
+      {currentTab == "energon" && <EnergonConversionTabContent />}
     </Tabs>
   );
 }
 
 export default function Points({ defaultTab }: { defaultTab?: string }) {
+  const loc = useLocation();
   return (
     <Layout
       title="My Points - Joint"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
-        <div className="flex w-full justify-between flex-col pt-3">
-          <PointStream />
-          <div className="relative">
-            <div className="text-gray-200 bottom-0 w-full">
-              <Footer />
+        loc.pathname != "/energon" && (
+          <div className="flex w-full justify-between flex-col pt-3">
+            <PointStream />
+            <div className="relative">
+              <div className="text-gray-200 bottom-0 w-full">
+                <Footer />
+              </div>
             </div>
           </div>
-        </div>
+        )
       }
     />
   );

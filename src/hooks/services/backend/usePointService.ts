@@ -13,6 +13,12 @@ export interface GetLatestPointsParams {
   limit?: number;
 }
 
+export interface CreatePointFromEnergonBalanceParams {
+  signer: string;
+  beneficiary: string;
+  sig: string;
+}
+
 /**
  * usePointService provides access to v1/points endpoints
  */
@@ -78,8 +84,55 @@ export function usePointService() {
     }
   }
 
+  /**
+   * Create points from Energon balance
+   * @param ctx The query context
+   * @returns
+   */
+  async function createPointFromEnergonBalance(
+    body: CreatePointFromEnergonBalanceParams,
+  ): Promise<undefined> {
+    try {
+      const { beneficiary, signer, sig } = body;
+      const headers = {};
+
+      await axios({
+        method: "post",
+        url: `${getChainInfo().apiUrl}/v1/points/from-energon-balance`,
+        data: { beneficiary, signer, sig },
+        headers,
+      });
+
+      return;
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
+   * Check if a point exists
+   * @param ctx The query context
+   * @returns
+   */
+  async function checkPointExists(
+    ctx: QueryFunctionContext<[string, string]>,
+  ): Promise<boolean> {
+    try {
+      const [, name] = ctx.queryKey;
+      const resp = await axios({
+        method: "get",
+        url: `${getChainInfo().apiUrl}/v1/points/${name}/exist`,
+      });
+      return Promise.resolve(resp.data.data.exist);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     getLeaderboard,
     getLatestPoints,
+    createPointFromEnergonBalance,
+    checkPointExists,
   };
 }

@@ -8,12 +8,13 @@ import { useReferralService } from "../../hooks/services/backend/useReferralServ
 import useStore from "../../hooks/store/useStore.ts";
 import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
+import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { ReferralLeaderboard } from "./ReferralLeaderboard.tsx";
 
 export function ReferralsTabContent() {
-  const { getLeaderboard } = useReferralService();
+  const { getLeaderboard, getInfo } = useReferralService();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const loaderProgress = useStore((state) => state.loaderProgress);
   const mounted = useMounted(1000);
@@ -21,45 +22,52 @@ export function ReferralsTabContent() {
   const [limit] = useState(100);
   const [searchParams] = useSearchParams();
 
-  const fetchLeaderboard = useQuery({
+  const fetchLB = useQuery({
     queryKey: ["getReferralLeaderboard", { referrer: address, limit }],
     queryFn: getLeaderboard,
-    enabled: mounted,
-    refetchInterval: 10000,
+    enabled: mounted && !!address,
+    refetchInterval: 60000,
   });
 
-  const fetchAddressPoint = useQuery({
+  const fetchAddrPoint = useQuery({
     queryKey: [
       "getLeaderboard",
       { referrer: address, referee: searchParams.get("address") || undefined },
     ],
     queryFn: getLeaderboard,
-    enabled: mounted && !!searchParams.get("address"),
-    refetchInterval: 10000,
+    enabled: mounted && !!address && !!searchParams.get("address"),
+    refetchInterval: 60000,
+  });
+
+  const fetchGetInfo = useQuery({
+    queryKey: ["getLeaderboard", { address }],
+    queryFn: getInfo,
+    enabled: mounted && !!address,
+    refetchInterval: 60000,
   });
 
   // Update global progress bar
   useEffect(() => {
-    if (fetchLeaderboard.isLoading) setLoaderProgress && setLoaderProgress(50);
-    if (
-      !(fetchLeaderboard.isRefetching || fetchLeaderboard.isLoading) &&
-      loaderProgress == 50
-    )
+    if (!address) return;
+
+    if (fetchLB.isLoading) setLoaderProgress && setLoaderProgress(50);
+    if (!(fetchLB.isRefetching || fetchLB.isLoading) && loaderProgress == 50)
       setLoaderProgress?.(100);
 
     if (!searchParams.get("address")) return;
-    if (fetchAddressPoint.isLoading) setLoaderProgress && setLoaderProgress(50);
+    if (fetchAddrPoint.isLoading) setLoaderProgress && setLoaderProgress(50);
     if (
-      !(fetchAddressPoint.isRefetching || fetchAddressPoint.isLoading) &&
+      !(fetchAddrPoint.isRefetching || fetchAddrPoint.isLoading) &&
       loaderProgress == 50
     )
       setLoaderProgress?.(100);
   }, [
-    fetchLeaderboard.isLoading,
-    fetchLeaderboard.isRefetching,
-    fetchAddressPoint.isLoading,
-    fetchAddressPoint.isRefetching,
+    fetchLB.isLoading,
+    fetchLB.isRefetching,
+    fetchAddrPoint.isLoading,
+    fetchAddrPoint.isRefetching,
     loaderProgress,
+    address,
   ]);
 
   return (
@@ -71,36 +79,39 @@ export function ReferralsTabContent() {
         <title>{`Referrals - Joint`}</title>
       </Helmet>
 
-      {fetchLeaderboard.isLoading && (
+      {address && fetchLB.isLoading && (
         <RowSkeleton className="h-[300px] xl:h-[610px]" />
       )}
 
-      {fetchLeaderboard.isError && (
+      {!address && <MainContainerConnectButton />}
+
+      {address && fetchLB.isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" />{" "}
-          {(fetchLeaderboard.error as RequestError)?.message}
+          {(fetchLB.error as RequestError)?.message}
         </div>
       )}
 
-      {(!fetchLeaderboard.isLoading || !fetchAddressPoint.isLoading) &&
-        (fetchLeaderboard.isSuccess || fetchAddressPoint.isSuccess) &&
-        ((fetchLeaderboard.data?.points || []).length > 0 ||
-          (fetchAddressPoint.data?.points || []).length > 0) && (
+      {address &&
+        (!fetchLB.isLoading || !fetchAddrPoint.isLoading) &&
+        (fetchLB.isSuccess || fetchAddrPoint.isSuccess) &&
+        ((fetchLB.data?.points || []).length > 0 ||
+          (fetchAddrPoint.data?.points || []).length > 0) && (
           <div className="flex flex-col flex-1 gap-3 min-h-[300px] xl:min-h-[610px]">
             <ReferralLeaderboard
-              points={fetchLeaderboard.data?.points || []}
-              addressPoint={fetchAddressPoint.data?.points || []}
-              total={fetchLeaderboard.data?.total || 0}
+              points={fetchLB.data?.points || []}
+              addressPoint={fetchAddrPoint.data?.points || []}
+              total={fetchLB.data?.total || 0}
+              referralInfo={fetchGetInfo.data}
             />
           </div>
         )}
 
-      {!fetchLeaderboard.isLoading &&
-        fetchLeaderboard.data?.points.length == 0 && (
-          <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
-            No result found
-          </div>
-        )}
+      {!fetchLB.isLoading && fetchLB.data?.points.length == 0 && (
+        <div className="flex items-center justify-center font-light text-gray-400 h-[300px] xl:h-[610px]">
+          No result found
+        </div>
+      )}
     </TabsContent>
   );
 }

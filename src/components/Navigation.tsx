@@ -5,7 +5,7 @@ import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
 
-import { GiftIcon } from "lucide-react";
+import { AwardIcon } from "lucide-react";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../hooks/store/useStore.ts";
 import { NavPageLink } from "./NavPageLink.tsx";
@@ -103,7 +103,7 @@ export function Navigation() {
         </li>
         <li>
           <NavPageLink
-            icon={<GiftIcon width="40" />}
+            icon={<AwardIcon width="40" />}
             iconClassName="w-[25px]"
             label="Points"
             active={pathname.match("^/points|referrals") != null}

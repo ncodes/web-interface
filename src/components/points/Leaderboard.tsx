@@ -43,7 +43,7 @@ export function Leaderboard({
 
   return (
     <div className="flex flex-col w-full">
-      <main className="flex flex-col gap-4 p-4 md:gap-8 md:p-10">
+      <main className="flex flex-col gap-4 p-4 md:gap-7 md:p-7">
         <div className="grid gap-4 md:grid-cols-3">
           {points.length > 0 && (
             <Card className="bg-card-background tracking-wider border-yellow-500">

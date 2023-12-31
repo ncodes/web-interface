@@ -332,11 +332,10 @@ export default function useConnector() {
       const chain = chains.find((c) => c.id === chainInfo.chainId);
       if (!chain) throw new Error("unknown chain");
       if (!chainInfo.rpcUrl) throw new Error("unknown rpc url");
-      chain.rpcUrls.default.http = [chainInfo.rpcUrl];
-      chain.rpcUrls.public.http = chain.rpcUrls.default.http;
+
       client = createPublicClient({
         chain: chains.find((c) => c.id === (chainId as number)),
-        transport: http(),
+        transport: http(chainInfo.rpcUrl),
       }) as PublicClient;
     }
 

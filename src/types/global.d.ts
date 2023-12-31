@@ -531,6 +531,13 @@ declare global {
     revealPhaseEnded?: boolean;
   }
 
+  export interface GetReferralInfo {
+    refCode: string;
+    numReferred: number;
+    totalPoints: string;
+    referred: string[];
+  }
+
   export interface Point {
     address: string;
     totalPoints: string;

@@ -123,6 +123,11 @@ const router = createBrowserRouter([
     element: <App page={<Points defaultTab="referrals" />} />,
     errorElement: <RootErrorBoundary />,
   },
+  {
+    path: makePath("/energon"),
+    element: <App page={<Points defaultTab="energon" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
 ]);
 
 const queryClient = new QueryClient();

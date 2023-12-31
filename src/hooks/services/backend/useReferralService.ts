@@ -15,7 +15,7 @@ export interface GetLatestPointsParams {
   limit?: number;
 }
 
-export interface GetInfo {
+export interface GetInfoParams {
   address: string;
 }
 
@@ -58,8 +58,8 @@ export function useReferralService() {
    * @param ctx The query context
    */
   async function getInfo(
-    ctx: QueryFunctionContext<[string, GetInfo]>,
-  ): Promise<{ points: Point[]; total: number }> {
+    ctx: QueryFunctionContext<[string, GetInfoParams]>,
+  ): Promise<GetReferralInfo> {
     try {
       const [, params] = ctx.queryKey;
       const { address } = params;

@@ -14,6 +14,7 @@ import { useReferralService } from "../../hooks/services/backend/useReferralServ
 import useMounted from "../../hooks/useMounted";
 import { RequestError } from "../../libs/RequestError";
 import { shortenAddress } from "../../libs/helpers";
+import { MainContainerConnectButton } from "../MainContainerConnectButton";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator";
 import EmojiAvatar from "../avatar/EmojiAvatar";
 import { AvatarSize } from "../avatar/useAvatar";
@@ -40,7 +41,7 @@ export function PointActivityStream() {
       },
     ],
     queryFn: isPointsPage ? getLatestPoints : getLatestReferralPoints,
-    enabled: mounted,
+    enabled: mounted && !!address,
     refetchOnWindowFocus: false,
     refetchInterval: 10000,
   });
@@ -57,18 +58,20 @@ export function PointActivityStream() {
 
   return (
     <div className="flex flex-col h-full relative">
-      {!fetchLatest.isLoading && points.length == 0 && (
+      {address && !fetchLatest.isLoading && points.length == 0 && (
         <div className="flex h-full items-center justify-center font-light text-gray-400">
           No result found
         </div>
       )}
 
-      {fetchLatest.isError && (
+      {address && fetchLatest.isError && (
         <div className="flex items-center gap-2 text-red-300 justify-center font-light h-[300px] xl:h-[610px]">
           <ErrorIcon className="w-[20px]" />{" "}
           {(fetchLatest.error as RequestError)?.message}
         </div>
       )}
+
+      {!address && <MainContainerConnectButton />}
 
       <ScrollOverflowIndicator
         side="bottom"
