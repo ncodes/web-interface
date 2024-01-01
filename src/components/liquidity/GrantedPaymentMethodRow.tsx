@@ -4,7 +4,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { deriveLiquidityAddress, isDev } from "../../libs/helpers.ts";
+import { deriveLiquidityAddress, logError } from "../../libs/helpers.ts";
 import { Avatar } from "../avatar/Avatar.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
@@ -66,7 +66,7 @@ export function GrantedPaymentMethodRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -100,7 +100,7 @@ export function GrantedPaymentMethodRow({
           className="font-normal text-xs"
           disabled={isLoading()}
           onClick={() => {
-            grantSig.refetch().catch(console.error);
+            grantSig.refetch().catch(logError);
           }}
         >
           {isLoading() && (

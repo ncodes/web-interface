@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { Location } from "react-router-dom";
 import { TransactionReceipt, decodeEventLog } from "viem";
 import { Options } from "../../../hooks/useToast.tsx";
-import { delay, isDev } from "../../../libs/helpers.ts";
+import { delay, logError } from "../../../libs/helpers.ts";
 
 /**
  * Appeal an order
@@ -71,7 +71,7 @@ export async function appealOrderFunc(
   } catch (error) {
     const msg = humanizeErrors(error);
     notifyError(msg);
-    if (isDev()) console.error(error);
+    logError(error);
   } finally {
     setLoading(swap.orderId.toFixed(), { ...loading, appealOrder: false });
   }

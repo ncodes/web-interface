@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { delay, isDev } from "../../libs/helpers.ts";
+import { delay, logError } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
@@ -32,12 +32,12 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
-      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(logError);
       props.close && props.close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

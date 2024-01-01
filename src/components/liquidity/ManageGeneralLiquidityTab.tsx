@@ -11,9 +11,9 @@ import { useToast } from "../../hooks/useToast.tsx";
 import { isSynth } from "../../libs/api_utils.ts";
 import {
   delay,
-  isDev,
   isEmpty,
   isZero,
+  logError,
   powOfD,
   toBN,
   toDec,
@@ -204,7 +204,7 @@ export function ManageGeneralLiquidityTab({
     } catch (error) {
       const msg = humanizeErc20Errors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setAllowLoading(false);
     }
@@ -262,7 +262,7 @@ export function ManageGeneralLiquidityTab({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setAddLoading(false);
     }

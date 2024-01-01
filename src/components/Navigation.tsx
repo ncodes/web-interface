@@ -106,7 +106,7 @@ export function Navigation() {
             icon={<AwardIcon width="40" />}
             iconClassName="w-[25px]"
             label="Points"
-            active={pathname.match("^/points|referrals") != null}
+            active={pathname.match("^/points|referrals|energon") != null}
             inactiveIconClassName="text-orange-500"
             inactiveClassName="text-orange-500 hover:text-orange-500"
             activeClassName="text-gray-100 text-orange-500"

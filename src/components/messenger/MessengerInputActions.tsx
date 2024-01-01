@@ -14,7 +14,7 @@ import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import { useFileService } from "../../hooks/services/backend/useFileService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { humanizeBytes } from "../../libs/helpers.ts";
+import { humanizeBytes, logError } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { Input } from "../ui/Input.tsx";
@@ -80,7 +80,7 @@ export function MessengerInputActions({
 
       const encFile = await RemoteAttachmentCodec.encodeEncrypted(
         attachment,
-        new AttachmentCodec()
+        new AttachmentCodec(),
       );
 
       const blob = new Blob([encFile.payload], { type: type });
@@ -96,7 +96,7 @@ export function MessengerInputActions({
         dataB64: Buffer.from(await file.arrayBuffer()).toString("base64"),
       };
     },
-    []
+    [],
   );
 
   /**
@@ -108,7 +108,7 @@ export function MessengerInputActions({
   const uploader = useCallback(
     async (
       formData: FormData,
-      onUploadProgress: (progress: AxiosProgressEvent) => void
+      onUploadProgress: (progress: AxiosProgressEvent) => void,
     ): Promise<string> => {
       const hash = await uploadMut.mutateAsync({
         net: swap.network,
@@ -118,7 +118,7 @@ export function MessengerInputActions({
       });
       return hash;
     },
-    [swap]
+    [swap],
   );
 
   useEffect(() => {
@@ -171,7 +171,7 @@ export function MessengerInputActions({
           onFileUpload?.();
         }
       } catch (e) {
-        console.error(e);
+        logError("uploadFiles:", e);
         notifyError(`Upload Error: ${(e as Error).message}`);
       } finally {
         setUploading(false);

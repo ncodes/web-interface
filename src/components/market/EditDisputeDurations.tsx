@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { delay, humanizeDur2, isDev } from "../../libs/helpers.ts";
+import { delay, humanizeDur2, logError } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { EditFieldWithLabelAndSlider } from "./EditFieldWithLabelAndSlider.tsx";
@@ -17,7 +17,7 @@ export function EditDisputeDurations({
   close?: () => void;
 }) {
   const [disputeDelayDur, setDisputeDelayDur] = useState(
-    market.disputeDelayDur
+    market.disputeDelayDur,
   );
   const [evidenceDur, setEvidenceDur] = useState(market.evidenceDur);
   const [votingDur, setVotingDur] = useState(market.predictDur);
@@ -34,7 +34,7 @@ export function EditDisputeDurations({
         market.address,
         disputeDelayDur,
         evidenceDur,
-        votingDur
+        votingDur,
       );
       const blockExplorer = getChainInfo().blockExplorer;
       await delay(5000);
@@ -44,12 +44,12 @@ export function EditDisputeDurations({
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
-      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(logError);
       close && close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

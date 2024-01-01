@@ -1,7 +1,8 @@
-import { useTranslation } from "react-i18next";
-import { useLocation, useParams } from "react-router-dom";
 import { compile, pathToRegexp } from "path-to-regexp";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation, useParams } from "react-router-dom";
+import { logError } from "../libs/helpers";
 
 export default function useTranslate() {
   const { locale: localeParam } = useParams();
@@ -11,7 +12,7 @@ export default function useTranslate() {
   useEffect(() => {
     const userSelectedLocale = localeParam || getCachedLocale();
     if (userSelectedLocale && userSelectedLocale !== i18n.language) {
-      i18n.changeLanguage(userSelectedLocale).catch(console.error);
+      i18n.changeLanguage(userSelectedLocale).catch(logError);
     }
   }, [i18n, localeParam]);
 

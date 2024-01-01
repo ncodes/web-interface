@@ -19,6 +19,7 @@ import { useUserService } from "../hooks/services/backend/useUserService.ts";
 import useNFTContract from "../hooks/services/contracts/useNFTContract.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useWindowFocus from "../hooks/useWindowFocus.ts";
+import { logError } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
 
 export default function Layout({
@@ -148,8 +149,7 @@ export default function Layout({
   // Subscribe for web push notifications.
   useEffect(() => {
     if (!address) return;
-    if ("serviceWorker" in navigator)
-      registerServiceWorker().catch(console.error);
+    if ("serviceWorker" in navigator) registerServiceWorker().catch(logError);
   }, [address]);
 
   // Register service worker.
@@ -168,7 +168,7 @@ export default function Layout({
         net: getChainInfo().queryName,
       });
     } catch (error) {
-      console.error("Failed to subscribe user for notification: ", error);
+      logError("Failed to subscribe user for notification: ", error);
     }
   }
 
@@ -185,7 +185,7 @@ export default function Layout({
       const count = await nativeNftBalance(address);
       setUserHasNativeNFT(count > 0);
     } catch (error) {
-      console.error("Failed to check native NFT ownership: ", error);
+      logError("Failed to check native NFT ownership: ", error);
     }
   }
 

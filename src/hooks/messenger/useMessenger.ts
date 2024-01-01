@@ -31,6 +31,8 @@ import {
   isDev,
   isEqlStr,
   isLocal,
+  isProd,
+  logError,
   sha1,
   uint8ArrayToB64,
 } from "../../libs/helpers.ts";
@@ -843,7 +845,7 @@ export default function useMessenger() {
   function handleMessageAddError(e) {
     const errMsg = (e as { message: string }).message;
     if (errMsg.includes("uniqueness requirements")) {
-      if (isDev()) console.error("processMessage(): message exist. skipping");
+      if (isDev()) logError("processMessage(): message exist. skipping");
     } else {
       throw e;
     }
@@ -939,7 +941,7 @@ export default function useMessenger() {
    * @returns
    */
   function getEnv() {
-    return isDev() ? (isLocal() ? "local" : "dev") : "production";
+    return isProd() ? "production" : isLocal() ? "local" : "dev";
   }
 
   return {

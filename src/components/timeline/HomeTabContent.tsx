@@ -6,6 +6,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import { useTimelineService } from "../../hooks/services/backend/useTimelineService.ts";
 import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
+import { logError } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { RowSkeleton } from "./RowSkeleton.tsx";
@@ -38,12 +39,12 @@ export function HomeTabContent() {
     const percent =
       ((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100;
     if (percent >= 90 && !events.isFetchingNextPage) {
-      events.fetchNextPage().catch(console.error);
+      events.fetchNextPage().catch(logError);
     }
   }, [y]);
 
   setTimeout(() => {
-    events.fetchNextPage().catch(console.error);
+    events.fetchNextPage().catch(logError);
   }, 5000);
 
   return (

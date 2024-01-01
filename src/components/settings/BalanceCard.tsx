@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useToast } from "../../hooks/useToast.tsx";
-import { isDev, toHDD, toLD } from "../../libs/helpers.ts";
+import { logError, toHDD, toLD } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -82,7 +82,7 @@ export function NativeTokenWrapper({
       if (wrap) {
         await sendTransaction(
           netInfo.wrappedTokenInfo?.address,
-          BigInt(toLD(amount))
+          BigInt(toLD(amount)),
         );
       } else {
         await withdrawWrappedToken(BigInt(toLD(amount)));
@@ -98,7 +98,7 @@ export function NativeTokenWrapper({
     } catch (error) {
       const msg = humanizeErc20Errors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

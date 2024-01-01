@@ -4,7 +4,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import { usePaymentService } from "../../hooks/services/backend/usePaymentService.ts";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { delay, deriveLiquidityAddress, isDev } from "../../libs/helpers.ts";
+import { delay, deriveLiquidityAddress, logError } from "../../libs/helpers.ts";
 import { InputWrapper } from "../InputWrapper.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
@@ -105,7 +105,7 @@ export function ManageLiquiditySetPaymentMethods({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -177,7 +177,7 @@ export function ManageLiquiditySetPaymentMethods({
                 onSelected={(method) => {
                   setSelected(method);
                   setOpen(false);
-                  if (payMethods) grantSig.refetch().catch(console.error);
+                  if (payMethods) grantSig.refetch().catch(logError);
                 }}
                 filterMethods={(method) => {
                   return !grantedPaymentMethods.find(

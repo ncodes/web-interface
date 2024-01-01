@@ -11,7 +11,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext"
 import { useMiscService } from "../../hooks/services/backend/useMiscService";
 import { usePointService } from "../../hooks/services/backend/usePointService";
 import { useToast } from "../../hooks/useToast";
-import { formatToMoney, toBN, toHD } from "../../libs/helpers";
+import { formatToMoney, logError, toBN, toHD } from "../../libs/helpers";
 import Input2 from "../Input2";
 import IconCheckCircle from "../icons/IconCheckCircle";
 import IconSpinner from "../icons/IconSpinner";
@@ -85,7 +85,7 @@ export function EnergonConversion() {
       notifySuccess("Points transferred successfully!", { label: "Success" });
     } catch (error) {
       notifyError((error as { message: string }).message, { label: "Error" });
-      console.error(error);
+      logError("doTransfer:", error);
     } finally {
       setLoading(false);
     }

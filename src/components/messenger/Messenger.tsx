@@ -28,7 +28,7 @@ import {
   isSwapDisputeExecuted,
   isSwapDraftee,
 } from "../../libs/api_utils.ts";
-import { isEqlStr } from "../../libs/helpers.ts";
+import { isEqlStr, logError } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { NotificationType } from "../../types/enums.ts";
 import { AlwaysScrollToBottom } from "../AlwaysScrollToBottom.tsx";
@@ -251,7 +251,7 @@ export function Messenger({
           setLastMsgTime({ ...lastMsgTime, [convoId]: msgTime / 1000 });
         },
         (err) => {
-          console.error("counterparty conversation stream error:", err);
+          logError("counterparty conversation stream error:", err);
         },
       );
     };
@@ -400,7 +400,7 @@ export function Messenger({
             setLastMsgTime({ ...lastMsgTime, [convoId]: msgTime / 1000 });
           },
           (err) => {
-            console.error("mediator conversation stream error:", err);
+            logError("mediator conversation stream error:", err);
           },
         );
       };
@@ -459,7 +459,7 @@ export function Messenger({
 
     const loadMsgsFromCounterparts = async () => {
       for (const convo of countPartsConvo) {
-        await loadMessagesFromConvoToDB(client, convo).catch(console.error);
+        await loadMessagesFromConvoToDB(client, convo).catch(logError);
       }
     };
 
@@ -492,7 +492,7 @@ export function Messenger({
             setLastMsgTime({ ...lastMsgTime, [convoId]: msgTime / 1000 });
           },
           (err) => {
-            console.error("counterpart conversation stream error:", err);
+            logError("counterpart conversation stream error:", err);
           },
         );
       };
@@ -640,7 +640,7 @@ export function Messenger({
           />
         </div>
       )}
-      
+
       <div
         className={cn(
           "absolute overflow-hidden flex flex-col text-gray-200 w-full h-full bg-card-background",
@@ -819,9 +819,7 @@ export function Messenger({
                       // Detect enter as long as shift is not pressed
                       if (e.key == "Enter" && !e.shiftKey) {
                         e.preventDefault();
-                        handleSendMsg(e.currentTarget.value).catch(
-                          console.error,
-                        );
+                        handleSendMsg(e.currentTarget.value).catch(logError);
                         setTextMsg("");
                       }
                     }}
@@ -833,7 +831,7 @@ export function Messenger({
                       className="!top-0 -left-1.5"
                       disabled={!textMsg}
                       onSend={() => {
-                        handleSendMsg(textMsg).catch(console.error);
+                        handleSendMsg(textMsg).catch(logError);
                         setTextMsg("");
                       }}
                     />
@@ -851,7 +849,7 @@ export function Messenger({
                     scrollToBottomRef?.current?.scrollIntoView();
                   }}
                   onSend={() => {
-                    handleSendMsg(textMsg).catch(console.error);
+                    handleSendMsg(textMsg).catch(logError);
                     setTextMsg("");
                   }}
                 />

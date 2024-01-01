@@ -14,7 +14,7 @@ import useStore from "../../hooks/store/useStore.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import useMounted from "../../hooks/useMounted.ts";
 import { RequestError } from "../../libs/RequestError.ts";
-import { isEqlStr } from "../../libs/helpers.ts";
+import { isEqlStr, logError } from "../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import { Paginator } from "../Paginator.tsx";
 import { RowSkeleton } from "../RowSkeleton.tsx";
@@ -149,7 +149,7 @@ export function WatchedLiquidityTabContent() {
       client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
-      console.error("Failed to initialize wallet", error);
+      logError("Failed to initialize wallet", error);
     } finally {
       setInitializing(false);
     }

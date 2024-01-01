@@ -13,7 +13,7 @@ import { Button } from "../ui/Button.tsx";
 import { ChevronLeft } from "lucide-react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
-import { cn, isDev } from "../../libs/helpers.ts";
+import { cn, logError } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 
@@ -105,7 +105,7 @@ export function LinkAccountSetting() {
         position: "top-center",
         duration: 5000,
       });
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -134,7 +134,7 @@ export function LinkAccountSetting() {
           position: "top-center",
           duration: 5000,
         });
-        if (isDev()) console.error(error);
+        logError(error);
       }
     } finally {
       setLoading(false);
@@ -165,7 +165,7 @@ export function LinkAccountSetting() {
         position: "top-center",
         duration: 5000,
       });
-      if (isDev()) console.error(error);
+      logError(error);
       return;
     }
 

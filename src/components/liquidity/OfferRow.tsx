@@ -19,8 +19,8 @@ import {
 import {
   delay,
   formatToHighDenom,
-  isDev,
   isMerchant,
+  logError,
   shortenAddress,
 } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
@@ -110,7 +110,7 @@ export function OfferRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -141,7 +141,7 @@ export function OfferRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -172,7 +172,7 @@ export function OfferRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

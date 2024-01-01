@@ -5,7 +5,7 @@ import useMarketContract from "../../hooks/services/contracts/useMarketContract.
 import { useToast } from "../../hooks/useToast.tsx";
 import {
   delay,
-  isDev,
+  logError,
   splitAndCleanBadges,
   splitBadgeFromPath,
 } from "../../libs/helpers.ts";
@@ -29,10 +29,10 @@ export function EditBadgeRequirements({
   const [err2, setErr2] = useState("");
   const [loading, setLoading] = useState(false);
   const [putBadges, setPutBadges] = useState(
-    market.requiredPutBadges.join(",")
+    market.requiredPutBadges.join(","),
   );
   const [swapBadges, setSwapBadges] = useState(
-    market.requiredSwapBadges.join(",")
+    market.requiredSwapBadges.join(","),
   );
 
   const doWrite = async () => {
@@ -41,7 +41,7 @@ export function EditBadgeRequirements({
       const txHash = await setRequiredBadges(
         market.address,
         splitBadgeFromPath(splitAndCleanBadges(putBadges)),
-        splitBadgeFromPath(splitAndCleanBadges(swapBadges))
+        splitBadgeFromPath(splitAndCleanBadges(swapBadges)),
       );
       const blockExplorer = getChainInfo().blockExplorer;
       await delay(5000);
@@ -51,12 +51,12 @@ export function EditBadgeRequirements({
           { label: "View Transaction", href: `${blockExplorer}/tx/${txHash}` },
         ],
       });
-      queryClient.refetchQueries(["getMarketsByCreator"]).catch(console.error);
+      queryClient.refetchQueries(["getMarketsByCreator"]).catch(logError);
       close && close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

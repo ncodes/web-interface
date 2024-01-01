@@ -16,7 +16,7 @@ import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.
 import useMediatorManagerContract from "../../hooks/services/contracts/useMediatorManagerContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { getTicketStatus } from "../../libs/api_utils.ts";
-import { delay, formatToHighDenom, isDev } from "../../libs/helpers.ts";
+import { delay, formatToHighDenom, logError } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { CountDown } from "../Countdown.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
@@ -83,7 +83,7 @@ export function TicketRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setJoining(false);
     }
@@ -108,7 +108,7 @@ export function TicketRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setCancelling(false);
     }
@@ -133,7 +133,7 @@ export function TicketRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setDraining(false);
     }

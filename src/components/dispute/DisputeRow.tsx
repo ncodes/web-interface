@@ -29,7 +29,7 @@ import {
   isDisputeDraftee,
   isRevealer,
 } from "../../libs/api_utils.ts";
-import { delay, isDev } from "../../libs/helpers.ts";
+import { delay, logError } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { CountDown } from "../Countdown.tsx";
 import { IDBadge } from "../IDBadge.tsx";
@@ -150,7 +150,7 @@ export function DisputeRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading({ ...loading, commitVote: false });
     }
@@ -186,7 +186,7 @@ export function DisputeRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading({ ...loading, revealVote: false });
     }
@@ -562,7 +562,7 @@ export function DisputeRow({
                   orderId={dispute.orderId}
                   ticketIndex={dispute.ticketIndex}
                   onActivate={(hash) => {
-                    doCommit(hash).catch(console.error);
+                    doCommit(hash).catch(logError);
                   }}
                 >
                   <Button
@@ -616,7 +616,7 @@ export function DisputeRow({
                   orderId={dispute.orderId}
                   ticketIndex={dispute.ticketIndex}
                   onActivate={(vote: string, hash) => {
-                    doReveal(vote, hash).catch(console.error);
+                    doReveal(vote, hash).catch(logError);
                   }}
                 >
                   <Button

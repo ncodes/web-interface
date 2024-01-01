@@ -13,7 +13,7 @@ import {
   useSwitchNetwork,
   useWalletClient,
 } from "wagmi";
-import { isDev } from "../../libs/helpers.ts";
+import { isDev, logError } from "../../libs/helpers.ts";
 import { IConnector } from "./interface.ts";
 
 /**
@@ -89,7 +89,7 @@ export default function useConnector() {
       const sig = await signMessageAsync({ message: msg });
       return Promise.resolve(sig);
     } catch (error) {
-      console.error(error);
+      logError("sign:", error);
       return Promise.reject(new Error(`User rejected the signing request`));
     }
   }

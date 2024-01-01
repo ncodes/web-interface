@@ -11,7 +11,7 @@ import useMessenger from "../../hooks/messenger/useMessenger.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { getSwapCounterpart } from "../../libs/api_utils.ts";
-import { shortenAddress } from "../../libs/helpers.ts";
+import { logError, shortenAddress } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { IconStarSmile } from "../icons/IconStarSmile.tsx";
@@ -95,7 +95,7 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
       client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
-      console.error("Failed to initialize wallet", error);
+      logError("Failed to initialize wallet", error);
     } finally {
       setInitializing(false);
     }
@@ -142,7 +142,7 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
     } catch (error) {
       setLoading(false);
       notifyError("Failed to post rating");
-      console.error(error);
+      logError(error);
     }
   }
 
