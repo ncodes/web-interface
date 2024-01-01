@@ -250,11 +250,11 @@ export function ManageGeneralLiquidityTab({
 
       await delay(5000);
       await queryClient.refetchQueries(["getLiquidityByCreator"]);
+      await queryClient.refetchQueries(["getLiquidities"]);
+      await queryClient.refetchQueries(["getMarket"]);
 
       notifySuccess(
-        !liquidity
-          ? "Liquidity successfully added"
-          : "Liquidity successfully updated",
+        `Liquidity successfully ${!liquidity ? "added" : "updated"}`,
         { duration: 5000 },
       );
 
