@@ -7,7 +7,6 @@ import IconOffer from "./icons/IconOffer.tsx";
 
 import { AwardIcon } from "lucide-react";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-import useStore from "../hooks/store/useStore.ts";
 import { useSession } from "../hooks/useSession.ts";
 import { NavPageLink } from "./NavPageLink.tsx";
 import IconCoinStack2 from "./icons/IconCoinStack2.tsx";
@@ -21,7 +20,6 @@ export function Navigation() {
   const { pathname } = useLocation();
   const { countUnread } = useOfferService();
   const { hasAccessToken } = useSession();
-  const user = useStore((state) => state.user);
   const unreadOfferCount = useQuery({
     queryKey: ["countUnreadOffer", { network: getChainInfo().queryName }],
     queryFn: countUnread,
