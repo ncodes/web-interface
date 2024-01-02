@@ -16,6 +16,7 @@ import Mediation from "./pages/Mediation.tsx";
 import Offer from "./pages/Offer.tsx";
 import Offers from "./pages/Offers.tsx";
 import Points from "./pages/Points.tsx";
+import RefPage from "./pages/Ref.tsx";
 import Swap from "./pages/Swap.tsx";
 import Swaps from "./pages/Swaps.tsx";
 import Timeline from "./pages/Timeline.tsx";
@@ -132,6 +133,11 @@ const router = createBrowserRouter([
   {
     path: makePath("/connect"),
     element: <App page={<ConnectPage />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/r/:code"),
+    element: <App page={<RefPage />} />,
     errorElement: <RootErrorBoundary />,
   },
 ]);

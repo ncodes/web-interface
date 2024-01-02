@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
 import { useNotificationService } from "../../hooks/services/backend/useNotificationService";
 import useStore from "../../hooks/store/useStore";
+import { useSession } from "../../hooks/useSession";
 import useWindowFocus from "../../hooks/useWindowFocus";
 
 export function UnreadMessageCount({
@@ -21,6 +22,7 @@ export function UnreadMessageCount({
   const { countNotifications, markNotificationsAsRead } =
     useNotificationService();
   const isWindowFocus = useWindowFocus();
+  const { hasAccessToken } = useSession();
 
   const countQuery = useQuery({
     queryKey: [
@@ -34,7 +36,7 @@ export function UnreadMessageCount({
       },
     ],
     queryFn: countNotifications,
-    enabled: !!address && !!user,
+    enabled: !!address && hasAccessToken() && !!user,
     refetchInterval: 10000,
   });
 

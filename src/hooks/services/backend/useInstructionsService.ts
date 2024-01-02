@@ -1,8 +1,8 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
-import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import { useSession } from "../../useSession.ts";
 
 type UpdateInstructionsBody = {
   net: string;
@@ -24,7 +24,7 @@ export type NewGrantValues = [
   number,
   string[],
   string[],
-  number
+  number,
 ][];
 
 export type ExistingGrantValues = [
@@ -33,7 +33,7 @@ export type ExistingGrantValues = [
   string,
   string,
   string,
-  number
+  number,
 ][];
 
 export interface GrantSigInfo {
@@ -57,17 +57,18 @@ export type InstructionsWithGrantSigResponse = InstructionsResponse & {
  */
 export function useInstructionsService() {
   const { getChainInfo } = useConnectorContext();
+  const { getAccessToken } = useSession();
 
   /**
    * Update instructions for the authenticated user
    * @param body The request body
    */
   async function updateInstructions(
-    body: Partial<UpdateInstructionsBody>
+    body: Partial<UpdateInstructionsBody>,
   ): Promise<InstructionsWithGrantSigResponse> {
     try {
       const headers = {};
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken();
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({
@@ -91,13 +92,13 @@ export function useInstructionsService() {
    * @param ctx The query context
    */
   async function getInstructions(
-    ctx: QueryFunctionContext<[string, GetInstructionsBody]>
+    ctx: QueryFunctionContext<[string, GetInstructionsBody]>,
   ): Promise<InstructionsResponse | undefined> {
     try {
       const [, body] = ctx.queryKey;
       const headers = {};
 
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken;
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const { net, address } = body;

@@ -1,8 +1,8 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import { useSession } from "../../useSession.ts";
 
 export interface SubscribeForWebPushParams {
   subscription: PushSubscription;
@@ -41,6 +41,7 @@ export interface NotificationParams {
  */
 export function useNotificationService() {
   const { getChainInfo } = useConnectorContext();
+  const { getAccessToken } = useSession();
 
   /**
    * Subscribe for web push notifications
@@ -48,7 +49,7 @@ export function useNotificationService() {
    * @returns
    */
   async function subscribeForWebPush(
-    params: SubscribeForWebPushParams
+    params: SubscribeForWebPushParams,
   ): Promise<void> {
     try {
       const headers = {
@@ -74,11 +75,11 @@ export function useNotificationService() {
    * @returns
    */
   async function getNotifications(
-    ctx: QueryFunctionContext<[string, NotificationParams]>
+    ctx: QueryFunctionContext<[string, NotificationParams]>,
   ): Promise<Notification[]> {
     const [, params] = ctx.queryKey;
     const headers = { "Content-Type": "application/json" };
-    const token = localStorage.getItem(StoreAccessTokenKey);
+    const token = getAccessToken();
     headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
     const resp = await axios({
@@ -97,12 +98,12 @@ export function useNotificationService() {
    * @returns
    */
   async function countNotifications(
-    ctx: QueryFunctionContext<[string, CountParams]>
+    ctx: QueryFunctionContext<[string, CountParams]>,
   ): Promise<number> {
     try {
       const [, params] = ctx.queryKey;
       const headers = { "Content-Type": "application/json" };
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken();
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({
@@ -124,11 +125,11 @@ export function useNotificationService() {
    * @returns
    */
   async function markNotificationsAsRead(
-    params: MarkReadParams
+    params: MarkReadParams,
   ): Promise<void> {
     try {
       const headers = { "Content-Type": "application/json" };
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken();
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       await axios({

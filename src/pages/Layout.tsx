@@ -11,13 +11,13 @@ import { LeftSidebar } from "../components/LeftSidebar.tsx";
 import { NotificationSheet } from "../components/NotificationSheet.tsx";
 import { ReviewViewerSheet } from "../components/ReviewViewerSheet.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
-import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useMiscService } from "../hooks/services/backend/useMiscService.ts";
 import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
 import { useUserService } from "../hooks/services/backend/useUserService.ts";
 import useNFTContract from "../hooks/services/contracts/useNFTContract.ts";
 import useStore from "../hooks/store/useStore.ts";
+import { useSession } from "../hooks/useSession.ts";
 import useWindowFocus from "../hooks/useWindowFocus.ts";
 import { isLocal, logError } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
@@ -35,6 +35,7 @@ export default function Layout({
   title: string;
   description?: string;
 }) {
+  const { getAccessToken, delAccessToken, hasAccessToken } = useSession();
   const headerHeight = 55;
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ export default function Layout({
   const setUser = useStore((state) => state.setUser);
   const setProtoFee = useStore((state) => state.setProtoFee);
   const { getUser, logOnlineStatus, registerDevice } = useUserService();
-  const accessToken = localStorage.getItem(StoreAccessTokenKey);
+  const accessToken = getAccessToken();
   const { subscribeForWebPush } = useNotificationService();
   const { getProtocolFees } = useMiscService();
   const ref = useRef(null);
@@ -101,7 +102,7 @@ export default function Layout({
       setUser(authedUserQuery.data);
     } else {
       setUser(undefined);
-      localStorage.removeItem(StoreAccessTokenKey);
+      delAccessToken();
     }
   }, [
     authedUserQuery.data,
@@ -138,7 +139,7 @@ export default function Layout({
 
   // Log online status every 10 seconds.
   useInterval(() => {
-    if (!user || !windowFocus) return;
+    if (!windowFocus || !hasAccessToken()) return;
 
     const orderMatch = location.pathname.match(/\/swap\/([0-9]+)/);
     const orderId = orderMatch ? parseInt(orderMatch[1]) : undefined;
@@ -154,7 +155,7 @@ export default function Layout({
 
   // Register user devices
   useEffect(() => {
-    if (!user) return;
+    if (!hasAccessToken()) return;
     registerDeviceMutation.mutate();
   }, [user]);
 

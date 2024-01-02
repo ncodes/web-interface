@@ -4,6 +4,7 @@ import React from "react";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
 import useStore from "../hooks/store/useStore.ts";
+import { useSession } from "../hooks/useSession.ts";
 import { useSheetInfo } from "../hooks/useSheetInfo.ts";
 import { cn } from "../libs/utils.ts";
 import { NotificationItem } from "./NotificationItem.tsx";
@@ -24,12 +25,14 @@ import {
 
 export function NotificationSheet(props: { children?: React.ReactNode }) {
   const [, sheetSide, styles] = useSheetInfo();
+  const user = useStore((state) => state.user);
   const { address, getChainInfo } = useConnectorContext();
   const openState = useStore((state) => state.openState);
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const { getNotifications, markNotificationsAsRead } =
     useNotificationService();
   const queryClient = useQueryClient();
+  const { hasAccessToken } = useSession();
 
   const getNotesQuery = useQuery({
     queryKey: [
@@ -40,7 +43,8 @@ export function NotificationSheet(props: { children?: React.ReactNode }) {
       },
     ],
     queryFn: getNotifications,
-    enabled: !!address && openState.notificationSheet,
+    enabled:
+      !!address && !!user && hasAccessToken() && openState.notificationSheet,
     refetchInterval: 10000,
   });
 

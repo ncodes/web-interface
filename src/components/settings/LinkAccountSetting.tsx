@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { StoreAccessTokenKey, StoreEmailKey } from "../../constants.ts";
+import { RefCodeKey, StoreEmailKey } from "../../constants.ts";
 import { createSignatureMessage } from "../../hooks/connectors/common.ts";
 import { useAuthService } from "../../hooks/services/backend/useAuthService.ts";
 import useStore from "../../hooks/store/useStore.ts";
@@ -13,6 +13,7 @@ import { Button } from "../ui/Button.tsx";
 import { ChevronLeft } from "lucide-react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { useSession } from "../../hooks/useSession.ts";
 import { cn, logError } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -28,10 +29,15 @@ export function LinkAccountSetting() {
   const [verifyMode, setVerifyMode] = useState<boolean>(false);
   const [err, setErr] = useState<string>("");
   const { getUser } = useUserService();
+  const { setAccessToken, delAccessToken } = useSession();
 
   const authMutation = useMutation({
-    mutationFn: (data: { msg: string; sig: string }) => {
-      return auth(data.msg, data.sig);
+    mutationFn: (data: {
+      msg: string;
+      sig: string;
+      refCode: string | null;
+    }) => {
+      return auth(data.msg, data.sig, data.refCode);
     },
   });
 
@@ -89,9 +95,11 @@ export function LinkAccountSetting() {
     }
 
     try {
+      const refCode = localStorage.getItem(RefCodeKey);
       const data = await authMutation.mutateAsync({
         msg: msg.toString("hex"),
         sig,
+        refCode,
       });
 
       if (!data.token) {
@@ -142,7 +150,7 @@ export function LinkAccountSetting() {
   }
 
   async function onLinked(user: User, token: string) {
-    localStorage.setItem(StoreAccessTokenKey, token);
+    setAccessToken(token);
     localStorage.setItem(StoreEmailKey, user.email);
     await fetchUser.refetch();
     setValue(user.email);
@@ -169,7 +177,7 @@ export function LinkAccountSetting() {
       return;
     }
 
-    localStorage.removeItem(StoreAccessTokenKey);
+    delAccessToken();
     setLinked(false);
     setLoading(false);
   }

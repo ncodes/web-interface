@@ -1,8 +1,8 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import { useSession } from "../../useSession.ts";
 
 interface IsAllowedAddressParams {
   address: string;
@@ -13,22 +13,25 @@ interface IsAllowedAddressParams {
  */
 export function useAuthService() {
   const { getChainInfo } = useConnectorContext();
+  const { getAccessToken } = useSession();
 
   /**
    * auth registers a new user and links their wallet address to their email
    * @param message - The message that was signed
    * @param signature - The signature derived from the message
+   * @param refCode - The referrer code
    */
   async function auth(
     message: string,
     signature: string,
+    refCode: string | null,
   ): Promise<{ token?: string; user: User }> {
     try {
       const resp = await axios({
         method: "post",
         url: `${getChainInfo().apiUrl}/v1/auth`,
         headers: { "Content-Type": "application/json" },
-        data: JSON.stringify({ msg: message, sig: signature }),
+        data: JSON.stringify({ msg: message, sig: signature, refCode }),
       });
       return Promise.resolve(resp.data.data);
     } catch (e) {
@@ -66,7 +69,7 @@ export function useAuthService() {
   async function deleteSession(all: boolean): Promise<void> {
     try {
       const headers = { "Content-Type": "application/json" };
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken();
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       await axios({

@@ -1,6 +1,6 @@
-import { StoreAccessTokenKey } from "../constants.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../hooks/store/useStore.ts";
+import { useSession } from "../hooks/useSession.ts";
 import IconCaution from "./icons/IconCaution.tsx";
 import { Button } from "./ui/Button.tsx";
 
@@ -10,12 +10,11 @@ export function AccountLinker() {
     user: state.user,
     toggleOpenState: state.toggleOpenState,
   }));
-
-  const userToken = localStorage.getItem(StoreAccessTokenKey);
+  const { getAccessToken } = useSession();
 
   return (
     <>
-      {!userToken && connected && (
+      {!getAccessToken() && connected && (
         <div className="select-none pt-2 py-2 bg-card-background rounded-3xl mb-2 px-3 md:px-3 border border-card-border flex items-center gap-3">
           <span>
             <IconCaution
