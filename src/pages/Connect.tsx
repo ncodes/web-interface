@@ -29,7 +29,7 @@ export default function ConnectPage() {
   return (
     <div className="fixed w-full h-screen bg-gray-900 z-50 left-0 flex flex-col">
       <Helmet>
-        <title>Connect Wallet | Joint Exchange</title>
+        <title>Connect Wallet - Joint Exchange</title>
         <meta
           name="description"
           content={
