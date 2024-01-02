@@ -22,7 +22,7 @@ export default function ConnectPage() {
   });
 
   useEffect(() => {
-    if (address && isAllowedQuery.data) navigate("/");
+    if (address && isAllowedQuery.data) navigate(-1);
     if (address && isAllowedQuery.data == false) disconnect();
   }, [address, isAllowedQuery.data]);
 
