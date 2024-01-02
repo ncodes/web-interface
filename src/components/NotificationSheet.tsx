@@ -44,7 +44,10 @@ export function NotificationSheet(props: { children?: React.ReactNode }) {
     ],
     queryFn: getNotifications,
     enabled:
-      !!address && !!user && hasAccessToken() && openState.notificationSheet,
+      !!address &&
+      !!user &&
+      hasAccessToken(address) &&
+      openState.notificationSheet,
     refetchInterval: 10000,
   });
 

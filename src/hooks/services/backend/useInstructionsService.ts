@@ -56,7 +56,7 @@ export type InstructionsWithGrantSigResponse = InstructionsResponse & {
  * useInstructionsService provides access to v1/instructions endpoint
  */
 export function useInstructionsService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getAccessToken } = useSession();
 
   /**
@@ -68,7 +68,7 @@ export function useInstructionsService() {
   ): Promise<InstructionsWithGrantSigResponse> {
     try {
       const headers = {};
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({
@@ -98,13 +98,13 @@ export function useInstructionsService() {
       const [, body] = ctx.queryKey;
       const headers = {};
 
-      const token = getAccessToken;
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
-      const { net, address } = body;
+      const { net } = body;
       const resp = await axios({
         method: "get",
-        url: `${getChainInfo().apiUrl}/v1/instructions/${net}/${address}`,
+        url: `${getChainInfo().apiUrl}/v1/instructions/${net}/${body.address}`,
         headers,
       });
 

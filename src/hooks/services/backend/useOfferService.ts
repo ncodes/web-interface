@@ -41,7 +41,7 @@ export type ListOfferIDs =
  * useOfferService provides access to v1/offers endpoints
  */
 export function useOfferService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getAccessToken } = useSession();
 
   /**
@@ -148,7 +148,7 @@ export function useOfferService() {
       const [, params] = ctx.queryKey;
       const { network, marketAddress, provider, lid } = params;
       const headers = {};
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
       const resp = await axios({
         method: "get",
@@ -179,7 +179,7 @@ export function useOfferService() {
       const [, params] = ctx.queryKey;
       const { network, marketAddress, provider, lid } = params;
       const headers = {};
-      const token = getAccessToken;
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
       const resp = await axios({
         method: "put",

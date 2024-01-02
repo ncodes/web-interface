@@ -22,7 +22,7 @@ interface LogOnlineStatusParams {
  * useUserService provides access to v1/users endpoint
  */
 export function useUserService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getAccessToken } = useSession();
 
   /**
@@ -36,7 +36,7 @@ export function useUserService() {
       const headers = {};
 
       if (!params.noAuth) {
-        const token = getAccessToken();
+        const token = getAccessToken(address);
         headers["authorization"] = token ? `Bearer ${token}` : undefined;
       }
 
@@ -61,7 +61,7 @@ export function useUserService() {
   async function logOnlineStatus(params: LogOnlineStatusParams) {
     try {
       const headers = {};
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({
@@ -87,7 +87,7 @@ export function useUserService() {
   async function registerDevice() {
     try {
       const headers = {};
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       await axios({

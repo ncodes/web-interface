@@ -23,7 +23,7 @@ export function Navigation() {
   const unreadOfferCount = useQuery({
     queryKey: ["countUnreadOffer", { network: getChainInfo().queryName }],
     queryFn: countUnread,
-    enabled: !!address && hasAccessToken(),
+    enabled: !!address && hasAccessToken(address),
   });
 
   return (

@@ -150,7 +150,7 @@ export function LinkAccountSetting() {
   }
 
   async function onLinked(user: User, token: string) {
-    setAccessToken(token);
+    setAccessToken(address, token);
     localStorage.setItem(StoreEmailKey, user.email);
     await fetchUser.refetch();
     setValue(user.email);
@@ -177,7 +177,7 @@ export function LinkAccountSetting() {
       return;
     }
 
-    delAccessToken();
+    delAccessToken(address);
     setLinked(false);
     setLoading(false);
   }
@@ -185,7 +185,8 @@ export function LinkAccountSetting() {
   return (
     <>
       <div className="font-light text-gray-300 text-sm">
-        Link your wallet to an email account to receive trade notifications.
+        Link your wallet to an email account to receive trade notifications and
+        access member features.
       </div>
       {!linked && (
         <div className="transition-all duration-300">

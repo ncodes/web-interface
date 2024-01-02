@@ -5,7 +5,7 @@ import IconCaution from "./icons/IconCaution.tsx";
 import { Button } from "./ui/Button.tsx";
 
 export function AccountLinker() {
-  const { connected } = useConnectorContext();
+  const { connected, address } = useConnectorContext();
   const { toggleOpenState } = useStore((state) => ({
     user: state.user,
     toggleOpenState: state.toggleOpenState,
@@ -14,7 +14,7 @@ export function AccountLinker() {
 
   return (
     <>
-      {!getAccessToken() && connected && (
+      {connected && !!address && !getAccessToken(address) && (
         <div className="select-none pt-2 py-2 bg-card-background rounded-3xl mb-2 px-3 md:px-3 border border-card-border flex items-center gap-3">
           <span>
             <IconCaution
@@ -27,13 +27,13 @@ export function AccountLinker() {
           <span className="tracking-wide font-light text-gray-400 flex md:items-center flex-col md:flex-row md:gap-2">
             <span className="text-white font-normal">Wallet Unlinked</span>
             <span className="text-xs md:text-sm">
-              <span className="hidden md:inline">
-                - Link your wallet to receive notifications!
+              <span className="hidden lg:inline">
+                - Link to enable personalized features like notifications!
               </span>
-              <span className="hidden xxs:inline md:hidden">
-                Link to receive notifications!
+              <span className="hidden xxs:inline lg:hidden">
+                Enable personalized features!
               </span>
-              <span className="xxs:hidden">Link for notifications!</span>
+              <span className="xxs:hidden">Get personalized features!</span>
             </span>
           </span>
           <span className="flex-1 flex justify-end">

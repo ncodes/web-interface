@@ -26,7 +26,7 @@ export interface ToggleConvosMuteStateParams {
  * useConvoService provides access to v1/convos endpoint
  */
 export function useConvoService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getAccessToken } = useSession();
 
   /**
@@ -38,7 +38,7 @@ export function useConvoService() {
     params: SubscribeToChatConvoParams,
   ) {
     try {
-      const token = getAccessToken;
+      const token = getAccessToken(address);
       const headers = {
         "Content-Type": "application/json",
         Authorization: token ? `Bearer ${token}` : undefined,
@@ -67,7 +67,7 @@ export function useConvoService() {
   ): Promise<boolean> {
     try {
       const headers = {};
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const [, params] = ctx.queryKey;
@@ -99,7 +99,7 @@ export function useConvoService() {
   async function toggleConvosMuteStatus(params: ToggleConvosMuteStateParams) {
     try {
       const headers = {};
-      const token = getAccessToken;
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       for (let topic of params.topics) {

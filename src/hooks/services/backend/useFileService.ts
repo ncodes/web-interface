@@ -14,7 +14,7 @@ export interface UploadParams {
  * useFileService provides access to v1/files endpoint
  */
 export function useFileService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getAccessToken } = useSession();
 
   /**
@@ -25,7 +25,7 @@ export function useFileService() {
       const { net, orderId, data, onUploadProgress } = params;
       const headers = { "Content-Type": "multipart/form-data" };
 
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({

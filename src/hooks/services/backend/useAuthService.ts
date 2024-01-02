@@ -12,7 +12,7 @@ interface IsAllowedAddressParams {
  * useAuthService provides access to v1/auth endpoint
  */
 export function useAuthService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getAccessToken } = useSession();
 
   /**
@@ -69,7 +69,7 @@ export function useAuthService() {
   async function deleteSession(all: boolean): Promise<void> {
     try {
       const headers = { "Content-Type": "application/json" };
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       await axios({

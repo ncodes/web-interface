@@ -36,7 +36,7 @@ export function UnreadMessageCount({
       },
     ],
     queryFn: countNotifications,
-    enabled: !!address && hasAccessToken() && !!user,
+    enabled: !!address && hasAccessToken(address) && !!user,
     refetchInterval: 10000,
   });
 

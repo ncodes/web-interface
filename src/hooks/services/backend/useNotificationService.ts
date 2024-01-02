@@ -40,7 +40,7 @@ export interface NotificationParams {
  * useNotificationService provides access to v1/notifications endpoint
  */
 export function useNotificationService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
   const { getAccessToken } = useSession();
 
   /**
@@ -79,7 +79,7 @@ export function useNotificationService() {
   ): Promise<Notification[]> {
     const [, params] = ctx.queryKey;
     const headers = { "Content-Type": "application/json" };
-    const token = getAccessToken();
+    const token = getAccessToken(address);
     headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
     const resp = await axios({
@@ -103,7 +103,7 @@ export function useNotificationService() {
     try {
       const [, params] = ctx.queryKey;
       const headers = { "Content-Type": "application/json" };
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({
@@ -129,7 +129,7 @@ export function useNotificationService() {
   ): Promise<void> {
     try {
       const headers = { "Content-Type": "application/json" };
-      const token = getAccessToken();
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       await axios({

@@ -48,7 +48,7 @@ export default function Layout({
   const setUser = useStore((state) => state.setUser);
   const setProtoFee = useStore((state) => state.setProtoFee);
   const { getUser, logOnlineStatus, registerDevice } = useUserService();
-  const accessToken = getAccessToken();
+  const accessToken = getAccessToken(address);
   const { subscribeForWebPush } = useNotificationService();
   const { getProtocolFees } = useMiscService();
   const ref = useRef(null);
@@ -97,12 +97,12 @@ export default function Layout({
 
   // Set authed user.
   useEffect(() => {
-    if (authedUserQuery.isLoading) return;
-    if (authedUserQuery.isSuccess) {
+    if (authedUserQuery.isLoading || authedUserQuery.isRefetching) return;
+    if (authedUserQuery.isSuccess && authedUserQuery.data) {
       setUser(authedUserQuery.data);
     } else {
       setUser(undefined);
-      delAccessToken();
+      delAccessToken(address);
     }
   }, [
     authedUserQuery.data,
@@ -139,7 +139,7 @@ export default function Layout({
 
   // Log online status every 10 seconds.
   useInterval(() => {
-    if (!windowFocus || !hasAccessToken()) return;
+    if (!windowFocus || !address || !hasAccessToken(address)) return;
 
     const orderMatch = location.pathname.match(/\/swap\/([0-9]+)/);
     const orderId = orderMatch ? parseInt(orderMatch[1]) : undefined;
@@ -155,7 +155,7 @@ export default function Layout({
 
   // Register user devices
   useEffect(() => {
-    if (!hasAccessToken()) return;
+    if (!address || !hasAccessToken(address)) return;
     registerDeviceMutation.mutate();
   }, [user]);
 
