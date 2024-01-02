@@ -41,10 +41,16 @@ export function PointActivityStream() {
       },
     ],
     queryFn: isPointsPage ? getLatestPoints : getLatestReferralPoints,
+    keepPreviousData: false,
     enabled: mounted && !!address,
     refetchOnWindowFocus: false,
     refetchInterval: 10000,
   });
+
+  useEffect(() => {
+    setPoints([]);
+    setFromDate("");
+  }, [loc]);
 
   useEffect(() => {
     if (fetchLatest.isLoading || fetchLatest.isRefetching) return;
