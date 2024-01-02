@@ -1,7 +1,12 @@
+import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
 import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+
+interface IsAllowedAddressParams {
+  address: string;
+}
 
 /**
  * useAuthService provides access to v1/auth endpoint
@@ -77,9 +82,32 @@ export function useAuthService() {
     }
   }
 
+  /**
+   * Check if an address is in the private allowlist
+   * @param ctx The query context
+   * @returns
+   */
+  async function isAllowedPrivateTestAddress(
+    ctx: QueryFunctionContext<[string, IsAllowedAddressParams]>,
+  ): Promise<boolean> {
+    try {
+      const [, params] = ctx.queryKey;
+
+      const resp = await axios({
+        method: "get",
+        url: `${getChainInfo().apiUrl}/v1/auth/${params.address}/allowed`,
+      });
+
+      return Promise.resolve(resp.data.data.allowed);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     auth,
     verifyEmail,
     deleteSession,
+    isAllowedPrivateTestAddress,
   };
 }

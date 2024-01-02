@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.tsx";
 import "./hooks/store/useStore.ts";
 import "./i18n/i18n.ts";
+import ConnectPage from "./pages/Connect.tsx";
 import Disputes from "./pages/Disputes.tsx";
 import Liquidities from "./pages/Liquidities.tsx";
 import Liquidity from "./pages/Liquidity.tsx";
@@ -126,6 +127,11 @@ const router = createBrowserRouter([
   {
     path: makePath("/energon"),
     element: <App page={<Points defaultTab="energon" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/connect"),
+    element: <App page={<ConnectPage />} />,
     errorElement: <RootErrorBoundary />,
   },
 ]);

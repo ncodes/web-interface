@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useInterval, useMediaQuery } from "usehooks-ts";
 import { AccountLinker } from "../components/AccountLinker.tsx";
 import { Footer } from "../components/Footer.tsx";
@@ -19,7 +19,7 @@ import { useUserService } from "../hooks/services/backend/useUserService.ts";
 import useNFTContract from "../hooks/services/contracts/useNFTContract.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useWindowFocus from "../hooks/useWindowFocus.ts";
-import { logError } from "../libs/helpers.ts";
+import { isLocal, logError } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
 
 export default function Layout({
@@ -37,6 +37,7 @@ export default function Layout({
 }) {
   const headerHeight = 55;
   const location = useLocation();
+  const navigate = useNavigate();
   const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
   const isXl = useMediaQuery("(min-width: 1280px)");
   const { address, ready, getChainInfo } = useConnectorContext();
@@ -54,6 +55,17 @@ export default function Layout({
   const [scrollYPos, setScrollYPos] = useState(0);
   const { balanceOf: nativeNftBalance } = useNFTContract();
   // const mounted = useMounted(1000);
+
+  // Redirect to connect page (for testnet allowlist check)
+  useEffect(() => {
+    setTimeout(() => {
+      if (location.pathname === "/connect") return;
+      if (!isLocal() && !ready) {
+        navigate("/connect");
+        return;
+      }
+    }, 1000);
+  }, [ready, location.pathname, navigate]);
 
   const authedUserQuery = useQuery({
     queryKey: ["getUser", { address }],
@@ -213,7 +225,6 @@ export default function Layout({
             setLeftSideMenuOpen(false);
           }}
         />
-
         <div className="flex flex-col flex-1 z-10">
           <div className="flex flex-col flex-1 pt-3">
             <div>
@@ -269,7 +280,6 @@ export default function Layout({
             <Footer />
           </div> */}
         </div>
-
         <SearchSheetBox />
         <NotificationSheet />
         <ReviewViewerSheet />

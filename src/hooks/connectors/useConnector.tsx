@@ -29,18 +29,17 @@ export default function useConnector() {
   const [chainId, setChainId] = useState<number | undefined>(undefined);
   const [ready, setReady] = useState(false);
   const [network, setNetwork] = useState<string | undefined>(undefined);
-
   const { disconnectAsync } = useDisconnect();
   const { chain } = useNetwork();
   const { isConnected, address: _address } = useAccount();
   const { data: walletClient } = useWalletClient();
+  const { switchNetwork: _switchNetwork, chains } = useSwitchNetwork();
+  const publicClient = usePublicClient();
   const {
     data: signedData,
     status: signStatus,
     signMessageAsync,
   } = useSignMessage();
-  const { switchNetwork: _switchNetwork, chains } = useSwitchNetwork();
-  const publicClient = usePublicClient();
 
   useEffect(() => {
     setConnected(isConnected);
@@ -51,6 +50,7 @@ export default function useConnector() {
     if (!chain) return;
     setChainId(connected ? chain.id : undefined);
     setNetwork(getChain(chain.id)?.queryName);
+    localStorage.setItem("lastChainId", chain.id.toString());
   }, [connected, chain]);
 
   useEffect(() => {
