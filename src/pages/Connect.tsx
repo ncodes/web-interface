@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { AlertOctagon, PlugZapIcon } from "lucide-react";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { ConnectWalletButton } from "../components/ConnectWalletButton";
 import { Button } from "../components/ui/Button";
@@ -27,6 +28,18 @@ export default function ConnectPage() {
 
   return (
     <div className="fixed w-full h-screen bg-gray-900 z-50 left-0 flex flex-col">
+      <Helmet>
+        <title>Connect Wallet | Joint Exchange</title>
+        <meta
+          name="description"
+          content={
+            "Joint is an innovative, simple to use DeFi protocol for peer-to-peer trading. " +
+            "Carry out swaps for crypto to crypto, crypto to fiat, NFT to fiat, and vice versa."
+          }
+        />
+        <meta name="theme-color" content="#030507" />
+        <body className="bg-background" />
+      </Helmet>
       <div className="flex justify-center items-center text-gray-200 pt-10">
         <img src="images/logo-w.svg" />
       </div>

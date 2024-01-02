@@ -210,7 +210,7 @@ export default function Layout({
           content={
             description ||
             "Joint is an innovative, simple to use DeFi protocol for peer-to-peer trading. " +
-              "Swap cryptocurrencies, NFTs for cash, and vice versa."
+              "Carry out swaps for crypto to crypto, crypto to fiat, NFT to fiat, and vice versa."
           }
         />
         <meta name="theme-color" content="#030507" />
