@@ -27,7 +27,7 @@ export default function ConnectPage() {
   }, [address, isAllowedQuery.data]);
 
   return (
-    <div className="fixed w-full h-screen bg-gray-900 z-50 left-0 flex flex-col">
+    <div className="fixed w-full h-screen bg-black z-50 left-0 flex flex-col">
       <Helmet>
         <title>Connect Wallet - Joint Exchange</title>
         <meta
