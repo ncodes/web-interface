@@ -1,68 +1,142 @@
-import { useQuery } from "@tanstack/react-query";
-import { AlertOctagon, PlugZapIcon } from "lucide-react";
-import { useEffect } from "react";
-import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
-import { ConnectWalletButton } from "../components/ConnectWalletButton";
-import { Button } from "../components/ui/Button";
-import { useConnectorContext } from "../hooks/connectors/useConnectorContext";
-import { useAuthService } from "../hooks/services/backend/useAuthService";
+import { DiscordLogoIcon } from '@radix-ui/react-icons';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { AlertCircle, AlertOctagon, PlugZapIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Alert } from '../components/Alert';
+import { ConnectWalletButton } from '../components/ConnectWalletButton';
+import { Button } from '../components/ui/Button';
+import { useConnectorContext } from '../hooks/connectors/useConnectorContext';
+import { useAuthService } from '../hooks/services/backend/useAuthService';
+import { cn } from '../libs/helpers';
 
 export default function ConnectPage() {
-  const { address, disconnect } = useConnectorContext();
-  const navigate = useNavigate();
-  const { isAllowedPrivateTestAddress } = useAuthService();
+	const { address, disconnect } = useConnectorContext();
+	const navigate = useNavigate();
+	const { isAllowedPrivateTestAddress, verifyDiscord } = useAuthService();
+	const [searchParams] = useSearchParams();
+	const [authCode, setAuthCode] = useState<string | undefined>();
+	const [err, setErr] = useState<string>('');
 
-  const isAllowedQuery = useQuery({
-    queryKey: ["isAllowedAddress", { address }],
-    queryFn: isAllowedPrivateTestAddress,
-    enabled: !!address,
-    refetchInterval: false,
-    keepPreviousData: true,
-  });
+	const isAllowedQuery = useQuery({
+		queryKey: ['isAllowedAddress', { address }],
+		queryFn: isAllowedPrivateTestAddress,
+		enabled: !!address,
+	});
 
-  useEffect(() => {
-    if (address && isAllowedQuery.data) navigate(-1);
-    if (address && isAllowedQuery.data == false) disconnect();
-  }, [address, isAllowedQuery.data]);
+	const mutateVerifyDiscord = useMutation({
+		mutationFn: verifyDiscord,
+	});
 
-  return (
-    <div className="fixed w-full h-screen bg-black z-50 left-0 flex flex-col">
-      <Helmet>
-        <title>Connect Wallet - Joint Exchange</title>
-        <meta
-          name="description"
-          content={
-            "Joint is an innovative, simple to use DeFi protocol for peer-to-peer trading. " +
-            "Carry out swaps for crypto to crypto, crypto to fiat, NFT to fiat, and vice versa."
-          }
-        />
-        <meta name="theme-color" content="#030507" />
-        <body className="bg-background" />
-      </Helmet>
-      <div className="flex justify-center items-center text-gray-200 pt-10">
-        <img src="images/logo-w.svg" />
-      </div>
-      <div className="flex-1 flex flex-col w-[300px] items-center mx-auto ">
-        {isAllowedQuery.data == undefined && (
-          <span className="block mt-[300px]">
-            <ConnectWalletButton>
-              <Button className="w-[220px] flex gap-2 hover:scale-105 duration-500">
-                <PlugZapIcon className="w-[20px]" /> Connect your wallet
-              </Button>
-            </ConnectWalletButton>
-          </span>
-        )}
+	useEffect(() => {
+		if (address && isAllowedQuery.data == 1) {
+			if (!searchParams.get('code')) navigate(-1);
+			else navigate('/');
+		}
+	}, [address, isAllowedQuery.data]);
 
-        {isAllowedQuery.data == false && (
-          <span className="text-gray-200 flex gap-2 items-center mt-[300px]">
-            <span>
-              <AlertOctagon width="20" />
-            </span>
-            <span>You do not have permission!</span>
-          </span>
-        )}
-      </div>
-    </div>
-  );
+	useEffect(() => {
+		const code = searchParams.get('code');
+		if (!code) return;
+		setAuthCode(code || undefined);
+	}, [searchParams, address, mutateVerifyDiscord.status]);
+
+	useEffect(() => {
+		if (!authCode || !address) return;
+		const doVerify = async () => {
+			try {
+				await mutateVerifyDiscord.mutateAsync({ code: authCode, address });
+				await isAllowedQuery.refetch();
+			} catch (error) {
+				setErr((error as { message: string }).message);
+				setAuthCode(undefined);
+			}
+		};
+
+		void doVerify();
+	}, [authCode]);
+
+	return (
+		<div className='fixed w-full h-screen bg-black z-50 left-0 flex flex-col'>
+			<Helmet>
+				<title>Connect Wallet - Joint Exchange</title>
+				<meta
+					name='description'
+					content={
+						'Joint is an innovative, simple to use DeFi protocol for peer-to-peer trading. ' +
+						'Carry out swaps for crypto to crypto, crypto to fiat, NFT to fiat, and vice versa.'
+					}
+				/>
+				<meta name='theme-color' content='#030507' />
+				<body className='bg-background' />
+			</Helmet>
+			<div className='flex justify-center items-center text-gray-200 pt-10'>
+				<img src='images/logo-w.svg' />
+			</div>
+			<div className='flex-1 flex flex-col items-center mx-auto'>
+				<span className='mt-[150px] xl:mt-[300px] flex flex-col gap-3'>
+					{isAllowedQuery.data != 1 && (
+						<>
+							{isAllowedQuery.data == -1 && (
+								<span className='text-gray-300 flex flex-col gap-2 items-center'>
+									<span className='flex gap-2'>
+										<span>
+											<AlertOctagon width='20' className='text-red-400' />
+										</span>
+										<span>You are not on the allowlist</span>
+									</span>
+									<span>
+										<Button variant='outline' onClick={disconnect}>
+											Disconnect
+										</Button>
+									</span>
+								</span>
+							)}
+
+							{err && (
+								<Alert
+									className='w-[250px] text-sm border-red-400 text-red-400'
+									icon={<AlertCircle className='text-red-400' />}
+								>
+									{err}
+								</Alert>
+							)}
+
+							{isAllowedQuery.data != -1 && (
+								<>
+									<ConnectWalletButton className={cn({ 'opacity-50': !!address })}>
+										<Button className='w-[250px] flex gap-2 hover:scale-105 duration-500'>
+											<PlugZapIcon className='w-[20px]' /> Connect your wallet
+										</Button>
+									</ConnectWalletButton>
+
+									<Link
+										className={(authCode && err == '') || address == undefined ? 'pointer-events-none' : ''}
+										to='https://discord.com/api/oauth2/authorize?client_id=1194240805322379284&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnect&scope=identify+guilds'
+									>
+										<Button
+											disabled={address == undefined || (authCode != undefined && err == '')}
+											className='w-[250px] flex gap-2 hover:scale-105 duration-500 bg-[#5864f2] hover:bg-[#5864f2]/90 text-gray-100'
+										>
+											<DiscordLogoIcon className='w-[20px]' />{' '}
+											{authCode && err == '' ? 'Connected' : 'Connect with Discord'}
+										</Button>
+									</Link>
+								</>
+							)}
+						</>
+					)}
+
+					{isAllowedQuery.data == 1 && (
+						<Link to='/' className='w-full'>
+							<Button variant='link' size='full'>
+								Go to Home
+							</Button>
+						</Link>
+					)}
+				</span>
+			</div>
+		</div>
+	);
 }

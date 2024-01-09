@@ -13,6 +13,7 @@ declare global {
 
     referrer: string;
     refCode: string;
+    discordId: string;
 
     totalSwaps: number;
     completionRate: number;
