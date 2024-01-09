@@ -113,7 +113,7 @@ export default function ConnectPage() {
 
 									<Link
 										className={(authCode && err == '') || address == undefined ? 'pointer-events-none' : ''}
-										to='https://discord.com/api/oauth2/authorize?client_id=1194240805322379284&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fconnect&scope=identify+guilds'
+										to={import.meta.env.VITE_DISCORD_OAUTH_URL}
 									>
 										<Button
 											disabled={address == undefined || (authCode != undefined && err == '')}
