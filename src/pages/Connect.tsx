@@ -71,71 +71,75 @@ export default function ConnectPage() {
 				<meta name='theme-color' content='#030507' />
 				<body className='bg-background' />
 			</Helmet>
-			<div className='flex justify-center items-center text-gray-200 pt-10'>
-				<img src='images/logo-w.svg' />
-			</div>
-			<div className='flex-1 flex flex-col items-center mx-auto'>
-				<span className='mt-[150px] xl:mt-[300px] flex flex-col gap-3'>
-					{isAllowedQuery.data != 1 && (
-						<>
-							{isAllowedQuery.data == -1 && (
-								<span className='text-gray-300 flex flex-col gap-2 items-center'>
-									<span className='flex gap-2'>
-										<span>
-											<AlertOctagon width='20' className='text-red-400' />
+			<div className='absolute w-full h-full bg-[url(images/bg/connect-bg.png)] bg-cover'></div>
+			<div className='absolute w-full h-full bg-blackx/80 bg-gradient-to-r from-black to-black/70'> </div>
+			<div className='absolute w-full h-full'>
+				<div className='flex justify-center items-center text-gray-200 pt-10'>
+					<img src='images/logo-w.svg' />
+				</div>
+				<div className='flex-1 flex flex-col items-center mx-auto'>
+					<span className='mt-[150px] xl:mt-[300px] flex flex-col gap-3'>
+						{isAllowedQuery.data != 1 && (
+							<>
+								{isAllowedQuery.data == -1 && (
+									<span className='text-gray-300 flex flex-col gap-2 items-center'>
+										<span className='flex gap-2'>
+											<span>
+												<AlertOctagon width='20' className='text-red-400' />
+											</span>
+											<span>You are not on the allowlist</span>
 										</span>
-										<span>You are not on the allowlist</span>
+										<span>
+											<Button variant='outline' onClick={disconnect}>
+												Disconnect
+											</Button>
+										</span>
 									</span>
-									<span>
-										<Button variant='outline' onClick={disconnect}>
-											Disconnect
-										</Button>
-									</span>
-								</span>
-							)}
+								)}
 
-							{err && (
-								<Alert
-									className='w-[250px] text-sm border-red-400 text-red-400'
-									icon={<AlertCircle className='text-red-400' />}
-								>
-									{err}
-								</Alert>
-							)}
-
-							{isAllowedQuery.data != -1 && (
-								<>
-									<ConnectWalletButton className={cn({ 'opacity-50': !!address })}>
-										<Button className='w-[250px] flex gap-2 hover:scale-105 duration-500'>
-											<PlugZapIcon className='w-[20px]' /> Connect your wallet
-										</Button>
-									</ConnectWalletButton>
-
-									<Link
-										className={(authCode && err == '') || address == undefined ? 'pointer-events-none' : ''}
-										to={import.meta.env.VITE_DISCORD_OAUTH_URL}
+								{err && (
+									<Alert
+										className='w-[250px] text-sm border-red-400 text-red-400'
+										icon={<AlertCircle className='text-red-400' />}
 									>
-										<Button
-											disabled={address == undefined || (authCode != undefined && err == '')}
-											className='w-[250px] flex gap-2 hover:scale-105 duration-500 bg-[#5864f2] hover:bg-[#5864f2]/90 text-gray-100'
-										>
-											<DiscordLogoIcon className='w-[20px]' />{' '}
-											{authCode && err == '' ? 'Connected' : 'Connect with Discord'}
-										</Button>
-									</Link>
-								</>
-							)}
-						</>
-					)}
+										{err}
+									</Alert>
+								)}
 
-					{isAllowedQuery.data == 1 && (
-						<Link to='/' className='w-full'>
-							<Button variant='link' size='full'>
-								Go to Home
-							</Button>
-						</Link>
-					)}
-				</span>
+								{isAllowedQuery.data != -1 && (
+									<>
+										<ConnectWalletButton className={cn({ 'opacity-50': !!address })}>
+											<Button className='w-[250px] flex gap-2 hover:scale-105 duration-500'>
+												<PlugZapIcon className='w-[20px]' /> Connect your wallet
+											</Button>
+										</ConnectWalletButton>
+
+										<Link
+											className={(authCode && err == '') || address == undefined ? 'pointer-events-none' : ''}
+											to={import.meta.env.VITE_DISCORD_OAUTH_URL}
+										>
+											<Button
+												disabled={address == undefined || (authCode != undefined && err == '')}
+												className='w-[250px] flex gap-2 hover:scale-105 duration-500 bg-[#5864f2] hover:bg-[#5864f2]/90 text-gray-100'
+											>
+												<DiscordLogoIcon className='w-[20px]' />{' '}
+												{authCode && err == '' ? 'Connected' : 'Connect with Discord'}
+											</Button>
+										</Link>
+									</>
+								)}
+							</>
+						)}
+
+						{isAllowedQuery.data == 1 && (
+							<Link to='/' className='w-full'>
+								<Button variant='link' size='full'>
+									Go to Home
+								</Button>
+							</Link>
+						)}
+					</span>
+				</div>
 			</div>
 		</div>
 	);
