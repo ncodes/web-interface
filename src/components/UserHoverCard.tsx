@@ -135,7 +135,10 @@ export function UserHoverCard({
 									width='w-full'
 									rmDataClickTrigger
 								>
-									<span className='text-gray-200'>{moment(user?.lastActiveAt).fromNow()}</span>
+									{user?.lastActiveAt}
+									<span className='text-gray-200'>
+										{user?.lastActiveAt ? moment(user?.lastActiveAt).fromNow() : 'no swap yet'}
+									</span>
 								</InfoCard>
 							</div>
 						</ScrollOverflowIndicator>
