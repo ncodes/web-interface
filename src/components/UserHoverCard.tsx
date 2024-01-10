@@ -12,7 +12,6 @@ import { AvatarSize } from './avatar/useAvatar.tsx';
 import IconCopyFilled from './icons/IconCopyFilled.tsx';
 import { VerifiedBadge } from './liquidity/VerifiedBadge.tsx';
 import { InfoCard } from './market/InfoCard.tsx';
-import { Button } from './ui/Button.tsx';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card.tsx';
 
 export function UserHoverCard({
@@ -74,12 +73,12 @@ export function UserHoverCard({
 								)}
 							</div>
 							<div className='flex-1 flex justify-end'>
-								<Button variant='default' size='sm'>
+								{/* <Button variant='default' size='sm'>
 									Follow
-								</Button>
+								</Button> */}
 							</div>
 						</div>
-						<div className='border-b border-gray-700'>
+						{/* <div className='border-b border-gray-700'>
 							<div className='p-1 px-3 flex justify-between text-gray-400 text-sm [&>div>span]:text-chinese-green'>
 								<div>
 									Following <span>100</span>
@@ -88,7 +87,7 @@ export function UserHoverCard({
 									Followers <span>1250</span>
 								</div>
 							</div>
-						</div>
+						</div> */}
 						<ScrollOverflowIndicator side='bottom' className='overflow-hidden rounded-b-xl'>
 							<div className='p-2 flex flex-col gap-2 h-[200px] overflow-auto scrollbar-hide'>
 								<InfoCard
