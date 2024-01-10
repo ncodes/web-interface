@@ -71,8 +71,8 @@ export default function ConnectPage() {
 				<meta name='theme-color' content='#030507' />
 				<body className='bg-background' />
 			</Helmet>
-			<div className='absolute w-full h-full bg-[url(images/bg/connect-bg.png)] bg-cover'></div>
-			<div className='absolute w-full h-full bg-blackx/80 bg-gradient-to-r from-black to-black/70'> </div>
+			<div className='absolute w-full h-full bg-[url(/images/bg/connect-bg.png)] bg-cover'></div>
+			<div className='absolute w-full h-full bg-gradient-to-r from-black to-black/70'> </div>
 			<div className='absolute w-full h-full'>
 				<div className='flex justify-center items-center text-gray-200 pt-10'>
 					<img src='images/logo-w.svg' />
