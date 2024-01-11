@@ -64,16 +64,17 @@ export function useAuthService() {
 	 * @param params The request params
 	 * @param params.address The user address
 	 * @param params.code The code from discord OAuth flow
+	 * @param params.refCode The referrer code (optional)
 	 * @returns
 	 */
-	async function verifyDiscord(params: { address: string; code: string }): Promise<void> {
+	async function verifyDiscord(params: { address: string; code: string; refCode?: string }): Promise<void> {
 		try {
-			const { address, code } = params;
+			const { address, code, refCode } = params;
 			await axios({
 				method: 'post',
 				url: `${getChainInfo().apiUrl}/v1/auth/verify-discord`,
 				headers: { 'Content-Type': 'application/json' },
-				data: JSON.stringify({ code, address }),
+				data: JSON.stringify({ code, address, refCode }),
 			});
 			return Promise.resolve(undefined);
 		} catch (e) {

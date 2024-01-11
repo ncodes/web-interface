@@ -46,7 +46,11 @@ export default function ConnectPage() {
 		if (!authCode || !address) return;
 		const doVerify = async () => {
 			try {
-				await mutateVerifyDiscord.mutateAsync({ code: authCode, address });
+				await mutateVerifyDiscord.mutateAsync({
+					code: authCode,
+					address,
+					refCode: localStorage.getItem('referrer') as string,
+				});
 				await isAllowedQuery.refetch();
 			} catch (error) {
 				setErr((error as { message: string }).message);
