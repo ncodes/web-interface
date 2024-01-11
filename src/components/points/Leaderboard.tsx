@@ -141,8 +141,8 @@ export function Leaderboard({
 									>
 										<TableCell>
 											<span className='font-medium flex gap-2 items-center'>
-												<span>{addressPoint.length == 0 ? index + 1 : point.rank}</span>
 												<span>{getRankIcon(addressPoint.length == 0 ? index + 1 : point.rank)}</span>
+												<span>{addressPoint.length == 0 ? index + 1 : point.rank}</span>
 											</span>
 										</TableCell>
 										<TableCell>
