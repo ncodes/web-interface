@@ -39,7 +39,7 @@ export function Leaderboard({
 		if (rank == 1) return <TrophyIcon className='w-4 h-4 text-yellow-500' />;
 		if (rank == 2) return <TrophyIcon className='w-4 h-4 text-[silver]' />;
 		if (rank == 3) return <TrophyIcon className='w-4 h-4 text-yellow-600' />;
-		return <>&nbsp;</>;
+		return <div className='w-[15px]'></div>;
 	}
 
 	return (
