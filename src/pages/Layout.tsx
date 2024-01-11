@@ -17,9 +17,10 @@ import { useNotificationService } from '../hooks/services/backend/useNotificatio
 import { useUserService } from '../hooks/services/backend/useUserService.ts';
 import useNFTContract from '../hooks/services/contracts/useNFTContract.ts';
 import useStore from '../hooks/store/useStore.ts';
+import useMounted from '../hooks/useMounted.ts';
 import { useSession } from '../hooks/useSession.ts';
 import useWindowFocus from '../hooks/useWindowFocus.ts';
-import { isLocal, logError } from '../libs/helpers.ts';
+import { logError } from '../libs/helpers.ts';
 import { cn } from '../libs/utils.ts';
 
 export default function Layout({
@@ -56,7 +57,7 @@ export default function Layout({
 	const [scrollYPos, setScrollYPos] = useState(0);
 	const { balanceOf: nativeNftBalance } = useNFTContract();
 	const setLoaderProgress = useStore((state) => state.setLoaderProgress);
-	// const mounted = useMounted(1000);
+	const mounted = useMounted(1000);
 
 	// Set loader progress to 100% on mount.
 	useEffect(() => {
@@ -65,11 +66,10 @@ export default function Layout({
 
 	// Redirect to connect page (for testnet allowlist check)
 	useEffect(() => {
-		setTimeout(() => {
-			if (location.pathname === '/connect') return;
-			if (!isLocal() && !ready) navigate('/connect');
-		}, 1000);
-	}, [ready, location.pathname, navigate]);
+		if (!mounted) return;
+		if (location.pathname === '/connect') return;
+		if (!ready) navigate('/connect');
+	}, [location.pathname, navigate, mounted]);
 
 	const authedUserQuery = useQuery({
 		queryKey: ['getUser', { address }],
