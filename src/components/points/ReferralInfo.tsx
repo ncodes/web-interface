@@ -40,7 +40,7 @@ export default function ReferralInfo({ referralInfo }: { referralInfo: GetReferr
 					)}
 
 					{referralInfo.refCode && (
-						<span className='flex items-center gap-1'>
+						<span className='flex items-center gap-1 break-all'>
 							https://jntl.ink/{referralInfo?.refCode}
 							<CopyToClipboard
 								text={`https://jntl.ink/${referralInfo?.refCode}`}
