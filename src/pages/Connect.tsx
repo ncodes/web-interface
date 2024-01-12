@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { AlertCircle, AlertOctagon, PlugZapIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Alert } from '../components/Alert';
 import { ConnectWalletButton } from '../components/ConnectWalletButton';
 import { Button } from '../components/ui/Button';
@@ -13,6 +13,7 @@ import { cn } from '../libs/helpers';
 
 export default function ConnectPage() {
 	const { address, disconnect } = useConnectorContext();
+	const loc = useLocation();
 	const navigate = useNavigate();
 	const { isAllowedPrivateTestAddress, verifyDiscord } = useAuthService();
 	const [searchParams] = useSearchParams();
@@ -31,10 +32,11 @@ export default function ConnectPage() {
 
 	useEffect(() => {
 		if (address && isAllowedQuery.data == 1) {
+			const searchParams = new URLSearchParams(loc.search);
 			if (searchParams.get('code') || searchParams.get('error')) navigate('/');
 			else navigate(-1);
 		}
-	}, [address, isAllowedQuery.data]);
+	}, [address, isAllowedQuery.data, searchParams]);
 
 	useEffect(() => {
 		const code = searchParams.get('code');
