@@ -67,8 +67,10 @@ export default function Layout({
 	// Redirect to connect page (for testnet allowlist check)
 	useEffect(() => {
 		if (!mounted) return;
-		if (location.pathname === '/connect') return;
-		if (!ready) navigate('/connect');
+		setTimeout(() => {
+			if (location.pathname === '/connect') return;
+			if (!ready) navigate('/connect');
+		}, 1000);
 	}, [location.pathname, navigate, mounted]);
 
 	const authedUserQuery = useQuery({
