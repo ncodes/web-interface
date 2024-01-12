@@ -31,14 +31,15 @@ export default function ConnectPage() {
 
 	useEffect(() => {
 		if (address && isAllowedQuery.data == 1) {
-			if (!searchParams.get('code')) navigate(-1);
-			else navigate('/');
+			if (searchParams.get('code') || searchParams.get('error')) navigate('/');
+			else navigate(-1);
 		}
 	}, [address, isAllowedQuery.data]);
 
 	useEffect(() => {
 		const code = searchParams.get('code');
 		if (!code) return;
+		searchParams.delete('code');
 		setAuthCode(code || undefined);
 	}, [searchParams, address, mutateVerifyDiscord.status]);
 
