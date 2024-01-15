@@ -1,7 +1,7 @@
 import axios, { AxiosProgressEvent } from "axios";
-import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import { useSession } from "../../useSession.ts";
 
 export interface UploadParams {
   net: string;
@@ -14,7 +14,8 @@ export interface UploadParams {
  * useFileService provides access to v1/files endpoint
  */
 export function useFileService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
+  const { getAccessToken } = useSession();
 
   /**
    * Get a user
@@ -24,7 +25,7 @@ export function useFileService() {
       const { net, orderId, data, onUploadProgress } = params;
       const headers = { "Content-Type": "multipart/form-data" };
 
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({

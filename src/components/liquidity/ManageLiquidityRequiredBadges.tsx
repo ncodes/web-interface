@@ -6,7 +6,7 @@ import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import {
   delay,
-  isDev,
+  logError,
   splitAndCleanBadges,
   splitBadgeFromPath,
 } from "../../libs/helpers.ts";
@@ -29,7 +29,7 @@ export function ManageLiquidityRequiredBadges({
   const [badges, setBadges] = useState(
     liquidity.requiredSwapBadges
       ? liquidity.requiredSwapBadges.join(", ").trim()
-      : ""
+      : "",
   );
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -44,7 +44,7 @@ export function ManageLiquidityRequiredBadges({
       const txHash = await setSwapBadgeForLiquidity(
         liquidity.marketAddress,
         liquidity.lid,
-        splitBadgeFromPath(splitAndCleanBadges(badges))
+        splitBadgeFromPath(splitAndCleanBadges(badges)),
       );
 
       await delay(5000);
@@ -59,13 +59,13 @@ export function ManageLiquidityRequiredBadges({
       const query = location.pathname.includes("liquidity")
         ? "getLiquidityByCreator"
         : "getMarketsByCreator";
-      queryClient.refetchQueries([query]).catch(console.error);
+      queryClient.refetchQueries([query]).catch(logError);
 
       close && close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

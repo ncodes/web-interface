@@ -11,9 +11,9 @@ import { useToast } from "../../hooks/useToast.tsx";
 import { isSynth } from "../../libs/api_utils.ts";
 import {
   delay,
-  isDev,
   isEmpty,
   isZero,
+  logError,
   powOfD,
   toBN,
   toDec,
@@ -204,7 +204,7 @@ export function ManageGeneralLiquidityTab({
     } catch (error) {
       const msg = humanizeErc20Errors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setAllowLoading(false);
     }
@@ -250,11 +250,11 @@ export function ManageGeneralLiquidityTab({
 
       await delay(5000);
       await queryClient.refetchQueries(["getLiquidityByCreator"]);
+      await queryClient.refetchQueries(["getLiquidities"]);
+      await queryClient.refetchQueries(["getMarket"]);
 
       notifySuccess(
-        !liquidity
-          ? "Liquidity successfully added"
-          : "Liquidity successfully updated",
+        `Liquidity successfully ${!liquidity ? "added" : "updated"}`,
         { duration: 5000 },
       );
 
@@ -262,7 +262,7 @@ export function ManageGeneralLiquidityTab({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setAddLoading(false);
     }

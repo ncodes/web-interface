@@ -1,8 +1,8 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import { useSession } from "../../useSession.ts";
 
 export interface ListOfferParams {
   network: string;
@@ -41,7 +41,8 @@ export type ListOfferIDs =
  * useOfferService provides access to v1/offers endpoints
  */
 export function useOfferService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
+  const { getAccessToken } = useSession();
 
   /**
    * List offers
@@ -147,7 +148,7 @@ export function useOfferService() {
       const [, params] = ctx.queryKey;
       const { network, marketAddress, provider, lid } = params;
       const headers = {};
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
       const resp = await axios({
         method: "get",
@@ -178,7 +179,7 @@ export function useOfferService() {
       const [, params] = ctx.queryKey;
       const { network, marketAddress, provider, lid } = params;
       const headers = {};
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
       const resp = await axios({
         method: "put",

@@ -14,7 +14,7 @@ import useStore from "../hooks/store/useStore.ts";
 import useForceUpdate from "../hooks/useForceUpdate.ts";
 import { useSheetInfo } from "../hooks/useSheetInfo.ts";
 import { isSwapCounterparty } from "../libs/api_utils.ts";
-import { isEqlStr, shortenAddress } from "../libs/helpers.ts";
+import { isEqlStr, logError, shortenAddress } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
 import { ReviewViewerSheetItem } from "./ReviewViewerSheetItem.tsx";
 import ScrollOverflowIndicator from "./ScrollOverflowIndicator.tsx";
@@ -106,7 +106,7 @@ export function ReviewViewerSheet() {
       client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
-      console.error("Failed to initialize wallet", error);
+      logError("Failed to initialize wallet", error);
     } finally {
       setInitializing(false);
     }

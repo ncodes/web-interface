@@ -1,8 +1,8 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import { useSession } from "../../useSession.ts";
 
 export type GetUserIDs = "getUser";
 
@@ -22,20 +22,21 @@ interface LogOnlineStatusParams {
  * useUserService provides access to v1/users endpoint
  */
 export function useUserService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
+  const { getAccessToken } = useSession();
 
   /**
    * Get a user
    */
   async function getUser(
-    ctx: QueryFunctionContext<[GetUserIDs, GetUserParams]>
+    ctx: QueryFunctionContext<[GetUserIDs, GetUserParams]>,
   ): Promise<User> {
     try {
       const [, params] = ctx.queryKey;
       const headers = {};
 
       if (!params.noAuth) {
-        const token = localStorage.getItem(StoreAccessTokenKey);
+        const token = getAccessToken(address);
         headers["authorization"] = token ? `Bearer ${token}` : undefined;
       }
 
@@ -60,7 +61,7 @@ export function useUserService() {
   async function logOnlineStatus(params: LogOnlineStatusParams) {
     try {
       const headers = {};
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({
@@ -68,7 +69,7 @@ export function useUserService() {
         method: "post",
         data: {
           ...params,
-          net:  params.net, 
+          net: params.net,
         },
         headers,
       });
@@ -86,7 +87,7 @@ export function useUserService() {
   async function registerDevice() {
     try {
       const headers = {};
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       await axios({

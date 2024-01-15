@@ -7,7 +7,7 @@ import { useAssetService } from "../../hooks/services/backend/useAssetService.ts
 import useMarketContract from "../../hooks/services/contracts/useMarketContract.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { delay, isDev, tokenTypeToAssetType } from "../../libs/helpers.ts";
+import { delay, logError, tokenTypeToAssetType } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import Input2 from "../Input2.tsx";
 import { ToolTip } from "../ToolTip.tsx";
@@ -93,12 +93,12 @@ export function CreateMarketSheet({
           { label: "View Transaction", href: `${explorer}/tx/${txHash}` },
         ],
       });
-      queryClient.refetchQueries(["getMarkets"]).catch(console.error);
+      queryClient.refetchQueries(["getMarkets"]).catch(logError);
       close();
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

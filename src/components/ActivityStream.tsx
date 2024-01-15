@@ -83,7 +83,7 @@ export function ActivityStream() {
               </div>
             )}
 
-            {swaps.isSuccess && swaps.data.swaps.length > 0 && (
+            {swaps.isSuccess && swaps.data.swaps && swaps.data.swaps.length > 0 && (
               <>
                 {swaps.data.swaps.map((swap) => {
                   return (
@@ -104,7 +104,7 @@ export function ActivityStream() {
               </>
             )}
 
-            {swaps.isSuccess && swaps.data.swaps.length == 0 && (
+            {swaps.isSuccess && swaps.data.swaps && swaps.data.swaps.length == 0 && (
               <div className="flex items-center gap-2 text-gray-500 justify-center font-light  h-[100px]">
                 Not enough data
               </div>

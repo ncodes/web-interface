@@ -13,10 +13,8 @@ import { twMerge } from "tailwind-merge";
 import { AssetType } from "../types/enums.ts";
 import { RequestError } from "./RequestError.ts";
 
-export function isDev(ignoreLocal = false) {
-  return (
-    import.meta.env.VITE_ENV === "development" || (!ignoreLocal && isLocal())
-  );
+export function isDev() {
+  return import.meta.env.VITE_ENV === "development";
 }
 
 export function isProd() {
@@ -25,6 +23,14 @@ export function isProd() {
 
 export function isLocal() {
   return import.meta.env.VITE_LOCAL === "true";
+}
+
+export function isLogEnabled() {
+  return import.meta.env.VITE_LOG === "true";
+}
+
+export function logError(message?: any, ...optionalParams: any[]) {
+  if (isDev() || isLogEnabled()) console.error(message, ...optionalParams);
 }
 
 // pow10 returns 10^decimals
@@ -152,7 +158,7 @@ export function handleAxiosError(error: {
   } else if (error.request) {
     return new RequestError(500, "request error");
   } else {
-    console.error(error);
+    logError("handleAxiosError", error);
     return new RequestError(500, "something went wrong");
   }
 }

@@ -2,6 +2,7 @@ import { Client } from "@xmtp/xmtp-js";
 import { useEffect, useRef, useState } from "react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMessenger from "../../hooks/messenger/useMessenger.ts";
+import { logError } from "../../libs/helpers.ts";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 
@@ -41,7 +42,7 @@ export function IdentityInitializer({
       onInitialized && onInitialized(client.current);
     } catch (e) {
       setLoading(false);
-      console.error(e);
+      logError("initializeWallet:", e);
     }
   }
 

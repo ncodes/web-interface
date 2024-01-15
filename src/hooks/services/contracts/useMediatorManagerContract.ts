@@ -64,6 +64,22 @@ export default function useMediatorManagerContract() {
       if (error.message.includes("transfer amount exceeds balance")) {
         return "Insufficient balance to cover ticket price and bond";
       }
+
+      if (error.message.includes("MM: LOW_BOND")) {
+        return "Bond is too low";
+      }
+
+      if (error.message.includes("MM: NOT_MATURE")) {
+        return "Ticket is not mature";
+      }
+
+      if (error.message.includes("MM: EXPIRED")) {
+        return "Ticket has expired";
+      }
+
+      if (error.message.includes("MM: CANCELLED")) {
+        return "Ticket has been cancelled";
+      }
     }
 
     return "Transaction failed";

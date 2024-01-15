@@ -37,9 +37,15 @@ export default function ConnectorProvider({
     }),
   );
 
+  const lastChainId = localStorage.getItem("lastChainId");
+
   return (
     <WagmiConfig config={config}>
-      <ConnectKitProvider>
+      <ConnectKitProvider
+        options={{
+          initialChainId: lastChainId ? parseInt(lastChainId) : undefined,
+        }}
+      >
         <ConnectorContextWrapper>{children}</ConnectorContextWrapper>
       </ConnectKitProvider>
     </WagmiConfig>

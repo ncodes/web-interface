@@ -8,7 +8,7 @@ import {
 } from "../../hooks/services/backend/useInstructionsService.ts";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { isDev } from "../../libs/helpers.ts";
+import { logError } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
@@ -67,7 +67,7 @@ export function LiquidityInstruction() {
       } catch (error) {
         const msg = humanizeErrors(error);
         notifyError(msg);
-        if (isDev()) console.error(error);
+        logError(error);
       } finally {
         setTxLoading(false);
       }
@@ -144,7 +144,7 @@ export function LiquidityInstruction() {
             update
               .mutateAsync()
               .then((data) => {
-                doPublish(data).catch(console.error);
+                doPublish(data).catch(logError);
               })
               .catch((e) => {
                 notifyError("Failed to update instructions: " + e.message);

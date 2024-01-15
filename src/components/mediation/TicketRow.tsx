@@ -11,11 +11,12 @@ import {
 } from "lucide-react";
 import moment from "moment";
 import { BaseSyntheticEvent, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useMediatorManagerContract from "../../hooks/services/contracts/useMediatorManagerContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { getTicketStatus } from "../../libs/api_utils.ts";
-import { delay, formatToHighDenom, isDev } from "../../libs/helpers.ts";
+import { delay, formatToHighDenom, logError } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { CountDown } from "../Countdown.tsx";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
@@ -82,7 +83,7 @@ export function TicketRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setJoining(false);
     }
@@ -107,7 +108,7 @@ export function TicketRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setCancelling(false);
     }
@@ -132,7 +133,7 @@ export function TicketRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setDraining(false);
     }
@@ -154,7 +155,7 @@ export function TicketRow({
           {
             "hover:border-chinese-green cursor-pointer": !noFocus,
           },
-          className
+          className,
         )}
       >
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
@@ -297,7 +298,7 @@ export function TicketRow({
                 className="flex gap-1 w-full justify-between md:justify-start"
               >
                 <span className="flex gap-1">
-                  <span>This ticket has matured. Join a pool</span>
+                  <span>This ticket has matured. Join its pool</span>
                   <CountDown
                     prefix=" before "
                     isoDate={ticket.joinBy}
@@ -416,7 +417,7 @@ export function TicketRow({
         <div
           className={cn("flex justify-between border-t border-card-border", {
             hidden: ["drained", "maturing", "cancelling"].includes(
-              getTicketStatus(ticket) || ""
+              getTicketStatus(ticket) || "",
             ),
           })}
         >
@@ -446,7 +447,7 @@ export function TicketRow({
             )}
 
             {["matured", "expired", "joined"].includes(
-              getTicketStatus(ticket) || ""
+              getTicketStatus(ticket) || "",
             ) && (
               <Button
                 variant="outline"
@@ -492,34 +493,26 @@ export function TicketRow({
           <div
             data-click-trigger="1"
             className={cn(
-              "flex items-center border-l border-gray-800 shrink-0 px-2"
+              "flex items-center border-l border-gray-800 shrink-0 px-2",
             )}
           >
             {getTicketStatus(ticket) == "drafted" && (
               <>
                 <span className=" lg:inline border-r border-gray-800 shrink-0">
-                  <Button
-                    variant="link"
-                    rounded="none"
-                    className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-                  >
-                    View Swap
-                  </Button>
-                </span>
-
-                <span className=" lg:inline border-gray-800 shrink-0">
-                  <Button
-                    variant="link"
-                    rounded="none"
-                    className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
-                  >
-                    View Dispute
-                  </Button>
+                  <NavLink to={`/swap/${ticket.orderId}`}>
+                    <Button
+                      variant="link"
+                      rounded="none"
+                      className="text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1"
+                    >
+                      View Swap
+                    </Button>
+                  </NavLink>
                 </span>
               </>
             )}
 
-            <span className="hidden ">
+            <span className="hidden">
               <DropdownMenu
                 onOpenChange={(open) => {
                   setMoreMenuOpen(open);
@@ -529,7 +522,7 @@ export function TicketRow({
                   <span
                     className={cn(
                       "px-2 py-3 outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                      { "scale-x-105 text-chinese-green": moreMenuOpen }
+                      { "scale-x-105 text-chinese-green": moreMenuOpen },
                     )}
                   >
                     <DotsVerticalIcon />
@@ -537,14 +530,11 @@ export function TicketRow({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
                   {getTicketStatus(ticket) == "drafted" && (
-                    <>
+                    <NavLink to={`/swap/${ticket.orderId}`}>
                       <DropdownMenuItem className="flex gap-2">
                         View Swap
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="flex gap-2">
-                        View Dispute
-                      </DropdownMenuItem>
-                    </>
+                    </NavLink>
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -21,9 +21,9 @@ import {
   delay,
   formatToHighDenom,
   formatToMoney,
-  isDev,
   isEmpty,
   isZero,
+  logError,
   powOfD,
   toDec,
   toHD,
@@ -452,7 +452,7 @@ export function SwapOfferCreatorContent({
     } catch (error) {
       const msg = humanizeErc20Errors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setApproveLoading(false);
     }
@@ -507,7 +507,7 @@ export function SwapOfferCreatorContent({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -554,7 +554,7 @@ export function SwapOfferCreatorContent({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -609,7 +609,7 @@ export function SwapOfferCreatorContent({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }
@@ -663,7 +663,7 @@ export function SwapOfferCreatorContent({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

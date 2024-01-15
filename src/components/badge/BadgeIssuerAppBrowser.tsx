@@ -3,7 +3,7 @@ import { NewGrantValues } from "@/hooks/services/backend/useInstructionsService.
 import useBadgeMgrContract from "@/hooks/services/contracts/useBadgeMgrContract.ts";
 import { useToast } from "@/hooks/useToast.tsx";
 import IconSpinner from "@/icons/IconSpinner.tsx";
-import { delay, isDev } from "@/libs/helpers.ts";
+import { delay, logError } from "@/libs/helpers.ts";
 import { BadgeManifest } from "@jointlabs/chains-info";
 import { useEffect, useRef, useState } from "react";
 import { AuthInfo } from "./BadgeSheetContent.tsx";
@@ -97,7 +97,7 @@ export function BadgeIssuerAppBrowser({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
       setLoading(false);
       setLoadingLabel("");
     }

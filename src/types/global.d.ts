@@ -11,6 +11,10 @@ declare global {
     emailUnverified: string;
     role: string;
 
+    referrer: string;
+    refCode: string;
+    discordId: string;
+
     totalSwaps: number;
     completionRate: number;
     badges: string[];
@@ -526,5 +530,23 @@ declare global {
 
   export interface SwapPageState {
     revealPhaseEnded?: boolean;
+  }
+
+  export interface GetReferralInfo {
+    refCode: string;
+    numReferred: number;
+    totalPoints: string;
+    referred: string[];
+  }
+
+  export interface Point {
+    address: string;
+    totalPoints: string;
+    owner: Partial<User>;
+    rank: number;
+    createdAt: string;
+    point: string;
+    referee: string;
+    referrer: string;
   }
 }

@@ -13,7 +13,7 @@ import {
   useSwitchNetwork,
   useWalletClient,
 } from "wagmi";
-import { isDev } from "../../libs/helpers.ts";
+import { isDev, logError } from "../../libs/helpers.ts";
 import { IConnector } from "./interface.ts";
 
 /**
@@ -29,18 +29,17 @@ export default function useConnector() {
   const [chainId, setChainId] = useState<number | undefined>(undefined);
   const [ready, setReady] = useState(false);
   const [network, setNetwork] = useState<string | undefined>(undefined);
-
   const { disconnectAsync } = useDisconnect();
   const { chain } = useNetwork();
   const { isConnected, address: _address } = useAccount();
   const { data: walletClient } = useWalletClient();
+  const { switchNetwork: _switchNetwork, chains } = useSwitchNetwork();
+  const publicClient = usePublicClient();
   const {
     data: signedData,
     status: signStatus,
     signMessageAsync,
   } = useSignMessage();
-  const { switchNetwork: _switchNetwork, chains } = useSwitchNetwork();
-  const publicClient = usePublicClient();
 
   useEffect(() => {
     setConnected(isConnected);
@@ -51,6 +50,7 @@ export default function useConnector() {
     if (!chain) return;
     setChainId(connected ? chain.id : undefined);
     setNetwork(getChain(chain.id)?.queryName);
+    localStorage.setItem("lastChainId", chain.id.toString());
   }, [connected, chain]);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function useConnector() {
       const sig = await signMessageAsync({ message: msg });
       return Promise.resolve(sig);
     } catch (error) {
-      console.error(error);
+      logError("sign:", error);
       return Promise.reject(new Error(`User rejected the signing request`));
     }
   }
@@ -332,11 +332,10 @@ export default function useConnector() {
       const chain = chains.find((c) => c.id === chainInfo.chainId);
       if (!chain) throw new Error("unknown chain");
       if (!chainInfo.rpcUrl) throw new Error("unknown rpc url");
-      chain.rpcUrls.default.http = [chainInfo.rpcUrl];
-      chain.rpcUrls.public.http = chain.rpcUrls.default.http;
+
       client = createPublicClient({
         chain: chains.find((c) => c.id === (chainId as number)),
-        transport: http(),
+        transport: http(chainInfo.rpcUrl),
       }) as PublicClient;
     }
 

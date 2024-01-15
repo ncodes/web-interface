@@ -1,8 +1,8 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
 import axios from "axios";
-import { StoreAccessTokenKey } from "../../../constants.ts";
 import { handleAxiosError } from "../../../libs/helpers.ts";
 import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
+import { useSession } from "../../useSession.ts";
 
 export interface SubscribeToChatConvoParams {
   topics: string[];
@@ -26,7 +26,8 @@ export interface ToggleConvosMuteStateParams {
  * useConvoService provides access to v1/convos endpoint
  */
 export function useConvoService() {
-  const { getChainInfo } = useConnectorContext();
+  const { getChainInfo, address } = useConnectorContext();
+  const { getAccessToken } = useSession();
 
   /**
    * Subscribe to a chat conversation to receive notifications
@@ -34,10 +35,10 @@ export function useConvoService() {
    * @returns
    */
   async function subscribeToConvosNotifications(
-    params: SubscribeToChatConvoParams
+    params: SubscribeToChatConvoParams,
   ) {
     try {
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       const headers = {
         "Content-Type": "application/json",
         Authorization: token ? `Bearer ${token}` : undefined,
@@ -62,11 +63,11 @@ export function useConvoService() {
    * @returns
    */
   async function areConvosMuted(
-    ctx: QueryFunctionContext<[string, AreConvosMutedParams]>
+    ctx: QueryFunctionContext<[string, AreConvosMutedParams]>,
   ): Promise<boolean> {
     try {
       const headers = {};
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const [, params] = ctx.queryKey;
@@ -98,7 +99,7 @@ export function useConvoService() {
   async function toggleConvosMuteStatus(params: ToggleConvosMuteStateParams) {
     try {
       const headers = {};
-      const token = localStorage.getItem(StoreAccessTokenKey);
+      const token = getAccessToken(address);
       headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       for (let topic of params.topics) {

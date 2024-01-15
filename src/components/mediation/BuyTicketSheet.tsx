@@ -10,7 +10,7 @@ import useMediatorManagerContract from "../../hooks/services/contracts/useMediat
 import useStore from "../../hooks/store/useStore.ts";
 import { useSheetInfo } from "../../hooks/useSheetInfo.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { delay, formatToHighDenom, isDev } from "../../libs/helpers.ts";
+import { delay, formatToHighDenom, logError } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -97,7 +97,7 @@ export function BuyTicketSheet(props: {
     } catch (error) {
       const msg = humanizeErc20Errors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setApproveLoading(false);
     }
@@ -126,7 +126,7 @@ export function BuyTicketSheet(props: {
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading(false);
     }

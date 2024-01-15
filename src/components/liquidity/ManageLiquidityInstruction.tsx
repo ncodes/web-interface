@@ -8,7 +8,7 @@ import {
 } from "../../hooks/services/backend/useInstructionsService.ts";
 import useBadgeMgrContract from "../../hooks/services/contracts/useBadgeMgrContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
-import { delay, isDev } from "../../libs/helpers.ts";
+import { delay, logError } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
@@ -80,12 +80,12 @@ export function ManageLiquidityInstruction({
       } catch (error) {
         const msg = humanizeErrors(error);
         notifyError(msg);
-        if (isDev()) console.error(error);
+        logError(error);
       } finally {
         setTxLoading(false);
       }
     },
-    [update.isSuccess, update.data]
+    [update.isSuccess, update.data],
   );
 
   return (
@@ -161,7 +161,7 @@ export function ManageLiquidityInstruction({
               update
                 .mutateAsync()
                 .then((data) => {
-                  onPublish(data).catch(console.error);
+                  onPublish(data).catch(logError);
                 })
                 .catch((e) => {
                   notifyError("Failed to update instructions: " + e.message);

@@ -130,10 +130,25 @@ export function useMiscService() {
     }
   }
 
+  async function getPointsPerEnergon(): Promise<number> {
+    try {
+      const apiUrl = getChainInfo().apiUrl;
+      const resp = await axios({
+        method: "get",
+        url: `${apiUrl}/v1/misc/points-per-energon`,
+      });
+
+      return resp.data.data.value;
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     getCryptoRate,
     getSynthRate,
     getProtocolFees,
     getTokenInfo,
+    getPointsPerEnergon,
   };
 }

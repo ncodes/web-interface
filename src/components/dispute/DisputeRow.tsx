@@ -29,7 +29,7 @@ import {
   isDisputeDraftee,
   isRevealer,
 } from "../../libs/api_utils.ts";
-import { delay, isDev } from "../../libs/helpers.ts";
+import { delay, logError } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { CountDown } from "../Countdown.tsx";
 import { IDBadge } from "../IDBadge.tsx";
@@ -111,14 +111,14 @@ export function DisputeRow({
     () => {
       setCommitted(isCommitter(dispute, address));
     },
-    committed == false ? 5000 : null
+    committed == false ? 5000 : null,
   );
 
   useInterval(
     () => {
       setRevealed(isRevealer(dispute, address));
     },
-    revealed == false ? 5000 : null
+    revealed == false ? 5000 : null,
   );
 
   async function doCommit(hash: string) {
@@ -128,7 +128,7 @@ export function DisputeRow({
       const [txHash] = await commitVote(
         dispute.orderId,
         dispute.ticketIndex,
-        hash
+        hash,
       );
       await delay(5000);
 
@@ -150,7 +150,7 @@ export function DisputeRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading({ ...loading, commitVote: false });
     }
@@ -164,7 +164,7 @@ export function DisputeRow({
         dispute.orderId,
         dispute.ticketIndex,
         vote,
-        hash
+        hash,
       );
       await delay(5000);
 
@@ -186,7 +186,7 @@ export function DisputeRow({
     } catch (error) {
       const msg = humanizeErrors(error);
       notifyError(msg);
-      if (isDev()) console.error(error);
+      logError(error);
     } finally {
       setLoading({ ...loading, revealVote: false });
     }
@@ -208,7 +208,7 @@ export function DisputeRow({
           {
             "hover:border-chinese-green cursor-pointer": !noFocus,
           },
-          className
+          className,
         )}
       >
         {/* Level 1 */}
@@ -299,7 +299,7 @@ export function DisputeRow({
                         <>Awaiting Execution</>
                       )}
                       {["released", "stalled", "cancelled"].includes(
-                        getDisputeStatus(dispute)
+                        getDisputeStatus(dispute),
                       ) && <>Verdict Executed</>}
                     </span>
                   </InfoCard>
@@ -324,7 +324,7 @@ export function DisputeRow({
                       {getDisputeStatus(dispute) == "awaiting_exec" && <>-</>}
                       {getDisputeStatus(dispute) == "abandoned" && <>-</>}
                       {["released", "stalled", "cancelled"].includes(
-                        getDisputeStatus(dispute)
+                        getDisputeStatus(dispute),
                       ) && <>-</>}
                     </span>
                   </InfoCard>
@@ -350,10 +350,10 @@ export function DisputeRow({
                       </span>
                     )}
                     {["awaiting_exec", "executed", "abandoned"].includes(
-                      getDisputeStatus(dispute) || ""
+                      getDisputeStatus(dispute) || "",
                     ) && <span className="text-gray-200">-</span>}
                     {["released", "stalled", "cancelled"].includes(
-                      getDisputeStatus(dispute)
+                      getDisputeStatus(dispute),
                     ) && <>-</>}
                   </InfoCard>
                 </div>
@@ -562,7 +562,7 @@ export function DisputeRow({
                   orderId={dispute.orderId}
                   ticketIndex={dispute.ticketIndex}
                   onActivate={(hash) => {
-                    doCommit(hash).catch(console.error);
+                    doCommit(hash).catch(logError);
                   }}
                 >
                   <Button
@@ -616,7 +616,7 @@ export function DisputeRow({
                   orderId={dispute.orderId}
                   ticketIndex={dispute.ticketIndex}
                   onActivate={(vote: string, hash) => {
-                    doReveal(vote, hash).catch(console.error);
+                    doReveal(vote, hash).catch(logError);
                   }}
                 >
                   <Button
@@ -676,7 +676,7 @@ export function DisputeRow({
                   rounded="none"
                   className={cn(
                     "text-xs px-2 font-light text-gray-400 hover:text-chinese-green flex items-center gap-1",
-                    { hidden: location.pathname.match("^/swap") }
+                    { hidden: location.pathname.match("^/swap") },
                   )}
                 >
                   View Swap
@@ -705,7 +705,7 @@ export function DisputeRow({
                   <span
                     className={cn(
                       "px-2 py-3 outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                      { "scale-x-105 text-chinese-green": moreMenuOpen }
+                      { "scale-x-105 text-chinese-green": moreMenuOpen },
                     )}
                   >
                     <DotsVerticalIcon />

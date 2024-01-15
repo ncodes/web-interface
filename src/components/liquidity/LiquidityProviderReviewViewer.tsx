@@ -12,7 +12,7 @@ import useCoreContract from "../../hooks/services/contracts/useCoreContract.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import useForceUpdate from "../../hooks/useForceUpdate.ts";
 import { isSwapCounterparty } from "../../libs/api_utils.ts";
-import { cn, isEqlStr } from "../../libs/helpers.ts";
+import { cn, isEqlStr, logError } from "../../libs/helpers.ts";
 import ScrollOverflowIndicator from "../ScrollOverflowIndicator.tsx";
 import { ToolTip } from "../ToolTip.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -96,7 +96,7 @@ export function LiquidityProviderReviewViewer({
       client.current = await initClient(getEnv(), wallet);
       forceUpdate.forceUpdate();
     } catch (error) {
-      console.error("Failed to initialize wallet", error);
+      logError("Failed to initialize wallet", error);
     } finally {
       setInitializing(false);
     }

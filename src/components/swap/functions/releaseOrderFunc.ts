@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { Location } from "react-router-dom";
 import { Options } from "../../../hooks/useToast.tsx";
-import { delay, isDev } from "../../../libs/helpers.ts";
+import { delay, logError } from "../../../libs/helpers.ts";
 
 /**
  * Release an order
@@ -52,7 +52,7 @@ export async function releaseOrderFunc(
   } catch (error) {
     const msg = humanizeErrors(error);
     notifyError(msg);
-    if (isDev()) console.error(error);
+    logError(error);
   } finally {
     setLoading(swap.orderId.toFixed(), { ...loading, releaseOrder: false });
   }

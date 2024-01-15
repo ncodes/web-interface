@@ -9,6 +9,7 @@ import FollowCodec, {
 import useMessenger from "../../hooks/messenger/useMessenger";
 import useForceUpdate from "../../hooks/useForceUpdate";
 import { useToast } from "../../hooks/useToast";
+import { logError } from "../../libs/helpers";
 import { cn } from "../../libs/utils";
 import IconHeart from "../icons/IconHeart";
 import IconSpinner from "../icons/IconSpinner";
@@ -92,7 +93,7 @@ export function FollowLiquidity({
         setFollowing(follow);
         setLoading(false);
       } catch (error) {
-        console.error("failed to read mailbox", error);
+        logError("failed to read mailbox", error);
       }
     };
 
@@ -118,7 +119,7 @@ export function FollowLiquidity({
       forceUpdate.forceUpdate();
       setOpen(false);
     } catch (error) {
-      console.error("Failed to initialize wallet", error);
+      logError("Failed to initialize wallet", error);
     } finally {
       setInitializing(false);
     }
@@ -158,7 +159,7 @@ export function FollowLiquidity({
     } catch (error) {
       setLoading(false);
       notifyError("Failed to watch liquidity");
-      console.error(error);
+      logError(error);
     }
   }
 
@@ -196,7 +197,7 @@ export function FollowLiquidity({
     } catch (error) {
       setLoading(false);
       notifyError("Failed to unwatch liquidity");
-      console.error(error);
+      logError(error);
     }
   }
 
