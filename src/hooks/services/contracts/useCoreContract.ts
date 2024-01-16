@@ -306,6 +306,9 @@ export default function useCoreContract() {
 			// Common
 			if (error.message.includes('OC: AMOUNT_REQ')) return 'Amount is required';
 			if (error.message.includes('ERC20: transfer amount exceeds balance')) return 'Insufficient balance';
+			if (error.message.includes('replacement transaction underpriced')) {
+				return 'Rejected: Not enough gas to replace pending tx';
+			}
 		}
 
 		return 'Transaction failed';
