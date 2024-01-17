@@ -281,7 +281,7 @@ export function BuyTicketSheet(props: { children?: React.ReactNode; onOpen?: (op
 						</Alert>
 					)}
 
-					<Button size='full' disabled={!approved || !pool || loading} onClick={doPurchase}>
+					<Button size='full' disabled={!canPurchase()} onClick={doPurchase}>
 						{!loading && 'Purchase'}
 						{loading && <IconSpinner width='20' className='animate-spin' fill='fill-gray-800' />}
 					</Button>
