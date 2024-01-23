@@ -60,7 +60,7 @@ export function Leaderboard({
 									<div className='text-sm lg:text-lg font-normal text-gray-100'>
 										{shortenAddress(points[0].address)}
 									</div>
-									<p className='text-xs lg:text-sm text-gray-400'>{points[0].totalPoints} points</p>
+									<p className='text-xs lg:text-sm text-gray-400'>{parseInt(points[0].totalPoints)} points</p>
 								</div>
 							</CardContent>
 						</Card>
@@ -80,7 +80,7 @@ export function Leaderboard({
 									<div className='text-sm lg:text-lg font-normal text-gray-100'>
 										{shortenAddress(points[1].address)}
 									</div>
-									<p className='text-xs lg:text-sm text-gray-400'>{points[1].totalPoints} points</p>
+									<p className='text-xs lg:text-sm text-gray-400'>{parseInt(points[1].totalPoints)} points</p>
 								</div>
 							</CardContent>
 						</Card>
@@ -100,7 +100,7 @@ export function Leaderboard({
 									<div className='text-sm lg:text-lg font-normal text-gray-100'>
 										{shortenAddress(points[2].address)}
 									</div>
-									<p className='text-xs lg:text-sm text-gray-400'>{points[2].totalPoints} points</p>
+									<p className='text-xs lg:text-sm text-gray-400'>{parseInt(points[2].totalPoints)} points</p>
 								</div>
 							</CardContent>
 						</Card>
@@ -174,7 +174,7 @@ export function Leaderboard({
 												'-'
 											)}
 										</TableCell>
-										<TableCell className='text-right'>{point.totalPoints}</TableCell>
+										<TableCell className='text-right'>{parseInt(point.totalPoints)}</TableCell>
 									</TableRow>
 								))}
 							</TableBody>
