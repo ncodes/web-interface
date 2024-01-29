@@ -88,12 +88,9 @@ export function NotificationItem({ note }: { note: Notification }) {
 			>
 				<CardHeader className='p-0 '>
 					<CardTitle
-						className={cn(
-							'text-gray-300 text-[13px] tracking-wide p-2 px-3 font-normal border-b border-gray-900 cursor-pointer',
-							{
-								'text-chinese-green': !note.read,
-							},
-						)}
+						className={cn('text-gray-300 text-[13px] tracking-wide p-2 px-3 font-normal border-b border-gray-900', {
+							'text-chinese-green': !note.read,
+						})}
 					>
 						{humanizedNoteType[note.type]}
 					</CardTitle>
@@ -109,6 +106,7 @@ export function NotificationItem({ note }: { note: Notification }) {
 		return (
 			<NavLink
 				to={link || '#'}
+				className='cursor-pointer'
 				onClick={() => {
 					doMarkAsRead();
 				}}
