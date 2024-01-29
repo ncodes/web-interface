@@ -1,5 +1,5 @@
 import { Address } from 'viem';
-import { AssetType, Events } from './enums.ts';
+import { AssetType, Events, NotificationType } from './enums.ts';
 
 declare global {
 	interface User {
@@ -308,36 +308,6 @@ declare global {
 		updatedAt: string;
 		market: Market;
 		drafts: Draft[];
-	}
-
-	enum NotificationType {
-		InstantSwap = 'swap:instant',
-		InteractiveSwap = 'swap:interactive',
-		OrderCancellation = 'order:cancellation',
-		OrderPaid = 'order:paid',
-		OrderReleased = 'order:released',
-		PutApproved = 'market:perm:put:approved',
-		PutRevoked = 'market:perm:put:revoked',
-		SwapApproved = 'market:perm:swap:approved',
-		SwapRevoked = 'market:perm:swap:revoked',
-		NewLiqManager = 'market:liquidity-manager:updated',
-		RemovedLiqManager = 'market:liquidity-manager:removed',
-		DisputeCreated = 'dispute:created',
-		DisputeTicketDrafted = 'dispute:ticket-drafted',
-		DisputeEvidenceSubmission = 'dispute:evidence-submission',
-		EvidencePhaseStarted = 'dispute:evidence-phase-started',
-		DisputeTicketSlashed = 'dispute:ticket-slashed',
-		EvidencePhaseEnded = 'dispute:evidence-phase-ended',
-		CommitPhaseEnded = 'dispute:commit-phase-ended',
-		RevealPhaseEnded = 'dispute:reveal-phase-ended',
-		DisputeExecuted = 'dispute:executed',
-		NewOffer = 'offer:new',
-		OfferUpdated = 'offer:updated',
-		OfferAccepted = 'offer:accepted',
-		OfferUnaccepted = 'offer:unaccepted',
-		OfferCancelled = 'offer:cancelled',
-		OfferExecuted = 'offer:executed',
-		ChatNewMessage = 'chat:new-message',
 	}
 
 	interface Notification {
