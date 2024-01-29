@@ -303,7 +303,8 @@ export default function useCoreContract() {
 			// createOffer, updateOffer
 			if (error.message.includes('OC: MAX_PRICE_REQ')) return 'Price is required';
 
-			if (error.message.includes('OC: AMOUNT_ABOVE_MAX_SWAP')) return `Actual 'Out' amount is above max swap amount`;
+			if (error.message.includes('OC: AMOUNT_ABOVE_MAX_SWAP'))
+				return `'OUT' amount is above max swap amount. (OUT amount = OUT + fee)`;
 
 			// Common
 			if (error.message.includes('OC: AMOUNT_REQ')) return 'Amount is required';
