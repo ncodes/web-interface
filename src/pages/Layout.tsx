@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
-import ReactGA from 'react-ga4';
 import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useInterval, useMediaQuery } from 'usehooks-ts';
@@ -24,7 +23,7 @@ import useWindowFocus from '../hooks/useWindowFocus.ts';
 import { logError } from '../libs/helpers.ts';
 import { cn } from '../libs/utils.ts';
 
-ReactGA.initialize('G-4HPN7GNCG6');
+// ReactGA.initialize('G-4HPN7GNCG6');
 
 export default function Layout({
 	body,
