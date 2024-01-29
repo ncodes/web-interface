@@ -1,66 +1,70 @@
-import { cn } from "../libs/utils.ts";
-import { Button } from "./ui/Button.tsx";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useWindowScroll } from "@uidotdev/usehooks";
+import { useWindowScroll } from '@uidotdev/usehooks';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '../libs/utils.ts';
+import { Button } from './ui/Button.tsx';
 
 export function Paginator({
-  className,
-  limit,
-  total,
-  curPage,
-  onNext,
-  onPrev,
+	className,
+	limit,
+	total,
+	curPage,
+	onNext,
+	onPrev,
 }: {
-  className?: string;
-  curPage: number;
-  limit: number;
-  total?: number;
-  onNext?: () => void;
-  onPrev?: () => void;
+	className?: string;
+	curPage: number;
+	limit: number;
+	total?: number;
+	onNext?: () => void;
+	onPrev?: () => void;
 }) {
-  const [, scrollTo] = useWindowScroll();
+	const [, scrollTo] = useWindowScroll();
 
-  function getPageCount() {
-    return total ? Math.ceil(total / (limit || 1)) : 0;
-  }
+	function getPageCount() {
+		return total ? Math.ceil(total / (limit || 1)) : 0;
+	}
 
-  return (
-    <div
-      className={cn(
-        "flex items-center bg-card-background justify-between border-b border-gray-800 px-3 md:px-5 text-sm py-2 text-gray-400 font-light",
-        { hidden: !total },
-        className
-      )}
-    >
-      <span>
-        Showing {curPage + 1} of {getPageCount()} pages
-      </span>
-      <div className="flex gap-2">
-        {curPage + 1 > 1 && (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              scrollTo({ top: 0 });
-              onPrev && onPrev();
-            }}
-          >
-            <ChevronLeft width="20px" />
-          </Button>
-        )}
-        {curPage + 1 < getPageCount() && (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              scrollTo({ top: 0 });
-              onNext && onNext();
-            }}
-          >
-            <ChevronRight width="20px" />
-          </Button>
-        )}
-      </div>
-    </div>
-  );
+	function getCurPage() {
+		return typeof curPage === 'number' ? curPage : parseInt(curPage);
+	}
+
+	return (
+		<div
+			className={cn(
+				'flex items-center bg-card-background justify-between border-b border-gray-800 px-3 md:px-5 text-sm py-2 text-gray-400 font-light',
+				{ hidden: !total },
+				className,
+			)}
+		>
+			<span>
+				Showing {getCurPage() + 1} of {getPageCount()} pages
+			</span>
+			<div className='flex gap-2'>
+				{getCurPage() + 1 > 1 && (
+					<Button
+						variant='outline'
+						size='icon'
+						onClick={() => {
+							scrollTo({ top: 0 });
+							onPrev && onPrev();
+						}}
+					>
+						<ChevronLeft width='20px' />
+					</Button>
+				)}
+				{getCurPage() + 1 < getPageCount() && (
+					<Button
+						variant='outline'
+						size='icon'
+						onClick={() => {
+							scrollTo({ top: 0 });
+							onNext && onNext();
+						}}
+					>
+						<ChevronRight width='20px' />
+					</Button>
+				)}
+			</div>
+		</div>
+	);
 }
