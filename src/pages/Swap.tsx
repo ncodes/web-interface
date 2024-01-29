@@ -27,7 +27,7 @@ function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
 				icon={<AlertCircle className='text-red-400' />}
 				className='m-3 border-gray-600 font-bold tracking-wider w-auto text-red-500'
 			>
-				THIS IS A TESTNET VERSION OF JOINT PROTOCOL. DO NOT USE REAL FUNDS.
+				THIS IS A TESTNET VERSION OF JOINT PROTOCOL. DO NOT USE OR SEND REAL FUNDS.
 			</Alert>
 			<TabsList className='bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border'>
 				<ScrollOverflowIndicator className='[&::before]:rounded-tr-none w-full'>
