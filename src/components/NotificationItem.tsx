@@ -80,7 +80,7 @@ export function NotificationItem({ note }: { note: Notification }) {
 		const card = (
 			<Card
 				className={cn(
-					'w-full shrink-0 border   border-gray-900 cursor-pointer bg-card-background shadow-gray-900 shadow-lg border-b-gray-800 hover:border-gray-700 transition-all duration-500',
+					'w-full shrink-0 border border-gray-900 cursor-pointer bg-card-background shadow-gray-900 shadow-lg border-b-gray-800 hover:border-gray-700 transition-all duration-500',
 					{
 						'border-chinese-green hover:border-chinese-green': !note.read,
 					},
