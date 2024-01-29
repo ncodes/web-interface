@@ -76,16 +76,11 @@ export function NotificationItem({ note }: { note: Notification }) {
 		});
 	}
 
-	return (
-		<NavLink
-			to={link || '#'}
-			onClick={() => {
-				doMarkAsRead();
-			}}
-		>
+	function wrapLink(link) {
+		const card = (
 			<Card
 				className={cn(
-					'w-full shrink-0 border   border-gray-900 bg-card-background shadow-gray-900 shadow-lg border-b-gray-800 hover:border-gray-700 transition-all duration-500 cursor-pointer',
+					'w-full shrink-0 border   border-gray-900 cursor-pointer bg-card-background shadow-gray-900 shadow-lg border-b-gray-800 hover:border-gray-700 transition-all duration-500',
 					{
 						'border-chinese-green hover:border-chinese-green': !note.read,
 					},
@@ -108,6 +103,20 @@ export function NotificationItem({ note }: { note: Notification }) {
 					<span className='text-gray-400 font-light text-xs'>{moment(note.createdAt).fromNow()}</span>
 				</div>
 			</Card>
-		</NavLink>
-	);
+		);
+
+		if (note.type == NotificationType.InstantSwap) return card;
+		return (
+			<NavLink
+				to={link || '#'}
+				onClick={() => {
+					doMarkAsRead();
+				}}
+			>
+				{card}
+			</NavLink>
+		);
+	}
+
+	return <>{wrapLink(link)}</>;
 }
