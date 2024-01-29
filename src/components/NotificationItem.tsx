@@ -65,6 +65,17 @@ export function NotificationItem({ note }: { note: Notification }) {
 		queryClient.refetchQueries(['getNotifications', 'countNotifications']);
 	}
 
+	// Remove links from body but replace the links with the inner text.
+	function cleanBody(body: string) {
+		return body.replace(/<\/?a[^>].*>.*?/g, (match) => {
+			const href = match.match(/href="([^"]*)/);
+			if (!href) return match;
+			const innerText = match.match(/>([^<]*)/);
+			if (!innerText) return match;
+			return innerText[1];
+		});
+	}
+
 	return (
 		<NavLink
 			to={link || '#'}
@@ -92,9 +103,7 @@ export function NotificationItem({ note }: { note: Notification }) {
 						{humanizedNoteType[note.type]}
 					</CardTitle>
 				</CardHeader>
-				<CardContent className='p-2 px-3 text-gray-300 font-extralight text-xs'>
-					{note.body.replace(/<\/?a[^>].*>.*?/g, '')}
-				</CardContent>
+				<CardContent className='p-2 px-3 text-gray-300 font-extralight text-xs'>{cleanBody(note.body)}</CardContent>
 				<div className='px-3 pb-3'>
 					<span className='text-gray-400 font-light text-xs'>{moment(note.createdAt).fromNow()}</span>
 				</div>
