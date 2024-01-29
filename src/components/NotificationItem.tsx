@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { useConnectorContext } from '../hooks/connectors/useConnectorContext.tsx';
 import { useNotificationService } from '../hooks/services/backend/useNotificationService.ts';
 import { cn } from '../libs/helpers.ts';
+import { NotificationType } from '../types/enums.ts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card.tsx';
 
 const humanizedNoteType = {
