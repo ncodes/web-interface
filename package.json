@@ -78,6 +78,7 @@
     "react-day-picker": "^8.8.1",
     "react-dom": "^18.2.0",
     "react-file-upload": "^0.0.4",
+    "react-ga4": "^2.1.0",
     "react-helmet": "^6.1.0",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^13.0.2",
