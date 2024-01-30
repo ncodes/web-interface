@@ -7,6 +7,7 @@ import App from './App.tsx';
 import ConnectorProvider from './hooks/connectors/components/ConnectorProvider.tsx';
 import './hooks/store/useStore.ts';
 import './i18n/i18n.ts';
+import { isLocal } from './libs/helpers.ts';
 import ConnectPage from './pages/Connect.tsx';
 import Disputes from './pages/Disputes.tsx';
 import Liquidities from './pages/Liquidities.tsx';
@@ -25,6 +26,7 @@ import './styles/app.css';
 import './styles/fonts.css';
 
 Sentry.init({
+	enabled: !isLocal(),
 	dsn: 'https://e58314a261e90f717ede3add86ae842b@o4506660089823232.ingest.sentry.io/4506660095459328',
 	integrations: [
 		new Sentry.BrowserTracing({
