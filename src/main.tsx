@@ -29,7 +29,7 @@ Sentry.init({
 	integrations: [
 		new Sentry.BrowserTracing({
 			// Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-			tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/],
+			tracePropagationTargets: [/^https:\/\/dev\.joint\.exchange\/v1/, /^https:\/\/api\.joint\.exchange\/v1/],
 		}),
 		new Sentry.Replay({
 			maskAllText: false,
