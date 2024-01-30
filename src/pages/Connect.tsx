@@ -31,6 +31,7 @@ export default function ConnectPage() {
 	});
 
 	useEffect(() => {
+		console.log('Address', address, isAllowedQuery.data == 1);
 		if (address && isAllowedQuery.data == 1) {
 			const searchParams = new URLSearchParams(loc.search);
 			if (searchParams.get('code') || searchParams.get('error')) navigate('/');
