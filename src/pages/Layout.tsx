@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/browser';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
@@ -65,6 +66,12 @@ export default function Layout({
 	useEffect(() => {
 		setLoaderProgress(100);
 	}, []);
+
+	// Sentry: Set address as sentry username
+	useEffect(() => {
+		if (!address) return;
+		Sentry.setUser({ username: address });
+	}, [address]);
 
 	// Redirect to connect page (for testnet allowlist check)
 	useEffect(() => {
