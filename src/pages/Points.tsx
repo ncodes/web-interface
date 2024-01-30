@@ -39,7 +39,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               </TabsTrigger>
               <TabsTrigger
                 value="referrals"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className="hidden font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
                   navigate("/referrals");
                 }}
@@ -48,7 +48,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               </TabsTrigger>
               <TabsTrigger
                 value="energon"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className="hidden font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
                   navigate("/energon");
                 }}

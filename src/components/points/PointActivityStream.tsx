@@ -98,7 +98,7 @@ export function PointActivityStream() {
 									</div>
 								</div>
 								<div className='text-right tracking-wider'>
-									<p className='text-sm font-normal text-gray-300'>{point.point} Points</p>
+									<p className='text-sm font-normal text-gray-300'>{parseInt(point.point)} Points</p>
 								</div>
 							</Card>
 						))}

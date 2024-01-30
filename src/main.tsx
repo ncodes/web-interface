@@ -16,11 +16,11 @@ import Mediation from './pages/Mediation.tsx';
 import Offer from './pages/Offer.tsx';
 import Offers from './pages/Offers.tsx';
 import Points from './pages/Points.tsx';
-import RefPage from './pages/Ref.tsx';
 import Swap from './pages/Swap.tsx';
 import Swaps from './pages/Swaps.tsx';
 import { RootErrorBoundary } from './pages/errors/root.tsx';
 import ConnectExample from './pages/play/ConnectExample.tsx';
+import './sentry.ts';
 import './styles/app.css';
 import './styles/fonts.css';
 
@@ -121,25 +121,25 @@ const router = createBrowserRouter([
 		errorElement: <RootErrorBoundary />,
 	},
 	{
-		path: makePath('/referrals'),
-		element: <App page={<Points defaultTab='referrals' />} />,
-		errorElement: <RootErrorBoundary />,
-	},
-	{
-		path: makePath('/energon'),
-		element: <App page={<Points defaultTab='energon' />} />,
-		errorElement: <RootErrorBoundary />,
-	},
-	{
 		path: makePath('/connect'),
 		element: <App page={<ConnectPage />} />,
 		errorElement: <RootErrorBoundary />,
 	},
-	{
-		path: makePath('/r/:code'),
-		element: <App page={<RefPage />} />,
-		errorElement: <RootErrorBoundary />,
-	},
+	// {
+	// 	path: makePath('/referrals'),
+	// 	element: <App page={<Points defaultTab='referrals' />} />,
+	// 	errorElement: <RootErrorBoundary />,
+	// },
+	// {
+	// 	path: makePath('/energon'),
+	// 	element: <App page={<Points defaultTab='energon' />} />,
+	// 	errorElement: <RootErrorBoundary />,
+	// },
+	// {
+	// 	path: makePath('/r/:code'),
+	// 	element: <App page={<RefPage />} />,
+	// 	errorElement: <RootErrorBoundary />,
+	// },
 ]);
 
 const queryClient = new QueryClient();

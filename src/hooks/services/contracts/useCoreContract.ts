@@ -303,9 +303,15 @@ export default function useCoreContract() {
 			// createOffer, updateOffer
 			if (error.message.includes('OC: MAX_PRICE_REQ')) return 'Price is required';
 
+			if (error.message.includes('OC: AMOUNT_ABOVE_MAX_SWAP'))
+				return `'OUT' amount is above max swap amount. (OUT amount = OUT + fee)`;
+
 			// Common
 			if (error.message.includes('OC: AMOUNT_REQ')) return 'Amount is required';
 			if (error.message.includes('ERC20: transfer amount exceeds balance')) return 'Insufficient balance';
+			if (error.message.includes('replacement transaction underpriced')) {
+				return 'Rejected: Not enough gas to replace pending tx';
+			}
 		}
 
 		return 'Transaction failed';

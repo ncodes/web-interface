@@ -1,4 +1,7 @@
-import moment from "moment";
+import { getChains } from '@jointlabs/chains-info';
+import moment from 'moment';
+import { hardhat } from 'viem/chains';
+import { isProd } from '../../libs/helpers';
 
 /**
  * Create message to signed by a wallet
@@ -6,17 +9,13 @@ import moment from "moment";
  * @param email - The email to associate with the signer
  * @param expireTimeStr - The time after which signature is considered expired
  */
-export function createSignatureMessage(
-  address: string,
-  email?: string,
-  expireTimeStr = "5 minutes"
-) {
-  const emailStr = !email ? "" : `Email: ${email}`;
-  const msg = `Welcome to ${import.meta.env.VITE_APP_NAME}!
+export function createSignatureMessage(address: string, email?: string, expireTimeStr = '5 minutes') {
+	const emailStr = !email ? '' : `Email: ${email}`;
+	const msg = `Welcome to ${import.meta.env.VITE_APP_NAME}!
   
-Click Sign button to sign and accept the ${
-    import.meta.env.VITE_APP_NAME
-  } Terms of Service: ${import.meta.env.VITE_APP_URL}/term.
+Click Sign button to sign and accept the ${import.meta.env.VITE_APP_NAME} Terms of Service: ${
+		import.meta.env.VITE_APP_URL
+	}/term.
   
 This request will not trigger a blockchain transaction or cost any gas fees.
   
@@ -26,5 +25,13 @@ Address: "${address}"
 ${emailStr}
 Timestamp: ${moment().toISOString()}`;
 
-  return Buffer.from(msg, "utf-8");
+	return Buffer.from(msg, 'utf-8');
+}
+
+export function getSupportedChains() {
+	const chains = getChains();
+	if (isProd()) {
+		return chains.filter((chain) => chain.id !== hardhat.id);
+	}
+	return chains;
 }
