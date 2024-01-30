@@ -31,7 +31,7 @@ export default function ConnectPage() {
 	});
 
 	useEffect(() => {
-		console.log('HELLO');
+		console.log('HELLO FREN');
 	}, []);
 
 	useEffect(() => {
