@@ -73,15 +73,6 @@ export default function Layout({
 		Sentry.setUser({ username: address });
 	}, [address]);
 
-	// Redirect to connect page (for testnet allowlist check)
-	useEffect(() => {
-		if (!mounted) return;
-		setTimeout(() => {
-			if (location.pathname === '/connect') return;
-			if (!ready) navigate('/connect');
-		}, 1000);
-	}, [location.pathname, navigate, mounted]);
-
 	const authedUserQuery = useQuery({
 		queryKey: ['getUser', { address }],
 		queryFn: getUser,

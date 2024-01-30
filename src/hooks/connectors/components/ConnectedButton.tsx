@@ -1,4 +1,3 @@
-import { useLocation } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import EmojiAvatar from '../../../components/avatar/EmojiAvatar.tsx';
 import { AvatarSize } from '../../../components/avatar/useAvatar';
@@ -14,8 +13,6 @@ interface ConnectedProps {
 export const ConnectedButton = (props: ConnectedProps) => {
 	const { address } = useAccount();
 	const toggleOpenState = useStore((state) => state.toggleOpenState);
-	const loc = useLocation();
-	const isConnectPage = loc.pathname.includes('/connect');
 
 	return (
 		<div>
@@ -25,32 +22,13 @@ export const ConnectedButton = (props: ConnectedProps) => {
 					toggleOpenState && toggleOpenState('settingsSheet');
 				}}
 			>
-				{!isConnectPage && (
-					<>
-						<p
-							className={cn('hidden lg:flex py-[6px] px-[8px] ml-[4px] text-[#001029] tracking-[0.19px]  rounded-full')}
-						>
-							<IconSettingsOutline width='17' />
-						</p>
-						<p className='hidden address lg:inline-block font-normal text-[14px] tracking-[0.22px] text-black'>
-							<span className='hidden lg:inline-block'>{shortenAddress(address as string)}</span>
-							<span className='lg:hidden'>{shortenAddress2(address as string)}</span>
-						</p>
-					</>
-				)}
-
-				{/* REMOVE WHEN CONNECT PAGE IS REMOVED */}
-				{isConnectPage && (
-					<>
-						<p className={cn('lg:flex py-[6px] px-[8px] ml-[4px] text-[#001029] tracking-[0.19px]  rounded-full')}>
-							<IconSettingsOutline width='17' />
-						</p>
-						<p className='address lg:inline-block font-normal text-[14px] tracking-[0.22px] text-black'>
-							<span className='inline-block'>{shortenAddress(address as string)}</span>
-							<span className='hidden'>{shortenAddress2(address as string)}</span>
-						</p>
-					</>
-				)}
+				<p className={cn('hidden lg:flex py-[6px] px-[8px] ml-[4px] text-[#001029] tracking-[0.19px]  rounded-full')}>
+					<IconSettingsOutline width='17' />
+				</p>
+				<p className='hidden address lg:inline-block font-normal text-[14px] tracking-[0.22px] text-black'>
+					<span className='hidden lg:inline-block'>{shortenAddress(address as string)}</span>
+					<span className='lg:hidden'>{shortenAddress2(address as string)}</span>
+				</p>
 
 				<div className='pl-1 md:pl-2'>
 					<EmojiAvatar size={AvatarSize.Small} randomStr={address as string} />
