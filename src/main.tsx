@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -7,7 +6,6 @@ import App from './App.tsx';
 import ConnectorProvider from './hooks/connectors/components/ConnectorProvider.tsx';
 import './hooks/store/useStore.ts';
 import './i18n/i18n.ts';
-import { isLocal } from './libs/helpers.ts';
 import ConnectPage from './pages/Connect.tsx';
 import Disputes from './pages/Disputes.tsx';
 import Liquidities from './pages/Liquidities.tsx';
@@ -22,28 +20,9 @@ import Swap from './pages/Swap.tsx';
 import Swaps from './pages/Swaps.tsx';
 import { RootErrorBoundary } from './pages/errors/root.tsx';
 import ConnectExample from './pages/play/ConnectExample.tsx';
+import './sentry.ts';
 import './styles/app.css';
 import './styles/fonts.css';
-
-Sentry.init({
-	enabled: !isLocal(),
-	dsn: 'https://e58314a261e90f717ede3add86ae842b@o4506660089823232.ingest.sentry.io/4506660095459328',
-	integrations: [
-		new Sentry.BrowserTracing({
-			// Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-			tracePropagationTargets: [/^https:\/\/dev\.joint\.exchange\/v1/, /^https:\/\/api\.joint\.exchange\/v1/],
-		}),
-		new Sentry.Replay({
-			maskAllText: false,
-			blockAllMedia: false,
-		}),
-	],
-	// Performance Monitoring
-	tracesSampleRate: 1.0, //  Capture 100% of the transactions
-	// Session Replay
-	replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-	replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-});
 
 function makePath(path: string) {
 	return `:locale?/${path}`;
