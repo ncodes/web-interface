@@ -5,9 +5,7 @@ Sentry.init({
 	enabled: !isLocal(),
 	dsn: 'https://e58314a261e90f717ede3add86ae842b@o4506660089823232.ingest.sentry.io/4506660095459328',
 	integrations: [
-		new Sentry.BrowserTracing({
-			tracePropagationTargets: [/^https:\/\/dev\.joint\.exchange\/v1/, /^https:\/\/api\.joint\.exchange\/v1/],
-		}),
+		new Sentry.BrowserTracing({}),
 
 		Sentry.replayIntegration({
 			maskAllText: false,

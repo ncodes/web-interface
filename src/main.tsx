@@ -6,6 +6,7 @@ import App from './App.tsx';
 import ConnectorProvider from './hooks/connectors/components/ConnectorProvider.tsx';
 import './hooks/store/useStore.ts';
 import './i18n/i18n.ts';
+import { isLocal } from './libs/helpers.ts';
 import ConnectPage from './pages/Connect.tsx';
 import Disputes from './pages/Disputes.tsx';
 import Liquidities from './pages/Liquidities.tsx';
@@ -28,12 +29,7 @@ function makePath(path: string) {
 	return `:locale?/${path}`;
 }
 
-const router = createBrowserRouter([
-	{
-		path: makePath(`play/connect-wallet`),
-		element: <App page={<ConnectExample />} />,
-		errorElement: <RootErrorBoundary />,
-	},
+const routes = [
 	{
 		path: makePath(''),
 		// element: <App page={<Timeline />} />,
@@ -140,7 +136,17 @@ const router = createBrowserRouter([
 	// 	element: <App page={<RefPage />} />,
 	// 	errorElement: <RootErrorBoundary />,
 	// },
-]);
+];
+
+if (isLocal()) {
+	routes.push({
+		path: makePath(`play/connect-wallet`),
+		element: <App page={<ConnectExample />} />,
+		errorElement: <RootErrorBoundary />,
+	});
+}
+
+const router = createBrowserRouter(routes);
 
 const queryClient = new QueryClient();
 
