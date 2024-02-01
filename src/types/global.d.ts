@@ -21,6 +21,15 @@ declare global {
 		volume: string;
 		volumeUsd: number;
 		lastActiveAt: string;
+
+		notificationSettings: NotificationSettings;
+	}
+
+	interface NotificationSettings {
+		disabled: boolean;
+		disabledSwap: boolean;
+		disabledLiq: boolean;
+		disabledOffer: boolean;
 	}
 
 	interface LoadingState {

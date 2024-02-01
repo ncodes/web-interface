@@ -212,7 +212,7 @@ export function ManageGeneralLiquidityTab({
 				[values.minSwap, values.maxSwap, values.paymentTime, 0, values.paused],
 			);
 
-			await delay(5000);
+			await delay(10000);
 			await queryClient.refetchQueries(['getLiquidityByCreator']);
 			await queryClient.refetchQueries(['getLiquidities']);
 			await queryClient.refetchQueries(['getMarket']);

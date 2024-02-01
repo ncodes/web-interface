@@ -86,7 +86,7 @@ export default function Layout({
 		queryKey: ['getUser', { address }],
 		queryFn: getUser,
 		enabled: !!accessToken && !!address,
-		refetchInterval: 60000,
+		refetchInterval: 180 * 1000,
 	});
 
 	const protoFeeQuery = useQuery({
@@ -118,7 +118,7 @@ export default function Layout({
 			setUser(undefined);
 			delAccessToken(address);
 		}
-	}, [authedUserQuery.data, authedUserQuery.isLoading, authedUserQuery.isSuccess, setUser]);
+	}, [authedUserQuery, setUser]);
 
 	// Set protocol fee
 	useEffect(() => {

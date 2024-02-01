@@ -11,6 +11,7 @@ import { ScrollAreaHorizontal } from '../ui/scroll-area.tsx';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet.tsx';
 import { AccountTab } from './AccountTab.tsx';
 import { GeneralTab } from './GeneralTab.tsx';
+import { NotificationTab } from './NotificationTab.tsx';
 import { RulesTab } from './RulesTab.tsx';
 import { SettingsFooter } from './SettingsFooter.tsx';
 
@@ -24,7 +25,10 @@ export function SettingsSheet(props: {
 	const openState = useStore((state) => state.openState);
 	const toggleOpenState = useStore((state) => state.toggleOpenState);
 	const currentTab = useStore((state) => state.currentTab);
+	const setCurrentTab = useStore((state) => state.setCurrentTab);
 	const loc = useLocation();
+
+	// TODO: remove when connect page is removed
 	const inConnectPage = loc.pathname.includes('/connect');
 
 	return (
@@ -50,10 +54,16 @@ export function SettingsSheet(props: {
 					</div>
 				</SheetHeader>
 				<div className='flex-1 flex px-0 text-white'>
-					<Tabs defaultValue={currentTab || 'general'} className='flex flex-1 flex-col transition-all duration-500'>
-						<ScrollOverflowIndicator>
-							<ScrollAreaHorizontal type='scroll'>
-								<TabsList className='justify-start px-3 py-2 border-b border-modal-border'>
+					<Tabs
+						defaultValue={currentTab || 'general'}
+						className='flex flex-1 flex-col transition-all duration-500'
+						onValueChange={(value) => {
+							setCurrentTab(value);
+						}}
+					>
+						<ScrollOverflowIndicator className='[&::before]:rounded-none' showArrow>
+							<ScrollAreaHorizontal type='scroll' className='relative h-[50px]' viewportClassName='absolute w-full'>
+								<TabsList className='justify-start w-full px-3 py-2 border-b border-modal-border'>
 									<TabsTrigger
 										value='general'
 										className='font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium'
@@ -69,6 +79,12 @@ export function SettingsSheet(props: {
 												Account
 											</TabsTrigger>
 											<TabsTrigger
+												value='notification'
+												className='font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium'
+											>
+												Notification
+											</TabsTrigger>
+											<TabsTrigger
 												value='rules'
 												className='font-light text-[14px] data-[state=active]:!bg-chinese-green data-[state=active]:text-gray-900 h-[0] py-[14px] !rounded-full data-[state=active]:font-medium'
 											>
@@ -79,9 +95,10 @@ export function SettingsSheet(props: {
 								</TabsList>
 							</ScrollAreaHorizontal>
 						</ScrollOverflowIndicator>
-						<GeneralTab address={address} />
-						<AccountTab />
-						<RulesTab />
+						{(currentTab === 'general' || !currentTab) && <GeneralTab address={address} />}
+						{currentTab === 'account' && <AccountTab />}
+						{currentTab === 'notification' && <NotificationTab />}
+						{currentTab === 'rules' && <RulesTab />}
 					</Tabs>
 				</div>
 				<div>

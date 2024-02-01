@@ -405,7 +405,7 @@ export function SwapOfferCreatorContent({
 				getChainInfo().contracts?.core.address as Address,
 				await getTokenSupply(market.quoteAddress as Address),
 			);
-			await delay(5000);
+			await delay(10000);
 			notifySuccess('Allowance successfully approved', { duration: 5000 });
 		} catch (error) {
 			const msg = humanizeErc20Errors(error);
@@ -438,7 +438,7 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(5000);
+			await delay(10000);
 
 			// For interactive swap, redirect to swap page
 			if (!market.instant) {
@@ -492,7 +492,7 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(5000);
+			await delay(10000);
 
 			// For interactive swap, redirect to swap page
 			const event = decodeEventLog({
@@ -526,7 +526,7 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(5000);
+			await delay(10000);
 
 			// Reset form and close sheets
 			reset();
@@ -590,7 +590,7 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(5000);
+			await delay(10000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Offer was successful updated`, {
