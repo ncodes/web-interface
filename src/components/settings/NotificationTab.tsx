@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AlertTriangle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useConnectorContext } from '../../hooks/connectors/useConnectorContext.tsx';
 import { useNotificationService } from '../../hooks/services/backend/useNotificationService.ts';
@@ -7,6 +8,7 @@ import { useSession } from '../../hooks/useSession.ts';
 import { useToast } from '../../hooks/useToast.tsx';
 import { logError } from '../../libs/helpers.ts';
 import { Button } from '../ui/Button.tsx';
+import { EmptySheetAlert } from '../ui/EmptySheetAlert.tsx';
 import { TabsContent } from '../ui/Tabs.tsx';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion.tsx';
 import { Label } from '../ui/label.tsx';
@@ -178,8 +180,14 @@ export function NotificationTab() {
 
 			{!hasAccessToken(address) && (
 				<div className='flex items-center justify-center h-full'>
-					<div className='rounded-3xl border border-gray-800 shadow-chinese-green/10 shadow-lg flex flex-col p-3 items-center justify-center'>
-						<span className='p-2 font-light tracking-wider text-sm'>Link wallet to update settings</span>
+					<EmptySheetAlert
+						label={
+							<div className='flex items-center gap-2 text-sm text-gray-300'>
+								<AlertTriangle className='text-yellow-500' width='20' />
+								<span>Log in to update settings</span>
+							</div>
+						}
+					>
 						<Button
 							variant='default'
 							size='full'
@@ -188,9 +196,9 @@ export function NotificationTab() {
 								setCurrentTab('account');
 							}}
 						>
-							Link Wallet
+							LOGIN
 						</Button>
-					</div>
+					</EmptySheetAlert>
 				</div>
 			)}
 		</TabsContent>

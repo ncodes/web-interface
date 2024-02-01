@@ -47,9 +47,9 @@ export function AccountLinker() {
 							<LogIn className='text-chinese-green' width='25' height='25' />
 						</span>
 						<span className='tracking-wide font-light text-gray-400 flex md:items-center flex-col md:flex-row md:gap-2'>
-							<span className='text-white font-normal'>Wallet Unlinked</span>
+							<span className='text-white font-normal'>Log In</span>
 							<span className='text-xs md:text-sm'>
-								<span className='hidden lg:inline'>- Link to enable personalized features like notifications!</span>
+								<span className='hidden lg:inline'>- Log in to enable personalized features like notifications!</span>
 								<span className='hidden xxs:inline lg:hidden'>Enable personalized features!</span>
 								<span className='xxs:hidden'>Get personalized features!</span>
 							</span>
@@ -63,7 +63,7 @@ export function AccountLinker() {
 									toggleOpenState && toggleOpenState('settingsSheet', 'account');
 								}}
 							>
-								Link
+								LOGIN
 							</Button>
 						</span>
 					</div>

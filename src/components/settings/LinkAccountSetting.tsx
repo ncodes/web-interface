@@ -105,7 +105,7 @@ export function LinkAccountSetting() {
 
 			void onLinked(data.user, data.token);
 		} catch (error) {
-			simpleError('Failed to link wallet', {
+			simpleError('Failed to log in', {
 				position: 'top-center',
 				duration: 5000,
 			});
@@ -159,13 +159,13 @@ export function LinkAccountSetting() {
 		try {
 			setLoading(true);
 			await deleteSessionMutation.mutateAsync(false);
-			simpleError('Successfully unlinked wallet', {
+			simpleError('Successfully logged out', {
 				position: 'top-center',
 				duration: 5000,
 			});
 		} catch (error) {
 			setLoading(false);
-			simpleError('Failed to unlink wallet', {
+			simpleError('Failed to log out', {
 				position: 'top-center',
 				duration: 5000,
 			});
@@ -181,7 +181,8 @@ export function LinkAccountSetting() {
 	return (
 		<>
 			<div className='font-light text-gray-300 text-sm'>
-				Link your wallet to an email account to receive trade notifications and access member features.
+				By logging in, you link your wallet to an email account to receive trade notifications and access member
+				features.
 			</div>
 			{!linked && (
 				<div className='transition-all duration-300'>
@@ -233,7 +234,7 @@ export function LinkAccountSetting() {
 										onClick={verifyMode ? doVerifyOTP : doLinkWallet}
 									>
 										{loading && <IconSpinner className='animate-spin' fill='fill-gray-900' width='20' />}
-										{!loading && (verifyMode ? 'Verify' : 'Link')}
+										{!loading && (verifyMode ? 'Verify' : 'LOGIN')}
 									</Button>
 								}
 							/>
