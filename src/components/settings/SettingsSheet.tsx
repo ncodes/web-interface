@@ -55,7 +55,7 @@ export function SettingsSheet(props: {
 				</SheetHeader>
 				<div className='flex-1 flex px-0 text-white'>
 					<Tabs
-						defaultValue={currentTab || 'general'}
+						value={currentTab || 'general'}
 						className='flex flex-1 flex-col transition-all duration-500'
 						onValueChange={(value) => {
 							setCurrentTab(value);
