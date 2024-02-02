@@ -549,6 +549,7 @@ declare global {
 	}
 
 	export interface Point {
+		id: string;
 		address: string;
 		totalPoints: string;
 		owner: Partial<User>;

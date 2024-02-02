@@ -36,7 +36,7 @@ export function PointActivityStream() {
 		queryKey: [
 			'getLatest',
 			{
-				limit: !fromDate ? 100 : 1,
+				limit: !points.length ? 100 : 3,
 				from: fromDate,
 				referrer: isPointsPage ? undefined : address,
 			},
@@ -57,9 +57,9 @@ export function PointActivityStream() {
 		if (fetchLatest.isLoading || fetchLatest.isRefetching) return;
 
 		const data = fetchLatest.data || [];
-		if (data.length == 0 || data[0].createdAt === fromDate) return;
+		if (data.length == 0) return;
 
-		setPoints([...data, ...points].slice(0, 100));
+		setPoints([...data, ...points]);
 		if (data.length) setFromDate(data[0].createdAt);
 	}, [fetchLatest.isLoading, fetchLatest.isRefetching, fetchLatest.isSuccess]);
 
