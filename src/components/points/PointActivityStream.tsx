@@ -42,10 +42,9 @@ export function PointActivityStream() {
 			},
 		],
 		queryFn: isPointsPage ? getLatestPoints : getLatestReferralPoints,
-		keepPreviousData: false,
 		enabled: mounted && !!address,
 		refetchOnWindowFocus: false,
-		refetchInterval: 10000,
+		refetchInterval: false,
 	});
 
 	useEffect(() => {
