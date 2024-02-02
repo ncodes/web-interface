@@ -306,6 +306,9 @@ export default function useCoreContract() {
 			if (error.message.includes('OC: AMOUNT_ABOVE_MAX_SWAP'))
 				return `'OUT' amount is above max swap amount. (OUT amount = OUT + fee)`;
 
+			if (error.message.includes('OC: MAX_OPEN_ORDERS'))
+				return `The liquidity provider has reached the maximum number of open orders`;
+
 			// Common
 			if (error.message.includes('OC: AMOUNT_REQ')) return 'Amount is required';
 			if (error.message.includes('ERC20: transfer amount exceeds balance')) return 'Insufficient balance';
