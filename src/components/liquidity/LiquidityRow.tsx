@@ -271,7 +271,13 @@ export function LiquidityRow({
 									>
 										<span className='flex gap-1'>
 											<span data-click-trigger='1'>
-												{formatToHighDenom(liquidity.price, liquidity.market.quoteDecimals)}
+												{formatToHighDenom(
+													liquidity.price,
+													liquidity.market.quoteDecimals,
+													undefined,
+													undefined,
+													99999999,
+												)}
 											</span>
 											<USDAmountToolTip v={liquidity.priceUsd} />
 										</span>
@@ -283,7 +289,13 @@ export function LiquidityRow({
 									>
 										<span className='flex gap-1' data-click-trigger='1'>
 											<span className='text-gray-200'>
-												{formatToHighDenom(liquidity.amount, liquidity.market.baseDecimals)}
+												{formatToHighDenom(
+													liquidity.amount,
+													liquidity.market.baseDecimals,
+													undefined,
+													undefined,
+													99999999,
+												)}
 											</span>
 											<USDAmountToolTip v={liquidity.amountUsd} />
 										</span>
