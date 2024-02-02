@@ -36,7 +36,7 @@ export function PointActivityStream() {
 		queryKey: [
 			'getLatest',
 			{
-				limit: !points.length ? 100 : 3,
+				limit: !points.length ? 30 : 3,
 				from: fromDate,
 				referrer: isPointsPage ? undefined : address,
 			},
