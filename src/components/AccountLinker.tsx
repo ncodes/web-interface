@@ -49,7 +49,7 @@ export function AccountLinker() {
 						<span className='tracking-wide font-light text-gray-400 flex md:items-center flex-col md:flex-row md:gap-2'>
 							<span className='text-white font-normal'>Log In</span>
 							<span className='text-xs md:text-sm'>
-								<span className='hidden lg:inline'>- Log in to enable personalized features like notifications!</span>
+								<span className='hidden lg:inline'>- Log in to enable personalized features like notification!</span>
 								<span className='hidden xxs:inline lg:hidden'>Enable personalized features!</span>
 								<span className='xxs:hidden'>Get personalized features!</span>
 							</span>

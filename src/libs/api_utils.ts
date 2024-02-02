@@ -1,11 +1,11 @@
-import moment from "moment";
-import { isEqlStr } from "./helpers.ts";
+import moment from 'moment';
+import { isEqlStr } from './helpers.ts';
 
 enum AssetType {
-  SYNTH,
-  ERC20,
-  ERC721,
-  ERC1155,
+	SYNTH,
+	ERC20,
+	ERC721,
+	ERC1155,
 }
 
 /**
@@ -13,7 +13,7 @@ enum AssetType {
  * @param assetType The asset type
  */
 export function isERC20(assetType: AssetType) {
-  return assetType == AssetType.ERC20;
+	return assetType == AssetType.ERC20;
 }
 
 /**
@@ -21,7 +21,7 @@ export function isERC20(assetType: AssetType) {
  * @param assetType The asset type
  */
 export function isERC721(assetType: AssetType) {
-  return assetType == AssetType.ERC721;
+	return assetType == AssetType.ERC721;
 }
 
 /**
@@ -29,7 +29,7 @@ export function isERC721(assetType: AssetType) {
  * @param assetType The asset type
  */
 export function isSynth(assetType: AssetType) {
-  return assetType == AssetType.SYNTH;
+	return assetType == AssetType.SYNTH;
 }
 
 /**
@@ -37,7 +37,7 @@ export function isSynth(assetType: AssetType) {
  * @param assetType The asset type
  */
 export function isFungible(assetType: AssetType) {
-  return assetType == AssetType.ERC20 || assetType == AssetType.SYNTH;
+	return assetType == AssetType.ERC20 || assetType == AssetType.SYNTH;
 }
 
 /**
@@ -45,7 +45,7 @@ export function isFungible(assetType: AssetType) {
  * @param assetType The asset type
  */
 export function isNFT(assetType: AssetType) {
-  return assetType == AssetType.ERC721 || assetType == AssetType.ERC1155;
+	return assetType == AssetType.ERC721 || assetType == AssetType.ERC1155;
 }
 
 /**
@@ -53,18 +53,18 @@ export function isNFT(assetType: AssetType) {
  * @param swap The swap object
  */
 export function getPayer(swap: Swap) {
-  let payer = "";
-  const { baseType, quoteType } = swap.market;
-  if (isERC20(baseType) && isSynth(quoteType)) {
-    payer = swap.taker;
-  } else if (isSynth(baseType) && isSynth(quoteType)) {
-    payer = swap.taker;
-  } else if (isSynth(baseType) && (isERC20(quoteType) || isNFT(quoteType))) {
-    payer = swap.provider;
-  } else if (isNFT(baseType) && isSynth(quoteType)) {
-    payer = swap.taker;
-  }
-  return payer;
+	let payer = '';
+	const { baseType, quoteType } = swap.market;
+	if (isERC20(baseType) && isSynth(quoteType)) {
+		payer = swap.taker;
+	} else if (isSynth(baseType) && isSynth(quoteType)) {
+		payer = swap.taker;
+	} else if (isSynth(baseType) && (isERC20(quoteType) || isNFT(quoteType))) {
+		payer = swap.provider;
+	} else if (isNFT(baseType) && isSynth(quoteType)) {
+		payer = swap.taker;
+	}
+	return payer;
 }
 
 /**
@@ -73,10 +73,7 @@ export function getPayer(swap: Swap) {
  * @param address The address to check
  */
 export function isDisputer(swap: Swap, address: string) {
-  return (
-    swap.disputes[0].creator.toLowerCase().trim() ==
-    address.toLowerCase().trim()
-  );
+	return swap.disputes[0].creator.toLowerCase().trim() == address.toLowerCase().trim();
 }
 
 /**
@@ -84,7 +81,7 @@ export function isDisputer(swap: Swap, address: string) {
  * @param swap The swap object
  */
 export function isInDispute(swap: Swap) {
-  return swap.disputes.length > 0 && !isSwapDisputeEnded(swap);
+	return swap.disputes.length > 0 && !isSwapDisputeEnded(swap);
 }
 
 /**
@@ -92,12 +89,11 @@ export function isInDispute(swap: Swap) {
  * @param swap The swap object
  */
 export function isLastDisputeStalled(swap: Swap) {
-  return (
-    swap.disputes.length > 0 &&
-    (swap.disputes[0].executed ||
-      moment(swap.disputes[0].revealEndAt).isBefore(moment())) &&
-    getDisputeOutcome(swap.disputes[0]) == "stalled"
-  );
+	return (
+		swap.disputes.length > 0 &&
+		(swap.disputes[0].executed || moment(swap.disputes[0].revealEndAt).isBefore(moment())) &&
+		getDisputeOutcome(swap.disputes[0]) == 'stalled'
+	);
 }
 
 /**
@@ -105,7 +101,7 @@ export function isLastDisputeStalled(swap: Swap) {
  * @param swap The swap object
  */
 export function isDisputeAbandoned(swap: Swap) {
-  return swap.disputes.length > 0 && swap.disputes[0].abandoned;
+	return swap.disputes.length > 0 && swap.disputes[0].abandoned;
 }
 
 /**
@@ -113,12 +109,7 @@ export function isDisputeAbandoned(swap: Swap) {
  * @param offer The offer object
  */
 export function isOfferPending(offer: Offer) {
-  return (
-    !offer.accepted &&
-    !offer.cancelled &&
-    !offer.executed &&
-    moment(offer.deadline).isAfter(moment())
-  );
+	return !offer.accepted && !offer.cancelled && !offer.executed && moment(offer.deadline).isAfter(moment());
 }
 
 /**
@@ -126,11 +117,7 @@ export function isOfferPending(offer: Offer) {
  * @param offer The offer object
  */
 export function isOfferExpired(offer: Offer) {
-  return (
-    !offer.cancelled &&
-    !offer.executed &&
-    moment().isAfter(moment(offer.deadline))
-  );
+	return !offer.cancelled && !offer.executed && moment().isAfter(moment(offer.deadline));
 }
 
 /**
@@ -139,20 +126,20 @@ export function isOfferExpired(offer: Offer) {
  * @param address The address to check
  */
 export function isOfferer(offer: Offer, address: string) {
-  return isEqlStr(offer.creator, address);
+	return isEqlStr(offer.creator, address);
 }
 
 enum DisputeState {
-  Abandoned = "abandoned",
-  Executed = "executed",
-  Released = "released",
-  Cancelled = "cancelled",
-  Stalled = "stalled",
-  Draft = "draft",
-  Evidence = "evidence",
-  Commit = "commit",
-  Reveal = "reveal",
-  AwaitingExec = "awaiting_exec",
+	Abandoned = 'abandoned',
+	Executed = 'executed',
+	Released = 'released',
+	Cancelled = 'cancelled',
+	Stalled = 'stalled',
+	Draft = 'draft',
+	Evidence = 'evidence',
+	Commit = 'commit',
+	Reveal = 'reveal',
+	AwaitingExec = 'awaiting_exec',
 }
 
 /**
@@ -160,90 +147,82 @@ enum DisputeState {
  * @param dispute
  */
 export function getDisputeStatus(dispute: Dispute) {
-  const {
-    abandoned,
-    executed,
-    released,
-    orderReleased,
-    numMediatorsDrafted,
-    numMediators,
-    evidenceEndAt,
-    commitEndAt,
-    revealEndAt,
-  } = dispute;
+	const {
+		abandoned,
+		executed,
+		released,
+		orderReleased,
+		numMediatorsDrafted,
+		numMediators,
+		evidenceEndAt,
+		commitEndAt,
+		revealEndAt,
+	} = dispute;
 
-  // Stalled after dispute
-  if (executed && getDisputeOutcome(dispute) == DisputeState.Stalled)
-    return DisputeState.Stalled;
+	// Stalled after dispute
+	if (executed && getDisputeOutcome(dispute) == DisputeState.Stalled) return DisputeState.Stalled;
 
-  // Cancelled after dispute
-  if (executed && getDisputeOutcome(dispute) == DisputeState.Cancelled)
-    return DisputeState.Cancelled;
+	// Cancelled after dispute
+	if (executed && getDisputeOutcome(dispute) == DisputeState.Cancelled) return DisputeState.Cancelled;
 
-  // Released after dispute
-  if (executed && getDisputeOutcome(dispute) == DisputeState.Released)
-    return DisputeState.Released;
+	// Released after dispute
+	if (executed && getDisputeOutcome(dispute) == DisputeState.Released) return DisputeState.Released;
 
-  // Released (swap released before dispute execution)
-  if (!executed && orderReleased) return DisputeState.Abandoned;
+	// Released (swap released before dispute execution)
+	if (!executed && orderReleased) return DisputeState.Abandoned;
 
-  // Abandoned (executed)
-  if (executed && abandoned) return DisputeState.Abandoned;
+	// Abandoned (executed)
+	if (executed && abandoned) return DisputeState.Abandoned;
 
-  // Released without dispute
-  if (!executed && released) return DisputeState.Released;
+	// Released without dispute
+	if (!executed && released) return DisputeState.Released;
 
-  // Draft phase
-  if (!executed && !orderReleased && numMediators > numMediatorsDrafted) {
-    return DisputeState.Draft;
-  }
+	// Draft phase
+	if (!executed && !orderReleased && numMediators > numMediatorsDrafted) {
+		return DisputeState.Draft;
+	}
 
-  // Evidence phase
-  if (
-    !executed &&
-    !orderReleased &&
-    numMediators == numMediatorsDrafted &&
-    moment(evidenceEndAt).isAfter(moment())
-  ) {
-    return DisputeState.Evidence;
-  }
+	// Evidence phase
+	if (!executed && !orderReleased && numMediators == numMediatorsDrafted && moment(evidenceEndAt).isAfter(moment())) {
+		return DisputeState.Evidence;
+	}
 
-  // Commit phase
-  if (
-    !executed &&
-    !orderReleased &&
-    numMediators == numMediatorsDrafted &&
-    moment(evidenceEndAt).isBefore(moment()) &&
-    moment(commitEndAt).isAfter(moment())
-  ) {
-    return DisputeState.Commit;
-  }
+	// Commit phase
+	if (
+		!executed &&
+		!orderReleased &&
+		numMediators == numMediatorsDrafted &&
+		moment(evidenceEndAt).isBefore(moment()) &&
+		moment(commitEndAt).isAfter(moment())
+	) {
+		return DisputeState.Commit;
+	}
 
-  // Reveal phase
-  if (
-    !executed &&
-    !orderReleased &&
-    numMediators == numMediatorsDrafted &&
-    moment(evidenceEndAt).isBefore(moment()) &&
-    moment(commitEndAt).isBefore(moment()) &&
-    moment(revealEndAt).isAfter(moment())
-  ) {
-    return DisputeState.Reveal;
-  }
+	// Reveal phase
+	if (
+		!executed &&
+		!orderReleased &&
+		numMediators == numMediatorsDrafted &&
+		moment(evidenceEndAt).isBefore(moment()) &&
+		moment(commitEndAt).isBefore(moment()) &&
+		moment(revealEndAt).isAfter(moment())
+	) {
+		return DisputeState.Reveal;
+	}
 
-  // Awaiting dispute execution
-  if (
-    !executed &&
-    !orderReleased &&
-    numMediators == numMediatorsDrafted &&
-    moment(evidenceEndAt).isBefore(moment()) &&
-    moment(commitEndAt).isBefore(moment()) &&
-    moment(revealEndAt).isBefore(moment())
-  ) {
-    return DisputeState.AwaitingExec;
-  }
+	// Awaiting dispute execution
+	if (
+		!executed &&
+		!orderReleased &&
+		numMediators == numMediatorsDrafted &&
+		moment(evidenceEndAt).isBefore(moment()) &&
+		moment(commitEndAt).isBefore(moment()) &&
+		moment(revealEndAt).isBefore(moment())
+	) {
+		return DisputeState.AwaitingExec;
+	}
 
-  return "unknown";
+	return 'unknown';
 }
 
 /**
@@ -252,7 +231,7 @@ export function getDisputeStatus(dispute: Dispute) {
  * @param address The address to check
  */
 export function isDisputeDraftee(dispute: Dispute, address: string) {
-  return dispute.draftees.some((d) => isEqlStr(d.owner, address));
+	return dispute.draftees.some((d) => isEqlStr(d.owner, address));
 }
 
 /**
@@ -260,19 +239,16 @@ export function isDisputeDraftee(dispute: Dispute, address: string) {
  * @param dispute The dispute object
  */
 export function getDisputeOutcome(dispute: Dispute) {
-  if (dispute.numMediators > dispute.reveals.length)
-    return DisputeState.Stalled;
+	if (dispute.numMediators > dispute.reveals.length) return DisputeState.Stalled;
 
-  const release = dispute.reveals.filter((r) => r.vote == "0x31");
-  const cancel = dispute.reveals.filter((r) => r.vote == "0x30");
+	const release = dispute.reveals.filter((r) => r.vote == '0x31');
+	const cancel = dispute.reveals.filter((r) => r.vote == '0x30');
 
-  if (Math.round(release.length / dispute.reveals.length) > 0.5)
-    return DisputeState.Released;
+	if (Math.round(release.length / dispute.reveals.length) > 0.5) return DisputeState.Released;
 
-  if (Math.round(cancel.length / dispute.reveals.length) > 0.5)
-    return DisputeState.Cancelled;
+	if (Math.round(cancel.length / dispute.reveals.length) > 0.5) return DisputeState.Cancelled;
 
-  return DisputeState.Stalled;
+	return DisputeState.Stalled;
 }
 
 /**
@@ -280,27 +256,26 @@ export function getDisputeOutcome(dispute: Dispute) {
  * @param dispute The dispute object
  */
 export function countDisputeVotes(dispute: Dispute) {
-  const { draftees, reveals } = dispute;
-  const release = reveals.filter((r) => r.vote == "0x31");
-  const cancel = reveals.filter((r) => r.vote == "0x30");
-  const miss =
-    draftees.length > reveals.length ? draftees.length - reveals.length : 0;
-  return {
-    release: release.length,
-    cancel: cancel.length,
-    miss,
-  };
+	const { draftees, reveals } = dispute;
+	const release = reveals.filter((r) => r.vote == '0x31');
+	const cancel = reveals.filter((r) => r.vote == '0x30');
+	const miss = draftees.length > reveals.length ? draftees.length - reveals.length : 0;
+	return {
+		release: release.length,
+		cancel: cancel.length,
+		miss,
+	};
 }
 
 enum TicketState {
-  Maturing = "maturing",
-  Matured = "matured",
-  Joined = "joined",
-  Expired = "expired",
-  Drafted = "drafted",
-  Cancelled = "cancelled",
-  Cancelling = "cancelling",
-  Drained = "drained",
+	Maturing = 'maturing',
+	Matured = 'matured',
+	Joined = 'joined',
+	Expired = 'expired',
+	Drafted = 'drafted',
+	Cancelled = 'cancelled',
+	Cancelling = 'cancelling',
+	Drained = 'drained',
 }
 
 /**
@@ -308,28 +283,16 @@ enum TicketState {
  * @param ticket The ticket object
  */
 export function getTicketStatus(ticket: Ticket) {
-  const {
-    matureAt,
-    joined,
-    expired,
-    matured,
-    drained,
-    drafted,
-    cancelling,
-    cancelled,
-    slashed,
-  } = ticket;
-  if (!joined && drained) return TicketState.Drained;
-  if (slashed) return TicketState.Cancelled;
-  if (!joined && moment(matureAt).isAfter(moment()))
-    return TicketState.Maturing;
-  if (!joined && matured && !drafted && !cancelling && !cancelled && !expired)
-    return TicketState.Matured;
-  if (joined && !drafted) return TicketState.Joined;
-  if (joined && drafted) return TicketState.Drafted;
-  if (!joined && cancelling) return TicketState.Cancelling;
-  if (!joined && cancelled) return TicketState.Cancelled;
-  if (!joined && expired) return TicketState.Expired;
+	const { matureAt, joined, expired, matured, drained, drafted, cancelling, cancelled, slashed } = ticket;
+	if (!joined && drained) return TicketState.Drained;
+	if (slashed) return TicketState.Cancelled;
+	if (!joined && moment(matureAt).isAfter(moment())) return TicketState.Maturing;
+	if (!joined && matured && !drafted && !cancelling && !cancelled && !expired) return TicketState.Matured;
+	if (joined && !drafted) return TicketState.Joined;
+	if (joined && drafted) return TicketState.Drafted;
+	if (!joined && cancelling) return TicketState.Cancelling;
+	if (!joined && cancelled) return TicketState.Cancelled;
+	if (!joined && expired) return TicketState.Expired;
 }
 
 /**
@@ -338,13 +301,11 @@ export function getTicketStatus(ticket: Ticket) {
  * @param address The address to check
  */
 export function isSwapParticipant(swap: Swap, address: string) {
-  return (
-    isEqlStr(swap.provider, address) ||
-    isEqlStr(swap.taker, address) ||
-    swap.disputes.some((d) =>
-      d.draftees.some((dr) => isEqlStr(dr.owner, address)),
-    )
-  );
+	return (
+		isEqlStr(swap.provider, address) ||
+		isEqlStr(swap.taker, address) ||
+		swap.disputes.some((d) => d.draftees.some((dr) => isEqlStr(dr.owner, address)))
+	);
 }
 
 /**
@@ -352,11 +313,8 @@ export function isSwapParticipant(swap: Swap, address: string) {
  * @param swap The swap object
  * @param address The address to check
  */
-export function isSwapCounterparty(
-  swap: { provider: string; taker: string },
-  address: string,
-) {
-  return isEqlStr(swap.provider, address) || isEqlStr(swap.taker, address);
+export function isSwapCounterparty(swap: { provider: string; taker: string }, address: string) {
+	return isEqlStr(swap.provider, address) || isEqlStr(swap.taker, address);
 }
 
 /**
@@ -365,7 +323,7 @@ export function isSwapCounterparty(
  * @param address The address to check
  */
 export function isOfferCounterparty(offer: Offer, address: string) {
-  return isEqlStr(offer.provider, address) || isEqlStr(offer.creator, address);
+	return isEqlStr(offer.provider, address) || isEqlStr(offer.creator, address);
 }
 
 /**
@@ -374,13 +332,8 @@ export function isOfferCounterparty(offer: Offer, address: string) {
  * @returns True if the offer is executable, false otherwise
  */
 export function canExecuteOffer(offer: Offer | undefined) {
-  if (!offer) return false;
-  return (
-    offer.accepted &&
-    !offer.executed &&
-    !offer.cancelled &&
-    !isOfferExpired(offer)
-  );
+	if (!offer) return false;
+	return offer.accepted && !offer.executed && !offer.cancelled && !isOfferExpired(offer);
 }
 
 /**
@@ -390,10 +343,8 @@ export function canExecuteOffer(offer: Offer | undefined) {
  * @param recent If true, only checks the most recent dispute
  */
 export function isSwapDraftee(swap: Swap, address: string, recent = false) {
-  if (recent) return isDisputeDraftee(swap.disputes[0], address);
-  return swap.disputes.some((d) =>
-    d.draftees.some((dr) => isEqlStr(dr.owner, address)),
-  );
+	if (recent) return isDisputeDraftee(swap.disputes[0], address);
+	return swap.disputes.some((d) => d.draftees.some((dr) => isEqlStr(dr.owner, address)));
 }
 
 /**
@@ -401,11 +352,11 @@ export function isSwapDraftee(swap: Swap, address: string, recent = false) {
  * @param swap
  */
 export function isDisputed(swap: Swap) {
-  return swap.disputes.length > 0;
+	return swap.disputes.length > 0;
 }
 
 export function getDrafteeIndex(swap: Swap, address: string) {
-  return swap.disputes[0].draftees.findIndex((d) => isEqlStr(d.owner, address));
+	return swap.disputes[0].draftees.findIndex((d) => isEqlStr(d.owner, address));
 }
 
 /**
@@ -413,8 +364,8 @@ export function getDrafteeIndex(swap: Swap, address: string) {
  * @param swap
  */
 export function getSwapDisputeOutcome(swap: Swap) {
-  if (swap.disputes.length == 0 || !isSwapDisputeEnded(swap)) return "";
-  return getDisputeOutcome(swap.disputes[0]);
+	if (swap.disputes.length == 0 || !isSwapDisputeEnded(swap)) return '';
+	return getDisputeOutcome(swap.disputes[0]);
 }
 
 /**
@@ -422,11 +373,8 @@ export function getSwapDisputeOutcome(swap: Swap) {
  * @param swap
  */
 export function isSwapDisputeEnded(swap: Swap) {
-  if (swap.disputes.length == 0) return false;
-  return (
-    swap.disputes[0].executed ||
-    moment(swap.disputes[0].revealEndAt).isBefore(moment())
-  );
+	if (swap.disputes.length == 0) return false;
+	return swap.disputes[0].executed || moment(swap.disputes[0].revealEndAt).isBefore(moment());
 }
 
 /**
@@ -434,8 +382,8 @@ export function isSwapDisputeEnded(swap: Swap) {
  * @param swap The swap object
  */
 export function isSwapDisputeExecuted(swap: Swap) {
-  if (swap.disputes.length == 0) return false;
-  return swap.disputes[0].executed;
+	if (swap.disputes.length == 0) return false;
+	return swap.disputes[0].executed;
 }
 
 /**
@@ -444,10 +392,7 @@ export function isSwapDisputeExecuted(swap: Swap) {
  * @param address The address to check
  */
 export function isCommitter(dispute: Dispute, address: string) {
-  return dispute.commits.some(
-    (c) =>
-      isEqlStr(c.committer, address) && c.ticketIndex == dispute.ticketIndex,
-  );
+	return dispute.commits.some((c) => isEqlStr(c.committer, address) && c.ticketIndex == dispute.ticketIndex);
 }
 
 /**
@@ -456,22 +401,34 @@ export function isCommitter(dispute: Dispute, address: string) {
  * @param address The address to check
  */
 export function isRevealer(dispute: Dispute, address: string) {
-  return dispute.reveals.some(
-    (r) =>
-      isEqlStr(r.revealer, address) && r.ticketIndex == dispute.ticketIndex,
-  );
+	return dispute.reveals.some((r) => isEqlStr(r.revealer, address) && r.ticketIndex == dispute.ticketIndex);
 }
 
 export function getSwapCounterpart(swap: Swap, address: string) {
-  if (isEqlStr(swap.provider, address)) return swap.taker;
-  return swap.provider;
+	if (isEqlStr(swap.provider, address)) return swap.taker;
+	return swap.provider;
 }
 
 export function getOfferCounterpart(offer: Offer, address: string) {
-  if (isEqlStr(offer.creator, address)) return offer.provider;
-  return offer.creator;
+	if (isEqlStr(offer.creator, address)) return offer.provider;
+	return offer.creator;
 }
 
 export function isProvider(swap: Swap, address: string) {
-  return isEqlStr(swap.provider, address);
+	return isEqlStr(swap.provider, address);
+}
+
+/**
+ * Returns the pagination info
+ * @param data The data object from the fetch query
+ * @param limit The limit used in the query
+ * @param offset The offset used in the query
+ * @returns
+ */
+export function getPaginationInfo(data: { meta: { queryCount: number } }, limit: number, offset: number) {
+	return {
+		totalResults: data?.meta?.queryCount,
+		totalPages: data?.meta?.queryCount ? Math.ceil(data?.meta?.queryCount / (limit || 1)) : 0,
+		currentPage: offset / limit,
+	};
 }
