@@ -56,14 +56,14 @@ export function AccountLinker() {
 						</span>
 						<span className='flex-1 flex justify-end'>
 							<Button
-								variant='default'
+								variant='outline'
 								size='sm'
-								className='w-[100px]'
+								className='w-[100px] justify-start hover:text-gray-100 items-start p-0.5 bg-gradient-to-r from-chinese-green via-yellow-500 to-orange-500 '
 								onClick={() => {
 									toggleOpenState && toggleOpenState('settingsSheet', 'account');
 								}}
 							>
-								LOGIN
+								<div className='bg-gray-900 w-full h-full rounded-2xl pt-0.5'>Login</div>
 							</Button>
 						</span>
 					</div>
