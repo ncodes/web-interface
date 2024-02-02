@@ -42,7 +42,8 @@ export function PointActivityStream() {
 			},
 		],
 		queryFn: isPointsPage ? getLatestPoints : getLatestReferralPoints,
-		enabled: mounted && !!address,
+		// enabled: mounted && !!address,
+		enabled: false,
 		refetchOnWindowFocus: false,
 		refetchInterval: false,
 	});
