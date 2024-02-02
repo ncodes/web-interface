@@ -307,7 +307,7 @@ export default function useCoreContract() {
 				return `'OUT' amount is above max swap amount. (OUT amount = OUT + fee)`;
 
 			if (error.message.includes('OC: MAX_OPEN_ORDERS'))
-				return `The liquidity provider has reached the maximum number of open orders`;
+				return `The liquidity provider has reached the maximum number of open orders allowed`;
 
 			// Common
 			if (error.message.includes('OC: AMOUNT_REQ')) return 'Amount is required';
