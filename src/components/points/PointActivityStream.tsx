@@ -90,26 +90,31 @@ const Comp = memo(function Comp({ points, isPointsPage }: { points: Point[]; isP
 	return (
 		<div className='mt-2 space-y-2'>
 			{points.map((point) => (
-				<Card
-					key={`${point.address}_${point.point}_${point.createdAt}_${Date.now()}`}
-					className='flex animate-in slide-in-from-top items-center tracking-wider justify-between p-2 bg-card-background border-card-border/40'
-				>
-					<div className='flex items-center space-x-4'>
-						<FetchedUserHoverCard address={isPointsPage ? point.address : point.referee}>
-							<EmojiAvatar size={AvatarSize.Small} randomStr={isPointsPage ? point.address : point.referee} />
-						</FetchedUserHoverCard>
+				<>
+					{parseInt(point.point) == 0 && null}
+					{parseInt(point.point) > 0 && (
+						<Card
+							key={`${point.address}_${point.point}_${point.createdAt}_${Date.now()}`}
+							className='flex animate-in slide-in-from-top items-center tracking-wider justify-between p-2 bg-card-background border-card-border/40'
+						>
+							<div className='flex items-center space-x-4'>
+								<FetchedUserHoverCard address={isPointsPage ? point.address : point.referee}>
+									<EmojiAvatar size={AvatarSize.Small} randomStr={isPointsPage ? point.address : point.referee} />
+								</FetchedUserHoverCard>
 
-						<div>
-							<h2 className='text-sm font-medium text-gray-300'>
-								{shortenAddress(isPointsPage ? point.address : point.referee)}
-							</h2>
-							<p className='text-xs text-gray-500'>{moment(point.createdAt).fromNow()}</p>
-						</div>
-					</div>
-					<div className='text-right tracking-wider'>
-						<p className='text-sm font-normal text-gray-300'>{parseInt(point.point)} Points</p>
-					</div>
-				</Card>
+								<div>
+									<h2 className='text-sm font-medium text-gray-300'>
+										{shortenAddress(isPointsPage ? point.address : point.referee)}
+									</h2>
+									<p className='text-xs text-gray-500'>{moment(point.createdAt).fromNow()}</p>
+								</div>
+							</div>
+							<div className='text-right tracking-wider'>
+								<p className='text-sm font-normal text-gray-300'>{parseInt(point.point)} Points</p>
+							</div>
+						</Card>
+					)}
+				</>
 			))}
 		</div>
 	);
