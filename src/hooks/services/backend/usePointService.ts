@@ -11,6 +11,7 @@ export interface GetLeaderboardParams {
 export interface GetLatestPointsParams {
 	from?: string;
 	limit?: number;
+	order?: 'asc' | 'desc';
 }
 
 export interface CreatePointFromEnergonBalanceParams {
@@ -60,13 +61,18 @@ export function usePointService() {
 	async function getLatestPoints(ctx: QueryFunctionContext<[string, GetLatestPointsParams]>): Promise<Point[]> {
 		try {
 			const [, params] = ctx.queryKey;
-			const { from, limit } = params;
+			const { from, limit, order } = params;
 			const headers = {};
 			const queryParams: any = {
 				limit,
 			};
+
 			if (from) {
 				queryParams.from = from;
+			}
+
+			if (order) {
+				queryParams.order = order;
 			}
 
 			const resp = await axios({
