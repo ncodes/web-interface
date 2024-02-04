@@ -80,9 +80,8 @@ export function LiquidityRow({
 		queryFn: getUser,
 		enabled: !!liquidity.provider,
 	});
-	const [paused, reason] = isLiquidityPaused(liquidity);
 
-	function isLiquidityPaused(liquidity: Liquidity) {
+	function isLiquidityPaused(liquidity: Liquidity): [boolean, string] {
 		if (liquidity.openOrders >= (contractsParams.core?.maxOpenOrders ?? 0)) {
 			return [
 				true,
@@ -102,6 +101,16 @@ export function LiquidityRow({
 		}
 
 		return [false, ''];
+	}
+
+	let reason = '';
+	const pausedCheck = isLiquidityPaused(liquidity);
+	if (pausedCheck[0]) {
+		reason = pausedCheck[1];
+	}
+
+	if (liquidity.amount == '0') {
+		reason = 'This liquidity holds zero (0) ' + liquidity.base + '. Add liquidity begin accepting swaps.';
 	}
 
 	return (
@@ -221,7 +230,7 @@ export function LiquidityRow({
 										{liquidity.quote}
 									</span>
 
-									{paused && liquidity.amount != '0' && (
+									{pausedCheck[0] && liquidity.amount != '0' && (
 										<span
 											data-click-trigger='1'
 											className='flex bg-yellow-400/30 rounded-full px-[4px] text-xs items-center font-medium tracking-wider border-yellow-400 text-yellow-400'
@@ -234,7 +243,7 @@ export function LiquidityRow({
 										</span>
 									)}
 
-									{!paused && liquidity.amount != '0' && (
+									{!pausedCheck[0] && liquidity.amount != '0' && (
 										<span
 											data-click-trigger='1'
 											className='flex bg-green-400/30 rounded-full px-[4px] text-xs items-center font-medium tracking-wider border-green-400 text-green-400'
