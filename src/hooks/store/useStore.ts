@@ -1,256 +1,254 @@
-import { create } from "zustand";
-import { defaultRegion } from "../../components/region/constants.ts";
+import { create } from 'zustand';
+import { defaultRegion } from '../../components/region/constants.ts';
 
 type OpenStateKey =
-  | "createOfferSheet"
-  | "searchSheet"
-  | "notificationSheet"
-  | "reviewSheet"
-  | "settingsSheet"
-  | "buyTicketSheet"
-  | "messengerSheet";
+	| 'createOfferSheet'
+	| 'searchSheet'
+	| 'notificationSheet'
+	| 'reviewSheet'
+	| 'settingsSheet'
+	| 'buyTicketSheet'
+	| 'messengerSheet';
 
 type OpenState = {
-  [key in OpenStateKey]: boolean;
+	[key in OpenStateKey]: boolean;
 };
 
 type OpenStateContext = {
-  [key in OpenStateKey]: unknown;
+	[key in OpenStateKey]: unknown;
 };
 
 export interface IStore {
-  // Authenticated user state
-  user: User | undefined | null;
-  setUser: (user: User | undefined | null) => void;
+	// Authenticated user state
+	user: User | undefined | null;
+	setUser: (user: User | undefined | null) => void;
 
-  // Connected wallet state
-  walletHasNativeNFT: boolean;
-  setUserHasNativeNFT: (enabled: boolean) => void;
+	// Connected wallet state
+	walletHasNativeNFT: boolean;
+	setUserHasNativeNFT: (enabled: boolean) => void;
 
-  // Protocol fees
-  protoFee: ProtocolFees;
-  setProtoFee: (fees: ProtocolFees) => void;
+	// Protocol fees
+	protoFee: ProtocolFees;
+	setProtoFee: (fees: ProtocolFees) => void;
 
-  // Region state
-  currentRegion: string;
-  setCurrentRegion: (region: string) => void;
+	contractsParams: Partial<ContractsParams>;
+	setContractsParams: (params: ContractsParams) => void;
 
-  // Safe mode state
-  enabledSafeMode: boolean;
-  setEnabledSafeMode: (enabled: boolean) => void;
+	// Region state
+	currentRegion: string;
+	setCurrentRegion: (region: string) => void;
 
-  // Top loading state
-  loaderProgress: number;
-  fullLoadCount: number;
-  setLoaderProgress: (progress: number) => void;
+	// Safe mode state
+	enabledSafeMode: boolean;
+	setEnabledSafeMode: (enabled: boolean) => void;
 
-  // Global loading stage
-  loading: { [id: string]: LoadingState };
-  setLoading: (id: string, updates: LoadingState) => void;
+	// Top loading state
+	loaderProgress: number;
+	fullLoadCount: number;
+	setLoaderProgress: (progress: number) => void;
 
-  // Current tab
-  currentTab: string;
-  setCurrentTab: (tab: string) => void;
+	// Global loading stage
+	loading: { [id: string]: LoadingState };
+	setLoading: (id: string, updates: LoadingState) => void;
 
-  // Open state toggling for sheets and modals
-  openStateContext: Partial<OpenStateContext>;
-  openState: OpenState;
-  toggleOpenState: (
-    key: OpenStateKey,
-    activeTab?: string,
-    ctx?: unknown,
-  ) => void;
-  resetOpenState: () => void;
+	// Current tab
+	currentTab: string;
+	setCurrentTab: (tab: string) => void;
 
-  // Swap page state
-  swapPageState: SwapPageState;
-  setPageSwapState: (state: SwapPageState) => void;
+	// Open state toggling for sheets and modals
+	openStateContext: Partial<OpenStateContext>;
+	openState: OpenState;
+	toggleOpenState: (key: OpenStateKey, activeTab?: string, ctx?: unknown) => void;
+	resetOpenState: () => void;
 
-  // Market filter
-  marketFilter: MarketFilter;
-  setMarketFilter: (filter: Partial<MarketFilter>) => void;
+	// Swap page state
+	swapPageState: SwapPageState;
+	setPageSwapState: (state: SwapPageState) => void;
 
-  // Liquidity filter
-  liquidityFilter: LiquidityFilter;
-  setLiquidityFilter: (filter: Partial<LiquidityFilter>) => void;
+	// Market filter
+	marketFilter: MarketFilter;
+	setMarketFilter: (filter: Partial<MarketFilter>) => void;
 
-  // Swap filter
-  swapFilter: SwapFilter;
-  setSwapFilter: (filter: Partial<SwapFilter>) => void;
+	// Liquidity filter
+	liquidityFilter: LiquidityFilter;
+	setLiquidityFilter: (filter: Partial<LiquidityFilter>) => void;
 
-  // Offer filter
-  offerFilter: OfferFilter;
-  setOfferFilter: (filter: Partial<OfferFilter>) => void;
+	// Swap filter
+	swapFilter: SwapFilter;
+	setSwapFilter: (filter: Partial<SwapFilter>) => void;
 
-  // Dispute filter
-  disputeFilter: DisputeFilter;
-  setDisputeFilter: (filter: Partial<DisputeFilter>) => void;
+	// Offer filter
+	offerFilter: OfferFilter;
+	setOfferFilter: (filter: Partial<OfferFilter>) => void;
 
-  // Ticket Filter
-  ticketFilter: TicketFilter;
-  setTicketFilter: (filter: Partial<TicketFilter>) => void;
+	// Dispute filter
+	disputeFilter: DisputeFilter;
+	setDisputeFilter: (filter: Partial<DisputeFilter>) => void;
+
+	// Ticket Filter
+	ticketFilter: TicketFilter;
+	setTicketFilter: (filter: Partial<TicketFilter>) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
-  user: undefined,
-  setUser: (user: User | undefined | null) => set({ user }),
+	user: undefined,
+	setUser: (user: User | undefined | null) => set({ user }),
 
-  walletHasNativeNFT: false,
-  setUserHasNativeNFT: (enabled: boolean) =>
-    set({ walletHasNativeNFT: enabled }),
+	walletHasNativeNFT: false,
+	setUserHasNativeNFT: (enabled: boolean) => set({ walletHasNativeNFT: enabled }),
 
-  protoFee: {
-    instantNFTSwapFeeBp: 0,
-    instantSwapFeeBp: 0,
-    syntheticSwapFeeBp: 0,
-    stableSwapFeeBp: 0,
-    fixedNFTSwapFee: 0,
-    fixedSynthSwapFee: 0,
-  },
-  setProtoFee: (fees: ProtocolFees) => set({ protoFee: fees }),
+	protoFee: {
+		instantNFTSwapFeeBp: 0,
+		instantSwapFeeBp: 0,
+		syntheticSwapFeeBp: 0,
+		stableSwapFeeBp: 0,
+		fixedNFTSwapFee: 0,
+		fixedSynthSwapFee: 0,
+	},
+	setProtoFee: (fees: ProtocolFees) => set({ protoFee: fees }),
 
-  loaderProgress: 0,
-  fullLoadCount: 0,
-  setLoaderProgress: (progress: number) => {
-    set({
-      loaderProgress: progress,
-      fullLoadCount:
-        progress == 100 ? get().fullLoadCount + 1 : get().fullLoadCount,
-    });
-  },
+	contractsParams: {},
+	setContractsParams: (params: ContractsParams) => set({ contractsParams: params }),
 
-  loading: {},
-  setLoading: (id: string, updates: Partial<LoadingState>) => {
-    set((state) => ({
-      loading: {
-        ...state.loading,
-        [id]: { ...state.loading[id], ...updates },
-      },
-    }));
-  },
+	loaderProgress: 0,
+	fullLoadCount: 0,
+	setLoaderProgress: (progress: number) => {
+		set({
+			loaderProgress: progress,
+			fullLoadCount: progress == 100 ? get().fullLoadCount + 1 : get().fullLoadCount,
+		});
+	},
 
-  currentRegion: localStorage.getItem("region") || defaultRegion,
-  setCurrentRegion: (region: string) => set({ currentRegion: region }),
+	loading: {},
+	setLoading: (id: string, updates: Partial<LoadingState>) => {
+		set((state) => ({
+			loading: {
+				...state.loading,
+				[id]: { ...state.loading[id], ...updates },
+			},
+		}));
+	},
 
-  currentTab: "",
-  setCurrentTab: (tab: string) => set({ currentTab: tab }),
+	currentRegion: localStorage.getItem('region') || defaultRegion,
+	setCurrentRegion: (region: string) => set({ currentRegion: region }),
 
-  enabledSafeMode: JSON.parse(
-    localStorage.getItem("enabledSafeMode") || "false",
-  ),
-  setEnabledSafeMode: (enabled: boolean) => {
-    localStorage.setItem("enabledSafeMode", JSON.stringify(enabled));
-    set({ enabledSafeMode: enabled });
-  },
+	currentTab: '',
+	setCurrentTab: (tab: string) => set({ currentTab: tab }),
 
-  openStateContext: {},
-  openState: {
-    createOfferSheet: false,
-    searchSheet: false,
-    notificationSheet: false,
-    reviewSheet: false,
-    settingsSheet: false,
-    buyTicketSheet: false,
-    messengerSheet: false,
-  },
-  toggleOpenState: (key: OpenStateKey, activeTab?: string, ctx?: unknown) => {
-    set((state) => ({
-      currentTab: activeTab || "",
-      openStateContext: {
-        ...state.openStateContext,
-        [key]: ctx,
-      },
-      openState: {
-        ...state.openState,
-        [key]: !state.openState[key],
-      },
-    }));
-  },
-  resetOpenState: () => {
-    set({
-      currentTab: "",
-      openStateContext: {},
-      openState: {
-        createOfferSheet: false,
-        searchSheet: false,
-        notificationSheet: false,
-        reviewSheet: false,
-        settingsSheet: false,
-        buyTicketSheet: false,
-        messengerSheet: false,
-      },
-    });
-  },
+	enabledSafeMode: JSON.parse(localStorage.getItem('enabledSafeMode') || 'false'),
+	setEnabledSafeMode: (enabled: boolean) => {
+		localStorage.setItem('enabledSafeMode', JSON.stringify(enabled));
+		set({ enabledSafeMode: enabled });
+	},
 
-  marketFilter: {},
-  setMarketFilter: (filter: Partial<MarketFilter>) => {
-    set((state) => ({
-      marketFilter: {
-        ...state.marketFilter,
-        ...filter,
-      },
-    }));
-  },
+	openStateContext: {},
+	openState: {
+		createOfferSheet: false,
+		searchSheet: false,
+		notificationSheet: false,
+		reviewSheet: false,
+		settingsSheet: false,
+		buyTicketSheet: false,
+		messengerSheet: false,
+	},
+	toggleOpenState: (key: OpenStateKey, activeTab?: string, ctx?: unknown) => {
+		set((state) => ({
+			currentTab: activeTab || '',
+			openStateContext: {
+				...state.openStateContext,
+				[key]: ctx,
+			},
+			openState: {
+				...state.openState,
+				[key]: !state.openState[key],
+			},
+		}));
+	},
+	resetOpenState: () => {
+		set({
+			currentTab: '',
+			openStateContext: {},
+			openState: {
+				createOfferSheet: false,
+				searchSheet: false,
+				notificationSheet: false,
+				reviewSheet: false,
+				settingsSheet: false,
+				buyTicketSheet: false,
+				messengerSheet: false,
+			},
+		});
+	},
 
-  swapPageState: {},
-  setPageSwapState: (updates: Partial<SwapPageState>) => {
-    set((state) => ({
-      swapPageState: {
-        ...state.swapPageState,
-        ...updates,
-      },
-    }));
-  },
+	marketFilter: {},
+	setMarketFilter: (filter: Partial<MarketFilter>) => {
+		set((state) => ({
+			marketFilter: {
+				...state.marketFilter,
+				...filter,
+			},
+		}));
+	},
 
-  liquidityFilter: {},
-  setLiquidityFilter: (filter: Partial<LiquidityFilter>) => {
-    set((state) => ({
-      liquidityFilter: {
-        ...state.liquidityFilter,
-        ...filter,
-      },
-    }));
-  },
+	swapPageState: {},
+	setPageSwapState: (updates: Partial<SwapPageState>) => {
+		set((state) => ({
+			swapPageState: {
+				...state.swapPageState,
+				...updates,
+			},
+		}));
+	},
 
-  swapFilter: {},
-  setSwapFilter: (filter: Partial<SwapFilter>) => {
-    set((state) => ({
-      swapFilter: {
-        ...state.swapFilter,
-        ...filter,
-      },
-    }));
-  },
+	liquidityFilter: {},
+	setLiquidityFilter: (filter: Partial<LiquidityFilter>) => {
+		set((state) => ({
+			liquidityFilter: {
+				...state.liquidityFilter,
+				...filter,
+			},
+		}));
+	},
 
-  offerFilter: {},
-  setOfferFilter: (filter: Partial<OfferFilter>) => {
-    set((state) => ({
-      offerFilter: {
-        ...state.offerFilter,
-        ...filter,
-      },
-    }));
-  },
+	swapFilter: {},
+	setSwapFilter: (filter: Partial<SwapFilter>) => {
+		set((state) => ({
+			swapFilter: {
+				...state.swapFilter,
+				...filter,
+			},
+		}));
+	},
 
-  disputeFilter: {},
-  setDisputeFilter: (filter: Partial<DisputeFilter>) => {
-    set((state) => ({
-      disputeFilter: {
-        ...state.disputeFilter,
-        ...filter,
-      },
-    }));
-  },
+	offerFilter: {},
+	setOfferFilter: (filter: Partial<OfferFilter>) => {
+		set((state) => ({
+			offerFilter: {
+				...state.offerFilter,
+				...filter,
+			},
+		}));
+	},
 
-  ticketFilter: {},
-  setTicketFilter: (filter: Partial<TicketFilter>) => {
-    set((state) => ({
-      ticketFilter: {
-        ...state.ticketFilter,
-        ...filter,
-      },
-    }));
-  },
+	disputeFilter: {},
+	setDisputeFilter: (filter: Partial<DisputeFilter>) => {
+		set((state) => ({
+			disputeFilter: {
+				...state.disputeFilter,
+				...filter,
+			},
+		}));
+	},
+
+	ticketFilter: {},
+	setTicketFilter: (filter: Partial<TicketFilter>) => {
+		set((state) => ({
+			ticketFilter: {
+				...state.ticketFilter,
+				...filter,
+			},
+		}));
+	},
 }));
 
 export default useStore;

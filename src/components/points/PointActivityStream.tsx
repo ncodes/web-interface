@@ -84,6 +84,7 @@ export function PointActivityStream() {
 			</ScrollOverflowIndicator>
 		</div>
 	);
+	
 }
 
 const Comp = memo(function Comp({ points, isPointsPage }: { points: Point[]; isPointsPage: boolean }) {

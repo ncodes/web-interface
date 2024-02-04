@@ -1,6 +1,6 @@
 import { DotsVerticalIcon, TimerIcon } from '@radix-ui/react-icons';
 import { useQuery } from '@tanstack/react-query';
-import { ChevronRight, PlayCircle } from 'lucide-react';
+import { AlertTriangle, ChevronRight, CircleSlash, PauseCircle, PlayCircle } from 'lucide-react';
 import moment from 'moment';
 import { BaseSyntheticEvent, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
@@ -69,6 +69,7 @@ export function LiquidityRow({
 	const [moreMenuOpen, setMoreMenuOpen] = useState(false);
 	const [openManageLiquiditySheet, setOpenManageLiquiditySheet] = useState(false);
 	const [openSwapSheet, setOpenSwapSheet] = useState(false);
+	const contractsParams = useStore((state) => state.contractsParams);
 	const { toggleOpenState } = useStore((state) => ({
 		openState: state.openState,
 		toggleOpenState: state.toggleOpenState,
@@ -79,6 +80,29 @@ export function LiquidityRow({
 		queryFn: getUser,
 		enabled: !!liquidity.provider,
 	});
+	const [paused, reason] = isLiquidityPaused(liquidity);
+
+	function isLiquidityPaused(liquidity: Liquidity) {
+		if (liquidity.openOrders >= (contractsParams.core?.maxOpenOrders ?? 0)) {
+			return [
+				true,
+				`Max. (${contractsParams.core?.maxOpenOrders}) open orders reached. Cannot accept new orders until open orders are concluded.`,
+			];
+		}
+
+		if (liquidity.openDisputes >= (contractsParams.core?.maxOpenDisputes ?? 0)) {
+			return [
+				true,
+				`Max. (${contractsParams.core?.maxOpenDisputes}) open disputes reached. Cannot accept new orders until open disputes are resolved.`,
+			];
+		}
+
+		if (liquidity.paused) {
+			return [true, 'This liquidity is paused and cannot accept new orders until unpaused.'];
+		}
+
+		return [false, ''];
+	}
 
 	return (
 		<div
@@ -197,23 +221,20 @@ export function LiquidityRow({
 										{liquidity.quote}
 									</span>
 
-									{liquidity.paused && liquidity.amount != '0' && (
+									{paused && liquidity.amount != '0' && (
 										<span
 											data-click-trigger='1'
 											className='flex bg-yellow-400/30 rounded-full px-[4px] text-xs items-center font-medium tracking-wider border-yellow-400 text-yellow-400'
 										>
-											<ToolTip
-												className='flex items-center gap-1'
-												tip={`This liquidity is paused and cannot accept new swaps`}
-											>
-												<PlayCircle width='15' />
+											<ToolTip className='flex items-center gap-1' tip={reason}>
+												<PauseCircle width='15' />
 												<span className='hidden xs:inline'>Paused</span>
 												<IconInfoCircle width='15' className='hidden xs:inline text-yellow-400' />
 											</ToolTip>
 										</span>
 									)}
 
-									{!liquidity.paused && liquidity.amount != '0' && (
+									{!paused && liquidity.amount != '0' && (
 										<span
 											data-click-trigger='1'
 											className='flex bg-green-400/30 rounded-full px-[4px] text-xs items-center font-medium tracking-wider border-green-400 text-green-400'
@@ -235,7 +256,7 @@ export function LiquidityRow({
 												className='flex items-center gap-1'
 												tip={`This liquidity holds zero (0) ${liquidity.base}. Add liquidity begin accepting swaps.`}
 											>
-												<PlayCircle width='15' />
+												<CircleSlash width='15' />
 												<span className='hidden xs:inline'>Empty</span>
 												<IconInfoCircle width='15' className='hidden xs:inline text-red-400' />
 											</ToolTip>
@@ -353,6 +374,14 @@ export function LiquidityRow({
 						</ScrollOverflowIndicator>
 					</div>
 				</div>
+
+				{reason && (
+					<div className='flex items-center gap-3 px-3 border-t border-gray-800'>
+						<AlertTriangle width='15' className='text-red-400 flex-shrink-0' />
+						<div className=' py-2 font-light text-xs text-gray-400 tracking-wider'>{reason}</div>
+					</div>
+				)}
+
 				<div className='border-t border-gray-800 text-gray-400 px-3 py-1 flex justify-between' data-click-trigger='1'>
 					<span
 						data-click-trigger='1'

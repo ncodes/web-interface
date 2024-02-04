@@ -48,6 +48,7 @@ export default function Layout({
 	const isXl = useMediaQuery('(min-width: 1280px)');
 	const { address, ready, getChainInfo } = useConnectorContext();
 	const user = useStore((state) => state.user);
+	const setContractsParams = useStore((state) => state.setContractsParams);
 	const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
 	const windowFocus = useWindowFocus();
 	const setUser = useStore((state) => state.setUser);
@@ -55,6 +56,7 @@ export default function Layout({
 	const { getUser, logOnlineStatus, registerDevice } = useUserService();
 	const accessToken = getAccessToken(address);
 	const { subscribeForWebPush } = useNotificationService();
+	const { getContractParams } = useMiscService();
 	const { getProtocolFees } = useMiscService();
 	const ref = useRef(null);
 	const { scrollY } = useScroll();
@@ -93,9 +95,16 @@ export default function Layout({
 	const protoFeeQuery = useQuery({
 		queryKey: ['getProtocolFees', { network: getChainInfo().queryName }],
 		queryFn: getProtocolFees,
-		// enabled: mounted && !!address,
 		enabled: false,
 		refetchInterval: 300 * 1000,
+	});
+
+	const contractParamsQuery = useQuery({
+		queryKey: ['getContractParams', { network: getChainInfo().queryName }],
+		queryFn: getContractParams,
+		enabled: mounted && !!address,
+		refetchIntervalInBackground: false,
+		refetchInterval: false,
 	});
 
 	const subscribeMutation = useMutation({
@@ -120,6 +129,14 @@ export default function Layout({
 			delAccessToken(address);
 		}
 	}, [authedUserQuery, setUser]);
+
+	// Set contract params
+	useEffect(() => {
+		if (contractParamsQuery.isLoading || contractParamsQuery.isRefetching) return;
+		if (contractParamsQuery.isSuccess && contractParamsQuery.data) {
+			setContractsParams(contractParamsQuery.data);
+		}
+	}, [contractParamsQuery]);
 
 	// Set protocol fee
 	useEffect(() => {

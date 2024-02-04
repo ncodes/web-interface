@@ -432,3 +432,4 @@ export function getPaginationInfo(data: { meta: { queryCount: number } }, limit:
 		currentPage: offset / limit,
 	};
 }
+
