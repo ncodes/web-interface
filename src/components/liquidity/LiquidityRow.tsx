@@ -110,7 +110,10 @@ export function LiquidityRow({
 	}
 
 	if (liquidity.amount == '0') {
-		reason = 'This liquidity holds zero (0) ' + liquidity.base + '. Add liquidity begin accepting swaps.';
+		reason = 'This liquidity holds zero (0) ' + liquidity.base + '. ';
+		if (ownerMode) {
+			reason += 'Add liquidity to begin accepting swaps.';
+		}
 	}
 
 	return (
