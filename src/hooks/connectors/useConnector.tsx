@@ -376,6 +376,7 @@ export default function useConnector() {
 			receipt = await publicClient.waitForTransactionReceipt({
 				hash: txHash,
 				confirmations: isDev() ? 1 : confirmations,
+				timeout: 500000,
 			});
 		}
 
