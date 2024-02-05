@@ -4,7 +4,7 @@ import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactGA from 'react-ga4';
 import { Helmet } from 'react-helmet';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useInterval, useMediaQuery } from 'usehooks-ts';
 import { AccountLinker } from '../components/AccountLinker.tsx';
 import { Footer } from '../components/Footer.tsx';
@@ -43,7 +43,6 @@ export default function Layout({
 	const { getAccessToken, delAccessToken, hasAccessToken } = useSession();
 	const headerHeight = 55;
 	const location = useLocation();
-	const navigate = useNavigate();
 	const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
 	const isXl = useMediaQuery('(min-width: 1280px)');
 	const { address, ready, getChainInfo } = useConnectorContext();
