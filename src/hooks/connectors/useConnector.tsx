@@ -248,7 +248,7 @@ export default function useConnector() {
 	 * @param confirmations The number of confirmations to wait for
 	 * @returns
 	 */
-	async function sendTransaction(to: string, value: bigint, noWait = false, confirmations = 2) {
+	async function sendTransaction(to: string, value: bigint, noWait = false, _confirmations = 1) {
 		if (!publicClient) throw new Error('no provider found');
 		if (!walletClient) throw new Error('wallet not connected');
 		const txHash = await walletClient.sendTransaction({
@@ -392,7 +392,7 @@ export default function useConnector() {
 	 * @param confirmations The number of confirmations to wait for
 	 * @returns
 	 */
-	async function withdrawWrappedToken(amount: bigint, noWait = false, confirmations = 2) {
+	async function withdrawWrappedToken(amount: bigint, noWait = false, _confirmations = 1) {
 		if (!publicClient) throw new Error('no provider found');
 		if (!walletClient) throw new Error('wallet not connected');
 		const netInfo = getChainInfo();
