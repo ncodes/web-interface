@@ -222,7 +222,7 @@ export function LiquidityRow({
 								</div>
 							)}
 
-							{ownerMode && (
+							{ownerMode && !getProvider.isLoading && (
 								<div
 									data-click-trigger='1'
 									className='w-full md:w-[100px] flex gap-1 justify-between items-center md:items-start md:justify-start md:flex-col'
