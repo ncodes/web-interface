@@ -47,7 +47,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 			setJoining(true);
 
 			const [txHash] = await join(BigInt(ticket.index));
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Ticket has joined the pool successfully`, {
@@ -70,7 +70,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 			setCancelling(true);
 
 			const [txHash] = await cancelTicket(BigInt(ticket.index));
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Ticket was cancelled successfully`, {
@@ -93,7 +93,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 			setDraining(true);
 
 			const [txHash] = await drainTicket(BigInt(ticket.index));
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Ticket was drained successfully`, {

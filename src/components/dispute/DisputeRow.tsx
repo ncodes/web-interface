@@ -108,7 +108,7 @@ export function DisputeRow({
 			setLoading({ ...loading, commitVote: true });
 
 			const [txHash] = await commitVote(dispute.orderId, dispute.ticketIndex, hash);
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Vote successfully committed`, {
@@ -137,7 +137,7 @@ export function DisputeRow({
 			setLoading({ ...loading, revealVote: true });
 
 			const [txHash] = await revealVote(dispute.orderId, dispute.ticketIndex, vote, hash);
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Vote successfully revealed`, {

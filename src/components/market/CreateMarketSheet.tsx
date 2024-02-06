@@ -79,7 +79,7 @@ export function CreateMarketSheet({
 				(commission || 0) * 100,
 				0,
 			);
-			await delay(10000);
+			await delay(5000);
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess('Successfully created a market', {
 				duration: 5000,

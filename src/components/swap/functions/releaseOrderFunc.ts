@@ -35,7 +35,7 @@ export async function releaseOrderFunc(
 		setLoading(swap.orderId.toFixed(), { ...loading, releaseOrder: true });
 
 		const [txHash] = await releaseOrder(BigInt(swap.orderId));
-		await delay(10000);
+		await delay(5000);
 
 		const explorer = getChainInfo().blockExplorer;
 		notifySuccess(`Swap was successfully released`, {

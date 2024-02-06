@@ -405,7 +405,7 @@ export function SwapOfferCreatorContent({
 				getChainInfo().contracts?.core.address as Address,
 				await getTokenSupply(market.quoteAddress as Address),
 			);
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Allowance successfully approved', { duration: 5000 });
 		} catch (error) {
 			const msg = humanizeErc20Errors(error);
@@ -438,7 +438,7 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(10000);
+			await delay(5000);
 
 			// For interactive swap, redirect to swap page
 			if (!market.instant) {
@@ -446,7 +446,8 @@ export function SwapOfferCreatorContent({
 					abi: getChainInfo().contracts?.core.abi,
 					data: txReceipt.logs[txReceipt.logs.length - 1].data,
 					topics: txReceipt.logs[txReceipt.logs.length - 1].topics,
-				});
+				}) as { args: { numTypeInfo: bigint[] } };
+
 				const orderId = (event.args as { numTypeInfo: bigint[] }).numTypeInfo[0];
 				resetOpenState();
 				navigate(`/swap/${orderId}`);
@@ -492,14 +493,14 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(10000);
+			await delay(5000);
 
 			// For interactive swap, redirect to swap page
 			const event = decodeEventLog({
 				abi: getChainInfo().contracts?.core.abi,
 				data: txReceipt.logs[0].data,
 				topics: txReceipt.logs[0].topics,
-			});
+			}) as { args: { offerId: bigint } };
 
 			reset();
 			resetOpenState();
@@ -526,7 +527,7 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(10000);
+			await delay(5000);
 
 			// Reset form and close sheets
 			reset();
@@ -538,7 +539,8 @@ export function SwapOfferCreatorContent({
 					abi: getChainInfo().contracts?.core.abi,
 					data: txReceipt.logs[txReceipt.logs.length - 1].data,
 					topics: txReceipt.logs[txReceipt.logs.length - 1].topics,
-				});
+				}) as { args: { numTypeInfo: bigint[] } };
+
 				const orderId = (event.args as { numTypeInfo: bigint[] }).numTypeInfo[0];
 				navigate(`/swap/${orderId}`);
 				return;
@@ -590,7 +592,7 @@ export function SwapOfferCreatorContent({
 			);
 
 			// Give backend a chance to process tx
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Offer was successful updated`, {

@@ -45,11 +45,12 @@ export async function appealOrderFunc(
 			abi: getChainInfo().contracts?.disputeManager.abi,
 			data: txReceipt.logs[0].data,
 			topics: txReceipt.logs[0].topics,
-		});
+		}) as { name: string; args: { index: bigint } };
+
 		const args = event.args as { index: bigint };
 		setDisputeId && setDisputeId(Number(args.index));
 
-		await delay(10000);
+		await delay(5000);
 
 		const explorer = getChainInfo().blockExplorer;
 		notifySuccess(`Appeal successfully started`, {

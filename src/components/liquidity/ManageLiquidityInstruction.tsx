@@ -57,7 +57,7 @@ export function ManageLiquidityInstruction({ liquidity }: { liquidity: Liquidity
 			try {
 				setTxLoading(true);
 				const txHash = await grantNewOrUpsetBadgeMetaBySig(data.sigInfo);
-				await delay(10000);
+				await delay(5000);
 				const blockExplorer = getChainInfo().blockExplorer;
 				notifySuccess('Successfully granted instruction badge', {
 					duration: 5000,

@@ -23,7 +23,7 @@ export function EditZeroPricedLiquidity({ market, close }: { market: Market; clo
 			setLoading(true);
 			const txHash = await allowZeroOfferPrice(market.address);
 			const blockExplorer = getChainInfo().blockExplorer;
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Successfully enabled zero price mode', {
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],

@@ -35,7 +35,7 @@ export async function markOrderAsPaidFunc(
 		setLoading(swap.orderId.toFixed(), { ...loading, markOrderAsPaid: true });
 
 		const [txHash] = await markOrderAsPaid(BigInt(swap.orderId));
-		await delay(10000);
+		await delay(5000);
 
 		const explorer = getChainInfo().blockExplorer;
 		notifySuccess(`Swap was successfully marked as 'PAID'`, {

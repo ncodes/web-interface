@@ -65,7 +65,7 @@ export function OfferRow({ className, offer }: { offer: Offer; ownerMode?: boole
 		try {
 			setLoading(true);
 			const [txHash] = await cancelOffer(BigInt(offer.offerId));
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Offer was successfully cancelled`, {
@@ -94,7 +94,7 @@ export function OfferRow({ className, offer }: { offer: Offer; ownerMode?: boole
 		try {
 			setLoading(true);
 			const [txHash] = await acceptOffer(BigInt(offer.offerId), BigInt(0));
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Offer was successfully accepted`, {
@@ -123,7 +123,7 @@ export function OfferRow({ className, offer }: { offer: Offer; ownerMode?: boole
 		try {
 			setLoading(true);
 			const [txHash] = await unacceptOffer(BigInt(offer.offerId));
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Offer was successfully unaccepted`, {

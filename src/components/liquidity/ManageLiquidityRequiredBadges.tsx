@@ -32,7 +32,7 @@ export function ManageLiquidityRequiredBadges({ liquidity }: { liquidity: Liquid
 				splitBadgeFromPath(splitAndCleanBadges(badges)),
 			);
 
-			await delay(10000);
+			await delay(5000);
 			const blockExplorer = getChainInfo().blockExplorer;
 			notifySuccess('Successfully updated badge requirement', {
 				duration: 5000,

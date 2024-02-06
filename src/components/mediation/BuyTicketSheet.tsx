@@ -97,7 +97,7 @@ export function BuyTicketSheet(props: { children?: React.ReactNode; onOpen?: (op
 				await getTokenSupply(getChainInfo().contracts?.token?.address as Address),
 			);
 
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Allowance successfully approved', { duration: 5000 });
 		} catch (error) {
 			const msg = humanizeErc20Errors(error);
@@ -115,7 +115,7 @@ export function BuyTicketSheet(props: { children?: React.ReactNode; onOpen?: (op
 			setLoading(true);
 
 			const [txHash] = await purchaseTicket(BigInt(pool.id));
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Ticket purchase was successful`, {

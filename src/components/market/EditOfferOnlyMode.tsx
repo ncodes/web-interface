@@ -23,7 +23,7 @@ export function EditOfferOnlyMode({ market, close }: { market: Market; close?: (
 			setLoading(true);
 			const txHash = await markAsOfferOnly(market.address);
 			const blockExplorer = getChainInfo().blockExplorer;
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Successfully enabled market-only mode', {
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],

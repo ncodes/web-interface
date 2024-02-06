@@ -35,7 +35,7 @@ export async function cancelOrderFunc(
 		setLoading(swap.orderId.toFixed(), { ...loading, cancelOrder: true });
 
 		const [txHash] = await cancelOrder(BigInt(swap.orderId));
-		await delay(10000);
+		await delay(5000);
 
 		const explorer = getChainInfo().blockExplorer;
 		notifySuccess(`Swap was successfully cancelled`, {

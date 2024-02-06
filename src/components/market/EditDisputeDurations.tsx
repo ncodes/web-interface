@@ -24,7 +24,7 @@ export function EditDisputeDurations({ market, close }: { market: Market; close?
 			setLoading(true);
 			const txHash = await setDisputeDurations(market.address, disputeDelayDur, evidenceDur, votingDur);
 			const blockExplorer = getChainInfo().blockExplorer;
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Successfully updated durations', {
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],

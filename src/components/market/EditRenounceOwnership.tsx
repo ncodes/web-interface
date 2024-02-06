@@ -20,7 +20,7 @@ export function EditRenounceOwnership({ market, close }: { market: Market; close
 			setLoading(true);
 			const txHash = await renounceOwnership(market.address);
 			const blockExplorer = getChainInfo().blockExplorer;
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Successfully renounced ownership', {
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],

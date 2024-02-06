@@ -191,6 +191,7 @@ export default function useConnector() {
 			await publicClient.waitForTransactionReceipt({
 				hash: txHash,
 				confirmations: isDev() ? 1 : confirmations,
+				timeout: 1800000,
 			});
 		}
 
@@ -259,6 +260,7 @@ export default function useConnector() {
 			await publicClient.waitForTransactionReceipt({
 				hash: txHash,
 				confirmations: isDev() ? 1 : confirmations,
+				timeout: 1800000,
 			});
 		}
 		return txHash;
@@ -376,7 +378,6 @@ export default function useConnector() {
 			receipt = await publicClient.waitForTransactionReceipt({
 				hash: txHash,
 				confirmations: isDev() ? 1 : confirmations,
-				timeout: 500000,
 			});
 		}
 

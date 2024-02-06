@@ -71,7 +71,7 @@ export function ManageLiquiditySetPaymentMethods({ liquidity }: { liquidity: Liq
 		try {
 			setLoading(true);
 			const txHash = await grantNewOrUpsetBadgeMetaBySig(grantSig.data);
-			await delay(10000);
+			await delay(5000);
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Successfully added payment method`, {
 				duration: 5000,

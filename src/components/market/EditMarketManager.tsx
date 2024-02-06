@@ -25,7 +25,7 @@ export function EditMarketManager({ market, close }: { market: Market; close?: (
 			setLoading(true);
 			const txHash = await setManager(market.address, address);
 			const blockExplorer = getChainInfo().blockExplorer;
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Successfully updated market manager', {
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],

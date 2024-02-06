@@ -75,7 +75,7 @@ export function BadgeIssuerAppBrowser({
 				values: params.values as unknown as NewGrantValues,
 			});
 
-			await delay(10000);
+			await delay(5000);
 
 			const explorer = getChainInfo().blockExplorer;
 			notifySuccess(`Successfully claimed ${params.badge}`, {

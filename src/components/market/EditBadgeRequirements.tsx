@@ -29,7 +29,7 @@ export function EditBadgeRequirements({ market, close }: { market: Market; close
 				splitBadgeFromPath(splitAndCleanBadges(swapBadges)),
 			);
 			const blockExplorer = getChainInfo().blockExplorer;
-			await delay(10000);
+			await delay(5000);
 			notifySuccess('Successfully updated badge requirement', {
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],
