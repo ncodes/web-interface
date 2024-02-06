@@ -13,7 +13,7 @@ import {
 	useSwitchNetwork,
 	useWalletClient,
 } from 'wagmi';
-import { isDev, logError } from '../../libs/helpers.ts';
+import { logError } from '../../libs/helpers.ts';
 import { IConnector } from './interface.ts';
 
 /**
@@ -171,7 +171,7 @@ export default function useConnector() {
 		spenderAddress: Address,
 		amount: bigint,
 		noWait = false,
-		confirmations = 2,
+		confirmations = 1,
 	) {
 		if (!walletClient) throw new Error('wallet not connected');
 		const netInfo = getChain(chainId as number);
@@ -190,7 +190,7 @@ export default function useConnector() {
 		if (!noWait) {
 			await publicClient.waitForTransactionReceipt({
 				hash: txHash,
-				confirmations: isDev() ? 1 : confirmations,
+				confirmations: 0,
 				timeout: 1800000,
 			});
 		}
@@ -259,7 +259,7 @@ export default function useConnector() {
 		if (!noWait) {
 			await publicClient.waitForTransactionReceipt({
 				hash: txHash,
-				confirmations: isDev() ? 1 : confirmations,
+				confirmations: 0,
 				timeout: 1800000,
 			});
 		}
@@ -358,7 +358,7 @@ export default function useConnector() {
 		targetFunc: string,
 		args: unknown[] = [],
 		noWait = false,
-		confirmations = 2,
+		confirmations = 1,
 	) {
 		if (!publicClient) throw new Error('no provider found');
 		if (!walletClient) throw new Error('wallet not connected');
@@ -377,7 +377,8 @@ export default function useConnector() {
 		if (!noWait) {
 			receipt = await publicClient.waitForTransactionReceipt({
 				hash: txHash,
-				confirmations: isDev() ? 1 : confirmations,
+				confirmations: 0,
+				timeout: 1800000,
 			});
 		}
 
@@ -407,7 +408,8 @@ export default function useConnector() {
 		if (!noWait) {
 			await publicClient.waitForTransactionReceipt({
 				hash: txHash,
-				confirmations: isDev() ? 1 : confirmations,
+				confirmations: 0,
+				timeout: 1800000,
 			});
 		}
 		return txHash;
