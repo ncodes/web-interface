@@ -120,7 +120,7 @@ export function MarketRow({
 							<div data-click-trigger='1' className='py-[8px] flex gap-2 md:px-2'>
 								<InfoCard
 									title={`Price (${market.quote})`}
-									width='w-auto'
+									className='w-[210px]'
 									tip={`The price of 1 ${market.base} in ${market.quote}`}
 									title2={<PriceChange priceChange={market.priceChange} />}
 								>

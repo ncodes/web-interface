@@ -33,6 +33,7 @@ import IconReview from '../icons/IconReview.tsx';
 import { IconSettingsOutline } from '../icons/IconSettingsOutline.tsx';
 import { FollowLiquidity } from '../market/FollowLiquidity.tsx';
 import { InfoCard } from '../market/InfoCard.tsx';
+import { PriceChange } from '../market/PriceChange.tsx';
 import { SwapOfferCreatorSheet } from '../swap/SwapOfferCreatorSheet.tsx';
 import { SwapSheet } from '../swap/SwapSheet.tsx';
 import { Button } from '../ui/Button.tsx';
@@ -283,24 +284,10 @@ export function LiquidityRow({
 							<ScrollAreaHorizontal className='flex mr-[1px]' data-click-trigger='1'>
 								<div className='flex-1 flex py-2 px-2 gap-2' data-click-trigger='1'>
 									<InfoCard
+										className='w-[210px]'
 										title={`Price (${liquidity.quote})`}
 										tip={`The price of 1 ${liquidity.base} in ${liquidity.quote}`}
-										title2={
-											<span
-												data-click-trigger='1'
-												className={cn('hidden xxs:inline text-[10px]', {
-													'text-green-400': liquidity?.priceChange > 0,
-													'text-red-400': liquidity?.priceChange < 0,
-													'text-gray-200': liquidity?.priceChange == 0,
-												})}
-											>
-												({liquidity?.priceChange < 0 && '-'}
-												{liquidity?.priceChange == 0 && ''}
-												{liquidity?.priceChange > 0 && '+'}
-												{liquidity?.priceChange.toFixed(0).replace('-', '')}
-												%)
-											</span>
-										}
+										title2={<PriceChange priceChange={liquidity.priceChange} />}
 									>
 										<span className='flex gap-1'>
 											<span data-click-trigger='1'>
