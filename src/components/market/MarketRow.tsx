@@ -126,7 +126,7 @@ export function MarketRow({
 								>
 									<span className='flex gap-1' data-click-trigger='1'>
 										<span data-click-trigger='1'>
-											{formatToHighDenom(market.lowestPrice, market.quoteDecimals, undefined, undefined, 99999999)}
+											{formatToHighDenom(market.lowestPrice, market.quoteDecimals, undefined, 8, 99999999)}
 										</span>
 										<USDAmountToolTip v={parseFloat(market.lowestPriceUsd)} />
 									</span>
