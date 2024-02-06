@@ -297,7 +297,7 @@ export function LiquidityRow({
 												({liquidity?.priceChange < 0 && '-'}
 												{liquidity?.priceChange == 0 && ''}
 												{liquidity?.priceChange > 0 && '+'}
-												{liquidity?.priceChange.toString().replace('-', '')}
+												{liquidity?.priceChange.toFixed(0).replace('-', '')}
 												%)
 											</span>
 										}
