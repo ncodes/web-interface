@@ -1,4 +1,6 @@
 import { ConnectKitProvider, getDefaultConfig } from 'connectkit';
+import { Chain, http } from 'viem';
+import { mainnet, sepolia } from 'viem/chains';
 import { WagmiConfig, createConfig } from 'wagmi';
 import { getSupportedChains } from '../common.ts';
 import { ConnectorContext } from '../context.tsx';
@@ -20,11 +22,14 @@ export default function ConnectorProvider({ children, appName, infuraId }: Conne
 		getDefaultConfig({
 			walletConnectProjectId: import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID,
 			appName,
-			infuraId,
-			chains: getSupportedChains(),
+			chains: getSupportedChains() as unknown as readonly [Chain, ...Chain[]],
 			appDescription: 'Joint is a decentralized P2P exchange protocol',
 			appUrl: import.meta.env.VITE_APP_URL,
 			appIcon: import.meta.env.VITE_APP_ICON,
+			transports: {
+				[sepolia.id]: http(`https://sepolia.infura.io/v3/${infuraId}`),
+				[mainnet.id]: http(`https://mainnet.infura.io/v3/${infuraId}`),
+			},
 		}),
 	);
 

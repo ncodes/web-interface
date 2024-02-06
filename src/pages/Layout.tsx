@@ -22,10 +22,12 @@ import useStore from '../hooks/store/useStore.ts';
 import useMounted from '../hooks/useMounted.ts';
 import { useSession } from '../hooks/useSession.ts';
 import useWindowFocus from '../hooks/useWindowFocus.ts';
-import { logError } from '../libs/helpers.ts';
+import { isLocal, logError } from '../libs/helpers.ts';
 import { cn } from '../libs/utils.ts';
 
-ReactGA.initialize('G-4HPN7GNCG6');
+if (!isLocal()) {
+	ReactGA.initialize('G-4HPN7GNCG6');
+}
 
 export default function Layout({
 	body,

@@ -362,6 +362,7 @@ export default function useConnector() {
 	) {
 		if (!publicClient) throw new Error('no provider found');
 		if (!walletClient) throw new Error('wallet not connected');
+
 		const netInfo = getChain(chainId as number);
 		if (!netInfo || !netInfo.contracts) throw new Error('unknown contract');
 		const [address] = await walletClient.getAddresses();
@@ -372,6 +373,7 @@ export default function useConnector() {
 			args: args,
 			account: address,
 		});
+
 		const txHash = await walletClient.writeContract(request);
 		let receipt: TransactionReceipt | undefined = undefined;
 		if (!noWait) {
