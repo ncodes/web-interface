@@ -22,7 +22,6 @@ export default function useConnector() {
 	const defaultNetwork = (getChain(import.meta.env.VITE_DEFAULT_NETWORK) ?? getChain(hardhat.id))?.chainId;
 	const [connected, setConnected] = useState<boolean | undefined>(undefined);
 	const [address, setAddress] = useState<string | undefined>(undefined);
-	// const [chainId, setChainId] = useState<number | undefined>(undefined);
 	const [ready, setReady] = useState(false);
 	const [network, setNetwork] = useState<string | undefined>(undefined);
 	const { disconnectAsync } = useDisconnect();
