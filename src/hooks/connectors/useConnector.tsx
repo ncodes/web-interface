@@ -1,16 +1,14 @@
 import { ChainInfo, ContractNames, getChain } from '@jointlabs/chains-info';
 import { useEffect, useState } from 'react';
-import { Address, TransactionReceipt, createPublicClient, http } from 'viem';
+import { Address, Chain, PublicClient, TransactionReceipt, createPublicClient, erc20Abi, http } from 'viem';
 import { hardhat } from 'viem/chains';
 import {
-	PublicClient,
-	erc20ABI,
 	useAccount,
+	useChainId,
 	useDisconnect,
-	useNetwork,
 	usePublicClient,
 	useSignMessage,
-	useSwitchNetwork,
+	useSwitchChain,
 	useWalletClient,
 } from 'wagmi';
 import { logError } from '../../libs/helpers.ts';
@@ -24,14 +22,15 @@ export default function useConnector() {
 	const defaultNetwork = (getChain(import.meta.env.VITE_DEFAULT_NETWORK) ?? getChain(hardhat.id))?.chainId;
 	const [connected, setConnected] = useState<boolean | undefined>(undefined);
 	const [address, setAddress] = useState<string | undefined>(undefined);
-	const [chainId, setChainId] = useState<number | undefined>(undefined);
+	// const [chainId, setChainId] = useState<number | undefined>(undefined);
 	const [ready, setReady] = useState(false);
 	const [network, setNetwork] = useState<string | undefined>(undefined);
 	const { disconnectAsync } = useDisconnect();
-	const { chain } = useNetwork();
+	const chainId = useChainId();
+	const [chain, setChain] = useState<Chain | undefined>(undefined);
 	const { isConnected, address: _address } = useAccount();
 	const { data: walletClient } = useWalletClient();
-	const { switchNetwork: _switchNetwork, chains } = useSwitchNetwork();
+	const { switchChain, chains } = useSwitchChain();
 	const publicClient = usePublicClient();
 	const { data: signedData, status: signStatus, signMessageAsync } = useSignMessage();
 
@@ -41,11 +40,11 @@ export default function useConnector() {
 	}, [isConnected, _address]);
 
 	useEffect(() => {
-		if (!chain) return;
-		setChainId(connected ? chain.id : undefined);
-		setNetwork(getChain(chain.id)?.queryName);
-		localStorage.setItem('lastChainId', chain.id.toString());
-	}, [connected, chain]);
+		if (!chainId) return;
+		setChain(getChain(chainId)?.chain);
+		setNetwork(getChain(chainId)?.queryName);
+		localStorage.setItem('lastChainId', chainId.toString());
+	}, [connected, chainId]);
 
 	useEffect(() => {
 		setReady(
@@ -54,9 +53,9 @@ export default function useConnector() {
 				address !== undefined &&
 				chainId !== undefined &&
 				walletClient != undefined &&
-				chain !== undefined,
+				chainId !== undefined,
 		);
-	}, [publicClient, connected, address, chainId, chain, walletClient]);
+	}, [publicClient, connected, address, chainId, chainId, walletClient]);
 
 	/**
 	 * Disconnect from supported wallet provider
@@ -92,8 +91,8 @@ export default function useConnector() {
 	async function switchNetwork(id: number) {
 		try {
 			if (!connected) return Promise.reject(new Error('not connected to a wallet'));
-			if (!_switchNetwork) return Promise.reject(new Error('switch function not set'));
-			_switchNetwork(id);
+			if (!switchChain) return Promise.reject(new Error('switch function not set'));
+			switchChain({ chainId: id });
 			return Promise.resolve();
 		} catch (error) {
 			return Promise.reject(error);
@@ -104,6 +103,7 @@ export default function useConnector() {
 	 * Get coin balance of the connected wallet
 	 */
 	async function getBalance(): Promise<bigint> {
+		if (!publicClient) throw new Error('no provider found');
 		return publicClient.getBalance({ address: address as Address });
 	}
 
@@ -117,7 +117,7 @@ export default function useConnector() {
 		if (!walletClient) throw new Error('wallet not connected');
 		return publicClient.readContract({
 			address: tokenAddress as Address,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'balanceOf',
 			args: [accountAddress as Address],
 		});
@@ -132,7 +132,7 @@ export default function useConnector() {
 		if (!walletClient) throw new Error('wallet not connected');
 		return publicClient.readContract({
 			address: tokenAddress,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'totalSupply',
 		});
 	}
@@ -152,7 +152,7 @@ export default function useConnector() {
 		if (!walletClient) throw new Error('wallet not connected');
 		return publicClient.readContract({
 			address: tokenAddress as Address,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'allowance',
 			args: [accountAddress as Address, spenderAddress as Address],
 		});
@@ -173,6 +173,7 @@ export default function useConnector() {
 		noWait = false,
 		_confirmations = 1,
 	) {
+		if (!publicClient) throw new Error('no provider found');
 		if (!walletClient) throw new Error('wallet not connected');
 		const netInfo = getChain(chainId as number);
 		if (!netInfo || !netInfo.contracts) throw new Error('unknown contract');
@@ -180,7 +181,7 @@ export default function useConnector() {
 
 		const { request } = await publicClient.simulateContract({
 			address: tokenAddress,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'approve',
 			args: [spenderAddress, amount],
 			account: address,
@@ -207,7 +208,7 @@ export default function useConnector() {
 		if (!publicClient) throw new Error('no provider found');
 		return publicClient.readContract({
 			address: tokenAddress as Address,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'name',
 		});
 	}
@@ -221,7 +222,7 @@ export default function useConnector() {
 		if (!publicClient) throw new Error('no provider found');
 		return publicClient.readContract({
 			address: tokenAddress as Address,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'decimals',
 		});
 	}
@@ -235,7 +236,7 @@ export default function useConnector() {
 		if (!publicClient) throw new Error('no provider found');
 		return publicClient.readContract({
 			address: tokenAddress as Address,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'symbol',
 		});
 	}
@@ -267,27 +268,6 @@ export default function useConnector() {
 	}
 
 	/**
-	 * Simulate a contract call
-	 * @param name - The name of the contract
-	 * @param targetFunc - The target function to be called
-	 * @param args - The arguments to be passed to the target function
-	 */
-	async function simulateContract(name: ContractNames, targetFunc: string, args: unknown[] = []) {
-		if (!publicClient) throw new Error('no provider found');
-		if (!walletClient) throw new Error('wallet not connected');
-		const netInfo = getChain(chainId as number);
-		if (!netInfo || !netInfo.contracts) throw new Error('unknown contract');
-		const [address] = await walletClient.getAddresses();
-		return publicClient.simulateContract({
-			address: netInfo.contracts[name].address as Address,
-			abi: netInfo.contracts[name].abi,
-			functionName: targetFunc,
-			args: args,
-			account: address,
-		});
-	}
-
-	/**
 	 * Read a contract
 	 * @param name - The name of the contract
 	 * @param targetFunc - The target function to be called
@@ -300,7 +280,8 @@ export default function useConnector() {
 		args: unknown[] = [],
 		useAltRpc = false,
 	): Promise<T> {
-		let client = publicClient;
+		if (!publicClient) throw new Error('no provider found');
+		let client = publicClient as PublicClient;
 
 		if (useAltRpc) {
 			const chainInfo = getChainInfo();
@@ -311,7 +292,7 @@ export default function useConnector() {
 			client = createPublicClient({
 				chain: chains.find((c) => c.id === (chainId as number)),
 				transport: http(chainInfo.rpcUrl),
-			}) as PublicClient;
+			});
 		}
 
 		if (!client) throw new Error('no provider found');
@@ -359,7 +340,7 @@ export default function useConnector() {
 		args: unknown[] = [],
 		noWait = false,
 		_confirmations = 1,
-	) {
+	): Promise<[Address, TransactionReceipt]> {
 		if (!publicClient) throw new Error('no provider found');
 		if (!walletClient) throw new Error('wallet not connected');
 
@@ -384,7 +365,7 @@ export default function useConnector() {
 			});
 		}
 
-		return [txHash, receipt];
+		return [txHash, receipt as TransactionReceipt];
 	}
 
 	/**
@@ -447,7 +428,6 @@ export default function useConnector() {
 		// Write and read network
 		getBalance,
 		readContract,
-		simulateContract,
 		simulateAndWriteContract,
 		writeContract,
 		sendTransaction,

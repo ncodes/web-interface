@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import '../polyfills.ts';
@@ -142,12 +141,8 @@ if (isLocal()) {
 
 const router = createBrowserRouter(routes);
 
-const queryClient = new QueryClient();
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-	<QueryClientProvider client={queryClient}>
-		<ConnectorProvider appName={import.meta.env.NEXT_PUBLIC_APP_NAME} infuraId={import.meta.env.VITE_INFURA_ID}>
-			<RouterProvider router={router} />
-		</ConnectorProvider>
-	</QueryClientProvider>,
+	<ConnectorProvider>
+		<RouterProvider router={router} />
+	</ConnectorProvider>,
 );

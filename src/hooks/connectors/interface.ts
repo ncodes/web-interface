@@ -1,18 +1,17 @@
 import { ChainInfo, ContractNames } from '@jointlabs/chains-info';
-import { Address, Chain, SimulateContractReturnType, TransactionReceipt, WalletClient } from 'viem';
+import { Address, Chain, TransactionReceipt, WalletClient } from 'viem';
 
 export interface IConnector {
 	defaultNetwork: number;
 
 	readContract<T>(name: ContractNames, targetFunc: string, args?, useAltRpc?): Promise<T>;
-	simulateContract(name: ContractNames, targetFunc: string, args?): Promise<SimulateContractReturnType>;
 	writeContract(name: ContractNames, targetFunc: string, args?): Promise<Address>;
 	simulateAndWriteContract(
 		name: ContractNames,
 		targetFunc: string,
 		args?,
 		noWait?: boolean,
-	): Promise<[Address, TransactionReceipt]>;
+	): Promise<[`0x${string}`, TransactionReceipt]>;
 	sendTransaction(to: string, value: bigint, noWait?: boolean, confirmations?: number): Promise<Address>;
 	withdrawWrappedToken(amount: bigint, noWait?: boolean, confirmations?: number): Promise<Address>;
 	getTokenBalance(tokenAddress: Address | string, accountAddress: Address | string): Promise<bigint>;
@@ -47,7 +46,7 @@ export interface IConnector {
 	wallet: WalletClient;
 	switchNetwork: (id: number) => Promise<void>;
 	chainId: number;
-	chains: Chain[];
+	chains: readonly Chain[];
 	chain: Chain;
 	network: string;
 	getChainInfo(): ChainInfo;

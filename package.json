@@ -41,7 +41,7 @@
 		"@rollup/plugin-inject": "^5.0.5",
 		"@sentry/react": "^7.98.0",
 		"@sentry/vite-plugin": "^2.10.3",
-		"@tanstack/react-query": "^4.29.25",
+		"@tanstack/react-query": "^5.18.1",
 		"@types/randombytes": "^2.0.0",
 		"@uidotdev/usehooks": "^2.3.1",
 		"@xmtp/content-type-read-receipt": "^1.1.3",
