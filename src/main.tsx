@@ -23,6 +23,7 @@ import './sentry.ts';
 import './styles/app.css';
 import './styles/fonts.css';
 
+// Make the path locale optional
 function makePath(path: string) {
 	return `:locale?/${path}`;
 }
