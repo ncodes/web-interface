@@ -171,7 +171,7 @@ export default function useConnector() {
 		spenderAddress: Address,
 		amount: bigint,
 		noWait = false,
-		confirmations = 1,
+		_confirmations = 1,
 	) {
 		if (!walletClient) throw new Error('wallet not connected');
 		const netInfo = getChain(chainId as number);
@@ -358,7 +358,7 @@ export default function useConnector() {
 		targetFunc: string,
 		args: unknown[] = [],
 		noWait = false,
-		confirmations = 1,
+		_confirmations = 1,
 	) {
 		if (!publicClient) throw new Error('no provider found');
 		if (!walletClient) throw new Error('wallet not connected');
