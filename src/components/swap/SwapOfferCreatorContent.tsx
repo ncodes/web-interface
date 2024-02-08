@@ -335,7 +335,6 @@ export function SwapOfferCreatorContent({
 
 		const { provider, lid } = liquidity;
 		const amt = toLD(amount, market.baseDecimals);
-		console.log('Compute Fee', 'Amount', amt, 'Price', price, 'Decimals', market.quoteDecimals);
 		const fee = await computeSwapFee(market.address, provider, lid, address, amt, toLD(price, market.quoteDecimals));
 
 		let symbol: string;
@@ -446,7 +445,8 @@ export function SwapOfferCreatorContent({
 					abi: getChainInfo().contracts?.core.abi,
 					data: txReceipt.logs[txReceipt.logs.length - 1].data,
 					topics: txReceipt.logs[txReceipt.logs.length - 1].topics,
-				});
+				}) as { args: { numTypeInfo: bigint[] } };
+
 				const orderId = (event.args as { numTypeInfo: bigint[] }).numTypeInfo[0];
 				resetOpenState();
 				navigate(`/swap/${orderId}`);
@@ -499,7 +499,7 @@ export function SwapOfferCreatorContent({
 				abi: getChainInfo().contracts?.core.abi,
 				data: txReceipt.logs[0].data,
 				topics: txReceipt.logs[0].topics,
-			});
+			}) as { args: { offerId: bigint } };
 
 			reset();
 			resetOpenState();
@@ -538,7 +538,8 @@ export function SwapOfferCreatorContent({
 					abi: getChainInfo().contracts?.core.abi,
 					data: txReceipt.logs[txReceipt.logs.length - 1].data,
 					topics: txReceipt.logs[txReceipt.logs.length - 1].topics,
-				});
+				}) as { args: { numTypeInfo: bigint[] } };
+
 				const orderId = (event.args as { numTypeInfo: bigint[] }).numTypeInfo[0];
 				navigate(`/swap/${orderId}`);
 				return;
@@ -551,12 +552,12 @@ export function SwapOfferCreatorContent({
 			});
 
 			if (location.pathname.includes('my/offers')) {
-				await queryClient.refetchQueries(['getOffersAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getOffersAsParticipant'] });
 			} else if (location.pathname.includes('/offer/')) {
-				await queryClient.refetchQueries(['getOffer']);
-				await queryClient.refetchQueries(['getOfferEvents']);
+				await queryClient.refetchQueries({ queryKey: ['getOffer'] });
+				await queryClient.refetchQueries({ queryKey: ['getOfferEvents'] });
 			} else if (location.pathname.match('/liquidity/.*/offers')) {
-				await queryClient.refetchQueries(['getLiquidityOffers']);
+				await queryClient.refetchQueries({ queryKey: ['getLiquidityOffers'] });
 			}
 		} catch (error) {
 			const msg = humanizeErrors(error);
@@ -599,12 +600,12 @@ export function SwapOfferCreatorContent({
 			});
 
 			if (location.pathname.includes('my/offers')) {
-				await queryClient.refetchQueries(['getOffersAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getOffersAsParticipant'] });
 			} else if (location.pathname.includes('/offer/')) {
-				await queryClient.refetchQueries(['getOffer']);
-				await queryClient.refetchQueries(['getOfferEvents']);
+				await queryClient.refetchQueries({ queryKey: ['getOffer'] });
+				await queryClient.refetchQueries({ queryKey: ['getOfferEvents'] });
 			} else if (location.pathname.match('/liquidity/.*/offers')) {
-				await queryClient.refetchQueries(['getLiquidityOffers']);
+				await queryClient.refetchQueries({ queryKey: ['getLiquidityOffers'] });
 			}
 
 			// Close sheets

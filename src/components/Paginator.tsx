@@ -24,10 +24,6 @@ export function Paginator({
 		return total ? Math.ceil(total / (limit || 1)) : 0;
 	}
 
-	function getCurPage() {
-		return typeof curPage === 'number' ? curPage : parseInt(curPage);
-	}
-
 	return (
 		<div
 			className={cn(
@@ -37,10 +33,10 @@ export function Paginator({
 			)}
 		>
 			<span>
-				Showing {getCurPage() + 1} of {getPageCount()} pages
+				Showing {curPage + 1} of {getPageCount()} pages
 			</span>
 			<div className='flex gap-2'>
-				{getCurPage() + 1 > 1 && (
+				{curPage + 1 > 1 && (
 					<Button
 						variant='outline'
 						size='icon'
@@ -52,7 +48,7 @@ export function Paginator({
 						<ChevronLeft width='20px' />
 					</Button>
 				)}
-				{getCurPage() + 1 < getPageCount() && (
+				{curPage + 1 < getPageCount() && (
 					<Button
 						variant='outline'
 						size='icon'

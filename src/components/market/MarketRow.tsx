@@ -120,12 +120,14 @@ export function MarketRow({
 							<div data-click-trigger='1' className='py-[8px] flex gap-2 md:px-2'>
 								<InfoCard
 									title={`Price (${market.quote})`}
-									width='w-auto'
+									className='w-[210px]'
 									tip={`The price of 1 ${market.base} in ${market.quote}`}
 									title2={<PriceChange priceChange={market.priceChange} />}
 								>
 									<span className='flex gap-1' data-click-trigger='1'>
-										<span data-click-trigger='1'>{formatToHighDenom(market.lowestPrice, market.quoteDecimals)}</span>
+										<span data-click-trigger='1'>
+											{formatToHighDenom(market.lowestPrice, market.quoteDecimals, undefined, 8, 99999999)}
+										</span>
 										<USDAmountToolTip v={parseFloat(market.lowestPriceUsd)} />
 									</span>
 								</InfoCard>
@@ -133,7 +135,7 @@ export function MarketRow({
 								<InfoCard title='Total Liquidity' title2='' tip={`The total amount of ${market.base} in the market`}>
 									<span className='flex gap-1' data-click-trigger='1'>
 										<span className='text-gray-200' data-click-trigger='1'>
-											{formatToHighDenom(market.totalLiquidity, market.baseDecimals)}
+											{formatToHighDenom(market.totalLiquidity, market.baseDecimals, undefined, undefined, 99999999)}
 										</span>
 										<USDAmountToolTip v={parseFloat(market.totalLiquidityUsd)} />
 									</span>

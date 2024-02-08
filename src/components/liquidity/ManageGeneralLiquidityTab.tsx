@@ -213,9 +213,10 @@ export function ManageGeneralLiquidityTab({
 			);
 
 			await delay(5000);
-			await queryClient.refetchQueries(['getLiquidityByCreator']);
-			await queryClient.refetchQueries(['getLiquidities']);
-			await queryClient.refetchQueries(['getMarket']);
+			await queryClient.refetchQueries({ queryKey: ['getLiquidityByCreator'] });
+			await queryClient.refetchQueries({ queryKey: ['getLiquidity'] });
+			await queryClient.refetchQueries({ queryKey: ['getLiquidities'] });
+			await queryClient.refetchQueries({ queryKey: ['getMarket'] });
 
 			notifySuccess(`Liquidity successfully ${!liquidity ? 'added' : 'updated'}`, { duration: 5000 });
 

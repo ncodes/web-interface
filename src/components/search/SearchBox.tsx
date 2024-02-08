@@ -33,7 +33,7 @@ export default function SearchBox({
 
 	useEffect(() => {
 		if (!query) return;
-		queryClient.refetchQueries(['searchMarkets']);
+		queryClient.refetchQueries({ queryKey: ['searchMarkets'] });
 	}, [query]);
 
 	const queryResult = useQuery({

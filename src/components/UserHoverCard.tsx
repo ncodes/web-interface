@@ -135,7 +135,6 @@ export function UserHoverCard({
 									width='w-full'
 									rmDataClickTrigger
 								>
-									{user?.lastActiveAt}
 									<span className='text-gray-200'>
 										{user?.lastActiveAt ? moment(user?.lastActiveAt).fromNow() : 'no swap yet'}
 									</span>

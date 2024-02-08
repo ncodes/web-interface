@@ -5,7 +5,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { ErrorIcon } from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 import { useConnectorContext } from '../../hooks/connectors/useConnectorContext';
@@ -27,7 +27,7 @@ export function PointActivityStream() {
 	const { getLatestPoints: getLatestReferralPoints } = useReferralService();
 	const mounted = useMounted(1000);
 	const { address } = useConnectorContext();
-	const [fromDate, setFromDate] = useState<string>('');
+	const fromDate = useRef<string>('');
 	const [points, setPoints] = useState<Point[]>([]);
 	const loc = useLocation();
 	const isPointsPage = loc.pathname.includes('/points');
@@ -36,31 +36,31 @@ export function PointActivityStream() {
 		queryKey: [
 			'getLatest',
 			{
-				limit: !fromDate ? 100 : 1,
-				from: fromDate,
+				limit: !fromDate.current ? 100 : 3,
+				order: !fromDate.current ? 'desc' : 'asc',
+				from: fromDate.current,
 				referrer: isPointsPage ? undefined : address,
 			},
 		],
 		queryFn: isPointsPage ? getLatestPoints : getLatestReferralPoints,
-		keepPreviousData: false,
 		enabled: mounted && !!address,
-		refetchOnWindowFocus: false,
 		refetchInterval: 10000,
 	});
 
 	useEffect(() => {
 		setPoints([]);
-		setFromDate('');
+		fromDate.current = '';
 	}, [loc]);
 
 	useEffect(() => {
-		if (fetchLatest.isLoading || fetchLatest.isRefetching) return;
+		if (fetchLatest.isLoading || fetchLatest.isRefetching || !fetchLatest.data) return;
 
-		const data = fetchLatest.data || [];
-		if (data.length == 0 || data[0].createdAt === fromDate) return;
+		const data = fetchLatest.data;
+		if (data.length == 0) return;
 
-		setPoints([...data, ...points].slice(0, 100));
-		if (data.length) setFromDate(data[0].createdAt);
+		setPoints([...data, ...points]);
+
+		if (data.length) fromDate.current = data[0].createdAt;
 	}, [fetchLatest.isLoading, fetchLatest.isRefetching, fetchLatest.isSuccess]);
 
 	return (
@@ -79,32 +79,44 @@ export function PointActivityStream() {
 
 			<ScrollOverflowIndicator side='bottom' className='relative h-full flex-1 [&>span.grad-indicator]:rounded-none'>
 				<ScrollArea type='scroll' viewportClassName='absolute xl:relative' className='h-full absolute'>
-					<div className='mt-2 space-y-2'>
-						{points.map((point) => (
-							<Card
-								key={`${point.address}_${point.point}_${point.createdAt}`}
-								className='flex animate-in slide-in-from-top items-center tracking-wider justify-between p-2 bg-card-background border-card-border/40'
-							>
-								<div className='flex items-center space-x-4'>
-									<FetchedUserHoverCard address={isPointsPage ? point.address : point.referee}>
-										<EmojiAvatar size={AvatarSize.Small} randomStr={isPointsPage ? point.address : point.referee} />
-									</FetchedUserHoverCard>
-
-									<div>
-										<h2 className='text-sm font-medium text-gray-300'>
-											{shortenAddress(isPointsPage ? point.address : point.referee)}
-										</h2>
-										<p className='text-xs text-gray-500'>{moment(point.createdAt).fromNow()}</p>
-									</div>
-								</div>
-								<div className='text-right tracking-wider'>
-									<p className='text-sm font-normal text-gray-300'>{parseInt(point.point)} Points</p>
-								</div>
-							</Card>
-						))}
-					</div>
+					{<Comp points={points} isPointsPage />}
 				</ScrollArea>
 			</ScrollOverflowIndicator>
 		</div>
 	);
+	
 }
+
+const Comp = memo(function Comp({ points, isPointsPage }: { points: Point[]; isPointsPage: boolean }) {
+	return (
+		<div className='mt-2 space-y-2'>
+			{points.map((point) => (
+				<>
+					{parseInt(point.point) == 0 && null}
+					{parseInt(point.point) > 0 && (
+						<Card
+							key={`${point.address}_${point.point}_${point.createdAt}_${Date.now()}`}
+							className='flex animate-in slide-in-from-top items-center tracking-wider justify-between p-2 bg-card-background border-card-border/40'
+						>
+							<div className='flex items-center space-x-4'>
+								<FetchedUserHoverCard address={isPointsPage ? point.address : point.referee}>
+									<EmojiAvatar size={AvatarSize.Small} randomStr={isPointsPage ? point.address : point.referee} />
+								</FetchedUserHoverCard>
+
+								<div>
+									<h2 className='text-sm font-medium text-gray-300'>
+										{shortenAddress(isPointsPage ? point.address : point.referee)}
+									</h2>
+									<p className='text-xs text-gray-500'>{moment(point.createdAt).fromNow()}</p>
+								</div>
+							</div>
+							<div className='text-right tracking-wider'>
+								<p className='text-sm font-normal text-gray-300'>{parseInt(point.point)} Points</p>
+							</div>
+						</Card>
+					)}
+				</>
+			))}
+		</div>
+	);
+});

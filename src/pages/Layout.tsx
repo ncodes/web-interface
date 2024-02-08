@@ -2,8 +2,9 @@ import * as Sentry from '@sentry/browser';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
+import ReactGA from 'react-ga4';
 import { Helmet } from 'react-helmet';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useInterval, useMediaQuery } from 'usehooks-ts';
 import { AccountLinker } from '../components/AccountLinker.tsx';
 import { Footer } from '../components/Footer.tsx';
@@ -21,10 +22,12 @@ import useStore from '../hooks/store/useStore.ts';
 import useMounted from '../hooks/useMounted.ts';
 import { useSession } from '../hooks/useSession.ts';
 import useWindowFocus from '../hooks/useWindowFocus.ts';
-import { logError } from '../libs/helpers.ts';
+import { isLocal, logError } from '../libs/helpers.ts';
 import { cn } from '../libs/utils.ts';
 
-// ReactGA.initialize('G-4HPN7GNCG6');
+if (!isLocal()) {
+	ReactGA.initialize('G-4HPN7GNCG6');
+}
 
 export default function Layout({
 	body,
@@ -42,11 +45,11 @@ export default function Layout({
 	const { getAccessToken, delAccessToken, hasAccessToken } = useSession();
 	const headerHeight = 55;
 	const location = useLocation();
-	const navigate = useNavigate();
 	const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
 	const isXl = useMediaQuery('(min-width: 1280px)');
 	const { address, ready, getChainInfo } = useConnectorContext();
 	const user = useStore((state) => state.user);
+	const setContractsParams = useStore((state) => state.setContractsParams);
 	const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
 	const windowFocus = useWindowFocus();
 	const setUser = useStore((state) => state.setUser);
@@ -54,6 +57,7 @@ export default function Layout({
 	const { getUser, logOnlineStatus, registerDevice } = useUserService();
 	const accessToken = getAccessToken(address);
 	const { subscribeForWebPush } = useNotificationService();
+	const { getContractParams } = useMiscService();
 	const { getProtocolFees } = useMiscService();
 	const ref = useRef(null);
 	const { scrollY } = useScroll();
@@ -73,28 +77,26 @@ export default function Layout({
 		Sentry.setUser({ username: address });
 	}, [address]);
 
-	// Redirect to connect page (for testnet allowlist check)
-	useEffect(() => {
-		if (!mounted) return;
-		setTimeout(() => {
-			if (location.pathname === '/connect') return;
-			if (!ready) navigate('/connect');
-		}, 1000);
-	}, [location.pathname, navigate, mounted]);
-
 	const authedUserQuery = useQuery({
 		queryKey: ['getUser', { address }],
 		queryFn: getUser,
 		enabled: !!accessToken && !!address,
-		refetchInterval: 60000,
+		refetchInterval: 180 * 1000,
 	});
 
 	const protoFeeQuery = useQuery({
 		queryKey: ['getProtocolFees', { network: getChainInfo().queryName }],
 		queryFn: getProtocolFees,
-		// enabled: mounted && !!address,
 		enabled: false,
 		refetchInterval: 300 * 1000,
+	});
+
+	const contractParamsQuery = useQuery({
+		queryKey: ['getContractParams', { network: getChainInfo().queryName }],
+		queryFn: getContractParams,
+		enabled: mounted && !!address,
+		refetchIntervalInBackground: false,
+		refetchInterval: false,
 	});
 
 	const subscribeMutation = useMutation({
@@ -118,7 +120,15 @@ export default function Layout({
 			setUser(undefined);
 			delAccessToken(address);
 		}
-	}, [authedUserQuery.data, authedUserQuery.isLoading, authedUserQuery.isSuccess, setUser]);
+	}, [authedUserQuery, setUser]);
+
+	// Set contract params
+	useEffect(() => {
+		if (contractParamsQuery.isLoading || contractParamsQuery.isRefetching) return;
+		if (contractParamsQuery.isSuccess && contractParamsQuery.data) {
+			setContractsParams(contractParamsQuery.data);
+		}
+	}, [contractParamsQuery]);
 
 	// Set protocol fee
 	useEffect(() => {

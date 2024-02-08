@@ -21,6 +21,15 @@ declare global {
 		volume: string;
 		volumeUsd: number;
 		lastActiveAt: string;
+
+		notificationSettings: NotificationSettings;
+	}
+
+	interface NotificationSettings {
+		disabled: boolean;
+		disabledSwap: boolean;
+		disabledLiq: boolean;
+		disabledOffer: boolean;
 	}
 
 	interface LoadingState {
@@ -540,6 +549,7 @@ declare global {
 	}
 
 	export interface Point {
+		id: string;
 		address: string;
 		totalPoints: string;
 		owner: Partial<User>;
@@ -548,5 +558,62 @@ declare global {
 		point: string;
 		referee: string;
 		referrer: string;
+	}
+
+	interface ContractsParams {
+		others: Others;
+		core: Core;
+		token: Token;
+		energon: Token;
+		nft: Token;
+		badgeManager: Token;
+		marketCore: MarketCore;
+		disputeManager: DisputeManager;
+		mediatorManager: MediatorManager;
+		assetRegistry: Token;
+	}
+
+	interface MediatorManager {
+		baseTicketPrice: string;
+		ticketWindowDur: number;
+		ticketsPerWindow: number;
+		ticketSupply: number;
+		priceSupplyDeltaBP: number;
+		minInactiveWindowBeforeReset: number;
+		soldOutBP: number;
+		ticketMatureDur: number;
+		ticketCancelDur: number;
+		ticketExpireDur: number;
+		reqPoolBond: string;
+		poolDraftReward: string;
+		poolWinReward: string;
+		poolNumDraftee: number;
+		poolNoVoteSlashBP: number;
+		poolLoseVoteSlashBP: number;
+	}
+
+	interface DisputeManager {
+		evidenceDur: number;
+		predictDur: number;
+	}
+
+	interface MarketCore {
+		defaultDisputeDelayDur: number;
+	}
+
+	interface Token {}
+
+	interface Core {
+		minTimeToPay: number;
+		orderGraceDur: number;
+		maxOpenOrders: number;
+		maxOpenDisputes: number;
+		transferToFeePoolInterval: number;
+		nftDiscountBP: number;
+	}
+
+	interface Others {
+		operatorBond: string;
+		allocatorAddr: string;
 	}
 }

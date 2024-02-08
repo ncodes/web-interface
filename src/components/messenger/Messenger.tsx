@@ -2,10 +2,11 @@ import { ContentTypeRemoteAttachment } from '@xmtp/content-type-remote-attachmen
 import { Client, ContentTypeText, Conversation, DecodedMessage, Stream } from '@xmtp/xmtp-js';
 import { useLiveQuery } from 'dexie-react-hooks';
 import _ from 'lodash';
+import { AlertOctagon, LockIcon } from 'lucide-react';
 import moment from 'moment';
 import { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useTimeout } from 'usehooks-ts';
+import { useInterval, useTimeout } from 'usehooks-ts';
 import { useConnectorContext } from '../../hooks/connectors/useConnectorContext.tsx';
 import { MessageRelayTypeId } from '../../hooks/messenger/codecs/MessageRelayCodec.ts';
 import { SwapStatusTypeId } from '../../hooks/messenger/codecs/SwapStatusCodec.ts';
@@ -16,6 +17,7 @@ import useWindowFocus from '../../hooks/useWindowFocus.ts';
 import {
 	getOfferCounterpart,
 	getSwapCounterpart,
+	getSwapCounterparts,
 	isDisputed,
 	isOfferCounterparty,
 	isSwapCounterparty,
@@ -26,7 +28,10 @@ import { isEqlStr, logError } from '../../libs/helpers.ts';
 import { cn } from '../../libs/utils.ts';
 import { NotificationType } from '../../types/enums.ts';
 import { AlwaysScrollToBottom } from '../AlwaysScrollToBottom.tsx';
+import { FetchedUserHoverCard } from '../FetchedUserHoverCard.tsx';
 import ScrollOverflowIndicator from '../ScrollOverflowIndicator.tsx';
+import EmojiAvatar from '../avatar/EmojiAvatar.tsx';
+import { AvatarSize } from '../avatar/useAvatar.tsx';
 import IconSpinner from '../icons/IconSpinner.tsx';
 import { ScrollArea } from '../ui/scroll-area.tsx';
 import { IdentityInitializer } from './IdentityInitializer.tsx';
@@ -62,7 +67,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		sendReadReceiptForMessage,
 		sendSwapStatus,
 		sendDeliveryReceipt,
-
+		canMessageAddress,
 		send,
 	} = useMessenger();
 	const { address, getChainInfo } = useConnectorContext();
@@ -71,18 +76,20 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 	const [client, setClient] = useState<Client | null>(null);
 	const [readableConvosIds, setReadableConvoIds] = useState<string[]>([]);
 	const [conversation, setConversation] = useState<Conversation | undefined>(undefined);
-	const [mediatorsConvo, setMediatorsConvo] = useState<Conversation[]>([]);
-	const [countPartsConvo, setCountPartsConvo] = useState<Conversation[]>([]);
+	const [mediatorConvos, setMediatorConvos] = useState<Conversation[]>([]);
+	const [counterpartsConvos, setCountpartsConvos] = useState<Conversation[]>([]);
 	const [lastMsgTime, setLastMsgTime] = useState<{ [key: string]: number }>({});
 	const streams = useRef<{ [key: string]: MessageStream | undefined }>({});
 	const streamEnders = useRef(streamEnderFunc);
 	const user = useStore((state) => state.user);
 	const { subscribeToConvosNotifications } = useConvoService();
 	const [reveal, setReveal] = useState(false);
-	const [pendingReadReceipts, setPendingReadReceipts] = useState<{
-		[key: string]: DecodedMessage[];
-	}>({});
+	const [pendingReadReceipts, setPendingReadReceipts] = useState<{ [key: string]: DecodedMessage[] }>({});
 	const windowFocus = useWindowFocus();
+	const [peerOffnet, setPeerOffnet] = useState<boolean | undefined>();
+	const [peerAddress, setPeerAddress] = useState<string | undefined>();
+	const [numMediatorsOffnet, setNumMediatorsOffnet] = useState<number>(0);
+	const [counterpartsOffnet, setCounterpartysOffnet] = useState<string[]>([]);
 
 	useTimeout(() => {
 		setReveal(true);
@@ -96,25 +103,45 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		const createConvoWithCounterpart = async () => {
 			if (!swap && !offer) return;
 
-			let convoId = '';
+			// Ensure the current wallet is a party to the swap
 			if (swap && !isSwapCounterparty(swap, address)) return;
+
+			// Get counterpart address
+			let peerAddress = '';
+			if (swap) peerAddress = getSwapCounterpart(swap, client.address);
+			if (offer) peerAddress = getOfferCounterpart(offer, client.address);
+			setPeerAddress(peerAddress);
+
+			// Ensure the counterparty is online and can be messaged
+			if (!(await canMessageAddress(client, peerAddress))) {
+				setPeerOffnet(true);
+				return;
+			}
+
+			// Build conversation key for swap or offer
+			let convoId = '';
 			if (swap) convoId = makeSwapConversationKey(swap.network, swap.orderId);
 			if (offer) convoId = makeOfferConvoKey(offer.network, offer.offerId);
 
+			// Find an existing conversation matching the conversation key
 			let conversation = (await client.conversations.list()).find((c) => {
 				return convoId == c.context?.conversationId;
 			});
 
+			// If the messenger is initialized for swap and no existing conversation is found,
+			// create a new conversation
 			if (swap && !conversation) {
-				const peerAddress = getSwapCounterpart(swap, client.address);
 				conversation = await createConversation(client, peerAddress, convoId);
 			}
 
+			// If the messenger is initialized for offer and no existing conversation is found,
+			// create a new conversation
 			if (offer && !conversation) {
-				const peerAddress = getOfferCounterpart(offer, client.address);
 				conversation = await createConversation(client, peerAddress, convoId);
 			}
 
+			// Set the conversation and add the conversation to the readable
+			// list to allow it to be read from DB
 			if (conversation) {
 				setConversation(conversation);
 				setReadableConvoIds(_.uniq([...readableConvosIds, convoId]));
@@ -132,25 +159,62 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			}
 		};
 
-		try {
-			void createConvoWithCounterpart();
-		} catch (error) {
-			logError('Failed to create conversation with counterparty: ', error);
-		}
-	}, [client, swap, offer, user]);
+		void createConvoWithCounterpart();
+	}, [client, swap, offer, user, peerOffnet]);
 
 	// As a swap/offer counterparty, load messages from conversation with counterparty to DB
 	useEffect(() => {
-		if (!client || !conversation) return;
+		if (!client || !conversation || peerOffnet) return;
 		void loadMessagesFromConvoToDB(client, conversation);
 	}, [client, conversation]);
 
+	// As a swap counterparty, create conversations with mediators (if in dispute)
+	useEffect(() => {
+		if (!client || !swap || !isDisputed(swap) || !isSwapCounterparty(swap, address)) return;
+
+		const createConvosWithMediators = async () => {
+			let index = 0;
+			const updReadableConvosIds = [...readableConvosIds];
+
+			// We want to create a conversation with the mediator for only the latest unexecuted dispute.
+			// For older or unexecuted disputes, we want to store references to the conversation so
+			// it can be read from DB.
+			for (const dispute of swap.disputes) {
+				const convos = await createOrGetConvoWithMediator(client, dispute);
+
+				// If latest dispute has not been executed, store reference to the mediator's conversation.
+				// We will use this reference to send and relay messages to the mediator's conversation.
+				if (index == 0) {
+					setMediatorConvos(!isSwapDisputeExecuted(swap) ? convos : []);
+				}
+
+				// Add conversations to the readable list to allow them to be read from DB.
+				updReadableConvosIds.push(...convos.map((c) => getConvoId(c)));
+				setReadableConvoIds(_.uniq(updReadableConvosIds));
+
+				// Subscribe to collected conversations topic to receive email notifications
+				if (user && convos.length) {
+					subscribeToConvosNotifications({
+						net: getChainInfo().queryName,
+						topics: (convos || []).map((c) => c.topic),
+						peerAddresses: (convos || []).map((c) => c.peerAddress),
+						orderId: swap ? swap.orderId : undefined,
+						offerId: offer ? offer.offerId : undefined,
+					});
+				}
+
+				index++;
+			}
+		};
+
+		void createConvosWithMediators();
+	}, [client, conversation, swap, user, numMediatorsOffnet]);
+
 	// As a swap counterparty, relay counterparty's conversation to mediators' conversation
 	useEffect(() => {
-		if (!client || !conversation) return;
-		if (mediatorsConvo.length == 0) return;
-		relayConvoToConvos(client.address, conversation, mediatorsConvo);
-	}, [client, conversation, swap?.disputes, mediatorsConvo]);
+		if (!client || !conversation || peerOffnet || mediatorConvos.length == 0) return;
+		relayConvoToConvos(client.address, conversation, mediatorConvos);
+	}, [client, conversation, swap?.disputes, mediatorConvos, peerOffnet]);
 
 	// Creates a stream for a conversation
 	const createStream = useCallback(
@@ -189,7 +253,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 	// As a swap/offer counterparty, process incoming messages from counterparty conversation.
 	// For swaps, relay new message to mediators' conversation if in dispute.
 	useEffect(() => {
-		if (!conversation || !client) return;
+		if (!conversation || !client || peerOffnet) return;
 
 		const streamsRef = streams.current;
 		const convoId = getConvoId(conversation);
@@ -203,31 +267,28 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 					stream = s;
 				},
 				async (message: DecodedMessage) => {
-					const { peerAddress } = conversation;
+					if (isEqlStr(message.senderAddress, client.address)) return;
 
-					// Ignore messages from self
-					if (message.senderAddress != client.address) {
-						// Process and store message
-						const msgCopy = { ...message } as DecodedMessage;
-						await processMessage(client, peerAddress, msgCopy);
+					// Process and store message
+					const msgCopy = { ...message } as DecodedMessage;
+					await processMessage(client, conversation.peerAddress, msgCopy);
 
-						// Send delivery receipt
-						void sendDeliveryReceipt(client.address, message, [conversation]);
+					// Send delivery receipt
+					void sendDeliveryReceipt(client.address, message, [conversation]);
 
-						// Send read receipt on window focus
-						if (windowFocus) {
-							void sendReadReceipt(client.address, message, [conversation]);
-						} else {
-							setPendingReadReceipts({
-								...pendingReadReceipts,
-								[convoId]: (pendingReadReceipts[convoId] || []).concat(message),
-							});
-						}
+					// Send read receipt on window focus
+					if (windowFocus) {
+						void sendReadReceipt(client.address, message, [conversation]);
+					} else {
+						setPendingReadReceipts({
+							...pendingReadReceipts,
+							[convoId]: (pendingReadReceipts[convoId] || []).concat(message),
+						});
 					}
 
 					// Relay message to conversation with mediators
 					if (swap) {
-						void relayMessageToConvos(client.address, conversation.peerAddress, mediatorsConvo, message);
+						void relayMessageToConvos(client.address, conversation.peerAddress, mediatorConvos, message);
 					}
 
 					const msgTime = message.sent.getTime();
@@ -245,7 +306,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			void endStream(stream);
 			delete streamsRef[convoId];
 		};
-	}, [conversation, client, mediatorsConvo, streams, windowFocus]);
+	}, [conversation, client, mediatorConvos, streams, windowFocus, peerOffnet]);
 
 	// Send read receipts for pending messages
 	useEffect(() => {
@@ -263,7 +324,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		};
 
 		const sendReadReceiptsForMediators = async () => {
-			for (const convo of mediatorsConvo) {
+			for (const convo of mediatorConvos) {
 				const convoId = getConvoId(convo);
 				const pendingMsgs = pendingReadReceipts[convoId];
 				if (!pendingMsgs || !pendingMsgs?.length) continue;
@@ -292,67 +353,28 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		ensureLastMessageRead(messages);
 	}, [messages, windowFocus]);
 
-	// As a swap counterparty, create conversations with mediators (if in dispute)
-	useEffect(() => {
-		if (!client || !conversation || !swap || !isDisputed(swap)) return;
-		if (!isSwapCounterparty(swap, address)) return;
-
-		const createConvoWithMediators = async () => {
-			let index = 0;
-			const updReadableConvosIds = [...readableConvosIds];
-			for (const dispute of swap.disputes) {
-				const convos = await createOrGetConvoWithMediator(client, dispute);
-
-				// If latest dispute has not been executed, store reference to the mediator's conversation.
-				if (index == 0) {
-					const disputeExecuted = isSwapDisputeExecuted(swap);
-					setMediatorsConvo(!disputeExecuted ? convos : []);
-				}
-
-				// Add conversations to the readable list to allow them to be read from DB.
-				updReadableConvosIds.push(...convos.map((c) => getConvoId(c)));
-				setReadableConvoIds(_.uniq(updReadableConvosIds));
-
-				// Subscribe to conversation topics to receive notifications
-				if (user && convos.length) {
-					subscribeToConvosNotifications({
-						net: getChainInfo().queryName,
-						topics: (convos || []).map((c) => c.topic),
-						peerAddresses: (convos || []).map((c) => c.peerAddress),
-						orderId: swap ? swap.orderId : undefined,
-						offerId: offer ? offer.offerId : undefined,
-					});
-				}
-
-				index++;
-			}
-		};
-
-		void createConvoWithMediators();
-	}, [client, conversation, swap, user]);
-
-	// As a swap counterparty, load messages from mediators conversation to DB
+	// As a swap counterparty, load messages from mediators conversations to DB
 	useEffect(() => {
 		if (!client || !swap) return;
 
 		const loadMsgFromMediators = async () => {
-			for (const convo of mediatorsConvo) {
+			for (const convo of mediatorConvos) {
 				void (await loadMessagesFromConvoToDB(client, convo, true));
 			}
 		};
 
 		void loadMsgFromMediators();
-	}, [client, mediatorsConvo]);
+	}, [client, mediatorConvos]);
 
 	// As a swap counterparty, process incoming messages from mediators
 	useEffect(() => {
-		if (!mediatorsConvo.length || !client) return;
+		if (!mediatorConvos.length || !client) return;
 		const streamsRef = streams.current;
 		const convosStream: MessageStream[] = [];
 		const endStream = streamEnders.current;
 		const convosId: string[] = [];
 
-		for (const convo of mediatorsConvo) {
+		for (const convo of mediatorConvos) {
 			const convoId = getConvoId(convo);
 
 			const createConvoStream = async () => {
@@ -395,7 +417,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			convosStream.forEach((stream) => void endStream(stream));
 			convosId.forEach((convoId) => delete streamsRef[convoId]);
 		};
-	}, [mediatorsConvo, client, streams, pendingReadReceipts, windowFocus]);
+	}, [mediatorConvos, client, streams, pendingReadReceipts, windowFocus]);
 
 	// As a mediator, create conversations with swap counterparties (if in dispute)
 	useEffect(() => {
@@ -408,11 +430,11 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			// If dispute is not executed, store references to the counterparties' conversations.
 			// If dispute is executed, clear references to the counterparties' conversations.
 			if (!disputeExecuted) {
-				setCountPartsConvo(convos);
+				setCountpartsConvos(convos);
 			} else {
 				// Delay clearing the conversations to allow incoming messages to be processed.
 				setTimeout(() => {
-					setCountPartsConvo([]);
+					setCountpartsConvos([]);
 				}, 3000);
 			}
 
@@ -432,31 +454,31 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		};
 
 		void createConvoWithCounterparts(isSwapDisputeExecuted(swap));
-	}, [swap, client, user]);
+	}, [swap, client, user, counterpartsOffnet]);
 
 	// As a mediator, load messages from counterparties conversation to DB
 	useEffect(() => {
 		if (!client || !swap) return;
 
 		const loadMsgsFromCounterparts = async () => {
-			for (const convo of countPartsConvo) {
+			for (const convo of counterpartsConvos) {
 				await loadMessagesFromConvoToDB(client, convo).catch(logError);
 			}
 		};
 
 		void loadMsgsFromCounterparts();
-	}, [client, countPartsConvo]);
+	}, [client, counterpartsConvos]);
 
 	// As a mediator, process incoming messages from counterparties
 	useEffect(() => {
-		if (!countPartsConvo.length || !client || !swap) return;
+		if (!counterpartsConvos.length || !client || !swap) return;
 
 		const streamsRef = streams.current;
 		const convosStream: MessageStream[] = [];
 		const endStream = streamEnders.current;
 		const convosId: string[] = [];
 
-		for (const convo of countPartsConvo) {
+		for (const convo of counterpartsConvos) {
 			const convoId = getConvoId(convo);
 			const createConvoStream = async () => {
 				await createStream(
@@ -484,7 +506,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			convosStream.forEach((stream) => void endStream(stream));
 			convosId.forEach((convoId) => delete streamsRef[convoId]);
 		};
-	}, [client, countPartsConvo]);
+	}, [client, counterpartsConvos]);
 
 	// As a swap counterpart, send swap status for dispute commencement
 	// in swap counterparty conversation
@@ -520,20 +542,52 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 	// As a mediator, send swap status for dispute commencement to
 	// counterparts conversations
 	useEffect(() => {
-		if (!countPartsConvo.length) return;
+		if (!counterpartsConvos.length) return;
 		if (!swap || isSwapCounterparty(swap, address)) return;
 		if (!isDisputed(swap)) return;
 		if (isSwapDisputeExecuted(swap)) return;
 
 		const sendDisputeStartedNotice = async () => {
-			for (const convo of countPartsConvo) {
+			for (const convo of counterpartsConvos) {
 				const dispId = swap.disputes[0].disputeId;
 				await sendSwapStatus(`dispute-start-${dispId}`, `Dispute #${dispId} has started`, convo);
 			}
 		};
 
 		void sendDisputeStartedNotice();
-	}, [countPartsConvo, swap?.disputes, address]);
+	}, [counterpartsConvos, swap?.disputes, address]);
+
+	// As a swapper, periodically check if the peer has joined the xmtp network.
+	useInterval(
+		async () => {
+			if (!client || !peerAddress) return;
+			setPeerOffnet(!(await canMessageAddress(client, peerAddress)));
+		},
+		client && peerAddress && peerOffnet ? 10000 : null,
+	);
+
+	// As a swapper, periodically update the number of mediators that have not joined the xmtp network.
+	useInterval(async () => {
+		if (!client || !swap || !isDisputed(swap)) return;
+		let offline = 0;
+		for (const draftee of swap.disputes[0].draftees) {
+			if (await canMessageAddress(client, draftee.owner)) continue;
+			offline++;
+		}
+		setNumMediatorsOffnet(offline);
+	}, 10000);
+
+	// As a mediator, periodically update the list of counterparts that have not joined the xmtp network.
+	useInterval(async () => {
+		if (!client || !swap || !isDisputed(swap) || !isSwapDraftee(swap, address, true)) return;
+		const counterparts = getSwapCounterparts(swap);
+		const offline: string[] = [];
+		for (const c of counterparts) {
+			const found = counterpartsConvos.some((convo) => isEqlStr(c, convo.peerAddress));
+			if (!found) offline.push(c);
+		}
+		setCounterpartysOffnet(offline);
+	}, 10000);
 
 	// Send read receipt for latest unread message received
 	async function ensureLastMessageRead(messages: Message[]) {
@@ -544,21 +598,40 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		sendReadReceiptForMessage(client, lastMsg);
 	}
 
+	/**
+	 * Send message to counterpart if current wallet is a counterparty to swap or offer..
+	 * If swap is disputed and current wallet is a drafted mediator, send message to the counterparties.
+	 * @param msg
+	 * @returns
+	 */
 	async function handleSendMsg(msg: string) {
 		if (!client || !msg) return;
 
 		if ((swap && isSwapCounterparty(swap, address)) || (offer && isOfferCounterparty(offer, address))) {
-			if (!conversation) return;
-			await send(client, conversation, msg);
-			setLastMsgTime({
-				...lastMsgTime,
-				[getConvoId(conversation)]: moment().unix(),
-			});
+			if (conversation) {
+				await send(client, conversation, msg);
+				setLastMsgTime({
+					...lastMsgTime,
+					[getConvoId(conversation)]: moment().unix(),
+				});
+			}
+
+			// When swap counterpart is offline, send message to mediators if swap is in an active dispute
+			if (swap && !conversation && isDisputed(swap) && !isSwapDisputeExecuted(swap)) {
+				for (const convo of mediatorConvos) {
+					await send(client, convo, msg);
+					setLastMsgTime({
+						...lastMsgTime,
+						[getConvoId(convo)]: moment().unix(),
+					});
+				}
+			}
 		}
 
+		// As a mediator, send message to swap counterparties if swap is in an active dispute
 		if (swap && isDisputed(swap) && isSwapDraftee(swap, address, true)) {
 			const now = moment();
-			for (const convo of countPartsConvo) {
+			for (const convo of counterpartsConvos) {
 				void send(client, convo, msg, now.toDate(), true).then(() => {
 					setLastMsgTime({
 						...lastMsgTime,
@@ -569,6 +642,12 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		}
 	}
 
+	/**
+	 * Handle message resend
+	 * @param id The message id
+	 * @param content The message content
+	 * @returns
+	 */
 	async function handleMsgResend(id: number, content: unknown) {
 		if (!client) return;
 		await removeMessageById(id as number);
@@ -579,7 +658,10 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 	function disableSend() {
 		if (!client) return true;
 		if (swap) {
-			return !isSwapCounterparty(swap, address) && (!isSwapDraftee(swap, address, true) || isSwapDisputeExecuted(swap));
+			return (
+				(!isSwapCounterparty(swap, address) && (!isSwapDraftee(swap, address, true) || isSwapDisputeExecuted(swap))) ||
+				(!!peerOffnet && !isDisputed(swap))
+			);
 		}
 		if (offer) {
 			return !isOfferCounterparty(offer, address);
@@ -587,9 +669,12 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		return false;
 	}
 
-	// Decide whether to show input actions
+	// Decide whether to show input actions.
+	// As swap participant: Show when conversation with the swap/offer counterpart exists.
+	// As mediator: Show when conversation with the swap counterparts exists.
+	// As swap counterpart: Show when conversation with the swap participant is offline but a dispute is ongoing.
 	function canHideShowActions() {
-		return conversation || countPartsConvo.length > 0;
+		return conversation || counterpartsConvos.length > 0 || (peerOffnet && !!mediatorConvos.length);
 	}
 
 	return (
@@ -623,8 +708,57 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 						)}
 					</span>
 					<span className='top-0.5 relative'>
-						<MuteMessenger convos={[...(conversation ? [conversation] : []), ...mediatorsConvo, ...countPartsConvo]} />
+						<MuteMessenger
+							convos={[...(conversation ? [conversation] : []), ...mediatorConvos, ...counterpartsConvos]}
+						/>
 					</span>
+				</div>
+				<div>
+					{swap && peerOffnet && isSwapCounterparty(swap, address) && (
+						<div className='flex gap-2 text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
+							<AlertOctagon width='20' className='text-red-500 flex-shrink-0' />
+							<div>
+								<b className='text-red-400 font-medium text-sm tracking-wider'>Swap order counterpart is offline.</b>{' '}
+								<br />
+								You will be able to send messages when the counterpart enables chat.
+							</div>
+						</div>
+					)}
+
+					{swap && numMediatorsOffnet > 0 && isSwapCounterparty(swap, address) && (
+						<div className='flex gap-2 items-center text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
+							<AlertOctagon width='20' className='text-red-500 flex-shrink-0' />
+							<div>
+								<b className='text-red-400 font-medium text-sm tracking-wider'>
+									{numMediatorsOffnet} (of {swap.disputes[0].numMediators}) mediator
+									{numMediatorsOffnet > 1 ? 's' : ''} {numMediatorsOffnet > 1 ? 'are' : 'is'} offline
+								</b>{' '}
+								<br />
+								Mediators may enable chat later.
+							</div>
+						</div>
+					)}
+
+					{swap && counterpartsOffnet.length > 0 && (
+						<div className='flex gap-2 text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
+							<AlertOctagon width='15' className='text-yellow-500 flex-shrink-0 -mt-0.5' />
+							<div>
+								<b className='text-gray-200 font-medium text-sm tracking-wider'>
+									{counterpartsOffnet.length} swap counterpart{counterpartsOffnet.length > 1 ? 's' : ''}{' '}
+									{counterpartsOffnet.length > 1 ? 'has' : 'have'} not enabled chat
+								</b>
+								<div className='flex gap-1 mt-1'>
+									{counterpartsOffnet.map((c) => (
+										<>
+											<FetchedUserHoverCard address={c} key={c}>
+												<EmojiAvatar size={AvatarSize.Micro} randomStr={c} />
+											</FetchedUserHoverCard>
+										</>
+									))}
+								</div>
+							</div>
+						</div>
+					)}
 				</div>
 				<div className='flex max-h-full  justify-between flex-col h-full overflow-hidden'>
 					<div className='flex-1 overflow-hidden bg-chat '>
@@ -638,11 +772,16 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 									/>
 								)}
 
-								{messages?.length == 0 && client && swap && isSwapCounterparty(swap, address) && (
-									<div className='text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
-										Need clarification or want to ask for or share information with your swap partner?
-										<br />
-										<span className='text-chinese-green'>Send a message</span>
+								{messages?.length == 0 && client && swap && isSwapCounterparty(swap, address) && !peerOffnet && (
+									<div className='flex gap-2 text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
+										<AlertOctagon width='20' className='text-chinese-green flex-shrink-0' />
+										<div>
+											<b className='text-chinese-green font-medium text-sm tracking-wider'>
+												Chat with your swap partner
+											</b>{' '}
+											<br />
+											Discuss about your order. Ask for or share information to complete the order.
+										</div>
 									</div>
 								)}
 
@@ -667,6 +806,13 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 										Start a conversation with the offer creator to discuss the terms and details of the offer.
 										<br />
 										<span className='text-chinese-green'>Send a message</span>
+									</div>
+								)}
+
+								{messages?.length == 0 && client && (
+									<div className='flex gap-1 justify-center items-center text-gray-400 text-center m-2 rounded-xl px-3 text-xs tracking-wider font-light'>
+										<LockIcon width='12' />
+										<span>This chat is end-to-end encrypted.</span>
 									</div>
 								)}
 
@@ -774,7 +920,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 									disableSendButton={!textMsg}
 									swap={swap}
 									client={client}
-									convos={[...countPartsConvo.concat(conversation || [])]}
+									convos={[...counterpartsConvos.concat(conversation || [])]}
 									onFileUpload={() => {
 										scrollToBottomRef?.current?.scrollIntoView();
 									}}

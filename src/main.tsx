@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import '../polyfills.ts';
@@ -6,7 +5,7 @@ import App from './App.tsx';
 import ConnectorProvider from './hooks/connectors/components/ConnectorProvider.tsx';
 import './hooks/store/useStore.ts';
 import './i18n/i18n.ts';
-import ConnectPage from './pages/Connect.tsx';
+import { isLocal } from './libs/helpers.ts';
 import Disputes from './pages/Disputes.tsx';
 import Liquidities from './pages/Liquidities.tsx';
 import Liquidity from './pages/Liquidity.tsx';
@@ -24,16 +23,12 @@ import './sentry.ts';
 import './styles/app.css';
 import './styles/fonts.css';
 
+// Make the path locale optional
 function makePath(path: string) {
 	return `:locale?/${path}`;
 }
 
-const router = createBrowserRouter([
-	{
-		path: makePath(`play/connect-wallet`),
-		element: <App page={<ConnectExample />} />,
-		errorElement: <RootErrorBoundary />,
-	},
+const routes = [
 	{
 		path: makePath(''),
 		// element: <App page={<Timeline />} />,
@@ -120,11 +115,6 @@ const router = createBrowserRouter([
 		element: <App page={<Points defaultTab='leaderboard' />} />,
 		errorElement: <RootErrorBoundary />,
 	},
-	{
-		path: makePath('/connect'),
-		element: <App page={<ConnectPage />} />,
-		errorElement: <RootErrorBoundary />,
-	},
 	// {
 	// 	path: makePath('/referrals'),
 	// 	element: <App page={<Points defaultTab='referrals' />} />,
@@ -140,14 +130,20 @@ const router = createBrowserRouter([
 	// 	element: <App page={<RefPage />} />,
 	// 	errorElement: <RootErrorBoundary />,
 	// },
-]);
+];
 
-const queryClient = new QueryClient();
+if (isLocal()) {
+	routes.push({
+		path: makePath(`play/connect-wallet`),
+		element: <App page={<ConnectExample />} />,
+		errorElement: <RootErrorBoundary />,
+	});
+}
+
+const router = createBrowserRouter(routes);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-	<QueryClientProvider client={queryClient}>
-		<ConnectorProvider appName={import.meta.env.NEXT_PUBLIC_APP_NAME} infuraId={import.meta.env.NEXT_PUBLIC_INFURA_ID}>
-			<RouterProvider router={router} />
-		</ConnectorProvider>
-	</QueryClientProvider>,
+	<ConnectorProvider>
+		<RouterProvider router={router} />
+	</ConnectorProvider>,
 );
