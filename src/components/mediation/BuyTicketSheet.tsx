@@ -123,7 +123,7 @@ export function BuyTicketSheet(props: { children?: React.ReactNode; onOpen?: (op
 				links: [{ label: 'View Transaction', href: `${explorer}/tx/${txHash}` }],
 			});
 
-			await queryClient.refetchQueries(['getTicketsOwned']);
+			await queryClient.refetchQueries({ queryKey: ['getTicketsOwned'] });
 			resetOpenState();
 			setPool(undefined);
 		} catch (error) {

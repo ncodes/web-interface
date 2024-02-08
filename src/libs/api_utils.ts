@@ -235,6 +235,15 @@ export function isDisputeDraftee(dispute: Dispute, address: string) {
 }
 
 /**
+ * Returns the number of draftees in a dispute
+ * @param dispute The dispute object
+ * @returns
+ */
+export function countNumberOfDraftees(dispute: Dispute) {
+	return dispute.draftees.length;
+}
+
+/**
  * Returns the outcome of the dispute
  * @param dispute The dispute object
  */
@@ -418,6 +427,10 @@ export function isProvider(swap: Swap, address: string) {
 	return isEqlStr(swap.provider, address);
 }
 
+export function getSwapCounterparts(swap: Swap) {
+	return [swap.provider.toLowerCase(), swap.taker.toLowerCase()];
+}
+
 /**
  * Returns the pagination info
  * @param data The data object from the fetch query
@@ -432,4 +445,3 @@ export function getPaginationInfo(data: { meta: { queryCount: number } }, limit:
 		currentPage: offset / limit,
 	};
 }
-

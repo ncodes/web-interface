@@ -44,10 +44,10 @@ export async function releaseOrderFunc(
 		});
 
 		if (location.pathname.includes('my/swaps')) {
-			await queryClient.refetchQueries(['getSwapsAsParticipant']);
+			await queryClient.refetchQueries({ queryKey: ['getSwapsAsParticipant'] });
 		} else if (location.pathname.includes('swap/')) {
-			await queryClient.refetchQueries(['getSwap']);
-			await queryClient.refetchQueries(['getSwapEvents']);
+			await queryClient.refetchQueries({ queryKey: ['getSwap'] });
+			await queryClient.refetchQueries({ queryKey: ['getSwapEvents'] });
 		}
 	} catch (error) {
 		const msg = humanizeErrors(error);

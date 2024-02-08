@@ -117,9 +117,9 @@ export function DisputeRow({
 			});
 
 			if (location.pathname.includes('disputes')) {
-				await queryClient.refetchQueries(['getDisputesAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getDisputesAsParticipant'] });
 			} else if (location.pathname.includes('swap/')) {
-				await queryClient.refetchQueries(['getSwap']);
+				await queryClient.refetchQueries({ queryKey: ['getSwap'] });
 			}
 
 			setCommitted(isCommitter(dispute, address));
@@ -146,9 +146,9 @@ export function DisputeRow({
 			});
 
 			if (location.pathname.includes('disputes')) {
-				await queryClient.refetchQueries(['getDisputesAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getDisputesAsParticipant'] });
 			} else if (location.pathname.includes('swap/')) {
-				await queryClient.refetchQueries(['getSwap']);
+				await queryClient.refetchQueries({ queryKey: ['getSwap'] });
 			}
 
 			setRevealed(isRevealer(dispute, address));

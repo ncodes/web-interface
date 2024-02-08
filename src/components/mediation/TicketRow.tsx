@@ -55,7 +55,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 				links: [{ label: 'View Transaction', href: `${explorer}/tx/${txHash}` }],
 			});
 
-			await queryClient.refetchQueries(['getTicketsOwned']);
+			await queryClient.refetchQueries({ queryKey: ['getTicketsOwned'] });
 		} catch (error) {
 			const msg = humanizeErrors(error);
 			notifyError(msg);
@@ -78,7 +78,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 				links: [{ label: 'View Transaction', href: `${explorer}/tx/${txHash}` }],
 			});
 
-			await queryClient.refetchQueries(['getTicketsOwned']);
+			await queryClient.refetchQueries({ queryKey: ['getTicketsOwned'] });
 		} catch (error) {
 			const msg = humanizeErrors(error);
 			notifyError(msg);
@@ -101,7 +101,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 				links: [{ label: 'View Transaction', href: `${explorer}/tx/${txHash}` }],
 			});
 
-			await queryClient.refetchQueries(['getTicketsOwned']);
+			await queryClient.refetchQueries({ queryKey: ['getTicketsOwned'] });
 		} catch (error) {
 			const msg = humanizeErrors(error);
 			notifyError(msg);
@@ -224,7 +224,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 											isoDate={ticket.matureAt}
 											className='[&>span.time]:text-chinese-green'
 											onDone={async () => {
-												await queryClient.refetchQueries(['getTicketsOwned']);
+												await queryClient.refetchQueries({ queryKey: ['getTicketsOwned'] });
 											}}
 											full
 										/>
@@ -246,7 +246,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 										isoDate={ticket.joinBy}
 										className='[&>span.time]:text-chinese-green [&>span.time]:font-medium'
 										onDone={async () => {
-											await queryClient.refetchQueries(['getTicketsOwned']);
+											await queryClient.refetchQueries({ queryKey: ['getTicketsOwned'] });
 										}}
 										full
 									/>
@@ -297,7 +297,7 @@ export function TicketRow({ ticket, noFocus, className }: { ticket: Ticket; noFo
 											isoDate={ticket.cancelAt}
 											className='[&>span.time]:text-chinese-green'
 											onDone={async () => {
-												await queryClient.refetchQueries(['getTicketsOwned']);
+												await queryClient.refetchQueries({ queryKey: ['getTicketsOwned'] });
 											}}
 											full
 										/>

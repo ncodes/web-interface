@@ -12,7 +12,7 @@ import { BalanceCard, NativeTokenWrapper } from './BalanceCard.tsx';
 import { TabContentHeader } from './TabContentHeader.tsx';
 
 export function GeneralTab(props: { address: string }) {
-	const { getBalance, getTokenBalance, getChainInfo, address } = useConnectorContext();
+	const { getBalance, getTokenBalance, getChainInfo, address, ready } = useConnectorContext();
 	const [nativeBalance, setNativeBalance] = useState(BigInt(0));
 	const [wrappedBalance, setWrappedBalance] = useState(BigInt(0));
 	const [p2pBalance, setP2pBalance] = useState(BigInt(0));
@@ -24,6 +24,7 @@ export function GeneralTab(props: { address: string }) {
 	const inConnectPage = loc.pathname.includes('/connect');
 
 	useInterval(async () => {
+		if (!ready) return;
 		fetchNativeBalance();
 		fetchWrappedBalance();
 		fetchP2pBalance();

@@ -28,7 +28,7 @@ export function EditZeroPricedLiquidity({ market, close }: { market: Market; clo
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],
 			});
-			queryClient.refetchQueries(['getMarketsByCreator']).catch(logError);
+			queryClient.refetchQueries({ queryKey: ['getMarketsByCreator'] }).catch(logError);
 			close && close();
 		} catch (error) {
 			const msg = humanizeErrors(error);

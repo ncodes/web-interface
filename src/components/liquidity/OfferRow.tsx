@@ -74,12 +74,12 @@ export function OfferRow({ className, offer }: { offer: Offer; ownerMode?: boole
 			});
 
 			if (location.pathname.includes('my/offers')) {
-				await queryClient.refetchQueries(['getOffersAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getOffersAsParticipant'] });
 			} else if (location.pathname.includes('/offer/')) {
-				await queryClient.refetchQueries(['getOffer']);
-				await queryClient.refetchQueries(['getOfferEvents']);
+				await queryClient.refetchQueries({ queryKey: ['getOffer'] });
+				await queryClient.refetchQueries({ queryKey: ['getOfferEvents'] });
 			} else if (location.pathname.match('/liquidity/.*/offers')) {
-				await queryClient.refetchQueries(['getLiquidityOffers']);
+				await queryClient.refetchQueries({ queryKey: ['getLiquidityOffers'] });
 			}
 		} catch (error) {
 			const msg = humanizeErrors(error);
@@ -103,12 +103,12 @@ export function OfferRow({ className, offer }: { offer: Offer; ownerMode?: boole
 			});
 
 			if (location.pathname.includes('my/offers')) {
-				await queryClient.refetchQueries(['getOffersAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getOffersAsParticipant'] });
 			} else if (location.pathname.includes('/offer/')) {
-				await queryClient.refetchQueries(['getOffer']);
-				await queryClient.refetchQueries(['getOfferEvents']);
+				await queryClient.refetchQueries({ queryKey: ['getOffer'] });
+				await queryClient.refetchQueries({ queryKey: ['getOfferEvents'] });
 			} else if (location.pathname.match('/liquidity/.*/offers')) {
-				await queryClient.refetchQueries(['getLiquidityOffers']);
+				await queryClient.refetchQueries({ queryKey: ['getLiquidityOffers'] });
 			}
 		} catch (error) {
 			const msg = humanizeErrors(error);
@@ -132,12 +132,12 @@ export function OfferRow({ className, offer }: { offer: Offer; ownerMode?: boole
 			});
 
 			if (location.pathname.includes('my/offers')) {
-				await queryClient.refetchQueries(['getOffersAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getOffersAsParticipant'] });
 			} else if (location.pathname.includes('/offer/')) {
-				await queryClient.refetchQueries(['getOffer']);
-				await queryClient.refetchQueries(['getOfferEvents']);
+				await queryClient.refetchQueries({ queryKey: ['getOffer'] });
+				await queryClient.refetchQueries({ queryKey: ['getOfferEvents'] });
 			} else if (location.pathname.match('/liquidity/.*/offers')) {
-				await queryClient.refetchQueries(['getLiquidityOffers']);
+				await queryClient.refetchQueries({ queryKey: ['getLiquidityOffers'] });
 			}
 		} catch (error) {
 			const msg = humanizeErrors(error);

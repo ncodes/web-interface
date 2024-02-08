@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConnectKitProvider, getDefaultConfig } from 'connectkit';
 import { Chain, http } from 'viem';
-import { hardhat, mainnet, sepolia } from 'viem/chains';
+import { hardhat, sepolia } from 'viem/chains';
 import { WagmiProvider, createConfig } from 'wagmi';
 import { AppIcon, AppName, AppUrl, WalletConnectId, infuraId } from '../../../constants.ts';
 import { getSupportedChains } from '../common.ts';
@@ -27,7 +27,6 @@ const config = createConfig(
 		appIcon: AppIcon,
 		transports: {
 			[sepolia.id]: http(`https://sepolia.infura.io/v3/${infuraId}`),
-			[mainnet.id]: http(`https://mainnet.infura.io/v3/${infuraId}`),
 			[hardhat.id]: http(hardhat.rpcUrls.default.http[0]),
 		},
 	}),

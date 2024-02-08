@@ -85,7 +85,7 @@ export function CreateMarketSheet({
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${explorer}/tx/${txHash}` }],
 			});
-			queryClient.refetchQueries(['getMarkets']).catch(logError);
+			queryClient.refetchQueries({ queryKey: ['getMarkets'] }).catch(logError);
 			close();
 		} catch (error) {
 			const msg = humanizeErrors(error);

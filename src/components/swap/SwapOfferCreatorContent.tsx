@@ -335,7 +335,6 @@ export function SwapOfferCreatorContent({
 
 		const { provider, lid } = liquidity;
 		const amt = toLD(amount, market.baseDecimals);
-		console.log('Compute Fee', 'Amount', amt, 'Price', price, 'Decimals', market.quoteDecimals);
 		const fee = await computeSwapFee(market.address, provider, lid, address, amt, toLD(price, market.quoteDecimals));
 
 		let symbol: string;
@@ -553,12 +552,12 @@ export function SwapOfferCreatorContent({
 			});
 
 			if (location.pathname.includes('my/offers')) {
-				await queryClient.refetchQueries(['getOffersAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getOffersAsParticipant'] });
 			} else if (location.pathname.includes('/offer/')) {
-				await queryClient.refetchQueries(['getOffer']);
-				await queryClient.refetchQueries(['getOfferEvents']);
+				await queryClient.refetchQueries({ queryKey: ['getOffer'] });
+				await queryClient.refetchQueries({ queryKey: ['getOfferEvents'] });
 			} else if (location.pathname.match('/liquidity/.*/offers')) {
-				await queryClient.refetchQueries(['getLiquidityOffers']);
+				await queryClient.refetchQueries({ queryKey: ['getLiquidityOffers'] });
 			}
 		} catch (error) {
 			const msg = humanizeErrors(error);
@@ -601,12 +600,12 @@ export function SwapOfferCreatorContent({
 			});
 
 			if (location.pathname.includes('my/offers')) {
-				await queryClient.refetchQueries(['getOffersAsParticipant']);
+				await queryClient.refetchQueries({ queryKey: ['getOffersAsParticipant'] });
 			} else if (location.pathname.includes('/offer/')) {
-				await queryClient.refetchQueries(['getOffer']);
-				await queryClient.refetchQueries(['getOfferEvents']);
+				await queryClient.refetchQueries({ queryKey: ['getOffer'] });
+				await queryClient.refetchQueries({ queryKey: ['getOfferEvents'] });
 			} else if (location.pathname.match('/liquidity/.*/offers')) {
-				await queryClient.refetchQueries(['getLiquidityOffers']);
+				await queryClient.refetchQueries({ queryKey: ['getLiquidityOffers'] });
 			}
 
 			// Close sheets

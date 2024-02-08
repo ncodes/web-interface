@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { ErrorIcon } from 'react-hot-toast';
@@ -55,26 +55,27 @@ export function OffersTabContent({ setLiquidity }: { setLiquidity?: Dispatch<Set
 			},
 		],
 		queryFn: listOffers,
-		keepPreviousData: true,
+		placeholderData: keepPreviousData,
 		enabled: !!market && !!provider && !!lid,
 	});
 
-	useQuery({
-		queryKey: [
-			'markAsRead',
-			{
+	const markAsReadMut = useMutation({
+		mutationFn: markAsRead,
+	});
+
+	useEffect(() => {
+		if (!address || !user || !provider || !market) return;
+		markAsReadMut
+			.mutateAsync({
 				network: getChainInfo().queryName,
 				marketAddress: market,
-				provider: provider,
+				provider,
 				lid: parseInt(lid || '0'),
-			},
-		],
-		queryFn: markAsRead,
-		enabled: !!address && !!user,
-		onSuccess: async () => {
-			await queryClient.refetchQueries(['countUnreadOffer']);
-		},
-	});
+			})
+			.then(async () => {
+				await queryClient.refetchQueries({ queryKey: ['countUnreadOffer'] });
+			});
+	}, [address, user, provider, market]);
 
 	useEffect(() => {
 		if (liquidity.isSuccess && setLiquidity) setLiquidity(liquidity.data);

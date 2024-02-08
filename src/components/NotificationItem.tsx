@@ -58,11 +58,9 @@ export function NotificationItem({ note }: { note: Notification }) {
 
 	async function doMarkAsRead() {
 		if (note.read) return;
-		await markAsReadMutation.mutateAsync({
-			id: note.id,
-			net: getChainInfo().queryName,
-		});
-		queryClient.refetchQueries(['getNotifications', 'countNotifications']);
+		await markAsReadMutation.mutateAsync({ id: note.id, net: getChainInfo().queryName });
+		queryClient.refetchQueries({ queryKey: ['getNotifications'] });
+		queryClient.refetchQueries({ queryKey: ['countNotifications'] });
 	}
 
 	// Remove links from body but replace the links with the inner text.

@@ -181,7 +181,7 @@ export function LinkAccountSetting() {
 	return (
 		<>
 			<div className='font-light text-gray-300 text-sm'>
-				By logging in, you link your wallet to an email account to receive trade notifications and access member
+				By logging in, you link your wallet to an email account to receive notifications and access member
 				features.
 			</div>
 			{!linked && (

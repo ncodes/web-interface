@@ -48,7 +48,7 @@ export default defineConfig(({ command }) => {
 			],
 		},
 		build: {
-			sourcemap: true, // Source map generation must be turned on
+			sourcemap: true,
 		},
 		plugins: [
 			replaceWorkerEnv(),

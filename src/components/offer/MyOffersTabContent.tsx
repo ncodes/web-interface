@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { ErrorIcon } from 'react-hot-toast';
 import { useOfferService } from '../../hooks/services/backend/useOfferService.ts';
@@ -38,18 +38,20 @@ export function MyOffersTabContent() {
 			},
 		],
 		queryFn: listOffers,
-		keepPreviousData: true,
+		placeholderData: keepPreviousData,
 		enabled: mounted && !!address,
 	});
 
-	useQuery({
-		queryKey: ['markAsRead', { network: getChainInfo().queryName }],
-		queryFn: markAsRead,
-		enabled: mounted && !!address && !!user,
-		onSuccess: async () => {
-			await queryClient.refetchQueries(['countUnreadOffer']);
-		},
+	const markAsReadMut = useMutation({
+		mutationFn: markAsRead,
 	});
+
+	useEffect(() => {
+		if (!mounted || !address || !user) return;
+		markAsReadMut.mutateAsync({ network: getChainInfo().queryName }).then(async () => {
+			await queryClient.refetchQueries({ queryKey: ['countUnreadOffer'] });
+		});
+	}, [mounted, address, user]);
 
 	useEffect(() => {
 		const { isLoading, isRefetching } = offers;

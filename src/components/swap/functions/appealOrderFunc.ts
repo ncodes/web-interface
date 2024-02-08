@@ -59,9 +59,9 @@ export async function appealOrderFunc(
 		});
 
 		if (location.pathname.includes('my/swaps')) {
-			await queryClient.refetchQueries(['getSwapsAsParticipant']);
+			await queryClient.refetchQueries({ queryKey: ['getSwapsAsParticipant'] });
 		} else if (location.pathname.includes('swap/')) {
-			await queryClient.refetchQueries(['getSwap']);
+			await queryClient.refetchQueries({ queryKey: ['getSwap'] });
 		}
 	} catch (error) {
 		const msg = humanizeErrors(error);

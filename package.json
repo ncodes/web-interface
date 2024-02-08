@@ -15,7 +15,7 @@
 	},
 	"dependencies": {
 		"@ethersproject/providers": "^5.7.2",
-		"@jointlabs/chains-info": "^0.0.32",
+		"@jointlabs/chains-info": "^0.0.34",
 		"@msgpack/msgpack": "^3.0.0-beta2",
 		"@radix-ui/react-accordion": "^1.1.2",
 		"@radix-ui/react-avatar": "^1.0.3",
@@ -41,7 +41,7 @@
 		"@rollup/plugin-inject": "^5.0.5",
 		"@sentry/react": "^7.98.0",
 		"@sentry/vite-plugin": "^2.10.3",
-		"@tanstack/react-query": "^4.29.25",
+		"@tanstack/react-query": "^5.18.1",
 		"@types/randombytes": "^2.0.0",
 		"@uidotdev/usehooks": "^2.3.1",
 		"@xmtp/content-type-read-receipt": "^1.1.3",

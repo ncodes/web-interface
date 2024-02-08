@@ -28,7 +28,7 @@ export function EditCommission(props: { market: Market; close?: () => void }) {
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],
 			});
-			queryClient.refetchQueries(['getMarketsByCreator']).catch(logError);
+			queryClient.refetchQueries({ queryKey: ['getMarketsByCreator'] }).catch(logError);
 			props.close && props.close();
 		} catch (error) {
 			const msg = humanizeErrors(error);

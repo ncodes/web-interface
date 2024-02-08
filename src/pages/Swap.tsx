@@ -1,4 +1,4 @@
-import { AlertCircle } from 'lucide-react';
+import { AlertOctagon } from 'lucide-react';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useMediaQuery } from 'usehooks-ts';
@@ -24,8 +24,8 @@ function SwapPage({ onSwapFetched }: { onSwapFetched?: (swap: Swap) => void }) {
 				<title>{`Swap #${swap?.orderId} - Joint`}</title>
 			</Helmet>
 			<Alert
-				icon={<AlertCircle className='text-red-400' />}
-				className='m-3 border-gray-600 font-bold tracking-wider w-auto text-red-500'
+				icon={<AlertOctagon className='text-red-400' />}
+				className='m-3 font-bold tracking-wider w-auto text-red-300 bg-card-background border-card-border'
 			>
 				THIS IS A TESTNET VERSION OF JOINT PROTOCOL. DO NOT USE OR SEND REAL FUNDS.
 			</Alert>

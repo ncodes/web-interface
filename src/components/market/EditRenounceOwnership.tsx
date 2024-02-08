@@ -25,7 +25,7 @@ export function EditRenounceOwnership({ market, close }: { market: Market; close
 				duration: 5000,
 				links: [{ label: 'View Transaction', href: `${blockExplorer}/tx/${txHash}` }],
 			});
-			queryClient.refetchQueries(['getMarketsByCreator']).catch(logError);
+			queryClient.refetchQueries({ queryKey: ['getMarketsByCreator'] }).catch(logError);
 			close && close();
 		} catch (error) {
 			const msg = humanizeErrors(error);

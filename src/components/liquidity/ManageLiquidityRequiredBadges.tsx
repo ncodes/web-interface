@@ -40,7 +40,7 @@ export function ManageLiquidityRequiredBadges({ liquidity }: { liquidity: Liquid
 			});
 
 			const query = location.pathname.includes('liquidity') ? 'getLiquidityByCreator' : 'getMarketsByCreator';
-			queryClient.refetchQueries([query]).catch(logError);
+			queryClient.refetchQueries({ queryKey: [query] }).catch(logError);
 
 			close && close();
 		} catch (error) {

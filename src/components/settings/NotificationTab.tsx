@@ -50,7 +50,7 @@ export function NotificationTab() {
 			try {
 				await updateSettingsMut.mutateAsync({ ...checked });
 				notifySuccess('Notification settings updated', { position: 'bottom-right' });
-				await queryClient.refetchQueries(['getUser']);
+				await queryClient.refetchQueries({ queryKey: ['getUser'] });
 			} catch (error) {
 				notifyError((error as Error).message);
 				logError(error);

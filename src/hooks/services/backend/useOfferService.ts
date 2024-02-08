@@ -1,208 +1,204 @@
-import { QueryFunctionContext } from "@tanstack/react-query";
-import axios from "axios";
-import { handleAxiosError } from "../../../libs/helpers.ts";
-import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
-import { useSession } from "../../useSession.ts";
+import { QueryFunctionContext } from '@tanstack/react-query';
+import axios from 'axios';
+import { handleAxiosError } from '../../../libs/helpers.ts';
+import { useConnectorContext } from '../../connectors/useConnectorContext.tsx';
+import { useSession } from '../../useSession.ts';
 
 export interface ListOfferParams {
-  network: string;
-  limit: number;
-  offset: number;
-  connectedAddress?: string;
-  offerFilter?: OfferFilter;
+	network: string;
+	limit: number;
+	offset: number;
+	connectedAddress?: string;
+	offerFilter?: OfferFilter;
 }
 
 export interface GetOfferEventsParams {
-  network: string;
-  offerId: number;
-  limit?: number;
-  offset?: number;
+	network: string;
+	offerId: number;
+	limit?: number;
+	offset?: number;
 }
 
 export interface GetOfferParams {
-  network: string;
-  offerId: number;
+	network: string;
+	offerId: number;
 }
 
 interface OfferReadStatusParams {
-  network: string;
-  marketAddress?: string;
-  provider?: string;
-  lid?: number;
-  offerId?: number;
+	network: string;
+	marketAddress?: string;
+	provider?: string;
+	lid?: number;
+	offerId?: number;
 }
 
-export type ListOfferIDs =
-  | "getOffersAsParticipant"
-  | "getOffers"
-  | "getLiquidityOffers";
+export type ListOfferIDs = 'getOffersAsParticipant' | 'getOffers' | 'getLiquidityOffers';
 
 /**
  * useOfferService provides access to v1/offers endpoints
  */
 export function useOfferService() {
-  const { getChainInfo, address } = useConnectorContext();
-  const { getAccessToken } = useSession();
+	const { getChainInfo, address } = useConnectorContext();
+	const { getAccessToken } = useSession();
 
-  /**
-   * List offers
-   * @param ctx
-   */
-  async function listOffers(
-    ctx: QueryFunctionContext<[ListOfferIDs, ListOfferParams]>,
-  ): Promise<{ offers: Offer[]; meta: { queryCount: number } }> {
-    try {
-      const [id, params] = ctx.queryKey;
-      const { network, limit, offerFilter, offset } = params;
-      const headers = {};
-      const resp = await axios({
-        method: "get",
-        url: `${getChainInfo().apiUrl}/v1/offers`,
-        params: {
-          ...offerFilter,
-          net: network,
-          offset,
-          limit,
-          creatorOrProvider:
-            id == "getOffersAsParticipant" && params.connectedAddress
-              ? params.connectedAddress
-              : undefined,
-        },
-        headers,
-      });
+	/**
+	 * List offers
+	 * @param ctx
+	 */
+	async function listOffers(
+		ctx: QueryFunctionContext<[ListOfferIDs, ListOfferParams]>,
+	): Promise<{ offers: Offer[]; meta: { queryCount: number } }> {
+		try {
+			const [id, params] = ctx.queryKey;
+			const { network, limit, offerFilter, offset } = params;
+			const headers = {};
+			const resp = await axios({
+				method: 'get',
+				url: `${getChainInfo().apiUrl}/v1/offers`,
+				params: {
+					...offerFilter,
+					net: network,
+					offset,
+					limit,
+					creatorOrProvider:
+						id == 'getOffersAsParticipant' && params.connectedAddress ? params.connectedAddress : undefined,
+				},
+				headers,
+			});
 
-      return Promise.resolve({
-        offers: resp.data.data,
-        meta: resp.data.meta,
-      });
-    } catch (e) {
-      return Promise.reject(handleAxiosError(e as never));
-    }
-  }
+			return Promise.resolve({
+				offers: resp.data.data,
+				meta: resp.data.meta,
+			});
+		} catch (e) {
+			return Promise.reject(handleAxiosError(e as never));
+		}
+	}
 
-  /**
-   * Get offer events
-   * @param ctx The query context
-   */
-  async function getEvents(
-    ctx: QueryFunctionContext<[string, GetOfferEventsParams]>,
-  ): Promise<{ events: Event[]; meta: { queryCount: number } }> {
-    try {
-      const [, params] = ctx.queryKey;
-      const { network, offerId, limit, offset } = params;
-      const headers = {};
-      const resp = await axios({
-        method: "get",
-        url: `${getChainInfo().apiUrl}/v1/offers/${offerId}/events`,
-        params: {
-          net: network,
-          offset,
-          limit,
-        },
-        headers,
-      });
+	/**
+	 * Get offer events
+	 * @param ctx The query context
+	 */
+	async function getEvents(
+		ctx: QueryFunctionContext<[string, GetOfferEventsParams]>,
+	): Promise<{ events: Event[]; meta: { queryCount: number } }> {
+		try {
+			const [, params] = ctx.queryKey;
+			const { network, offerId, limit, offset } = params;
+			const headers = {};
+			const resp = await axios({
+				method: 'get',
+				url: `${getChainInfo().apiUrl}/v1/offers/${offerId}/events`,
+				params: {
+					net: network,
+					offset,
+					limit,
+				},
+				headers,
+			});
 
-      return Promise.resolve({
-        events: resp.data.data,
-        meta: resp.data.meta,
-      });
-    } catch (e) {
-      return Promise.reject(handleAxiosError(e as never));
-    }
-  }
+			return Promise.resolve({
+				events: resp.data.data,
+				meta: resp.data.meta,
+			});
+		} catch (e) {
+			return Promise.reject(handleAxiosError(e as never));
+		}
+	}
 
-  /**
-   * Get an offer
-   * @param ctx The query context
-   */
-  async function getOffer(
-    ctx: QueryFunctionContext<[string, GetOfferParams]>,
-  ): Promise<Offer> {
-    try {
-      const [, params] = ctx.queryKey;
-      const { network, offerId } = params;
-      const headers = {};
-      const resp = await axios({
-        method: "get",
-        url: `${getChainInfo().apiUrl}/v1/offers/${offerId}`,
-        params: {
-          net: network,
-        },
-        headers,
-      });
+	/**
+	 * Get an offer
+	 * @param ctx The query context
+	 */
+	async function getOffer(ctx: QueryFunctionContext<[string, GetOfferParams]>): Promise<Offer> {
+		try {
+			const [, params] = ctx.queryKey;
+			const { network, offerId } = params;
+			const headers = {};
+			const resp = await axios({
+				method: 'get',
+				url: `${getChainInfo().apiUrl}/v1/offers/${offerId}`,
+				params: {
+					net: network,
+				},
+				headers,
+			});
 
-      return Promise.resolve(resp.data.data);
-    } catch (e) {
-      return Promise.reject(handleAxiosError(e as never));
-    }
-  }
+			return Promise.resolve(resp.data.data);
+		} catch (e) {
+			return Promise.reject(handleAxiosError(e as never));
+		}
+	}
 
-  /**
-   * Count unread offers
-   * @param ctx
-   */
-  async function countUnread(
-    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>,
-  ): Promise<{ asProvider: number; asOfferer: number }> {
-    try {
-      const [, params] = ctx.queryKey;
-      const { network, marketAddress, provider, lid } = params;
-      const headers = {};
-      const token = getAccessToken(address);
-      headers["authorization"] = token ? `Bearer ${token}` : undefined;
-      const resp = await axios({
-        method: "get",
-        url: `${getChainInfo().apiUrl}/v1/offers/count-unread`,
-        params: {
-          net: network,
-          marketAddress,
-          provider,
-          lid,
-        },
-        headers,
-      });
+	/**
+	 * Count unread offers
+	 * @param ctx
+	 */
+	async function countUnread(
+		ctx: QueryFunctionContext<[string, OfferReadStatusParams]>,
+	): Promise<{ asProvider: number; asOfferer: number }> {
+		try {
+			const [, params] = ctx.queryKey;
+			const { network, marketAddress, provider, lid } = params;
+			const headers = {};
+			const token = getAccessToken(address);
+			headers['authorization'] = token ? `Bearer ${token}` : undefined;
+			const resp = await axios({
+				method: 'get',
+				url: `${getChainInfo().apiUrl}/v1/offers/count-unread`,
+				params: {
+					net: network,
+					marketAddress,
+					provider,
+					lid,
+				},
+				headers,
+			});
 
-      return Promise.resolve(resp.data.data);
-    } catch (e) {
-      return Promise.reject(handleAxiosError(e as never));
-    }
-  }
+			return Promise.resolve(resp.data.data);
+		} catch (e) {
+			return Promise.reject(handleAxiosError(e as never));
+		}
+	}
 
-  /**
-   * Mark unread offers as read
-   * @param ctx
-   */
-  async function markAsRead(
-    ctx: QueryFunctionContext<[string, OfferReadStatusParams]>,
-  ): Promise<void> {
-    try {
-      const [, params] = ctx.queryKey;
-      const { network, marketAddress, provider, lid } = params;
-      const headers = {};
-      const token = getAccessToken(address);
-      headers["authorization"] = token ? `Bearer ${token}` : undefined;
-      const resp = await axios({
-        method: "put",
-        url: `${getChainInfo().apiUrl}/v1/offers/mark-read`,
-        params: {
-          net: network,
-          marketAddress,
-          provider,
-          lid,
-        },
-        headers,
-      });
-      return Promise.resolve(resp.data.data);
-    } catch (e) {
-      return Promise.reject(handleAxiosError(e as never));
-    }
-  }
+	/**
+	 * Mark unread offers as read
+	 * @param ctx
+	 */
+	async function markAsRead(params: {
+		network: string;
+		marketAddress?: string;
+		provider?: string;
+		lid?: number;
+		offerId?: number;
+	}): Promise<void> {
+		try {
+			const { network, marketAddress, provider, lid } = params;
+			const headers = {};
+			const token = getAccessToken(address);
+			headers['authorization'] = token ? `Bearer ${token}` : undefined;
+			const resp = await axios({
+				method: 'put',
+				url: `${getChainInfo().apiUrl}/v1/offers/mark-read`,
+				params: {
+					net: network,
+					marketAddress,
+					provider,
+					lid,
+				},
+				headers,
+			});
+			return Promise.resolve(resp.data.data);
+		} catch (e) {
+			return Promise.reject(handleAxiosError(e as never));
+		}
+	}
 
-  return {
-    listOffers,
-    countUnread,
-    markAsRead,
-    getOffer,
-    getEvents,
-  };
+	return {
+		listOffers,
+		countUnread,
+		markAsRead,
+		getOffer,
+		getEvents,
+	};
 }
