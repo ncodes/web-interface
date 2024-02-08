@@ -86,10 +86,10 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 	const [reveal, setReveal] = useState(false);
 	const [pendingReadReceipts, setPendingReadReceipts] = useState<{ [key: string]: DecodedMessage[] }>({});
 	const windowFocus = useWindowFocus();
-	const [peerOffline, setPeerOffline] = useState<boolean | undefined>();
+	const [peerOffnet, setPeerOffnet] = useState<boolean | undefined>();
 	const [peerAddress, setPeerAddress] = useState<string | undefined>();
-	const [numMediatorsOffline, setNumMediatorsOffline] = useState<number>(0);
-	const [offlineCounterparts, setOfflineCounterparts] = useState<string[]>([]);
+	const [numMediatorsOffnet, setNumMediatorsOffnet] = useState<number>(0);
+	const [counterpartsOffnet, setCounterpartysOffnet] = useState<string[]>([]);
 
 	useTimeout(() => {
 		setReveal(true);
@@ -114,7 +114,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 
 			// Ensure the counterparty is online and can be messaged
 			if (!(await canMessageAddress(client, peerAddress))) {
-				setPeerOffline(true);
+				setPeerOffnet(true);
 				return;
 			}
 
@@ -160,11 +160,11 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		};
 
 		void createConvoWithCounterpart();
-	}, [client, swap, offer, user, peerOffline]);
+	}, [client, swap, offer, user, peerOffnet]);
 
 	// As a swap/offer counterparty, load messages from conversation with counterparty to DB
 	useEffect(() => {
-		if (!client || !conversation || peerOffline) return;
+		if (!client || !conversation || peerOffnet) return;
 		void loadMessagesFromConvoToDB(client, conversation);
 	}, [client, conversation]);
 
@@ -208,13 +208,13 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		};
 
 		void createConvosWithMediators();
-	}, [client, conversation, swap, user, numMediatorsOffline]);
+	}, [client, conversation, swap, user, numMediatorsOffnet]);
 
 	// As a swap counterparty, relay counterparty's conversation to mediators' conversation
 	useEffect(() => {
-		if (!client || !conversation || peerOffline || mediatorConvos.length == 0) return;
+		if (!client || !conversation || peerOffnet || mediatorConvos.length == 0) return;
 		relayConvoToConvos(client.address, conversation, mediatorConvos);
-	}, [client, conversation, swap?.disputes, mediatorConvos, peerOffline]);
+	}, [client, conversation, swap?.disputes, mediatorConvos, peerOffnet]);
 
 	// Creates a stream for a conversation
 	const createStream = useCallback(
@@ -253,7 +253,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 	// As a swap/offer counterparty, process incoming messages from counterparty conversation.
 	// For swaps, relay new message to mediators' conversation if in dispute.
 	useEffect(() => {
-		if (!conversation || !client || peerOffline) return;
+		if (!conversation || !client || peerOffnet) return;
 
 		const streamsRef = streams.current;
 		const convoId = getConvoId(conversation);
@@ -306,7 +306,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			void endStream(stream);
 			delete streamsRef[convoId];
 		};
-	}, [conversation, client, mediatorConvos, streams, windowFocus, peerOffline]);
+	}, [conversation, client, mediatorConvos, streams, windowFocus, peerOffnet]);
 
 	// Send read receipts for pending messages
 	useEffect(() => {
@@ -454,7 +454,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		};
 
 		void createConvoWithCounterparts(isSwapDisputeExecuted(swap));
-	}, [swap, client, user, offlineCounterparts]);
+	}, [swap, client, user, counterpartsOffnet]);
 
 	// As a mediator, load messages from counterparties conversation to DB
 	useEffect(() => {
@@ -557,16 +557,16 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		void sendDisputeStartedNotice();
 	}, [counterpartsConvos, swap?.disputes, address]);
 
-	// As a swapper, periodically check if the peer has come online.
+	// As a swapper, periodically check if the peer has joined the xmtp network.
 	useInterval(
 		async () => {
 			if (!client || !peerAddress) return;
-			setPeerOffline(!(await canMessageAddress(client, peerAddress)));
+			setPeerOffnet(!(await canMessageAddress(client, peerAddress)));
 		},
-		client && peerAddress && peerOffline ? 10000 : null,
+		client && peerAddress && peerOffnet ? 10000 : null,
 	);
 
-	// As a swapper, periodically update the number of offline mediators
+	// As a swapper, periodically update the number of mediators that have not joined the xmtp network.
 	useInterval(async () => {
 		if (!client || !swap || !isDisputed(swap)) return;
 		let offline = 0;
@@ -574,10 +574,10 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			if (await canMessageAddress(client, draftee.owner)) continue;
 			offline++;
 		}
-		setNumMediatorsOffline(offline);
+		setNumMediatorsOffnet(offline);
 	}, 10000);
 
-	// As a mediator, periodically update the list of offline counterparts
+	// As a mediator, periodically update the list of counterparts that have not joined the xmtp network.
 	useInterval(async () => {
 		if (!client || !swap || !isDisputed(swap) || !isSwapDraftee(swap, address, true)) return;
 		const counterparts = getSwapCounterparts(swap);
@@ -586,7 +586,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 			const found = counterpartsConvos.some((convo) => isEqlStr(c, convo.peerAddress));
 			if (!found) offline.push(c);
 		}
-		setOfflineCounterparts(offline);
+		setCounterpartysOffnet(offline);
 	}, 10000);
 
 	// Send read receipt for latest unread message received
@@ -660,7 +660,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 		if (swap) {
 			return (
 				(!isSwapCounterparty(swap, address) && (!isSwapDraftee(swap, address, true) || isSwapDisputeExecuted(swap))) ||
-				(!!peerOffline && !isDisputed(swap))
+				(!!peerOffnet && !isDisputed(swap))
 			);
 		}
 		if (offer) {
@@ -674,7 +674,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 	// As mediator: Show when conversation with the swap counterparts exists.
 	// As swap counterpart: Show when conversation with the swap participant is offline but a dispute is ongoing.
 	function canHideShowActions() {
-		return conversation || counterpartsConvos.length > 0 || (peerOffline && !!mediatorConvos.length);
+		return conversation || counterpartsConvos.length > 0 || (peerOffnet && !!mediatorConvos.length);
 	}
 
 	return (
@@ -714,41 +714,41 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 					</span>
 				</div>
 				<div>
-					{swap && peerOffline && isSwapCounterparty(swap, address) && (
+					{swap && peerOffnet && isSwapCounterparty(swap, address) && (
 						<div className='flex gap-2 text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
 							<AlertOctagon width='20' className='text-red-500 flex-shrink-0' />
 							<div>
 								<b className='text-red-400 font-medium text-sm tracking-wider'>Swap order counterpart is offline.</b>{' '}
 								<br />
-								You will be able to send messages when the counterpart comes online.
+								You will be able to send messages when the counterpart enables chat.
 							</div>
 						</div>
 					)}
 
-					{swap && numMediatorsOffline > 0 && isSwapCounterparty(swap, address) && (
+					{swap && numMediatorsOffnet > 0 && isSwapCounterparty(swap, address) && (
 						<div className='flex gap-2 items-center text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
 							<AlertOctagon width='20' className='text-red-500 flex-shrink-0' />
 							<div>
 								<b className='text-red-400 font-medium text-sm tracking-wider'>
-									{numMediatorsOffline} (of {swap.disputes[0].numMediators}) mediator
-									{numMediatorsOffline > 1 ? 's' : ''} {numMediatorsOffline > 1 ? 'are' : 'is'} offline
+									{numMediatorsOffnet} (of {swap.disputes[0].numMediators}) mediator
+									{numMediatorsOffnet > 1 ? 's' : ''} {numMediatorsOffnet > 1 ? 'are' : 'is'} offline
 								</b>{' '}
 								<br />
-								Offline mediators may come online later.
+								Mediators may enable chat later.
 							</div>
 						</div>
 					)}
 
-					{swap && offlineCounterparts.length > 0 && (
+					{swap && counterpartsOffnet.length > 0 && (
 						<div className='flex gap-2 text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
 							<AlertOctagon width='15' className='text-yellow-500 flex-shrink-0 -mt-0.5' />
 							<div>
 								<b className='text-gray-200 font-medium text-sm tracking-wider'>
-									{offlineCounterparts.length} swap counterpart{offlineCounterparts.length > 1 ? 's' : ''}{' '}
-									{offlineCounterparts.length > 1 ? 'are' : 'is'} offline
+									{counterpartsOffnet.length} swap counterpart{counterpartsOffnet.length > 1 ? 's' : ''}{' '}
+									{counterpartsOffnet.length > 1 ? 'has' : 'have'} not enabled chat
 								</b>
 								<div className='flex gap-1 mt-1'>
-									{offlineCounterparts.map((c) => (
+									{counterpartsOffnet.map((c) => (
 										<>
 											<FetchedUserHoverCard address={c} key={c}>
 												<EmojiAvatar size={AvatarSize.Micro} randomStr={c} />
@@ -772,7 +772,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 									/>
 								)}
 
-								{messages?.length == 0 && client && swap && isSwapCounterparty(swap, address) && !peerOffline && (
+								{messages?.length == 0 && client && swap && isSwapCounterparty(swap, address) && !peerOffnet && (
 									<div className='flex gap-2 text-gray-300 m-2 rounded-xl p-3 text-xs tracking-wider bg-gray-800 font-light border border-chinese-green/10'>
 										<AlertOctagon width='20' className='text-chinese-green flex-shrink-0' />
 										<div>
