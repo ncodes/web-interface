@@ -36,7 +36,7 @@ export function PointActivityStream() {
 		queryKey: [
 			'getLatest',
 			{
-				limit: !fromDate.current ? 100 : 3,
+				limit: !fromDate.current ? 30 : 3,
 				order: !fromDate.current ? 'desc' : 'asc',
 				from: fromDate.current,
 				referrer: isPointsPage ? undefined : address,
@@ -84,7 +84,6 @@ export function PointActivityStream() {
 			</ScrollOverflowIndicator>
 		</div>
 	);
-	
 }
 
 const Comp = memo(function Comp({ points, isPointsPage }: { points: Point[]; isPointsPage: boolean }) {
