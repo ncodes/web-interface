@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Client, PrivateKey, Signature } from '@xmtp/xmtp-js';
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -58,7 +58,7 @@ export function WatchedLiquidityTabContent() {
 			},
 		],
 		queryFn: listLiquidities,
-		keepPreviousData: !!watchedLiquidities.length,
+		placeholderData: watchedLiquidities.length ? keepPreviousData : undefined,
 		refetchInterval: 10000,
 		enabled: mounted && !!watchedLiquidities.length,
 	});

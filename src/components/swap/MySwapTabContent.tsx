@@ -35,7 +35,6 @@ export function MySwapTabContent() {
 			},
 		],
 		queryFn: listSwaps,
-		keepPreviousData: false,
 		enabled: mounted && !!address,
 		refetchInterval: 10000,
 	});

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { ErrorIcon } from 'react-hot-toast';
@@ -43,7 +43,7 @@ export function MarketsTabContent() {
 			},
 		],
 		queryFn: listMarkets,
-		keepPreviousData: true,
+		placeholderData: keepPreviousData,
 		enabled: mounted,
 		refetchInterval: 10000,
 	});

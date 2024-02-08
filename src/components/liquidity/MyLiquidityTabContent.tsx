@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { ErrorIcon } from 'react-hot-toast';
@@ -36,7 +36,7 @@ export function MyLiquidityTabContent() {
 			},
 		],
 		queryFn: listLiquidities,
-		keepPreviousData: true,
+		placeholderData: keepPreviousData,
 		enabled: mounted && !!address,
 	});
 

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { ErrorIcon } from 'react-hot-toast';
@@ -37,7 +37,7 @@ export function MyTicketsTabContent() {
 			},
 		],
 		queryFn: listTickets,
-		keepPreviousData: true,
+		placeholderData: keepPreviousData,
 		enabled: mounted && !!address,
 		refetchInterval: 10000,
 	});

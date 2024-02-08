@@ -22,7 +22,7 @@ import {
 	isOfferCounterparty,
 	isSwapCounterparty,
 	isSwapDisputeExecuted,
-	isSwapDraftee
+	isSwapDraftee,
 } from '../../libs/api_utils.ts';
 import { isEqlStr, logError } from '../../libs/helpers.ts';
 import { cn } from '../../libs/utils.ts';
@@ -579,7 +579,7 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 
 	// As a mediator, periodically update the list of offline counterparts
 	useInterval(async () => {
-		if (!client || !swap || !isDisputed(swap) || !isSwapDraftee(swap, address, true))  return;
+		if (!client || !swap || !isDisputed(swap) || !isSwapDraftee(swap, address, true)) return;
 		const counterparts = getSwapCounterparts(swap);
 		const offline: string[] = [];
 		for (const c of counterparts) {
@@ -748,9 +748,9 @@ export function Messenger({ sheetMode, swap, offer }: { sheetMode: boolean; swap
 									{offlineCounterparts.length > 1 ? 'are' : 'is'} offline
 								</b>
 								<div className='flex gap-1 mt-1'>
-									{offlineCounterparts.map((c, i) => (
+									{offlineCounterparts.map((c) => (
 										<>
-											<FetchedUserHoverCard address={c}>
+											<FetchedUserHoverCard address={c} key={c}>
 												<EmojiAvatar size={AvatarSize.Micro} randomStr={c} />
 											</FetchedUserHoverCard>
 										</>

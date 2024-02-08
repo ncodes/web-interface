@@ -25,11 +25,11 @@ export function useTimelineService() {
 	 * @param ctx
 	 */
 	async function get(
-		ctx: QueryFunctionContext<[string, GetParams]>,
+		ctx: QueryFunctionContext<(string | GetParams)[]> & { pageParam: number },
 	): Promise<{ events: Event[]; meta: { queryCount: number } }> {
 		try {
 			const lastSerial = ctx.pageParam as number;
-			const [, params] = ctx.queryKey;
+			const [, params] = ctx.queryKey as [string, GetParams];
 			const { network, liquidities, markets, wallets, limit } = params;
 			const headers = {};
 			const resp = await axios({

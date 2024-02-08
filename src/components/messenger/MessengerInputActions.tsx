@@ -60,7 +60,7 @@ export function MessengerInputActions({
 	const [progress, setProgress] = useState<number>(0);
 	const { notifyError } = useToast();
 	const { uploadFile } = useFileService();
-	const uploadMut = useMutation(uploadFile);
+	const uploadMut = useMutation({ mutationFn: uploadFile });
 	const user = useStore((state) => state.user);
 	const toggleOpenState = useStore((state) => state.toggleOpenState);
 

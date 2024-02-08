@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { ErrorIcon } from 'react-hot-toast';
 import { useDisputeService } from '../../hooks/services/backend/useDisputeService.ts';
@@ -34,7 +34,7 @@ export function MyDisputeTabContent() {
 				disputeFilter,
 			},
 		],
-		keepPreviousData: true,
+		placeholderData: keepPreviousData,
 		queryFn: listDisputes,
 		enabled: mounted && !!address,
 		refetchInterval: 10000,

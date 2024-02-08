@@ -45,7 +45,7 @@ export function ManageLiquiditySetPaymentMethods({ liquidity }: { liquidity: Liq
 		refetchOnMount: false,
 		refetchOnWindowFocus: false,
 		refetchIntervalInBackground: false,
-		cacheTime: 0,
+		gcTime: 0,
 	});
 
 	useEffect(() => {

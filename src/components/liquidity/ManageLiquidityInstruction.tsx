@@ -91,7 +91,7 @@ export function ManageLiquidityInstruction({ liquidity }: { liquidity: Liquidity
 					<Textarea
 						className='mt-1 h-[160px] font-light text-gray-300'
 						value={content}
-						disabled={update.isLoading || txLoading}
+						disabled={update.isPending || txLoading}
 						onChange={(e) => {
 							if (e.target.value.length > 250) return;
 							setContent(e.target.value);
@@ -133,7 +133,7 @@ export function ManageLiquidityInstruction({ liquidity }: { liquidity: Liquidity
 						rounded='default'
 						size='full'
 						className='tracking-wider'
-						disabled={originalContent === content || update.isLoading || txLoading}
+						disabled={originalContent === content || update.isPending || txLoading}
 						onClick={() => {
 							update
 								.mutateAsync()
@@ -145,10 +145,10 @@ export function ManageLiquidityInstruction({ liquidity }: { liquidity: Liquidity
 								});
 						}}
 					>
-						{(update.isLoading || txLoading) && (
+						{(update.isPending || txLoading) && (
 							<IconSpinner width='15' className='animate-spin' fill='fill-gray-900' />
 						)}
-						{!update.isLoading && !txLoading && 'Publish'}
+						{!update.isPending && !txLoading && 'Publish'}
 					</Button>
 				</div>
 			</AccordionContent>
