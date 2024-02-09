@@ -25,6 +25,7 @@ import { PairAvatar } from '../avatar/PairAvatar.tsx';
 import { AvatarSize } from '../avatar/useAvatar.tsx';
 import { BadgePill } from '../badge/BadgePill.tsx';
 import IconCaution from '../icons/IconCaution.tsx';
+import { IconMessageReceived } from '../icons/IconMessageReceived.tsx';
 import IconEdit from '../icons/IconEdit.tsx';
 import IconInfoCircle from '../icons/IconInfoCircle.tsx';
 import { IconMarket } from '../icons/IconMarket.tsx';
@@ -382,6 +383,15 @@ export function LiquidityRow({
 				)}
 
 				<div className='border-t border-gray-800 text-gray-400 px-3 py-1 flex justify-between' data-click-trigger='1'>
+					<div className='flex gap-2 items-center'>
+						{liquidity.messagingEnabled && (
+							<ToolTip tip='User can receive message' className='hover:scale-110  transition-all duration-300'>
+								<IconMessageReceived className='text-gray-400 hover:text-gray-300' />
+							</ToolTip>
+						)}
+						<IDBadge id={liquidity.lid} tip='Liquidity ID' />
+					</div>
+
 					<span
 						data-click-trigger='1'
 						className='flex py-1 text-[12px] text-gray-400 gap-1 items-center tracking-wide font-light'
@@ -394,9 +404,6 @@ export function LiquidityRow({
 								<span>{moment(liquidity.createdAt).format('DD MMM YYYY, h:mm:ss a').toUpperCase()}</span>
 							</ToolTip>
 						</span>
-					</span>
-					<span>
-						<IDBadge id={liquidity.lid} tip='Liquidity ID' />
 					</span>
 				</div>
 				<div className='flex justify-between border-t border-gray-800' data-click-trigger='1'>

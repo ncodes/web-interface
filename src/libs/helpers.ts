@@ -207,8 +207,8 @@ export function shortenAddress2(address: string) {
  * @param precision - The precision to use
  */
 export function approxNumber(num: number | string | undefined, precision?: number) {
-	if (!num) return num;
-	return approx(num, { precision: precision });
+	if (num == undefined) return num;
+	return approx(num, { precision });
 }
 
 /**
