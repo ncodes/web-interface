@@ -151,6 +151,7 @@ declare global {
 		online: boolean;
 		lastTimeOnline: string;
 		market: Market;
+		messagingEnabled: boolean;
 	}
 
 	interface Swap {
