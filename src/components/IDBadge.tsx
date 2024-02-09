@@ -3,13 +3,13 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { useToast } from '../hooks/useToast.tsx';
 import { ToolTip } from './ToolTip.tsx';
 
-export function IDBadge(props: { id: number; tip?: ReactNode }) {
+export function IDBadge(props: { id: number; provider: string; tip?: ReactNode }) {
 	const { simpleSuccess } = useToast();
 
 	if (props.id == undefined) return null;
 
 	return (
-		<ToolTip tip={props.tip}>
+		<ToolTip tip={`${props.provider}/${props.id}`}>
 			<CopyToClipboard
 				text={props.id.toString()}
 				onCopy={() => {
