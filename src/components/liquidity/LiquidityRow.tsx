@@ -25,10 +25,10 @@ import { PairAvatar } from '../avatar/PairAvatar.tsx';
 import { AvatarSize } from '../avatar/useAvatar.tsx';
 import { BadgePill } from '../badge/BadgePill.tsx';
 import IconCaution from '../icons/IconCaution.tsx';
-import { IconMessageReceived } from '../icons/IconMessageReceived.tsx';
 import IconEdit from '../icons/IconEdit.tsx';
 import IconInfoCircle from '../icons/IconInfoCircle.tsx';
 import { IconMarket } from '../icons/IconMarket.tsx';
+import { IconMessageReceived } from '../icons/IconMessageReceived.tsx';
 import IconOffer from '../icons/IconOffer.tsx';
 import IconReview from '../icons/IconReview.tsx';
 import { IconSettingsOutline } from '../icons/IconSettingsOutline.tsx';
@@ -389,7 +389,7 @@ export function LiquidityRow({
 								<IconMessageReceived className='text-gray-400 hover:text-gray-300' />
 							</ToolTip>
 						)}
-						<IDBadge id={liquidity.lid} tip='Liquidity ID' />
+						<IDBadge prefix={liquidity.provider + '/'} id={liquidity.lid} tip='Liquidity ID' />
 					</div>
 
 					<span
