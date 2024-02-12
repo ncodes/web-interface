@@ -88,8 +88,8 @@ export function SwapOfferCreatorContent({
 	const [quoteAmountInputFocused, setQuoteAmountInputFocused] = useState(false);
 	const [approveLoading, setApproveLoading] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [price, setPrice] = useState('0');
-	const [maxPrice, setMaxPrice] = useState(price);
+	const [priceHD, setPriceHD] = useState('0');
+	const [maxPriceLD, setMaxPriceLD] = useState('0');
 	const [slippage, setSlippage] = useState(0);
 	const [quoteBal, setQuoteBal] = useState<bigint>(0n);
 	const [canDo, setCanDo] = useState(false);
@@ -131,8 +131,8 @@ export function SwapOfferCreatorContent({
 		};
 
 		const setInitialPrice = async () => {
-			if (!offer) return setPrice(toHD(liquidity.price, market.quoteDecimals));
-			setPrice(toHD(offer.price, market.quoteDecimals));
+			if (!offer) return setPriceHD(toHD(liquidity.price, market.quoteDecimals));
+			setPriceHD(toHD(offer.price, market.quoteDecimals));
 		};
 
 		const setInitialExpireDuration = () => {
@@ -216,16 +216,16 @@ export function SwapOfferCreatorContent({
 		(async () => {
 			if (!quoteAmountInputFocused) return;
 			if (quoteAmount == '') return setAmount('');
-			if (isZero(price)) return setQuoteAmount('0');
+			if (isZero(priceHD)) return setQuoteAmount('0');
 
-			let amount = toDec(quoteAmount).div(price);
+			let amount = toDec(quoteAmount).div(priceHD);
 			const feeInfo = await computeFeeInfo(amount.toFixed());
 			setFeeInfo(feeInfo);
 
 			if (feeInfo.symbol == market.base) amount = amount.sub(feeInfo.total);
 			setAmount(trimZeros(amount.toFixed(8)));
 		})();
-	}, [quoteAmount, price]);
+	}, [quoteAmount, priceHD]);
 
 	// Set or update quote amount when amount changed
 	useEffect(() => {
@@ -244,15 +244,17 @@ export function SwapOfferCreatorContent({
 
 			const amtD = toDec(amount);
 			const feePct = totalFeeBp / 100 / 100;
-			const newQuoteAmt = amtD.div(1 - feePct).mul(price);
+			const newQuoteAmt = amtD.div(1 - feePct).mul(priceHD);
 			setQuoteAmount(trimZeros(newQuoteAmt.toFixed(8)));
 		})();
-	}, [amount, price]);
+	}, [amount, priceHD]);
 
 	function isOfferChanged() {
 		return (
 			offer &&
-			(initAmount != amount || toHD(offer.price, market.quoteDecimals) != price || initExpireDuration != expireDuration)
+			(initAmount != amount ||
+				toHD(offer.price, market.quoteDecimals) != priceHD ||
+				initExpireDuration != expireDuration)
 		);
 	}
 
@@ -273,14 +275,14 @@ export function SwapOfferCreatorContent({
 			if (isEmpty(quoteAmount)) return;
 			if (isZero(slippage)) {
 				setMaxQuoteAmount(quoteAmount);
-				setMaxPrice(liquidity.price);
+				setMaxPriceLD(liquidity.price);
 				return;
 			}
 
 			// compute max price
 			const price = toDec(liquidity.price);
 			const maxPrice = price.add(price.mul(slippage / 100)).toFixed();
-			setMaxPrice(maxPrice);
+			setMaxPriceLD(maxPrice);
 
 			// compute output amount
 			const { quoteDecimals } = market;
@@ -335,7 +337,7 @@ export function SwapOfferCreatorContent({
 
 		const { provider, lid } = liquidity;
 		const amt = toLD(amount, market.baseDecimals);
-		const fee = await computeSwapFee(market.address, provider, lid, address, amt, toLD(price, market.quoteDecimals));
+		const fee = await computeSwapFee(market.address, provider, lid, address, amt, toLD(priceHD, market.quoteDecimals));
 
 		let symbol: string;
 		let decimals: number;
@@ -431,7 +433,7 @@ export function SwapOfferCreatorContent({
 				undefined,
 				lid,
 				amt,
-				toLD(maxPrice, quoteDecimals),
+				toLD(maxPriceLD, quoteDecimals),
 				[],
 				BigInt(moment().add(expireDuration, 'seconds').unix()),
 			);
@@ -474,9 +476,9 @@ export function SwapOfferCreatorContent({
 			const { address, baseType, baseDecimals } = market;
 			const quoteAmt = toDec(quoteAmount);
 			const amt =
-				price != '0'
+				priceHD != '0'
 					? !isSynth(baseType)
-						? toLD(quoteAmt.div(price), baseDecimals)
+						? toLD(quoteAmt.div(priceHD), baseDecimals)
 						: toLD(amount, baseDecimals)
 					: toLD(amount, baseDecimals);
 
@@ -486,7 +488,7 @@ export function SwapOfferCreatorContent({
 				constants.AddressZero,
 				liquidity.lid,
 				amt,
-				toLD(price, market.quoteDecimals),
+				toLD(priceHD, market.quoteDecimals),
 				[],
 				expireDuration,
 			);
@@ -576,16 +578,16 @@ export function SwapOfferCreatorContent({
 			const { baseType, baseDecimals } = market;
 			const quoteAmt = toDec(quoteAmount);
 			const amt =
-				price != '0'
+				priceHD != '0'
 					? !isSynth(baseType)
-						? toLD(quoteAmt.div(price), baseDecimals)
+						? toLD(quoteAmt.div(priceHD), baseDecimals)
 						: toLD(amount, baseDecimals)
 					: toLD(amount, baseDecimals);
 
 			const [txHash] = await updateOffer(
 				BigInt(offer.offerId),
 				amt,
-				toLD(price, market.quoteDecimals),
+				toLD(priceHD, market.quoteDecimals),
 				[],
 				expireDuration,
 			);
@@ -735,11 +737,10 @@ export function SwapOfferCreatorContent({
 											<SwapInput
 												avatar={market.quoteLogo}
 												avatarFallback={market.quote}
-												// value={toHD(price, market.quoteDecimals)}
-												value={price}
+												value={priceHD}
 												onFocused={setAmountInputFocused}
 												setValue={(v) => {
-													setPrice(v);
+													setPriceHD(v);
 												}}
 												disabled={loading || canExecuteOffer(offer)}
 											/>
@@ -848,11 +849,11 @@ export function SwapOfferCreatorContent({
 												<span>Expected Price</span>
 												{amount != '' ? (
 													<span className='flex gap-1'>
-														<span>{formatToHighDenom(price, market.quoteDecimals)} </span>
-														{price != maxPrice && (
+														<span>{formatToMoney(priceHD)} </span>
+														{toLD(priceHD, market.quoteDecimals) != maxPriceLD && (
 															<>
 																<span> - </span>
-																<span>{formatToHighDenom(maxPrice, market.quoteDecimals)} </span>
+																<span>{formatToHighDenom(maxPriceLD, market.quoteDecimals)} </span>
 															</>
 														)}
 														<span>{market.base}</span>
@@ -895,7 +896,7 @@ export function SwapOfferCreatorContent({
 										<AccordionContent className='pt-3 px-3 tracking-wide'>
 											{!offerMode && (
 												<EditSwapSlippage
-													disabled={loading || approveLoading}
+													disabled={loading || approveLoading || !amount}
 													defaultValue={slippage}
 													onValueChanged={(val) => {
 														setSlippage(val);
@@ -903,7 +904,7 @@ export function SwapOfferCreatorContent({
 												/>
 											)}
 											<EditSwapExpiry
-												disabled={loading || approveLoading}
+												disabled={loading || approveLoading || !amount}
 												defaultValue={expireDuration}
 												offerMode={!!offer || offerMode}
 												canExecOffer={canExecuteOffer(offer)}

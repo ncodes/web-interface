@@ -402,6 +402,7 @@ export default function useConnector() {
 	// @throws Error if default network is not set
 	// @throws Error if chainId is unknown
 	function getChainInfo(): ChainInfo {
+		console.log('No chain', defaultNetwork, chainId);
 		if (!chainId) {
 			if (!defaultNetwork) throw new Error('default network not set');
 			return getChain(defaultNetwork) as ChainInfo;
