@@ -393,8 +393,9 @@ export function SwapOfferCreatorContent({
 	// Get the maximum base amount.
 	// Result cannot be greater than available liquidity
 	function getMaxBaseAmount() {
-		const { maxSwap, amount } = liquidity;
-		return !isZero(maxSwap) && toDec(maxSwap).lte(amount) ? maxSwap : amount;
+		const { maxSwap } = liquidity;
+		// return !isZero(maxSwap) && toDec(maxSwap).lte(amount) ? maxSwap : amount;
+		return maxSwap;
 	}
 
 	// Request and execute token allowance
