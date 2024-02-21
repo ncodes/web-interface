@@ -169,7 +169,7 @@ export function SwapOfferCreatorContent({
 	// Validate amount and quote amount
 	useEffect(() => {
 		const { baseDecimals, quoteDecimals } = market;
-		const { minSwap } = liquidity;
+		const { minSwap, amount: liqAmt } = liquidity;
 
 		let amtErrMsg = '';
 		if (amount != '') {
@@ -192,6 +192,10 @@ export function SwapOfferCreatorContent({
 			if (quoteAmt.mul(powOfD(1, quoteDecimals)).gt(toDec(quoteBal))) {
 				quoteAmtErrMsg = 'Insufficient balance';
 			}
+		}
+
+		if (amount != '' && toHDD(liqAmt, baseDecimals).lt(amount)) {
+			amtErrMsg = 'Insufficient liquidity';
 		}
 
 		setAmountErr(amtErrMsg);
