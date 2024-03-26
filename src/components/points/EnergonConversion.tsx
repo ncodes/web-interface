@@ -3,13 +3,13 @@
  * @see https://v0.dev/t/vMzZ4wev4IQ
  */
 
-import { getChain } from "@jointlabs/chains-info";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { isAddress } from "viem";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
 import { useMiscService } from "../../hooks/services/backend/useMiscService";
 import { usePointService } from "../../hooks/services/backend/usePointService";
+import { useUserService } from "../../hooks/services/backend/useUserService";
 import { useToast } from "../../hooks/useToast";
 import { formatToMoney, logError, toBN, toHD } from "../../libs/helpers";
 import Input2 from "../Input2";
@@ -18,8 +18,8 @@ import IconSpinner from "../icons/IconSpinner";
 import { Button } from "../ui/Button";
 
 export function EnergonConversion() {
-  const { address, ready, getTokenBalance, getChainInfo, sign } =
-    useConnectorContext();
+  const { address, ready, sign } = useConnectorContext();
+  const { getEnergonBalance } = useUserService();
   const [engBalance, setEngBalance] = useState("0");
   const { createPointFromEnergonBalance, checkPointExists } = usePointService();
   const { getPointsPerEnergon } = useMiscService();
@@ -30,6 +30,13 @@ export function EnergonConversion() {
   const getPointsPerEnergonQuery = useQuery({
     queryKey: ["getPointsPerEnergon"],
     queryFn: getPointsPerEnergon,
+    enabled: ready,
+    refetchInterval: false,
+  });
+
+  const getEnergonBalanceQuery = useQuery({
+    queryKey: ["getEnergonBalance", { address }],
+    queryFn: getEnergonBalance,
     enabled: ready,
     refetchInterval: false,
   });
@@ -46,23 +53,16 @@ export function EnergonConversion() {
   });
 
   useEffect(() => {
-    if (!ready) return;
-
-    const chainInfo = getChain(getChainInfo().chainId);
-    if (!chainInfo || !chainInfo.contracts?.energon) return;
-
-    getTokenBalance(
-      chainInfo.contracts?.energon.address as string,
-      address,
-    ).then((balance) => {
-      setEngBalance(toHD(balance, 18));
-    });
-  }, [ready]);
+    if (getEnergonBalanceQuery.isLoading) return;
+    if (getEnergonBalanceQuery.data) {
+      setEngBalance(toHD(getEnergonBalanceQuery.data, 18));
+    }
+  }, [getEnergonBalanceQuery.isLoading, getEnergonBalanceQuery.data]);
 
   function canTransfer() {
     return (
       !loading &&
-      !ready &&
+      ready &&
       isPointGrantedQuery.data == false &&
       beneficiaryAddress &&
       isAddress(beneficiaryAddress) &&
@@ -82,6 +82,7 @@ export function EnergonConversion() {
         beneficiary: beneficiaryAddress,
         sig,
       });
+      await isPointGrantedQuery.refetch();
       notifySuccess("Points transferred successfully!", { label: "Success" });
     } catch (error) {
       notifyError((error as { message: string }).message, { label: "Error" });
@@ -132,7 +133,7 @@ export function EnergonConversion() {
               value={beneficiaryAddress}
               onChange={(e) => setBeneficiaryAddress(e.target.value)}
               afterInput={
-                <div className="mt-1">
+                <div className="mt-1 mr-1 relative -top-0.5">
                   <Button
                     variant="link"
                     size="xs"
@@ -180,7 +181,7 @@ export function EnergonConversion() {
             <span>
               <IconCheckCircle width="20" />
             </span>
-            <span>Points Already Claimed</span>
+            <span>Points Claimed</span>
           </label>
         </div>
       )}
