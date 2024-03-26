@@ -84,11 +84,11 @@ export function NFTConversion() {
   }
 
   return (
-    <div className="flex flex-col gap-y-3 w-[400px]">
+    <div className="flex flex-col gap-y-3 w-[400px] px-1 xxs:px-3 sm:px-5 md:px-0">
       <div className="bg-card-background border border-card-border p-6 w-full max-w-md mx-auto rounded-lg shadow-md flex flex-col">
         <div className="mb-4 flex justify-center items-center">
           <WalletIcon className="w-4 h-4 mr-2" />
-          <h1 className="text-lg font-semibold tracking-wider">
+          <h1 className="text-sm md:text-lg font-semibold tracking-wider">
             Total Owned / Points Earned:
           </h1>
         </div>

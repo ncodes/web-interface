@@ -25,10 +25,14 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
         setCurrentTab(value);
       }}
     >
-      <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
-        <ScrollAreaHorizontal type="scroll" className="w-full">
-          <ScrollOverflowIndicator>
-            <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
+      <ScrollOverflowIndicator
+        arrowContainerRightClassName="rounded-tr-3xl right-[1px]"
+        arrowContainerLeftClassName="rounded-tl-3xl"
+        showArrow
+      >
+        <ScrollAreaHorizontal type="scroll" className="w-full rounded-t-3xl">
+          <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
+            <div className="flex flex-1 w-full items-center px-1 py-2 pt-0">
               <TabsTrigger
                 value="leaderboard"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
@@ -66,16 +70,16 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
                 NFT
               </TabsTrigger>
             </div>
-          </ScrollOverflowIndicator>
+          </TabsList>
         </ScrollAreaHorizontal>
-        <div className="flex shrink-0 gap-2 items-center justify-end">
-          {loc.pathname != "/energon" && loc.pathname != "/nft" && (
-            <div className="hidden md:block">
-              <PointSearchBar />
-            </div>
-          )}
-        </div>
-      </TabsList>
+      </ScrollOverflowIndicator>
+      <div className="flex shrink-0 gap-2 items-center justify-end">
+        {loc.pathname != "/energon" && loc.pathname != "/nft" && (
+          <div className="hidden md:block">
+            <PointSearchBar />
+          </div>
+        )}
+      </div>
       {currentTab == "leaderboard" && <LeaderboardTabContent />}
       {currentTab == "referrals" && <ReferralsTabContent />}
       {currentTab == "energon" && <EnergonConversionTabContent />}
