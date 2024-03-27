@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { EnergonConversionTabContent } from "../components/points/EnergonConversionTabContent.tsx";
+import { GalxeConverstionTabContent } from "../components/points/GalxeConversionTabContent.tsx";
 import { LeaderboardTabContent } from "../components/points/LeaderboardTabContent.tsx";
 import { NFTConverstionTabContent } from "../components/points/NFTConversionTabContent.tsx";
 import { PointSearchBar } from "../components/points/PointSearchBar.tsx";
@@ -69,21 +70,33 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               >
                 NFT
               </TabsTrigger>
+              <TabsTrigger
+                value="galxe"
+                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={async () => {
+                  navigate("/galxe");
+                }}
+              >
+                Galxe
+              </TabsTrigger>
+            </div>
+            <div className="flex shrink-0 items-center justify-end">
+              {loc.pathname != "/energon" &&
+                loc.pathname != "/nft" &&
+                loc.pathname != "/galxe" && (
+                  <div className="hidden lg:block">
+                    <PointSearchBar />
+                  </div>
+                )}
             </div>
           </TabsList>
         </ScrollAreaHorizontal>
       </ScrollOverflowIndicator>
-      <div className="flex shrink-0 gap-2 items-center justify-end">
-        {loc.pathname != "/energon" && loc.pathname != "/nft" && (
-          <div className="hidden md:block">
-            <PointSearchBar />
-          </div>
-        )}
-      </div>
       {currentTab == "leaderboard" && <LeaderboardTabContent />}
       {currentTab == "referrals" && <ReferralsTabContent />}
       {currentTab == "energon" && <EnergonConversionTabContent />}
       {currentTab == "nft" && <NFTConverstionTabContent />}
+      {currentTab == "galxe" && <GalxeConverstionTabContent />}
     </Tabs>
   );
 }
@@ -97,7 +110,8 @@ export default function Points({ defaultTab }: { defaultTab?: string }) {
       body={<MarketTabs defaultTab={defaultTab} />}
       rightSide={
         loc.pathname != "/energon" &&
-        loc.pathname != "/nft" && (
+        loc.pathname != "/nft" &&
+        loc.pathname != "/galxe" && (
           <div className="flex w-full justify-between flex-col pt-3">
             <PointStream />
             <div className="relative">
@@ -107,7 +121,7 @@ export default function Points({ defaultTab }: { defaultTab?: string }) {
             </div>
           </div>
         )
-      }
+      } 
     />
   );
 }

@@ -132,6 +132,11 @@ const routes = [
     errorElement: <RootErrorBoundary />,
   },
   {
+    path: makePath("/galxe"),
+    element: <App page={<Points defaultTab="galxe" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
     path: makePath("/r/:code"),
     element: <App page={<RefPage />} />,
     errorElement: <RootErrorBoundary />,

@@ -125,7 +125,8 @@ export function EnergonConversion() {
               </label>
               <p className="text-xs font-light tracking-wider text-gray-400">
                 Transfer points earned from owning Energon to an address of your
-                choice. The beneficiary address will receive the points.
+                choice. The beneficiary address will receive the points.{" "}
+                <i>The action can note be reversed.</i>
               </p>
             </div>
             <Input2

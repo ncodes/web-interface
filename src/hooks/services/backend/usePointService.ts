@@ -14,13 +14,7 @@ export interface GetLatestPointsParams {
   order?: "asc" | "desc";
 }
 
-export interface CreatePointFromEnergonBalanceParams {
-  signer: string;
-  beneficiary: string;
-  sig: string;
-}
-
-export interface CreatePointFromNFTOwnedParams {
+export interface CreatePointBySigParams {
   signer: string;
   beneficiary: string;
   sig: string;
@@ -102,7 +96,7 @@ export function usePointService() {
    * @returns
    */
   async function createPointFromEnergonBalance(
-    body: CreatePointFromEnergonBalanceParams,
+    body: CreatePointBySigParams,
   ): Promise<undefined> {
     try {
       const { beneficiary, signer, sig } = body;
@@ -127,7 +121,7 @@ export function usePointService() {
    * @returns
    */
   async function createPointFromNFTOwned(
-    body: CreatePointFromNFTOwnedParams,
+    body: CreatePointBySigParams,
   ): Promise<undefined> {
     try {
       const { beneficiary, signer, sig } = body;
@@ -136,6 +130,31 @@ export function usePointService() {
       await axios({
         method: "post",
         url: `${getChainInfo().apiUrl}/v1/points/from-nft-owned`,
+        data: { beneficiary, signer, sig },
+        headers,
+      });
+
+      return;
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
+   * Create points from Galxe points
+   * @param ctx The query context
+   * @returns
+   */
+  async function createPointFromGalxe(
+    body: CreatePointBySigParams,
+  ): Promise<undefined> {
+    try {
+      const { beneficiary, signer, sig } = body;
+      const headers = {};
+
+      await axios({
+        method: "post",
+        url: `${getChainInfo().apiUrl}/v1/points/from-galxe`,
         data: { beneficiary, signer, sig },
         headers,
       });
@@ -171,6 +190,7 @@ export function usePointService() {
     getLatestPoints,
     createPointFromEnergonBalance,
     createPointFromNFTOwned,
+    createPointFromGalxe,
     checkPointExists,
   };
 }

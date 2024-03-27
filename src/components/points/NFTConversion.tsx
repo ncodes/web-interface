@@ -111,8 +111,9 @@ export function NFTConversion() {
                 Transfer Points
               </label>
               <p className="text-xs font-light tracking-wider text-gray-400">
-                Transfer points earned from owning Energon to an address of your
-                choice. The beneficiary address will receive the points.
+                Transfer points earned to an address of your choice. The
+                beneficiary address will receive the points.{" "}
+                <i>The action can note be reversed.</i>
               </p>
             </div>
             <Input2

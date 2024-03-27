@@ -149,11 +149,36 @@ export function useUserService() {
     }
   }
 
+  /**
+   * Get galxe balance
+   * @param ctx The query function context
+   * @returns
+   */
+  async function getGalxePoints(
+    ctx: QueryFunctionContext<[string, { address: string }]>,
+  ): Promise<number> {
+    try {
+      const [, params] = ctx.queryKey;
+      const headers = {};
+
+      const resp = await axios({
+        url: `${getChainInfo().apiUrl}/v1/users/galxe-points/${params.address}`,
+        method: "get",
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data.points);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     getUser,
     logOnlineStatus,
     registerDevice,
     getEnergonBalance,
     getNFTInfo,
+    getGalxePoints,
   };
 }
