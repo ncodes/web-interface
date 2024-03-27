@@ -20,6 +20,7 @@ export function GalxeConversion() {
   const { address, ready, sign } = useConnectorContext();
   const { getGalxePoints } = useUserService();
   const [totalPoints, setTotalPoints] = useState(0);
+  const [points, setPoints] = useState(0);
   const { createPointFromGalxe, checkPointExists } = usePointService();
   const [beneficiaryAddress, setBeneficiaryAddress] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,7 +47,8 @@ export function GalxeConversion() {
   useEffect(() => {
     if (getGalxePointQuery.isLoading) return;
     if (getGalxePointQuery.data != undefined) {
-      setTotalPoints(getGalxePointQuery.data);
+      setTotalPoints(getGalxePointQuery.data.actualPoints);
+      setPoints(getGalxePointQuery.data.points);
     }
   }, [getGalxePointQuery.isLoading, getGalxePointQuery.data]);
 
@@ -87,11 +89,14 @@ export function GalxeConversion() {
         <div className="mb-4 flex justify-center items-center">
           <WalletIcon className="w-4 h-4 mr-2" />
           <h1 className="text-sm md:text-lg font-semibold tracking-wider">
-            Points Earned:
+            Total Points / Points Earned
           </h1>
         </div>
         <p className="text-gray-200 text-lg text-center flex gap-2 justify-center items-center">
-          <span className="text-orange-500 text-sm">{totalPoints} Points</span>
+          <span>{points}</span>
+          <span className="text-orange-500 text-sm">
+            ({totalPoints || "0"} Points)
+          </span>
         </p>
       </div>
 

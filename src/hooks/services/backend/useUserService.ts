@@ -156,7 +156,7 @@ export function useUserService() {
    */
   async function getGalxePoints(
     ctx: QueryFunctionContext<[string, { address: string }]>,
-  ): Promise<number> {
+  ): Promise<{ points: number; actualPoints: number }> {
     try {
       const [, params] = ctx.queryKey;
       const headers = {};
@@ -167,7 +167,7 @@ export function useUserService() {
         headers,
       });
 
-      return Promise.resolve(resp.data.data.points);
+      return Promise.resolve(resp.data.data);
     } catch (e) {
       return Promise.reject(handleAxiosError(e as never));
     }
