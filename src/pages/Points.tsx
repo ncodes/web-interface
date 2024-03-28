@@ -49,7 +49,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               >
                 Leaderboard
               </TabsTrigger>
-              <TabsTrigger
+              {/* <TabsTrigger
                 value="referrals"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
@@ -57,7 +57,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
                 }}
               >
                 Referrals
-              </TabsTrigger>
+              </TabsTrigger> */}
               <TabsTrigger
                 value="energon"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"

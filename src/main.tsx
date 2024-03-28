@@ -15,7 +15,6 @@ import Mediation from "./pages/Mediation.tsx";
 import Offer from "./pages/Offer.tsx";
 import Offers from "./pages/Offers.tsx";
 import Points from "./pages/Points.tsx";
-import RefPage from "./pages/Ref.tsx";
 import Swap from "./pages/Swap.tsx";
 import Swaps from "./pages/Swaps.tsx";
 import { RootErrorBoundary } from "./pages/errors/root.tsx";
@@ -117,11 +116,6 @@ const routes = [
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/referrals"),
-    element: <App page={<Points defaultTab="referrals" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
-  {
     path: makePath("/energon"),
     element: <App page={<Points defaultTab="energon" />} />,
     errorElement: <RootErrorBoundary />,
@@ -136,11 +130,16 @@ const routes = [
     element: <App page={<Points defaultTab="galxe" />} />,
     errorElement: <RootErrorBoundary />,
   },
-  {
-    path: makePath("/r/:code"),
-    element: <App page={<RefPage />} />,
-    errorElement: <RootErrorBoundary />,
-  },
+  // {
+  //   path: makePath("/referrals"),
+  //   element: <App page={<Points defaultTab="referrals" />} />,
+  //   errorElement: <RootErrorBoundary />,
+  // },
+  //   {
+  //     path: makePath("/r/:code"),
+  //     element: <App page={<RefPage />} />,
+  //     errorElement: <RootErrorBoundary />,
+  //   },
 ];
 
 if (isLocal()) {
