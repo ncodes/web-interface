@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
@@ -18,9 +18,15 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   const [currentTab, setCurrentTab] = useState(defaultTab || "leaderboard");
   const loc = useLocation();
 
+  useEffect(() => {
+    if (defaultTab) {
+      setCurrentTab(defaultTab);
+    }
+  }, [defaultTab]);
+
   return (
     <Tabs
-      defaultValue={defaultTab || "leaderboard"}
+      value={currentTab || "leaderboard"}
       className="w-full transition-all duration-500  flex flex-1 flex-col"
       onValueChange={(value) => {
         setCurrentTab(value);
@@ -121,7 +127,7 @@ export default function Points({ defaultTab }: { defaultTab?: string }) {
             </div>
           </div>
         )
-      } 
+      }
     />
   );
 }
