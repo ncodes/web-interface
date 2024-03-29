@@ -48,7 +48,7 @@ export function EnergonConversion() {
   const isPointGrantedQuery = useQuery({
     queryKey: ["isPointGranted", `energon_point:${address}`],
     queryFn: checkPointExists,
-    enabled: !!address,
+    enabled: !!address && ready,
     refetchInterval: 60000,
   });
 
@@ -113,12 +113,12 @@ export function EnergonConversion() {
         </p>
       </div>
 
-      {isPointGrantedQuery.data == false && (
+      {isPointGrantedQuery.data == false && engBalance != "0" && (
         <div className="bg-card-background border border-card-border p-6 w-full max-w-md mx-auto rounded-lg shadow-md flex flex-col items-center">
           <div className="w-full mb-4 flex flex-col gap-4">
             <div>
               <label
-                className="block text-sm font-medium text-gray-300 mb-2 tracking-wider"
+                className="block font-medium text-gray-300 mb-2 tracking-wider"
                 htmlFor="points"
               >
                 Transfer Points
