@@ -13,7 +13,7 @@ export function useAssetService() {
    * Get swappable token list
    */
   async function getList(
-    ctx: QueryFunctionContext<[string, { network: string }]>
+    ctx: QueryFunctionContext<[string, { network: string }]>,
   ): Promise<AssetInfo[]> {
     try {
       const [, params] = ctx.queryKey;
