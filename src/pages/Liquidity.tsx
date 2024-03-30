@@ -44,6 +44,7 @@ function LiquidityPage({
   const user = useStore((state) => state.user);
   const { countUnread } = useOfferService();
   const mounted = useMounted(1000);
+  const restricted = useStore((state) => state.restricted);
 
   const unreadOfferCount = useQuery({
     queryKey: [
@@ -103,15 +104,17 @@ function LiquidityPage({
           </ScrollAreaHorizontal>
         </ScrollOverflowIndicator>
         <div className="hidden md:inline xl:hidden">
-          <Button
-            size="sm"
-            className="w-[150px] gap-2 items-center"
-            onClick={() => {
-              toggleOpenState && toggleOpenState("createOfferSheet");
-            }}
-          >
-            <IconOffer width="20px" /> Create Offer
-          </Button>
+          {!restricted && (
+            <Button
+              size="sm"
+              className="w-[150px] gap-2 items-center"
+              onClick={() => {
+                toggleOpenState && toggleOpenState("createOfferSheet");
+              }}
+            >
+              <IconOffer width="20px" /> Create Offer
+            </Button>
+          )}
         </div>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
           <DropdownMenu>
@@ -121,14 +124,16 @@ function LiquidityPage({
               </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="shadow-xl drop-shadow-2xl rounded-xl bg-modal-background border-gray-600 text-gray-200 tracking-wide px-0 py-0">
-              <DropdownMenuItem
-                className="gap-1"
-                onClick={() => {
-                  toggleOpenState && toggleOpenState("createOfferSheet");
-                }}
-              >
-                <IconOffer width="20px" /> Create Offer
-              </DropdownMenuItem>
+              {!restricted && (
+                <DropdownMenuItem
+                  className="gap-1"
+                  onClick={() => {
+                    toggleOpenState && toggleOpenState("createOfferSheet");
+                  }}
+                >
+                  <IconOffer width="20px" /> Create Offer
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

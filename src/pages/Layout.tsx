@@ -11,6 +11,7 @@ import { Footer } from "../components/Footer.tsx";
 import { Header } from "../components/Header.tsx";
 import { LeftSidebar } from "../components/LeftSidebar.tsx";
 import { NotificationSheet } from "../components/NotificationSheet.tsx";
+import RestrictedLocationBlocker from "../components/RestrictedLocationBlocker.tsx";
 import { ReviewViewerSheet } from "../components/ReviewViewerSheet.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
@@ -47,10 +48,11 @@ export default function Layout({
   const location = useLocation();
   const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
   const isXl = useMediaQuery("(min-width: 1280px)");
-  const { address, ready, getChainInfo, chain } = useConnectorContext();
+  const { address, ready, getChainInfo } = useConnectorContext();
   const user = useStore((state) => state.user);
   const setContractsParams = useStore((state) => state.setContractsParams);
   const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
+  const setCountryCode = useStore((state) => state.setCountryCode);
   const windowFocus = useWindowFocus();
   const setUser = useStore((state) => state.setUser);
   const setProtoFee = useStore((state) => state.setProtoFee);
@@ -58,7 +60,7 @@ export default function Layout({
   const accessToken = getAccessToken(address);
   const { subscribeForWebPush } = useNotificationService();
   const { getContractParams } = useMiscService();
-  const { getProtocolFees } = useMiscService();
+  const { getProtocolFees, getRequestCountryCode } = useMiscService();
   const ref = useRef(null);
   const { scrollY } = useScroll();
   const [scrollYPos, setScrollYPos] = useState(0);
@@ -96,6 +98,12 @@ export default function Layout({
     queryFn: getContractParams,
     enabled: mounted && !!address,
     refetchIntervalInBackground: false,
+    refetchInterval: false,
+  });
+
+  const userCountryCodeQuery = useQuery({
+    queryKey: ["getUserCountryCode"],
+    queryFn: getRequestCountryCode,
     refetchInterval: false,
   });
 
@@ -137,6 +145,12 @@ export default function Layout({
     setProtoFee(protoFeeQuery.data);
   }, [protoFeeQuery.isSuccess, protoFeeQuery.data]);
 
+  // Set country code
+  useEffect(() => {
+    if (!userCountryCodeQuery.data) return;
+    setCountryCode(userCountryCodeQuery.data);
+  }, [userCountryCodeQuery.isSuccess, userCountryCodeQuery.data]);
+
   // Set mobile menu open state based on screen size.
   useEffect(() => {
     setLeftSideMenuOpen(isXl);
@@ -151,6 +165,7 @@ export default function Layout({
 
   // Check native NFT Ownership every 5 minutes.
   useInterval(() => {
+    if (!getChainInfo().contracts?.nft.address) return;
     checkNativeNFTOwnership();
   }, 300 * 1000);
 
@@ -238,6 +253,9 @@ export default function Layout({
         <meta name="theme-color" content="#030507" />
         <body className="bg-background" />
       </Helmet>
+
+      <RestrictedLocationBlocker />
+
       <div ref={ref} className="container-x flex h-screen text-white text ">
         <LeftSidebar
           open={leftSideMenuOpen}
