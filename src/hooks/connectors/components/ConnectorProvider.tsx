@@ -37,7 +37,7 @@ const config = createConfig(
     appIcon: AppIcon,
     transports: {
       [sepolia.id]: http(`https://sepolia.infura.io/v3/${infuraId}`),
-      //   [arbitrum.id]: http(`https://arbitrum-mainnet.infura.io/v3/${infuraId}`),
+      //   [arbitrum.id]: http(`https://arbitrum-mainnet.infura.io/v3/${infuraId}`), // TODO: remove when arbitrum is enabled
       [hardhat.id]: http(hardhat.rpcUrls.default.http[0]),
     },
   }),
