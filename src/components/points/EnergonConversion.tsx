@@ -11,7 +11,7 @@ import { useMiscService } from "../../hooks/services/backend/useMiscService";
 import { usePointService } from "../../hooks/services/backend/usePointService";
 import { useUserService } from "../../hooks/services/backend/useUserService";
 import { useToast } from "../../hooks/useToast";
-import { formatToMoney, logError, toBN, toDec, toHD } from "../../libs/helpers";
+import { formatToMoney, logError, toDec, toHD } from "../../libs/helpers";
 import Input2 from "../Input2";
 import IconCheckCircle from "../icons/IconCheckCircle";
 import IconSpinner from "../icons/IconSpinner";
@@ -56,7 +56,6 @@ export function EnergonConversion() {
     if (getEnergonBalanceQuery.isLoading) return;
     if (getEnergonBalanceQuery.data) {
       setEngBalance(getEnergonBalanceQuery.data);
-      // setEngBalance("0.05");
     }
   }, [getEnergonBalanceQuery.isLoading, getEnergonBalanceQuery.data]);
 
@@ -67,7 +66,7 @@ export function EnergonConversion() {
       isPointGrantedQuery.data == false &&
       beneficiaryAddress &&
       isAddress(beneficiaryAddress) &&
-      toBN(toHD(engBalance, 18))
+      toDec(toHD(engBalance, 18))
         .mul(getPointsPerEnergonQuery.data || 0)
         .gt(0)
     );
