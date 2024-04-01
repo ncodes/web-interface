@@ -34,9 +34,9 @@ Timestamp: ${moment().toISOString()}`;
 
 export function getSupportedChains() {
   let chains = getChains();
+  chains = chains.filter((chain) => chain.id !== arbitrum.id); // TODO: remove this when arbitrum is enabled
   if (isProd()) {
     chains = chains.filter((chain) => chain.id !== hardhat.id);
-    chains = chains.filter((chain) => chain.id !== arbitrum.id); // TODO: remove this when arbitrum is enabled
   }
   return chains;
 }
