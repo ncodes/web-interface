@@ -55,7 +55,8 @@ export function EnergonConversion() {
   useEffect(() => {
     if (getEnergonBalanceQuery.isLoading) return;
     if (getEnergonBalanceQuery.data) {
-      setEngBalance(toHD(getEnergonBalanceQuery.data, 18));
+      setEngBalance(getEnergonBalanceQuery.data);
+      // setEngBalance("0.05");
     }
   }, [getEnergonBalanceQuery.isLoading, getEnergonBalanceQuery.data]);
 
@@ -66,7 +67,7 @@ export function EnergonConversion() {
       isPointGrantedQuery.data == false &&
       beneficiaryAddress &&
       isAddress(beneficiaryAddress) &&
-      toBN(engBalance)
+      toBN(toHD(engBalance, 18))
         .mul(getPointsPerEnergonQuery.data || 0)
         .gt(0)
     );
@@ -102,10 +103,10 @@ export function EnergonConversion() {
           </h1>
         </div>
         <p className="text-gray-200 text-lg text-center flex gap-2 justify-center items-center">
-          <span>{formatToMoney(engBalance)}</span>
+          <span>{formatToMoney(toHD(engBalance, 18))}</span>
           <span className="text-orange-500 text-sm">
             (
-            {toDec(engBalance)
+            {toDec(toHD(engBalance, 18))
               .mul(getPointsPerEnergonQuery.data || 0)
               .toFixed()}{" "}
             Points)
