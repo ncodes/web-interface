@@ -107,7 +107,7 @@ export function EnergonConversion() {
             (
             {toDec(toHD(engBalance, 18))
               .mul(getPointsPerEnergonQuery.data || 0)
-              .toFixed()}{" "}
+              .toFixed(2)}{" "}
             Points)
           </span>
         </p>
