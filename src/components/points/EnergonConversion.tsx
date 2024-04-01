@@ -11,7 +11,7 @@ import { useMiscService } from "../../hooks/services/backend/useMiscService";
 import { usePointService } from "../../hooks/services/backend/usePointService";
 import { useUserService } from "../../hooks/services/backend/useUserService";
 import { useToast } from "../../hooks/useToast";
-import { formatToMoney, logError, toBN, toHD } from "../../libs/helpers";
+import { formatToMoney, logError, toBN, toDec, toHD } from "../../libs/helpers";
 import Input2 from "../Input2";
 import IconCheckCircle from "../icons/IconCheckCircle";
 import IconSpinner from "../icons/IconSpinner";
@@ -105,9 +105,9 @@ export function EnergonConversion() {
           <span>{formatToMoney(engBalance)}</span>
           <span className="text-orange-500 text-sm">
             (
-            {toBN(engBalance)
+            {toDec(engBalance)
               .mul(getPointsPerEnergonQuery.data || 0)
-              .toString()}{" "}
+              .toFixed()}{" "}
             Points)
           </span>
         </p>
