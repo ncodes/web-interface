@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
 
+import { arbitrum } from "viem/chains";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { isProd } from "../libs/helpers.ts";
 
@@ -66,11 +67,15 @@ export function NetworkSelector() {
   }, [curChain]);
 
   useEffect(() => {
-    const chains = getChainsID(
+    let chains = getChainsID(
       false,
       true,
       curChain?.chainId ? [curChain?.chainId] : [],
     );
+
+    // TODO remove before arbitrum testnet
+    chains = chains.filter((id) => getChain(id)?.chainId != arbitrum.id);
+
     setMainChainsID(chains);
   }, [curChain]);
 
