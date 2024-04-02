@@ -22,6 +22,7 @@ export enum RestrictScope {
   GLOBAL,
   MARKET,
   OFFER,
+  MARKET_PERM
 }
 
 export interface IStore {

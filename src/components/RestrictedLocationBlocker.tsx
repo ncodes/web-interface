@@ -2,9 +2,9 @@ import { AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import { useGeofence } from "../hooks/geofence/useGeofence.ts";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import useStore, { RestrictScope } from "../hooks/store/useStore.ts";
-import { useGeofence } from "../hooks/useGeofence.ts";
 import { Button } from "./ui/Button.tsx";
 import {
   Dialog,
@@ -18,8 +18,9 @@ export default function RestrictedLocationBlocker() {
     isGlobalDisallowed,
     isDisallowedForInteractiveMarket,
     isDisallowedForMarket,
+    isAllowedForMarket,
   } = useGeofence();
-  const { network } = useConnectorContext();
+  const { network, address } = useConnectorContext();
   const { getOffer } = useOfferService();
   const countryCode = useStore((state) => state.countryCode);
   const restricted = useStore((state) => state.restricted);
@@ -49,6 +50,7 @@ export default function RestrictedLocationBlocker() {
     ) => {
       isDisallowedForMarket(network, marketAddress, countryCode).then(
         (restricted) => {
+          console.log("aa");
           setRestricted(restricted);
           setRestrictedScope(scope);
 
@@ -60,6 +62,15 @@ export default function RestrictedLocationBlocker() {
             ).then((restricted) => {
               setRestricted(restricted);
               setRestrictedScope(RestrictScope.MARKET);
+
+              if (!restricted) {
+                isAllowedForMarket(network, marketAddress, address).then(
+                  (allowed) => {
+                    // setRestricted(allowed);
+                    // setRestrictedScope(RestrictScope.MARKET);
+                  },
+                );
+              }
             });
           }
         },
@@ -144,6 +155,16 @@ export function RestrictedLocationNotice({
               or organizations who are residents of, or are located,
               incorporated or have a registered agent in the U.S or a restricted
               territory.
+            </span>
+          </>
+        )}
+
+        {restrictedScope === RestrictScope.MARKET_PERM && (
+          <>
+            <span>
+              You have not been whitelisted to access this market. Please
+              contact support in our Discord server if you think this is an
+              error.
             </span>
           </>
         )}

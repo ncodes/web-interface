@@ -1,4 +1,5 @@
-import { useMarketService } from "./services/backend/useMarketService";
+import { useMarketService } from "../services/backend/useMarketService";
+import MarketsAllowlist from "./allowlist";
 
 export function useGeofence() {
   const { getMarket } = useMarketService();
@@ -71,9 +72,31 @@ export function useGeofence() {
     return false;
   }
 
+  /**
+   * Check if the user is allowed to access the market
+   * @param network The network name
+   * @param marketAddress The market address
+   * @param userAddress The user address
+   */
+  async function isAllowedForMarket(
+    network: string,
+    marketAddress: string,
+    userAddress: string,
+  ) {
+    const allowList = MarketsAllowlist;
+    const marketKey = `${network}_${marketAddress}`;
+    if (!allowList || !allowList[marketKey]) return true;
+    return (
+      (allowList[marketKey] as string[]).find(
+        (addr) => addr.toLowerCase() === userAddress.toLowerCase(),
+      ) != null
+    );
+  }
+
   return {
     isGlobalDisallowed,
     isDisallowedForInteractiveMarket,
     isDisallowedForMarket,
+    isAllowedForMarket,
   };
 }
