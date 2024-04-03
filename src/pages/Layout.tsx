@@ -1,4 +1,4 @@
-import RestrictedLocationBlocker from "@/components/RestrictedLocationBlocker.1.tsx";
+import RestrictedLocationBlocker from "@/components/RestrictedLocationBlocker.tsx";
 import * as Sentry from "@sentry/browser";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
@@ -97,7 +97,7 @@ export default function Layout({
   const contractParamsQuery = useQuery({
     queryKey: ["getContractParams", { network: getChainInfo().queryName }],
     queryFn: getContractParams,
-    enabled: mounted && !!address,
+    enabled: mounted,
     refetchIntervalInBackground: false,
     refetchInterval: false,
   });
