@@ -96,7 +96,7 @@ export default function Layout({
   const contractParamsQuery = useQuery({
     queryKey: ["getContractParams", { network: getChainInfo().queryName }],
     queryFn: getContractParams,
-    enabled: mounted && !!address,
+    enabled: mounted,
     refetchIntervalInBackground: false,
     refetchInterval: false,
   });
