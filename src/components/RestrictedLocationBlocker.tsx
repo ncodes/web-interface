@@ -35,6 +35,7 @@ export default function RestrictedLocationBlocker() {
   // then check if the user is restricted from accessing an interactive market
   useEffect(() => {
     if (!network || !countryCode) return;
+    setRestricted(false);
 
     if (isGlobalDisallowed(countryCode)) {
       setRestricted(true);
@@ -50,7 +51,6 @@ export default function RestrictedLocationBlocker() {
     ) => {
       isDisallowedForMarket(network, marketAddress, countryCode).then(
         (restricted) => {
-          console.log("aa");
           setRestricted(restricted);
           setRestrictedScope(scope);
 
@@ -66,8 +66,8 @@ export default function RestrictedLocationBlocker() {
               if (!restricted) {
                 isAllowedForMarket(network, marketAddress, address).then(
                   (allowed) => {
-                    // setRestricted(allowed);
-                    // setRestrictedScope(RestrictScope.MARKET);
+                    setRestricted(!allowed);
+                    setRestrictedScope(RestrictScope.MARKET_PERM);
                   },
                 );
               }
