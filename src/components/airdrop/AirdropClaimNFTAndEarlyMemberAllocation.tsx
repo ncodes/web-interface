@@ -201,14 +201,15 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
                 <>No "Early Member" role</>
               )}
             </div>
-            {user?.isEarlyDiscordMember && (
-              <div className="text-xs tracking-wider text-gray-600">
-                Allocation:{" "}
-                <span className="text-gray-100">
-                  {formatToMoney(user?.earlyDiscordMemberAlloc || "0")} P2P
-                </span>
-              </div>
-            )}
+            <div className="text-xs tracking-wider text-gray-600">
+              Allocation:{" "}
+              <span className="text-gray-100">
+                {user?.isEarlyDiscordMember
+                  ? formatToMoney(user?.earlyDiscordMemberAlloc || "0")
+                  : "0"}{" "}
+                P2P
+              </span>
+            </div>
           </span>
           <span className="flex-1 flex justify-end">
             {user?.isEarlyDiscordMember && !user?.earlyDiscordMemberClaimed && (
