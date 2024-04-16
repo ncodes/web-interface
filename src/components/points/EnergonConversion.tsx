@@ -3,23 +3,23 @@
  * @see https://v0.dev/t/vMzZ4wev4IQ
  */
 
-import { getChain } from "@jointlabs/chains-info";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { isAddress } from "viem";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
 import { useMiscService } from "../../hooks/services/backend/useMiscService";
 import { usePointService } from "../../hooks/services/backend/usePointService";
+import { useUserService } from "../../hooks/services/backend/useUserService";
 import { useToast } from "../../hooks/useToast";
-import { formatToMoney, logError, toBN, toHD } from "../../libs/helpers";
+import { formatToMoney, logError, toDec, toHD } from "../../libs/helpers";
 import Input2 from "../Input2";
 import IconCheckCircle from "../icons/IconCheckCircle";
 import IconSpinner from "../icons/IconSpinner";
 import { Button } from "../ui/Button";
 
 export function EnergonConversion() {
-  const { address, ready, getTokenBalance, getChainInfo, sign } =
-    useConnectorContext();
+  const { address, ready, sign } = useConnectorContext();
+  const { getEnergonBalance } = useUserService();
   const [engBalance, setEngBalance] = useState("0");
   const { createPointFromEnergonBalance, checkPointExists } = usePointService();
   const { getPointsPerEnergon } = useMiscService();
@@ -34,6 +34,13 @@ export function EnergonConversion() {
     refetchInterval: false,
   });
 
+  const getEnergonBalanceQuery = useQuery({
+    queryKey: ["getEnergonBalance", { address }],
+    queryFn: getEnergonBalance,
+    enabled: ready,
+    refetchInterval: false,
+  });
+
   const createPoint = useMutation({
     mutationFn: createPointFromEnergonBalance,
   });
@@ -41,32 +48,25 @@ export function EnergonConversion() {
   const isPointGrantedQuery = useQuery({
     queryKey: ["isPointGranted", `energon_point:${address}`],
     queryFn: checkPointExists,
-    enabled: !!address,
+    enabled: !!address && ready,
     refetchInterval: 60000,
   });
 
   useEffect(() => {
-    if (!ready) return;
-
-    const chainInfo = getChain(getChainInfo().chainId);
-    if (!chainInfo || !chainInfo.contracts?.energon) return;
-
-    getTokenBalance(
-      chainInfo.contracts?.energon.address as string,
-      address,
-    ).then((balance) => {
-      setEngBalance(toHD(balance, 18));
-    });
-  }, [ready]);
+    if (getEnergonBalanceQuery.isLoading) return;
+    if (getEnergonBalanceQuery.data) {
+      setEngBalance(getEnergonBalanceQuery.data);
+    }
+  }, [getEnergonBalanceQuery.isLoading, getEnergonBalanceQuery.data]);
 
   function canTransfer() {
     return (
       !loading &&
-      !ready &&
+      ready &&
       isPointGrantedQuery.data == false &&
       beneficiaryAddress &&
       isAddress(beneficiaryAddress) &&
-      toBN(engBalance)
+      toDec(toHD(engBalance, 18))
         .mul(getPointsPerEnergonQuery.data || 0)
         .gt(0)
     );
@@ -82,6 +82,7 @@ export function EnergonConversion() {
         beneficiary: beneficiaryAddress,
         sig,
       });
+      await isPointGrantedQuery.refetch();
       notifySuccess("Points transferred successfully!", { label: "Success" });
     } catch (error) {
       notifyError((error as { message: string }).message, { label: "Error" });
@@ -92,39 +93,40 @@ export function EnergonConversion() {
   }
 
   return (
-    <div className="flex flex-col gap-y-3 w-[400px]">
+    <div className="flex flex-col gap-y-3 w-[400px] px-5 md:px-0">
       <div className="bg-card-background border border-card-border p-6 w-full max-w-md mx-auto rounded-lg shadow-md flex flex-col">
         <div className="mb-4 flex justify-center items-center">
           <WalletIcon className="w-4 h-4 mr-2" />
-          <h1 className="text-lg font-semibold tracking-wider">
+          <h1 className="text-sm md:text-lg font-semibold tracking-wider">
             Your Energon Balance:
           </h1>
         </div>
         <p className="text-gray-200 text-lg text-center flex gap-2 justify-center items-center">
-          <span>{formatToMoney(engBalance)}</span>
+          <span>{formatToMoney(toHD(engBalance, 18))}</span>
           <span className="text-orange-500 text-sm">
             (
-            {toBN(engBalance)
+            {toDec(toHD(engBalance, 18))
               .mul(getPointsPerEnergonQuery.data || 0)
-              .toString()}{" "}
+              .toFixed(2)}{" "}
             Points)
           </span>
         </p>
       </div>
 
-      {isPointGrantedQuery.data == false && (
+      {isPointGrantedQuery.data == false && engBalance != "0" && (
         <div className="bg-card-background border border-card-border p-6 w-full max-w-md mx-auto rounded-lg shadow-md flex flex-col items-center">
           <div className="w-full mb-4 flex flex-col gap-4">
             <div>
               <label
-                className="block text-sm font-medium text-gray-300 mb-2 tracking-wider"
+                className="block font-medium text-gray-300 mb-2 tracking-wider"
                 htmlFor="points"
               >
                 Transfer Points
               </label>
               <p className="text-xs font-light tracking-wider text-gray-400">
                 Transfer points earned from owning Energon to an address of your
-                choice. The beneficiary address will receive the points.
+                choice. The beneficiary address will receive the points.{" "}
+                <i>The action can note be reversed.</i>
               </p>
             </div>
             <Input2
@@ -132,7 +134,7 @@ export function EnergonConversion() {
               value={beneficiaryAddress}
               onChange={(e) => setBeneficiaryAddress(e.target.value)}
               afterInput={
-                <div className="mt-1">
+                <div className="mt-1 mr-1 relative -top-0.5">
                   <Button
                     variant="link"
                     size="xs"
@@ -180,7 +182,7 @@ export function EnergonConversion() {
             <span>
               <IconCheckCircle width="20" />
             </span>
-            <span>Points Already Claimed</span>
+            <span>Points Claimed</span>
           </label>
         </div>
       )}

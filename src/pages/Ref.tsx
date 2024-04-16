@@ -12,7 +12,7 @@ export default function RefPage() {
   }, []);
 
   if (code && !prevRefCode) {
-    localStorage.setItem("referrer", code);
+    localStorage.setItem(RefCodeKey, code);
   }
 
   return null;

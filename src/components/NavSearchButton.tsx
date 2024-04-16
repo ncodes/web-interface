@@ -4,7 +4,7 @@ export function NavSearchButton() {
   const toggleOpenState = useStore((s) => s.toggleOpenState);
 
   return (
-    <div className="lg:hidden z-20">
+    <div className="hidden xxs:inline lg:hidden z-20">
       <span
         onClick={() => {
           toggleOpenState && toggleOpenState("searchSheet");

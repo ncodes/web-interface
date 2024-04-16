@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
+import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { usePointService } from "../../hooks/services/backend/usePointService.ts";
 import useStore from "../../hooks/store/useStore.ts";
 import useMounted from "../../hooks/useMounted.ts";
@@ -17,6 +18,7 @@ export function LeaderboardTabContent() {
   const loaderProgress = useStore((state) => state.loaderProgress);
   const mounted = useMounted(1000);
   const [limit] = useState(100);
+  const { ready } = useConnectorContext();
   const [searchParams] = useSearchParams();
 
   const fetchLeaderboard = useQuery({
@@ -32,7 +34,7 @@ export function LeaderboardTabContent() {
       { address: searchParams.get("address") || undefined },
     ],
     queryFn: getLeaderboard,
-    enabled: mounted && !!searchParams.get("address"),
+    enabled: ready && mounted && !!searchParams.get("address"),
     refetchInterval: 10000,
   });
 

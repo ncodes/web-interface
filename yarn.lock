@@ -934,10 +934,10 @@
   resolved "https://registry.npmjs.org/@ioredis/commands/-/commands-1.2.0.tgz"
   integrity sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==
 
-"@jointlabs/chains-info@^0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@jointlabs/chains-info/-/chains-info-0.0.34.tgz#27adc4d43b648feea8e693c50d30c824df954d3e"
-  integrity sha512-fEbuAxpQgNOmyEVWi4592oTp0tcObaEdYYnS6ZhrHdBwm4Hpmt/M2NlRbZoue2xBFEitPwAxaITSGG5eEfS5dQ==
+"@jointlabs/chains-info@^0.0.43":
+  version "0.0.43"
+  resolved "https://registry.yarnpkg.com/@jointlabs/chains-info/-/chains-info-0.0.43.tgz#d824cabfc78bb85d071b10e501eb5853c69c57c4"
+  integrity sha512-gazrVZZaXkKTPJgbegqXXTkr+XeTdGeqCDrEwyx1ZxHERWHravX55kWvNin16kH+lXagkPdUL3c2wpnsup0Y8A==
   dependencies:
     lodash "^4.17.21"
     react "^18.2.0"

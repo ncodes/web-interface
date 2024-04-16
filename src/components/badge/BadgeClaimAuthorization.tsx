@@ -1,4 +1,8 @@
-import { BadgeManifest, BadgeManifests } from "@jointlabs/chains-info";
+import {
+  BadgeManifest,
+  BadgeManifests,
+  ChainBadgeManifest,
+} from "@jointlabs/chains-info";
 import DOMPurify from "dompurify";
 import { ChevronRight } from "lucide-react";
 import { marked } from "marked";
@@ -10,7 +14,10 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import { Button } from "../ui/Button.tsx";
 import { AuthInfo } from "./BadgeSheetContent.tsx";
 
-function findMatchInBadgeManifests(netManifests: BadgeManifest, badge: string) {
+function findMatchInBadgeManifests(
+  netManifests: ChainBadgeManifest,
+  badge: string,
+) {
   let manifest: BadgeManifest | undefined;
   for (const key in netManifests) {
     if (badge.match(new RegExp(key))) {
@@ -34,7 +41,7 @@ export function BadgeClaimAuthorization({
   const [loading, setLoading] = useState(false);
 
   const manifest = findMatchInBadgeManifests(
-    BadgeManifests[getChainInfo().queryName],
+    BadgeManifests[getChainInfo().queryName] as ChainBadgeManifest,
     badge,
   );
 
