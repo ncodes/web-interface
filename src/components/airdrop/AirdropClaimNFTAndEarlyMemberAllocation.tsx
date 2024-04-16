@@ -148,7 +148,10 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
             <div className="text-xs tracking-wider text-gray-600">
               Allocation:{" "}
               <span className="text-gray-100">
-                {formatToMoney(user?.nft?.totalAlloc ?? "0")} P2P
+                {(user?.nft?.count || 0) > 0
+                  ? formatToMoney(user?.nft?.totalAlloc ?? "0")
+                  : "0"}{" "}
+                P2P
               </span>
             </div>
           </span>
