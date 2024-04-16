@@ -193,7 +193,8 @@ export function AirdropDailyQuest() {
                       <div className="flex flex-col">
                         <div className="font-normal">
                           <div>
-                            Complete {quest.count} swaps on{" "}
+                            Complete {quest.count} swap
+                            {quest.count > 1 ? "s" : ""} on{" "}
                             <a
                               href={`/liquidity/${quest.marketAddress}/${quest.provider}/${quest.lid}`}
                             >
