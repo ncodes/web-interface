@@ -6,6 +6,7 @@ import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.t
 import "./hooks/store/useStore.ts";
 import "./i18n/i18n.ts";
 import { isLocal } from "./libs/helpers.ts";
+import Airdrop from "./pages/Airdrop.tsx";
 import Disputes from "./pages/Disputes.tsx";
 import Liquidities from "./pages/Liquidities.tsx";
 import Liquidity from "./pages/Liquidity.tsx";
@@ -14,7 +15,6 @@ import Markets from "./pages/Markets.tsx";
 import Mediation from "./pages/Mediation.tsx";
 import Offer from "./pages/Offer.tsx";
 import Offers from "./pages/Offers.tsx";
-import Points from "./pages/Points.tsx";
 import Swap from "./pages/Swap.tsx";
 import Swaps from "./pages/Swaps.tsx";
 import { RootErrorBoundary } from "./pages/errors/root.tsx";
@@ -111,23 +111,28 @@ const routes = [
     errorElement: <RootErrorBoundary />,
   },
   {
+    path: makePath("/airdrop"),
+    element: <App page={<Airdrop defaultTab="airdrop" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
     path: makePath("/points"),
-    element: <App page={<Points defaultTab="leaderboard" />} />,
+    element: <App page={<Airdrop defaultTab="leaderboard" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
     path: makePath("/energon"),
-    element: <App page={<Points defaultTab="energon" />} />,
+    element: <App page={<Airdrop defaultTab="energon" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
     path: makePath("/nft"),
-    element: <App page={<Points defaultTab="nft" />} />,
+    element: <App page={<Airdrop defaultTab="nft" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
     path: makePath("/galxe"),
-    element: <App page={<Points defaultTab="galxe" />} />,
+    element: <App page={<Airdrop defaultTab="galxe" />} />,
     errorElement: <RootErrorBoundary />,
   },
   // {

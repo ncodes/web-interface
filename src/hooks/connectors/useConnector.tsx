@@ -96,7 +96,12 @@ export default function useConnector() {
       return Promise.resolve(sig);
     } catch (error) {
       logError("sign:", error);
-      return Promise.reject(new Error(`User rejected the signing request`));
+      const message = (error as unknown as { message: string }).message;
+      if ((message as string).includes("rejected")) {
+        return Promise.reject(new Error(`User rejected the signing request`));
+      } else {
+        return Promise.reject(new Error(`Failed to connecte: ${message}`));
+      }
     }
   }
 

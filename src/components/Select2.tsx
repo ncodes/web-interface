@@ -9,13 +9,15 @@ export default function Select2({
   value,
   placeholder,
   triggerClassName,
+  contentClassName,
 }: {
   children?: React.ReactNode;
   className?: string;
-  value: string;
+  value?: string;
   onValueChange?: (val: string) => void;
   placeholder?: string;
   triggerClassName?: string;
+  contentClassName?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -46,7 +48,9 @@ export default function Select2({
           >
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
-          <SelectContent className="border-gray-700">{children}</SelectContent>
+          <SelectContent className={cn("border-gray-700", contentClassName)}>
+            {children}
+          </SelectContent>
         </>
       </Select>
     </div>
