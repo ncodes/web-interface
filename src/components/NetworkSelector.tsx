@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
 
-import { arbitrum } from "viem/chains";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { isProd } from "../libs/helpers.ts";
 
@@ -67,14 +66,11 @@ export function NetworkSelector() {
   }, [curChain]);
 
   useEffect(() => {
-    let chains = getChainsID(
+    const chains = getChainsID(
       false,
       true,
       curChain?.chainId ? [curChain?.chainId] : [],
     );
-
-    // TODO remove before arbitrum testnet
-    chains = chains.filter((id) => getChain(id)?.chainId != arbitrum.id);
 
     setMainChainsID(chains);
   }, [curChain]);
@@ -136,9 +132,13 @@ export function NetworkSelector() {
               {getChain(chainId)?.displayName}
             </DropdownMenuItemCustom>
           ))}
+
+          {!!mainChainsID.length && (
+            <DropdownMenuSeparator className="bg-gray-800" />
+          )}
+
           {testnetChainsID.length > 0 && (
             <>
-              <DropdownMenuSeparator className="bg-gray-800" />
               <DropdownMenuLabel className="font-extralight tracking-wider text-gray-300 text-xs">
                 Testnets
               </DropdownMenuLabel>
