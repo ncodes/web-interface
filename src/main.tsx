@@ -17,6 +17,7 @@ import Offer from "./pages/Offer.tsx";
 import Offers from "./pages/Offers.tsx";
 import Swap from "./pages/Swap.tsx";
 import Swaps from "./pages/Swaps.tsx";
+import { Error404 } from "./pages/errors/Error404.tsx";
 import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import ConnectExample from "./pages/play/ConnectExample.tsx";
 import "./sentry.ts";
@@ -30,8 +31,7 @@ function makePath(path: string) {
 
 const routes = [
   {
-    path: makePath(""),
-    // element: <App page={<Timeline />} />,
+    path: makePath("/"),
     element: <App page={<Markets defaultTab="markets" />} />,
     errorElement: <RootErrorBoundary />,
   },
@@ -120,21 +120,21 @@ const routes = [
     element: <App page={<Airdrop defaultTab="leaderboard" />} />,
     errorElement: <RootErrorBoundary />,
   },
-  {
-    path: makePath("/energon"),
-    element: <App page={<Airdrop defaultTab="energon" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
-  {
-    path: makePath("/nft"),
-    element: <App page={<Airdrop defaultTab="nft" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
-  {
-    path: makePath("/galxe"),
-    element: <App page={<Airdrop defaultTab="galxe" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
+  // {
+  //   path: makePath("/energon"),
+  //   element: <App page={<Airdrop defaultTab="energon" />} />,
+  //   errorElement: <RootErrorBoundary />,
+  // },
+  // {
+  //   path: makePath("/nft"),
+  //   element: <App page={<Airdrop defaultTab="nft" />} />,
+  //   errorElement: <RootErrorBoundary />,
+  // },
+  // {
+  //   path: makePath("/galxe"),
+  //   element: <App page={<Airdrop defaultTab="galxe" />} />,
+  //   errorElement: <RootErrorBoundary />,
+  // },
   // {
   //   path: makePath("/referrals"),
   //   element: <App page={<Points defaultTab="referrals" />} />,
@@ -145,6 +145,10 @@ const routes = [
   //     element: <App page={<RefPage />} />,
   //     errorElement: <RootErrorBoundary />,
   //   },
+  {
+    path: makePath("*"),
+    element: <Error404 />,
+  },
 ];
 
 if (isLocal()) {
