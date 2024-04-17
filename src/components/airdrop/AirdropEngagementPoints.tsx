@@ -24,14 +24,14 @@ export function AirdropEngagementPoints() {
 
       <p className="p-5 font-extralight text-md text-gray-300">
         Earn points when you create X posts mentioning <b>@OxJoint</b> or{" "}
-        <b>$P2P</b>. The more people engaging with your post, the more points
+        <b>$JOIN</b>. The more people engaging with your post, the more points
         you earn. Also, engaging with similar posts to earn you more points.{" "}
       </p>
 
       <div className="px-5 mb-3">
         {user?.twitterUsername ? (
           <>
-            <a href="https://twitter.com/intent/tweet?text=@0xJoint&hashtags=P2P">
+            <a href="https://twitter.com/intent/tweet?text=@0xJoint&hashtags=JOIN">
               <Button
                 size="full"
                 className="hover:scale-105 transition-all duration-500"

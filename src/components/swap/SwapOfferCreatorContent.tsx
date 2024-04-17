@@ -403,9 +403,9 @@ export function SwapOfferCreatorContent({
       decimals = quoteDecimals;
       usdRate = quoteUsdRate.data || 0;
     } else {
-      symbol = "P2P";
+      symbol = "JOIN";
       decimals = 18;
-      usdRate = 0; // TODO: get P2P rate
+      usdRate = 0; // TODO: get JOIN rate
     }
 
     const total = toHD(fee.protocolFee + fee.marketFee, decimals);

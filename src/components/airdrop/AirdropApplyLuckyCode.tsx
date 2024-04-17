@@ -49,7 +49,7 @@ export function AirdropApplyLuckyCode() {
       {!isZero(amount) && (
         <div className="flex items-center gap-2 px-4 py-2 text-xs text-green-400 border-b border-gray-800">
           <CheckCircle2 size="15" />{" "}
-          <span>{formatToMoney(amount)} P2P allocated</span>
+          <span>{formatToMoney(amount)} JOIN allocated</span>
         </div>
       )}
       <div className="p-3">

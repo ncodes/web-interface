@@ -370,9 +370,9 @@ export function AirdropQuestVerificationRequest({
                 setOpen(false);
               }}
             />
-            <DialogTitle>Join $P2P Private Sale</DialogTitle>
+            <DialogTitle>Join $JOIN Private Sale</DialogTitle>
             <DialogDescription className="text-gray-400 font-light">
-              Apply to participate in the upcoming Joint $P2P private sale
+              Apply to participate in the upcoming Joint $JOIN private sale
               event. <b>{quest.engageBond}</b> points will be deducted as
               security bond and will only be returned after you participate in
               the sale. You will also get an additional{" "}

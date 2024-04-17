@@ -81,7 +81,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
       <div className="flex rounded-b-2xl justify-between items-center tracking-wider p-2 gap-3 px-4 border-b border-gray-800">
         <div className="flex items-center gap-2 font-bold">
           <img src="/images/airdrop-icons/coin.svg" className="w-5" />
-          <span>Claim P2P Allocation</span>
+          <span>Claim JOIN Allocation</span>
           <ToolTip
             tip="Your total points"
             className="text-gray-500 relative -left-1 mt-[2px]"
@@ -104,7 +104,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
             <div className="text-xs tracking-wider text-gray-600">
               Allocation:{" "}
               <span className="text-gray-100">
-                {formatToMoney(user?.pointsAllocs || "0")} P2P
+                {formatToMoney(user?.pointsAllocs || "0")} JOIN
               </span>
             </div>
           </span>
@@ -151,7 +151,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
                 {(user?.nft?.count || 0) > 0
                   ? formatToMoney(user?.nft?.totalAlloc ?? "0")
                   : "0"}{" "}
-                P2P
+                JOIN
               </span>
             </div>
           </span>
@@ -207,7 +207,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
                 {user?.isEarlyDiscordMember
                   ? formatToMoney(user?.earlyDiscordMemberAlloc || "0")
                   : "0"}{" "}
-                P2P
+                JOIN
               </span>
             </div>
           </span>
