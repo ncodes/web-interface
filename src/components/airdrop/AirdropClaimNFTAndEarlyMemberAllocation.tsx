@@ -81,7 +81,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
       <div className="flex rounded-b-2xl justify-between items-center tracking-wider p-2 gap-3 px-4 border-b border-gray-800">
         <div className="flex items-center gap-2 font-bold">
           <img src="/images/airdrop-icons/coin.svg" className="w-5" />
-          <span>Claim JOIN Allocation</span>
+          <span>Claim $JOIN Allocation</span>
           <ToolTip
             tip="Your total points"
             className="text-gray-500 relative -left-1 mt-[2px]"
