@@ -1,7 +1,5 @@
-import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { AlertTriangle } from "lucide-react";
 import useStore from "../../hooks/store/useStore.ts";
-import { ToolTip } from "../ToolTip.tsx";
 import { Button } from "../ui/Button.tsx";
 
 export function AirdropEngagementPoints() {
@@ -13,12 +11,6 @@ export function AirdropEngagementPoints() {
         <div className="flex items-center gap-2 font-bold">
           <img src="/images/airdrop-icons/megaphone.svg" className="w-5" />
           <span>Engagement Points</span>
-          <ToolTip
-            tip="Your total points"
-            className="text-gray-500 relative -left-1 mt-[2px]"
-          >
-            <InfoCircledIcon width="20px" />
-          </ToolTip>
         </div>
       </div>
 

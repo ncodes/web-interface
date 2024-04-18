@@ -83,7 +83,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
           <img src="/images/airdrop-icons/coin.svg" className="w-5" />
           <span>Claim $JOIN Allocation</span>
           <ToolTip
-            tip="Your total points"
+            tip="Claim $JOIN allocation for your points, NFTs, and early member role."
             className="text-gray-500 relative -left-1 mt-[2px]"
           >
             <InfoCircledIcon width="20px" />

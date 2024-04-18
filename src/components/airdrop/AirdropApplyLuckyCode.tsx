@@ -39,7 +39,7 @@ export function AirdropApplyLuckyCode() {
           <img src="/images/airdrop-icons/chip.svg" className="w-5" />
           <span>Apply Lucky Code</span>
           <ToolTip
-            tip="Your total points"
+            tip="Claim $JOIN allocation by applying your lucky code"
             className="text-gray-500 relative -left-1 mt-[2px]"
           >
             <InfoCircledIcon width="20px" />

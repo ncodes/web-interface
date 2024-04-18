@@ -29,7 +29,7 @@ export function AirdropHeader() {
               {formatToHighDenom(user?.totalUnclaimedAlloc || "0", 18)}
             </span>
             <span className="text-gray-500">
-              <ToolTip tip="Your total points">
+              <ToolTip tip="Your total $JOIN allocation">
                 <InfoCircledIcon width="20px" />
               </ToolTip>
             </span>
