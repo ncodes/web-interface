@@ -7,8 +7,10 @@ export function AirdropHeader() {
   const user = useStore((store) => store.user);
 
   return (
-    <div className="border-b border-gray-800 flex flex-col md:flex-row justify-between p-5">
-      <span className="text-xl tracking-wider font-bold">Airdrop Season</span>
+    <div className="border-b border-gray-800 flex flex-col md:flex-row justify-between items-center md:items-start p-5">
+      <span className="text-xl tracking-wider font-semibold">
+        Airdrop Season
+      </span>
       <ul className="flex gap-7 mt-2 md:mt-0">
         <li className="flex gap-2 items-center font-light tracking-wider">
           <img src="/images/airdrop-icons/point-star.svg" className="w-6" />
