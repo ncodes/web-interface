@@ -19,7 +19,6 @@ import {
   useSwitchChain,
   useWalletClient,
 } from "wagmi";
-import { logError } from "../../libs/helpers.ts";
 import { IConnector } from "./interface.ts";
 
 /**
@@ -95,12 +94,11 @@ export default function useConnector() {
       const sig = await signMessageAsync({ message: msg });
       return Promise.resolve(sig);
     } catch (error) {
-      logError("sign:", error);
       const message = (error as unknown as { message: string }).message;
       if ((message as string).includes("rejected")) {
         return Promise.reject(new Error(`User rejected the signing request`));
       } else {
-        return Promise.reject(new Error(`Failed to connecte: ${message}`));
+        return Promise.reject(new Error(`Failed to sign`));
       }
     }
   }
