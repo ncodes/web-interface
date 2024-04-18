@@ -125,11 +125,11 @@ const routes = [
   //   element: <App page={<Airdrop defaultTab="energon" />} />,
   //   errorElement: <RootErrorBoundary />,
   // },
-  {
-    path: makePath("/nft"),
-    element: <App page={<Airdrop defaultTab="nft" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
+  // {
+  //   path: makePath("/nft"),
+  //   element: <App page={<Airdrop defaultTab="nft" />} />,
+  //   errorElement: <RootErrorBoundary />,
+  // },
   // {
   //   path: makePath("/galxe"),
   //   element: <App page={<Airdrop defaultTab="galxe" />} />,

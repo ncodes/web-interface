@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
-import { NFTConverstionTabContent } from "../components/airdrop/NFTConversionTabContent.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
-import { IconNFT } from "../components/icons/IconNFT.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import Layout from "./Layout.tsx";
@@ -77,7 +75,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
               >
                 Energon
               </TabsTrigger> */}
-              <TabsTrigger
+              {/* <TabsTrigger
                 value="nft"
                 className=" flex items-center gap-2 font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
@@ -86,7 +84,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
               >
                 <IconNFT width="20px" className="text-yellow-400" />
                 <span>NFT</span>
-              </TabsTrigger>
+              </TabsTrigger> */}
               {/* <TabsTrigger
                 value="galxe"
                 className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
@@ -113,7 +111,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
       {/* {currentTab == "energon" && <EnergonConversionTabContent />} */}
-      {currentTab == "nft" && <NFTConverstionTabContent />}
+      {/* {currentTab == "nft" && <NFTConverstionTabContent />} */}
       {/* {currentTab == "galxe" && <GalxeConverstionTabContent />} */}
     </Tabs>
   );
