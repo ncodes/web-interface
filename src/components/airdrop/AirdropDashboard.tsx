@@ -6,7 +6,6 @@ import { Button } from "../ui/Button.tsx";
 import { EmptySheetAlert } from "../ui/EmptySheetAlert.tsx";
 import { AirdropAccountConnect } from "./AirdropAccountConnect.tsx";
 import { AirdropApplyLuckyCode } from "./AirdropApplyLuckyCode.tsx";
-import { AirdropClaimNFTAndEarlyMemberAllocation } from "./AirdropClaimNFTAndEarlyMemberAllocation.tsx";
 import { AirdropDailyQuest } from "./AirdropDailyQuest.tsx";
 import { AirdropEngagementPoints } from "./AirdropEngagementPoints.tsx";
 import { AirdropHeader } from "./AirdropHeader.tsx";
@@ -51,7 +50,7 @@ export function AirdropDashboard() {
           <div className="flex-1 flex flex-col gap-5">
             <AirdropAccountConnect />
             <AirdropEngagementPoints />
-            <AirdropClaimNFTAndEarlyMemberAllocation />
+            {/* <AirdropClaimNFTAndEarlyMemberAllocation /> */}
             <div className="hidden lg:block">
               <AirdropApplyLuckyCode />
             </div>
