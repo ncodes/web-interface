@@ -192,7 +192,7 @@ export function CreateMarketSheet({
                     }
                   }}
                   className="px-3 p-5 !w-[150px]"
-                  placeholder="0.1"
+                  placeholder="ex: 0.1"
                   err={commissionErr}
                 />
               </div>

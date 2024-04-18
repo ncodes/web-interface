@@ -9,7 +9,7 @@ import {
   erc20Abi,
   http,
 } from "viem";
-import { hardhat } from "viem/chains";
+import { arbitrum } from "viem/chains";
 import {
   useAccount,
   useChainId,
@@ -27,7 +27,7 @@ import { IConnector } from "./interface.ts";
  */
 export default function useConnector() {
   const defaultNetwork = (
-    getChain(import.meta.env.VITE_DEFAULT_NETWORK) ?? getChain(hardhat.id)
+    getChain(import.meta.env.VITE_DEFAULT_NETWORK) ?? getChain(arbitrum.id)
   )?.chainId;
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
