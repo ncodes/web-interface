@@ -31,6 +31,10 @@ module.exports = {
       sans: ["Mitr", "sans-serif"],
       raleway: ["Raleway", "sans-serif"],
       satoshi: ["Satoshi", "sans-serif"],
+      jersey10: [`"Jersey 10"`, "sans-serif"],
+      jersey20: [`"Jersey 20"`, "sans-serif"],
+      jersey25: [`"Jersey 25"`, "sans-serif"],
+      abrilFatFace: [`"Abril Fatface"`, "sans-serif"],
     },
     extend: {
       colors: {
@@ -85,6 +89,9 @@ module.exports = {
       },
       backgroundImage: {
         chat: "url('/images/bg/chatbg.png')",
+        airdropHeader: "url('/images/airdrop/headerbg.png')",
+        airdropHeader2: "url('/images/airdrop/headerbg2.png')",
+        airdropHeader3: "url('/images/airdrop/headerbg3.png')",
       },
       transitionProperty: {
         width: "width",

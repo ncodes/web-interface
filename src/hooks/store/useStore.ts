@@ -22,7 +22,7 @@ export enum RestrictScope {
   GLOBAL,
   MARKET,
   OFFER,
-  MARKET_PERM
+  MARKET_PERM,
 }
 
 export interface IStore {
@@ -109,6 +109,9 @@ export interface IStore {
 
   restrictedScope: RestrictScope;
   setRestrictedScope: (scope: RestrictScope) => void;
+
+  mousePosition: { x: number; y: number };
+  setMousePosition: (x: number, y: number) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
@@ -284,6 +287,9 @@ const useStore = create<IStore>((set, get) => ({
 
   restrictedScope: RestrictScope.GLOBAL,
   setRestrictedScope: (scope: RestrictScope) => set({ restrictedScope: scope }),
+
+  mousePosition: { x: 0, y: 0 },
+  setMousePosition: (x: number, y: number) => set({ mousePosition: { x, y } }),
 }));
 
 export default useStore;

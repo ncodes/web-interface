@@ -9,7 +9,7 @@ import IconSpinner from "../icons/IconSpinner";
 import { Button } from "../ui/Button";
 
 export function AirdropAccountConnect() {
-  const connectTwitterLink = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${import.meta.env.VITE_TWITTER_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_TWITTER_CALLBACK_URL}&scope=tweet.read%20users.read%20offline.access&code_challenge=challenge&code_challenge_method=plain&state=twitter`;
+  const connectTwitterLink = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${import.meta.env.VITE_TWITTER_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_TWITTER_CALLBACK_URL}&scope=users.read%20offline.access%20tweet.read&code_challenge=challenge&code_challenge_method=plain&state=twitter`;
   const connectDiscordLink = `https://discord.com/oauth2/authorize?client_id=${import.meta.env.VITE_DISCORD_CLIENT_ID}&response_type=code&redirect_uri=${import.meta.env.VITE_DISCORD_CALLBACK_URL}&scope=identify+guilds+guilds.members.read&state=discord`;
   const user = useStore((state) => state.user);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -123,9 +123,9 @@ export function AirdropAccountConnect() {
   return (
     <div className=" border rounded-xl border-gray-800">
       <div className="flex rounded-b-2xl  justify-between tracking-wider p-2 gap-3 px-4 border-b border-gray-800">
-        <div className="flex items-center gap-3 font-bold">
+        <div className="flex items-center gap-3 font-bold text-xl font-jersey25 tracking-wider">
           <img src="/images/airdrop-icons/connect.svg" className="w-5" />
-          <span>Connect Social</span>
+          <span>Connect Socials</span>
         </div>
         <span className="inline-block mt-1 font-light text-sm text-gray-400">
           {connectedAcct}/2

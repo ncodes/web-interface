@@ -31,6 +31,8 @@ declare global {
     earlyDiscordMemberAlloc: string;
     earlyDiscordMemberClaimed: boolean;
 
+    canCreateRaffle: boolean;
+
     nft: {
       count: number;
       totalAlloc: number;

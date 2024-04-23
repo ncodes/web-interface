@@ -8,7 +8,7 @@ export function AirdropEngagementPoints() {
   return (
     <div className=" border rounded-xl border-gray-800 min-h-[100px]">
       <div className="flex flex rounded-b-2xl  justify-between tracking-wider p-2 gap-3 px-4 border-b border-gray-800">
-        <div className="flex items-center gap-2 font-bold">
+        <div className="flex items-center gap-2 font-bold text-xl font-jersey25 tracking-wider">
           <img src="/images/airdrop-icons/megaphone.svg" className="w-5" />
           <span>Engagement Points</span>
         </div>

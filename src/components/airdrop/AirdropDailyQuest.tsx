@@ -20,7 +20,7 @@ export function AirdropDailyQuest() {
   return (
     <div className="flex-1">
       <div>
-        <div className="flex rounded-2xl gap-2 border border-gray-800 p-4 pb-2 pt-2 font-bold tracking-wider">
+        <div className="flex rounded-2xl gap-2 border border-gray-800 p-4 pb-2 pt-2 text-xl font-jersey25 tracking-wider">
           <span>
             <img src="/images/airdrop-icons/quest.svg" className="w-6" />
           </span>

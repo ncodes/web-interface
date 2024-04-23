@@ -5,7 +5,9 @@ import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
+import { TapOffTabContent } from "../components/airdrop/tapoff/TapOffTabContent.tsx";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
+import IconSpaceship from "../components/icons/IconSpaceship.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import Layout from "./Layout.tsx";
@@ -39,13 +41,23 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
             <div className="flex flex-1 gap-4 w-full items-center px-1 py-2 pt-0">
               <TabsTrigger
                 value="airdrop"
-                className="flex items-center gap-1 font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className="flex font-jersey25 text-[18px] items-center gap-1 font-light relative top-2 bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
                   navigate("/airdrop");
                 }}
               >
                 <IconCoinGold width="25" />
-                <span>Airdrop</span>
+                <span>Dashboard</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="tap"
+                className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                onClick={() => {
+                  navigate("/tap");
+                }}
+              >
+                <IconSpaceship width="25" className="text-yellow-500" />
+                <span>TapOff</span>
               </TabsTrigger>
               {/* <TabsTrigger
                 value="leaderboard"
@@ -98,6 +110,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
             <div className="flex shrink-0 items-center justify-end">
               {loc.pathname != "/energon" &&
                 loc.pathname != "/nft" &&
+                loc.pathname != "/tap" &&
                 loc.pathname != "/airdrop" &&
                 loc.pathname != "/galxe" && (
                   <div className="hidden lg:block">
@@ -109,6 +122,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
         </ScrollAreaHorizontal>
       </ScrollOverflowIndicator>
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
+      {currentTab == "tap" && <TapOffTabContent />}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
       {/* {currentTab == "energon" && <EnergonConversionTabContent />} */}
       {/* {currentTab == "nft" && <NFTConverstionTabContent />} */}

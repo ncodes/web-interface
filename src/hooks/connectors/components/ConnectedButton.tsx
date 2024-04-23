@@ -29,7 +29,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
         >
           <IconSettingsOutline width="17" />
         </p>
-        <p className="hidden address lg:inline-block font-normal text-[14px] tracking-[0.22px] text-black">
+        <p className="hidden address lg:inline-block font-normal text-[18px] text-black font-jersey20 tracking-wider">
           <span className="hidden lg:inline-block">
             {shortenAddress(address as string)}
           </span>

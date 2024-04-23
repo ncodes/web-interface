@@ -15,6 +15,7 @@ type NavPageLinkProps = {
   inactiveClassName?: string;
   activeIconClassName?: string;
   inactiveIconClassName?: string;
+  labelClassName?: string;
 };
 
 export function NavPageLink(props: NavPageLinkProps) {
@@ -53,7 +54,12 @@ export function NavPageLink(props: NavPageLinkProps) {
               }),
             })}
         </span>
-        <span className={cn("text-[20px] xl:text-[21px] tracking-wide", {})}>
+        <span
+          className={cn(
+            "text-[20px] xl:text-[21px] tracking-wide",
+            props.labelClassName,
+          )}
+        >
           {props.label}
         </span>
         {props.countBadge != undefined && props.countBadge > 0 && (

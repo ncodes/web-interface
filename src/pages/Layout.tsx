@@ -62,6 +62,7 @@ export default function Layout({
   const { subscribeForWebPush } = useNotificationService();
   const { getContractParams } = useMiscService();
   const { getProtocolFees, getRequestCountryCode } = useMiscService();
+  const setMousePos = useStore((state) => state.setMousePosition);
   const ref = useRef(null);
   const { scrollY } = useScroll();
   const [scrollYPos, setScrollYPos] = useState(0);
@@ -239,8 +240,12 @@ export default function Layout({
     }
   }
 
+  function doSetMousePos(e) {
+    setMousePos(e.clientX, e.clientY);
+  }
+
   return (
-    <div>
+    <div onMouseMove={doSetMousePos}>
       <Helmet>
         <title>{title}</title>
         <meta

@@ -7,11 +7,11 @@ export function AirdropHeader() {
   const user = useStore((store) => store.user);
 
   return (
-    <div className="border-b border-gray-800 flex flex-col md:flex-row justify-between items-center md:items-start p-5">
-      <span className="text-xl tracking-wider font-semibold">
-        Airdrop Season
+    <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col md:flex-row justify-between items-center md:items-start p-5">
+      <span className="text-3xl tracking-wider font-semibold font-jersey10 inline-block ml-2">
+        Dashboard
       </span>
-      <ul className="flex gap-7 mt-2 md:mt-0">
+      <ul className="flex gap-7 mt-2 md:mt-1">
         <li className="flex gap-2 items-center font-light tracking-wider">
           <img src="/images/airdrop-icons/point-star.svg" className="w-6" />
           <span className="flex items-center text-lg gap-0.5">

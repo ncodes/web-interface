@@ -94,7 +94,7 @@ export function LeftSidebar(props: {
                 href="#"
                 label="Settings"
                 svg={<IconSettingsOutline />}
-                className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]"
+                className="relative font-abrilFatFace tracking-wider [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[1px]"
                 onClick={() => {
                   toggleOpenState && toggleOpenState("settingsSheet");
                 }}
@@ -104,7 +104,7 @@ export function LeftSidebar(props: {
                 target="_blank"
                 label="Help & Support"
                 svg={<IconQuestionCircle />}
-                className="relative [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[2px]"
+                className="relative font-abrilFatFace tracking-wider [&>span:nth-child(2)]:relative [&>span:nth-child(2)]:-top-[2px]"
               />
             </div>
           </div>
