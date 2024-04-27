@@ -110,8 +110,7 @@ export function AirdropQuestVoteDialog({
               {loading.yes && (
                 <IconSpinner
                   width="20"
-                  fill="fill-green-800"
-                  className="animate-spin"
+                  className="animate-spin text-green-800"
                 />
               )}
             </Button>
@@ -123,11 +122,7 @@ export function AirdropQuestVoteDialog({
             >
               {!loading.no && "NO"}
               {loading.no && (
-                <IconSpinner
-                  width="20"
-                  fill="fill-red-800"
-                  className="animate-spin"
-                />
+                <IconSpinner width="20" className="animate-spin text-red-800" />
               )}
             </Button>
           </div>
@@ -185,8 +180,7 @@ export function AirdropQuestVoteDialog({
               {loading.yes && (
                 <IconSpinner
                   width="20"
-                  fill="fill-green-800"
-                  className="animate-spin"
+                  className="animate-spin text-green-800"
                 />
               )}
             </Button>
@@ -198,11 +192,7 @@ export function AirdropQuestVoteDialog({
             >
               {!loading.no && "NO"}
               {loading.no && (
-                <IconSpinner
-                  width="20"
-                  fill="fill-red-800"
-                  className="animate-spin"
-                />
+                <IconSpinner width="20" className="animate-spin text-red-800" />
               )}
             </Button>
           </div>

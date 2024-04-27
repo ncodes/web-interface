@@ -254,8 +254,7 @@ export function FollowMarket({
                   <>
                     <IconSpinner
                       width="20"
-                      className="animate-spin"
-                      fill="fill-gray-100"
+                      className="animate-spin text-gray-100"
                     />
                   </>
                 )}

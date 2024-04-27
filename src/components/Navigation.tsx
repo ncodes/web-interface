@@ -123,7 +123,7 @@ export function Navigation() {
           />
         </li>
       </ul>
-      <div className="hidden xl:block mt-[30px] w-[240px] ">
+      <div className="hidden mt-[30px] w-[240px] ">
         {!connected && <ConnectWalletButton />}
       </div>
     </nav>

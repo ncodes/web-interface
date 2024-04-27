@@ -15,6 +15,7 @@ import Markets from "./pages/Markets.tsx";
 import Mediation from "./pages/Mediation.tsx";
 import Offer from "./pages/Offer.tsx";
 import Offers from "./pages/Offers.tsx";
+import RefPage from "./pages/Ref.tsx";
 import Swap from "./pages/Swap.tsx";
 import Swaps from "./pages/Swaps.tsx";
 import { Error404 } from "./pages/errors/Error404.tsx";
@@ -121,7 +122,7 @@ const routes = [
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/tap"),
+    path: makePath("/tapoff"),
     element: <App page={<Airdrop defaultTab="tap" />} />,
     errorElement: <RootErrorBoundary />,
   },
@@ -145,11 +146,11 @@ const routes = [
   //   element: <App page={<Points defaultTab="referrals" />} />,
   //   errorElement: <RootErrorBoundary />,
   // },
-  //   {
-  //     path: makePath("/r/:code"),
-  //     element: <App page={<RefPage />} />,
-  //     errorElement: <RootErrorBoundary />,
-  //   },
+  {
+    path: makePath("/r/:code"),
+    element: <App page={<RefPage />} />,
+    errorElement: <RootErrorBoundary />,
+  },
   {
     path: makePath("*"),
     element: <Error404 />,

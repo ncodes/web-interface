@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 import { create } from "zustand";
 import { defaultRegion } from "../../components/region/constants.ts";
 
@@ -112,6 +113,9 @@ export interface IStore {
 
   mousePosition: { x: number; y: number };
   setMousePosition: (x: number, y: number) => void;
+
+  socket?: Socket;
+  setSocket: (socket: Socket) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
@@ -290,6 +294,9 @@ const useStore = create<IStore>((set, get) => ({
 
   mousePosition: { x: 0, y: 0 },
   setMousePosition: (x: number, y: number) => set({ mousePosition: { x, y } }),
+
+  socket: undefined,
+  setSocket: (socket: Socket) => set({ socket }),
 }));
 
 export default useStore;

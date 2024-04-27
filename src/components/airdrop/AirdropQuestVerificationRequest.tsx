@@ -220,9 +220,8 @@ export function AirdropQuestVerificationRequest({
                 {!loading && <>Submit</>}
                 {loading && (
                   <IconSpinner
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                     width="20"
-                    fill="fill-gray-800"
                   />
                 )}
               </Button>
@@ -254,9 +253,8 @@ export function AirdropQuestVerificationRequest({
                 {!loading && <>Submit</>}
                 {loading && (
                   <IconSpinner
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                     width="20"
-                    fill="fill-gray-800"
                   />
                 )}
               </Button>
@@ -302,9 +300,8 @@ export function AirdropQuestVerificationRequest({
                 {!loading && <>Submit</>}
                 {loading && (
                   <IconSpinner
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                     width="20"
-                    fill="fill-gray-800"
                   />
                 )}
               </Button>
@@ -350,9 +347,8 @@ export function AirdropQuestVerificationRequest({
                 {!loading && <>Submit</>}
                 {loading && (
                   <IconSpinner
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                     width="20"
-                    fill="fill-gray-800"
                   />
                 )}
               </Button>
@@ -411,9 +407,8 @@ export function AirdropQuestVerificationRequest({
                 {!loading && <>Submit</>}
                 {loading && (
                   <IconSpinner
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                     width="20"
-                    fill="fill-gray-800"
                   />
                 )}
               </Button>
@@ -467,9 +462,8 @@ export function AirdropQuestVerificationRequest({
                 {!loading && <>Verify</>}
                 {loading && (
                   <IconSpinner
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                     width="20"
-                    fill="fill-gray-800"
                   />
                 )}
               </Button>

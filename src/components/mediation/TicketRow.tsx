@@ -445,7 +445,7 @@ export function TicketRow({
                 {joining && (
                   <IconSpinner
                     width="20"
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                     fill="fill-gray-800"
                   />
                 )}
@@ -468,8 +468,7 @@ export function TicketRow({
                 {cancelling && (
                   <IconSpinner
                     width="20"
-                    className="animate-spin"
-                    fill="fill-gray-200"
+                    className="animate-spin text-gray-200"
                   />
                 )}
               </Button>
@@ -489,8 +488,7 @@ export function TicketRow({
                 {draining && (
                   <IconSpinner
                     width="20"
-                    className="animate-spin"
-                    fill="fill-gray-200"
+                    className="animate-spin text-gray-200"
                   />
                 )}
               </Button>

@@ -151,8 +151,7 @@ export function NFTConversion() {
               {loading && (
                 <IconSpinner
                   width="20"
-                  className="animate-spin"
-                  fill="fill-gray-900"
+                  className="animate-spin text-gray-900"
                 />
               )}
             </Button>

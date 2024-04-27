@@ -260,8 +260,7 @@ export function CreateMarketSheet({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-[#06060c]"
-                    className="animate-spin"
+                    className="animate-spin text-gray-[#06060c]"
                   />
                 </>
               )}

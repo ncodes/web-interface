@@ -1104,8 +1104,7 @@ export function SwapOfferCreatorContent({
                   <>
                     <IconSpinner
                       width="20"
-                      fill="fill-gray-900"
-                      className="animate-spin"
+                      className="animate-spin text-gray-900"
                     />
                   </>
                 )}
@@ -1123,8 +1122,7 @@ export function SwapOfferCreatorContent({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-gray-900"
-                    className="animate-spin"
+                    className="animate-spin text-gray-900"
                   />
                 </>
               )}
@@ -1138,8 +1136,7 @@ export function SwapOfferCreatorContent({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-gray-900"
-                    className="animate-spin"
+                    className="animate-spin text-gray-900"
                   />
                 </>
               )}
@@ -1153,8 +1150,7 @@ export function SwapOfferCreatorContent({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-gray-900"
-                    className="animate-spin"
+                    className="animate-spin text-gray-900"
                   />
                 </>
               )}

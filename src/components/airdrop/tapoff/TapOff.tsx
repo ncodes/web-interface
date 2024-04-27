@@ -1,4 +1,3 @@
-import { AlertTriangle } from "lucide-react";
 import moment from "moment";
 import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -7,9 +6,6 @@ import { useConnectorContext } from "../../../hooks/connectors/useConnectorConte
 import useStore from "../../../hooks/store/useStore.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
-import IconSpaceship from "../../icons/IconSpaceship.tsx";
-import { Button } from "../../ui/Button.tsx";
-import { EmptySheetAlert } from "../../ui/EmptySheetAlert.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
 import { OverheatIndicator } from "./OverheatIndicator.tsx";
 import { Ship } from "./Ship.tsx";
@@ -19,7 +15,8 @@ import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 
 export function TapOff() {
   const { address } = useConnectorContext();
-  const { hasAccessToken } = useSession();
+  const [addressOnlyLogin, setAddressOnlyLogin] = useState(false);
+  const { token } = useSession();
   const toggleOpenState = useStore((state) => state.toggleOpenState);
   const [taps, setTaps] = useState("0");
   const [tapIncrement, setTapIncrement] = useState(0);
@@ -33,7 +30,7 @@ export function TapOff() {
   const [showTapToFireNotice, setShowTapToFireNotice] = useState(true);
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
-  const { socket, info, countTaps, ping, connect, token, isConnected, tap } =
+  const { socket, info, countTaps, ping, connect, isConnected, tap } =
     useTapSocketService();
 
   useEffect(() => {
@@ -152,45 +149,10 @@ export function TapOff() {
   }
 
   return (
-    <div className="absolute h-full w-full flex flex-col">
-      {!isConnected ||
-        (!playerInfo && (
-          <div className="w-full h-full bg-black absolute z-20 rounded-b-2xl flex justify-center items-center">
-            <IconSpaceship
-              width="30"
-              className="text-yellow-400 animate-spin"
-            />
-          </div>
-        ))}
+    <div className="h-full w-full flex flex-col flex-1">
+      <TapOffHeader playerInfo={playerInfo} />
 
-      <TapOffHeader />
-
-      {address && !hasAccessToken(address) && (
-        <div className="flex md:items-center justify-center h-[350px]">
-          <EmptySheetAlert
-            className="h-[115px] mt-12 md:mt-0"
-            label={
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <AlertTriangle className="text-yellow-500" width="20" />
-                <span>Log in to update settings</span>
-              </div>
-            }
-          >
-            <Button
-              variant="default"
-              size="full"
-              className="w-full mt-2"
-              onClick={() => {
-                toggleOpenState && toggleOpenState("settingsSheet", "account");
-              }}
-            >
-              LOGIN
-            </Button>
-          </EmptySheetAlert>
-        </div>
-      )}
-
-      {address && hasAccessToken(address) && (
+      {address && !!token && (
         <div className="flex flex-col justify-between flex-1">
           <div className="flex-1 flex justify-center py-10">
             <TapCounter
@@ -211,7 +173,7 @@ export function TapOff() {
             shipRef={shipRef}
           />
 
-          <div className="h-[100px] mt-16">
+          <div className="h-[100px]  mt-16">
             <OverheatIndicator
               overheatLevel={overheatLevel}
               overheatLevelPct={overheatLevelPct}
@@ -221,7 +183,7 @@ export function TapOff() {
         </div>
       )}
 
-      {!address && <MainContainerConnectButton />}
+      <MainContainerConnectButton authenticate showLoader />
     </div>
   );
 }

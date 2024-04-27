@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { cn } from "../../libs/helpers";
 
-export function EmptySheetAlert({
+export function EmptyBodyCard({
   label,
   className,
   children,

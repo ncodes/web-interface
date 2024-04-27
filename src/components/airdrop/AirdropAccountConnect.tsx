@@ -167,8 +167,7 @@ export function AirdropAccountConnect() {
               <>
                 <IconSpinner
                   width="20"
-                  className="animate-spin"
-                  fill="fill-gray-600"
+                  className="animate-spin text-gray-600"
                 />
               </>
             ) : (
@@ -235,8 +234,7 @@ export function AirdropAccountConnect() {
               <>
                 <IconSpinner
                   width="20"
-                  className="animate-spin"
-                  fill="fill-gray-600"
+                  className="animate-spin text-gray-600"
                 />
               </>
             ) : (

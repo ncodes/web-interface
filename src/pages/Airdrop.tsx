@@ -53,7 +53,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 value="tap"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
-                  navigate("/tap");
+                  navigate("/tapoff");
                 }}
               >
                 <IconSpaceship width="25" className="text-yellow-500" />
@@ -110,7 +110,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
             <div className="flex shrink-0 items-center justify-end">
               {loc.pathname != "/energon" &&
                 loc.pathname != "/nft" &&
-                loc.pathname != "/tap" &&
+                loc.pathname != "/tapoff" &&
                 loc.pathname != "/airdrop" &&
                 loc.pathname != "/galxe" && (
                   <div className="hidden lg:block">

@@ -1,4 +1,3 @@
-import { cn } from "../../../libs/helpers.ts";
 import IconFire from "../../icons/IconFire.tsx";
 import { Progress } from "../../ui/progress.tsx";
 import { InfoResult } from "./useTapSocketService.ts";
@@ -21,12 +20,7 @@ export function OverheatIndicator({
           <span className="text-xs">{playerInfo?.maxOverheatLvl || 0}</span>
         </span>
       </span>
-      <div
-        className={cn(
-          "block w-full bg-gray-900 border border-gray-800 p-1 rounded-full bg-gradient-to-b from-gray-900 to-gray-700",
-          {},
-        )}
-      >
+      <div className="block w-full bg-gray-900 border border-gray-800 p-1 rounded-full bg-gradient-to-b from-gray-900 to-gray-700">
         <Progress
           value={overheatLevelPct}
           className="w-full h-4 

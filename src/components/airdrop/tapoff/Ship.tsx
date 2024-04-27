@@ -53,7 +53,7 @@ export function Ship({
         <div key={i}>{indicator}</div>
       ))}
       <motion.div
-        className="flex justify-center"
+        className="flex justify-center w-[250px] mx-auto"
         animate={{
           x: [null, 20, 0],
           rotate: [null, -5, 0, 5, 0, null] as any,

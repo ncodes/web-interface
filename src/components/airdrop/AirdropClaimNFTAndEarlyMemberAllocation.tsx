@@ -122,8 +122,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
                   <>
                     <IconSpinner
                       width="15px"
-                      className="animate-spin"
-                      fill="fill-gray-800"
+                      className="animate-spin text-gray-800"
                     />
                   </>
                 )}
@@ -169,8 +168,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
                   <>
                     <IconSpinner
                       width="15px"
-                      className="animate-spin"
-                      fill="fill-gray-800"
+                      className="animate-spin text-gray-800"
                     />
                   </>
                 )}
@@ -225,8 +223,7 @@ export function AirdropClaimNFTAndEarlyMemberAllocation() {
                   <>
                     <IconSpinner
                       width="15px"
-                      className="animate-spin"
-                      fill="fill-gray-800"
+                      className="animate-spin text-gray-800"
                     />
                   </>
                 )}

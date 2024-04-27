@@ -334,8 +334,7 @@ export function BuyTicketSheet(props: {
               {approveLoading && (
                 <IconSpinner
                   width="20"
-                  className="animate-spin"
-                  fill="fill-gray-800"
+                  className="animate-spin text-gray-800"
                 />
               )}
             </Button>
@@ -360,11 +359,7 @@ export function BuyTicketSheet(props: {
           <Button size="full" disabled={!canPurchase()} onClick={doPurchase}>
             {!loading && "Purchase"}
             {loading && (
-              <IconSpinner
-                width="20"
-                className="animate-spin"
-                fill="fill-gray-800"
-              />
+              <IconSpinner width="20" className="animate-spin text-gray-800" />
             )}
           </Button>
         </div>

@@ -35,6 +35,7 @@ module.exports = {
       jersey20: [`"Jersey 20"`, "sans-serif"],
       jersey25: [`"Jersey 25"`, "sans-serif"],
       abrilFatFace: [`"Abril Fatface"`, "sans-serif"],
+      mitr: ["Mitr", "sans-serif"],
     },
     extend: {
       colors: {

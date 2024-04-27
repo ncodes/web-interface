@@ -30,9 +30,8 @@ export function MessageSendStatus({
           <span>
             <ToolTip tip="Sending">
               <IconSpinner
-                className="animate-spin"
+                className="animate-spin text-gray-500"
                 width="10px"
-                fill="fill-gray-500"
               />
             </ToolTip>
           </span>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Manager, Socket } from "socket.io-client";
+import { Manager } from "socket.io-client";
 import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext";
+import useStore from "../../../hooks/store/useStore";
 import { useSession } from "../../../hooks/useSession";
 
 export interface TapResult {
@@ -21,6 +22,12 @@ export interface PingResult {
   message?: string;
 }
 
+export interface ApplyMultiplierResult {
+  success?: boolean;
+  message?: string;
+  newBalance: string;
+}
+
 export interface CountTapsResult {
   count: string;
   success?: boolean;
@@ -34,11 +41,41 @@ export interface InfoResult {
   tapCount: string;
   tapIncrement: string;
   rank: string;
+  isDiscordConnected: boolean;
+  markedTwitterFollow: boolean;
+  markedTelegramFollow: boolean;
+  markedWebVisitFollow: boolean;
+  followQuestCompleted: boolean;
+  followQuestBonusAwarded: boolean;
+  followQuestReward: string;
   rapidFire: CommonFreeBoostInfo;
   instantCool: CommonFreeBoostInfo;
   hyperFire: CommonBoostInfo;
   antiOverheat: CommonBoostInfo;
   hyperCool: CommonBoostInfo;
+  gameStats: {
+    totalBalance: string;
+    totalShots: string;
+    totalPlayers: string;
+    totalPlayersLast24h: string;
+    totalPlayersLast1min: string;
+  };
+  multiplier: {
+    balance: string;
+    cost: string;
+    value: number;
+    canSpend: boolean;
+    curWindowEndsAt?: string;
+  };
+  rankInfo: {
+    [key: string]: {
+      taps: number;
+      reward: number;
+    };
+  };
+  rankBonusClaimStatus: Record<string, boolean>;
+  referralInfo: { count: number; reward: number }[];
+  claimableReferrals: number;
 }
 
 interface CommonFreeBoostInfo {
@@ -63,6 +100,10 @@ export const ErrorTapCooldown = new Error("Tap cooldown required");
 export const ErrorAuthFailed = new Error("Not authenticated");
 
 export default function useTapSocketService() {
+  const { socket, setSocket } = useStore((e) => ({
+    socket: e.socket,
+    setSocket: e.setSocket,
+  }));
   const manager = new Manager(`${import.meta.env.VITE_PRIMARY_API_URL}`, {
     autoConnect: false,
     reconnection: true,
@@ -72,8 +113,21 @@ export default function useTapSocketService() {
   const { address } = useConnectorContext();
   const { getAccessToken } = useSession();
   const [token, setToken] = useState(getAccessToken(address));
-  const [socket, setSocket] = useState<Socket>(manager.socket("/v1/taps"));
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isConnected, setIsConnected] = useState(socket?.connected);
+
+  useEffect(() => {
+    if (socket?.connected) {
+      setIsConnected(true);
+      setSocket(socket);
+    } else {
+      if (!socket) {
+        setSocket(manager.socket("/v1/taps"));
+      }
+      if (socket && !socket.connected) {
+        connect();
+      }
+    }
+  }, [isConnected]);
 
   useInterval(
     () => {
@@ -84,9 +138,10 @@ export default function useTapSocketService() {
   );
 
   useEffect(() => {
-    if (!token) return;
+    if (!token || !socket) return;
 
     function onConnect() {
+      if (!socket) return;
       socket.emit("auth", { token }, (res) => {
         setIsConnected(res.success);
         setSocket(socket);
@@ -108,7 +163,8 @@ export default function useTapSocketService() {
   }, [token]);
 
   async function tap(): Promise<TapResult> {
-    if (!isConnected) throw Error("Not connected");
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
     return new Promise((resolve, reject) => {
       try {
         socket.emit("tap", (res: TapResult) => {
@@ -130,7 +186,8 @@ export default function useTapSocketService() {
   }
 
   async function ping(): Promise<PingResult> {
-    if (!isConnected) throw Error("Not connected");
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
     return new Promise((resolve, reject) => {
       try {
         socket.emit("ping", (res: PingResult) => {
@@ -152,7 +209,8 @@ export default function useTapSocketService() {
   }
 
   async function countTaps(): Promise<CountTapsResult> {
-    if (!isConnected) throw Error("Not connected");
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
     return new Promise((resolve, reject) => {
       try {
         socket.emit("countTaps", (res: CountTapsResult) => {
@@ -171,8 +229,141 @@ export default function useTapSocketService() {
     });
   }
 
+  async function applyRapidFire(): Promise<PingResult> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("applyRapidFire", (res: PingResult) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function applyInstantCool(): Promise<PingResult> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("applyInstantCool", (res: PingResult) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function buyHyperFire(): Promise<PingResult> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("buyHyperFire", (res: PingResult) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function buyAntiOverheat(): Promise<PingResult> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("buyAntiOverheat", (res: PingResult) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function buyHyperCool(): Promise<PingResult> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("buyHyperCool", (res: PingResult) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function applyMultiplier(
+    amount: string,
+  ): Promise<ApplyMultiplierResult> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit(
+          "applyMultiplier",
+          { amount },
+          (res: ApplyMultiplierResult) => {
+            if (!res.success) {
+              if (res.message == "Not authenticated")
+                return reject(ErrorAuthFailed);
+              return reject(new Error(res.message));
+            }
+
+            delete res.success;
+            resolve(res);
+          },
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   async function info(): Promise<InfoResult> {
-    if (!isConnected) throw Error("Not connected");
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
     return new Promise((resolve, reject) => {
       try {
         socket.emit("info", (res: InfoResult) => {
@@ -191,8 +382,94 @@ export default function useTapSocketService() {
     });
   }
 
+  async function markFollows(
+    platform: "x" | "telegram" | "webvisit",
+  ): Promise<void> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("markFollows", { [platform]: true }, (res) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function claimQuestsReward(): Promise<void> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("claimQuestsReward", (res) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function claimRankBonus(rank: string): Promise<void> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("claimRankBonus", { rank }, (res) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async function claimReferralBonus(count: number): Promise<void> {
+    if (!socket) throw new Error("Socket not initialized");
+    if (!isConnected) throw new Error("Not connected");
+    return new Promise((resolve, reject) => {
+      try {
+        socket.emit("claimReferralBonus", { count }, (res) => {
+          if (!res.success) {
+            if (res.message == "Not authenticated")
+              return reject(ErrorAuthFailed);
+            return reject(new Error(res.message));
+          }
+
+          delete res.success;
+          resolve(res);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   function connect() {
-    socket.connect();
+    socket?.connect();
   }
 
   return {
@@ -201,8 +478,17 @@ export default function useTapSocketService() {
     ping,
     countTaps,
     info,
-    token,
     isConnected,
     connect,
+    applyRapidFire,
+    applyInstantCool,
+    buyHyperFire,
+    buyAntiOverheat,
+    buyHyperCool,
+    applyMultiplier,
+    markFollows,
+    claimQuestsReward,
+    claimRankBonus,
+    claimReferralBonus,
   };
 }

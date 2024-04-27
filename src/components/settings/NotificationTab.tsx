@@ -8,7 +8,7 @@ import { useSession } from "../../hooks/useSession.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { logError } from "../../libs/helpers.ts";
 import { Button } from "../ui/Button.tsx";
-import { EmptySheetAlert } from "../ui/EmptySheetAlert.tsx";
+import { EmptyBodyCard } from "../ui/EmptyBodyCard.tsx";
 import { TabsContent } from "../ui/Tabs.tsx";
 import {
   Accordion,
@@ -217,7 +217,7 @@ export function NotificationTab() {
 
       {!hasAccessToken(address) && (
         <div className="flex items-center justify-center h-full">
-          <EmptySheetAlert
+          <EmptyBodyCard
             label={
               <div className="flex items-center gap-2 text-sm text-gray-300">
                 <AlertTriangle className="text-yellow-500" width="20" />
@@ -235,7 +235,7 @@ export function NotificationTab() {
             >
               LOGIN
             </Button>
-          </EmptySheetAlert>
+          </EmptyBodyCard>
         </div>
       )}
     </TabsContent>

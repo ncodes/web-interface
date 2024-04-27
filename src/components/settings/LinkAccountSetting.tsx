@@ -10,7 +10,7 @@ import IconCheckCircle from "../icons/IconCheckCircle.tsx";
 import IconInfoCircle from "../icons/IconInfoCircle.tsx";
 import { Button } from "../ui/Button.tsx";
 
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, LogOut } from "lucide-react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
 import { useSession } from "../../hooks/useSession.ts";
@@ -29,7 +29,7 @@ export function LinkAccountSetting() {
   const [verifyMode, setVerifyMode] = useState<boolean>(false);
   const [err, setErr] = useState<string>("");
   const { getUser } = useUserService();
-  const { setAccessToken, delAccessToken } = useSession();
+  const { setAccessToken, delAccessToken, token } = useSession();
 
   const authMutation = useMutation({
     mutationFn: (data: {
@@ -250,8 +250,7 @@ export function LinkAccountSetting() {
                   >
                     {loading && (
                       <IconSpinner
-                        className="animate-spin"
-                        fill="fill-gray-900"
+                        className="animate-spin text-gray-900"
                         width="20"
                       />
                     )}
@@ -278,25 +277,27 @@ export function LinkAccountSetting() {
               <span className="shrink-0">
                 {loading && (
                   <IconSpinner
-                    className="animate-spin"
-                    fill="fill-gray-500"
+                    className="animate-spin text-gray-500"
                     width="20"
                   />
-                )}
-
-                {!loading && (
-                  <Button
-                    onClick={doUnlink}
-                    variant="link"
-                    rounded="md"
-                    size="sm"
-                  >
-                    Logout
-                  </Button>
                 )}
               </span>
             </div>
           </Alert>
+        </div>
+      )}
+
+      {token && (
+        <div className=" mt-3">
+          <Button
+            variant="outline"
+            onClick={doUnlink}
+            size="full"
+            className="gap-2 text-gray-400"
+          >
+            <LogOut size="20" />
+            Logout
+          </Button>
         </div>
       )}
     </>
