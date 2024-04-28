@@ -11,7 +11,6 @@ import { Ship } from "./Ship.tsx";
 import { TapCounter } from "./TapCounter.tsx";
 import { TapOffHeader } from "./TapOffHeader.tsx";
 import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
-import { isCommunityResourcable } from "@ethersproject/providers";
 
 export function TapOff() {
   const { address } = useConnectorContext();
@@ -37,7 +36,7 @@ export function TapOff() {
   }, [token, isConnected]);
 
   useEffect(() => {
-    console.log("Connected", isConnected)
+    console.log("Connected", isConnected);
     if (!isConnected) return;
 
     countTaps()
