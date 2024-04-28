@@ -12,7 +12,7 @@ export function TapOffHeader({ playerInfo }: { playerInfo?: InfoResult }) {
 
   return (
     <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col md:flex-row justify-between items-center md:items-start p-5 py-3">
-      <span className="text-3xl tracking-wider font-semibold font-jersey10 inline-block ml-2">
+      <span className="hidden md:block text-3xl tracking-wider font-semibold font-jersey10 inline-block ml-2">
         TapOff
       </span>
 

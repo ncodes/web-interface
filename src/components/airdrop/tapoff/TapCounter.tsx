@@ -20,12 +20,7 @@ export function TapCounter({
         <span className="text-gray-300">Your Taps</span>
         <ToolTip
           className="opacity-40 hover:opacity-100 transition-all duration-500"
-          tip={
-            <>
-              The number of taps you have created.
-              <br /> 10000 = 20 points
-            </>
-          }
+          tip={<>The number of taps you have created.</>}
         >
           <IconInfoCircle />
         </ToolTip>
@@ -34,7 +29,7 @@ export function TapCounter({
 
       {/* Count */}
       <div
-        className="flex justify-center  h-[110px] font-jersey25 text-9xl bg-gradient-to-r
+        className="flex justify-center  md:h-[110px] font-jersey25 text-7xl md:text-9xl bg-gradient-to-r
    from-amber-400 via-yellow-300 to-yellow-500 text-transparent bg-clip-text
    shadow-2xl"
         ref={tapCountRef}

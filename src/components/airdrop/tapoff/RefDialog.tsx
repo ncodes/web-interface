@@ -66,6 +66,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
   return (
     <Dialog
       open={open}
+      modal={true}
       onOpenChange={(open) => {
         setOpen(open);
         if (openDetails) {
@@ -90,7 +91,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 outline-none select-none sm:min-w-[425px] sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
+        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] md:w-auto sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
           <DialogHeader className="border-b border-gray-800 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-200  to-yellow-600 rounded-t-lg py-1">
               Referrals
@@ -112,11 +113,11 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
             <div className="flex p-1 m-2 mt-1 mb-1 gap-3">
               <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl border-gray-800">
                 <div className="">
-                  <Link width="35" className="text-yellow-500" />
+                  <Link className="text-yellow-500 w-[25px] md:w-[35px]" />
                 </div>
                 <div className="flex w-full flex-col items-start justify-start font-jersey25 tracking-wider">
-                  <div className="flex w-full justify-between">
-                    <span className="label text-gray-200 text-lg flex items-center">
+                  <div className="flex  w-full justify-between">
+                    <span className="label text-gray-200 text-sm md:text-lg flex items-center">
                       <span className="font-mitr font-extralight">
                         https://jntl.ink/r/
                       </span>
@@ -135,13 +136,13 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <div>
                       <Button
                         variant="ghost"
-                        className="m-0 h-auto items-center flex gap-1 p-1 px-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
+                        className="m-0 h-auto items-center flex gap-1 p-1 px-3 pl-0 pr-0 md:pl-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
                         onClick={() => {
                           showDetail("share");
                         }}
                       >
                         <Share width="20" className="text-gray-200" />
-                        <span className="text-lg">Share</span>
+                        <span className="text-lg hidden xxs:inline">Share</span>
                       </Button>
                     </div>
                   </div>
@@ -218,7 +219,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     100,000,000 TAPS as reward.
                   </div>
 
-                  <div className=" flex justify-center items-center mt-6">
+                  <div className=" flex justify-center items-center mt-4 xs:mt-6">
                     <ul className="flex gap-2 ">
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.TwitterShareButton
@@ -285,7 +286,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     </ul>
                   </div>
 
-                  <div className="text-center xs:px-10 text-xs font-extralight tracking-wider mt-5 text-gray-400">
+                  <div className="text-center xs:px-3 md:px-10 text-xs font-extralight tracking-wider mt-4 xs:mt-5 text-gray-400">
                     Friends must connect their Twitter/X or Discord account to
                     be counted as a valid invite.
                   </div>

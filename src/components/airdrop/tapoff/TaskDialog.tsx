@@ -229,7 +229,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 select-none sm:min-w-[425px] sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
+        <DialogContent className="p-0 select-none w-[310px] xxs:w-[360px] xs:w-[400px] sm:max-w-[425px] top-[10%] md:top-[15%] border-modal-border bg-modal-background text-white">
           <DialogHeader className="border-b border-gray-800 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-200  to-yellow-600 rounded-t-lg py-1">
               Quests
@@ -314,7 +314,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       </span>
                     </div>
                   </div>
-                  <div className="px-5 pt-4 pb-0 flex flex-col gap-3">
+                  <div className="px-3 md:px-5 pt-4 pb-0 flex flex-col gap-3">
                     <div className="flex gap-2 items-center border rounded-full px-1 pl-0.5  border-gray-800">
                       <Button
                         variant="ghost"
@@ -333,7 +333,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             className="h-[20px] w-[25px]"
                           />
                         </div>
-                        <div className="text-md font-medium tracking-wider">
+                        <div className="text-xs xs:text-md font-medium tracking-wider">
                           <div>Join our Discord Community</div>
                         </div>
                       </Button>
@@ -343,7 +343,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           size="sm"
                           disabled={playerInfo.isDiscordConnected}
                           className={cn(
-                            "px-5 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 pr-1 xs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.isDiscordConnected,
@@ -383,7 +383,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                               className="relative -left-1 h-[40px] rounded-2xl"
                             />
                           </div>
-                          <div className="text-md font-medium tracking-wider">
+                          <div className="text-xs xs:text-md font-medium tracking-wider">
                             <div>Follow us on X</div>
                             {xFollowError && (
                               <div className="text-red-500 text-xs pb-1 font-extralight">
@@ -401,7 +401,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedTwitterFollow || !clicked.x
                           }
                           className={cn(
-                            "px-5 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 pr-1 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedTwitterFollow,
@@ -458,7 +458,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <div className="rounded-full">
                             <IconTelegram className="w-[33px] h-[33px]" />
                           </div>
-                          <div className="text-md font-medium tracking-wider">
+                          <div className="text-xs xs:text-md font-medium tracking-wider">
                             <div>Join our Telegram channel</div>
                             {telegramFollowError && (
                               <div className="text-red-500 text-xs pb-1 font-extralight">
@@ -476,7 +476,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedTelegramFollow || !clicked.telegram
                           }
                           className={cn(
-                            "px-5 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 pr-1 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedTelegramFollow,
@@ -533,7 +533,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <div className="rounded-full mr-[4px] ml-1">
                             <Globe size="25" className="h-[33px]" />
                           </div>
-                          <div className="text-md font-medium tracking-wider">
+                          <div className="text-xs xs:text-md font-medium tracking-wider">
                             <div>Visit our website</div>
                             {webVistError && (
                               <div className="text-red-500 text-xs pb-1 font-extralight">
@@ -551,7 +551,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedWebVisitFollow || !clicked.webvisit
                           }
                           className={cn(
-                            "px-5 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 pr-1 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedWebVisitFollow,
@@ -630,7 +630,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <div>
                       <div
                         key={i}
-                        className="flex gap-2 items-center p-2 px-5 pl-3  border-gray-800"
+                        className="flex gap-2 items-center p-2 md:px-5 md:pl-3  border-gray-800"
                       >
                         <div className="rounded-full pl-2">
                           <IconRank width="35" className="text-gray-700" />
@@ -699,7 +699,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <div>
                       <div
                         key={i}
-                        className="flex gap-2 items-center p-2 px-5 pl-3  border-gray-800"
+                        className="flex gap-2 items-center p-2 md:px-5 md:pl-3  border-gray-800"
                       >
                         <div className="rounded-full pl-2">
                           <IconFriends width="35" className="text-gray-700" />

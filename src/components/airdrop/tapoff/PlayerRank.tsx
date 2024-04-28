@@ -1,5 +1,4 @@
-import { Cross1Icon } from "@radix-ui/react-icons";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, XIcon } from "lucide-react";
 import { useState } from "react";
 import IconCoinGold from "../../icons/IconCoinGold";
 import { Button } from "../../ui/Button";
@@ -30,7 +29,7 @@ export function PlayerRank({ rank }: { rank: string }) {
         setOpen(open);
       }}
     >
-      <div className="flex justify-center items-center mt-2 select-none">
+      <div className="flex justify-center items-center md:mt-2 select-none">
         <DialogTrigger asChild>
           <Button
             variant="ghost"
@@ -43,12 +42,12 @@ export function PlayerRank({ rank }: { rank: string }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 sm:min-w-[425px] sm:max-w-[425px] top-[25%] border-modal-border bg-modal-background text-white">
-          <DialogHeader className="border-b border-gray-800 space-y-0">
+        <DialogContent className="p-0 w-[310px] xxs:w-[350px] xs:w-[370px] sm:max-w-[425px] top-[10%] md:top-[25%] border-modal-border bg-modal-background text-white">
+          <DialogHeader className="border-b border-gray-900 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-500  to-yellow-300 rounded-t-lg py-1">
               Rank
             </DialogTitle>
-            <DialogDescription className="text-gray-500 font-light px-2 py-2 text-center">
+            <DialogDescription className="text-gray-500 font-light px-2 py-2 text-center text-xs xs:text-sm">
               Your rank is based on number of taps you made
             </DialogDescription>
           </DialogHeader>
@@ -59,7 +58,7 @@ export function PlayerRank({ rank }: { rank: string }) {
                   {Array.from({ length: 5 }).map((_, index) => (
                     <CarouselItem key={index} className="basis-full">
                       <div className="p-1">
-                        <Card className="bg-black border-gray-800 text-gray-400">
+                        <Card className="bg-black border-transparent text-gray-400">
                           <CardContent className="flex   aspect-square items-center justify-center p-6">
                             <span className="text-4xl font-semibold">
                               {index + 1}
@@ -71,10 +70,10 @@ export function PlayerRank({ rank }: { rank: string }) {
                   ))}
                 </CarouselContent>
                 <CarouselPrevious
-                  className="ml-5 disabled:bg-transparent disabled:text-gray-400 disabled:border-gray-500"
+                  className="xs:scale-100 hover:border-yellow-500 hover:bg-yellow-500 ml-14 xs:ml-8 md:ml-5 disabled:bg-transparent disabled:text-gray-400 disabled:border-gray-500"
                   variant="outline"
                 />
-                <CarouselNext className="mr-5" />
+                <CarouselNext className="mr-14 xss:mr-9 xs:mr-8 md:mr-5 bg-transparent hover:border-yellow-500 hover:bg-yellow-500" />
               </Carousel>
             </div>
             <div className="flex flex-col justify-center items-center px-10 pb-6 gap-2">
@@ -91,13 +90,13 @@ export function PlayerRank({ rank }: { rank: string }) {
                   value={50}
                   className="w-full h-4 
       bg-gray-900
-      [&_.indicator]:border-t [&_.indicator]:border-yellow-100 [&_.indicator]:bg-gradient-to-b [&_.indicator]:from-gray-300 [&_.indicator]:via-gray-400 [&_.indicator]:to-gray-600 [&_.indicator]:rounded-full"
+      [&_.indicator]:border-t [&_.indicator]:border-green-500 [&_.indicator]:bg-gradient-to-b [&_.indicator]:from-green-300 [&_.indicator]:via-green-400 [&_.indicator]:to-green-600 [&_.indicator]:rounded-full"
                 />
               </div>
             </div>
           </div>
-          <Cross1Icon
-            className="absolute right-0 mr-3 top-3 cursor-pointer opacity-80 hover:opacity-100 text-gray-900"
+          <XIcon
+            className="absolute right-0 mr-2 top-2 cursor-pointer opacity-80 hover:opacity-100 text-gray-900"
             onClick={() => {
               setOpen(false);
             }}

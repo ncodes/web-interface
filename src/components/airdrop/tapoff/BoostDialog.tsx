@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../hooks/useToast";
 import { formatToMoney, toDec } from "../../../libs/helpers";
 import { CountDown } from "../../Countdown";
+import ScrollOverflowIndicator from "../../ScrollOverflowIndicator";
 import IconCoinGold from "../../icons/IconCoinGold";
 import IconConflict from "../../icons/IconConflict";
 import IconSpinner from "../../icons/IconSpinner";
@@ -199,12 +200,12 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 outline-none select-none sm:min-w-[425px] sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
+        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] sm:max-w-[425px] top-[10%] md:top-[15%] border-modal-border bg-modal-background text-white">
           <DialogHeader className="border-b border-gray-800 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-200  to-yellow-600 rounded-t-lg py-1">
               Boost
             </DialogTitle>
-            <DialogDescription className="text-gray-500 font-light px-2 py-2 text-center flex justify-center items-center gap-1">
+            <DialogDescription className="hidden md:flex text-gray-500 font-light px-2 py-2 text-center justify-center items-center gap-1">
               <IconCoinGold width="20" />
               <span className="text-xl font-jersey25 text-yellow-200">
                 {formatToMoney(playerInfo.tapCount)}
@@ -235,7 +236,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <IconConflict width="35" className="fill-yellow-500 " />
                   </div>
                   <div className="flex flex-col items-start justify-start font-jersey25 tracking-wider">
-                    <span className="label text-gray-200 text-lg">
+                    <span className="label text-gray-200 text-sm xs:text-lg">
                       Rapid Fire
                     </span>
                     {playerInfo.rapidFire.numUsed <
@@ -277,7 +278,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <Fan size="35" className="text-yellow-500" />
                   </div>
                   <div className="flex flex-col items-start justify-start font-jersey25 tracking-wider">
-                    <span className="label text-gray-200 text-lg">
+                    <span className="label text-gray-200 xs:text-lg">
                       Instant Cool
                     </span>
                     {playerInfo.instantCool.numUsed <
@@ -310,115 +311,117 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               </Label>
             </div>
 
-            <div className="flex flex-col p-1 m-2 mt-1 mb-1 gap-3 overflow-auto h-[320px]">
-              <Button
-                variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                onClick={() => {
-                  showDetail("hyper-fire");
-                }}
-              >
-                <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                  <div className="">
-                    <img width="40" src="/images/hyper_fire.svg" />
-                  </div>
-                  <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                    <span className="w-full label flex justify-between text-gray-200 text-lg">
-                      <span>Hyper Fire</span>
-                      <span className="flex items-center gap-1 text-gray-300 text-sm">
-                        <IconCoinGold width="20" />
-                        <span>2000</span>
-                        <span className="text-gray-400">(Lvl: 2)</span>
+            <ScrollOverflowIndicator side="bottom">
+              <div className="flex flex-col p-1 m-2 mt-1 mb-1 gap-3 overflow-auto h-[250px]  md:h-[320px]">
+                <Button
+                  variant="ghost"
+                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                  onClick={() => {
+                    showDetail("hyper-fire");
+                  }}
+                >
+                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="">
+                      <img width="40" src="/images/hyper_fire.svg" />
+                    </div>
+                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                      <span className="w-full label flex justify-between text-gray-200 text-lg">
+                        <span>Hyper Fire</span>
+                        <span className="flex items-center gap-1 text-gray-300 text-sm">
+                          <IconCoinGold width="20" />
+                          <span>2000</span>
+                          <span className="text-gray-400">(Lvl: 2)</span>
+                        </span>
                       </span>
-                    </span>
-                    <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                      Get more TAPs for one tap.
-                    </span>
+                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                        Get more TAPs for one tap.
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Button>
+                </Button>
 
-              <Button
-                variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                onClick={() => {
-                  showDetail("anti-overheat");
-                }}
-              >
-                <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                  <div className="">
-                    <img width="40" src="/images/icon_multi_ice.svg" />
-                  </div>
-                  <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                    <span className="w-full label flex justify-between text-gray-200 text-lg">
-                      <span>Anti-Overheat</span>
-                      <span className="flex items-center gap-1 text-gray-300 text-sm">
-                        <IconCoinGold width="20" />
-                        <span>2000</span>
-                        <span className="text-gray-400">(Lvl: 2)</span>
+                <Button
+                  variant="ghost"
+                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                  onClick={() => {
+                    showDetail("anti-overheat");
+                  }}
+                >
+                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="">
+                      <img width="40" src="/images/icon_multi_ice.svg" />
+                    </div>
+                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                      <span className="w-full label flex justify-between text-gray-200 text-lg">
+                        <span>Anti-Overheat</span>
+                        <span className="flex items-center gap-1 text-gray-300 text-sm">
+                          <IconCoinGold width="20" />
+                          <span>2000</span>
+                          <span className="text-gray-400">(Lvl: 2)</span>
+                        </span>
                       </span>
-                    </span>
-                    <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                      Increase the overheat limit.
-                    </span>
+                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                        Increase the overheat limit.
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Button>
+                </Button>
 
-              <Button
-                variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                onClick={() => {
-                  showDetail("hyper-cool");
-                }}
-              >
-                <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                  <div className="">
-                    <img width="40" src="/images/icon_engine_cold_oil.svg" />
-                  </div>
-                  <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                    <span className="w-full label flex justify-between text-gray-200 text-lg">
-                      <span>Hyper Cool</span>
-                      <span className="flex items-center gap-1 text-gray-300 text-sm">
-                        <IconCoinGold width="20" />
-                        <span>2000</span>
-                        <span className="text-gray-400">(Lvl: 2)</span>
+                <Button
+                  variant="ghost"
+                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                  onClick={() => {
+                    showDetail("hyper-cool");
+                  }}
+                >
+                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="">
+                      <img width="40" src="/images/icon_engine_cold_oil.svg" />
+                    </div>
+                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                      <span className="w-full label flex justify-between text-gray-200 text-lg">
+                        <span>Hyper Cool</span>
+                        <span className="flex items-center gap-1 text-gray-300 text-sm">
+                          <IconCoinGold width="20" />
+                          <span>2000</span>
+                          <span className="text-gray-400">(Lvl: 2)</span>
+                        </span>
                       </span>
-                    </span>
-                    <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                      Fast recovery from overheat.
-                    </span>
+                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                        Fast recovery from overheat.
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Button>
+                </Button>
 
-              <Button
-                variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                onClick={() => {
-                  showDetail("tap-multiplier");
-                }}
-              >
-                <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                  <div className="">
-                    <img width="40" src="/images/icon_coin_x10.svg" />
-                  </div>
-                  <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                    <span className="w-full label flex justify-between text-gray-200 text-lg">
-                      <span>Tap Multiplier</span>
-                      <span className="flex items-center gap-1 text-gray-300 text-sm">
-                        <img src="/images/icon_coin_usdc.svg" width="18" />
-                        <span>100</span>
-                        <span className="text-gray-400">(per 10x)</span>
+                <Button
+                  variant="ghost"
+                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                  onClick={() => {
+                    showDetail("tap-multiplier");
+                  }}
+                >
+                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="">
+                      <img width="40" src="/images/icon_coin_x10.svg" />
+                    </div>
+                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                      <span className="w-full label flex justify-between text-gray-200 text-lg">
+                        <span>Tap Multiplier</span>
+                        <span className="flex items-center gap-1 text-gray-300 text-sm">
+                          <img src="/images/icon_coin_usdc.svg" width="18" />
+                          <span>100</span>
+                          <span className="text-gray-400">(per 10x)</span>
+                        </span>
                       </span>
-                    </span>
-                    <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                      Multiply your overall TAPs
-                    </span>
+                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                        Multiply your overall TAPs
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </Button>
-            </div>
+                </Button>
+              </div>
+            </ScrollOverflowIndicator>
           </div>
 
           <X
@@ -442,10 +445,10 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Apply Rapid Fire
                   </div>
-                  <div className="flex justify-center items-center mt-10 mb-5 w-24 p-2 rounded-2xl bg-yellow-900/30 mx-auto">
-                    <IconConflict width="70" className="fill-yellow-500 " />
+                  <div className="flex justify-center items-center mt-6 md:mt-10 mb-5 w-24 p-2 rounded-2xl bg-yellow-900/30 mx-auto">
+                    <IconConflict className="fill-yellow-500 w-[50px] md:w-[70px]" />
                   </div>
-                  <div className="text-center p-10 font-extralight tracking-wider">
+                  <div className="text-center text-sm md:text-lg p-4 md:p-10 font-extralight tracking-wider">
                     For 20 seconds, multiply each TAP you get from one tap by
                     5x.
                   </div>
@@ -486,10 +489,10 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Apply Instant Cool
                   </div>
-                  <div className="flex justify-center items-center mt-10 mb-5 w-24 p-2 rounded-2xl bg-yellow-900/30 mx-auto">
-                    <Fan size="70" className="text-yellow-500" />
+                  <div className="flex justify-center items-center mt-5 md:mt-10 mb-5 w-24 p-2 rounded-2xl bg-yellow-900/30 mx-auto">
+                    <Fan className="text-yellow-500 w-[50px] h-[60px] md:w-[70px] md:h-[80px]" />
                   </div>
-                  <div className="text-center p-10 font-extralight tracking-wider">
+                  <div className="text-center text-sm md:text-lg p-5 md:p-10 font-extralight tracking-wider">
                     Instantly recover from overheat.
                   </div>
                   <div className="mx-10">
@@ -525,20 +528,20 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               )}
 
               {curDetailId === "hyper-fire" && (
-                <div className="absolute flex flex-col gap-2 rounded-b-2xl w-full h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
+                <div className="absolute flex flex-col gap-2 rounded-b-2xl w-full h-[80%] md:h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Buy Hyper Fire
                   </div>
                   <div className="flex justify-center items-center mt-2 mb-5 w-24 p-4 rounded-2xl bg-yellow-900/30 mx-auto">
                     <img width="40" src="/images/hyper_fire.svg" />
                   </div>
-                  <div className="text-center px-10 pb-1 font-extralight tracking-wider">
+                  <div className="text-center text-sm px-10 pb-1 font-extralight tracking-wider">
                     Increase the amount of TAPs you get from one tap.
                   </div>
-                  <div className="text-center font-extralight tracking-wider pb-5 font-jersey20">
+                  <div className="text-center font-extralight tracking-wider pb-1 md:pb-5 font-jersey20">
                     +1 per tap for each level
                   </div>
-                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-5 font-jersey20">
+                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-2 md:pb-5 font-jersey20">
                     {playerInfo.hyperFire.nextLevelCost ? (
                       <>
                         <span>
@@ -604,20 +607,20 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               )}
 
               {curDetailId === "anti-overheat" && (
-                <div className="absolute flex flex-col gap-2 rounded-b-2xl w-full h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
+                <div className="absolute flex flex-col gap-2 rounded-b-2xl w-full h-[80%] md:h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Buy Anti-Overheat
                   </div>
                   <div className="flex justify-center items-center mt-2 mb-5 w-24 p-4 rounded-2xl bg-gray-900 mx-auto">
                     <img width="40" src="/images/icon_multi_ice.svg" />
                   </div>
-                  <div className="text-center px-10 pb-1 font-extralight tracking-wider">
+                  <div className="text-center px-5 md:px-10 pb-1 font-extralight tracking-wider">
                     Increase the overheat limit.
                   </div>
-                  <div className="text-center font-extralight tracking-wider pb-5 font-jersey20">
+                  <div className="text-center font-extralight tracking-wider pb-2 md:pb-5 font-jersey20">
                     +500 per level
                   </div>
-                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-5 font-jersey20">
+                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-4 md:pb-5 font-jersey20">
                     {playerInfo.antiOverheat.nextLevelCost ? (
                       <>
                         <span>
@@ -683,20 +686,20 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               )}
 
               {curDetailId === "hyper-cool" && (
-                <div className="absolute flex flex-col gap-2 rounded-b-2xl w-full h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
+                <div className="absolute flex flex-col gap-2 rounded-b-2xl w-full h-[80%] md:h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Buy Hyper Cool
                   </div>
                   <div className="flex justify-center items-center mt-2 mb-5 w-24 p-4 rounded-2xl bg-red-900/30 mx-auto">
                     <img width="40" src="/images/icon_engine_cold_oil.svg" />
                   </div>
-                  <div className="text-center px-10 pb-1 font-extralight tracking-wider">
+                  <div className="text-center px-2 md:px-10 pb-1 font-extralight tracking-wider">
                     Fast recovery from overheat.
                   </div>
-                  <div className="text-center font-extralight tracking-wider pb-5 font-jersey20">
+                  <div className="text-center font-extralight tracking-wider pb-2 md:pb-5 font-jersey20">
                     +1 per second for each level
                   </div>
-                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-5 font-jersey20">
+                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-4 md:pb-5 font-jersey20">
                     {playerInfo.hyperCool.nextLevelCost ? (
                       <>
                         <span>
@@ -762,17 +765,20 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               )}
 
               {curDetailId === "tap-multiplier" && (
-                <div className="absolute flex flex-col gap-1.5 rounded-b-2xl w-full h-[80%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
+                <div className="absolute flex flex-col gap-1.5 rounded-b-2xl w-full h-[90%] md:h-[80%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Buy Tap Multiplier
                   </div>
                   <div className="flex justify-center items-center mt-2 mb-5 w-24 p-4 rounded-2xl bg-yellow-900/30 mx-auto">
-                    <img width="40" src="/images/icon_coin_x10.svg" />
+                    <img
+                      src="/images/icon_coin_x10.svg"
+                      className="w-[30px] md:w-[40px]"
+                    />
                   </div>
                   <div className="text-center px-10 pb-1 font-extralight tracking-wider">
                     Multiply your overall TAPs.
                   </div>
-                  <div className="text-center font-extralight tracking-wider pb-3 font-jersey20">
+                  <div className="text-center font-extralight tracking-wider pb-1 md:pb-3 font-jersey20">
                     Apply once per 12 hours
                   </div>
                   <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-1 font-jersey20">
@@ -781,9 +787,9 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     </span>
                     <span className="text-xl">100 USDC</span>
                     <span>per</span>
-                    <span className="text-yellow-200"> 10x</span>
+                    <span className="text-green-400"> 10x</span>
                   </div>
-                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-5 font-jersey20">
+                  <div className="text-center gap-1 flex justify-center items-center tracking-wider pb-1 md:pb-5 font-jersey20">
                     <span className="text-gray-400">Balance:</span>
                     <span className="text-xl">
                       {formatToMoney(
@@ -824,10 +830,8 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                         <>
                           {!loading.multiplier && (
                             <>
-                              {playerInfo.multiplier.canSpend && <>Apply</>}
-                              {playerInfo.multiplier.balance == "0" && (
-                                <>Apply</>
-                              )}
+                              {(playerInfo.multiplier.canSpend ||
+                                playerInfo.multiplier.balance) && <>Apply</>}
                               {!playerInfo.multiplier.canSpend &&
                                 playerInfo.multiplier.balance != "0" && (
                                   <span className="flex items-center gap-2">

@@ -45,7 +45,7 @@ export function StatsDialog({ playerInfo }: { playerInfo: InfoResult }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 outline-none select-none sm:min-w-[425px] sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
+        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] xs:w-[390px] sm:max-w-[425px] top-[10%] md:top-[15%] border-modal-border bg-modal-background text-white">
           <DialogHeader className="border-b border-gray-800 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-200  to-yellow-600 rounded-t-lg py-1">
               Game Stats
