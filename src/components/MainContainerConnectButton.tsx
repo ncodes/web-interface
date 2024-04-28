@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { AlertTriangle, LogInIcon, Wallet2 } from "lucide-react";
+import { AlertTriangle, LogInIcon } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { RefCodeKey } from "../constants.ts";
 import { createSignatureMessage } from "../hooks/connectors/common.ts";
@@ -77,14 +77,15 @@ function WalletConnect({
           </div>
         }
       >
+        {ready.toString()}
         <ConnectWalletButton onConnect={onConnect}>
-          <Button
+          {/* <Button
             variant={(variant || "default") as any}
             rounded="xl"
             className="w-[220px] flex gap-2 hover:scale-[1.02] duration-500"
           >
             <Wallet2 width="20" className="" /> Connect
-          </Button>
+          </Button> */}
         </ConnectWalletButton>
       </EmptyBodyCard>
     </div>

@@ -319,7 +319,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                 <div className="[&_button]:w-full space-y-2  p-1 m-2 mt-1 overflow-auto">
                   <Button
                     variant="ghost"
-                    className="flex-1 block p-1 m-0 h-auto hover:bg-transparent border-none"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
                     onClick={() => {
                       showDetail("hyper-fire");
                     }}
