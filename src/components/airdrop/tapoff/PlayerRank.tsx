@@ -70,10 +70,10 @@ export function PlayerRank({ rank }: { rank: string }) {
                   ))}
                 </CarouselContent>
                 <CarouselPrevious
-                  className="xs:scale-100 hover:border-yellow-500 hover:bg-yellow-500 ml-14 xs:ml-8 md:ml-5 disabled:bg-transparent disabled:text-gray-400 disabled:border-gray-500"
+                  className="xs:scale-100 hover:border-yellow-500 hover:bg-yellow-500 ml-14 xs:ml-8 md:ml-10 disabled:bg-transparent disabled:text-gray-400 disabled:border-gray-500"
                   variant="outline"
                 />
-                <CarouselNext className="mr-14 xss:mr-9 xs:mr-8 md:mr-5 bg-transparent hover:border-yellow-500 hover:bg-yellow-500" />
+                <CarouselNext className="mr-14 xss:mr-9 xs:mr-8 md:mr-10 bg-transparent hover:border-yellow-500 hover:bg-yellow-500" />
               </Carousel>
             </div>
             <div className="flex flex-col justify-center items-center px-10 pb-6 gap-2">
