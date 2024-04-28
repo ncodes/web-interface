@@ -111,7 +111,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
             </div>
 
             <div className="flex p-1 m-2 mt-1 mb-1 gap-3">
-              <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl border-gray-800">
+              <div className="flex-1 flex items-center p-2 gap-1 border rounded-xl border-gray-800">
                 <div className="">
                   <Link className="text-yellow-500 w-[25px] md:w-[35px]" />
                 </div>
@@ -136,7 +136,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <div>
                       <Button
                         variant="ghost"
-                        className="m-0 h-auto items-center flex gap-1 p-1 px-3 pl-0 pr-0 md:pl-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
+                        className="m-0 h-auto items-center flex gap-1 p-1 px-1 pl-0 pr-0 md:pr-4 md:pl-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
                         onClick={() => {
                           showDetail("share");
                         }}

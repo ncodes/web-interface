@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "../../ui/Dialog";
 import { Label } from "../../ui/label";
+import { ScrollArea } from "../../ui/scroll-area";
 import useTapSocketService, { InfoResult } from "./useTapSocketService";
 
 export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
@@ -222,7 +223,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
             <div className="flex p-1 m-2 mt-1 mb-1 gap-3">
               <Button
                 variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none "
+                className="flex-1 block p-0 m-0 h-auto border-none hover:bg-transparent border-none "
                 disabled={
                   playerInfo.rapidFire.numUsed ==
                   playerInfo.rapidFire.maxPerWindow
@@ -242,8 +243,9 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     {playerInfo.rapidFire.numUsed <
                       playerInfo.rapidFire.maxPerWindow && (
                       <span className="text-gray-400 font-abrilFatFace block relative -top-1">
-                        {playerInfo.rapidFire.numUsed}/
-                        {playerInfo.rapidFire.maxPerWindow}
+                        {playerInfo.rapidFire.maxPerWindow -
+                          playerInfo.rapidFire.numUsed}
+                        /{playerInfo.rapidFire.maxPerWindow}
                       </span>
                     )}
                     {playerInfo.rapidFire.numUsed ==
@@ -264,7 +266,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
 
               <Button
                 variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                className="flex-1 block p-0 border-none m-0 h-auto hover:bg-transparent border-none"
                 onClick={() => {
                   showDetail("instant-cool");
                 }}
@@ -284,8 +286,9 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     {playerInfo.instantCool.numUsed <
                       playerInfo.instantCool.maxPerWindow && (
                       <span className="text-gray-400 font-abrilFatFace block relative -top-1">
-                        {playerInfo.instantCool.numUsed}/
-                        {playerInfo.instantCool.maxPerWindow}
+                        {playerInfo.instantCool.maxPerWindow -
+                          playerInfo.instantCool.numUsed}
+                        /{playerInfo.instantCool.maxPerWindow}
                       </span>
                     )}
                     {playerInfo.instantCool.numUsed ==
@@ -312,115 +315,120 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
             </div>
 
             <ScrollOverflowIndicator side="bottom">
-              <div className="flex flex-col p-1 m-2 mt-1 mb-1 gap-3 overflow-auto h-[250px]  md:h-[320px]">
-                <Button
-                  variant="ghost"
-                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                  onClick={() => {
-                    showDetail("hyper-fire");
-                  }}
-                >
-                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                    <div className="">
-                      <img width="40" src="/images/hyper_fire.svg" />
-                    </div>
-                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                      <span className="w-full label flex justify-between text-gray-200 text-lg">
-                        <span>Hyper Fire</span>
-                        <span className="flex items-center gap-1 text-gray-300 text-sm">
-                          <IconCoinGold width="20" />
-                          <span>2000</span>
-                          <span className="text-gray-400">(Lvl: 2)</span>
+              <ScrollArea type="scroll" className="h-[250px] md:h-[280px]">
+                <div className="[&_button]:w-full space-y-2  p-1 m-2 mt-1 overflow-auto">
+                  <Button
+                    variant="ghost"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    onClick={() => {
+                      showDetail("hyper-fire");
+                    }}
+                  >
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                      <div className="">
+                        <img width="40" src="/images/hyper_fire.svg" />
+                      </div>
+                      <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                        <span className="w-full label flex justify-between text-gray-200 text-lg">
+                          <span>Hyper Fire</span>
+                          <span className="flex items-center gap-1 text-gray-300 text-sm">
+                            <IconCoinGold width="20" />
+                            <span>2000</span>
+                            <span className="text-gray-400">(Lvl: 2)</span>
+                          </span>
                         </span>
-                      </span>
-                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                        Get more TAPs for one tap.
-                      </span>
+                        <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                          Get more TAPs for one tap.
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Button>
+                  </Button>
 
-                <Button
-                  variant="ghost"
-                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                  onClick={() => {
-                    showDetail("anti-overheat");
-                  }}
-                >
-                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                    <div className="">
-                      <img width="40" src="/images/icon_multi_ice.svg" />
-                    </div>
-                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                      <span className="w-full label flex justify-between text-gray-200 text-lg">
-                        <span>Anti-Overheat</span>
-                        <span className="flex items-center gap-1 text-gray-300 text-sm">
-                          <IconCoinGold width="20" />
-                          <span>2000</span>
-                          <span className="text-gray-400">(Lvl: 2)</span>
+                  <Button
+                    variant="ghost"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    onClick={() => {
+                      showDetail("anti-overheat");
+                    }}
+                  >
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                      <div className="">
+                        <img width="40" src="/images/icon_multi_ice.svg" />
+                      </div>
+                      <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                        <span className="w-full label flex justify-between text-gray-200 text-lg">
+                          <span>Anti-Overheat</span>
+                          <span className="flex items-center gap-1 text-gray-300 text-sm">
+                            <IconCoinGold width="20" />
+                            <span>2000</span>
+                            <span className="text-gray-400">(Lvl: 2)</span>
+                          </span>
                         </span>
-                      </span>
-                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                        Increase the overheat limit.
-                      </span>
+                        <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                          Increase the overheat limit.
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Button>
+                  </Button>
 
-                <Button
-                  variant="ghost"
-                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                  onClick={() => {
-                    showDetail("hyper-cool");
-                  }}
-                >
-                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                    <div className="">
-                      <img width="40" src="/images/icon_engine_cold_oil.svg" />
-                    </div>
-                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                      <span className="w-full label flex justify-between text-gray-200 text-lg">
-                        <span>Hyper Cool</span>
-                        <span className="flex items-center gap-1 text-gray-300 text-sm">
-                          <IconCoinGold width="20" />
-                          <span>2000</span>
-                          <span className="text-gray-400">(Lvl: 2)</span>
+                  <Button
+                    variant="ghost"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    onClick={() => {
+                      showDetail("hyper-cool");
+                    }}
+                  >
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                      <div className="">
+                        <img
+                          width="40"
+                          src="/images/icon_engine_cold_oil.svg"
+                        />
+                      </div>
+                      <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                        <span className="w-full label flex justify-between text-gray-200 text-lg">
+                          <span>Hyper Cool</span>
+                          <span className="flex items-center gap-1 text-gray-300 text-sm">
+                            <IconCoinGold width="20" />
+                            <span>2000</span>
+                            <span className="text-gray-400">(Lvl: 2)</span>
+                          </span>
                         </span>
-                      </span>
-                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                        Fast recovery from overheat.
-                      </span>
+                        <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                          Fast recovery from overheat.
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Button>
+                  </Button>
 
-                <Button
-                  variant="ghost"
-                  className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
-                  onClick={() => {
-                    showDetail("tap-multiplier");
-                  }}
-                >
-                  <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                    <div className="">
-                      <img width="40" src="/images/icon_coin_x10.svg" />
-                    </div>
-                    <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
-                      <span className="w-full label flex justify-between text-gray-200 text-lg">
-                        <span>Tap Multiplier</span>
-                        <span className="flex items-center gap-1 text-gray-300 text-sm">
-                          <img src="/images/icon_coin_usdc.svg" width="18" />
-                          <span>100</span>
-                          <span className="text-gray-400">(per 10x)</span>
+                  <Button
+                    variant="ghost"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    onClick={() => {
+                      showDetail("tap-multiplier");
+                    }}
+                  >
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                      <div className="">
+                        <img width="40" src="/images/icon_coin_x10.svg" />
+                      </div>
+                      <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
+                        <span className="w-full label flex justify-between text-gray-200 text-lg">
+                          <span>Tap Multiplier</span>
+                          <span className="flex items-center gap-1 text-gray-300 text-sm">
+                            <img src="/images/icon_coin_usdc.svg" width="18" />
+                            <span>100</span>
+                            <span className="text-gray-400">(per 10x)</span>
+                          </span>
                         </span>
-                      </span>
-                      <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
-                        Multiply your overall TAPs
-                      </span>
+                        <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
+                          Multiply your overall TAPs
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Button>
-              </div>
+                  </Button>
+                </div>
+              </ScrollArea>
             </ScrollOverflowIndicator>
           </div>
 

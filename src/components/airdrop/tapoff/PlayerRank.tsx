@@ -35,7 +35,7 @@ export function PlayerRank({ rank }: { rank: string }) {
             variant="ghost"
             className="p-0 h-auto hover:bg-transparent opacity-80 hover:opacity-100 hover:text-white"
           >
-            <div className="tracking-wider font-abrilFatFace text-lg text-gray-100">
+            <div className="tracking-wider font-abrilFatFace text-sm md:text-md text-gray-100">
               {rank}
             </div>
             <ChevronRight size="20" className="relative top-0.5 opacity-60" />
