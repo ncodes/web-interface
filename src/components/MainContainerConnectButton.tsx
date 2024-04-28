@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { AlertTriangle, LogInIcon } from "lucide-react";
+import { AlertTriangle, LogInIcon, Wallet2 } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { RefCodeKey } from "../constants.ts";
 import { createSignatureMessage } from "../hooks/connectors/common.ts";
@@ -53,11 +53,12 @@ export function MainContainerConnectButton({
 
 function WalletConnect({
   onConnect,
+  variant,
 }: {
   variant?: string;
   onConnect?: () => void;
 }) {
-  const { ready } = useConnectorContext();
+  const { ready, address } = useConnectorContext();
 
   return (
     <div className="animate-in slide-in-from-top-10 flex select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
@@ -65,7 +66,7 @@ function WalletConnect({
         className="max-w-[300px] mt-12 md:mt-0 pt-0"
         label={
           <div className="flex items-center gap-2 text-sm text-gray-300">
-            {!ready && (
+            {ready && !address && (
               <>
                 <AlertTriangle className="text-chinese-green" width="20" />
                 <span className="font-jersey20 text-xl">
@@ -76,16 +77,14 @@ function WalletConnect({
           </div>
         }
       >
-        {ready.toString()}
         <ConnectWalletButton onConnect={onConnect}>
-          <span></span>
-          {/* <Button
+          <Button
             variant={(variant || "default") as any}
             rounded="xl"
             className="w-[220px] flex gap-2 hover:scale-[1.02] duration-500"
           >
             <Wallet2 width="20" className="" /> Connect
-          </Button> */}
+          </Button>
         </ConnectWalletButton>
       </EmptyBodyCard>
     </div>
