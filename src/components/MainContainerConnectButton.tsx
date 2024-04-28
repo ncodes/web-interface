@@ -52,7 +52,6 @@ export function MainContainerConnectButton({
 }
 
 function WalletConnect({
-  variant,
   onConnect,
 }: {
   variant?: string;
@@ -79,6 +78,7 @@ function WalletConnect({
       >
         {ready.toString()}
         <ConnectWalletButton onConnect={onConnect}>
+          <span></span>
           {/* <Button
             variant={(variant || "default") as any}
             rounded="xl"
