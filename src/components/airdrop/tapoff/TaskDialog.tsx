@@ -699,7 +699,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <div>
                       <div
                         key={i}
-                        className="flex gap-2 items-center p-2 md:px-5 md:pl-3  border-gray-800"
+                        className="flex gap-2 items-center p-2 md:px-5 md:pl-1  border-gray-800"
                       >
                         <div className="rounded-full pl-2">
                           <IconFriends width="35" className="text-gray-700" />
