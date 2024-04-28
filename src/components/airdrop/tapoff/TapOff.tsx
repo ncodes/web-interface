@@ -30,10 +30,18 @@ export function TapOff() {
   const { socket, info, countTaps, ping, connect, isConnected, tap } =
     useTapSocketService();
 
+  useInterval(
+    () => {
+      if (!socket || isConnected) return;
+      connect();
+    },
+    !isConnected ? 5000 : null,
+  );
+
   useEffect(() => {
     if (!socket || isConnected) return;
     connect();
-  }, [token, isConnected]);
+  }, [token, isConnected, address]);
 
   useEffect(() => {
     if (!isConnected) return;
