@@ -329,7 +329,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       >
                         <div className="rounded-full pl-2">
                           <img
-                            src="/public/images/airdrop-icons/discord.svg"
+                            src="/images/airdrop-icons/discord.svg"
                             className="h-[20px] w-[25px]"
                           />
                         </div>
