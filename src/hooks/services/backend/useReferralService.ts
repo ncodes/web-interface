@@ -25,7 +25,7 @@ export interface GetInfoParams {
  * useReferralService provides access to v1/referrals endpoints
  */
 export function useReferralService() {
-  const { getChainInfo, address } = useConnectorContext();
+  const { getChainInfo } = useConnectorContext();
   const { token } = useSession();
 
   /**

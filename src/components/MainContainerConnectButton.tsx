@@ -93,7 +93,6 @@ function WalletConnect({
 
 function AccountSignIn({ connectedAt }: { connectedAt: number }) {
   const { simpleError } = useToast();
-  const [err, setErr] = useState<string>("");
   const { auth } = useAuthService();
   const { address, sign, ready } = useConnectorContext();
   const [loading, setLoading] = useState(false);
@@ -120,7 +119,6 @@ function AccountSignIn({ connectedAt }: { connectedAt: number }) {
     const msg = createSignatureMessage(address, undefined, "24 hours");
     const sig = await sign(msg.toString("utf-8")).catch((e) => {
       simpleError(e.message, { position: "top-center", duration: 5000 });
-      setErr("Signing failed");
       setLoading(false);
     });
 
@@ -140,7 +138,6 @@ function AccountSignIn({ connectedAt }: { connectedAt: number }) {
       setAccessToken(address, data.token as string);
       setLoading(false);
     } catch (error) {
-      setErr("Auth failed");
       simpleError("Auth failed", { position: "top-center", duration: 5000 });
       logError(error);
       setLoading(false);

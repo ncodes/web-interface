@@ -3,7 +3,6 @@ import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
-import useStore from "../../../hooks/store/useStore.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
@@ -15,9 +14,7 @@ import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 
 export function TapOff() {
   const { address } = useConnectorContext();
-  const [addressOnlyLogin, setAddressOnlyLogin] = useState(false);
   const { token } = useSession();
-  const toggleOpenState = useStore((state) => state.toggleOpenState);
   const [taps, setTaps] = useState("0");
   const [tapIncrement, setTapIncrement] = useState(0);
   const [lastTapTime, setLastTapTime] = useState(0);

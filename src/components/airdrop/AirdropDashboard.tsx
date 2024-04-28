@@ -1,5 +1,4 @@
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import useStore from "../../hooks/store/useStore.ts";
 import { useSession } from "../../hooks/useSession.ts";
 import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import IconCoinGold from "../icons/IconCoinGold.tsx";
@@ -12,9 +11,6 @@ import { AirdropHeader } from "./AirdropHeader.tsx";
 export function AirdropDashboard() {
   const { address } = useConnectorContext();
   const { hasAccessToken } = useSession();
-  const { toggleOpenState } = useStore((state) => ({
-    toggleOpenState: state.toggleOpenState,
-  }));
 
   return (
     <div className="w-full flex flex-col flex-1 relative">
