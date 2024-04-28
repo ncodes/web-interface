@@ -201,7 +201,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] sm:max-w-[425px] top-[10%] md:top-[15%] border-modal-border bg-modal-background text-white">
+        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] xs:w-[400px] sm:max-w-[425px] top-[10%] md:top-[15%] border-modal-border bg-modal-background text-white">
           <DialogHeader className="border-b border-gray-800 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-200  to-yellow-600 rounded-t-lg py-1">
               Boost
@@ -220,10 +220,10 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               </Label>
             </div>
 
-            <div className="flex p-1 m-2 mt-1 mb-1 gap-3">
+            <div className="flex flex-col xxs:flex-row p-1 m-2 mt-1 mb-1 gap-3">
               <Button
                 variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto border-none hover:bg-transparent border-none "
+                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none "
                 disabled={
                   playerInfo.rapidFire.numUsed ==
                   playerInfo.rapidFire.maxPerWindow
@@ -250,7 +250,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     )}
                     {playerInfo.rapidFire.numUsed ==
                       playerInfo.rapidFire.maxPerWindow && (
-                      <span className="text-gray-400 font-abrilFatFace block relative -top-1">
+                      <span className="text-gray-400 font-abrilFatFace block relative -top-1 text-[11px] xs:text-sm">
                         use in{" "}
                         <CountDown
                           full={true}
@@ -266,7 +266,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
 
               <Button
                 variant="ghost"
-                className="flex-1 block p-0 border-none m-0 h-auto hover:bg-transparent border-none"
+                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
                 onClick={() => {
                   showDetail("instant-cool");
                 }}
@@ -293,7 +293,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     )}
                     {playerInfo.instantCool.numUsed ==
                       playerInfo.instantCool.maxPerWindow && (
-                      <span className="text-gray-400 font-abrilFatFace block relative -top-1">
+                      <span className="text-gray-400 font-abrilFatFace block relative -top-1 text-[11px] xs:text-sm">
                         use in{" "}
                         <CountDown
                           full={true}

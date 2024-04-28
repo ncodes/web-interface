@@ -5,6 +5,7 @@ import { useToast } from "../../../hooks/useToast";
 import { cn, formatToMoney, toDec } from "../../../libs/helpers";
 import ScrollOverflowIndicator from "../../ScrollOverflowIndicator";
 import IconCoinGold from "../../icons/IconCoinGold";
+import IconDiscord from "../../icons/IconDiscord";
 import IconFriends from "../../icons/IconFriends";
 import IconRank from "../../icons/IconRank";
 import IconSpinner from "../../icons/IconSpinner";
@@ -328,10 +329,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                         }}
                       >
                         <div className="rounded-full pl-2">
-                          <img
-                            src="/images/airdrop-icons/discord.svg"
-                            className="h-[20px] w-[25px]"
-                          />
+                          <IconDiscord className="h-[25px] w-[25px]" />
                         </div>
                         <div className="text-xs xs:text-md font-medium tracking-wider">
                           <div>Join our Discord Community</div>
