@@ -36,7 +36,6 @@ export function TapOff() {
   }, [token, isConnected]);
 
   useEffect(() => {
-    console.log("Connected", isConnected);
     if (!isConnected) return;
 
     countTaps()
