@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Copy, Link, Share, Share2, X } from "lucide-react";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import * as ReactShare from "react-share";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext";
@@ -24,15 +24,12 @@ import { Label } from "../../ui/label";
 import { InfoResult } from "./useTapSocketService";
 
 export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
-  const defaultRefState = {};
   const { address } = useConnectorContext();
   const user = useStore((state) => state.user);
   const [open, setOpen] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [curDetailId, setCurDetailId] = useState("");
   const { getRecentReferrees, getInfo } = useReferralService();
-  const [loading, setLoading] = useState({ ...defaultRefState });
-  const [done, setDone] = useState({ ...defaultRefState });
   const { simpleSuccess } = useToast();
 
   const recentRefsQuery = useQuery({
@@ -47,13 +44,6 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
     queryFn: getInfo,
     enabled: open,
   });
-
-  useEffect(() => {
-    if (!open || !openDetails) {
-      setLoading({ ...defaultRefState });
-      setDone(defaultRefState);
-    }
-  }, [open, openDetails]);
 
   if (!playerInfo) return null;
 

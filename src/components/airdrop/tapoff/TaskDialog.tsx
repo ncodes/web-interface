@@ -22,19 +22,6 @@ import {
 import { Progress } from "../../ui/progress";
 import useTapSocketService, { InfoResult } from "./useTapSocketService";
 
-const ranks = [
-  "Cadet",
-  "Ensign",
-  "Lieutenant Jnr",
-  "Lieutenant",
-  "Commander",
-  "Captain",
-  "Commodore",
-  "Rear Admiral",
-  "Vice Admiral",
-  "Admiral",
-];
-
 const defaultState = {
   x: false,
   telegram: false,
