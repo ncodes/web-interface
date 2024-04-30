@@ -8,7 +8,7 @@ import { useAuthService } from "../hooks/services/backend/useAuthService.ts";
 import useMounted from "../hooks/useMounted.ts";
 import { useSession } from "../hooks/useSession.ts";
 import { useToast } from "../hooks/useToast.tsx";
-import { logError } from "../libs/helpers.ts";
+import { cn, logError } from "../libs/helpers.ts";
 import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import LoaderOverlay from "./airdrop/tapoff/LoaderOverlay.tsx";
 import IconSpinner from "./icons/IconSpinner.tsx";
@@ -20,11 +20,13 @@ export function MainContainerConnectButton({
   authenticate,
   showLoader,
   loaderIcon,
+  className,
 }: {
   variant?: string;
   authenticate?: boolean;
   showLoader?: boolean;
   loaderIcon?: ReactNode;
+  className?: string;
 }) {
   const connectedAt = useRef<number>(0);
   const { address, ready } = useConnectorContext();
@@ -38,6 +40,7 @@ export function MainContainerConnectButton({
       {mounted && !ready && (
         <WalletConnect
           variant={variant}
+          className={className}
           onConnect={() => {
             connectedAt.current = Math.round(Date.now() / 1000);
           }}
@@ -45,7 +48,10 @@ export function MainContainerConnectButton({
       )}
 
       {mounted && authenticate && address && !token && (
-        <AccountSignIn connectedAt={connectedAt.current} />
+        <AccountSignIn
+          className={className}
+          connectedAt={connectedAt.current}
+        />
       )}
     </>
   );
@@ -54,16 +60,18 @@ export function MainContainerConnectButton({
 function WalletConnect({
   variant,
   onConnect,
+  className,
 }: {
   variant?: string;
   onConnect?: () => void;
+  className?: string;
 }) {
   const { ready } = useConnectorContext();
 
   return (
     <div className="animate-in slide-in-from-top-10 flex select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
       <EmptyBodyCard
-        className="max-w-[300px] mt-12 md:mt-0 pt-0"
+        className={cn("max-w-[300px] mt-12 md:mt-0 pt-0", className)}
         label={
           <div className="flex items-center gap-2 text-sm text-gray-300">
             {!ready && (
@@ -91,7 +99,13 @@ function WalletConnect({
   );
 }
 
-function AccountSignIn({ connectedAt }: { connectedAt: number }) {
+function AccountSignIn({
+  connectedAt,
+  className,
+}: {
+  connectedAt: number;
+  className?: string;
+}) {
   const { simpleError } = useToast();
   const { auth } = useAuthService();
   const { address, sign, ready } = useConnectorContext();
@@ -147,7 +161,10 @@ function AccountSignIn({ connectedAt }: { connectedAt: number }) {
   return (
     <div className="animate-in slide-in-from-top-10 flex select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
       <EmptyBodyCard
-        className="min-h-[100px] max-w-[300px] mt-12 md:mt-0 pt-0"
+        className={cn(
+          "min-h-[100px] max-w-[300px] mt-12 md:mt-0 pt-0",
+          className,
+        )}
         label={
           <div className="flex items-center gap-2 text-sm text-gray-300">
             <LogInIcon className="text-chinese-green" width="20" />

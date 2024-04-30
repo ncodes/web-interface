@@ -85,6 +85,7 @@
     "react-dom": "^18.2.0",
     "react-file-upload": "^0.0.4",
     "react-ga4": "^2.1.0",
+    "react-h5-audio-player": "^3.9.1",
     "react-helmet": "^6.1.0",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^13.0.2",

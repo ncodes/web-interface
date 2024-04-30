@@ -214,7 +214,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
         <DialogTrigger asChild>
           <Button
             variant="ghost"
-            className="hover:bg-transparent p-0 hover:scale-110 hover:-rotate-2"
+            className="hover:bg-transparent h-auto p-0 hover:scale-110 hover:-rotate-2"
           >
             <div
               className="flex w-[60px] flex-col border  items-center rounded-lg px-3 py-1 bg-gradient-to-r

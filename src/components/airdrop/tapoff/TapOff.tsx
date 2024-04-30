@@ -3,14 +3,19 @@ import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
+import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
+import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
 import { OverheatIndicator } from "./OverheatIndicator.tsx";
 import { Ship } from "./Ship.tsx";
 import { TapCounter } from "./TapCounter.tsx";
 import { TapOffHeader } from "./TapOffHeader.tsx";
 import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
+
+const audioBgPath = "/audio/bg_game_audio.mp3";
+const audioFirePath = "/audio/fire_audio.mp3";
 
 export function TapOff() {
   const { address } = useConnectorContext();
@@ -27,25 +32,23 @@ export function TapOff() {
   const [showTapToFireNotice, setShowTapToFireNotice] = useState(true);
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
-  const { socket, info, countTaps, ping, connect, isConnected, tap } =
-    useTapSocketService();
-
-  useInterval(
-    () => {
-      if (!socket || isConnected) return;
-      connect();
-    },
-    !isConnected ? 5000 : null,
-  );
-
-  useEffect(() => {
-    if (!socket || isConnected) return;
-    connect();
-  }, [token, isConnected, address]);
+  const { info, countTaps, ping, isReady, tap } = useTapSocketService();
+  const {
+    createAudio,
+    playAudio,
+    pauseAudio,
+    manualPaused,
+    playing,
+    isFirstPlay,
+  } = useGameAudioPlayer();
 
   useEffect(() => {
-    if (!isConnected) return;
+    createAudio(audioBgPath);
+    createAudio(audioFirePath, false);
+  }, []);
 
+  useEffect(() => {
+    if (!isReady) return;
     countTaps()
       .then((result) => {
         setTaps(result.count);
@@ -57,7 +60,7 @@ export function TapOff() {
         setPlayerInfo(result);
       })
       .catch(console.error);
-  }, [isConnected]);
+  }, [isReady]);
 
   useInterval(
     () => {
@@ -70,7 +73,7 @@ export function TapOff() {
 
   useInterval(
     () => {
-      if (!isConnected) return;
+      if (!isReady) return;
       info()
         .then((result) => {
           setTaps(result.tapCount);
@@ -80,12 +83,12 @@ export function TapOff() {
         })
         .catch(console.error);
     },
-    isConnected ? 2000 : null,
+    isReady ? 2000 : null,
   );
 
   useInterval(
     () => {
-      if (!isConnected) return;
+      if (!isReady) return;
       ping()
         .then((result) => {
           const { maxOverheatLvl } = playerInfo || {};
@@ -99,7 +102,7 @@ export function TapOff() {
           //
         });
     },
-    isConnected ? 1000 : null,
+    isReady ? 1000 : null,
   );
 
   function fire() {
@@ -115,8 +118,16 @@ export function TapOff() {
         : [...firedCoins, ...createCoinsToFire(gunCount)],
     );
 
+    if (isFirstPlay(audioBgPath)) {
+      playAudio(audioBgPath, false, false);
+    }
+
     const doFire = async () => {
       try {
+        if (!manualPaused) {
+          playAudio(audioFirePath, false, true);
+        }
+
         const result = await tap();
         setTaps(result.tapCount);
         setTapIncrement(result.tapIncrement);
@@ -153,42 +164,68 @@ export function TapOff() {
     return coins;
   }
 
+  function toggleAudioPause() {
+    if (playing) {
+      pauseAudio(audioBgPath);
+      pauseAudio(audioFirePath);
+    } else {
+      playAudio(audioBgPath);
+    }
+  }
+
   return (
     <div className="h-full w-full flex flex-col flex-1">
-      <TapOffHeader playerInfo={playerInfo} />
+      <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
+        <TapOffHeader
+          playerInfo={playerInfo}
+          audioState={playing ? "playing" : "stopped"}
+          toggleAudioPause={toggleAudioPause}
+        />
 
-      {address && !!token && (
-        <div className="flex flex-col justify-between flex-1">
-          <div className="flex-1 flex justify-center py-10">
-            <TapCounter
-              tapCountRef={tapCountRef}
-              count={taps}
-              rank={playerInfo?.rank || ""}
+        {address && !!token && (
+          <div className="flex flex-col justify-between flex-1">
+            <div className="flex-1 flex justify-center py-10">
+              <TapCounter
+                tapCountRef={tapCountRef}
+                count={taps}
+                rank={playerInfo?.rank || ""}
+              />
+            </div>
+
+            <Ship
+              fire={fire}
+              onFireStop={onFireStop}
+              firedCoins={firedCoins}
+              tapIncrement={tapIncrement}
+              overheatLevel={overheatLevelPct}
+              showTapToFireNotice={showTapToFireNotice}
+              firing={firing}
+              shipRef={shipRef}
             />
+
+            <div className="h-[100px] flex flex-col justify-end">
+              <div className=" mt-16">
+                <OverheatIndicator
+                  overheatLevel={overheatLevel}
+                  overheatLevelPct={overheatLevelPct}
+                  playerInfo={playerInfo}
+                />
+              </div>
+            </div>
           </div>
-
-          <Ship
-            fire={fire}
-            onFireStop={onFireStop}
-            firedCoins={firedCoins}
-            tapIncrement={tapIncrement}
-            overheatLevel={overheatLevelPct}
-            showTapToFireNotice={showTapToFireNotice}
-            firing={firing}
-            shipRef={shipRef}
-          />
-
-          <div className="h-[100px]  mt-16">
-            <OverheatIndicator
-              overheatLevel={overheatLevel}
-              overheatLevelPct={overheatLevelPct}
-              playerInfo={playerInfo}
-            />
-          </div>
-        </div>
-      )}
-
-      <MainContainerConnectButton authenticate showLoader />
+        )}
+        <MainContainerConnectButton
+          className="bg-black"
+          authenticate
+          showLoader
+        />
+        {/* <AudioPlayer
+          src="/audio/bg_audio.ogg"
+          autoPlay={true}
+          ref={bgAudioRef}
+        /> */}
+      </div>
+      {<GameBackgroundImage />}
     </div>
   );
 }

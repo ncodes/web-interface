@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import { Manager } from "socket.io-client";
-import { useInterval } from "usehooks-ts";
-import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext";
-import useStore from "../../../hooks/store/useStore";
+import { Manager, Socket } from "socket.io-client";
 import { useSession } from "../../../hooks/useSession";
 
 export interface TapResult {
@@ -99,62 +96,47 @@ export const ErrorPingCooldown = new Error("Ping cooldown required");
 export const ErrorTapCooldown = new Error("Tap cooldown required");
 export const ErrorAuthFailed = new Error("Not authenticated");
 
+const manager = new Manager(`${import.meta.env.VITE_PRIMARY_API_URL}`, {
+  autoConnect: false,
+  reconnection: true,
+  transports: ["websocket"],
+});
+
+const socket: Socket = manager.socket("/v1/taps");
+
 export default function useTapSocketService() {
-  const { socket, setSocket } = useStore((e) => ({
-    socket: e.socket,
-    setSocket: e.setSocket,
-  }));
-  const manager = new Manager(`${import.meta.env.VITE_PRIMARY_API_URL}`, {
-    autoConnect: false,
-    reconnection: true,
-    transports: ["websocket"],
-  });
-
-  const { address } = useConnectorContext();
-  const { getAccessToken } = useSession();
-  const [token, setToken] = useState(getAccessToken(address));
+  const { token } = useSession();
   const [isConnected, setIsConnected] = useState(socket?.connected);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (socket?.connected) {
-      setIsConnected(true);
-      setSocket(socket);
-    } else {
-      if (!socket) {
-        setSocket(manager.socket("/v1/taps"));
-      }
-      if (socket && !socket.connected) {
-        connect();
-      }
-    }
-  }, [isConnected]);
-
-  useInterval(
-    () => {
-      const token = getAccessToken(address);
-      setToken(token);
-    },
-    !token ? 100 : null,
-  );
+    if (isAuthenticated || !isConnected) return;
+    socket.emit("auth", { token }, (res) => {
+      setIsAuthenticated(res.success);
+      setIsReady(true);
+    });
+  }, [isAuthenticated, isConnected]);
 
   useEffect(() => {
-    if (!token || !socket) return;
+    if (!token) return;
 
     function onConnect() {
-      if (!socket) return;
-      socket.emit("auth", { token }, (res) => {
-        setIsConnected(res.success);
-        setSocket(socket);
-      });
+      setIsConnected(true);
     }
 
     function onDisconnect() {
-      console.log("DISCONNECTED");
       setIsConnected(false);
+      setIsAuthenticated(false);
+      setIsReady(false);
     }
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
+
+    if (!isConnected) {
+      socket.connect();
+    }
 
     return () => {
       socket.off("connect", onConnect);
@@ -169,8 +151,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("tap", (res: TapResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             if (res.message == "You are overheating")
               return reject(ErrorOverheating);
             return reject(new Error(res.message));
@@ -192,8 +176,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("ping", (res: PingResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             if (res.message == "Ping cooldown required")
               return reject(ErrorPingCooldown);
             return reject(new Error(res.message));
@@ -215,8 +201,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("countTaps", (res: CountTapsResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -236,8 +224,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("applyRapidFire", (res: PingResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -257,8 +247,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("applyInstantCool", (res: PingResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -278,8 +270,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("buyHyperFire", (res: PingResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -299,8 +293,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("buyAntiOverheat", (res: PingResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -320,8 +316,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("buyHyperCool", (res: PingResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -368,8 +366,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("info", (res: InfoResult) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -391,8 +391,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("markFollows", { [platform]: true }, (res) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -412,8 +414,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("claimQuestsReward", (res) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -433,8 +437,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("claimRankBonus", { rank }, (res) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -454,8 +460,10 @@ export default function useTapSocketService() {
       try {
         socket.emit("claimReferralBonus", { count }, (res) => {
           if (!res.success) {
-            if (res.message == "Not authenticated")
+            if (res.message == "Not authenticated") {
+              setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
+            }
             return reject(new Error(res.message));
           }
 
@@ -478,7 +486,7 @@ export default function useTapSocketService() {
     ping,
     countTaps,
     info,
-    isConnected,
+    isReady,
     connect,
     applyRapidFire,
     applyInstantCool,
