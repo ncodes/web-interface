@@ -9,12 +9,14 @@ export function Ship({
   fire,
   onFireStop,
   firedCoins,
+  rank,
   showTapToFireNotice,
   firing,
   shipRef,
   overheatLevel,
   tapIncrement,
 }: {
+  rank: string;
   fire: () => void;
   onFireStop: () => void;
   firedCoins: ReactNode[];
@@ -65,24 +67,26 @@ export function Ship({
         }}
         onClick={renderTapIncrementIndicator}
       >
-        <Button
-          variant="ghost"
-          className="flex border-none ring-0 active:bottom-0 focus-visible:ring-0  flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
-          onMouseDown={fire}
-          onMouseUp={onFireStop}
-        >
-          <div className="flex justify-center" ref={shipRef}>
-            <FiringCoins coins={firedCoins} />
-          </div>
-          <img src="/images/ship.png" className="w-[200px]" />
-          {showTapToFireNotice && !firing && (
-            <div className="relative w-full">
-              <div className="w-full animate-pulse font-jersey20 z-20 text-xl text-white absolute -top-10">
-                Tap to Fire
+        {rank && (
+          <Button
+            variant="ghost"
+            className="flex border-none ring-0 active:bottom-0 focus-visible:ring-0  flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
+            onMouseDown={fire}
+            onMouseUp={onFireStop}
+          >
+            {showTapToFireNotice && !firing && (
+              <div className="relative w-full">
+                <div className="w-full animate-pulse font-jersey20 z-20 text-xl text-white absolute -top-10">
+                  Tap to Fire
+                </div>
               </div>
+            )}
+            <div className="flex justify-center" ref={shipRef}>
+              <FiringCoins coins={firedCoins} />
             </div>
-          )}
-        </Button>
+            <img src={`/images/rank-ships/${rank}.png`} className="h-[200px]" />
+          </Button>
+        )}
       </motion.div>
     </div>
   );

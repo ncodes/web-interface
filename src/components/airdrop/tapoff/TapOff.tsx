@@ -2,8 +2,10 @@ import moment from "moment";
 import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useInterval } from "usehooks-ts";
+import { shipImages } from "../../../constants.ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
+import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
@@ -18,6 +20,7 @@ const audioBgPath = "/audio/bg_game_audio.mp3";
 const audioFirePath = "/audio/fire_audio.mp3";
 
 export function TapOff() {
+  useImagePreloader(shipImages);
   const { address } = useConnectorContext();
   const { token } = useSession();
   const [taps, setTaps] = useState("0");
@@ -189,6 +192,7 @@ export function TapOff() {
                 tapCountRef={tapCountRef}
                 count={taps}
                 rank={playerInfo?.rank || ""}
+                rankInfo={playerInfo?.rankInfo}
               />
             </div>
 
@@ -201,6 +205,7 @@ export function TapOff() {
               showTapToFireNotice={showTapToFireNotice}
               firing={firing}
               shipRef={shipRef}
+              rank={playerInfo?.rank || ""}
             />
 
             <div className="h-[100px] flex flex-col justify-end">

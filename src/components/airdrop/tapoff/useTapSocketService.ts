@@ -31,6 +31,13 @@ export interface CountTapsResult {
   message?: string;
 }
 
+export interface RankInfo {
+  [key: string]: {
+    taps: number;
+    reward: number;
+  };
+}
+
 export interface InfoResult {
   success?: boolean;
   message?: string;
@@ -64,12 +71,7 @@ export interface InfoResult {
     canSpend: boolean;
     curWindowEndsAt?: string;
   };
-  rankInfo: {
-    [key: string]: {
-      taps: number;
-      reward: number;
-    };
-  };
+  rankInfo: RankInfo;
   rankBonusClaimStatus: Record<string, boolean>;
   referralInfo: { count: number; reward: number }[];
   claimableReferrals: number;

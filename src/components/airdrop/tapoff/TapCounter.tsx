@@ -2,15 +2,18 @@ import { ToolTip } from "../../ToolTip";
 import IconCoinGold from "../../icons/IconCoinGold";
 import IconInfoCircle from "../../icons/IconInfoCircle";
 import { PlayerRank } from "./PlayerRank";
+import { RankInfo } from "./useTapSocketService";
 
 export function TapCounter({
   tapCountRef,
   count,
   rank,
+  rankInfo,
 }: {
   tapCountRef: any;
   count: string;
   rank: string;
+  rankInfo?: RankInfo;
 }) {
   return (
     <div className="select-none">
@@ -39,7 +42,13 @@ export function TapCounter({
       {/* End Count */}
 
       {/* Rank */}
-      {rank && <PlayerRank rank={rank} />}
+      {rank && rankInfo && (
+        <PlayerRank
+          rank={rank}
+          tapCount={count}
+          rankInfo={rankInfo}
+        />
+      )}
       {/* End Rank */}
     </div>
   );

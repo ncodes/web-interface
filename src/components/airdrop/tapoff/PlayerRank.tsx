@@ -1,5 +1,8 @@
 import { ChevronRight, XIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { shipImages } from "../../../constants";
+import useImagePreloader from "../../../hooks/useImagePreloader";
+import { toDec } from "../../../libs/helpers";
 import IconCoinGold from "../../icons/IconCoinGold";
 import { Button } from "../../ui/Button";
 import {
@@ -13,19 +16,87 @@ import {
 import { Card, CardContent } from "../../ui/card";
 import {
   Carousel,
+  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "../../ui/carousel";
 import { Progress } from "../../ui/progress";
+import { RankInfo } from "./useTapSocketService";
 
-export function PlayerRank({ rank }: { rank: string }) {
+export function PlayerRank({
+  rank,
+  rankInfo,
+  tapCount,
+}: {
+  rank: string;
+  rankInfo: RankInfo;
+  tapCount: string;
+}) {
+  const { imagesPreloaded } = useImagePreloader(shipImages);
+  const [api, setApi] = useState<CarouselApi>();
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(rankInfo ? rank : "");
+  const [next, setNext] = useState(getNextRank(rankInfo ? rank : ""));
+  const [defaultSet, setDefaultSet] = useState(false);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    api.on("select", () => {
+      setSelected(getRank(api.selectedScrollSnap()));
+
+      if (api.selectedScrollSnap() + 1 != getRanks().length) {
+        setNext(getRanks()[api.selectedScrollSnap() + 1]);
+      }
+    });
+  }, [api]);
+
+  useEffect(() => {
+    if (!api || defaultSet || !open) return;
+    api.reInit({ active: true, startIndex: getRankIndex(selected) });
+  }, [api, open, rankInfo]);
+
+  function getNextRank(rank: string) {
+    if (!rank) return "";
+    const ranks = getRanks();
+    const curRankIdx = getCurrentRankIndex();
+    if (curRankIdx + 1 == ranks.length) return "";
+    return ranks[curRankIdx + 1];
+  }
+
+  function getRankIndex(rank: string) {
+    return getRanks().indexOf(rank);
+  }
+
+  function getCurrentRankIndex() {
+    return getRanks().indexOf(rank);
+  }
+
+  function getRanks() {
+    return Object.keys(rankInfo) || [];
+  }
+
+  function getRank(idx: number) {
+    return getRanks()[idx];
+  }
+
+  function progessPct(max: number) {
+    return toDec(tapCount).div(max).mul(100).toNumber();
+  }
+
+  if (!imagesPreloaded) return null;
   return (
     <Dialog
       open={open}
       onOpenChange={(open) => {
+        if (!open) {
+          api?.scrollTo(getCurrentRankIndex());
+          setDefaultSet(false);
+        }
         setOpen(open);
       }}
     >
@@ -42,26 +113,35 @@ export function PlayerRank({ rank }: { rank: string }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 w-[310px] xxs:w-[350px] xs:w-[370px] sm:max-w-[425px] top-[10%] md:top-[25%] border-modal-border bg-modal-background text-white">
-          <DialogHeader className="border-b border-gray-900 space-y-0">
+        <DialogContent className="p-0 w-[310px] xxs:w-[350px] select-none xs:w-[370px] sm:max-w-[425px] top-[10%] md:top-[25%] border-modal-border bg-modal-background text-white">
+          <DialogHeader className=" space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-500  to-yellow-300 rounded-t-lg py-1">
               Rank
             </DialogTitle>
-            <DialogDescription className="text-gray-500 font-light px-2 py-2 text-center text-xs xs:text-sm">
-              Your rank is based on number of taps you made
+            <DialogDescription className="text-gray-300 font-abrilFatFace tracking-wider font-light px-2 py-2 text-center text-xs xs:text-sm">
+              Your rank is based on your TAP count
             </DialogDescription>
           </DialogHeader>
           <div>
             <div className="flex justify-center items-center">
-              <Carousel className="w-full max-w-xs [&_button]:active:bg-yellow-400">
-                <CarouselContent className="p-5">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <CarouselItem key={index} className="basis-full">
+              <Carousel
+                setApi={setApi}
+                className="w-full max-w-xs [&_button]:active:bg-yellow-400"
+              >
+                <CarouselContent className="p-5 pt-2">
+                  {Object.keys(rankInfo).map((r, index) => (
+                    <CarouselItem key={index} className="basis-full h-[220px]">
                       <div className="p-1">
                         <Card className="bg-black border-transparent text-gray-400">
-                          <CardContent className="flex   aspect-square items-center justify-center p-6">
+                          <CardContent className="flex items-center justify-center p-6">
                             <span className="text-4xl font-semibold">
-                              {index + 1}
+                              <img
+                                src={`/public/images/rank-ships/${r}.png`}
+                                className="h-[150px] select-none"
+                              />
+                              <div className="text-lg text-center tracking-wider text-gray-100 font-jersey25">
+                                {r}
+                              </div>
                             </span>
                           </CardContent>
                         </Card>
@@ -82,19 +162,28 @@ export function PlayerRank({ rank }: { rank: string }) {
                   <IconCoinGold width="20" />
                 </span>
                 <span className="font-jersey25 text-2xl text-gray-300">
-                  0 - 30,000
+                  {rankInfo[selected].taps}{" "}
+                  {selected != next ? <>- {rankInfo[next].taps - 1}</> : ""}
                 </span>
               </div>
-              <div className="block w-full bg-gray-900 border border-gray-800 p-1 rounded-full bg-gradient-to-b from-gray-900 to-gray-700">
-                <Progress
-                  value={50}
-                  className="w-full h-4 
+              {rank == selected && (
+                <span className="text-blue-400 tracking-wider text-sm">
+                  Current Rank
+                </span>
+              )}
+              {rank != selected && (
+                <div className="block w-full bg-gray-900 border border-gray-800 p-1 rounded-full bg-gradient-to-b from-gray-900 to-gray-700">
+                  <Progress
+                    value={progessPct(rankInfo[next]?.taps)}
+                    className="w-full h-4 
       bg-gray-900
       [&_.indicator]:border-t [&_.indicator]:border-green-500 [&_.indicator]:bg-gradient-to-b [&_.indicator]:from-green-300 [&_.indicator]:via-green-400 [&_.indicator]:to-green-600 [&_.indicator]:rounded-full"
-                />
-              </div>
+                  />
+                </div>
+              )}
             </div>
           </div>
+
           <XIcon
             className="absolute right-0 mr-2 top-2 cursor-pointer opacity-80 hover:opacity-100 text-gray-900"
             onClick={() => {

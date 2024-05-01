@@ -54,11 +54,11 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 value="tap"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
-                  navigate("/tapoff");
+                  navigate("/tapwar");
                 }}
               >
                 <IconSpaceship width="25" className="text-yellow-500" />
-                <span>TapOff</span>
+                <span>TapWar</span>
               </TabsTrigger>
               <TabsTrigger
                 value="swap"
@@ -68,7 +68,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 }}
               >
                 <IconSwap width="25" className="text-yellow-500" />
-                <span>SwapOff</span>
+                <span>WarBond</span>
               </TabsTrigger>
               {/* <TabsTrigger
                 value="leaderboard"
@@ -121,8 +121,9 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
             <div className="flex shrink-0 items-center justify-end">
               {loc.pathname != "/energon" &&
                 loc.pathname != "/nft" &&
-                loc.pathname != "/tapoff" &&
-                loc.pathname != "/airdrop" &&
+                loc.pathname != "/tapwar" &&
+                loc.pathname != "/tapwar" &&
+                loc.pathname != "/warbond" &&
                 loc.pathname != "/galxe" && (
                   <div className="hidden lg:block">
                     <PointSearchBar />
@@ -152,6 +153,7 @@ export default function Airdrop({ defaultTab }: { defaultTab?: string }) {
       rightSide={
         loc.pathname != "/energon" &&
         loc.pathname != "/nft" &&
+        loc.pathname != "/tapwar" &&
         loc.pathname != "/galxe" && (
           <div className="flex w-full justify-between flex-col pt-3">
             <PointStream />

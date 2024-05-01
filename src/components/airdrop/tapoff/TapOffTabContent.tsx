@@ -9,7 +9,7 @@ export function TapOffTabContent() {
       className="p-0 m-0 flex flex-1 flex-col gap-3 relative"
     >
       <Helmet>
-        <title>{`TapOff - Joint`}</title>
+        <title>{`TapWar - Joint`}</title>
       </Helmet>
 
       <TapOff />

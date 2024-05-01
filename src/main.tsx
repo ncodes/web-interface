@@ -122,7 +122,7 @@ const routes = [
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/tapoff"),
+    path: makePath("/tapwar"),
     element: <App page={<Airdrop defaultTab="tap" />} />,
     errorElement: <RootErrorBoundary />,
   },
