@@ -7,6 +7,14 @@ export interface LinkTwitterUserParams {
   code: string;
 }
 
+export type BondSpends = {
+  amount: string;
+  side: string;
+  allocation: string;
+  battleId: string;
+  createdAt: string;
+}[];
+
 /**
  * useAirdropService provides access to v1/airdrop endpoint
  */
@@ -322,6 +330,92 @@ export function useAirdropService() {
     }
   }
 
+  /**
+   * Get bond balance
+   */
+  async function getBondBalance(): Promise<string> {
+    try {
+      const headers = {};
+      const token = getAccessToken(address);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+
+      const resp = await axios({
+        method: "get",
+        url: `${getChainInfo().apiUrl}/v1/airdrop/bond-balance`,
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data.balance);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
+   * Get battle info
+   */
+  async function getBattleInfo(): Promise<{
+    battleId: string;
+    battleIndex: number;
+    battleTaps: string;
+    battleAllocation: string;
+    nextBattleTime: string;
+    droidTaps: string;
+    banditTaps: string;
+    numDroids: number;
+    numBadits: number;
+    spends: BondSpends;
+  }> {
+    try {
+      const headers = {};
+      const token = getAccessToken(address);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+
+      const resp = await axios({
+        method: "get",
+        url: `${getChainInfo().apiUrl}/v1/airdrop/battle-info`,
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+  /**
+   * Stake bond
+   * @param battleId The battle id
+   * @param amount The amount to stake
+   * @param side The side to stake
+   * @returns
+   */
+  async function stakeBond({
+    battleId,
+    amount,
+    side,
+  }: {
+    battleId: string;
+    amount: string;
+    side: string;
+  }): Promise<void> {
+    try {
+      const headers = {};
+      const token = getAccessToken(address);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+
+      await axios({
+        url: `${getChainInfo().apiUrl}/v1/airdrop/stake-bond`,
+        method: "post",
+        data: { battleId, amount, side },
+        headers,
+      });
+
+      return Promise.resolve(undefined);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     linkTwitterUser,
     unlinkTwitter,
@@ -336,5 +430,8 @@ export function useAirdropService() {
     voteQuest,
     applyForPresale,
     verifySwap,
+    stakeBond,
+    getBondBalance,
+    getBattleInfo,
   };
 }

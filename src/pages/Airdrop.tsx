@@ -6,6 +6,7 @@ import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
 import { TapOffTabContent } from "../components/airdrop/tapoff/TapOffTabContent.tsx";
+import { WarBondTabContent } from "../components/airdrop/warbond/WarbondTabContent.tsx";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
 import IconSpaceship from "../components/icons/IconSpaceship.tsx";
 import IconSwap from "../components/icons/IconSwap.tsx";
@@ -61,10 +62,10 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 <span>TapWar</span>
               </TabsTrigger>
               <TabsTrigger
-                value="swap"
+                value="warbond"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
-                  navigate("/swapoff");
+                  navigate("/warbond");
                 }}
               >
                 <IconSwap width="25" className="text-yellow-500" />
@@ -120,8 +121,8 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
             </div>
             <div className="flex shrink-0 items-center justify-end">
               {loc.pathname != "/energon" &&
+                loc.pathname != "/airdrop" &&
                 loc.pathname != "/nft" &&
-                loc.pathname != "/tapwar" &&
                 loc.pathname != "/tapwar" &&
                 loc.pathname != "/warbond" &&
                 loc.pathname != "/galxe" && (
@@ -135,6 +136,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
       </ScrollOverflowIndicator>
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
       {currentTab == "tap" && <TapOffTabContent />}
+      {currentTab == "warbond" && <WarBondTabContent />}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
       {/* {currentTab == "energon" && <EnergonConversionTabContent />} */}
       {/* {currentTab == "nft" && <NFTConverstionTabContent />} */}
@@ -154,6 +156,7 @@ export default function Airdrop({ defaultTab }: { defaultTab?: string }) {
         loc.pathname != "/energon" &&
         loc.pathname != "/nft" &&
         loc.pathname != "/tapwar" &&
+        loc.pathname != "/warbond" &&
         loc.pathname != "/galxe" && (
           <div className="flex w-full justify-between flex-col pt-3">
             <PointStream />

@@ -13,6 +13,7 @@ export default function Input2(props: {
   className?: string;
   autoFocus?: boolean;
   containerClassName?: string;
+  focusedClassName?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: FocusEvent<HTMLInputElement, Element>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void;
@@ -35,7 +36,8 @@ export default function Input2(props: {
         "flex-1 bg-card-background border rounded-2xl transition-all duration-500",
         {
           "border-card-border": !focused,
-          "border-chinese-green ring-2 ring-chinese-green": focused,
+          [`border-chinese-green ring-2 ring-chinese-green ${props.focusedClassName}`]:
+            focused,
         },
       )}
     >

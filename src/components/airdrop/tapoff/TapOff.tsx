@@ -1,6 +1,7 @@
 import moment from "moment";
 import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
 import { shipImages } from "../../../constants.ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
@@ -36,19 +37,20 @@ export function TapOff() {
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
-  const {
-    createAudio,
-    playAudio,
-    pauseAudio,
-    manualPaused,
-    playing,
-    isFirstPlay,
-  } = useGameAudioPlayer();
+  const loc = useLocation();
+  const { playAudio, pauseAudio, manualPaused, playing, isFirstPlay } =
+    useGameAudioPlayer();
 
   useEffect(() => {
-    createAudio(audioBgPath);
-    createAudio(audioFirePath, false);
+    return () => {
+      pauseAudio(audioBgPath);
+      pauseAudio(audioFirePath);
+    };
   }, []);
+
+  useEffect(() => {
+    console.log("Changed location", loc.pathname);
+  }, [loc]);
 
   useEffect(() => {
     if (!isReady) return;

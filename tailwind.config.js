@@ -94,6 +94,7 @@ module.exports = {
         airdropHeader2: "url('/images/airdrop/headerbg2.png')",
         airdropHeader3: "url('/images/airdrop/headerbg3.png')",
         gamebg: "url('/images/game/gamebg@1x.png')",
+        warbond: "url('public/images/game/warbondbg.png')",
       },
       transitionProperty: {
         width: "width",

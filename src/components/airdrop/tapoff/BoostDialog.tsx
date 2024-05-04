@@ -810,7 +810,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       className="w-full text-lg gap-1 bg-gradient-to-b from-yellow-300 to-yellow-600 transition-all duration-200 hover:scale-[1.02]"
                       onClick={() => {
                         navigate(
-                          `/liquidity/${import.meta.env.VITE_DISCORD_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_DISCORD_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_DISCORD_TAPOFF_MULTIPLIER_LID}`,
+                          `/liquidity/${import.meta.env.VITE_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_LID}`,
                         );
                       }}
                     >

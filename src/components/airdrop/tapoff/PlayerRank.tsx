@@ -136,7 +136,7 @@ export function PlayerRank({
                           <CardContent className="flex items-center justify-center p-6">
                             <span className="text-4xl font-semibold">
                               <img
-                                src={`/public/images/rank-ships/${r}.png`}
+                                src={`/images/rank-ships/${r}.png`}
                                 className="h-[150px] select-none"
                               />
                               <div className="text-lg text-center tracking-wider text-gray-100 font-jersey25">
