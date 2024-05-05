@@ -6,7 +6,7 @@ import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
 import { TapOffTabContent } from "../components/airdrop/tapoff/TapOffTabContent.tsx";
-import { WarBondTabContent } from "../components/airdrop/warbond/WarbondTabContent.tsx";
+import { WarBondTabContent } from "../components/airdrop/warbond/WarBondTabContent.tsx";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
 import IconSpaceship from "../components/icons/IconSpaceship.tsx";
 import IconSwap from "../components/icons/IconSwap.tsx";

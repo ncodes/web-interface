@@ -1,4 +1,3 @@
-import { InfoIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../../hooks/store/useStore.ts";
