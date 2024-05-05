@@ -105,15 +105,17 @@ export function StakeDialog({
                 }}
                 placeholder="0.0"
                 focusedClassName="ring-yellow-500 border-yellow-500"
-                afterInput=<Button
-                  variant="link"
-                  className="py-0 h-auto text-yellow-300 text-xs"
-                  onClick={() => {
-                    setValue(balance);
-                  }}
-                >
-                  MAX
-                </Button>
+                afterInput={
+                  <Button
+                    variant="link"
+                    className="py-0 h-auto text-yellow-300 text-xs"
+                    onClick={() => {
+                      setValue(balance);
+                    }}
+                  >
+                    MAX
+                  </Button>
+                }
               />
             </div>
             <div className="px-5 pb-5">
