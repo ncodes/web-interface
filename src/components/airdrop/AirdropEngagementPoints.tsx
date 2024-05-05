@@ -23,7 +23,7 @@ export function AirdropEngagementPoints() {
       <div className="px-5 mb-3">
         {user?.twitterUsername ? (
           <>
-            <a href="https://twitter.com/intent/tweet?text=@0xJoint&hashtags=JOIN">
+            <a href="https://twitter.com/intent/tweet?text=%400xJoint%20$JOIN">
               <Button
                 size="full"
                 className="hover:scale-105 transition-all duration-500"
