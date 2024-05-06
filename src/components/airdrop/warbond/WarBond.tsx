@@ -35,7 +35,10 @@ export function WarBond() {
   return (
     <div className="h-full w-full flex flex-col flex-1 ">
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
-        <Header bondBalance={bondBalanceQuery.data || "0"} />
+        <Header
+          bondBalance={bondBalanceQuery.data || "0"}
+          battleId={battleInfoQuery.data?.battleId}
+        />
 
         {address && !!token && (
           <div className="overflow-auto flex flex-col pb-10 md:pb-0">
@@ -68,15 +71,21 @@ export function WarBond() {
               </div>
               <div className="flex justify-center -mt-3">
                 <span className="font-jersey10 text-xl tracking-wider">
-                  Next Battle in{" "}
-                  <span className="text-chinese-green">
-                    {battleInfoQuery.data && (
-                      <CountDown
-                        isoDate={battleInfoQuery.data?.nextBattleTime}
-                        full
-                      />
-                    )}
-                  </span>
+                  {battleInfoQuery.data?.battleId ? (
+                    <>
+                      Next Battle in{" "}
+                      <span className="text-chinese-green">
+                        {battleInfoQuery.data && (
+                          <CountDown
+                            isoDate={battleInfoQuery.data?.nextBattleTime}
+                            full
+                          />
+                        )}
+                      </span>
+                    </>
+                  ) : (
+                    <>First Battle starting soon</>
+                  )}
                 </span>
               </div>
             </header>

@@ -12,7 +12,13 @@ import IconInfoCircle from "../../icons/IconInfoCircle.tsx";
 import { Button } from "../../ui/Button.tsx";
 import { InfoDialog } from "./InfoDialog.tsx";
 
-export function Header({ bondBalance }: { bondBalance: string }) {
+export function Header({
+  bondBalance,
+  battleId,
+}: {
+  bondBalance: string;
+  battleId?: string;
+}) {
   const navigate = useNavigate();
   const { address } = useConnectorContext();
   const { token } = useSession();
@@ -66,7 +72,7 @@ export function Header({ bondBalance }: { bondBalance: string }) {
               <Button
                 variant="ghost"
                 rounded="xl"
-                disabled={toDec(bondBalance).lte(0)}
+                disabled={toDec(bondBalance).lte(0) || !battleId}
                 className="font-jersey25 text-lg md:h-10 md:px-8 md:text-xl bg-gradient-to-b text-gray-950 from-green-300 to-green-500 hover:scale-105 transition-all duration-500"
                 onClick={() => {
                   navigate(

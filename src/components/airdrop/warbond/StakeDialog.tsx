@@ -72,6 +72,7 @@ export function StakeDialog({
             variant="ghost"
             size="full"
             rounded="xl"
+            disabled={!battleId}
             className="p-2 h-auto bg-gradient-to-b text-3xl text-gray-950 from-yellow-300 to-yellow-500 hover:scale-105 transition-all duration-500"
           >
             Stake Bond

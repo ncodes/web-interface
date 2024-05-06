@@ -378,7 +378,24 @@ export function useAirdropService() {
       });
 
       return Promise.resolve(resp.data.data);
-    } catch (e) {
+    } catch (e: any) {
+      if (
+        e.response?.status === 400 &&
+        e.response?.data?.error.message === "No battle found"
+      ) {
+        return {
+          battleId: "",
+          battleIndex: 0,
+          battleTaps: "0",
+          battleAllocation: "0",
+          nextBattleTime: "",
+          droidTaps: "0",
+          banditTaps: "0",
+          numDroids: 0,
+          numBadits: 0,
+          spends: [],
+        };
+      }
       return Promise.reject(handleAxiosError(e as never));
     }
   }
