@@ -333,8 +333,14 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <span>Hyper Fire</span>
                           <span className="flex items-center gap-1 text-gray-300 text-sm">
                             <IconCoinGold width="20" />
-                            <span>2000</span>
-                            <span className="text-gray-400">(Lvl: 2)</span>
+                            <span>
+                              {formatToMoney(
+                                playerInfo.hyperFire.nextLevelCost,
+                              )}
+                            </span>
+                            <span className="text-gray-400">
+                              (Lvl: {playerInfo.hyperFire.level})
+                            </span>
                           </span>
                         </span>
                         <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
@@ -360,8 +366,14 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <span>Anti-Overheat</span>
                           <span className="flex items-center gap-1 text-gray-300 text-sm">
                             <IconCoinGold width="20" />
-                            <span>2000</span>
-                            <span className="text-gray-400">(Lvl: 2)</span>
+                            <span>
+                              {formatToMoney(
+                                playerInfo.antiOverheat.nextLevelCost,
+                              )}
+                            </span>
+                            <span className="text-gray-400">
+                              (Lvl: {playerInfo.antiOverheat.level})
+                            </span>
                           </span>
                         </span>
                         <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
@@ -390,8 +402,14 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <span>Hyper Cool</span>
                           <span className="flex items-center gap-1 text-gray-300 text-sm">
                             <IconCoinGold width="20" />
-                            <span>2000</span>
-                            <span className="text-gray-400">(Lvl: 2)</span>
+                            <span>
+                              {formatToMoney(
+                                playerInfo.hyperCool.nextLevelCost,
+                              )}
+                            </span>
+                            <span className="text-gray-400">
+                              (Lvl: {playerInfo.hyperCool.level})
+                            </span>
                           </span>
                         </span>
                         <span className="flex font-['Mitr'] font-light text-xs text-gray-400 relative -top-1">
