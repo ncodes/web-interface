@@ -14,7 +14,7 @@ export function AirdropHeader() {
       <ul className="flex gap-7 mt-2 md:mt-1">
         <li className="flex gap-2 items-center font-light tracking-wider">
           <img src="/images/airdrop-icons/point-star.svg" className="w-6" />
-          <span className="flex items-center text-lg gap-0.5">
+          <span className="flex items-center text-lg gap-0.5 font-jersey25">
             <span>{user?.points ?? "0"}</span>
             <span className="text-gray-500">
               <ToolTip tip="Your total points">
@@ -26,7 +26,7 @@ export function AirdropHeader() {
 
         <li className="flex gap-2 items-center font-light tracking-wider">
           <img src="/images/airdrop-icons/coin.svg" className="w-6" />
-          <span className="flex items-center text-lg gap-0.5">
+          <span className="flex items-center text-lg gap-0.5 font-jersey25">
             <span>
               {formatToHighDenom(user?.totalUnclaimedAlloc || "0", 18)}
             </span>

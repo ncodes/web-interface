@@ -124,7 +124,7 @@ export function TapOff() {
     );
 
     if (isFirstPlay(audioBgPath)) {
-      playAudio(audioBgPath, false, false);
+      playAudio(audioBgPath, true, false);
     }
 
     const doFire = async () => {

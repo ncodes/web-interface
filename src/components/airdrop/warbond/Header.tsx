@@ -35,7 +35,7 @@ export function Header({ bondBalance }: { bondBalance: string }) {
                   className="w-[20px]"
                 />
               </span>
-              <span className="tracking-widest font-bold">
+              <span className="tracking-widest font-bold font-jersey25">
                 {formatToHighDenom(user?.totalUnclaimedAlloc || "0", 18)}
               </span>
               <ToolTip
@@ -52,7 +52,7 @@ export function Header({ bondBalance }: { bondBalance: string }) {
                   className="w-[20px]"
                 />
               </span>
-              <span className="tracking-widest font-bold">
+              <span className="tracking-widest font-bold font-jersey25">
                 {formatToMoney(bondBalance || "0")}
               </span>
               <ToolTip

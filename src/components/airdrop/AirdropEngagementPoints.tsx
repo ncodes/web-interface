@@ -16,8 +16,8 @@ export function AirdropEngagementPoints() {
 
       <p className="p-5 font-extralight text-md text-gray-300">
         Earn points when you create X posts mentioning <b>@OxJoint</b> or{" "}
-        <b>$JOIN</b>. The more people engaging with your post, the more points
-        you earn. Also, engaging with similar posts to earn you more points.{" "}
+        <b>$JOIN</b>. The more people engage with your post, the more points you
+        earn.{" "}
       </p>
 
       <div className="px-5 mb-3">

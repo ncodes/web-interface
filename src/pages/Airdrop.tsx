@@ -8,8 +8,8 @@ import PointStream from "../components/airdrop/PointStream.tsx";
 import { TapOffTabContent } from "../components/airdrop/tapoff/TapOffTabContent.tsx";
 import { WarBondTabContent } from "../components/airdrop/warbond/WarBondTabContent.tsx";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
+import IconBattle from "../components/icons/IconBattle.tsx";
 import IconSpaceship from "../components/icons/IconSpaceship.tsx";
-import IconSwap from "../components/icons/IconSwap.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import Layout from "./Layout.tsx";
@@ -68,7 +68,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                   navigate("/warbond");
                 }}
               >
-                <IconSwap width="25" className="text-yellow-500" />
+                <IconBattle width="25" className="text-yellow-500" />
                 <span>WarBond</span>
               </TabsTrigger>
               {/* <TabsTrigger
