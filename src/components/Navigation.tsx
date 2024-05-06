@@ -27,7 +27,7 @@ export function Navigation() {
 
   return (
     <nav className="-ml-5 border-b border-b-gray-900 xl:border-b-0 pb-4 xl:pb-0 pl-8">
-      <ul className="mt-3 xl:mt-[50px] flex flex-col xl:space-y-3">
+      <ul className="mt-3 xl:mt-[60px] flex flex-col xl:space-y-2">
         {/* <li>
           <NavPageLink
             iconClassName="w-[25px]"
@@ -41,7 +41,7 @@ export function Navigation() {
           <NavPageLink
             iconClassName="w-[25px]"
             label="Markets"
-            labelClassName="font-abrilFatFace tracking-wider"
+            labelClassName="font-jersey25 tracking-wider"
             icon={<IconMarketCoin width="25" />}
             active={pathname.match("^(/(my/)?market)|(/$)") != null}
             to="/"
@@ -51,7 +51,7 @@ export function Navigation() {
           <NavPageLink
             iconClassName="w-[25px]"
             label="Liquidity"
-            labelClassName="font-abrilFatFace tracking-wider"
+            labelClassName="font-jersey25 tracking-wider"
             active={pathname.match("^/(my/)?liquidit(y|ies)") != null}
             icon={<IconCoinStack2 width="25" />}
             to="/my/liquidity"
@@ -62,7 +62,7 @@ export function Navigation() {
             iconClassName="w-[25px]"
             icon={<IconExchange width="25" />}
             label="Swaps"
-            labelClassName="font-abrilFatFace tracking-wider"
+            labelClassName="font-jersey25 tracking-wider"
             active={pathname.match("^/(my/)?swap(s|)") != null}
             to="/my/swaps"
           />
@@ -72,7 +72,7 @@ export function Navigation() {
             iconClassName="w-[25px]"
             icon={<IconOffer width="25" />}
             label="Offers"
-            labelClassName="font-abrilFatFace tracking-wider"
+            labelClassName="font-jersey25 tracking-wider"
             active={pathname.match("^/(my/)?offer(s|)") != null}
             to="/my/offers"
             countBadge={
@@ -91,7 +91,7 @@ export function Navigation() {
             iconClassName="relative w-[25px] left-1"
             icon={<IconDispute width="40" />}
             label="Disputes"
-            labelClassName="font-abrilFatFace tracking-wider"
+            labelClassName="font-jersey25 tracking-wider"
             active={pathname.match("^/my/dispute") != null}
             to="/my/disputes"
           />
@@ -100,7 +100,7 @@ export function Navigation() {
           <NavPageLink
             icon={<IconMediation width="40" />}
             iconClassName="w-[25px]"
-            labelClassName="font-abrilFatFace tracking-wider"
+            labelClassName="font-jersey25 tracking-wider"
             label="Mediation"
             active={pathname.match("^/(my/)?tickets") != null}
             to="/my/tickets"
@@ -111,7 +111,7 @@ export function Navigation() {
             icon={<IconCoinGold width="40" />}
             iconClassName="w-[35px] relative -left-1"
             label="Airdrop"
-            labelClassName="relative -left-2 font-abrilFatFace tracking-wider"
+            labelClassName="relative -left-2 font-jersey25 tracking-wider"
             active={
               pathname.match("^/points|referrals|energon|airdrop") != null
             }

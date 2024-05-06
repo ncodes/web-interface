@@ -56,7 +56,7 @@ export function NavPageLink(props: NavPageLinkProps) {
         </span>
         <span
           className={cn(
-            "text-[20px] xl:text-[21px] tracking-wide",
+            "text-[20px] xl:text-[25px] tracking-wide",
             props.labelClassName,
           )}
         >
