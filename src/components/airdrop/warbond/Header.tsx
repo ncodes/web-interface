@@ -28,7 +28,7 @@ export function Header({ bondBalance }: { bondBalance: string }) {
       {address && !!token && (
         <>
           <ul className="flex gap-4 mt-2">
-            <li className="flex items-center gap-1">
+            <li className="flex items-center gap-1.5">
               <span>
                 <img
                   src="/images/airdrop-icons/coin.svg"
@@ -45,10 +45,10 @@ export function Header({ bondBalance }: { bondBalance: string }) {
                 <IconInfoCircle className="w-[13px] cursor-pointer" />
               </ToolTip>
             </li>
-            <li className="flex items-center gap-1">
+            <li className="flex items-center gap-1.5">
               <span>
                 <img
-                  src="/images/game/war_bond_coin.svg"
+                  src="/public/images/airdrop-icons/bond-coin.svg"
                   className="w-[20px]"
                 />
               </span>
