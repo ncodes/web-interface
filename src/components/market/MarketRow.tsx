@@ -56,7 +56,7 @@ export function MarketRow({
   return (
     <div
       className={cn(
-        "border select-none bg-card-background border-card-border border-b-gray-600 transition-all duration-300 rounded-xl ",
+        "border select-none bg-card-background border-card-border/50 border-b-gray-600/60 transition-all duration-300 rounded-xl ",
         {
           "hover:border-chinese-green cursor-pointer": !noFocus,
         },
