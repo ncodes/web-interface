@@ -81,9 +81,9 @@ export function WarBond() {
               </div>
             </header>
             <div className="flex flex-col md:flex-row xl:w-[1000px] gap-5 xl:gap-0 justify-between mx-auto mt-16 xl:mt-10">
-              <div className="flex flex-col w-[250px] font-jersey10 h-[310px] border border-[#97A2ED]/30 rounded-2xl bg-gradient-to-b from-black to-black/50">
+              <div className="flex flex-col w-[250px] font-jersey10 min-h-[310px] border border-[#97A2ED]/30 rounded-2xl bg-gradient-to-b from-black to-black/50">
                 <div className="flex justify-center">
-                  <span className="p-2 px-5 relative font-abrilFatFace tracking-wider text-xl -top-[22px] text-center bg-[#122BE1] inline-block rounded-full m">
+                  <span className="p-2 px-5 relative font-jersey10 tracking-wider text-2xl -top-[22px] text-center bg-[#122BE1] inline-block rounded-full m">
                     Droid Side
                   </span>
                 </div>
@@ -138,9 +138,9 @@ export function WarBond() {
                 VS
               </div>
 
-              <div className="flex flex-col w-[250px] font-jersey10 h-[300px] border border-[#EFA6A6]/30 rounded-2xl bg-gradient-to-b from-black to-black/50">
+              <div className="flex flex-col w-[250px] font-jersey10 min-h-[300px] border border-[#EFA6A6]/30 rounded-2xl bg-gradient-to-b from-black to-black/50">
                 <div className="flex justify-center">
-                  <span className="p-2 px-5 relative font-abrilFatFace tracking-wider text-xl -top-[22px] text-center bg-[#E11212] inline-block rounded-full m">
+                  <span className="p-2 px-5 relative font-jersey10 tracking-wider text-2xl -top-[22px] text-center bg-[#E11212] inline-block rounded-full m">
                     Bandit Side
                   </span>
                 </div>

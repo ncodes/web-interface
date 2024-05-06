@@ -72,7 +72,7 @@ export function StakeDialog({
             variant="ghost"
             size="full"
             rounded="xl"
-            className="p-2 h-auto bg-gradient-to-b text-4xl text-gray-950 from-yellow-300 to-yellow-500 hover:scale-105 transition-all duration-500"
+            className="p-2 h-auto bg-gradient-to-b text-3xl text-gray-950 from-yellow-300 to-yellow-500 hover:scale-105 transition-all duration-500"
           >
             Stake Bond
           </Button>

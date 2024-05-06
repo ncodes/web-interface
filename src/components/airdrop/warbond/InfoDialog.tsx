@@ -1,5 +1,6 @@
-import { InfoIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useState } from "react";
+import { Button } from "../../ui/Button";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +22,12 @@ export function InfoDialog() {
     >
       <div className="flex justify-center items-center select-none">
         <DialogTrigger asChild>
-          <InfoIcon className="w-[18px] text-gray-400 opacity-60 hover:opacity-100 cursor-pointer transition-all duration-500" />
+          <Button
+            variant="link"
+            className="text-xl border p-4 ml-2 border-gray-700 py-0.5 h-auto hover:border-chinese-green"
+          >
+            About
+          </Button>
         </DialogTrigger>
 
         <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] md:w-auto lg:w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
@@ -74,8 +80,8 @@ export function InfoDialog() {
               <li>
                 You can buy war $BOND in a designated Joint market. Note: $BOND
                 are only meant for side staking. It carries no value outside the
-                game, it is non-refundable and will become useless at the end of the
-                game.
+                game, it is non-refundable and will become useless at the end of
+                the game.
               </li>
             </ul>
           </div>
