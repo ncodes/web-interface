@@ -31,7 +31,7 @@ export function Header({ bondBalance }: { bondBalance: string }) {
             <li className="flex items-center gap-1">
               <span>
                 <img
-                  src="/public/images/airdrop-icons/coin.svg"
+                  src="/images/airdrop-icons/coin.svg"
                   className="w-[20px]"
                 />
               </span>
@@ -48,7 +48,7 @@ export function Header({ bondBalance }: { bondBalance: string }) {
             <li className="flex items-center gap-1">
               <span>
                 <img
-                  src="/public/images/game/war_bond_coin.svg"
+                  src="/images/game/war_bond_coin.svg"
                   className="w-[20px]"
                 />
               </span>

@@ -47,7 +47,7 @@ export function StakeHistoryDialog({
             {spends.map((spend, index) => (
               <div key={index} className="flex gap-2 p-3">
                 <img
-                  src="/public/images/game/war_bond_coin.svg"
+                  src="/images/game/war_bond_coin.svg"
                   className="w-[20px]"
                 />
                 <div className="text-sm tracking-wider">

@@ -55,7 +55,7 @@ export function WarBond() {
               <div className="flex justify-center xl:-mt-3 items-center gap-2 xl:gap-4">
                 <span>
                   <img
-                    src="/public/images/game/stack_coin.svg"
+                    src="/images/game/stack_coin.svg"
                     className="h-[40px] xl:h-[70px]"
                   />
                 </span>
