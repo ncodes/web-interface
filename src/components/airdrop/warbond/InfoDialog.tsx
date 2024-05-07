@@ -140,6 +140,9 @@ export function InfoDialog({ type }: { type: string }) {
                           wait time.
                         </li>
                         <li>
+                          <b>Hyper Fire:</b> Get more TAPs for each tap action.
+                        </li>
+                        <li>
                           <b>Anti-Overheat:</b> Increase your overheat
                           resistance level.
                         </li>
