@@ -28,7 +28,7 @@ export function Header({
     <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col md:flex-row justify-between items-center p-5 py-3">
       <span className="gap-1 flex justify-center items-center h-full text-3xl tracking-wider font-semibold font-jersey10 ml-2">
         <span>WarBond</span>
-        <InfoDialog />
+        <InfoDialog type="warbond" />
       </span>
 
       {address && !!token && (

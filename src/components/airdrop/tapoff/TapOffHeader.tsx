@@ -10,6 +10,7 @@ import { RefDialog } from "./RefDialog.tsx";
 import { StatsDialog } from "./StatsDialog.tsx";
 import { TaskDialog } from "./TaskDialog.tsx";
 import { InfoResult } from "./useTapSocketService.ts";
+import { InfoDialog } from "../warbond/InfoDialog.tsx";
 
 export function TapOffHeader({
   playerInfo,
@@ -27,7 +28,8 @@ export function TapOffHeader({
   return (
     <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col md:flex-row justify-between items-center md:items-start p-5 py-3">
       <span className="hidden md:flex justify-center items-center h-full text-3xl tracking-wider font-semibold font-jersey10 ml-2">
-        TapWar
+        <span>TapWar</span>
+        <InfoDialog type="tapwar" />
       </span>
 
       {address && hasAccessToken(address) && playerInfo && (
