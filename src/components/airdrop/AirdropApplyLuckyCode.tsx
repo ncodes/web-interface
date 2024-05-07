@@ -1,8 +1,9 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2 } from "lucide-react";
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { useAirdropService } from "../../hooks/services/backend/useAirdropService.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import { formatToMoney, isZero, toHD } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
@@ -11,6 +12,7 @@ import { Button } from "../ui/Button.tsx";
 
 export function AirdropApplyLuckyCode() {
   const { applyLuckyCode } = useAirdropService();
+  const user = useStore((state) => state.user);
   const [code, setCode] = useState("");
   const [amount, setAmount] = useState("0");
   const { notifyError, notifySuccess } = useToast();
@@ -53,25 +55,34 @@ export function AirdropApplyLuckyCode() {
         </div>
       )}
       <div className="p-3">
-        <Input2
-          placeholder="Enter your luck code"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          containerClassName="!rounded-full"
-          className="pt-2 pl-5 md:!text-lg"
-          afterInput={
-            <Button
-              size="lg"
-              className="mr-1 md:text-lg"
-              disabled={applyLuckyCodeMut.isPending || !code}
-              onClick={() => {
-                apply();
-              }}
-            >
-              Apply
-            </Button>
-          }
-        />
+        {!user?.twitterUserId && !user?.discordId && (
+          <div className="flex justify-center my-4 gap-2 text-gray-400 font-light items-center">
+            <AlertTriangle size="14" />
+            <span>X or Discord account not connected</span>
+          </div>
+        )}
+
+        {(user?.twitterUserId || user?.discordId) && (
+          <Input2
+            placeholder="Enter your luck code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            containerClassName="!rounded-full"
+            className="pt-2 pl-5 md:!text-lg"
+            afterInput={
+              <Button
+                size="lg"
+                className="mr-1 md:text-lg"
+                disabled={applyLuckyCodeMut.isPending || !code}
+                onClick={() => {
+                  apply();
+                }}
+              >
+                Apply
+              </Button>
+            }
+          />
+        )}
       </div>
     </div>
   );

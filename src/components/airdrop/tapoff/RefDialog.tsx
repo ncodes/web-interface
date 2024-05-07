@@ -119,11 +119,11 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   <div className="flex  w-full justify-between">
                     <span className="label text-gray-200 text-sm md:text-lg flex items-center">
                       <span className="font-mitr font-extralight">
-                        https://jntl.ink/r/
+                        https://jntl.ink/
                       </span>
                       <span>{user?.refCode}</span>
                       <CopyToClipboard
-                        text={`https://jntl.ink/r/${user?.refCode}`}
+                        text={`https://jntl.ink/${user?.refCode}`}
                         onCopy={() => {
                           simpleSuccess("Copied", { position: "top-center" });
                         }}

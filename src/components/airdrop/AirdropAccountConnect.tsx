@@ -172,7 +172,7 @@ export function AirdropAccountConnect() {
               </>
             ) : (
               <>
-                {!user?.twitterUsername && (
+                {!user?.twitterUserId && (
                   <>
                     {!user?.twitterLinkedAt ? (
                       <span className="shrink-0 w-20 h-7 font-normal bg-chinese-green hover:scale-110 transition-all duration-300 rounded-full text-black flex items-center justify-center text-sm">
@@ -185,7 +185,7 @@ export function AirdropAccountConnect() {
                     )}
                   </>
                 )}
-                {user?.twitterUsername && (
+                {user?.twitterUserId && (
                   <Button
                     variant="link"
                     className="shrink-0 cursor-pointer w-20 h-7 font-normal text-gray-400 hover:text-gray-300 rounded-full flex items-center justify-center text-sm"

@@ -22,6 +22,7 @@ declare global {
     pointsAllocs: number;
     pointsAllocsClaimed: boolean;
 
+    twitterUserId: string;
     twitterUsername: string;
     twitterLinkedAt: string;
 
