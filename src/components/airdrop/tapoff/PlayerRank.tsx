@@ -162,8 +162,12 @@ export function PlayerRank({
                   <IconCoinGold width="20" />
                 </span>
                 <span className="font-jersey25 text-2xl text-gray-300">
-                  {rankInfo[selected].taps}{" "}
-                  {selected != next ? <>- {rankInfo[next].taps - 1}</> : ""}
+                  {rankInfo[selected].taps}
+                  {next && selected != next ? (
+                    <>- {rankInfo[next]?.taps - 1}</>
+                  ) : (
+                    ""
+                  )}
                 </span>
               </div>
               {rank == selected && (
