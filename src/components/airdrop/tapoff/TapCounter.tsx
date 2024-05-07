@@ -32,7 +32,7 @@ export function TapCounter({
 
       {/* Count */}
       <div
-        className="flex justify-center  md:h-[110px] font-jersey25 text-7xl md:text-9xl bg-gradient-to-r
+        className="flex justify-center hover:scale-105 transition-all duration-500  md:h-[110px] font-jersey25 text-7xl md:text-9xl bg-gradient-to-r
    from-amber-400 via-yellow-300 to-yellow-500 text-transparent bg-clip-text
    shadow-2xl"
         ref={tapCountRef}
@@ -43,11 +43,7 @@ export function TapCounter({
 
       {/* Rank */}
       {rank && rankInfo && (
-        <PlayerRank
-          rank={rank}
-          tapCount={count}
-          rankInfo={rankInfo}
-        />
+        <PlayerRank rank={rank} tapCount={count} rankInfo={rankInfo} />
       )}
       {/* End Rank */}
     </div>

@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { Copy, Link, Share, Share2, X } from "lucide-react";
+import { AlertTriangle, Copy, Link, Share, Share2, X } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { useNavigate } from "react-router-dom";
 import * as ReactShare from "react-share";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext";
 import { useReferralService } from "../../../hooks/services/backend/useReferralService";
@@ -25,6 +26,7 @@ import { InfoResult } from "./useTapSocketService";
 
 export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
   const { address } = useConnectorContext();
+  const nav = useNavigate();
   const user = useStore((state) => state.user);
   const [open, setOpen] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
@@ -104,51 +106,76 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
             </DialogDescription>
           </DialogHeader>
           <div className="min-h-[200px]">
-            <div className="px-5 pt-2 pb-0">
-              <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">
-                Your Referral link
-              </Label>
-            </div>
+            {!user?.twitterUserId && !user?.discordId && (
+              <div className="flex flex-col justify-center my-10 text-gray-400 font-light items-center">
+                <span className="flex items-center gap-2">
+                  <AlertTriangle size="14" />
+                  <span>Social account not connected</span>
+                </span>
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    nav("/airdrop");
+                  }}
+                >
+                  Go to Home to Connect
+                </Button>
+              </div>
+            )}
 
-            <div className="flex p-1 m-2 mt-1 mb-1 gap-3">
-              <div className="flex-1 flex items-center p-2 gap-1 border rounded-xl border-gray-800">
-                <div className="">
-                  <Link className="text-yellow-500 w-[25px] md:w-[35px]" />
+            {(user?.twitterUserId || user?.discordId) && (
+              <>
+                <div className="px-5 pt-2 pb-0">
+                  <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">
+                    Your Referral link
+                  </Label>
                 </div>
-                <div className="flex w-full flex-col items-start justify-start font-jersey25 tracking-wider">
-                  <div className="flex  w-full justify-between">
-                    <span className="label text-gray-200 text-sm md:text-lg flex items-center">
-                      <span className="font-mitr font-extralight">
-                        https://jntl.ink/
-                      </span>
-                      <span>{user?.refCode}</span>
-                      <CopyToClipboard
-                        text={`https://jntl.ink/${user?.refCode}`}
-                        onCopy={() => {
-                          simpleSuccess("Copied", { position: "top-center" });
-                        }}
-                      >
-                        <span className="text-gray-400 opacity-80 mr-2 hover:opacity-100 cursor-pointer hover:text-yellow-400 transition-all duration-300 active:scale-110">
-                          <Copy className="w-4 inline-block ml-1 " />
+
+                <div className="flex p-1 m-2 mt-1 mb-1 gap-3">
+                  <div className="flex-1 flex items-center p-2 gap-1 border rounded-xl border-gray-800">
+                    <div className="">
+                      <Link className="text-yellow-500 w-[25px] md:w-[35px]" />
+                    </div>
+                    <div className="flex w-full flex-col items-start justify-start font-jersey25 tracking-wider">
+                      <div className="flex  w-full justify-between">
+                        <span className="label text-gray-200 text-sm md:text-lg flex items-center">
+                          <span className="font-mitr font-extralight">
+                            https://jntl.ink/
+                          </span>
+                          <span>{user?.refCode}</span>
+                          <CopyToClipboard
+                            text={`https://jntl.ink/${user?.refCode}`}
+                            onCopy={() => {
+                              simpleSuccess("Copied", {
+                                position: "top-center",
+                              });
+                            }}
+                          >
+                            <span className="text-gray-400 opacity-80 mr-2 hover:opacity-100 cursor-pointer hover:text-yellow-400 transition-all duration-300 active:scale-110">
+                              <Copy className="w-4 inline-block ml-1 " />
+                            </span>
+                          </CopyToClipboard>
                         </span>
-                      </CopyToClipboard>
-                    </span>
-                    <div>
-                      <Button
-                        variant="ghost"
-                        className="m-0 h-auto items-center flex gap-1 p-1 px-1 pl-0 pr-0 md:pr-4 md:pl-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
-                        onClick={() => {
-                          showDetail("share");
-                        }}
-                      >
-                        <Share width="20" className="text-gray-200" />
-                        <span className="text-lg hidden xxs:inline">Share</span>
-                      </Button>
+                        <div>
+                          <Button
+                            variant="ghost"
+                            className="m-0 h-auto items-center flex gap-1 p-1 px-1 pl-0 pr-0 md:pr-4 md:pl-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
+                            onClick={() => {
+                              showDetail("share");
+                            }}
+                          >
+                            <Share width="20" className="text-gray-200" />
+                            <span className="text-lg hidden xxs:inline">
+                              Share
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
 
             <div className="px-5 pt-2 pb-0">
               <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">
