@@ -15,6 +15,8 @@ import {
   DialogTrigger,
 } from "../../ui/Dialog";
 
+const minStakeBond = import.meta.env.VITE_TAPOFF_MIN_BOND_STAKE;
+
 export function StakeDialog({
   side,
   balance,
@@ -97,7 +99,12 @@ export function StakeDialog({
               allocation.
             </div>
             <div className="px-5 mt-5 pt-3 border-t border-gray-900">
-              <span className="mb-2 block text-gray-400">How much?</span>
+              <div className="flex items-center justify-between tracking-wider">
+                <span className="mb-2 block text-gray-400">How much?</span>
+                <span className="text-sm font-light text-gray-300">
+                  <span className="text-gray-500">Minimum:</span> {minStakeBond}
+                </span>
+              </div>
               <Input2
                 type="number"
                 value={value}
@@ -126,6 +133,7 @@ export function StakeDialog({
                   toDec(balance).isZero() ||
                   toDec(value || "0").lte(0) ||
                   toDec(value || "0").gt(balance) ||
+                  toDec(minStakeBond).gt(value || "0") ||
                   loading
                 }
                 onClick={() => {
