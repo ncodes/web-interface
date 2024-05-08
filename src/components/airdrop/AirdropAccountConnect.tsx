@@ -41,7 +41,7 @@ export function AirdropAccountConnect() {
   // Handle twitter auth code linking
   useEffect(() => {
     if (state != "twitter") return;
-    if (!user || user.twitterUsername || !authCode) return;
+    if (!user || user.twitterUserId || !authCode) return;
     setLoading({ ...loading, twitter: true });
 
     const link = async function () {
@@ -89,7 +89,7 @@ export function AirdropAccountConnect() {
   useEffect(() => {
     if (!user) return;
     let count = 0;
-    if (user.twitterUsername) count++;
+    if (user.twitterUserId) count++;
     if (user.discordId) count++;
     setConnectedAct(count);
   }, [user]);
@@ -135,7 +135,7 @@ export function AirdropAccountConnect() {
       <a
         href={connectTwitterLink}
         onClick={(e) => {
-          if (loading.twitter || (user && user.twitterUsername))
+          if (loading.twitter || (user && user.twitterUserId))
             e.preventDefault();
         }}
       >
@@ -143,19 +143,19 @@ export function AirdropAccountConnect() {
           className={cn(
             "py-3 h-auto px-5 rounded-none block w-full hover:text-gray-100 hover:bg-transparent",
             {
-              "hover:bg-transparent cursor-default": !!user?.twitterUsername,
-              "hover:bg-gray-900": !loading.twitter && !user?.twitterUsername,
+              "hover:bg-transparent cursor-default": !!user?.twitterUserId,
+              "hover:bg-gray-900": !loading.twitter && !user?.twitterUserId,
             },
           )}
         >
           <div className="flex items-center justify-between">
             <div
               className={cn("flex gap-3 xxs:pr-5", {
-                "opacity-50": !!user?.twitterUsername,
+                "opacity-50": !!user?.twitterUserId,
               })}
             >
               <img src="/images/airdrop-icons/twitter.svg" className="w-5" />
-              {user?.twitterUsername ? (
+              {user?.twitterUserId ? (
                 <span className="font-light">X Connected</span>
               ) : (
                 <span className="font-light text-gray-300">
@@ -176,7 +176,7 @@ export function AirdropAccountConnect() {
                   <>
                     {!user?.twitterLinkedAt ? (
                       <span className="shrink-0 w-20 h-7 font-normal bg-chinese-green hover:scale-110 transition-all duration-300 rounded-full text-black flex items-center justify-center text-sm">
-                        +30 pts
+                        +1000 pts
                       </span>
                     ) : (
                       <span className="shrink-0 w-20 h-7 font-normal bg-chinese-green hover:scale-110 transition-all duration-300 rounded-full text-black flex items-center justify-center text-sm">
@@ -243,7 +243,7 @@ export function AirdropAccountConnect() {
                   <>
                     {!user?.discordLinkedAt ? (
                       <span className="shrink-0 w-20 h-7 font-normal bg-chinese-green hover:scale-110 transition-all duration-300 rounded-full text-black flex items-center justify-center text-sm">
-                        +30 pts
+                        +1000 pts
                       </span>
                     ) : (
                       <span className="shrink-0 w-20 h-7 font-normal bg-chinese-green hover:scale-110 transition-all duration-300 rounded-full text-black flex items-center justify-center text-sm">
