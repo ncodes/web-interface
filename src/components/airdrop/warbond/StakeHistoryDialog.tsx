@@ -2,6 +2,7 @@ import { X } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import { BondSpends } from "../../../hooks/services/backend/useAirdropService";
+import { formatToHighDenom } from "../../../libs/helpers";
 import {
   Dialog,
   DialogContent,
@@ -33,7 +34,7 @@ export function StakeHistoryDialog({
             href="#"
             className="tracking-wide text-gray-500 hover:text-gray-200"
           >
-            View History
+            Stake History
           </a>
         </DialogTrigger>
 
@@ -64,7 +65,7 @@ export function StakeHistoryDialog({
                       <span className="text-gray-400">$JOIN:</span>{" "}
                       {curBattleId === spend.battleId
                         ? "Pending"
-                        : spend.allocation}
+                        : formatToHighDenom(spend.allocation, 18)}
                     </span>
                   </div>
                 </div>

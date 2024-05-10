@@ -39,7 +39,7 @@ export function WarBond() {
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
         <Header
           bondBalance={bondBalanceQuery.data || "0"}
-          battleId={battleInfoQuery.data?.battleId}
+          battleInfo={battleInfoQuery.data}
         />
 
         {address && !!token && (
@@ -125,15 +125,14 @@ export function WarBond() {
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-end p-2">
-                  {battleInfoQuery.data &&
-                    battleInfoQuery.data.spends.length > 0 && (
-                      <div className="text-center mb-2">
-                        <StakeHistoryDialog
-                          spends={battleInfoQuery.data?.spends || []}
-                          curBattleId={battleInfoQuery.data?.battleId as string}
-                        />
-                      </div>
-                    )}
+                  {battleInfoQuery.data && (
+                    <div className="text-center mb-2">
+                      <StakeHistoryDialog
+                        spends={battleInfoQuery.data?.spends || []}
+                        curBattleId={battleInfoQuery.data?.battleId as string}
+                      />
+                    </div>
+                  )}
 
                   {battleInfoQuery.data && (
                     <StakeDialog

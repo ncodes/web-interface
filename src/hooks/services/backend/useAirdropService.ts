@@ -15,6 +15,19 @@ export type BondSpends = {
   createdAt: string;
 }[];
 
+export type BattleInfo = {
+  battleId: string;
+  battleIndex: number;
+  battleTaps: string;
+  battleAllocation: string;
+  nextBattleTime: string;
+  droidTaps: string;
+  banditTaps: string;
+  numDroids: number;
+  numBandits: number;
+  spends: BondSpends;
+};
+
 /**
  * useAirdropService provides access to v1/airdrop endpoint
  */
@@ -354,18 +367,7 @@ export function useAirdropService() {
   /**
    * Get battle info
    */
-  async function getBattleInfo(): Promise<{
-    battleId: string;
-    battleIndex: number;
-    battleTaps: string;
-    battleAllocation: string;
-    nextBattleTime: string;
-    droidTaps: string;
-    banditTaps: string;
-    numDroids: number;
-    numBandits: number;
-    spends: BondSpends;
-  }> {
+  async function getBattleInfo(): Promise<BattleInfo> {
     try {
       const headers = {};
       const token = getAccessToken(address);
