@@ -37,7 +37,7 @@ export function MainContainerConnectButton({
     <>
       {!mounted && showLoader && <LoaderOverlay icon={loaderIcon} />}
 
-      {mounted && !ready && (
+      {mounted && !ready && !address && (
         <WalletConnect
           variant={variant}
           className={className}

@@ -12,8 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
 
+import { hardhat, sepolia } from "viem/chains";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-import { isProd } from "../libs/helpers.ts";
+import { isLocal, isProd } from "../libs/helpers.ts";
 
 function DropdownMenuItemCustom({
   children,
@@ -52,11 +53,14 @@ export function NetworkSelector() {
   }, [chainId]);
 
   useEffect(() => {
-    let chains = getChainsID(
-      true,
-      false,
-      curChain?.chainId ? [curChain?.chainId] : [],
-    );
+    const chainsToIgnore = curChain?.chainId ? [curChain?.chainId] : [];
+
+    if (!isLocal()) {
+      chainsToIgnore.push(hardhat.id);
+      chainsToIgnore.push(sepolia.id);
+    }
+
+    let chains = getChainsID(true, false, chainsToIgnore);
 
     if (isProd()) {
       chains = chains.filter((id) => !getChain(id)?.testnet);
