@@ -25,7 +25,7 @@ export function AirdropEngagementPoints() {
             @OxJoint
           </a>
         </b>{" "}
-        or <b className="text-chinese-green">$JOIN</b>. The more people engage
+        and <b className="text-chinese-green">$JOIN</b>. The more people engage
         with your post, the more points you earn.{" "}
       </p>
 
