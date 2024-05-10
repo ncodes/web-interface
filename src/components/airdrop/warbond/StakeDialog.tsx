@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "../../ui/Dialog";
 
-const minStakeBond = import.meta.env.VITE_TAPOFF_MIN_BOND_STAKE;
+const minStakeBond = import.meta.env.VITE_TAPOFF_BOND_MIN_BOND_STAKE;
 
 export function StakeDialog({
   side,
