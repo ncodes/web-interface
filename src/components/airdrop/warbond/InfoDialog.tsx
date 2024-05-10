@@ -59,7 +59,7 @@ export function InfoDialog({ type }: { type: string }) {
 
                   <li>
                     Anyone can buy war $BOND and stake on whether the Droid or
-                    Bandit will win (finish the battle with the most TAPS).
+                    Bandit will win (finish the battle with the most TAPs).
                   </li>
 
                   <li>

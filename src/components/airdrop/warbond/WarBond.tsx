@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { shipImages } from "../../../constants.ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import { useAirdropService } from "../../../hooks/services/backend/useAirdropService.ts";
@@ -9,6 +10,7 @@ import { CountDown } from "../../Countdown.tsx";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { ToolTip } from "../../ToolTip.tsx";
 import IconInfoCircle from "../../icons/IconInfoCircle.tsx";
+import IconSpinner from "../../icons/IconSpinner.tsx";
 import { WarBondBackgroundImage } from "../tapoff/WarBondBackgroundImage.tsx";
 import { Header } from "./Header.tsx";
 import { StakeDialog } from "./StakeDialog.tsx";
@@ -19,6 +21,7 @@ export function WarBond() {
   const { address } = useConnectorContext();
   const { token } = useSession();
   const { getBattleInfo, getBondBalance } = useAirdropService();
+  const [loadingBattle, setLoadingBattle] = useState(false);
 
   const battleInfoQuery = useQuery({
     queryKey: ["getBattleInfo"],
@@ -72,15 +75,27 @@ export function WarBond() {
                 </span>
               </div>
               <div className="flex justify-center -mt-3">
-                <span className="font-jersey10 text-xl tracking-wider">
+                <span className="font-jersey10 text-xl tracking-wider flex items-center gap-1">
                   {battleInfoQuery.data?.battleId ? (
                     <>
                       Next Battle in{" "}
                       <span className="text-chinese-green">
-                        {battleInfoQuery.data && (
+                        {battleInfoQuery.data && !loadingBattle && (
                           <CountDown
                             isoDate={battleInfoQuery.data?.nextBattleTime}
                             full
+                            onDone={() => {
+                              setLoadingBattle(true);
+                              battleInfoQuery.refetch().finally(() => {
+                                setLoadingBattle(false);
+                              });
+                            }}
+                          />
+                        )}
+                        {loadingBattle && (
+                          <IconSpinner
+                            className="text-chinese-green animate-spin"
+                            width="20"
                           />
                         )}
                       </span>
