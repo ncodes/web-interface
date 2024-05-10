@@ -45,6 +45,11 @@ export function StakeHistoryDialog({
             </DialogTitle>
           </DialogHeader>
           <div className="min-h-[200px] max-h-[300px] overflow-auto divide-y divide-gray-900">
+            {spends.length == 0 && (
+              <div className="flex text-sm h-[200px] justify-center items-center font-light text-gray-500">
+                No stake yet
+              </div>
+            )}
             {spends.map((spend, index) => (
               <div key={index} className="flex gap-2 p-3">
                 <img
