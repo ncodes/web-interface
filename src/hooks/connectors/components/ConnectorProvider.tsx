@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { Chain, http } from "viem";
-import { arbitrum, hardhat, sepolia } from "viem/chains";
+import { arbitrum, hardhat } from "viem/chains";
 import { WagmiProvider, createConfig } from "wagmi";
 import {
   AppIcon,
