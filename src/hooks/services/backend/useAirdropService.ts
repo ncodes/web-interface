@@ -363,7 +363,7 @@ export function useAirdropService() {
     droidTaps: string;
     banditTaps: string;
     numDroids: number;
-    numBadits: number;
+    numBandits: number;
     spends: BondSpends;
   }> {
     try {
@@ -392,7 +392,7 @@ export function useAirdropService() {
           droidTaps: "0",
           banditTaps: "0",
           numDroids: 0,
-          numBadits: 0,
+          numBandits: 0,
           spends: [],
         };
       }

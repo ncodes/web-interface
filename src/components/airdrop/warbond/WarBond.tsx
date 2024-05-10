@@ -178,7 +178,7 @@ export function WarBond() {
                     </ToolTip>
                   </div>
                   <div className="text-3xl">
-                    {formatToMoney(battleInfoQuery.data?.numBadits || "0")}
+                    {formatToMoney(battleInfoQuery.data?.numBandits || "0")}
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-end p-2">
