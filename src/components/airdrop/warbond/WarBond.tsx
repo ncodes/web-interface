@@ -24,12 +24,14 @@ export function WarBond() {
     queryKey: ["getBattleInfo"],
     queryFn: getBattleInfo,
     enabled: !!address || !!token,
+    refetchInterval: 30000,
   });
 
   const bondBalanceQuery = useQuery({
     queryKey: ["getBondBalance"],
     queryFn: getBondBalance,
     enabled: !!address || !!token,
+    refetchInterval: 30000,
   });
 
   return (
