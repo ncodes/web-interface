@@ -196,15 +196,14 @@ export function WarBond() {
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-end p-2">
-                  {battleInfoQuery.data &&
-                    battleInfoQuery.data.spends.length > 0 && (
-                      <div className="text-center mb-2">
-                        <StakeHistoryDialog
-                          spends={battleInfoQuery.data?.spends || []}
-                          curBattleId={battleInfoQuery.data?.battleId as string}
-                        />
-                      </div>
-                    )}
+                  {battleInfoQuery.data && (
+                    <div className="text-center mb-2">
+                      <StakeHistoryDialog
+                        spends={battleInfoQuery.data?.spends || []}
+                        curBattleId={battleInfoQuery.data?.battleId as string}
+                      />
+                    </div>
+                  )}
 
                   {battleInfoQuery.data && (
                     <StakeDialog
