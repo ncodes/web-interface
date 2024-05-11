@@ -1,8 +1,9 @@
-import { X } from "lucide-react";
+import { InfoIcon, X } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import { BondSpends } from "../../../hooks/services/backend/useAirdropService";
 import { formatToHighDenom } from "../../../libs/helpers";
+import { ToolTip } from "../../ToolTip";
 import {
   Dialog,
   DialogContent,
@@ -68,11 +69,33 @@ export function StakeHistoryDialog({
                     </span>
                     <span>
                       <span className="text-gray-400">$JOIN:</span>{" "}
-                      {curBattleId === spend.battleId
-                        ? "Pending"
-                        : formatToHighDenom(spend.allocation, 18)}
+                      {curBattleId === spend.battleId ? (
+                        "Pending"
+                      ) : (
+                        <span>
+                          <span>{formatToHighDenom(spend.allocation, 18)}</span>
+                        </span>
+                      )}
                     </span>
                   </div>
+                  {spend.allocPct > 0 && (
+                    <div className="font-jersey25 flex gap-3 opacity-90">
+                      <span className="flex items-center gap-1">
+                        <span className="text-gray-400">Side %:</span>{" "}
+                        <span className="capitalize">{spend.sideAllocPct}</span>
+                        <ToolTip tip="Percentage of battle allocation allotted the side">
+                          <InfoIcon width="10" />
+                        </ToolTip>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="text-gray-400">Stake %:</span>{" "}
+                        <span className="capitalize">{spend.allocPct}</span>
+                        <ToolTip tip="Percentage of side allocation allotted to the stake">
+                          <InfoIcon width="10" />
+                        </ToolTip>
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex-1 text-right text-xs text-gray-500 tracking-wider">
                   {moment(spend.createdAt).fromNow()}

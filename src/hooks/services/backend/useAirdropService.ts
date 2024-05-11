@@ -13,6 +13,8 @@ export type BondSpends = {
   allocation: string;
   battleId: string;
   createdAt: string;
+  sideAllocPct: number;
+  allocPct: number;
 }[];
 
 export type BattleInfo = {
