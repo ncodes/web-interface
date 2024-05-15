@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, Copy, Link, Share, Share2, X } from "lucide-react";
+import { AlertTriangle, Copy, Share, Share2, X } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as ReactShare from "react-share";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext";
 import { useReferralService } from "../../../hooks/services/backend/useReferralService";
@@ -59,7 +59,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
       case "x":
         return `Hey Cadet! $JOIN the fight. \nCommand a ship in @0xJoint's new game.\n🎁 3K TAPs enlist reward.\n`;
       case "telegram":
-        return `\nHey Cadet! $JOIN the fight. \nCommand a ship in @jointproto's new game. \n🎁 3K TAPs enlist reward.\n`;
+        return `\nHey Cadet! $JOIN the fight. \nCommand a ship in @JointHQ's new game. \n🎁 3K TAPs enlist reward.\n`;
       default:
         return "Hey Cadet! $JOIN the fight. Command a ship in https://x.com/0xJoint new game. \n🎁 3K TAPs enlist reward.\n";
     }
@@ -93,7 +93,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] md:w-auto sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
+        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] md:w-[350px] sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
           <DialogHeader className="border-b border-gray-800 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-200  to-yellow-600 rounded-t-lg py-1">
               Referrals
