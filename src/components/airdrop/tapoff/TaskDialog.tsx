@@ -449,7 +449,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           disabled={playerInfo.markedTelegramFollow}
                           className="flex h-auto flex-1 gap-1 border-none text-left justify-start p-0 hover:bg-transparent hover:text-gray-100 hover:scale-[1.02]"
                           onClick={() => {
-                            window.open("https://t.me/jointproto", "_blank");
+                            window.open("https://t.me/JointHQ", "_blank");
                             setClicked({ ...clicked, telegram: true });
                           }}
                         >
