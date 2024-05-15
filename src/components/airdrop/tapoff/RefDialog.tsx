@@ -250,7 +250,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <ul className="flex gap-2 ">
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.TwitterShareButton
-                          url={`https://jntl.ink/r/${user?.refCode}`}
+                          url={`https://jntl.ink/${user?.refCode}`}
                           title={getMessage("x")}
                         >
                           <ReactShare.XIcon
@@ -262,7 +262,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       </li>
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.TelegramShareButton
-                          url={`https://jntl.ink/r/${user?.refCode}`}
+                          url={`https://jntl.ink/${user?.refCode}`}
                           title={getMessage("telegram")}
                         >
                           <ReactShare.TelegramIcon
@@ -274,7 +274,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       </li>
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.WhatsappShareButton
-                          url={`https://jntl.ink/r/${user?.refCode}`}
+                          url={`https://jntl.ink/${user?.refCode}`}
                           title={getMessage("whatsapp")}
                         >
                           <ReactShare.WhatsappIcon size={32} round />
@@ -282,14 +282,14 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       </li>
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.FacebookShareButton
-                          url={`https://jntl.ink/r/${user?.refCode}`}
+                          url={`https://jntl.ink/${user?.refCode}`}
                         >
                           <ReactShare.FacebookIcon size={32} round />
                         </ReactShare.FacebookShareButton>
                       </li>
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.FacebookMessengerShareButton
-                          url={`https://jntl.ink/r/${user?.refCode}`}
+                          url={`https://jntl.ink/${user?.refCode}`}
                           appId="1089905982307068"
                         >
                           <ReactShare.FacebookMessengerIcon size={32} round />
@@ -297,7 +297,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       </li>
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.LinkedinShareButton
-                          url={`https://jntl.ink/r/${user?.refCode}`}
+                          url={`https://jntl.ink/${user?.refCode}`}
                           title={getMessage("linkedin")}
                         >
                           <ReactShare.LinkedinIcon size={32} round />
@@ -305,7 +305,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       </li>
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.VKShareButton
-                          url={`https://jntl.ink/r/${user?.refCode}`}
+                          url={`https://jntl.ink/${user?.refCode}`}
                         >
                           <ReactShare.VKIcon size={32} round />
                         </ReactShare.VKShareButton>
