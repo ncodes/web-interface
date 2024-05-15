@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, Copy, Share, Share2, X } from "lucide-react";
+import { AlertTriangle, Copy, Link, Share, Share2, X } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as ReactShare from "react-share";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext";
 import { useReferralService } from "../../../hooks/services/backend/useReferralService";
