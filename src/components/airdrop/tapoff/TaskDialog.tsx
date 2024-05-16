@@ -169,7 +169,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
           simpleSuccess("Referral reward claimed", { position: "top-center" });
         }, 2000);
       })
-      .catch((e) => {
+      .catch(() => {
         setLoading({ ...loading, [`claimingReferralBonus${count}`]: false });
         notifyError("Failed to claim referral bonus");
       });
