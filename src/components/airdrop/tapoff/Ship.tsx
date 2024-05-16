@@ -70,7 +70,7 @@ export function Ship({
         {rank && (
           <Button
             variant="ghost"
-            className="flex border-none ring-0 active:bottom-0 focus-visible:ring-0  flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
+            className="flex border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
             onMouseDown={fire}
             onMouseUp={onFireStop}
           >
@@ -84,7 +84,10 @@ export function Ship({
             <div className="flex justify-center" ref={shipRef}>
               <FiringCoins coins={firedCoins} />
             </div>
-            <img src={`/images/rank-ships/${rank}.png`} className="h-[200px]" />
+            <img
+              src={`/images/rank-ships/${rank}.png`}
+              className="h-[200px] select-none"
+            />
           </Button>
         )}
       </motion.div>
