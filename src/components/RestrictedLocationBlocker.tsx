@@ -97,7 +97,7 @@ export default function RestrictedLocationBlocker() {
   }, [loc, network, id, market, countryCode]);
 
   return (
-    <Dialog defaultOpen={true} modal={true} open={true}>
+    <Dialog defaultOpen={restricted} modal={true} open={restricted}>
       <DialogContent className="bg-modal-background border-gray-700 mx-2 md:mx-0 md:w-[400px] top-[25%] ring-0 outline-0 shadow-sm shadow-gray-800">
         <RestrictedLocationNotice restrictedScope={restrictedScope} />
       </DialogContent>

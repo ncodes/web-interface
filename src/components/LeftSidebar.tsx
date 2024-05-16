@@ -6,7 +6,7 @@ import { Navigation } from "./Navigation.tsx";
 import { RegionSelector } from "./RegionSelector.tsx";
 import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 
-import { useLockedBody, useMediaQuery } from "usehooks-ts";
+import { useMediaQuery, useScrollLock } from "usehooks-ts";
 import useStore from "../hooks/store/useStore.ts";
 import { LanguageSelectorMobile } from "./LanguageSelector.tsx";
 import { IconDoubleChevronBack } from "./icons/IconDoubleChevronBack.tsx";
@@ -35,10 +35,16 @@ export function LeftSidebar(props: {
   const { toggleOpenState } = useStore((s) => ({
     toggleOpenState: s.toggleOpenState,
   }));
-  const [, setLocked] = useLockedBody(false);
+  const { lock, unlock } = useScrollLock({ autoLock: false });
 
   useEffect(() => {
-    if (!isXl) setLocked(props.open);
+    if (!isXl) {
+      if (props.open) {
+        lock();
+      } else {
+        unlock();
+      }
+    }
     setOpenOverlay(props.open);
   }, [props.open]);
 

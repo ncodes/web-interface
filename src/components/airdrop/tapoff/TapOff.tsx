@@ -5,9 +5,11 @@ import { useLocation } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
 import { shipImages } from "../../../constants.ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
+import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
+import { cn } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
@@ -37,6 +39,9 @@ export function TapOff() {
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
+  const { gameMaximized } = useStore((state) => ({
+    gameMaximized: state.gameMaximized,
+  }));
   const loc = useLocation();
   const { playAudio, pauseAudio, manualPaused, playing, isFirstPlay } =
     useGameAudioPlayer();
@@ -179,7 +184,14 @@ export function TapOff() {
   }
 
   return (
-    <div className="h-full w-full flex flex-col flex-1">
+    <div
+      className={cn(
+        "h-full w-full flex flex-col flex-1 transition-all duration-300",
+        {
+          "fixed top-0 left-0 z-30 bg-black": gameMaximized,
+        },
+      )}
+    >
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
         <TapOffHeader
           playerInfo={playerInfo}

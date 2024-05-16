@@ -3,25 +3,29 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { useEffect } from "react";
-import { useLockedBody } from "usehooks-ts";
+import { useScrollLock } from "usehooks-ts";
 import useStore from "../../hooks/store/useStore.ts";
 import { cn } from "../../libs/utils.ts";
 
 const Sheet = function (
   props: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root> & {
     notHidden?: boolean;
-  }
+  },
 ) {
-  const [, setLocked] = useLockedBody(false);
+  const { lock, unlock } = useScrollLock({ autoLock: false });
   const openState = useStore((s) => s.openState);
 
   useEffect(() => {
-    setLocked(props.open || false);
+    if (props.open) {
+      lock();
+    } else {
+      unlock();
+    }
   }, [props.open]);
 
   useEffect(() => {
     if (!props.open) return;
-    setLocked(false);
+    unlock();
   }, [openState]);
 
   if (props.notHidden) return <SheetPrimitive.Root {...props} />;
@@ -41,7 +45,7 @@ const SheetPortal = ({
   className,
   ...props
 }: SheetPrimitive.DialogPortalProps & { className?: string }) => (
-  <SheetPrimitive.Portal  {...props} />
+  <SheetPrimitive.Portal {...props} />
 );
 SheetPortal.displayName = SheetPrimitive.Portal.displayName;
 
@@ -52,7 +56,7 @@ const SheetOverlay = React.forwardRef<
   <SheetPrimitive.Overlay
     className={cn(
       "fixed inset-0 z-50 bg-background/10 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-      className
+      className,
     )}
     {...props}
     ref={ref}
@@ -76,7 +80,7 @@ const sheetVariants = cva(
     defaultVariants: {
       side: "right",
     },
-  }
+  },
 );
 
 interface SheetContentProps
@@ -118,7 +122,7 @@ const SheetFooter = ({
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className
+      className,
     )}
     {...props}
   />
@@ -157,6 +161,5 @@ export {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger
+  SheetTrigger,
 };
-

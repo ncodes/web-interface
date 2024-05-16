@@ -217,7 +217,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
             className="hover:bg-transparent h-auto p-0 hover:scale-110 hover:-rotate-2"
           >
             <div
-              className="flex w-[60px] flex-col border  items-center rounded-lg px-3 py-1 bg-gradient-to-r
+              className="flex w-[50px] xs:w-[60px] flex-col border  items-center rounded-lg px-3 py-1 bg-gradient-to-r
    from-amber-400 via-yellow-300 to-yellow-500 text-black border-yellow-100/50"
             >
               <span>

@@ -116,6 +116,9 @@ export interface IStore {
 
   socket?: Socket;
   setSocket: (socket: Socket) => void;
+
+  gameMaximized: boolean;
+  setGameMaximized: (maximized: boolean) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
@@ -297,6 +300,9 @@ const useStore = create<IStore>((set, get) => ({
 
   socket: undefined,
   setSocket: (socket: Socket) => set({ socket }),
+
+  gameMaximized: false,
+  setGameMaximized: (maximized: boolean) => set({ gameMaximized: maximized }),
 }));
 
 export default useStore;
