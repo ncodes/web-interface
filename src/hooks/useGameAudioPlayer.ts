@@ -28,6 +28,13 @@ export function useGameAudioPlayer() {
 
     audio.onpause = () => {
       audiosState.current[url] = "paused";
+      setManualPaused(true);
+      setUpdatedAt(Date.now());
+    };
+
+    audio.onplaying = () => {
+      audiosState.current[url] = "playing";
+      setManualPaused(false);
       setUpdatedAt(Date.now());
     };
 
@@ -53,12 +60,6 @@ export function useGameAudioPlayer() {
 
     audio.play();
     audios.current[url] = audio;
-    if (audiosState[url] != "playing") {
-      audiosState.current[url] = "playing";
-      setUpdatedAt(Date.now());
-    }
-
-    setManualPaused(false);
 
     if (!firstPlayedAt[url]) firstPlayedAt[url] = Date.now();
   }

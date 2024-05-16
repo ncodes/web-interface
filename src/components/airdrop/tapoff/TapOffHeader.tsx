@@ -94,7 +94,7 @@ export function TapOffHeader({
               else unlock();
             }}
           >
-            <div className="flex gap-2 border border-yellow-500 text-yellow-200 bg-yellow-400/40  items-center rounded-lg px-3 py-1 ">
+            <div className="flex gap-2 border border-yellow-300 text-yellow-200 bg-yellow-400/40  items-center rounded-lg px-3 py-1 ">
               {gameMaximized && <Minimize2 size="20" />}
               {!gameMaximized && <Maximize2 size="20" />}
             </div>
