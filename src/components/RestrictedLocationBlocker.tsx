@@ -6,12 +6,7 @@ import { useGeofence } from "../hooks/geofence/useGeofence.ts";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import useStore, { RestrictScope } from "../hooks/store/useStore.ts";
 import { Button } from "./ui/Button.tsx";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "./ui/Dialog.tsx";
+import { Dialog, DialogContent, DialogHeader } from "./ui/Dialog.tsx";
 
 export default function RestrictedLocationBlocker() {
   const {
@@ -102,13 +97,9 @@ export default function RestrictedLocationBlocker() {
   }, [loc, network, id, market, countryCode]);
 
   return (
-    <Dialog defaultOpen={restricted} modal={true} open={restricted}>
-      <DialogContent className="bg-modal-background border-modal-border w-[400px] top-[25%] ring-0 outline-0 shadow-md shadow-gray-800">
-        <DialogHeader>
-          <DialogDescription>
-            <RestrictedLocationNotice restrictedScope={restrictedScope} />
-          </DialogDescription>
-        </DialogHeader>
+    <Dialog defaultOpen={true} modal={true} open={true}>
+      <DialogContent className="bg-modal-background border-gray-700 mx-2 md:mx-0 md:w-[400px] top-[25%] ring-0 outline-0 shadow-sm shadow-gray-800">
+        <RestrictedLocationNotice restrictedScope={restrictedScope} />
       </DialogContent>
     </Dialog>
   );
@@ -123,18 +114,27 @@ export function RestrictedLocationNotice({
 }) {
   return (
     <div>
-      <div className="flex text-[17px] items-center gap-2 tracking-wide text-chinese-green">
-        <span>
-          <AlertTriangle width="19" />
-        </span>
-        <span>Restricted Location</span>
-      </div>
-      <div className=" text-gray-300 tracking-wide font-light relative top-1 pt-2">
+      <DialogHeader>
+        <div className="flex text-[17px] items-center gap-2 tracking-wide text-chinese-green ">
+          <span>
+            <AlertTriangle width="19" />
+          </span>
+          <span>Restricted Location</span>
+        </div>
+      </DialogHeader>
+      <div className="text-sm text-gray-300 tracking-wide font-light relative top-1 pt-2 [&_a]:text-chinese-green">
         {restrictedScope === RestrictScope.GLOBAL && (
           <>
             This Interface is not available to people or organizations who are
             residents of, or are located, incorporated or have a registered
-            agent in the U.S or a restricted territory.
+            agent in the U.S or a{" "}
+            <a
+              href="https://docs.joint.exchange/others/prohibited-jurisdictions"
+              target="_blank"
+            >
+              restricted territory
+            </a>
+            .
           </>
         )}
 
@@ -169,7 +169,7 @@ export function RestrictedLocationNotice({
           </>
         )}
 
-        {!hideBtns && (
+        {!hideBtns && restrictedScope != RestrictScope.GLOBAL && (
           <Button
             onClick={() => {
               window.history.back();
