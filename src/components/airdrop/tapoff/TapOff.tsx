@@ -1,7 +1,6 @@
 import moment from "moment";
 import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useInterval } from "usehooks-ts";
 import { shipImages } from "../../../constants.ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
@@ -42,7 +41,6 @@ export function TapOff() {
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
-  const loc = useLocation();
   const { playAudio, pauseAudio, manualPaused, playing, isFirstPlay } =
     useGameAudioPlayer();
 
@@ -52,10 +50,6 @@ export function TapOff() {
       pauseAudio(audioFirePath);
     };
   }, []);
-
-  useEffect(() => {
-    console.log("Changed location", loc.pathname);
-  }, [loc]);
 
   useEffect(() => {
     if (!isReady) return;

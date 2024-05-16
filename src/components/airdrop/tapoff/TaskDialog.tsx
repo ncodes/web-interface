@@ -171,7 +171,6 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
       })
       .catch((e) => {
         setLoading({ ...loading, [`claimingReferralBonus${count}`]: false });
-        console.log(e);
         notifyError("Failed to claim referral bonus");
       });
   }

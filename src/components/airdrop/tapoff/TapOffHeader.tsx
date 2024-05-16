@@ -37,7 +37,6 @@ export function TapOffHeader({
   }));
 
   useEffect(() => {
-    console.log(isMd);
     if (isMd) {
       setGameMaximized(false);
       unlock();

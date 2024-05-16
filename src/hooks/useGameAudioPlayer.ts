@@ -56,6 +56,7 @@ export function useGameAudioPlayer() {
       audio.currentTime = resetTime ? 0 : audio.currentTime;
       audio.pause();
       audio.loop = loop;
+      setManualPaused(false);
     }
 
     audio.play();
