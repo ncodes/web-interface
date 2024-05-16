@@ -93,7 +93,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] md:w-[350px] sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
+        <DialogContent className="p-0 outline-none select-none w-[310px] xxs:w-[350px] md:w-[400px] sm:max-w-[425px] top-[15%] border-modal-border bg-modal-background text-white">
           <DialogHeader className="border-b border-gray-800 space-y-0">
             <DialogTitle className="text-center  text-black font-jersey20 text-2xl tracking-wide bg-gradient-to-b from-yellow-200  to-yellow-600 rounded-t-lg py-1">
               Referrals
@@ -105,15 +105,22 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
               </span>
             </DialogDescription>
           </DialogHeader>
-          <div className="min-h-[200px]">
+          <div className="">
             {!user?.twitterUserId && !user?.discordId && (
-              <div className="flex flex-col justify-center my-10 text-gray-400 font-light items-center">
-                <span className="flex items-center gap-2">
-                  <AlertTriangle size="14" />
-                  <span>Social account not connected</span>
+              <div className="flex flex-col justify-center px-3 my-10 text-gray-400 font-light items-center">
+                <span className="flex flex-col justify-center items-center gap-2">
+                  <AlertTriangle
+                    size="20"
+                    className="shrink-0 text-yellow-500"
+                  />
+                  <span className="block text-center text-sm tracking-wider">
+                    Connect Twitter & Discord to access your referral link and
+                    stats.
+                  </span>
                 </span>
                 <Button
-                  variant="link"
+                  variant="outline"
+                  className="mt-3 hover:bg-transparent hover:text-gray-400 hover:border-gray-600"
                   onClick={() => {
                     nav("/airdrop");
                   }}
@@ -177,44 +184,48 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
               </>
             )}
 
-            <div className="px-5 pt-2 pb-0">
-              <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">
-                My Referrals
-              </Label>
-            </div>
-
-            <div className="flex pt-2 flex-col p-1 m-2 mt-1 mb-1 gap-3 overflow-auto h-[320px]">
-              {recentRefsQuery.data.map((ref) => (
-                <div className="flex gap-2 items-center">
-                  <div className="bg-gray-600 rounded-full">
-                    <EmojiAvatar
-                      size={AvatarSize.Medium}
-                      randomStr={ref.address}
-                    />
-                  </div>
-                  <div className="text-sm">{ref.address}</div>
-                  <div className="flex-1 text-right font-light text-xs text-gray-400">
-                    {moment(ref.joinedAt).fromNow()}
-                  </div>
+            {(user?.twitterUserId || user?.discordId) && (
+              <>
+                <div className="px-5 pt-2 pb-0">
+                  <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">
+                    My Referrals
+                  </Label>
                 </div>
-              ))}
 
-              {recentRefsQuery.isSuccess &&
-                recentRefsQuery.data.length == 0 && (
-                  <div className="flex justify-center items-center h-full">
-                    <Button
-                      variant="ghost"
-                      className="m-0 h-auto items-center flex gap-1 p-2 -mt-10 px-3 border border-gray-800 hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
-                      onClick={() => {
-                        showDetail("share");
-                      }}
-                    >
-                      <Share width="20" className="text-gray-200" />
-                      <span className="text-lg">Share</span>
-                    </Button>
-                  </div>
-                )}
-            </div>
+                <div className="flex pt-2 flex-col p-1 m-2 mt-1 mb-1 gap-3 overflow-auto h-[200px]">
+                  {recentRefsQuery.data.map((ref) => (
+                    <div className="flex gap-2 items-center">
+                      <div className="bg-gray-600 rounded-full">
+                        <EmojiAvatar
+                          size={AvatarSize.Medium}
+                          randomStr={ref.address}
+                        />
+                      </div>
+                      <div className="text-sm">{ref.address}</div>
+                      <div className="flex-1 text-right font-light text-xs text-gray-400">
+                        {moment(ref.joinedAt).fromNow()}
+                      </div>
+                    </div>
+                  ))}
+
+                  {recentRefsQuery.isSuccess &&
+                    recentRefsQuery.data.length == 0 && (
+                      <div className="flex justify-center items-center h-full">
+                        <Button
+                          variant="ghost"
+                          className="m-0 h-auto items-center flex gap-1 p-2 px-3 border border-gray-800 hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
+                          onClick={() => {
+                            showDetail("share");
+                          }}
+                        >
+                          <Share width="20" className="text-gray-200" />
+                          <span className="text-lg">Share</span>
+                        </Button>
+                      </div>
+                    )}
+                </div>
+              </>
+            )}
           </div>
 
           <X
