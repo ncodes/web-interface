@@ -27,6 +27,7 @@ export function useGameAudioPlayer() {
     audios.current[url] = audio;
 
     audio.onpause = () => {
+      if (audio.ended) return;
       audiosState.current[url] = "paused";
       setManualPaused(true);
       setUpdatedAt(Date.now());
