@@ -192,7 +192,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   </Label>
                 </div>
 
-                <div className="flex pt-2 flex-col p-1 m-2 mt-1 mb-1 gap-3 overflow-auto h-[200px]">
+                <div className="flex pt-2 flex-col p-1 m-2 mt-1 mb-1 gap-3 overflow-auto h-[200px] md:h-[350px]">
                   {recentRefsQuery.data.map((ref) => (
                     <div className="flex gap-2 items-center">
                       <div className="bg-gray-600 rounded-full">
@@ -245,7 +245,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
               ></div>
 
               {curDetailId === "share" && (
-                <div className="absolute rounded-b-2xl w-full h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
+                <div className="absolute rounded-b-2xl w-full h-[90%] md:h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Share
                   </div>
