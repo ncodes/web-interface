@@ -124,7 +124,7 @@ function IncrIndicator({
           duration: 2,
         },
       }}
-      className="fixed break w-10 h-10 text-2xl  text-gray-200 font-jersey20 rounded-full flex justify-center items-center"
+      className="fixed break w-10 h-10 pointer-events-none text-2xl text-gray-200 font-jersey20 rounded-full flex justify-center items-center"
     >
       +{tapIncrement}
     </motion.div>

@@ -205,7 +205,9 @@ export function TapOff() {
             </div>
 
             <Ship
-              fire={fire}
+              fire={() => {
+                fire();
+              }}
               onFireStop={onFireStop}
               firedCoins={firedCoins}
               tapIncrement={tapIncrement}
@@ -232,11 +234,6 @@ export function TapOff() {
           authenticate
           showLoader
         />
-        {/* <AudioPlayer
-          src="/audio/bg_audio.ogg"
-          autoPlay={true}
-          ref={bgAudioRef}
-        /> */}
       </div>
       {<GameBackgroundImage />}
     </div>
