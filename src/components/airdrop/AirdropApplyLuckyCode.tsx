@@ -63,25 +63,32 @@ export function AirdropApplyLuckyCode() {
         )}
 
         {(user?.twitterUserId || user?.discordId) && (
-          <Input2
-            placeholder="Enter your luck code"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            containerClassName="!rounded-full"
-            className="pt-2 pl-5 md:!text-lg"
-            afterInput={
-              <Button
-                size="lg"
-                className="mr-1 md:text-lg"
-                disabled={applyLuckyCodeMut.isPending || !code}
-                onClick={() => {
-                  apply();
-                }}
-              >
-                Apply
-              </Button>
-            }
-          />
+          <>
+            <span className="block text-sm font-light mb-4 text-gray-500">
+              Lucky Code grants $JOIN allocation. To receive a code, be an
+              active and contributing member of our/partner communities and you
+              might just be noticed by the mods.
+            </span>
+            <Input2
+              placeholder="Enter your luck code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              containerClassName="!rounded-full"
+              className="pt-2 pl-5 md:!text-lg"
+              afterInput={
+                <Button
+                  size="lg"
+                  className="mr-1 md:text-lg"
+                  disabled={applyLuckyCodeMut.isPending || !code}
+                  onClick={() => {
+                    apply();
+                  }}
+                >
+                  Apply
+                </Button>
+              }
+            />
+          </>
         )}
       </div>
     </div>

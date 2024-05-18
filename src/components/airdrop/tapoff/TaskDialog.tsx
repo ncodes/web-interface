@@ -331,7 +331,10 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <IconDiscord className="h-[25px] w-[25px]" />
                         </div>
                         <div className="text-xs xs:text-md font-medium tracking-wider">
-                          <div>Join our Discord Community</div>
+                          <div>
+                            Join our Discord{" "}
+                            <span className="hidden xxs:inline">Community</span>
+                          </div>
                         </div>
                       </Button>
                       <div className="text-right font-light text-xs text-gray-400">
@@ -340,7 +343,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           size="sm"
                           disabled={playerInfo.isDiscordConnected}
                           className={cn(
-                            "px-5 pr-1 xs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 xs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.isDiscordConnected,
@@ -398,7 +401,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedTwitterFollow || !clicked.x
                           }
                           className={cn(
-                            "px-5 pr-1 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedTwitterFollow,
@@ -456,7 +459,10 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             <IconTelegram className="w-[33px] h-[33px]" />
                           </div>
                           <div className="text-xs xs:text-md font-medium tracking-wider">
-                            <div>Join our Telegram channel</div>
+                            <div>
+                              Join our Telegram{" "}
+                              <span className="hidden xxs:inline">channel</span>
+                            </div>
                             {telegramFollowError && (
                               <div className="text-red-500 text-xs pb-1 font-extralight">
                                 {telegramFollowError}
@@ -473,7 +479,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedTelegramFollow || !clicked.telegram
                           }
                           className={cn(
-                            "px-5 pr-1 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedTelegramFollow,
@@ -548,7 +554,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedWebVisitFollow || !clicked.webvisit
                           }
                           className={cn(
-                            "px-5 pr-1 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "px-5 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedWebVisitFollow,
