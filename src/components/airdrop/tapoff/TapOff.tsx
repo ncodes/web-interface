@@ -15,8 +15,8 @@ import { OverheatIndicator } from "./OverheatIndicator.tsx";
 import { Ship } from "./Ship.tsx";
 import { TapCounter } from "./TapCounter.tsx";
 import { TapOffHeader } from "./TapOffHeader.tsx";
-import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 import { shipImages } from "./contants.ts";
+import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 
 const audioBgPath = "/audio/bg_game_audio.mp3";
 const audioFirePath = "/audio/fire_audio.mp3";
@@ -71,8 +71,6 @@ export function TapOff() {
       if (moment().unix() - lastTapTime < 5) return;
       setShowTapToFireNotice(true);
       setFiredCoins([]);
-      pauseAudio(audioBgPath);
-      pauseAudio(audioFirePath);
     },
     firing || !showTapToFireNotice ? 5000 : null,
   );
