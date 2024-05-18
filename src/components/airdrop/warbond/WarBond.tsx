@@ -54,7 +54,7 @@ export function WarBond() {
                     Battle #{battleInfoQuery.data?.battleIndex} Allocation
                   </span>
                   <span>
-                    <ToolTip tip="The total number of $JOIN tokens to be shared to all bond holders in the current battle">
+                    <ToolTip tip="The total number of $JOIN tokens to be shared among bond stakers in the current battle">
                       <IconInfoCircle className="w-[18px] cursor-pointer" />
                     </ToolTip>
                   </span>
