@@ -1,7 +1,6 @@
 import moment from "moment";
 import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { Helmet } from "react-helmet";
 import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../../hooks/store/useStore.ts";
@@ -187,12 +186,6 @@ export function TapOff() {
         },
       )}
     >
-      <Helmet>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </Helmet>
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
         <TapOffHeader
           playerInfo={playerInfo}

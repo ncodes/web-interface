@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import random from "random";
 import { ReactNode, Ref, useEffect, useRef, useState } from "react";
 import useStore from "../../../hooks/store/useStore.ts";
-import { Button } from "../../ui/Button.tsx";
 import { FiringCoins } from "./FiringCoins.tsx";
 
 export function Ship({
@@ -50,7 +49,7 @@ export function Ship({
   }
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="[touch-action:manipulation]">
       {incrIndicators.map((indicator, i) => (
         <div key={i}>{indicator}</div>
       ))}
@@ -68,9 +67,8 @@ export function Ship({
         onClick={renderTapIncrementIndicator}
       >
         {rank && (
-          <Button
-            variant="ghost"
-            className="flex [-webkit-tap-highlight-color:transparent] [touch-action:manipulation] border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
+          <div
+            className="flex text-center [-webkit-tap-highlight-color:transparent] [touch-action:manipulation] border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
             onMouseDown={fire}
             onMouseUp={onFireStop}
           >
@@ -88,7 +86,7 @@ export function Ship({
               src={`/images/rank-ships/${rank}.png`}
               className="h-[200px] select-none"
             />
-          </Button>
+          </div>
         )}
       </motion.div>
     </div>
