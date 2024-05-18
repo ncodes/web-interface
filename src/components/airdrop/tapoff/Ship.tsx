@@ -70,7 +70,7 @@ export function Ship({
         {rank && (
           <Button
             variant="ghost"
-            className="flex [-webkit-tap-highlight-color:transparent] border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
+            className="flex [-webkit-tap-highlight-color:transparent] [touch-action:manipulation] border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
             onMouseDown={fire}
             onMouseUp={onFireStop}
           >
