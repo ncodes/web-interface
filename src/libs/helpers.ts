@@ -459,3 +459,11 @@ export function humanizeBytes(bytes: number | string) {
 export function uint8ArrayToB64(bytes: Uint8Array) {
   return Buffer.from(bytes).toString("base64");
 }
+
+export function iOSversion() {
+  if (/iP(hone|od|ad)/.test(navigator.platform)) {
+    const v = navigator.userAgent.match(/OS (\d+)_(\d+)_?(\d+)?/);
+    if (!v) return [];
+    return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || "0", 10)];
+  }
+}

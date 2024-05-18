@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useInterval } from "usehooks-ts";
 
 export type AudioState = "playing" | "paused" | "stopped";
 
@@ -6,11 +7,10 @@ export function useGameAudioPlayer() {
   const audiosState = useRef<Record<string, AudioState>>({});
   const audios = useRef<Record<string, HTMLAudioElement>>({});
   const firstPlayedAt = useRef<Record<string, number>>({});
-  const [updatedAt, setUpdatedAt] = useState(Date.now());
   const [playing, setPlaying] = useState(false);
-  const [manualPaused, setManualPaused] = useState(false);
+  const [paused, setPaused] = useState(false);
 
-  useEffect(() => {
+  useInterval(() => {
     let isPlaying = false;
     for (const url in audios.current) {
       if (audiosState.current[url] == "playing") {
@@ -18,7 +18,7 @@ export function useGameAudioPlayer() {
       }
     }
     setPlaying(isPlaying);
-  }, [updatedAt]);
+  }, 500);
 
   function createAudio(url: string, loop = true) {
     const audio = new Audio(url);
@@ -29,19 +29,16 @@ export function useGameAudioPlayer() {
     audio.onpause = () => {
       if (audio.ended) return;
       audiosState.current[url] = "paused";
-      setManualPaused(true);
-      setUpdatedAt(Date.now());
+      setPaused(true);
     };
 
     audio.onplaying = () => {
       audiosState.current[url] = "playing";
-      setManualPaused(false);
-      setUpdatedAt(Date.now());
+      setPaused(false);
     };
 
     audio.onended = () => {
       audiosState.current[url] = "stopped";
-      setUpdatedAt(Date.now());
     };
 
     return audio;
@@ -54,10 +51,11 @@ export function useGameAudioPlayer() {
       audio = createAudio(url, loop);
     } else {
       audio = audios.current[url];
-      audio.currentTime = resetTime ? 0 : audio.currentTime;
-      audio.pause();
-      audio.loop = loop;
-      setManualPaused(false);
+      if (audiosState.current[url] === "playing") {
+        audio.currentTime = resetTime ? 0 : audio.currentTime;
+        audio.loop = loop;
+        return;
+      }
     }
 
     audio.play();
@@ -71,16 +69,14 @@ export function useGameAudioPlayer() {
       audios.current[url].pause();
       audios.current[url].currentTime = 0;
       audiosState.current[url] = "stopped";
-      setUpdatedAt(Date.now());
     }
   }
 
   function pauseAudio(url: string) {
     if (audios.current[url]) {
-      setManualPaused(true);
+      setPaused(true);
       audios.current[url].pause();
       audiosState.current[url] = "paused";
-      setUpdatedAt(Date.now());
     }
   }
 
@@ -99,9 +95,8 @@ export function useGameAudioPlayer() {
     pauseAudio,
     getAudios,
     audiosState,
-    manualPaused,
+    paused,
     playing,
     isFirstPlay,
-    updatedAt,
   };
 }

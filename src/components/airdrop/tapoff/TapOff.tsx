@@ -7,7 +7,7 @@ import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
-import { cn } from "../../../libs/helpers.ts";
+import { cn, iOSversion } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
@@ -41,7 +41,7 @@ export function TapOff() {
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
-  const { playAudio, pauseAudio, manualPaused, playing, isFirstPlay } =
+  const { playAudio, pauseAudio, playing, paused, isFirstPlay } =
     useGameAudioPlayer();
 
   useEffect(() => {
@@ -128,8 +128,11 @@ export function TapOff() {
 
     const doFire = async () => {
       try {
-        if (!manualPaused) {
-          playAudio(audioFirePath, false, true);
+        const iosVersion = iOSversion();
+        if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
+          setTimeout(() => {
+            playAudio(audioFirePath, false, true);
+          }, 100);
         }
 
         const result = await tap();

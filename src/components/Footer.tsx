@@ -20,7 +20,7 @@ export function Footer() {
       </div>
 
       <div className="w-full flex gap-2 justify-center xl:justify-start font-light text-xs text-gray-400 hover:[&>a]:text-gray-100 transition-all">
-        &copy; {new Date().getFullYear()} Joint Labs, Inc.
+        &copy; {new Date().getFullYear()} Joint Labs LLC.
       </div>
     </footer>
   );
