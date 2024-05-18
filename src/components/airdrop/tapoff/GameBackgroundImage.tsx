@@ -1,18 +1,6 @@
 import { memo } from "react";
 import useImagePreloader from "../../../hooks/useImagePreloader";
-
-const imageList = [
-  "/images/game/gamebg@1x.png",
-  "/images/game/planet1.svg",
-  "/images/game/planet2.svg",
-  "/images/game/planet3.svg",
-  "/images/game/planet4.svg",
-  "/images/game/planet5.svg",
-  "/images/game/planet6.svg",
-  "/images/game/planet7.svg",
-  "/images/game/planet8.svg",
-  "/images/game/planet9.svg",
-];
+import { imageList } from "./contants";
 
 export const GameBackgroundImage = memo(function () {
   const { imagesPreloaded } = useImagePreloader(imageList);

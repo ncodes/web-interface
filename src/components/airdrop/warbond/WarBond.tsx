@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { shipImages } from "../../../constants.ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import { useAirdropService } from "../../../hooks/services/backend/useAirdropService.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
@@ -12,6 +11,7 @@ import { ToolTip } from "../../ToolTip.tsx";
 import IconInfoCircle from "../../icons/IconInfoCircle.tsx";
 import IconSpinner from "../../icons/IconSpinner.tsx";
 import { WarBondBackgroundImage } from "../tapoff/WarBondBackgroundImage.tsx";
+import { shipImages } from "../tapoff/contants.ts";
 import { Header } from "./Header.tsx";
 import { StakeDialog } from "./StakeDialog.tsx";
 import { StakeHistoryDialog } from "./StakeHistoryDialog.tsx";

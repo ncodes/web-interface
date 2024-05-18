@@ -2,7 +2,6 @@ import moment from "moment";
 import randomstring from "randomstring";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { useInterval } from "usehooks-ts";
-import { shipImages } from "../../../constants.ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
@@ -17,6 +16,7 @@ import { Ship } from "./Ship.tsx";
 import { TapCounter } from "./TapCounter.tsx";
 import { TapOffHeader } from "./TapOffHeader.tsx";
 import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
+import { shipImages } from "./contants.ts";
 
 const audioBgPath = "/audio/bg_game_audio.mp3";
 const audioFirePath = "/audio/fire_audio.mp3";
@@ -71,6 +71,8 @@ export function TapOff() {
       if (moment().unix() - lastTapTime < 5) return;
       setShowTapToFireNotice(true);
       setFiredCoins([]);
+      pauseAudio(audioBgPath);
+      pauseAudio(audioFirePath);
     },
     firing || !showTapToFireNotice ? 5000 : null,
   );

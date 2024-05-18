@@ -6,15 +6,18 @@ import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
 import { TapOffTabContent } from "../components/airdrop/tapoff/TapOffTabContent.tsx";
+import { imageList } from "../components/airdrop/tapoff/contants.ts";
 import { WarBondTabContent } from "../components/airdrop/warbond/WarBondTabContent.tsx";
 import IconBattle from "../components/icons/IconBattle.tsx";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
 import IconSpaceship from "../components/icons/IconSpaceship.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import useImagePreloader from "../hooks/useImagePreloader.ts";
 import Layout from "./Layout.tsx";
 
 function AirdropPage({ defaultTab }: { defaultTab?: string }) {
+  useImagePreloader(imageList);
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(defaultTab || "leaderboard");
   const loc = useLocation();

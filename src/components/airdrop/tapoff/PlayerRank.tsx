@@ -1,6 +1,5 @@
 import { ChevronRight, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { shipImages } from "../../../constants";
 import useImagePreloader from "../../../hooks/useImagePreloader";
 import { toDec } from "../../../libs/helpers";
 import IconCoinGold from "../../icons/IconCoinGold";
@@ -23,6 +22,7 @@ import {
   CarouselPrevious,
 } from "../../ui/carousel";
 import { Progress } from "../../ui/progress";
+import { shipImages } from "./contants";
 import { RankInfo } from "./useTapSocketService";
 
 export function PlayerRank({

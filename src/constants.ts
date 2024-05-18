@@ -7,15 +7,4 @@ export const StoreAccessTokenKey = "access_token";
 export const StoreEmailKey = "email";
 export const RefCodeKey = "referrer";
 
-export const shipImages = [
-  "/images/rank-ships/Cadet.png",
-  "/images/rank-ships/Ensign.png",
-  "/images/rank-ships/Lieutenant Jnr.png",
-  "/images/rank-ships/Lieutenant.png",
-  "/images/rank-ships/Commander.png",
-  "/images/rank-ships/Captain.png",
-  "/images/rank-ships/Commodore.png",
-  "/images/rank-ships/Vice Admiral.png",
-  "/images/rank-ships/Rear Admiral.png",
-  "/images/rank-ships/Admiral.png",
-];
+
