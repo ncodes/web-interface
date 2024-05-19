@@ -84,7 +84,7 @@ export function Ship({
             </div>
             <img
               src={`/images/rank-ships/${rank}.png`}
-              className="h-[200px] select-none"
+              className="h-[200px] select-none [touch-action:manipulation]"
             />
           </div>
         )}
