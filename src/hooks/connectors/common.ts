@@ -17,9 +17,7 @@ export function createSignatureMessage(
   const emailStr = !email ? "" : `Email: ${email}`;
   const msg = `Welcome to ${import.meta.env.VITE_APP_NAME}!
   
-Click Sign button to sign and accept the ${import.meta.env.VITE_APP_NAME} Terms of Service: ${
-    import.meta.env.VITE_APP_URL
-  }/term.
+Click Sign button to sign and accept the ${import.meta.env.VITE_APP_NAME} Terms of Service: https://jntl.ink/tos.
   
 This request will not trigger a blockchain transaction or cost any gas fees.
   
