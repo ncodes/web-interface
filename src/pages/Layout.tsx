@@ -8,7 +8,6 @@ import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
 import { useInterval, useMediaQuery } from "usehooks-ts";
 import { AccountLinker } from "../components/AccountLinker.tsx";
-import AuditStatusNotice from "../components/AuditStatusNotice.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { Header } from "../components/Header.tsx";
 import { LeftSidebar } from "../components/LeftSidebar.tsx";
@@ -261,7 +260,7 @@ export default function Layout({
       </Helmet>
 
       <RestrictedLocationBlocker />
-      <AuditStatusNotice />
+      {/* <AuditStatusNotice /> */}
 
       <div ref={ref} className="container-x flex h-screen text-white text ">
         <LeftSidebar
