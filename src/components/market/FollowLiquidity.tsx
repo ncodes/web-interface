@@ -261,13 +261,10 @@ export function FollowLiquidity({
               >
                 {!initializing && <>Initialize</>}
                 {initializing && (
-                  <>
-                    <IconSpinner
-                      width="20"
-                      className="animate-spin"
-                      fill="fill-gray-100"
-                    />
-                  </>
+                  <IconSpinner
+                    width="20"
+                    className="animate-spin text-gray-100"
+                  />
                 )}
               </Button>
             </div>

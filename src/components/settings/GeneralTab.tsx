@@ -108,10 +108,9 @@ export function GeneralTab(props: { address: string }) {
                     />
                   </BalanceCard>
                   <BalanceCard
-                    symbol="P2P"
+                    symbol="JOIN"
                     balance={formatToHighDenom(p2pBalance)}
                   />
-                  {/*<BalanceCard symbol="POUCH (P2P)" balance="34,000" />*/}
                 </div>
               </AccordionContent>
             </AccordionItem>

@@ -246,8 +246,7 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
                 {loading && isOkay && (
                   <IconSpinner
                     width="20"
-                    className="animate-spin"
-                    fill="fill-gray-800"
+                    className="animate-spin text-gray-800"
                   />
                 )}
               </Button>
@@ -266,8 +265,7 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
                 {loading && !isOkay && (
                   <IconSpinner
                     width="20"
-                    className="animate-spin"
-                    fill="fill-gray-800"
+                    className="animate-spin text-gray-800"
                   />
                 )}
               </Button>
@@ -298,8 +296,7 @@ export function SwapRateCallout({ swap }: { swap: Swap }) {
                   <>
                     <IconSpinner
                       width="20"
-                      className="animate-spin"
-                      fill="fill-gray-100"
+                      className="animate-spin text-gray-100"
                     />
                   </>
                 )}

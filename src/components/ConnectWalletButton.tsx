@@ -34,11 +34,17 @@ export function ConnectWalletButton(props: {
   className?: string;
   label?: string;
   children?: React.ReactElement;
+  onClick?: () => void;
+  onConnect?: () => void;
 }) {
   return (
     <span className={props.className}>
       <ConnectKitButton.Custom>
         {({ isConnected, show }) => {
+          if (isConnected) {
+            props.onConnect?.();
+          }
+
           return (
             <span className="connect-btn">
               {!isConnected ? (
@@ -54,6 +60,7 @@ export function ConnectWalletButton(props: {
                   ) : (
                     React.cloneElement(props.children, {
                       onClick: () => {
+                        props.onClick?.();
                         show?.();
                       },
                     })

@@ -8,7 +8,7 @@ export default function RefPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/");
+    navigate("/tapwar");
   }, []);
 
   if (code && !prevRefCode) {

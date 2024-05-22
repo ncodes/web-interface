@@ -1,8 +1,8 @@
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
-import { Button } from "../ui/Button.tsx";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { cn } from "../../libs/utils.ts";
 import { Avatar } from "../avatar/Avatar.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { Button } from "../ui/Button.tsx";
 import {
   Command,
   CommandEmpty,
@@ -10,7 +10,7 @@ import {
   CommandInput,
   CommandItem,
 } from "../ui/command.tsx";
-import { cn } from "../../libs/utils.ts";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover.tsx";
 
 export function PaymentMethodSelector({
   open,
@@ -44,7 +44,7 @@ export function PaymentMethodSelector({
           aria-expanded={open}
           className={cn(
             "text-xs pl-2 xxs:text-sm flex-1 mx-1 justify-between pr-2 border-none transition-all duration-500 hover:bg-transparent hover:text-gray-100 hover:scale-[1.02] data-[state=open]:scale-[1.02]",
-            triggerClassName
+            triggerClassName,
           )}
         >
           {!selected && "Select payment method"}
@@ -57,8 +57,7 @@ export function PaymentMethodSelector({
                   fallbackClassName="w-[25px] h-[25px] rounded bg-card-background"
                   fallback={
                     <IconSpinner
-                      className="animate-spin"
-                      fill="fill-gray-800"
+                      className="animate-spin text-gray-800"
                       width="15"
                     />
                   }
@@ -73,7 +72,7 @@ export function PaymentMethodSelector({
       <PopoverContent
         className={cn(
           "p-0 xs:w-[385px] ml-[20px] xxs:w-[335px] w-[280px] md:ml-[60px] md:w-[345px]  border-card-border bg-card-background",
-          contentClassName
+          contentClassName,
         )}
         sideOffset={5}
       >
@@ -111,8 +110,7 @@ export function PaymentMethodSelector({
                           src={method.logoUrl}
                           fallback={
                             <IconSpinner
-                              className="animate-spin"
-                              fill="fill-gray-800"
+                              className="animate-spin text-gray-800"
                               width="15"
                             />
                           }
@@ -125,7 +123,7 @@ export function PaymentMethodSelector({
                         "ml-auto h-4 w-4",
                         selected?.badge === method.badge
                           ? "opacity-100"
-                          : "opacity-0"
+                          : "opacity-0",
                       )}
                     />
                   </CommandItem>

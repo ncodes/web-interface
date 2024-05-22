@@ -138,8 +138,7 @@ Timestamp: ${timestamp}`;
                 {loading && (
                   <IconSpinner
                     width="20"
-                    fill="fill-gray-800"
-                    className="animate-spin"
+                    className="animate-spin text-gray-800"
                   />
                 )}
                 {!loading && <>Proceed</>}

@@ -11,14 +11,14 @@
                 <g transform="translate(18.0 16.0)">
                     <g transform="translate(0.0 7.0)">
                         <path d="M8.5,17 C13.1944204,17 17,13.1944204 17,8.5 C17,3.80557963 13.1944204,0 8.5,0 C3.80557963,0 0,3.80557963 0,8.5 C0,13.1944204 3.80557963,17 8.5,17 Z"
-                              stroke="#E83E3E" stroke-width="1" fill="none" stroke-linejoin="round"></path>
+                              stroke="#E83E3E" strokeWidth="1" fill="none" strokeLinejoin="round"></path>
                         <g transform="translate(8.216666666666665 13.03333333333334)">
-                            <path d="M0.283333333,0 L0.283333333,1.13333333" stroke="#E83E3E" stroke-width="1"
-                                  fill="none" stroke-linejoin="round"></path>
+                            <path d="M0.283333333,0 L0.283333333,1.13333333" stroke="#E83E3E" strokeWidth="1"
+                                  fill="none" strokeLinejoin="round"></path>
                         </g>
                         <g transform="translate(8.216666666666665 2.833333333333334)">
-                            <path d="M0.283333333,9.06666667 L0.283333333,0" stroke="#E83E3E" stroke-width="1"
-                                  fill="none" stroke-linejoin="round"></path>
+                            <path d="M0.283333333,9.06666667 L0.283333333,0" stroke="#E83E3E" strokeWidth="1"
+                                  fill="none" strokeLinejoin="round"></path>
                         </g>
                     </g>
                 </g>

@@ -121,7 +121,7 @@ export function TicketsStatsTabContent() {
                   <>
                     <span className="text-lg md:text-3xl">
                       {formatToHighDenom(data.price, 18)}{" "}
-                      <span className="text-gray-400">P2P</span>
+                      <span className="text-gray-400">JOIN</span>
                     </span>
                     <span className="text-sm text-gray-400">
                       (${formatToMoney(data?.priceUsd || "0")})
@@ -158,7 +158,7 @@ export function TicketsStatsTabContent() {
                   <span className="flex flex-col text-lg md:text-3xl">
                     <span>
                       {formatToHighDenom(data?.totalBonds, 18)}{" "}
-                      <span className="text-gray-400">P2P</span>
+                      <span className="text-gray-400">JOIN</span>
                     </span>
                     <span className="text-sm text-gray-400">
                       (${formatToMoney(data?.totalBondsUsd || "0")})
@@ -185,7 +185,7 @@ export function TicketsStatsTabContent() {
                   <span className="flex flex-col text-lg md:text-3xl">
                     <span>
                       {formatToHighDenom(data?.owner?.totalBonds || "0", 18)}{" "}
-                      <span className="text-gray-400">P2P</span>
+                      <span className="text-gray-400">JOIN</span>
                     </span>
                     <span className="text-sm text-gray-400">
                       (${formatToMoney(data?.owner?.totalBondsUsd || "0")})

@@ -10,13 +10,15 @@ export function TabContentHeader(props: { address: string }) {
 
   return (
     <div className="!select-none text-gray-500 text-sm font-light">
-      <span className="text-white w-full px-3 py-2 border-b border-gray-800 rounded-b-xl border-b-gray-800 flex font-light tracking-wider gap-1 items-center">
-        <span className="flex w-full items-center gap-2">
+      <span className="text-white bg-gradient-to-r from-black to-chinese-green/30 w-full px-3 py-2 border-b border-gray-800 rounded-b-xl border-b-gray-800 flex font-light tracking-wider gap-1 items-center">
+        <span className="flex w-full justify-between items-center gap-2">
           <span>
             <EmojiAvatar size={AvatarSize.Small} randomStr={props.address} />
           </span>
-          <span className="flex flex-1 justify-between items-center">
-            <span className="text-[16px]">{shortenAddress(props.address)}</span>
+          <span className="text-[18px] font-jersey25 tracking-wider">
+            {shortenAddress(props.address)}
+          </span>
+          <span className="flex justify-between items-center">
             <CopyToClipboard
               text={props.address}
               onCopy={() => {

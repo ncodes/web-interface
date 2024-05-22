@@ -129,8 +129,7 @@ export default function SwapRowLayer3({
                   <>
                     <IconSpinner
                       width="20"
-                      fill="fill-gray-900"
-                      className="animate-spin"
+                      className="animate-spin text-gray-900"
                     />
                   </>
                 )}
@@ -154,8 +153,7 @@ export default function SwapRowLayer3({
                   <>
                     <IconSpinner
                       width="20"
-                      fill="fill-gray-900"
-                      className="animate-spin"
+                      className="animate-spin text-gray-900"
                     />
                   </>
                 )}
@@ -179,8 +177,7 @@ export default function SwapRowLayer3({
                   <>
                     <IconSpinner
                       width="20"
-                      fill="fill-gray-100"
-                      className="animate-spin"
+                      className="animate-spin text-gray-100"
                     />
                   </>
                 )}
@@ -223,8 +220,7 @@ export default function SwapRowLayer3({
                     <>
                       <IconSpinner
                         width="20"
-                        fill="fill-gray-100"
-                        className="animate-spin"
+                        className="animate-spin text-gray-100"
                       />
                     </>
                   )}

@@ -1,3 +1,4 @@
+import RestrictedLocationBlocker from "@/components/RestrictedLocationBlocker.tsx";
 import * as Sentry from "@sentry/browser";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
@@ -7,11 +8,11 @@ import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
 import { useInterval, useMediaQuery } from "usehooks-ts";
 import { AccountLinker } from "../components/AccountLinker.tsx";
+import AuditStatusNotice from "../components/AuditStatusNotice.tsx";
 import { Footer } from "../components/Footer.tsx";
 import { Header } from "../components/Header.tsx";
 import { LeftSidebar } from "../components/LeftSidebar.tsx";
 import { NotificationSheet } from "../components/NotificationSheet.tsx";
-import RestrictedLocationBlocker from "../components/RestrictedLocationBlocker.tsx";
 import { ReviewViewerSheet } from "../components/ReviewViewerSheet.tsx";
 import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
@@ -61,6 +62,7 @@ export default function Layout({
   const { subscribeForWebPush } = useNotificationService();
   const { getContractParams } = useMiscService();
   const { getProtocolFees, getRequestCountryCode } = useMiscService();
+  const setMousePos = useStore((state) => state.setMousePosition);
   const ref = useRef(null);
   const { scrollY } = useScroll();
   const [scrollYPos, setScrollYPos] = useState(0);
@@ -238,8 +240,12 @@ export default function Layout({
     }
   }
 
+  function doSetMousePos(e) {
+    setMousePos(e.clientX, e.clientY);
+  }
+
   return (
-    <div>
+    <div onMouseMove={doSetMousePos}>
       <Helmet>
         <title>{title}</title>
         <meta
@@ -255,7 +261,7 @@ export default function Layout({
       </Helmet>
 
       <RestrictedLocationBlocker />
-      {/* <AuditStatusNotice /> */}
+      <AuditStatusNotice />
 
       <div ref={ref} className="container-x flex h-screen text-white text ">
         <LeftSidebar

@@ -20,9 +20,11 @@ import {
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import Layout from "./Layout.tsx";
 
 function MarketTabs({ defaultTab }: { defaultTab?: string }) {
+  const { address } = useConnectorContext();
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
   const [openCreateMarketSheet, setOpenCreateMarketSheet] = useState(false);
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
                 value="markets"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className=" font-jersey25 text-[18px] font-light relative top-2 bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
                   navigate("/markets");
                 }}
@@ -51,7 +53,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               </TabsTrigger>
               <TabsTrigger
                 value="my-markets"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className=" font-jersey25 text-[18px] font-light relative top-2 bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
                   navigate("/my/markets");
                 }}
@@ -60,7 +62,7 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               </TabsTrigger>
               <TabsTrigger
                 value="watched-markets"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className="font-light relative top-2  font-jersey25 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
                   navigate("/markets/watching");
                 }}
@@ -79,16 +81,18 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
           >
             <IconFilterOutline />
           </Button>
-          <Button
-            size="sm"
-            className="hidden md:flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
-            onClick={() => {
-              setOpenCreateMarketSheet(true);
-            }}
-          >
-            <IconPlus />
-            <span className="hidden md:inline">Create Market</span>
-          </Button>
+          {!!address && (
+            <Button
+              size="sm"
+              className="hidden md:flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
+              onClick={() => {
+                setOpenCreateMarketSheet(true);
+              }}
+            >
+              <IconPlus />
+              <span className="hidden md:inline">Create Market</span>
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <span className="md:hidden justify-center flex gap-1 h-7 w-7 items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green">
@@ -104,14 +108,16 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
               >
                 <IconFilterOutline /> Filter Markets
               </DropdownMenuItem>
-              <DropdownMenuItem
-                className="flex gap-2"
-                onClick={() => {
-                  setOpenCreateMarketSheet(true);
-                }}
-              >
-                <IconPlus /> Create Market
-              </DropdownMenuItem>
+              {!!address && (
+                <DropdownMenuItem
+                  className="flex gap-2"
+                  onClick={() => {
+                    setOpenCreateMarketSheet(true);
+                  }}
+                >
+                  <IconPlus /> Create Market
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
           {openCreateMarketSheet && (

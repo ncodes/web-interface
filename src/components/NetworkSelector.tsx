@@ -12,9 +12,9 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
 
-import { arbitrum } from "viem/chains";
+import { hardhat, sepolia } from "viem/chains";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-import { isProd } from "../libs/helpers.ts";
+import { isLocal, isProd } from "../libs/helpers.ts";
 
 function DropdownMenuItemCustom({
   children,
@@ -53,11 +53,14 @@ export function NetworkSelector() {
   }, [chainId]);
 
   useEffect(() => {
-    let chains = getChainsID(
-      true,
-      false,
-      curChain?.chainId ? [curChain?.chainId] : [],
-    );
+    const chainsToIgnore = curChain?.chainId ? [curChain?.chainId] : [];
+
+    if (!isLocal()) {
+      chainsToIgnore.push(hardhat.id);
+      chainsToIgnore.push(sepolia.id);
+    }
+
+    let chains = getChainsID(true, false, chainsToIgnore);
 
     if (isProd()) {
       chains = chains.filter((id) => !getChain(id)?.testnet);
@@ -67,14 +70,11 @@ export function NetworkSelector() {
   }, [curChain]);
 
   useEffect(() => {
-    let chains = getChainsID(
+    const chains = getChainsID(
       false,
       true,
       curChain?.chainId ? [curChain?.chainId] : [],
     );
-
-    // TODO remove before arbitrum testnet
-    chains = chains.filter((id) => getChain(id)?.chainId != arbitrum.id);
 
     setMainChainsID(chains);
   }, [curChain]);
@@ -95,7 +95,7 @@ export function NetworkSelector() {
         >
           <div
             className={cn(
-              "md:w-[152px] flex gap-2 justify-between border items-center transition-all duration-500 hover:cursor-pointer hover:bg-gray-800 hover:scale-x-105 hover:border-chinese-green p-2 px-2 pr-1 rounded-full border-gray-600",
+              "font-jersey20 tracking-wider text-lg md:w-[152px] flex gap-2 justify-between border items-center transition-all duration-500 hover:cursor-pointer hover:bg-gray-800 hover:scale-x-105 hover:border-chinese-green p-2 px-2 pr-1 rounded-full border-gray-600",
               {
                 "scale-105 border-chinese-green bg-gray-800": open,
               },
@@ -136,9 +136,13 @@ export function NetworkSelector() {
               {getChain(chainId)?.displayName}
             </DropdownMenuItemCustom>
           ))}
+
+          {!!mainChainsID.length && (
+            <DropdownMenuSeparator className="bg-gray-800" />
+          )}
+
           {testnetChainsID.length > 0 && (
             <>
-              <DropdownMenuSeparator className="bg-gray-800" />
               <DropdownMenuLabel className="font-extralight tracking-wider text-gray-300 text-xs">
                 Testnets
               </DropdownMenuLabel>
