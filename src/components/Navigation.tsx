@@ -8,11 +8,13 @@ import IconOffer from "./icons/IconOffer.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useSession } from "../hooks/useSession.ts";
 import { NavPageLink } from "./NavPageLink.tsx";
+import IconBattle from "./icons/IconBattle.tsx";
 import IconCoinGold from "./icons/IconCoinGold.tsx";
 import IconCoinStack2 from "./icons/IconCoinStack2.tsx";
 import IconDispute from "./icons/IconDispute.tsx";
 import IconMarketCoin from "./icons/IconMarketCoin.tsx";
 import IconMediation from "./icons/IconMediation.tsx";
+import IconSpaceship from "./icons/IconSpaceship.tsx";
 
 export function Navigation() {
   const { connected, address, getChainInfo } = useConnectorContext();
@@ -115,11 +117,39 @@ export function Navigation() {
             active={
               pathname.match("^/points|referrals|energon|airdrop") != null
             }
-            inactiveIconClassName="text-yellow-500"
-            inactiveClassName="text-yellow-500 hover:text-yellow-500"
+            inactiveIconClassName=""
+            inactiveClassName=" hover:text-yellow-500"
             activeClassName="text-gray-100 text-white"
             activeIconClassName="text-yellow-500"
             to="/airdrop"
+          />
+        </li>
+        <li>
+          <NavPageLink
+            icon={<IconSpaceship width="25" className="text-yellow-500" />}
+            iconClassName="w-[25px]"
+            labelClassName="font-jersey25 tracking-wider"
+            label="TapWar"
+            active={pathname.match("^/tapwar") != null}
+            inactiveIconClassName="text-yellow-500"
+            inactiveClassName=" hover:text-yellow-500"
+            activeClassName="text-gray-100 text-white"
+            activeIconClassName="text-yellow-500"
+            to="/tapwar"
+          />
+        </li>
+        <li>
+          <NavPageLink
+            icon={<IconBattle width="25" className="text-yellow-500" />}
+            iconClassName="w-[25px]"
+            labelClassName="font-jersey25 tracking-wider"
+            label="WarBond"
+            active={pathname.match("^/warbond") != null}
+            inactiveIconClassName="text-yellow-500"
+            inactiveClassName=" hover:text-yellow-500"
+            activeClassName="text-gray-100 text-white"
+            activeIconClassName="text-yellow-500"
+            to="/warbond"
           />
         </li>
       </ul>

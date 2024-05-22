@@ -7,8 +7,6 @@ export default function IconBattle(props: React.SVGProps<SVGSVGElement>) {
       {...props}
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      width="25px"
-      height="75px"
       viewBox="0 0 97 85"
     >
       <title>Group 70</title>
