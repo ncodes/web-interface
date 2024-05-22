@@ -164,7 +164,7 @@ export function PlayerRank({
                 <span className="font-jersey25 text-2xl text-gray-300">
                   {rankInfo[selected].taps}
                   {next && selected != next ? (
-                    <>- {rankInfo[next]?.taps - 1}</>
+                    <> - {rankInfo[next]?.taps - 1}</>
                   ) : (
                     ""
                   )}
