@@ -192,7 +192,7 @@ export function CreateMarketSheet({
                     }
                   }}
                   className="px-3 p-5 !w-[150px]"
-                  placeholder="0.1"
+                  placeholder="ex: 0.1"
                   err={commissionErr}
                 />
               </div>
@@ -260,8 +260,7 @@ export function CreateMarketSheet({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-[#06060c]"
-                    className="animate-spin"
+                    className="animate-spin text-gray-[#06060c]"
                   />
                 </>
               )}

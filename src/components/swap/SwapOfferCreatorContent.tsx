@@ -109,14 +109,14 @@ export function SwapOfferCreatorContent({
   const [slippage, setSlippage] = useState(0);
   const [quoteBal, setQuoteBal] = useState<bigint>(0n);
   const [canDo, setCanDo] = useState(false);
-  const [amount, setAmount] = useState("");
   const [initAmount, setInitAmount] = useState("");
-  const [slippageAmount, setSlippageAmount] = useState(amount);
+  const [amount, setAmount] = useState("");
   const [quoteAmount, setQuoteAmount] = useState("");
   const [amountErr, setAmountErr] = useState("");
   const [quoteAmountErr, setQuoteAmountErr] = useState("");
   const [amountUsd, setAmountUsd] = useState(0);
   const [quoteAmountUsd, setQuoteAmountUsd] = useState(0);
+  const [slippageAmount, setSlippageAmount] = useState(amount);
   const [maxQuoteAmount, setMaxQuoteAmount] = useState("");
   const { baseUsdRate, quoteUsdRate } = useBaseQuoteRate(market, true, true);
   const [hasAllowance, setHasAllowance] = useState(false);
@@ -237,13 +237,14 @@ export function SwapOfferCreatorContent({
   // Set or update amount when quote amount or price changed
   useEffect(() => {
     (async () => {
-      if (!quoteAmountInputFocused) return;
       if (quoteAmount == "") return setAmount("");
-      if (isZero(priceHD)) return setQuoteAmount("0");
 
       let amount = toDec(quoteAmount).div(priceHD);
       const feeInfo = await computeFeeInfo(amount.toFixed());
       setFeeInfo(feeInfo);
+
+      if (!quoteAmountInputFocused) return;
+      if (isZero(priceHD)) return setQuoteAmount("0");
 
       if (feeInfo.symbol == market.base) amount = amount.sub(feeInfo.total);
       setAmount(trimZeros(amount.toFixed(8)));
@@ -265,9 +266,9 @@ export function SwapOfferCreatorContent({
         totalFeeBp = feeInfo.protoFeeBps + market.commission;
       }
 
-      const amtD = toDec(amount);
+      const amt = toDec(amount);
       const feePct = totalFeeBp / 100 / 100;
-      const newQuoteAmt = amtD.div(1 - feePct).mul(priceHD);
+      const newQuoteAmt = amt.div(1 - feePct).mul(priceHD);
       setQuoteAmount(trimZeros(newQuoteAmt.toFixed(8)));
     })();
   }, [amount, priceHD]);
@@ -402,9 +403,9 @@ export function SwapOfferCreatorContent({
       decimals = quoteDecimals;
       usdRate = quoteUsdRate.data || 0;
     } else {
-      symbol = "P2P";
+      symbol = "JOIN";
       decimals = 18;
-      usdRate = 0; // TODO: get P2P rate
+      usdRate = 0; // TODO: get JOIN rate
     }
 
     const total = toHD(fee.protocolFee + fee.marketFee, decimals);
@@ -442,9 +443,8 @@ export function SwapOfferCreatorContent({
   // Get the maximum base amount.
   // Result cannot be greater than available liquidity
   function getMaxBaseAmount() {
-    const { maxSwap } = liquidity;
-    // return !isZero(maxSwap) && toDec(maxSwap).lte(amount) ? maxSwap : amount;
-    return maxSwap;
+    const { maxSwap, amount } = liquidity;
+    return !isZero(maxSwap) ? maxSwap : amount;
   }
 
   // Request and execute token allowance
@@ -467,16 +467,23 @@ export function SwapOfferCreatorContent({
     }
   }
 
+  // Actual amout is the amout of base asset to be received if a swap is initiated for the current quote amount.
+  function calcActualAmount() {
+    const { quoteDecimals, baseType, baseDecimals } = market;
+    const { price } = liquidity;
+    const quoteAmt = toDec(quoteAmount || "0");
+    return !isSynth(baseType)
+      ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
+      : toLD(amount, baseDecimals);
+  }
+
   async function doCreateSwap() {
     try {
       setLoading(true);
-      const { address, quoteDecimals, baseType, baseDecimals } = market;
-      const { provider, lid, price } = liquidity;
-      const quoteAmt = toDec(quoteAmount);
-      const amt = !isSynth(baseType)
-        ? toLD(quoteAmt.div(toHD(price, quoteDecimals)), baseDecimals)
-        : toLD(amount, baseDecimals);
+      const { address, quoteDecimals } = market;
+      const amt = calcActualAmount();
 
+      const { provider, lid } = liquidity;
       const [txHash, txReceipt] = await swapQuoteForBase(
         address,
         provider,
@@ -685,7 +692,11 @@ export function SwapOfferCreatorContent({
   }
 
   return (
-    <div className={cn("text-white flex flex-col flex-1")}>
+    <div
+      className={cn(
+        "text-white flex flex-col flex-1 border border-gray-800 rounded-xl p-1 pt-0",
+      )}
+    >
       <div className="flex flex-col flex-1">
         {!inBody && (
           <div className="flex text-gray-400 w-full px-5 py-2 items-center bg-card-background border-b border-gray-800/60">
@@ -886,13 +897,34 @@ export function SwapOfferCreatorContent({
                         </div>
                       </div>
                       <div>
-                        {amountErr && (
+                        {amountErr ? (
                           <span className="flex items-center gap-1 text-red-500 text-xs font-light pt-1">
                             <span>
                               <IconCaution width="15" fillA="#cb0c2c" />
                             </span>
                             <span>{amountErr}</span>
                           </span>
+                        ) : (
+                          amount && (
+                            <div className="text-xs mt-2 flex items-center gap-1 pr-5">
+                              <span className="text-gray-500">
+                                <ToolTip
+                                  tip={
+                                    "The actual output requested (incl. fees)."
+                                  }
+                                >
+                                  <IconInfoCircle width="15" />
+                                </ToolTip>
+                              </span>
+                              <span className="text-gray-300">Actual: </span>
+                              <span className="text-gray-400">
+                                {formatToHighDenom(
+                                  calcActualAmount(),
+                                  market.baseDecimals,
+                                )}
+                              </span>
+                            </div>
+                          )
                         )}
                       </div>
                     </div>
@@ -1072,8 +1104,7 @@ export function SwapOfferCreatorContent({
                   <>
                     <IconSpinner
                       width="20"
-                      fill="fill-gray-900"
-                      className="animate-spin"
+                      className="animate-spin text-gray-900"
                     />
                   </>
                 )}
@@ -1091,8 +1122,7 @@ export function SwapOfferCreatorContent({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-gray-900"
-                    className="animate-spin"
+                    className="animate-spin text-gray-900"
                   />
                 </>
               )}
@@ -1106,8 +1136,7 @@ export function SwapOfferCreatorContent({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-gray-900"
-                    className="animate-spin"
+                    className="animate-spin text-gray-900"
                   />
                 </>
               )}
@@ -1121,8 +1150,7 @@ export function SwapOfferCreatorContent({
                 <>
                   <IconSpinner
                     width="20"
-                    fill="fill-gray-900"
-                    className="animate-spin"
+                    className="animate-spin text-gray-900"
                   />
                 </>
               )}

@@ -69,7 +69,10 @@ export function MarketsTabContent() {
   }, [marketFilter]);
 
   return (
-    <TabsContent value="markets" className="p-0 m-0 flex flex-1 flex-col gap-3">
+    <TabsContent
+      value="markets"
+      className="p-0 pt-3 m-0 flex flex-1 flex-col gap-3"
+    >
       <Helmet>
         <title>{`Markets - Joint`}</title>
       </Helmet>

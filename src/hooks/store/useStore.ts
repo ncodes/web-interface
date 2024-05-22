@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 import { create } from "zustand";
 import { defaultRegion } from "../../components/region/constants.ts";
 
@@ -22,6 +23,7 @@ export enum RestrictScope {
   GLOBAL,
   MARKET,
   OFFER,
+  MARKET_PERM,
 }
 
 export interface IStore {
@@ -108,6 +110,15 @@ export interface IStore {
 
   restrictedScope: RestrictScope;
   setRestrictedScope: (scope: RestrictScope) => void;
+
+  mousePosition: { x: number; y: number };
+  setMousePosition: (x: number, y: number) => void;
+
+  socket?: Socket;
+  setSocket: (socket: Socket) => void;
+
+  gameMaximized: boolean;
+  setGameMaximized: (maximized: boolean) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
@@ -283,6 +294,15 @@ const useStore = create<IStore>((set, get) => ({
 
   restrictedScope: RestrictScope.GLOBAL,
   setRestrictedScope: (scope: RestrictScope) => set({ restrictedScope: scope }),
+
+  mousePosition: { x: 0, y: 0 },
+  setMousePosition: (x: number, y: number) => set({ mousePosition: { x, y } }),
+
+  socket: undefined,
+  setSocket: (socket: Socket) => set({ socket }),
+
+  gameMaximized: false,
+  setGameMaximized: (maximized: boolean) => set({ gameMaximized: maximized }),
 }));
 
 export default useStore;

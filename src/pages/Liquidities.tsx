@@ -39,7 +39,7 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
             <div className="flex flex-1 w-full gap-2 items-center px-2 py-2 pt-0">
               <TabsTrigger
                 value="my-liquidities"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className="font-light relative top-2  font-jersey25 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
                   navigate("/my/liquidity");
                 }}
@@ -48,7 +48,7 @@ function LiquidityTabs({ defaultTab }: { defaultTab?: string }) {
               </TabsTrigger>
               <TabsTrigger
                 value="watched-liquidities"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                className="font-light relative top-2  font-jersey25 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={async () => {
                   navigate("/liquidity/watched");
                 }}

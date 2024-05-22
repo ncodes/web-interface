@@ -1,106 +1,104 @@
 @font-face {
-    font-family: 'Satoshi';
-    font-weight: 300;
-    font-style: normal;
-    src: url('/fonts/satoshi/light.ttf') format('truetype');
+  font-family: "Satoshi";
+  font-weight: 300;
+  font-style: normal;
+  src: url("/fonts/satoshi/light.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Satoshi';
-    font-weight: 400;
-    font-style: normal;
-    src: url('/fonts/satoshi/regular.ttf') format('truetype');
+  font-family: "Satoshi";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/satoshi/regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Satoshi';
-    font-weight: 500;
-    font-style: normal;
-    src: url('/fonts/satoshi/medium.ttf') format('truetype');
+  font-family: "Satoshi";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/fonts/satoshi/medium.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Satoshi';
-    font-weight: 700;
-    font-style: normal;
-    src: url('/fonts/satoshi/bold.ttf') format('truetype');
+  font-family: "Satoshi";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/satoshi/bold.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Satoshi';
-    font-weight: 900;
-    font-style: normal;
-    src: url('/fonts/satoshi/black.ttf') format('truetype');
-}
-
-
-@font-face {
-    font-family: 'Raleway';
-    font-weight: 100;
-    font-style: normal;
-    src: url('/fonts/raleway/thin.ttf') format('truetype');
+  font-family: "Satoshi";
+  font-weight: 900;
+  font-style: normal;
+  src: url("/fonts/satoshi/black.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Raleway';
-    font-weight: 300;
-    font-style: normal;
-    src: url('/fonts/raleway/light.ttf') format('truetype');
+  font-family: "Raleway";
+  font-weight: 100;
+  font-style: normal;
+  src: url("/fonts/raleway/thin.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Raleway';
-    font-weight: 400;
-    font-style: normal;
-    src: url('/fonts/raleway/regular.ttf') format('truetype');
+  font-family: "Raleway";
+  font-weight: 300;
+  font-style: normal;
+  src: url("/fonts/raleway/light.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Raleway';
-    font-weight: 500;
-    font-style: normal;
-    src: url('/fonts/raleway/medium.ttf') format('truetype');
-}
-
-
-@font-face {
-    font-family: 'Mitr';
-    font-weight: 200;
-    font-style: normal;
-    src: url('/fonts/mitr/extralight.ttf') format('truetype');
+  font-family: "Raleway";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/raleway/regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Mitr';
-    font-weight: 300;
-    font-style: normal;
-    src: url('/fonts/mitr/light.ttf') format('truetype');
+  font-family: "Raleway";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/fonts/raleway/medium.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Mitr';
-    font-weight: 400;
-    font-style: normal;
-    src: url('/fonts/mitr/regular.ttf') format('truetype');
+  font-family: "Mitr";
+  font-weight: 200;
+  font-style: normal;
+  src: url("/fonts/mitr/extralight.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Mitr';
-    font-weight: 500;
-    font-style: normal;
-    src: url('/fonts/mitr/medium.ttf') format('truetype');
+  font-family: "Mitr";
+  font-weight: 300;
+  font-style: normal;
+  src: url("/fonts/mitr/light.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Mitr';
-    font-weight: 600;
-    font-style: normal;
-    src: url('/fonts/mitr/semibold.ttf') format('truetype');
+  font-family: "Mitr";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/mitr/regular.ttf") format("truetype");
 }
 
 @font-face {
-    font-family: 'Mitr';
-    font-weight: 700;
-    font-style: normal;
-    src: url('/fonts/mitr/bold.ttf') format('truetype');
+  font-family: "Mitr";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/fonts/mitr/medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Mitr";
+  font-weight: 600;
+  font-style: normal;
+  src: url("/fonts/mitr/semibold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Mitr";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/mitr/bold.ttf") format("truetype");
 }

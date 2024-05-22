@@ -585,8 +585,7 @@ export function OfferRow({
                           {loading && (
                             <IconSpinner
                               width="15"
-                              className="animate-spin"
-                              fill="fill-gray-800"
+                              className="animate-spin text-gray-900"
                             />
                           )}
                         </span>
@@ -606,8 +605,7 @@ export function OfferRow({
                         {loading && (
                           <IconSpinner
                             width="15"
-                            className="animate-spin"
-                            fill="fill-gray-300"
+                            className="animate-spin text-gray-300"
                           />
                         )}
                       </Button>
@@ -632,8 +630,7 @@ export function OfferRow({
                         {loading && (
                           <IconSpinner
                             width="15"
-                            className="animate-spin"
-                            fill="fill-gray-300"
+                            className="animate-spin text-gray-300"
                           />
                         )}
                       </Button>
@@ -675,8 +672,7 @@ export function OfferRow({
                           {loading && (
                             <IconSpinner
                               width="15"
-                              className="animate-spin"
-                              fill="fill-gray-300"
+                              className="animate-spin text-gray-300"
                             />
                           )}
                         </Button>

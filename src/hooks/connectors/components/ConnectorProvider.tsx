@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { Chain, http } from "viem";
-import { hardhat, sepolia } from "viem/chains";
+import { arbitrum, hardhat } from "viem/chains";
 import { WagmiProvider, createConfig } from "wagmi";
 import {
   AppIcon,
@@ -10,6 +10,7 @@ import {
   WalletConnectId,
   infuraId,
 } from "../../../constants.ts";
+import { isLocal } from "../../../libs/helpers.ts";
 import { getSupportedChains } from "../common.ts";
 import { ConnectorContext } from "../context.tsx";
 import useConnector from "../useConnector.tsx";
@@ -27,19 +28,25 @@ function ConnectorContextWrapper({ children }) {
   );
 }
 
+const transports = {};
+if (isLocal()) {
+  transports[hardhat.id] = http(hardhat.rpcUrls.default.http[0]);
+} else {
+  transports[arbitrum.id] = http(
+    `https://arbitrum-mainnet.infura.io/v3/${infuraId}`,
+  );
+}
+
 const config = createConfig(
   getDefaultConfig({
     walletConnectProjectId: WalletConnectId,
     appName: AppName,
     chains: getSupportedChains() as unknown as readonly [Chain, ...Chain[]],
-    appDescription: "A decentralized peer-to-peer crypto exchange protocol",
+    appDescription:
+      "Joint is a peer-to-peer exchange protocol that lets you swap tokens with real people",
     appUrl: AppUrl,
     appIcon: AppIcon,
-    transports: {
-      [sepolia.id]: http(`https://sepolia.infura.io/v3/${infuraId}`),
-      //   [arbitrum.id]: http(`https://arbitrum-mainnet.infura.io/v3/${infuraId}`), // TODO: remove when arbitrum is enabled
-      [hardhat.id]: http(hardhat.rpcUrls.default.http[0]),
-    },
+    transports,
   }),
 );
 

@@ -56,11 +56,7 @@ export function SwapOfferCreatorSheet({
       >
         {!reveal && (
           <div className="absolute flex justify-center items-center z-10 w-full h-full bg-card-background rounded-xl">
-            <IconSpinner
-              width="20"
-              fill="fill-gray-600"
-              className="animate-spin"
-            />
+            <IconSpinner width="20" className="animate-spin text-gray-600" />
           </div>
         )}
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">

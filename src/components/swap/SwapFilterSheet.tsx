@@ -55,7 +55,7 @@ export function SwapFilterSheet({
       >
         <SheetHeader className="flex pr-[50px] border-b border-gray-800">
           <div className="text-white">
-            <SheetTitle className="flex items-center gap-2 text-gray-100 tracking-wide p-3 pl-5">
+            <SheetTitle className="flex items-center gap-2 text-gray-100 p-3 pl-5 font-jersey25 tracking-wider">
               Filter Swaps
             </SheetTitle>
           </div>

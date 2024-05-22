@@ -12,6 +12,7 @@ export default function ScrollOverflowIndicator({
   arrowContainerClassName,
   arrowContainerRightClassName,
   arrowContainerLeftClassName,
+  disabled,
 }: {
   children: ReactElement;
   side?: "bottom" | "right";
@@ -20,6 +21,7 @@ export default function ScrollOverflowIndicator({
   arrowContainerClassName?: string;
   arrowContainerRightClassName?: string;
   arrowContainerLeftClassName?: string;
+  disabled?: boolean;
   onScroll?: (progress: number) => void;
 }) {
   const [progress, setProgress] = React.useState(0);
@@ -111,6 +113,8 @@ export default function ScrollOverflowIndicator({
     if (!viewPort) return;
     viewPort.scrollLeft -= 20;
   }
+
+  if (disabled) return <>{children}</>;
 
   return (
     <div

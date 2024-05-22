@@ -1,6 +1,6 @@
 import { getChains } from "@jointlabs/chains-info";
 import moment from "moment";
-import { arbitrum, hardhat } from "viem/chains";
+import { hardhat } from "viem/chains";
 import { isProd } from "../../libs/helpers";
 
 /**
@@ -17,9 +17,7 @@ export function createSignatureMessage(
   const emailStr = !email ? "" : `Email: ${email}`;
   const msg = `Welcome to ${import.meta.env.VITE_APP_NAME}!
   
-Click Sign button to sign and accept the ${import.meta.env.VITE_APP_NAME} Terms of Service: ${
-    import.meta.env.VITE_APP_URL
-  }/term.
+Click Sign button to sign and accept the ${import.meta.env.VITE_APP_NAME} Terms of Service: https://jntl.ink/tos.
   
 This request will not trigger a blockchain transaction or cost any gas fees.
   
@@ -34,7 +32,6 @@ Timestamp: ${moment().toISOString()}`;
 
 export function getSupportedChains() {
   let chains = getChains();
-  chains = chains.filter((chain) => chain.id !== arbitrum.id); // TODO: remove this when arbitrum is enabled
   if (isProd()) {
     chains = chains.filter((chain) => chain.id !== hardhat.id);
   }
