@@ -17,7 +17,7 @@ export function AirdropDailyQuest() {
     queryFn: getQuests,
     initialData: [],
     enabled: ready,
-    refetchInterval: 10000,
+    refetchInterval: false,
   });
 
   return (
