@@ -102,11 +102,15 @@ export function TapOff() {
           const { maxOverheatLvl } = playerInfo || {};
           const { overheatLvl } = result;
           if (!maxOverheatLvl) return;
-          const overheatLevel = (overheatLvl / maxOverheatLvl) * 100;
 
           if (!firing) {
-            console.log("set overheat level");
-            setOverheatLevelPct(overheatLevel);
+            const overheatLevelPct = (overheatLvl / maxOverheatLvl) * 100;
+            console.log(
+              "set overheat level",
+              overheatLevelPct,
+              result.overheatLvl,
+            );
+            setOverheatLevelPct(overheatLevelPct);
             setOverheatLevel(result.overheatLvl);
           }
         })
