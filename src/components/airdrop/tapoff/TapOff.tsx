@@ -53,7 +53,6 @@ export function TapOff() {
 
   useEffect(() => {
     if (!isReady) return;
-    console.log("ready to play");
     countTaps()
       .then((result) => {
         setTaps(result.count);
@@ -96,7 +95,6 @@ export function TapOff() {
   useInterval(
     () => {
       if (!isReady) return;
-      console.log("call ping");
       ping()
         .then((result) => {
           const { maxOverheatLvl } = playerInfo || {};
@@ -105,11 +103,6 @@ export function TapOff() {
 
           if (!firing) {
             const overheatLevelPct = (overheatLvl / maxOverheatLvl) * 100;
-            console.log(
-              "set overheat level",
-              overheatLevelPct,
-              result.overheatLvl,
-            );
             setOverheatLevelPct(overheatLevelPct);
             setOverheatLevel(result.overheatLvl);
           }
