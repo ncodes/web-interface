@@ -21,7 +21,6 @@ import Swaps from "./pages/Swaps.tsx";
 import { Error404 } from "./pages/errors/Error404.tsx";
 import { RootErrorBoundary } from "./pages/errors/root.tsx";
 import ConnectExample from "./pages/play/ConnectExample.tsx";
-import "./sentry.ts";
 import "./styles/app.css";
 import "./styles/fonts.css";
 
