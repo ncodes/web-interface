@@ -77,16 +77,13 @@ export function TapOff() {
 
   useInterval(
     () => {
-      console.log("Info ready", isReady);
       if (!isReady) return;
       info()
         .then((result) => {
-          console.log("Info data", result);
           if (!taps) setTaps(result.tapCount);
           if (!tapIncrement) setTapIncrement(parseInt(result.tapIncrement));
           setPlayerInfo(result);
           setGunCount(result.rapidFire.active ? 5 : 1);
-          console.log("Info set");
         })
         .catch((e) => {
           console.error("info", e);
@@ -97,11 +94,9 @@ export function TapOff() {
 
   useInterval(
     () => {
-      console.log("Ping", isReady);
       if (!isReady) return;
       ping()
         .then((result) => {
-          console.log("Ping result", result);
           const { maxOverheatLvl } = playerInfo || {};
           const { overheatLvl } = result;
           if (!maxOverheatLvl) return;
@@ -112,9 +107,7 @@ export function TapOff() {
             setOverheatLevel(result.overheatLvl);
           }
         })
-        .catch((e) => {
-          console.log("Ping error", e);
-        });
+        .catch((e) => {});
     },
     isReady ? 1000 : null,
   );
@@ -145,9 +138,7 @@ export function TapOff() {
           // }, 100);
         }
 
-        console.log("Fire");
         const result = await tap();
-        console.log("Fire result", result);
         setTaps(result.tapCount);
         setTapIncrement(result.tapIncrement);
 
@@ -157,7 +148,6 @@ export function TapOff() {
         setOverheatLevelPct(overheatLevel);
         setOverheatLevel(result.overheatLvl);
       } catch (error) {
-        console.log("Fire error", error);
         // do nothing
       }
     };
