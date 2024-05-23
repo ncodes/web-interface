@@ -140,9 +140,9 @@ export function TapOff() {
       try {
         const iosVersion = iOSversion();
         if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
-          setTimeout(() => {
-            playAudio(audioFirePath, false, true);
-          }, 100);
+          // setTimeout(() => {
+          // playAudio(audioFirePath, false, true);
+          // }, 100);
         }
 
         console.log("Fire");
