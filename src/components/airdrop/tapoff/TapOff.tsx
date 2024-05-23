@@ -107,7 +107,9 @@ export function TapOff() {
             setOverheatLevel(result.overheatLvl);
           }
         })
-        .catch((e) => {});
+        .catch(() => {
+          //
+        });
     },
     isReady ? 1000 : null,
   );
