@@ -25,7 +25,7 @@ export function TapOff() {
   useImagePreloader(shipImages);
   const { address } = useConnectorContext();
   const { token } = useSession();
-  const [taps, setTaps] = useState("0");
+  const [taps, setTaps] = useState("");
   const [tapIncrement, setTapIncrement] = useState(0);
   const [lastTapTime, setLastTapTime] = useState(0);
   const tapCountRef = useRef<any>();
@@ -80,14 +80,14 @@ export function TapOff() {
       if (!isReady) return;
       info()
         .then((result) => {
-          setTaps(result.tapCount);
+          if (!taps) setTaps(result.tapCount);
+          if (!tapIncrement) setTapIncrement(parseInt(result.tapIncrement));
           setPlayerInfo(result);
-          setTapIncrement(parseInt(result.tapIncrement));
           setGunCount(result.rapidFire.active ? 5 : 1);
         })
         .catch(console.error);
     },
-    isReady ? 2000 : null,
+    isReady ? 500 : null,
   );
 
   useInterval(
@@ -99,8 +99,11 @@ export function TapOff() {
           const { overheatLvl } = result;
           if (!maxOverheatLvl) return;
           const overheatLevel = (overheatLvl / maxOverheatLvl) * 100;
-          setOverheatLevelPct(overheatLevel);
-          setOverheatLevel(result.overheatLvl);
+
+          if (!firing) {
+            setOverheatLevelPct(overheatLevel);
+            setOverheatLevel(result.overheatLvl);
+          }
         })
         .catch(() => {
           //
