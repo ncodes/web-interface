@@ -115,6 +115,7 @@ export default function useTapSocketService() {
 
   useEffect(() => {
     if (isAuthenticated || !isConnected) return;
+    setIsReady(false);
     console.log("Authing");
     socket.emit("auth", { token }, (res) => {
       console.log("Authed");
