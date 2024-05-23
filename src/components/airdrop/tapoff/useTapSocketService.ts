@@ -116,11 +116,8 @@ export default function useTapSocketService() {
   useEffect(() => {
     if (isAuthenticated || !isConnected) return;
     setIsReady(false);
-    console.log("Authing");
     socket.emit("auth", { token }, (res) => {
-      console.log("Authed");
       setTimeout(() => {
-        console.log("Authed set");
         setIsAuthenticated(res.success);
         setIsReady(true);
       }, 1000);
@@ -212,7 +209,6 @@ export default function useTapSocketService() {
         socket.emit("countTaps", (res: CountTapsResult) => {
           if (!res.success) {
             if (res.message == "Not authenticated") {
-              console.log("Not authenticated", "count");
               setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
             }
@@ -378,7 +374,6 @@ export default function useTapSocketService() {
         socket.emit("info", (res: InfoResult) => {
           if (!res.success) {
             if (res.message == "Not authenticated") {
-              console.log("Not authenticated", "info");
               setIsAuthenticated(false);
               return reject(ErrorAuthFailed);
             }
