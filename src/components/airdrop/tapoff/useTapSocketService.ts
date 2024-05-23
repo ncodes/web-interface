@@ -42,6 +42,7 @@ export interface InfoResult {
   success?: boolean;
   message?: string;
   maxOverheatLvl: number;
+  overheatLvl: number;
   tapCount: string;
   tapIncrement: string;
   rank: string;
@@ -115,9 +116,10 @@ export default function useTapSocketService() {
   useEffect(() => {
     if (isAuthenticated || !isConnected) return;
     socket.emit("auth", { token }, (res) => {
-      console.log("Auth", res);
-      setIsAuthenticated(res.success);
-      setIsReady(true);
+      setTimeout(() => {
+        setIsAuthenticated(res.success);
+        setIsReady(true);
+      }, 1000);
     });
   }, [isAuthenticated, isConnected]);
 
@@ -138,7 +140,6 @@ export default function useTapSocketService() {
     socket.on("disconnect", onDisconnect);
 
     if (!isConnected) {
-      console.log("Socket connecting");
       socket.connect();
     }
 
@@ -201,6 +202,7 @@ export default function useTapSocketService() {
   async function countTaps(): Promise<CountTapsResult> {
     if (!socket) throw new Error("Socket not initialized");
     if (!isConnected) throw new Error("Not connected");
+    if (!isAuthenticated) throw new Error("Not authenticated");
     return new Promise((resolve, reject) => {
       try {
         socket.emit("countTaps", (res: CountTapsResult) => {
@@ -502,5 +504,6 @@ export default function useTapSocketService() {
     claimQuestsReward,
     claimRankBonus,
     claimReferralBonus,
+    isAuthenticated,
   };
 }
