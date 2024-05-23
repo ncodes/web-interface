@@ -145,6 +145,7 @@ export function TapOff() {
           }, 100);
         }
 
+        console.log("Fire");
         const result = await tap();
         console.log("Fire result", result);
         setTaps(result.tapCount);
