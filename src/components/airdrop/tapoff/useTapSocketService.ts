@@ -115,6 +115,7 @@ export default function useTapSocketService() {
   useEffect(() => {
     if (isAuthenticated || !isConnected) return;
     socket.emit("auth", { token }, (res) => {
+      console.log("Auth", res);
       setIsAuthenticated(res.success);
       setIsReady(true);
     });
@@ -137,6 +138,7 @@ export default function useTapSocketService() {
     socket.on("disconnect", onDisconnect);
 
     if (!isConnected) {
+      console.log("Socket connecting");
       socket.connect();
     }
 
