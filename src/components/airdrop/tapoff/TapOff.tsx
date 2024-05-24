@@ -38,6 +38,7 @@ export function TapOff() {
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
+  const [isPinging, setIsPinging] = useState(false);
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
@@ -82,8 +83,16 @@ export function TapOff() {
         .then((result) => {
           if (!taps) setTaps(result.tapCount);
           if (!tapIncrement) setTapIncrement(parseInt(result.tapIncrement));
+          setTaps(result.tapCount);
           setPlayerInfo(result);
           setGunCount(result.rapidFire.active ? 5 : 1);
+
+          if (!isPinging) {
+            const overheatLevelPct =
+              (result.overheatLvl / result.maxOverheatLvl) * 100;
+            setOverheatLevelPct(overheatLevelPct);
+            setOverheatLevel(result.overheatLvl);
+          }
         })
         .catch((e) => {
           console.error("info", e);
@@ -95,6 +104,7 @@ export function TapOff() {
   useInterval(
     () => {
       if (!isReady) return;
+      setIsPinging(true);
       ping()
         .then((result) => {
           const { maxOverheatLvl } = playerInfo || {};
@@ -135,9 +145,9 @@ export function TapOff() {
       try {
         const iosVersion = iOSversion();
         if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
-          // setTimeout(() => {
-          // playAudio(audioFirePath, false, true);
-          // }, 100);
+          setTimeout(() => {
+            playAudio(audioFirePath, false, true);
+          }, 100);
         }
 
         const result = await tap();
