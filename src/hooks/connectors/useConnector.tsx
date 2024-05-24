@@ -98,6 +98,8 @@ export default function useConnector() {
       if ((message as string).includes("rejected")) {
         return Promise.reject(new Error(`User rejected the signing request`));
       } else {
+        console.log("ERR MSG", message);
+        console.log("SIGN ERR", error);
         if (message.includes("SwitchChainError")) {
           return Promise.reject(new Error(`Failed to switch network`));
           disconnect();
