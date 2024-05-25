@@ -23,7 +23,6 @@ const audioFirePath = "/audio/fire_audio.mp3";
 
 export function TapOff() {
   useImagePreloader(shipImages);
-  const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
   const { address } = useConnectorContext();
   const { token } = useSession();
   const [taps, setTaps] = useState("");
@@ -38,6 +37,8 @@ export function TapOff() {
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
+  console.log(isTelegramBot);
   const [isPinging, setIsPinging] = useState(false);
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
@@ -205,7 +206,7 @@ export function TapOff() {
       )}
     >
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
-        {!isTelegramWebApp && (
+        {!isTelegramBot && (
           <TapOffHeader
             playerInfo={playerInfo}
             audioState={playing ? "playing" : "stopped"}

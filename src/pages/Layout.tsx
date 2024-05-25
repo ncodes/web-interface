@@ -43,6 +43,7 @@ export default function Layout({
   title: string;
   description?: string;
 }) {
+  const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
   const { getAccessToken, delAccessToken, hasAccessToken } = useSession();
   const headerHeight = 55;
   const location = useLocation();
@@ -56,6 +57,7 @@ export default function Layout({
   const windowFocus = useWindowFocus();
   const setUser = useStore((state) => state.setUser);
   const setProtoFee = useStore((state) => state.setProtoFee);
+  const setIsTelegramBot = useStore((state) => state.setIsTelegramBot);
   const { getUser, logOnlineStatus, registerDevice } = useUserService();
   const accessToken = getAccessToken(address);
   const { subscribeForWebPush } = useNotificationService();
@@ -68,6 +70,8 @@ export default function Layout({
   const { balanceOf: nativeNftBalance } = useNFTContract();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const mounted = useMounted(1000);
+
+  setIsTelegramBot(isTelegramWebApp);
 
   // Set loader progress to 100% on mount.
   useEffect(() => {
