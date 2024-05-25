@@ -16,7 +16,7 @@ import { StatsDialog } from "./StatsDialog.tsx";
 import { TaskDialog } from "./TaskDialog.tsx";
 import { InfoResult } from "./useTapSocketService.ts";
 
-export function TapOffHeader({
+export function TapWarHeader({
   playerInfo,
   toggleAudioPause,
   audioState,

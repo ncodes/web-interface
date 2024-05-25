@@ -1,8 +1,8 @@
 import Helmet from "react-helmet";
 import { TabsContent } from "../../ui/Tabs.tsx";
-import { TapOff } from "./TapOff.tsx";
+import { TapWar } from "./TapWar.tsx";
 
-export function TapOffTabContent() {
+export function TapWarTabContent() {
   return (
     <TabsContent
       value="tap"
@@ -12,7 +12,7 @@ export function TapOffTabContent() {
         <title>{`TapWar - Joint`}</title>
       </Helmet>
 
-      <TapOff />
+      <TapWar />
     </TabsContent>
   );
 }

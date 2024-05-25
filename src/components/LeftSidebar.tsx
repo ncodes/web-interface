@@ -36,6 +36,7 @@ export function LeftSidebar(props: {
     toggleOpenState: s.toggleOpenState,
   }));
   const { lock, unlock } = useScrollLock({ autoLock: false });
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   useEffect(() => {
     if (!isXl) {
@@ -47,6 +48,8 @@ export function LeftSidebar(props: {
     }
     setOpenOverlay(props.open);
   }, [props.open]);
+
+  if (isTelegramBot) return null;
 
   return (
     <div>

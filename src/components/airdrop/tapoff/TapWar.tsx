@@ -14,14 +14,14 @@ import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
 import { OverheatIndicator } from "./OverheatIndicator.tsx";
 import { Ship } from "./Ship.tsx";
 import { TapCounter } from "./TapCounter.tsx";
-import { TapOffHeader } from "./TapOffHeader.tsx";
+import { TapWarHeader } from "./TapWarHeader.tsx";
 import { shipImages } from "./contants.ts";
 import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 
 const audioBgPath = "/audio/bg_game_audio.mp3";
 const audioFirePath = "/audio/fire_audio.mp3";
 
-export function TapOff() {
+export function TapWar() {
   useImagePreloader(shipImages);
   const { address } = useConnectorContext();
   const { token } = useSession();
@@ -207,7 +207,7 @@ export function TapOff() {
     >
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
         {!isTelegramBot && (
-          <TapOffHeader
+          <TapWarHeader
             playerInfo={playerInfo}
             audioState={playing ? "playing" : "stopped"}
             toggleAudioPause={toggleAudioPause}

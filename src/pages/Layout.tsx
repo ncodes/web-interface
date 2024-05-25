@@ -58,6 +58,7 @@ export default function Layout({
   const setUser = useStore((state) => state.setUser);
   const setProtoFee = useStore((state) => state.setProtoFee);
   const setIsTelegramBot = useStore((state) => state.setIsTelegramBot);
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
   const { getUser, logOnlineStatus, registerDevice } = useUserService();
   const accessToken = getAccessToken(address);
   const { subscribeForWebPush } = useNotificationService();
@@ -71,7 +72,8 @@ export default function Layout({
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const mounted = useMounted(1000);
 
-  setIsTelegramBot(isTelegramWebApp);
+  // setIsTelegramBot(isTelegramWebApp);
+  setIsTelegramBot(true);
 
   // Set loader progress to 100% on mount.
   useEffect(() => {
@@ -266,7 +268,12 @@ export default function Layout({
       <RestrictedLocationBlocker />
       {/* <AuditStatusNotice /> */}
 
-      <div ref={ref} className="container-x flex h-screen text-white text ">
+      <div
+        ref={ref}
+        className={cn("flex h-screen text-white text", {
+          "container-x": !isTelegramBot,
+        })}
+      >
         <LeftSidebar
           open={leftSideMenuOpen}
           headerHeight={headerHeight}
@@ -276,7 +283,11 @@ export default function Layout({
           }}
         />
         <div className="flex flex-col flex-1 z-10">
-          <div className="flex flex-col flex-1 pt-3">
+          <div
+            className={cn("flex flex-col flex-1", {
+              "pt-3": !isTelegramBot,
+            })}
+          >
             <div>
               <Header
                 onClick={() => {
@@ -286,13 +297,18 @@ export default function Layout({
               />
             </div>
             <div className="flex flex-1">
-              <div className="flex-1 relative flex flex-col mt-3">
+              <div
+                className={cn("flex-1 relative flex flex-col", {
+                  "mt-3": !isTelegramBot,
+                })}
+              >
                 <AccountLinker />
                 <div className="relative flex-1 flex flex-col">
                   <div className="absolute w-full h-full">
                     <div
                       className={cn(
-                        "z-0 border border-gray-800 rounded-3xl bg-vampire-black ",
+                        "z-0 border border-gray-800 bg-vampire-black ",
+                        { "rounded-3xl": !isTelegramBot },
                         bodyContainerClassName,
                       )}
                     >

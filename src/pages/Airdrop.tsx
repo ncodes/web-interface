@@ -5,7 +5,7 @@ import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
-import { TapOffTabContent } from "../components/airdrop/tapoff/TapOffTabContent.tsx";
+import { TapWarTabContent } from "../components/airdrop/tapoff/TapWarTabContent.tsx";
 import { imageList } from "../components/airdrop/tapoff/contants.ts";
 import { WarBondTabContent } from "../components/airdrop/warbond/WarBondTabContent.tsx";
 import IconBattle from "../components/icons/IconBattle.tsx";
@@ -138,7 +138,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
         </ScrollAreaHorizontal>
       </ScrollOverflowIndicator>
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
-      {currentTab == "tap" && <TapOffTabContent />}
+      {currentTab == "tap" && <TapWarTabContent />}
       {currentTab == "warbond" && <WarBondTabContent />}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
       {/* {currentTab == "energon" && <EnergonConversionTabContent />} */}
