@@ -119,6 +119,9 @@ export interface IStore {
 
   gameMaximized: boolean;
   setGameMaximized: (maximized: boolean) => void;
+
+  isTelegramBot: boolean;
+  setIsTelegramBot: (isTelegramBot: boolean) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
@@ -303,6 +306,10 @@ const useStore = create<IStore>((set, get) => ({
 
   gameMaximized: false,
   setGameMaximized: (maximized: boolean) => set({ gameMaximized: maximized }),
+
+  isTelegramBot: false,
+  setIsTelegramBot: (isTelegramBot: boolean) =>
+    set({ isTelegramBot: isTelegramBot }),
 }));
 
 export default useStore;
