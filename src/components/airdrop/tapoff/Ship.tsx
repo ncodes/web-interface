@@ -6,7 +6,6 @@ import { FiringCoins } from "./FiringCoins.tsx";
 
 export function Ship({
   fire,
-  onFireStop,
   firedCoins,
   rank,
   showTapToFireNotice,
@@ -17,7 +16,6 @@ export function Ship({
 }: {
   rank: string;
   fire: () => void;
-  onFireStop: () => void;
   firedCoins: ReactNode[];
   showTapToFireNotice: boolean;
   firing: boolean;
@@ -67,26 +65,33 @@ export function Ship({
         onClick={renderTapIncrementIndicator}
       >
         {rank && (
-          <div
-            className="flex text-center [-webkit-tap-highlight-color:transparent] [touch-action:manipulation] border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
-            onMouseDown={fire}
-            onMouseUp={onFireStop}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              fire();
+            }}
           >
-            {showTapToFireNotice && !firing && (
-              <div className="relative w-full">
-                <div className="w-full animate-pulse font-jersey20 z-20 text-xl text-white absolute -top-10">
-                  Tap to Fire
+            <div
+              id="ship"
+              className="flex text-center [-webkit-tap-highlight-color:transparent] [touch-action:manipulation] border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
+            >
+              {showTapToFireNotice && !firing && (
+                <div className="relative w-full">
+                  <div className="w-full animate-pulse font-jersey20 z-20 text-xl text-white absolute -top-10">
+                    Tap to Fire
+                  </div>
                 </div>
+              )}
+              <div className="flex justify-center" ref={shipRef}>
+                <FiringCoins coins={firedCoins} />
               </div>
-            )}
-            <div className="flex justify-center" ref={shipRef}>
-              <FiringCoins coins={firedCoins} />
+              <img
+                src={`/images/rank-ships/${rank}.png`}
+                className="h-[200px] select-none [touch-action:manipulation]"
+              />
             </div>
-            <img
-              src={`/images/rank-ships/${rank}.png`}
-              className="h-[200px] select-none [touch-action:manipulation]"
-            />
-          </div>
+          </a>
         )}
       </motion.div>
     </div>

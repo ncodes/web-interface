@@ -23,6 +23,7 @@ const audioFirePath = "/audio/fire_audio.mp3";
 
 export function TapOff() {
   useImagePreloader(shipImages);
+  const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
   const { address } = useConnectorContext();
   const { token } = useSession();
   const [taps, setTaps] = useState("");
@@ -33,7 +34,6 @@ export function TapOff() {
   const [gunCount, setGunCount] = useState(1);
   const [firedCoins, setFiredCoins] = useState<ReactNode[]>([]);
   const [playerInfo, setPlayerInfo] = useState<InfoResult>();
-  const [firing, setFiring] = useState(false);
   const [showTapToFireNotice, setShowTapToFireNotice] = useState(true);
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
@@ -73,7 +73,7 @@ export function TapOff() {
       setShowTapToFireNotice(true);
       setFiredCoins([]);
     },
-    firing || !showTapToFireNotice ? 5000 : null,
+    isFiring() || !showTapToFireNotice ? 5000 : null,
   );
 
   useInterval(
@@ -111,7 +111,7 @@ export function TapOff() {
           const { overheatLvl } = result;
           if (!maxOverheatLvl) return;
 
-          if (!firing) {
+          if (!isFiring()) {
             const overheatLevelPct = (overheatLvl / maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
             setOverheatLevel(result.overheatLvl);
@@ -124,10 +124,12 @@ export function TapOff() {
     isReady ? 1000 : null,
   );
 
+  function isFiring() {
+    return moment().unix() - lastTapTime < 1;
+  }
+
   function fire() {
-    setFiring(true);
     setShowTapToFireNotice(false);
-    setLastTapTime(moment().unix());
 
     if (overheatLevelPct <= 0) return;
 
@@ -143,6 +145,8 @@ export function TapOff() {
 
     const doFire = async () => {
       try {
+        setLastTapTime(moment().unix());
+
         const iosVersion = iOSversion();
         if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
           setTimeout(() => {
@@ -165,10 +169,6 @@ export function TapOff() {
     };
 
     doFire();
-  }
-
-  function onFireStop() {
-    setFiring(false);
   }
 
   function createCoinsToFire(count: number) {
@@ -205,11 +205,13 @@ export function TapOff() {
       )}
     >
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
-        <TapOffHeader
-          playerInfo={playerInfo}
-          audioState={playing ? "playing" : "stopped"}
-          toggleAudioPause={toggleAudioPause}
-        />
+        {!isTelegramWebApp && (
+          <TapOffHeader
+            playerInfo={playerInfo}
+            audioState={playing ? "playing" : "stopped"}
+            toggleAudioPause={toggleAudioPause}
+          />
+        )}
 
         {address && !!token && (
           <div className="flex flex-col justify-between flex-1">
@@ -226,12 +228,11 @@ export function TapOff() {
               fire={() => {
                 fire();
               }}
-              onFireStop={onFireStop}
               firedCoins={firedCoins}
               tapIncrement={tapIncrement}
               overheatLevel={overheatLevelPct}
               showTapToFireNotice={showTapToFireNotice}
-              firing={firing}
+              firing={isFiring()}
               shipRef={shipRef}
               rank={playerInfo?.rank || ""}
             />
