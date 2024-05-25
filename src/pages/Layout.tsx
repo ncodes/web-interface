@@ -43,7 +43,7 @@ export default function Layout({
   title: string;
   description?: string;
 }) {
-  const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
+  // const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
   const { getAccessToken, delAccessToken, hasAccessToken } = useSession();
   const headerHeight = 55;
   const location = useLocation();
