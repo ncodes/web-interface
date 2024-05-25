@@ -13,7 +13,9 @@ import IconCoinGold from "../components/icons/IconCoinGold.tsx";
 import IconSpaceship from "../components/icons/IconSpaceship.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
+import useStore from "../hooks/store/useStore.ts";
 import useImagePreloader from "../hooks/useImagePreloader.ts";
+import { cn } from "../libs/helpers.ts";
 import Layout from "./Layout.tsx";
 
 function AirdropPage({ defaultTab }: { defaultTab?: string }) {
@@ -21,6 +23,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(defaultTab || "leaderboard");
   const loc = useLocation();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   useEffect(() => {
     if (defaultTab) {
@@ -37,12 +40,19 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
       }}
     >
       <ScrollOverflowIndicator
-        arrowContainerRightClassName="rounded-tr-3xl right-[1px]"
-        arrowContainerLeftClassName="rounded-tl-3xl"
+        arrowContainerRightClassName={
+          !isTelegramBot ? "rounded-tr-3xl right-[1px]" : ""
+        }
+        arrowContainerLeftClassName={!isTelegramBot ? "rounded-tl-3xl" : ""}
         showArrow
       >
         <ScrollAreaHorizontal type="scroll" className="w-full rounded-t-3xl">
-          <TabsList className="bg-card-background rounded-t-3xl flex justify-start w-full items-center border-b border-modal-border">
+          <TabsList
+            className={cn(
+              "bg-card-background flex justify-start w-full items-center border-b border-modal-border",
+              { "rounded-t-3xl": !isTelegramBot },
+            )}
+          >
             <div className="flex flex-1 gap-4 w-full items-center px-1 py-2 pt-0">
               <TabsTrigger
                 value="airdrop"
