@@ -13,6 +13,9 @@ import { InputActivatedSearchBox } from "./search/InputActivatedSearchBox.tsx";
 export function Header(props: { onClick: () => void; height?: string }) {
   const { connected } = useConnectorContext();
   const user = useStore((state) => state.user);
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
+
+  if (isTelegramBot) return null;
 
   return (
     <header className={cn("flex items-center", props.height)}>
