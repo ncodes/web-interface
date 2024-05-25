@@ -67,6 +67,7 @@ export function Ship({
         {rank && (
           <a
             href="#"
+            className="[touch-action:manipulation]"
             onClick={(e) => {
               e.preventDefault();
               fire();
