@@ -33,6 +33,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
   const [curDetailId, setCurDetailId] = useState("");
   const { getRecentReferrees, getInfo } = useReferralService();
   const { simpleSuccess } = useToast();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   const recentRefsQuery = useQuery({
     queryKey: ["getRecentReferrees"],
@@ -106,7 +107,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
             </DialogDescription>
           </DialogHeader>
           <div className="">
-            {!user?.twitterUserId && !user?.discordId && (
+            {!user?.twitterUserId && !user?.discordId && !isTelegramBot && (
               <div className="flex flex-col justify-center px-3 my-10 text-gray-400 font-light items-center">
                 <span className="flex flex-col justify-center items-center gap-2">
                   <AlertTriangle
@@ -130,7 +131,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
               </div>
             )}
 
-            {(user?.twitterUserId || user?.discordId) && (
+            {(user?.twitterUserId || user?.discordId || isTelegramBot) && (
               <>
                 <div className="px-5 pt-2 pb-0">
                   <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">
@@ -184,7 +185,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
               </>
             )}
 
-            {(user?.twitterUserId || user?.discordId) && (
+            {(user?.twitterUserId || user?.discordId || isTelegramBot) && (
               <>
                 <div className="px-5 pt-2 pb-0">
                   <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">

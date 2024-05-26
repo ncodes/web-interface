@@ -99,7 +99,7 @@ function WalletConnect({
           <Button
             variant={(variant || "default") as any}
             rounded="xl"
-            className="w-full flex gap-2 hover:scale-[1.02] duration-500"
+            className="w-full flex gap-2 hover:scale-[1.02] duration-500 font-jersey10 text-2xl"
           >
             <Wallet2 width="20" className="" /> Connect
           </Button>
