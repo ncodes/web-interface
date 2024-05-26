@@ -26,6 +26,7 @@ export function Ship({
   const containerRef = useRef<any>();
   const mousePos = useStore((state) => state.mousePosition);
   const [incrIndicators, setIncrIndicators] = useState<ReactNode[]>([]);
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   useEffect(() => {
     if (firedCoins.length > 0) return;
@@ -77,7 +78,7 @@ export function Ship({
               id="ship"
               className="flex text-center [-webkit-tap-highlight-color:transparent] [touch-action:manipulation] border-none ring-0 active:bottom-0 focus-visible:ring-0 select-none flex-col h-auto hover:bg-transparent xanimate-bounce hover:animate-none duration-1000"
             >
-              {showTapToFireNotice && !firing && (
+              {!isTelegramBot && showTapToFireNotice && !firing && (
                 <div className="relative w-full">
                   <div className="w-full animate-pulse font-jersey20 z-20 text-xl text-white absolute -top-10">
                     Tap to Fire
