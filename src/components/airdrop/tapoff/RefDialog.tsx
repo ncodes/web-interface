@@ -59,11 +59,11 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
   function getMessage(platform: string) {
     switch (platform) {
       case "x":
-        return `Hey Cadet! $JOIN the fight. \nCommand a ship in @0xJoint's new game.\n🎁 3K TAPs enlist reward.\n`;
+        return `Hey Cadet! $JOIN the fight. \nCommand a ship in @0xJoint's new game.\n🎁 5K TAPs enlist reward.\n`;
       case "telegram":
-        return `Hey Cadet! $JOIN the fight. \nCommand a ship in @JointHQ's new game. \n🎁 3K TAPs enlist reward.\n`;
+        return `Hey Cadet! $JOIN the fight. \nCommand a ship in @JointHQ's new game. \n🎁 5K TAPs enlist reward.\n`;
       default:
-        return "Hey Cadet! $JOIN the fight. Command a ship in https://x.com/0xJoint new game. \n🎁 3K TAPs enlist reward.\n";
+        return "Hey Cadet! $JOIN the fight. Command a ship in https://x.com/0xJoint new game. \n🎁 5K TAPs enlist reward.\n";
     }
   }
 
