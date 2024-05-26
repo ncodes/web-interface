@@ -33,6 +33,13 @@ export function MainContainerConnectButton({
   const { address, ready } = useConnectorContext();
   const { token } = useSession();
   const mounted = useMounted(3000);
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
+
+  useEffect(() => {
+    if (!isTelegramBot || !mounted) return;
+    (window as any).Telegram.WebApp.ready();
+    (window as any).Telegram.WebApp.expand();
+  }, [mounted]);
 
   return (
     <>
