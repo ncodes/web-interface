@@ -9,6 +9,7 @@ import { useConnectorContext } from "../../../hooks/connectors/useConnectorConte
 import { useReferralService } from "../../../hooks/services/backend/useReferralService";
 import useStore from "../../../hooks/store/useStore";
 import { useToast } from "../../../hooks/useToast";
+import { cn } from "../../../libs/helpers";
 import EmojiAvatar from "../../avatar/EmojiAvatar";
 import { AvatarSize } from "../../avatar/useAvatar";
 import IconFriends from "../../icons/IconFriends";
@@ -260,7 +261,12 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
 
                   <div className=" flex justify-center items-center mt-4 xs:mt-6">
                     <ul className="flex gap-2 ">
-                      <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
+                      <li
+                        className={cn(
+                          "[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300",
+                          { hidden: isTelegramBot },
+                        )}
+                      >
                         <ReactShare.TwitterShareButton
                           url={`https://jntl.ink/${user?.refCode}`}
                           title={getMessage("x")}
@@ -272,19 +278,32 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           />
                         </ReactShare.TwitterShareButton>
                       </li>
-                      <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
+                      <li
+                        className={cn(
+                          "[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300 transition-all duration-1000",
+                          {
+                            hidden: !isTelegramBot,
+                            "animate-pulse hover:animate-none": isTelegramBot,
+                          },
+                        )}
+                      >
                         <ReactShare.TelegramShareButton
                           url={`https://t.me/TapWar_bot?start=ref-${user?.refCode}`}
                           title={getMessage("telegram")}
                         >
                           <ReactShare.TelegramIcon
-                            size={32}
+                            size={!isTelegramBot ? 32 : 64}
                             round
                             className="rounded-full"
                           />
                         </ReactShare.TelegramShareButton>
                       </li>
-                      <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
+                      <li
+                        className={cn(
+                          "[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300",
+                          { hidden: isTelegramBot },
+                        )}
+                      >
                         <ReactShare.WhatsappShareButton
                           url={`https://jntl.ink/${user?.refCode}`}
                           title={getMessage("whatsapp")}
@@ -292,14 +311,24 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <ReactShare.WhatsappIcon size={32} round />
                         </ReactShare.WhatsappShareButton>
                       </li>
-                      <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
+                      <li
+                        className={cn(
+                          "[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300",
+                          { hidden: isTelegramBot },
+                        )}
+                      >
                         <ReactShare.FacebookShareButton
                           url={`https://jntl.ink/${user?.refCode}`}
                         >
                           <ReactShare.FacebookIcon size={32} round />
                         </ReactShare.FacebookShareButton>
                       </li>
-                      <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
+                      <li
+                        className={cn(
+                          "[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300",
+                          { hidden: isTelegramBot },
+                        )}
+                      >
                         <ReactShare.FacebookMessengerShareButton
                           url={`https://jntl.ink/${user?.refCode}`}
                           appId="1089905982307068"
@@ -307,7 +336,12 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <ReactShare.FacebookMessengerIcon size={32} round />
                         </ReactShare.FacebookMessengerShareButton>
                       </li>
-                      <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
+                      <li
+                        className={cn(
+                          "[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300",
+                          { hidden: isTelegramBot },
+                        )}
+                      >
                         <ReactShare.LinkedinShareButton
                           url={`https://jntl.ink/${user?.refCode}`}
                           title={getMessage("linkedin")}
@@ -315,7 +349,12 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           <ReactShare.LinkedinIcon size={32} round />
                         </ReactShare.LinkedinShareButton>
                       </li>
-                      <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
+                      <li
+                        className={cn(
+                          "[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300",
+                          { hidden: isTelegramBot },
+                        )}
+                      >
                         <ReactShare.VKShareButton
                           url={`https://jntl.ink/${user?.refCode}`}
                         >
@@ -325,10 +364,12 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     </ul>
                   </div>
 
-                  <div className="text-center xs:px-3 md:px-10 text-xs font-extralight tracking-wider mt-4 xs:mt-5 text-gray-400">
-                    Friends must connect their Twitter/X or Discord account to
-                    be counted as a valid invite.
-                  </div>
+                  {!isTelegramBot && (
+                    <div className="text-center xs:px-3 md:px-10 text-xs font-extralight tracking-wider mt-4 xs:mt-5 text-gray-400">
+                      Friends must connect their Twitter/X or Discord account to
+                      be counted as a valid invite.
+                    </div>
+                  )}
                   <X
                     className="absolute right-0 mr-3 top-3 cursor-pointer opacity-80 hover:opacity-100 text-gray-100"
                     onClick={() => {
