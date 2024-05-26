@@ -198,7 +198,11 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             }}
                           >
                             <Share width="20" className="text-gray-200" />
-                            <span className="text-lg hidden xxs:inline">
+                            <span
+                              className={cn("text-lg hidden xxs:inline", {
+                                inline: isTelegramBot,
+                              })}
+                            >
                               Share
                             </span>
                           </Button>
