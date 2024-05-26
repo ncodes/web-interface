@@ -246,13 +246,11 @@ export function TapWar() {
             </div>
           </div>
         )}
-        {!isTelegramBot && (
-          <MainContainerConnectButton
-            className="bg-black"
-            authenticate
-            showLoader
-          />
-        )}
+        <MainContainerConnectButton
+          className="bg-black"
+          authenticate
+          showLoader
+        />
       </div>
       {<GameBackgroundImage />}
     </div>

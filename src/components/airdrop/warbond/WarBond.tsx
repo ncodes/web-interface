@@ -220,13 +220,11 @@ export function WarBond() {
           </div>
         )}
 
-        {!isTelegramBot && (
-          <MainContainerConnectButton
-            className="bg-black"
-            authenticate
-            showLoader
-          />
-        )}
+        <MainContainerConnectButton
+          className="bg-black"
+          authenticate
+          showLoader
+        />
       </div>
       {<WarBondBackgroundImage />}
     </div>
