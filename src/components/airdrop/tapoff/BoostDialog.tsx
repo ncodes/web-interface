@@ -233,7 +233,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   showDetail("rapid-fire");
                 }}
               >
-                <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                <div className="flex-1 flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                   <div className="">
                     <IconConflict className="fill-yellow-500 w-[25px] xxs:w-[35px]" />
                   </div>
@@ -276,7 +276,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   playerInfo.instantCool.maxPerWindow
                 }
               >
-                <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                <div className="flex-1 flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                   <div className="">
                     <Fan className="text-yellow-500 w-[25px] h-[25px] xxs:w-[35px] xxs:h-[35px]" />
                   </div>
@@ -328,7 +328,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       showDetail("hyper-fire");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="rounded-xl shrink-0">
                         <img
                           src="/images/hyper_fire.svg"
@@ -364,7 +364,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       showDetail("anti-overheat");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="shrink-0">
                         <img
                           src="/images/icon_multi_ice.svg"
@@ -400,7 +400,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       showDetail("hyper-cool");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="shrink-0">
                         <img
                           className="w-[25px] xxs:w-[35px]"
@@ -436,7 +436,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       showDetail("tap-multiplier");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="shrink-0">
                         <img
                           className="w-[25px] xxs:w-[35px]"
