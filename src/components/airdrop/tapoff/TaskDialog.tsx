@@ -343,7 +343,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                           size="sm"
                           disabled={playerInfo.isDiscordConnected}
                           className={cn(
-                            "px-5 xs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "xs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.isDiscordConnected,
@@ -401,7 +401,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedTwitterFollow || !clicked.x
                           }
                           className={cn(
-                            "px-5 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedTwitterFollow,
@@ -479,7 +479,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedTelegramFollow || !clicked.telegram
                           }
                           className={cn(
-                            "px-5 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedTelegramFollow,
@@ -554,7 +554,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             playerInfo.markedWebVisitFollow || !clicked.webvisit
                           }
                           className={cn(
-                            "px-5 xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                            "xxs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
                             {
                               "from-green-400 to-green-600":
                                 !playerInfo.markedWebVisitFollow,
