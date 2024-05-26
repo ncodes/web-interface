@@ -39,7 +39,7 @@ export function MainContainerConnectButton({
     if (!isTelegramBot || !mounted) return;
     (window as any).Telegram.WebApp.ready();
     (window as any).Telegram.WebApp.expand();
-  }, [mounted]);
+  }, [mounted, isTelegramBot]);
 
   return (
     <>

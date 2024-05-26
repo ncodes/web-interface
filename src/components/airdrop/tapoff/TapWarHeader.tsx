@@ -89,8 +89,12 @@ export function TapWarHeader({
             className="absolute mt-4 right-0 md:hidden"
             onClick={() => {
               setGameMaximized(!gameMaximized);
-              if (!gameMaximized) lock();
-              else unlock();
+              if (!gameMaximized) {
+                lock();
+                (window as any).Telegram.WebApp.expand();
+              } else {
+                unlock();
+              }
             }}
           >
             <div className="flex gap-2 border border-yellow-300 text-yellow-200 bg-yellow-400/40  items-center rounded-lg px-3 py-1 ">
