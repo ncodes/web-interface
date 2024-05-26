@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import { useAirdropService } from "../../../hooks/services/backend/useAirdropService.ts";
-import useStore from "../../../hooks/store/useStore.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { formatToMoney } from "../../../libs/helpers.ts";
@@ -23,7 +22,6 @@ export function WarBond() {
   const { token } = useSession();
   const { getBattleInfo, getBondBalance } = useAirdropService();
   const [loadingBattle, setLoadingBattle] = useState(false);
-  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   const battleInfoQuery = useQuery({
     queryKey: ["getBattleInfo"],
