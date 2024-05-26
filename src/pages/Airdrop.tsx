@@ -46,7 +46,12 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
         arrowContainerLeftClassName={!isTelegramBot ? "rounded-tl-3xl" : ""}
         showArrow
       >
-        <ScrollAreaHorizontal type="scroll" className="w-full rounded-t-3xl">
+        <ScrollAreaHorizontal
+          type="scroll"
+          className={cn("w-full rounded-t-3xl", {
+            "!rounded-none": isTelegramBot,
+          })}
+        >
           <TabsList
             className={cn(
               "bg-card-background flex justify-start w-full items-center border-b border-modal-border",
