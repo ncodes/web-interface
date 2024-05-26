@@ -57,7 +57,7 @@ export default function Layout({
   const windowFocus = useWindowFocus();
   const setUser = useStore((state) => state.setUser);
   const setProtoFee = useStore((state) => state.setProtoFee);
-  const setIsTelegramBot = useStore((state) => state.setIsTelegramBot);
+  // const setIsTelegramBot = useStore((state) => state.setIsTelegramBot);
   const isTelegramBot = useStore((state) => state.isTelegramBot);
   const { getUser, logOnlineStatus, registerDevice } = useUserService();
   const accessToken = getAccessToken(address);
