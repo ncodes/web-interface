@@ -60,7 +60,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
       case "x":
         return `Hey Cadet! $JOIN the fight. \nCommand a ship in @0xJoint's new game.\n🎁 3K TAPs enlist reward.\n`;
       case "telegram":
-        return `\nHey Cadet! $JOIN the fight. \nCommand a ship in @JointHQ's new game. \n🎁 3K TAPs enlist reward.\n`;
+        return `Hey Cadet! $JOIN the fight. \nCommand a ship in @JointHQ's new game. \n🎁 3K TAPs enlist reward.\n`;
       default:
         return "Hey Cadet! $JOIN the fight. Command a ship in https://x.com/0xJoint new game. \n🎁 3K TAPs enlist reward.\n";
     }
@@ -274,7 +274,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       </li>
                       <li className="[&_svg]:hover:scale-150 [&_svg]:transition-all [&_svg]:duration-300">
                         <ReactShare.TelegramShareButton
-                          url={`https://jntl.ink/${user?.refCode}`}
+                          url={`https://t.me/TapWar_bot?start=ref-${user?.refCode}`}
                           title={getMessage("telegram")}
                         >
                           <ReactShare.TelegramIcon
