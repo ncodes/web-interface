@@ -353,9 +353,11 @@ export default function Layout({
                     >
                       {body}
                     </div>
-                    <div className="xl:hidden">
-                      <Footer />
-                    </div>
+                    {!isTelegramBot && (
+                      <div className="xl:hidden">
+                        <Footer />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
