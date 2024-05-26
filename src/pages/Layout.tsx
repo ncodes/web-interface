@@ -61,6 +61,7 @@ export default function Layout({
   const setProtoFee = useStore((state) => state.setProtoFee);
   const setIsTelegramBot = useStore((state) => state.setIsTelegramBot);
   const isTelegramBot = useStore((state) => state.isTelegramBot);
+  const isVirtualWallet = useStore((state) => state.isVirtualWallet);
   const { getUser, logOnlineStatus, registerDevice } = useUserService();
   const accessToken = getAccessToken(address);
   const { subscribeForWebPush } = useNotificationService();
@@ -84,7 +85,7 @@ export default function Layout({
 
   // In Telegram bot mode, link telegram user with the app's authenticated user.
   useEffect(() => {
-    if (!isTelegramBot || !address || !token) return;
+    if (!isTelegramBot || isVirtualWallet || !address || !token ) return;
     async function doTGLinkUser() {
       try {
         const result = await linkTGUserMut.mutateAsync({

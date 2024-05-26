@@ -2,6 +2,7 @@ import { ExternalLink, Fan, LucideFlame, X } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useStore from "../../../hooks/store/useStore";
 import { useToast } from "../../../hooks/useToast";
 import { formatToMoney, toDec } from "../../../libs/helpers";
 import { CountDown } from "../../Countdown";
@@ -46,6 +47,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
   const [loading, setLoading] = useState({ ...defaultBoostState });
   const [done, setDone] = useState({ ...defaultBoostState });
   const { simpleSuccess } = useToast();
+  const isVirtualWallet = useStore((state) => state.isVirtualWallet);
 
   useEffect(() => {
     if (!open || !openDetails) {
@@ -840,9 +842,21 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     <Button
                       className="w-full text-lg gap-1 bg-gradient-to-b from-yellow-300 to-yellow-600 transition-all duration-200 hover:scale-[1.02]"
                       onClick={() => {
-                        navigate(
-                          `/liquidity/${import.meta.env.VITE_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_LID}`,
-                        );
+                        if (!isVirtualWallet) {
+                          navigate(
+                            `/liquidity/${import.meta.env.VITE_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_LID}`,
+                          );
+                        } else {
+                          (window as any).Telegram.WebApp.openLink(
+                            `${import.meta.env.VITE_APP_URL}/liquidity/${import.meta.env.VITE_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_LID}`,
+                          );
+
+                          //                           alert(`
+                          // Virtual wallet cannot directly purchase multipliers on Telegram.
+                          // Open the game (https:jntl.ink/tapwar) in a browser to purchase multipliers.
+                          // ⚠️ Use only your TapWar Virtual Wallet private key to connect and make purchases. Purchases with other wallets will not be credited to your TapWar account.
+                          // `);
+                        }
                       }}
                     >
                       Buy <ExternalLink size="15" />

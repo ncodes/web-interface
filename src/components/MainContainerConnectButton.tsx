@@ -42,8 +42,10 @@ export function MainContainerConnectButton({
     (window as any).Telegram.WebApp.expand();
   }, [mounted, isTelegramBot]);
 
+  if (address) return null;
+
   return (
-    <div className="h-full flex justify-center items-center">
+    <div className="h-full flex justify-center items-center flex-1">
       {!mounted && showLoader && <LoaderOverlay icon={loaderIcon} />}
 
       {mounted && !ready && !address && (

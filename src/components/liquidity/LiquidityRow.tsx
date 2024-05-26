@@ -80,6 +80,7 @@ export function LiquidityRow({
   const navigate = useNavigate();
   const location = useLocation();
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const isVirtualWallet = useStore((state) => state.isVirtualWallet);
   const [openManageLiquiditySheet, setOpenManageLiquiditySheet] =
     useState(false);
   const restricted = useStore((state) => state.restricted);
@@ -695,7 +696,7 @@ export function LiquidityRow({
               </span>
             )}
 
-            {!restricted && (
+            {!restricted && !isVirtualWallet && (
               <span className="flex border-l border-gray-800 pl-1">
                 <Button
                   variant="link"
@@ -739,6 +740,7 @@ export function LiquidityRow({
                   {!restricted && !ownerMode && (
                     <DropdownMenuItem
                       className="flex gap-2"
+                      disabled={isVirtualWallet}
                       onClick={() => {
                         toggleOpenState && toggleOpenState("createOfferSheet");
                       }}

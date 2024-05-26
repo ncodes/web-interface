@@ -45,6 +45,7 @@ function MarketTabs() {
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
   const mounted = useMounted(1000);
+  const isVirtualWallet = useStore((state) => state.isVirtualWallet);
   const restricted = useStore((state) => state.restricted);
 
   const market = useQuery({
@@ -107,7 +108,7 @@ function MarketTabs() {
           </ScrollOverflowIndicator>
         </ScrollAreaHorizontal>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
-          {!restricted && (
+          {!restricted && !isVirtualWallet && (
             <Button
               size="sm"
               className="flex gap-1 items-center transition-all duration-500 hover:scale-x-105"

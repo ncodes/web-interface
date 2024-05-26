@@ -495,17 +495,20 @@ export default function useConnector() {
     wallet: walletClient,
     defaultNetwork,
     ready,
+    setReady,
     connected,
     disconnect,
     sign,
     signedData,
     signStatus,
     address,
+    setAddress,
     chainId,
     switchNetwork,
     chains,
     chain,
     network,
     getChainInfo,
+
   } as IConnector;
 }

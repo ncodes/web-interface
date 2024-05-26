@@ -14,6 +14,7 @@ import { InputActivatedSearchBox } from "./search/InputActivatedSearchBox.tsx";
 export function Header(props: { onClick: () => void; height?: string }) {
   const { connected } = useConnectorContext();
   const user = useStore((state) => state.user);
+  const isVirtualWallet = useStore((state) => state.isVirtualWallet);
   const isTelegramBot = useStore((state) => state.isTelegramBot);
   const loc = useLocation();
 
@@ -33,8 +34,12 @@ export function Header(props: { onClick: () => void; height?: string }) {
         <NavHelpButton />
         {connected && !!user && <NavNotificationButton />}
         {connected && <NetworkSelector />}
-        <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
-        <ConnectWalletButton className="lg:hidden" label="Connect" />
+        {!isVirtualWallet && (
+          <>
+            <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
+            <ConnectWalletButton className="lg:hidden" label="Connect" />
+          </>
+        )}
       </div>
     </header>
   );

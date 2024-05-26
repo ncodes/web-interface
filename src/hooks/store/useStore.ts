@@ -122,6 +122,9 @@ export interface IStore {
 
   isTelegramBot: boolean;
   setIsTelegramBot: (isTelegramBot: boolean) => void;
+
+  isVirtualWallet: boolean;
+  setIsVirtualWallet: (isVirtualWallet: boolean) => void;
 }
 
 const useStore = create<IStore>((set, get) => ({
@@ -310,6 +313,10 @@ const useStore = create<IStore>((set, get) => ({
   isTelegramBot: false,
   setIsTelegramBot: (isTelegramBot: boolean) =>
     set({ isTelegramBot: isTelegramBot }),
+
+  isVirtualWallet: false,
+  setIsVirtualWallet: (isVirtualWallet: boolean) =>
+    set({ isVirtualWallet: isVirtualWallet }),
 }));
 
 export default useStore;

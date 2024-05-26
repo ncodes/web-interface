@@ -50,4 +50,7 @@ export interface IConnector {
 	chain: Chain;
 	network: string;
 	getChainInfo(): ChainInfo;
+	
+	setAddress: (address: string) => void;
+	setReady: (ready: boolean) => void;
 }
