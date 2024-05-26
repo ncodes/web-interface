@@ -73,7 +73,6 @@ export default function Layout({
   const mounted = useMounted(1000);
 
   // setIsTelegramBot(isTelegramWebApp);
-  setIsTelegramBot(true);
 
   // Set loader progress to 100% on mount.
   useEffect(() => {
