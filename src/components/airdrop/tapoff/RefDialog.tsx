@@ -141,34 +141,58 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                 </div>
 
                 <div className="flex p-1 m-2 mt-1 mb-1 gap-3">
-                  <div className="flex-1 flex items-center p-2 gap-1 border rounded-xl border-gray-800">
+                  <div
+                    className={cn(
+                      "flex-1 flex items-center p-2 gap-1 border rounded-xl border-gray-800",
+                      {
+                        "hover:cursor-pointer hover:border-gray-700 transition-all duration-300":
+                          isTelegramBot,
+                      },
+                    )}
+                    onClick={() => {
+                      if (!isTelegramBot) return;
+                      showDetail("share");
+                    }}
+                  >
                     <div className="">
-                      <Link className="text-yellow-500 w-[25px] md:w-[35px]" />
+                      {!isTelegramBot && (
+                        <Link className="text-yellow-500 w-[25px] md:w-[35px]" />
+                      )}
                     </div>
                     <div className="flex w-full flex-col items-start justify-start font-jersey25 tracking-wider">
-                      <div className="flex  w-full justify-between">
-                        <span className="label text-gray-200 text-sm md:text-lg flex items-center">
-                          <span className="font-mitr font-extralight">
-                            https://jntl.ink/
-                          </span>
-                          <span>{user?.refCode}</span>
-                          <CopyToClipboard
-                            text={`https://jntl.ink/${user?.refCode}`}
-                            onCopy={() => {
-                              simpleSuccess("Copied", {
-                                position: "top-center",
-                              });
-                            }}
-                          >
-                            <span className="text-gray-400 opacity-80 mr-2 hover:opacity-100 cursor-pointer hover:text-yellow-400 transition-all duration-300 active:scale-110">
-                              <Copy className="w-4 inline-block ml-1 " />
+                      <div
+                        className={cn("flex  w-full", {
+                          "justify-between": !isTelegramBot,
+                          "justify-center": isTelegramBot,
+                        })}
+                      >
+                        {!isTelegramBot && (
+                          <span className="label text-gray-200 text-sm md:text-lg flex items-center">
+                            <span className="font-mitr font-extralight">
+                              https://jntl.ink/
                             </span>
-                          </CopyToClipboard>
-                        </span>
+                            <span>{user?.refCode}</span>
+                            <CopyToClipboard
+                              text={`https://jntl.ink/${user?.refCode}`}
+                              onCopy={() => {
+                                simpleSuccess("Copied", {
+                                  position: "top-center",
+                                });
+                              }}
+                            >
+                              <span className="text-gray-400 opacity-80 mr-2 hover:opacity-100 cursor-pointer hover:text-yellow-400 transition-all duration-300 active:scale-110">
+                                <Copy className="w-4 inline-block ml-1 " />
+                              </span>
+                            </CopyToClipboard>
+                          </span>
+                        )}
                         <div>
                           <Button
                             variant="ghost"
-                            className="m-0 h-auto items-center flex gap-1 p-1 px-1 pl-0 pr-0 md:pr-4 md:pl-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
+                            className={cn(
+                              "m-0 h-auto items-center flex gap-1 p-1 px-1 pl-0 pr-0 md:pr-4 md:pl-3 border border-transparent hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100",
+                              { "!border-transparent": isTelegramBot },
+                            )}
                             onClick={() => {
                               showDetail("share");
                             }}
@@ -215,7 +239,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
                       <div className="flex justify-center items-center h-full">
                         <Button
                           variant="ghost"
-                          className="m-0 h-auto items-center flex gap-1 p-2 px-3 border border-gray-800 hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100"
+                          className="m-0 h-auto items-center flex gap-1 p-2 px-3 border border-gray-800 hover:bg-transparent hover:border hover:border-gray-500 hover:text-gray-100 animate-pulse hover:animate-none duration-1000 transition-all"
                           onClick={() => {
                             showDetail("share");
                           }}
@@ -247,7 +271,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
               ></div>
 
               {curDetailId === "share" && (
-                <div className="absolute rounded-b-2xl w-full h-[90%] md:h-[70%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
+                <div className="absolute rounded-b-2xl w-full h-[90%] md:h-[75%] shadow-[0_-10px_20px_-15px_rgba(255,255,255,0.4)] rounded-t-2xl bg-black border-t border-gray-600 z-10 bottom-0">
                   <div className="w-full text-center p-2 text-xl font-jersey25">
                     Share
                   </div>
