@@ -23,23 +23,8 @@ export function CreateVirtualAccount() {
     async function doTGLinkUser() {
       try {
         const result = await createLinkedUserMut.mutateAsync({
-          // initData: (window as any).Telegram.WebApp.initData,
-          // initDataUnsafe: (window as any).Telegram.WebApp.initDataUnsafe,
-          initData:
-            "query_id=AAH4CQ0aAAAAAPgJDRr_Qt2t&user=%7B%22id%22%3A437062136%2C%22first_name%22%3A%22Kennedy%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22ncodes%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1716660789&hash=61fdecd2845d779c22c3b0fdfdfdb1efb2b661014dfba7fcc14e12e2a3276dc1",
-          initDataUnsafe: {
-            auth_date: "1716592368",
-            hash: "61fdecd2845d779c22c3b0fdfdfdb1efb2b661014dfba7fcc14e12e2a3276dc1",
-            query_id: "AAH4CQ0aAAAAAPgJDRq9naJu",
-            user: {
-              id: 437062136,
-              allows_write_to_pm: true,
-              first_name: "Kennedy",
-              last_name: "",
-              username: "ncodes",
-              language_code: "en",
-            },
-          },
+          initData: (window as any).Telegram.WebApp.initData,
+          initDataUnsafe: (window as any).Telegram.WebApp.initDataUnsafe,
         });
         setIsVirtualWallet(true);
         setUser(result.user);
