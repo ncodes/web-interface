@@ -224,7 +224,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
             <div className="flex flex-col xxs:flex-row p-1 m-2 mt-1 mb-1 gap-3">
               <Button
                 variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none "
+                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none rounded-none "
                 disabled={
                   playerInfo.rapidFire.numUsed ==
                   playerInfo.rapidFire.maxPerWindow
@@ -233,7 +233,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   showDetail("rapid-fire");
                 }}
               >
-                <div className="flex-1 flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                   <div className="">
                     <IconConflict className="fill-yellow-500 w-[25px] xxs:w-[35px]" />
                   </div>
@@ -267,7 +267,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
 
               <Button
                 variant="ghost"
-                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none rounded-none"
                 onClick={() => {
                   showDetail("instant-cool");
                 }}
@@ -276,7 +276,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   playerInfo.instantCool.maxPerWindow
                 }
               >
-                <div className="flex-1 flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                   <div className="">
                     <Fan className="text-yellow-500 w-[25px] h-[25px] xxs:w-[35px] xxs:h-[35px]" />
                   </div>
@@ -323,12 +323,12 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                 <div className="[&_button]:w-full space-y-2  p-1 m-2 mt-1 overflow-auto">
                   <Button
                     variant="ghost"
-                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none rounded-none"
                     onClick={() => {
                       showDetail("hyper-fire");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="rounded-xl shrink-0">
                         <img
                           src="/images/hyper_fire.svg"
@@ -359,12 +359,12 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
 
                   <Button
                     variant="ghost"
-                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none rounded-none"
                     onClick={() => {
                       showDetail("anti-overheat");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="shrink-0">
                         <img
                           src="/images/icon_multi_ice.svg"
@@ -395,12 +395,12 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
 
                   <Button
                     variant="ghost"
-                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none rounded-none"
                     onClick={() => {
                       showDetail("hyper-cool");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="shrink-0">
                         <img
                           className="w-[25px] xxs:w-[35px]"
@@ -431,12 +431,12 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
 
                   <Button
                     variant="ghost"
-                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none"
+                    className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none rounded-none"
                     onClick={() => {
                       showDetail("tap-multiplier");
                     }}
                   >
-                    <div className="flex items-center p-2 gap-2 border rounded md:rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
+                    <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                       <div className="shrink-0">
                         <img
                           className="w-[25px] xxs:w-[35px]"
