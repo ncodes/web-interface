@@ -91,7 +91,10 @@ export function LiquidityRow({
   }));
   const { getUser } = useUserService();
   const getProvider = useQuery({
-    queryKey: ["getUser", { address: liquidity.provider, noAuth: true }],
+    queryKey: [
+      "getUser",
+      { addressOrUserId: liquidity.provider, noAuth: true },
+    ],
     queryFn: getUser,
     enabled: !!liquidity.provider,
   });

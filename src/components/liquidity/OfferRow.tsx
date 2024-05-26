@@ -81,7 +81,7 @@ export function OfferRow({
   });
 
   const getProvider = useQuery({
-    queryKey: ["getUser", { address: offer.creator, noAuth: true }],
+    queryKey: ["getUser", { addressOrUserId: offer.creator, noAuth: true }],
     queryFn: getUser,
     enabled: !!offer.creator,
   });

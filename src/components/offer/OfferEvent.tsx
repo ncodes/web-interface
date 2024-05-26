@@ -16,7 +16,7 @@ import { EventContentOfferUpdate } from "./event/EventContentOfferUpdate.tsx";
 export default function OfferEvent({ event }: { event: Event }) {
   const { getUser } = useUserService();
   const user = useQuery({
-    queryKey: ["getUser", { address: event.creator, noAuth: true }],
+    queryKey: ["getUser", { addressOrUserId: event.creator, noAuth: true }],
     queryFn: getUser,
     enabled: !!event,
   });

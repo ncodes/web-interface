@@ -37,8 +37,6 @@ export function TapWar() {
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
-  const isTelegramBot = useStore((state) => state.isTelegramBot);
-  console.log(isTelegramBot);
   const [isPinging, setIsPinging] = useState(false);
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
@@ -206,13 +204,11 @@ export function TapWar() {
       )}
     >
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
-        {!isTelegramBot && (
-          <TapWarHeader
-            playerInfo={playerInfo}
-            audioState={playing ? "playing" : "stopped"}
-            toggleAudioPause={toggleAudioPause}
-          />
-        )}
+        <TapWarHeader
+          playerInfo={playerInfo}
+          audioState={playing ? "playing" : "stopped"}
+          toggleAudioPause={toggleAudioPause}
+        />
 
         {address && !!token && (
           <div className="flex flex-col justify-between flex-1">
@@ -249,13 +245,11 @@ export function TapWar() {
             </div>
           </div>
         )}
-        {!isTelegramBot && (
-          <MainContainerConnectButton
-            className="bg-black"
-            authenticate
-            showLoader
-          />
-        )}
+        <MainContainerConnectButton
+          className="bg-black"
+          authenticate
+          showLoader
+        />
       </div>
       {<GameBackgroundImage />}
     </div>

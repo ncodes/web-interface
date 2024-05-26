@@ -17,6 +17,7 @@ import { SearchSheetBox } from "../components/search/SearchSheetBox.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useMiscService } from "../hooks/services/backend/useMiscService.ts";
 import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
+import { useTGBotService } from "../hooks/services/backend/useTGBotService.ts";
 import { useUserService } from "../hooks/services/backend/useUserService.ts";
 import useNFTContract from "../hooks/services/contracts/useNFTContract.ts";
 import useStore from "../hooks/store/useStore.ts";
@@ -50,11 +51,11 @@ export default function Layout({
   const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
   const isXl = useMediaQuery("(min-width: 1280px)");
   const { address, ready, getChainInfo } = useConnectorContext();
-  const user = useStore((state) => state.user);
   const setContractsParams = useStore((state) => state.setContractsParams);
   const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
   const setCountryCode = useStore((state) => state.setCountryCode);
   const windowFocus = useWindowFocus();
+  const user = useStore((state) => state.user);
   const setUser = useStore((state) => state.setUser);
   const setProtoFee = useStore((state) => state.setProtoFee);
   const setIsTelegramBot = useStore((state) => state.setIsTelegramBot);
@@ -70,9 +71,48 @@ export default function Layout({
   const [scrollYPos, setScrollYPos] = useState(0);
   const { balanceOf: nativeNftBalance } = useNFTContract();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
+  const { linkTGUser } = useTGBotService();
   const mounted = useMounted(1000);
 
   // setIsTelegramBot(isTelegramWebApp);
+  setIsTelegramBot(true);
+
+  const linkTGUserMut = useMutation({
+    mutationFn: linkTGUser,
+  });
+
+  // Handle Telegram bot user linking
+  useEffect(() => {
+    if (!isTelegramBot || !address) return;
+
+    async function doRegBotUser() {
+      try {
+        const result = await linkTGUserMut.mutateAsync({
+          // initData: (window as any).Telegram.WebApp.initData,
+          // initDataUnsafe: (window as any).Telegram.WebApp.initDataUnsafe,
+          initData:
+            "query_id=AAH4CQ0aAAAAAPgJDRr_Qt2t&user=%7B%22id%22%3A437062136%2C%22first_name%22%3A%22Kennedy%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22ncodes%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1716660789&hash=61fdecd2845d779c22c3b0fdfdfdb1efb2b661014dfba7fcc14e12e2a3276dc1",
+          initDataUnsafe: {
+            auth_date: "1716592368",
+            hash: "61fdecd2845d779c22c3b0fdfdfdb1efb2b661014dfba7fcc14e12e2a3276dc1",
+            query_id: "AAH4CQ0aAAAAAPgJDRq9naJu",
+            user: {
+              id: 437062136,
+              allows_write_to_pm: true,
+              first_name: "Kennedy",
+              last_name: "",
+              username: "ncodes",
+              language_code: "en",
+            },
+          },
+        });
+        setUser(result.user);
+      } catch (error) {
+        console.error("Failed to register bot user: ", error);
+      }
+    }
+    void doRegBotUser();
+  }, [isTelegramBot, address]);
 
   // Set loader progress to 100% on mount.
   useEffect(() => {
@@ -86,7 +126,7 @@ export default function Layout({
   }, [address]);
 
   const authedUserQuery = useQuery({
-    queryKey: ["getUser", { address }],
+    queryKey: ["getUser", { addressOrUserId: address }],
     queryFn: getUser,
     enabled: !!accessToken && !!address,
     refetchInterval: 180 * 1000,
@@ -134,7 +174,7 @@ export default function Layout({
       setUser(undefined);
       delAccessToken(address);
     }
-  }, [authedUserQuery, setUser]);
+  }, [authedUserQuery]);
 
   // Set contract params
   useEffect(() => {

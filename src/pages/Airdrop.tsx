@@ -160,12 +160,15 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
 
 export default function Airdrop({ defaultTab }: { defaultTab?: string }) {
   const loc = useLocation();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
+
   return (
     <Layout
       title="My Points - Joint"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<AirdropPage defaultTab={defaultTab} />}
       rightSide={
+        !isTelegramBot &&
         loc.pathname != "/energon" &&
         loc.pathname != "/nft" &&
         loc.pathname != "/tapwar" &&

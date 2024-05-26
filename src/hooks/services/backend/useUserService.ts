@@ -5,7 +5,7 @@ import { useConnectorContext } from "../../connectors/useConnectorContext.tsx";
 import { useSession } from "../../useSession.ts";
 
 export interface GetUserParams {
-  address: string;
+  addressOrUserId: string;
   noAuth?: boolean;
   net?: string;
 }
@@ -39,7 +39,7 @@ export function useUserService() {
       }
 
       const resp = await axios({
-        url: `${getChainInfo().apiUrl}/v1/users/${params.address}`,
+        url: `${getChainInfo().apiUrl}/v1/users/${params.addressOrUserId}`,
         method: "get",
         params: { no404: true },
         headers,

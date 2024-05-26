@@ -24,7 +24,7 @@ export function EventItem({ event, swap }: { event: Event; swap: Swap }) {
   const { getUser } = useUserService();
   const { address } = useConnectorContext();
   const creator = useQuery({
-    queryKey: ["getUser", { address: event.creator, noAuth: true }],
+    queryKey: ["getUser", { addressOrUserId: event.creator, noAuth: true }],
     queryFn: getUser,
     enabled: !!event.creator,
   });

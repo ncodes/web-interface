@@ -54,7 +54,7 @@ export function LinkAccountSetting() {
   });
 
   const fetchUser = useQuery({
-    queryKey: ["getUser", { address }],
+    queryKey: ["getUser", { addressOrUserId: address }],
     queryFn: getUser,
     enabled: !!address,
   });

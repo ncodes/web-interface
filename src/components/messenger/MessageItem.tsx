@@ -59,7 +59,7 @@ export function MessageItem({
   const mine = isEqlStr(from, address);
   const title = getTitle(from);
   const user = useQuery({
-    queryKey: ["getUser", { address: from, noAuth: true }],
+    queryKey: ["getUser", { addressOrUserId: from, noAuth: true }],
     queryFn: getUser,
     enabled: !!from,
   });

@@ -1,10 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import { AlertTriangle, LogInIcon, Wallet2 } from "lucide-react";
+import { LogInIcon, Wallet2 } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { RefCodeKey } from "../constants.ts";
 import { createSignatureMessage } from "../hooks/connectors/common.ts";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useAuthService } from "../hooks/services/backend/useAuthService.ts";
+import useStore from "../hooks/store/useStore.ts";
 import useMounted from "../hooks/useMounted.ts";
 import { useSession } from "../hooks/useSession.ts";
 import { useToast } from "../hooks/useToast.tsx";
@@ -31,7 +32,7 @@ export function MainContainerConnectButton({
   const connectedAt = useRef<number>(0);
   const { address, ready } = useConnectorContext();
   const { token } = useSession();
-  const mounted = useMounted(3000);
+  const mounted = useMounted(0);
 
   return (
     <>
@@ -67,29 +68,38 @@ function WalletConnect({
   className?: string;
 }) {
   const { ready } = useConnectorContext();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   return (
     <div className="animate-in slide-in-from-top-10 flex select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
       <EmptyBodyCard
-        className={cn("max-w-[300px] mt-12 md:mt-0 pt-0", className)}
+        className={cn("max-w-[350px] mt-12 md:mt-0 pt-0", className)}
         label={
-          <div className="flex items-center gap-2 text-sm text-gray-300">
+          <div className="text-sm text-gray-200">
             {!ready && (
               <>
-                <AlertTriangle className="text-chinese-green" width="20" />
-                <span className="font-jersey20 text-xl">
-                  Wallet not connected
-                </span>
+                <div className="flex items-center gap-2">
+                  <Wallet2 className="text-chinese-green" width="20" />
+                  <span className="font-jersey20 text-xl block">
+                    You need to connect a wallet
+                  </span>
+                </div>
+                {isTelegramBot && (
+                  <div className="text-sm text-gray-300 tracking-wide my-2">
+                    Hey Player 😎, It looks like you haven't connected a wallet.
+                    Connect one to start the game.
+                  </div>
+                )}
               </>
             )}
           </div>
         }
       >
-        <ConnectWalletButton onConnect={onConnect}>
+        <ConnectWalletButton onConnect={onConnect} className="w-full">
           <Button
             variant={(variant || "default") as any}
             rounded="xl"
-            className="w-[220px] flex gap-2 hover:scale-[1.02] duration-500"
+            className="w-full flex gap-2 hover:scale-[1.02] duration-500"
           >
             <Wallet2 width="20" className="" /> Connect
           </Button>

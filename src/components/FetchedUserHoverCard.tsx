@@ -1,6 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { useUserService } from "../hooks/services/backend/useUserService.ts";
-import { useQuery } from "@tanstack/react-query";
 import { UserHoverCard } from "./UserHoverCard.tsx";
 
 export function FetchedUserHoverCard(props: {
@@ -10,7 +10,7 @@ export function FetchedUserHoverCard(props: {
 }) {
   const { getUser } = useUserService();
   const user = useQuery({
-    queryKey: ["getUser", { address: props.address, noAuth: true }],
+    queryKey: ["getUser", { addressOrUserId: props.address, noAuth: true }],
     queryFn: getUser,
     enabled: !!props.address,
   });

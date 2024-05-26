@@ -16,6 +16,7 @@ export function AccountLinker() {
   }));
   const [animate, setAnimate] = useState(true);
   const [hovered, setHovered] = useState(false);
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   useInterval(
     () => {
@@ -27,6 +28,8 @@ export function AccountLinker() {
     },
     !hasAccessToken(address) ? 10000 : null,
   );
+
+  if (isTelegramBot) return null;
 
   return (
     <>

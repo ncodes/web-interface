@@ -32,6 +32,10 @@ declare global {
     earlyDiscordMemberAlloc: string;
     earlyDiscordMemberClaimed: boolean;
 
+    telegramUserId: number;
+    telegramUsername: string;
+    telegramLastAuthAt: string;
+
     canCreateRaffle: boolean;
 
     nft: {

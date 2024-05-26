@@ -1,41 +1,41 @@
+import { useQuery } from "@tanstack/react-query";
+import moment from "moment";
+import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { shortenAddress } from "../../libs/helpers.ts";
+import { Events } from "../../types/enums.ts";
 import EmojiAvatar from "../avatar/EmojiAvatar.tsx";
 import { AvatarSize } from "../avatar/useAvatar.tsx";
-import { shortenAddress } from "../../libs/helpers.ts";
-import moment from "moment";
-import { Events } from "../../types/enums.ts";
-import { EventContentSwapPaid } from "../swap/event/EventContentSwapPaid.tsx";
-import { EventContentSwapReleased } from "../swap/event/EventContentSwapReleased.tsx";
-import { EventContentSwapCancelled } from "../swap/event/EventContentSwapCancelled.tsx";
-import { EventContentSwapDisputed } from "../swap/event/EventContentSwapDisputed.tsx";
-import { EventContentSwapDrafted } from "../swap/event/EventContentSwapDrafted.tsx";
-import { EventContentSwapCommitted } from "../swap/event/EventContentSwapCommitted.tsx";
-import { EventContentSwapRevealed } from "../swap/event/EventContentSwapRevealed.tsx";
-import { EventContentSwapExecuted } from "../swap/event/EventContentSwapExecuted.tsx";
-import { EventContentSwapUndrafted } from "../swap/event/EventContentSwapUndrafted.tsx";
 import { EventContentLiquidityAdd } from "../liquidity/event/EventContentLiquidityAdd.tsx";
-import { EventContentLiquidityRemove } from "../liquidity/event/EventContentLiquidityRemove.tsx";
-import { EventContentLiquiditySwap } from "../liquidity/event/EventContentLiquiditySwap.tsx";
+import { EventContentLiquidityManagerUpdate } from "../liquidity/event/EventContentLiquidityManagerUpdate.tsx";
 import { EventContentLiquidityNewOffer } from "../liquidity/event/EventContentLiquidityNewOffer.tsx";
 import { EventContentLiquidityPause } from "../liquidity/event/EventContentLiquidityPause.tsx";
-import { EventContentLiquidityManagerUpdate } from "../liquidity/event/EventContentLiquidityManagerUpdate.tsx";
-import { EventContentLiquidityTargetUpdate } from "../liquidity/event/EventContentLiquidityTargetUpdate.tsx";
 import { EventContentLiquidityPriceUpdate } from "../liquidity/event/EventContentLiquidityPriceUpdate.tsx";
+import { EventContentLiquidityRemove } from "../liquidity/event/EventContentLiquidityRemove.tsx";
+import { EventContentLiquiditySwap } from "../liquidity/event/EventContentLiquiditySwap.tsx";
 import { EventContentLiquiditySwapLimitUpdate } from "../liquidity/event/EventContentLiquiditySwapLimitUpdate.tsx";
+import { EventContentLiquidityTargetUpdate } from "../liquidity/event/EventContentLiquidityTargetUpdate.tsx";
 import { EventContentLiquidityTimeToPayUpdate } from "../liquidity/event/EventContentLiquidityTimeToPayUpdate.tsx";
-import { EventContentOfferCreate } from "../offer/event/EventContentOfferCreate.tsx";
-import { EventContentOfferUpdate } from "../offer/event/EventContentOfferUpdate.tsx";
 import { EventContentOfferAccept } from "../offer/event/EventContentOfferAccept.tsx";
-import { EventContentOfferUnaccept } from "../offer/event/EventContentOfferUnaccept.tsx";
 import { EventContentOfferCancel } from "../offer/event/EventContentOfferCancel.tsx";
-import { useQuery } from "@tanstack/react-query";
-import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import { EventContentOfferCreate } from "../offer/event/EventContentOfferCreate.tsx";
+import { EventContentOfferUnaccept } from "../offer/event/EventContentOfferUnaccept.tsx";
+import { EventContentOfferUpdate } from "../offer/event/EventContentOfferUpdate.tsx";
+import { EventContentSwapCancelled } from "../swap/event/EventContentSwapCancelled.tsx";
+import { EventContentSwapCommitted } from "../swap/event/EventContentSwapCommitted.tsx";
+import { EventContentSwapDisputed } from "../swap/event/EventContentSwapDisputed.tsx";
+import { EventContentSwapDrafted } from "../swap/event/EventContentSwapDrafted.tsx";
+import { EventContentSwapExecuted } from "../swap/event/EventContentSwapExecuted.tsx";
+import { EventContentSwapPaid } from "../swap/event/EventContentSwapPaid.tsx";
+import { EventContentSwapReleased } from "../swap/event/EventContentSwapReleased.tsx";
+import { EventContentSwapRevealed } from "../swap/event/EventContentSwapRevealed.tsx";
+import { EventContentSwapUndrafted } from "../swap/event/EventContentSwapUndrafted.tsx";
 
 import { UserHoverCard } from "../UserHoverCard.tsx";
 
 export default function TimelineEvent({ event }: { event: Event }) {
   const { getUser } = useUserService();
   const creator = useQuery({
-    queryKey: ["getUser", { address: event.creator, noAuth: true }],
+    queryKey: ["getUser", { addressOrUserId: event.creator, noAuth: true }],
     queryFn: getUser,
     enabled: !!event.creator,
   });
