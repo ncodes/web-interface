@@ -11,6 +11,7 @@ import { useSession } from "../hooks/useSession.ts";
 import { useToast } from "../hooks/useToast.tsx";
 import { cn, logError } from "../libs/helpers.ts";
 import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
+import { CreateVirtualAccount } from "./CreateVirtualAccount.tsx";
 import LoaderOverlay from "./airdrop/tapoff/LoaderOverlay.tsx";
 import IconSpinner from "./icons/IconSpinner.tsx";
 import { Button } from "./ui/Button.tsx";
@@ -32,7 +33,7 @@ export function MainContainerConnectButton({
   const connectedAt = useRef<number>(0);
   const { address, ready } = useConnectorContext();
   const { token } = useSession();
-  const mounted = useMounted(3000);
+  const mounted = useMounted(0);
   const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export function MainContainerConnectButton({
   }, [mounted, isTelegramBot]);
 
   return (
-    <>
+    <div className="h-full flex justify-center items-center">
       {!mounted && showLoader && <LoaderOverlay icon={loaderIcon} />}
 
       {mounted && !ready && !address && (
@@ -61,7 +62,7 @@ export function MainContainerConnectButton({
           connectedAt={connectedAt.current}
         />
       )}
-    </>
+    </div>
   );
 }
 
@@ -78,40 +79,44 @@ function WalletConnect({
   const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   return (
-    <div className="animate-in slide-in-from-top-10 flex select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
-      <EmptyBodyCard
-        className={cn("max-w-[350px] mt-12 md:mt-0 pt-0", className)}
-        label={
-          <div className="text-sm text-gray-200">
-            {!ready && (
-              <>
-                <div className="flex items-center gap-2">
-                  <Wallet2 className="text-chinese-green" width="20" />
-                  <span className="font-jersey20 text-xl block">
-                    You need to connect a wallet
-                  </span>
-                </div>
-                {isTelegramBot && (
-                  <div className="text-sm text-gray-300 tracking-wide my-2">
-                    Hey Player 😎, It looks like you haven't connected a wallet.
-                    Connect one to start the game.
+    <div className="animate-i sslide-in-from-top-10 flex flex-col select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
+      <>
+        <EmptyBodyCard
+          className={cn("max-w-[350px] mt-[30px] md:mt-0 pt-0", className)}
+          label={
+            <div className="text-sm text-gray-200">
+              {!ready && (
+                <>
+                  <div className="flex items-center gap-2">
+                    <Wallet2 className="text-chinese-green" width="20" />
+                    <span className="font-jersey20 text-xl block">
+                      You need to connect a wallet
+                    </span>
                   </div>
-                )}
-              </>
-            )}
-          </div>
-        }
-      >
-        <ConnectWalletButton onConnect={onConnect} className="w-full">
-          <Button
-            variant={(variant || "default") as any}
-            rounded="xl"
-            className="w-full flex gap-2 hover:scale-[1.02] duration-500 font-jersey10 text-2xl"
-          >
-            <Wallet2 width="20" className="" /> Connect
-          </Button>
-        </ConnectWalletButton>
-      </EmptyBodyCard>
+                  {isTelegramBot && (
+                    <div className="text-sm text-gray-300 tracking-wide my-2">
+                      Hey Player 😎, It looks like you haven't connected a
+                      wallet. Connect one to start the game.
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          }
+        >
+          <ConnectWalletButton onConnect={onConnect} className="w-full">
+            <Button
+              variant={(variant || "default") as any}
+              rounded="xl"
+              className="w-full flex gap-2 hover:scale-[1.02] duration-500 font-jersey10 text-2xl"
+            >
+              <Wallet2 width="20" className="" /> Connect
+            </Button>
+          </ConnectWalletButton>
+        </EmptyBodyCard>
+
+        <CreateVirtualAccount />
+      </>
     </div>
   );
 }

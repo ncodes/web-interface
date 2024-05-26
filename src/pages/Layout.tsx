@@ -45,7 +45,8 @@ export default function Layout({
   description?: string;
 }) {
   const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
-  const { getAccessToken, delAccessToken, hasAccessToken } = useSession();
+  const { getAccessToken, delAccessToken, hasAccessToken, token } =
+    useSession();
   const headerHeight = 55;
   const location = useLocation();
   const [leftSideMenuOpen, setLeftSideMenuOpen] = useState(false);
@@ -74,18 +75,17 @@ export default function Layout({
   const { linkTGUser } = useTGBotService();
   const mounted = useMounted(1000);
 
-  setIsTelegramBot(isTelegramWebApp);
-  // setIsTelegramBot(true);
+  // setIsTelegramBot(isTelegramWebApp);
+  setIsTelegramBot(true);
 
   const linkTGUserMut = useMutation({
     mutationFn: linkTGUser,
   });
 
-  // Handle Telegram bot user linking
+  // In Telegram bot mode, link telegram user with the app's authenticated user.
   useEffect(() => {
-    if (!isTelegramBot || !address) return;
-
-    async function doRegBotUser() {
+    if (!isTelegramBot || !address || !token) return;
+    async function doTGLinkUser() {
       try {
         const result = await linkTGUserMut.mutateAsync({
           initData: (window as any).Telegram.WebApp.initData,
@@ -96,7 +96,7 @@ export default function Layout({
         console.error("Failed to register bot user: ", error);
       }
     }
-    void doRegBotUser();
+    void doTGLinkUser();
   }, [isTelegramBot, address]);
 
   // Set loader progress to 100% on mount.
