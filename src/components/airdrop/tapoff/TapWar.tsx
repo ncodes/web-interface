@@ -212,7 +212,7 @@ export function TapWar() {
 
         {address && !!token && (
           <div className="flex flex-col justify-between flex-1">
-            <div className="flex-1 flex justify-center py-10">
+            <div className="flex-1 flex justify-center py-5 lg:py-10">
               <TapCounter
                 tapCountRef={tapCountRef}
                 count={taps}

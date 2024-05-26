@@ -53,7 +53,7 @@ export function Ship({
         <div key={i}>{indicator}</div>
       ))}
       <motion.div
-        className="flex justify-cente w-[200px] mx-auto"
+        className="w-[180px] md:w-[200px] mx-auto"
         animate={{
           x: [null, 20, 0],
           rotate: [null, -5, 0, 5, 0, null] as any,
@@ -68,7 +68,7 @@ export function Ship({
         {rank && (
           <a
             href="#"
-            className="[touch-action:manipulation]"
+            className="[touch-action:manipulation] [-webkit-tap-highlight-color:transparent]"
             onClick={(e) => {
               e.preventDefault();
               fire();
@@ -90,7 +90,7 @@ export function Ship({
               </div>
               <img
                 src={`/images/rank-ships/${rank}.png`}
-                className="h-[200px] select-none [touch-action:manipulation]"
+                className="h-[180px] md:h-[200px] select-none [touch-action:manipulation]"
               />
             </div>
           </a>

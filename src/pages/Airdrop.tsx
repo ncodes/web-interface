@@ -84,53 +84,6 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 <IconBattle width="25" className="text-yellow-500" />
                 <span>WarBond</span>
               </TabsTrigger>
-              {/* <TabsTrigger
-                value="leaderboard"
-                className="flex items-center gap-2 px-3 font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={() => {
-                  navigate("/points");
-                }}
-              >
-                <IconLeaderboard width="25" />
-                <span>Leaderboard</span>
-              </TabsTrigger> */}
-              {/* <TabsTrigger
-                value="referrals"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={async () => {
-                  navigate("/referrals");
-                }}
-              >
-                Referrals
-              </TabsTrigger> */}
-              {/* <TabsTrigger
-                value="energon"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={async () => {
-                  navigate("/energon");
-                }}
-              >
-                Energon
-              </TabsTrigger> */}
-              {/* <TabsTrigger
-                value="nft"
-                className=" flex items-center gap-2 font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={async () => {
-                  navigate("/nft");
-                }}
-              >
-                <IconNFT width="20px" className="text-yellow-400" />
-                <span>NFT</span>
-              </TabsTrigger> */}
-              {/* <TabsTrigger
-                value="galxe"
-                className="font-light relative top-2 text-[14px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={async () => {
-                  navigate("/galxe");
-                }}
-              >
-                Galxe
-              </TabsTrigger> */}
             </div>
             <div className="flex shrink-0 items-center justify-end">
               {loc.pathname != "/energon" &&
