@@ -92,7 +92,8 @@ export function Header({
 Virtual wallet cannot directly purchase multipliers on Telegram. 
 We will open the market in an external browser.
 
-Once open, connect your wallet and buy $BOND from the liquidity. 
+Once open, connect your wallet and buy $BOND. 
+
 If a Virtual Wallet private key was sent to you by the bot, please connect with it. 
 
 Do you want to proceed?`)
