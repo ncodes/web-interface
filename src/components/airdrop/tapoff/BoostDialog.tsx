@@ -847,15 +847,20 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                             `/liquidity/${import.meta.env.VITE_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_LID}`,
                           );
                         } else {
-                          (window as any).Telegram.WebApp.openLink(
-                            `${import.meta.env.VITE_APP_URL}/liquidity/${import.meta.env.VITE_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_LID}`,
-                          );
+                          if (
+                            confirm(`
+Virtual wallet cannot directly purchase multipliers on Telegram. 
+We will open the market in an external browser.
 
-                          //                           alert(`
-                          // Virtual wallet cannot directly purchase multipliers on Telegram.
-                          // Open the game (https:jntl.ink/tapwar) in a browser to purchase multipliers.
-                          // ⚠️ Use only your TapWar Virtual Wallet private key to connect and make purchases. Purchases with other wallets will not be credited to your TapWar account.
-                          // `);
+Once open, connect your wallet and buy $MULTI from the liquidity. 
+If a Virtual Wallet private key was sent to you by the bot, please connect with it. 
+
+Do you want to proceed?`)
+                          ) {
+                            (window as any).Telegram.WebApp.openLink(
+                              `${import.meta.env.VITE_APP_URL}/liquidity/${import.meta.env.VITE_TAPOFF_MULTIPLIER_MKT}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_PROVIDER}/${import.meta.env.VITE_TAPOFF_MULTIPLIER_LID}`,
+                            );
+                          }
                         }
                       }}
                     >

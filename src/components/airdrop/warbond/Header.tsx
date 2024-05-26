@@ -3,11 +3,7 @@ import { useConnectorContext } from "../../../hooks/connectors/useConnectorConte
 import { BattleInfo } from "../../../hooks/services/backend/useAirdropService.ts";
 import useStore from "../../../hooks/store/useStore.ts";
 import { useSession } from "../../../hooks/useSession.ts";
-import {
-  formatToHighDenom,
-  formatToMoney,
-  toDec,
-} from "../../../libs/helpers.ts";
+import { formatToHighDenom, formatToMoney } from "../../../libs/helpers.ts";
 import { ToolTip } from "../../ToolTip.tsx";
 import IconInfoCircle from "../../icons/IconInfoCircle.tsx";
 import { Button } from "../../ui/Button.tsx";
@@ -25,6 +21,7 @@ export function Header({
   const { address } = useConnectorContext();
   const { token } = useSession();
   const user = useStore((s) => s.user);
+  const isVirtualWallet = useStore((state) => state.isVirtualWallet);
 
   return (
     <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col md:flex-row justify-between items-center p-5 py-3">
@@ -85,9 +82,26 @@ export function Header({
                 disabled={!battleInfo?.battleId}
                 className="font-jersey25 w-[170px] text-lg md:h-10 md:px-8 md:text-xl bg-gradient-to-b text-gray-950 from-green-300 to-green-500 hover:scale-105 transition-all duration-500"
                 onClick={() => {
-                  navigate(
-                    `/liquidity/${import.meta.env.VITE_TAPOFF_BOND_MKT}/${import.meta.env.VITE_TAPOFF_BOND_PROVIDER}/${import.meta.env.VITE_TAPOFF_BOND_LID}`,
-                  );
+                  if (!isVirtualWallet) {
+                    navigate(
+                      `/liquidity/${import.meta.env.VITE_TAPOFF_BOND_MKT}/${import.meta.env.VITE_TAPOFF_BOND_PROVIDER}/${import.meta.env.VITE_TAPOFF_BOND_LID}`,
+                    );
+                  } else {
+                    if (
+                      confirm(`
+Virtual wallet cannot directly purchase multipliers on Telegram. 
+We will open the market in an external browser.
+
+Once open, connect your wallet and buy $BOND from the liquidity. 
+If a Virtual Wallet private key was sent to you by the bot, please connect with it. 
+
+Do you want to proceed?`)
+                    ) {
+                      (window as any).Telegram.WebApp.openLink(
+                        `${import.meta.env.VITE_APP_URL}/liquidity/${import.meta.env.VITE_TAPOFF_BOND_MKT}/${import.meta.env.VITE_TAPOFF_BOND_PROVIDER}/${import.meta.env.VITE_TAPOFF_BOND_LID}`,
+                      );
+                    }
+                  }
                 }}
               >
                 Buy $BOND
@@ -98,8 +112,30 @@ export function Header({
             <Button
               variant="ghost"
               rounded="xl"
-              disabled={toDec(bondBalance).lte(0)}
+              disabled={!battleInfo?.battleId}
               className="font-jersey25 text-lg md:h-10 md:px-8 md:text-xl bg-gradient-to-b text-gray-950 from-green-300 to-green-500 hover:scale-105 transition-all duration-500"
+              onClick={() => {
+                if (!isVirtualWallet) {
+                  navigate(
+                    `/liquidity/${import.meta.env.VITE_TAPOFF_BOND_MKT}/${import.meta.env.VITE_TAPOFF_BOND_PROVIDER}/${import.meta.env.VITE_TAPOFF_BOND_LID}`,
+                  );
+                } else {
+                  if (
+                    confirm(`
+Virtual wallet cannot directly purchase multipliers on Telegram. 
+We will open the market in an external browser.
+
+Once open, connect your wallet and buy $BOND from the liquidity. 
+If a Virtual Wallet private key was sent to you by the bot, please connect with it. 
+
+Do you want to proceed?`)
+                  ) {
+                    (window as any).Telegram.WebApp.openLink(
+                      `${import.meta.env.VITE_APP_URL}/liquidity/${import.meta.env.VITE_TAPOFF_BOND_MKT}/${import.meta.env.VITE_TAPOFF_BOND_PROVIDER}/${import.meta.env.VITE_TAPOFF_BOND_LID}`,
+                    );
+                  }
+                }
+              }}
             >
               Buy $Bond
             </Button>
