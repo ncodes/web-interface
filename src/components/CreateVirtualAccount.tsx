@@ -4,6 +4,8 @@ import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx
 import { useTGBotService } from "../hooks/services/backend/useTGBotService.ts";
 import useStore from "../hooks/store/useStore.ts";
 import { useSession } from "../hooks/useSession.ts";
+import { useToast } from "../hooks/useToast.tsx";
+import { logError } from "../libs/helpers.ts";
 import { ToolTip } from "./ToolTip.tsx";
 import { Button } from "./ui/Button.tsx";
 
@@ -14,6 +16,7 @@ export function CreateVirtualAccount() {
   const setIsVirtualWallet = useStore((state) => state.setIsVirtualWallet);
   const { setAddress, setReady } = useConnectorContext();
   const { setAccessToken } = useSession();
+  const { notifyError } = useToast();
 
   const createLinkedUserMut = useMutation({
     mutationFn: createLinkedUser,
@@ -32,7 +35,8 @@ export function CreateVirtualAccount() {
         setReady(true);
         setAccessToken(result.user.address, result.token);
       } catch (error) {
-        console.error("Failed to create virtual account: ", error);
+        notifyError((error as Error).message);
+        logError(error);
       }
     }
     void doTGLinkUser();
