@@ -32,7 +32,7 @@ export function MainContainerConnectButton({
   const connectedAt = useRef<number>(0);
   const { address, ready } = useConnectorContext();
   const { token } = useSession();
-  const mounted = useMounted(0);
+  const mounted = useMounted(1000);
 
   return (
     <>
