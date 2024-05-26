@@ -235,7 +235,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               >
                 <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                   <div className="">
-                    <IconConflict width="35" className="fill-yellow-500 " />
+                    <IconConflict className="fill-yellow-500 w-[25px] xxs:w-[35px]" />
                   </div>
                   <div className="flex flex-col items-start justify-start font-jersey25 tracking-wider">
                     <span className="label text-gray-200 text-sm xs:text-lg">
@@ -278,7 +278,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
               >
                 <div className="flex-1 flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
                   <div className="">
-                    <Fan size="35" className="text-yellow-500" />
+                    <Fan className="text-yellow-500 w-[25px] h-[25px] xxs:w-[35px] xxs:h-[35px]" />
                   </div>
                   <div className="flex flex-col items-start justify-start font-jersey25 tracking-wider">
                     <span className="label text-gray-200 xs:text-lg">
@@ -329,8 +329,11 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     }}
                   >
                     <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                      <div className="rounded-xl">
-                        <img width="40" src="/images/hyper_fire.svg" />
+                      <div className="rounded-xl shrink-0">
+                        <img
+                          src="/images/hyper_fire.svg"
+                          className="w-[25px] xxs:w-[35px]"
+                        />
                       </div>
                       <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
                         <span className="w-full label flex justify-between text-gray-200 text-lg">
@@ -362,8 +365,11 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     }}
                   >
                     <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                      <div className="">
-                        <img width="40" src="/images/icon_multi_ice.svg" />
+                      <div className="shrink-0">
+                        <img
+                          src="/images/icon_multi_ice.svg"
+                          className="w-[25px] xxs:w-[35px]"
+                        />
                       </div>
                       <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
                         <span className="w-full label flex justify-between text-gray-200 text-lg">
@@ -395,9 +401,9 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     }}
                   >
                     <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                      <div className="">
+                      <div className="shrink-0">
                         <img
-                          width="40"
+                          className="w-[25px] xxs:w-[35px]"
                           src="/images/icon_engine_cold_oil.svg"
                         />
                       </div>
@@ -431,8 +437,11 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     }}
                   >
                     <div className="flex items-center p-2 gap-2 border rounded-xl transition-all duration-500 cursor-pointer border-gray-800 hover:border-yellow-400 [&_.label]:hover:text-yellow-400 hover:scale-[1.01]">
-                      <div className="">
-                        <img width="40" src="/images/icon_coin_x10.svg" />
+                      <div className="shrink-0">
+                        <img
+                          className="w-[25px] xxs:w-[35px]"
+                          src="/images/icon_coin_x10.svg"
+                        />
                       </div>
                       <div className="flex w-full flex-col font-jersey25 tracking-wider gap-1">
                         <span className="w-full label flex justify-between text-gray-200 text-lg">
