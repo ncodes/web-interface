@@ -1,4 +1,5 @@
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
+import useStore from "../../hooks/store/useStore.ts";
 import { useSession } from "../../hooks/useSession.ts";
 import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
 import IconCoinGold from "../icons/IconCoinGold.tsx";
@@ -11,6 +12,7 @@ import { AirdropHeader } from "./AirdropHeader.tsx";
 export function AirdropDashboard() {
   const { address } = useConnectorContext();
   const { hasAccessToken } = useSession();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   return (
     <div className="w-full flex flex-col flex-1 relative">
@@ -31,13 +33,18 @@ export function AirdropDashboard() {
         </div>
       )}
 
-      <MainContainerConnectButton
-        authenticate
-        showLoader
-        loaderIcon={
-          <IconCoinGold width="30" className="text-yellow-400 animate-spin " />
-        }
-      />
+      {!isTelegramBot && (
+        <MainContainerConnectButton
+          authenticate
+          showLoader
+          loaderIcon={
+            <IconCoinGold
+              width="30"
+              className="text-yellow-400 animate-spin "
+            />
+          }
+        />
+      )}
     </div>
   );
 }

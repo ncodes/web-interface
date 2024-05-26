@@ -37,6 +37,7 @@ export function TapWar() {
   const [overheatLevel, setOverheatLevel] = useState(0);
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
   const [isPinging, setIsPinging] = useState(false);
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
@@ -245,11 +246,13 @@ export function TapWar() {
             </div>
           </div>
         )}
-        <MainContainerConnectButton
-          className="bg-black"
-          authenticate
-          showLoader
-        />
+        {!isTelegramBot && (
+          <MainContainerConnectButton
+            className="bg-black"
+            authenticate
+            showLoader
+          />
+        )}
       </div>
       {<GameBackgroundImage />}
     </div>
