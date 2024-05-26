@@ -695,21 +695,19 @@ export function LiquidityRow({
               </span>
             )}
 
-            {!restricted &&
-              !ownerMode &&
-              !location.pathname.includes("/liquidity/0x") && (
-                <span className="flex border-l border-gray-800 pl-1">
-                  <Button
-                    variant="link"
-                    rounded="lg"
-                    scale="sm"
-                    className="text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green  h-8 mx-1 lg:rounded-br-lg"
-                    onClick={() => setOpenSwapSheet(true)}
-                  >
-                    Swap
-                  </Button>
-                </span>
-              )}
+            {!restricted && (
+              <span className="flex border-l border-gray-800 pl-1">
+                <Button
+                  variant="link"
+                  rounded="lg"
+                  scale="sm"
+                  className="text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green  h-8 mx-1 lg:rounded-br-lg"
+                  onClick={() => setOpenSwapSheet(true)}
+                >
+                  Swap
+                </Button>
+              </span>
+            )}
 
             <span className="lg:hidden border-l border-gray-800">
               <DropdownMenu
