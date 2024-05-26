@@ -27,8 +27,8 @@ export function Header({
   const user = useStore((s) => s.user);
 
   return (
-    <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col lg:flex-row justify-between items-center p-5 py-3">
-      <span className="gap-1 flex flex-col lg:flex-row justify-center items-center h-full text-3xl tracking-wider font-semibold font-jersey10 ml-2">
+    <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col md:flex-row justify-between items-center p-5 py-3">
+      <span className="gap-1 w-full flex justify-center md:justify-start items-center h-full text-3xl tracking-wider font-semibold font-jersey10 ml-2">
         <span>WarBond</span>
         <span className="flex items-center">
           <InfoDialog type="warbond" />
@@ -43,7 +43,7 @@ export function Header({
 
       {address && !!token && (
         <>
-          <ul className="flex gap-4 mt-2">
+          <ul className="flex gap-4 mt-2 md:mt-0">
             <li className="flex items-center gap-1.5">
               <span>
                 <img
@@ -83,7 +83,7 @@ export function Header({
                 variant="ghost"
                 rounded="xl"
                 disabled={!battleInfo?.battleId}
-                className="font-jersey25 text-lg md:h-10 md:px-8 md:text-xl bg-gradient-to-b text-gray-950 from-green-300 to-green-500 hover:scale-105 transition-all duration-500"
+                className="font-jersey25 w-[170px] text-lg md:h-10 md:px-8 md:text-xl bg-gradient-to-b text-gray-950 from-green-300 to-green-500 hover:scale-105 transition-all duration-500"
                 onClick={() => {
                   navigate(
                     `/liquidity/${import.meta.env.VITE_TAPOFF_BOND_MKT}/${import.meta.env.VITE_TAPOFF_BOND_PROVIDER}/${import.meta.env.VITE_TAPOFF_BOND_LID}`,

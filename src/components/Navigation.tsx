@@ -6,6 +6,7 @@ import { IconExchange } from "./icons/IconExchange.tsx";
 import IconOffer from "./icons/IconOffer.tsx";
 
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
+import useStore from "../hooks/store/useStore.ts";
 import { useSession } from "../hooks/useSession.ts";
 import { NavPageLink } from "./NavPageLink.tsx";
 import IconBattle from "./icons/IconBattle.tsx";
@@ -21,6 +22,7 @@ export function Navigation() {
   const { pathname } = useLocation();
   const { countUnread } = useOfferService();
   const { hasAccessToken } = useSession();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
   const unreadOfferCount = useQuery({
     queryKey: ["countUnreadOffer", { network: getChainInfo().queryName }],
     queryFn: countUnread,
@@ -39,75 +41,79 @@ export function Navigation() {
             to="/"
           />
         </li> */}
-        <li>
-          <NavPageLink
-            iconClassName="w-[25px]"
-            label="Markets"
-            labelClassName="font-jersey25 tracking-wider"
-            icon={<IconMarketCoin width="25" />}
-            active={pathname.match("^(/(my/)?market)|(/$)") != null}
-            to="/"
-          />
-        </li>
-        <li>
-          <NavPageLink
-            iconClassName="w-[25px]"
-            label="Liquidity"
-            labelClassName="font-jersey25 tracking-wider"
-            active={pathname.match("^/(my/)?liquidit(y|ies)") != null}
-            icon={<IconCoinStack2 width="25" />}
-            to="/my/liquidity"
-          />
-        </li>
-        <li>
-          <NavPageLink
-            iconClassName="w-[25px]"
-            icon={<IconExchange width="25" />}
-            label="Swaps"
-            labelClassName="font-jersey25 tracking-wider"
-            active={pathname.match("^/(my/)?swap(s|)") != null}
-            to="/my/swaps"
-          />
-        </li>
-        <li>
-          <NavPageLink
-            iconClassName="w-[25px]"
-            icon={<IconOffer width="25" />}
-            label="Offers"
-            labelClassName="font-jersey25 tracking-wider"
-            active={pathname.match("^/(my/)?offer(s|)") != null}
-            to="/my/offers"
-            countBadge={
-              unreadOfferCount.data &&
-              unreadOfferCount.data.asOfferer +
-                unreadOfferCount.data.asProvider >
-                0
-                ? unreadOfferCount.data.asOfferer +
-                  unreadOfferCount.data.asProvider
-                : 0
-            }
-          />
-        </li>
-        <li>
-          <NavPageLink
-            iconClassName="relative w-[25px] left-1"
-            icon={<IconDispute width="40" />}
-            label="Disputes"
-            labelClassName="font-jersey25 tracking-wider"
-            active={pathname.match("^/my/dispute") != null}
-            to="/my/disputes"
-          />
-        </li>
-        <li>
-          <NavPageLink
-            icon={<IconMediation width="40" />}
-            iconClassName="w-[25px]"
-            labelClassName="font-jersey25 tracking-wider"
-            label="Mediation"
-            active={pathname.match("^/(my/)?tickets") != null}
-            to="/my/tickets"
-          />
-        </li>
+        {!isTelegramBot && (
+          <>
+            <li>
+              <NavPageLink
+                iconClassName="w-[25px]"
+                label="Markets"
+                labelClassName="font-jersey25 tracking-wider"
+                icon={<IconMarketCoin width="25" />}
+                active={pathname.match("^(/(my/)?market)|(/$)") != null}
+                to="/"
+              />
+            </li>
+            <li>
+              <NavPageLink
+                iconClassName="w-[25px]"
+                label="Liquidity"
+                labelClassName="font-jersey25 tracking-wider"
+                active={pathname.match("^/(my/)?liquidit(y|ies)") != null}
+                icon={<IconCoinStack2 width="25" />}
+                to="/my/liquidity"
+              />
+            </li>
+            <li>
+              <NavPageLink
+                iconClassName="w-[25px]"
+                icon={<IconExchange width="25" />}
+                label="Swaps"
+                labelClassName="font-jersey25 tracking-wider"
+                active={pathname.match("^/(my/)?swap(s|)") != null}
+                to="/my/swaps"
+              />
+            </li>
+            <li>
+              <NavPageLink
+                iconClassName="w-[25px]"
+                icon={<IconOffer width="25" />}
+                label="Offers"
+                labelClassName="font-jersey25 tracking-wider"
+                active={pathname.match("^/(my/)?offer(s|)") != null}
+                to="/my/offers"
+                countBadge={
+                  unreadOfferCount.data &&
+                  unreadOfferCount.data.asOfferer +
+                    unreadOfferCount.data.asProvider >
+                    0
+                    ? unreadOfferCount.data.asOfferer +
+                      unreadOfferCount.data.asProvider
+                    : 0
+                }
+              />
+            </li>
+            <li>
+              <NavPageLink
+                iconClassName="relative w-[25px] left-1"
+                icon={<IconDispute width="40" />}
+                label="Disputes"
+                labelClassName="font-jersey25 tracking-wider"
+                active={pathname.match("^/my/dispute") != null}
+                to="/my/disputes"
+              />
+            </li>
+            <li>
+              <NavPageLink
+                icon={<IconMediation width="40" />}
+                iconClassName="w-[25px]"
+                labelClassName="font-jersey25 tracking-wider"
+                label="Mediation"
+                active={pathname.match("^/(my/)?tickets") != null}
+                to="/my/tickets"
+              />
+            </li>
+          </>
+        )}
         <li>
           <NavPageLink
             icon={<IconCoinGold width="40" />}

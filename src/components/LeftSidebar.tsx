@@ -6,6 +6,7 @@ import { Navigation } from "./Navigation.tsx";
 import { RegionSelector } from "./RegionSelector.tsx";
 import { IconSettingsOutline } from "./icons/IconSettingsOutline.tsx";
 
+import { useLocation } from "react-router-dom";
 import { useMediaQuery, useScrollLock } from "usehooks-ts";
 import useStore from "../hooks/store/useStore.ts";
 import { LanguageSelectorMobile } from "./LanguageSelector.tsx";
@@ -37,6 +38,7 @@ export function LeftSidebar(props: {
   }));
   const { lock, unlock } = useScrollLock({ autoLock: false });
   const isTelegramBot = useStore((state) => state.isTelegramBot);
+  const loc = useLocation();
 
   useEffect(() => {
     if (!isXl) {
@@ -49,7 +51,7 @@ export function LeftSidebar(props: {
     setOpenOverlay(props.open);
   }, [props.open]);
 
-  if (isTelegramBot) return null;
+  if (isTelegramBot && loc.pathname.includes("/tapwar")) return null;
 
   return (
     <div>
@@ -84,17 +86,19 @@ export function LeftSidebar(props: {
               </div>
             </header>
 
-            <div className="md:hidden pl-7 py-3 mt-5 border-b border-gray-800">
-              <NavOrdinaryLink
-                href="#"
-                label="Search"
-                svg={<IconSearch width="20" />}
-                className="py-0"
-                onClick={() => {
-                  toggleOpenState && toggleOpenState("searchSheet");
-                }}
-              />
-            </div>
+            {!isTelegramBot && (
+              <div className="md:hidden pl-7 py-3 mt-5 border-b border-gray-800">
+                <NavOrdinaryLink
+                  href="#"
+                  label="Search"
+                  svg={<IconSearch width="20" />}
+                  className="py-0"
+                  onClick={() => {
+                    toggleOpenState && toggleOpenState("searchSheet");
+                  }}
+                />
+              </div>
+            )}
 
             <Navigation />
             <div className="flex-1 flex flex-col justify-end pl-8">
