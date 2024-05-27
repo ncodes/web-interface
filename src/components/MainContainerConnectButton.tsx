@@ -35,6 +35,7 @@ export function MainContainerConnectButton({
   const { token } = useSession();
   const mounted = useMounted(3000);
   const isTelegramBot = useStore((state) => state.isTelegramBot);
+  const { simpleSuccess } = useToast();
 
   useEffect(() => {
     if (!isTelegramBot || !mounted) return;
@@ -54,6 +55,7 @@ export function MainContainerConnectButton({
           loaderIcon={loaderIcon}
           className={className}
           onConnect={() => {
+            simpleSuccess(`Connected to wallet: ${token?.length}`);
             connectedAt.current = Math.round(Date.now() / 1000);
           }}
         />
