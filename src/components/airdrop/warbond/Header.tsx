@@ -113,7 +113,7 @@ Do you want to proceed?`)
             <Button
               variant="ghost"
               rounded="xl"
-              disabled={!battleInfo?.battleId}
+              // disabled={!battleInfo?.battleId}
               className="font-jersey25 text-lg md:h-10 md:px-8 md:text-xl bg-gradient-to-b text-gray-950 from-green-300 to-green-500 hover:scale-105 transition-all duration-500"
               onClick={() => {
                 if (!isVirtualWallet) {
