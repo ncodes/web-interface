@@ -86,39 +86,42 @@ function WalletConnect({
   return (
     <div className="animate-i sslide-in-from-top-10 flex flex-col select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
       <>
-        <EmptyBodyCard
-          className={cn("max-w-[350px] mt-[30px] md:mt-0 pt-0", className)}
-          label={
-            <div className="text-sm text-gray-200">
-              {!ready && (
-                <>
-                  <div className="flex items-center gap-2">
-                    <Wallet2 className="text-chinese-green" width="20" />
-                    <span className="font-jersey20 text-xl block">
-                      You need to connect a wallet
-                    </span>
-                  </div>
-                  {isTelegramBot && (
-                    <div className="text-sm text-gray-300 tracking-wide my-2">
-                      Hey Player 😎, It looks like you haven't connected a
-                      wallet. Connect one to start the game.
-                    </div>
+        {!isTelegramBot ||
+          ((window as any).Telegram.WebApp.platform == "ios" && (
+            <EmptyBodyCard
+              className={cn("max-w-[350px] mt-[30px] md:mt-0 pt-0", className)}
+              label={
+                <div className="text-sm text-gray-200">
+                  {!ready && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <Wallet2 className="text-chinese-green" width="20" />
+                        <span className="font-jersey20 text-xl block">
+                          You need to connect a wallet
+                        </span>
+                      </div>
+                      {isTelegramBot && (
+                        <div className="text-sm text-gray-300 tracking-wide my-2">
+                          Hey Player 😎, It looks like you haven't connected a
+                          wallet. Connect one to start the game.
+                        </div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
-            </div>
-          }
-        >
-          <ConnectWalletButton onConnect={onConnect} className="w-full">
-            <Button
-              variant={(variant || "default") as any}
-              rounded="xl"
-              className="w-full flex gap-2 hover:scale-[1.02] duration-500 font-jersey10 text-2xl"
+                </div>
+              }
             >
-              <Wallet2 width="20" className="" /> Connect
-            </Button>
-          </ConnectWalletButton>
-        </EmptyBodyCard>
+              <ConnectWalletButton onConnect={onConnect} className="w-full">
+                <Button
+                  variant={(variant || "default") as any}
+                  rounded="xl"
+                  className="w-full flex gap-2 hover:scale-[1.02] duration-500 font-jersey10 text-2xl"
+                >
+                  <Wallet2 width="20" className="" /> Connect
+                </Button>
+              </ConnectWalletButton>
+            </EmptyBodyCard>
+          ))}
 
         <CreateVirtualAccount loaderIcon={loaderIcon} />
       </>
