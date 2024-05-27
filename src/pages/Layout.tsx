@@ -44,7 +44,7 @@ export default function Layout({
   title: string;
   description?: string;
 }) {
-  // const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
+  const isTelegramWebApp = !!(window as any).Telegram.WebApp.initData;
   const { getAccessToken, delAccessToken, hasAccessToken, token } =
     useSession();
   const headerHeight = 55;
@@ -76,8 +76,8 @@ export default function Layout({
   const { linkTGUser } = useTGBotService();
   const mounted = useMounted(1000);
 
-  // setIsTelegramBot(isTelegramWebApp);
-  setIsTelegramBot(true);
+  setIsTelegramBot(isTelegramWebApp);
+  // setIsTelegramBot(true);
 
   const linkTGUserMut = useMutation({
     mutationFn: linkTGUser,
@@ -85,7 +85,7 @@ export default function Layout({
 
   // In Telegram bot mode, link telegram user with the app's authenticated user.
   useEffect(() => {
-    if (!isTelegramBot || isVirtualWallet || !address || !token ) return;
+    if (!isTelegramBot || isVirtualWallet || !address || !token) return;
     async function doTGLinkUser() {
       try {
         const result = await linkTGUserMut.mutateAsync({
