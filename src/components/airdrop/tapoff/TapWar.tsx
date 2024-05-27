@@ -132,7 +132,7 @@ export function TapWar() {
   );
 
   function isFiring() {
-    return moment().unix() - lastTapTime < 2;
+    return moment().unix() - lastTapTime < 1;
   }
 
   function fire() {
