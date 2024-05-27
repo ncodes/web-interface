@@ -158,10 +158,12 @@ function AccountSignIn({
   async function doAuth() {
     setLoading(true);
     const msg = createSignatureMessage(address, undefined, "24 hours");
+    console.log("Request");
     const sig = await sign(msg.toString("utf-8")).catch((e) => {
       simpleError(e.message, { position: "top-center", duration: 5000 });
       setLoading(false);
     });
+    console.log("Response");
 
     if (!sig) {
       setLoading(false);
@@ -170,11 +172,13 @@ function AccountSignIn({
 
     try {
       const refCode = localStorage.getItem(RefCodeKey);
+      console.log("Ref Code", refCode);
       const data = await authMutation.mutateAsync({
         msg: msg.toString("hex"),
         sig,
         refCode,
       });
+      console.log("Auth Data", data);
 
       setAccessToken(address, data.token as string);
       setLoading(false);
