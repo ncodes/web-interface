@@ -37,12 +37,13 @@ export function Header(props: { onClick: () => void; height?: string }) {
         <NavHelpButton />
         {connected && !!user && <NavNotificationButton />}
         {connected && <NetworkSelector />}
-        {!isVirtualWallet && (
-          <>
-            <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
-            <ConnectWalletButton className="lg:hidden" label="Connect" />
-          </>
-        )}
+        {!isVirtualWallet &&
+          (window as any).Telegram?.WebApp?.platform != "android" && (
+            <>
+              <ConnectWalletButton className="hidden lg:block max-[300px] relative " />
+              <ConnectWalletButton className="lg:hidden" label="Connect" />
+            </>
+          )}
         {isVirtualWallet && <VirtualWalletConnected />}
       </div>
     </header>

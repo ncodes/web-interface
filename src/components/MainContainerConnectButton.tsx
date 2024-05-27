@@ -96,7 +96,7 @@ function WalletConnect({
                   <>
                     <div className="flex items-center gap-2">
                       <Wallet2 className="text-chinese-green" width="20" />
-                      <span className="font-jersey20 text-xl block">
+                      <span className="font-jersey20 text-lg xs:text-xl block">
                         You need to connect a wallet
                       </span>
                     </div>

@@ -58,7 +58,7 @@ export function CreateVirtualAccount({
     <div className="mt-5 text-center items-center flex flex-col">
       {showLoader && <LoaderOverlay icon={loaderIcon} />}
       <span className="text-gray-400 flex items-center gap-2">
-        {(window as any).Telegram.WebApp.platform == "ios" && (
+        {(window as any).Telegram.WebApp.platform != "android" && (
           <span>Unable to connect?</span>
         )}
 
