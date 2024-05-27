@@ -87,7 +87,7 @@ function WalletConnect({
     <div className="animate-i sslide-in-from-top-10 flex flex-col select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
       <>
         {(!isTelegramBot ||
-          (window as any).Telegram.WebApp.platform == "ios") && (
+          (window as any).Telegram.WebApp.platform != "android") && (
           <EmptyBodyCard
             className={cn("max-w-[350px] mt-[30px] md:mt-0 pt-0", className)}
             label={
