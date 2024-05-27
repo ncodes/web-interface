@@ -62,7 +62,7 @@ export function CreateVirtualAccount({
       {showLoader && <LoaderOverlay icon={loaderIcon} />}
       <span className="text-gray-400 flex items-center gap-2">
         <span>Unable to connect?</span>
-        <ToolTip tip="Virtual account is linked to your telegram account.">
+        <ToolTip tip="Virtual wallet is created online and linked to your Telegram ID. The private key will be sent you.">
           <InfoIcon className="w-4" />
         </ToolTip>
       </span>
@@ -71,7 +71,7 @@ export function CreateVirtualAccount({
         className="mt-2 bg-gray-800/20 backdrop-blur-sm hover:bg-gray-800/40 hover:text-chinese-green"
         onClick={createAccount}
       >
-        Create a virtual account
+        Create Virtual Wccount
       </Button>
     </div>
   );
