@@ -11,7 +11,6 @@ import { cn, iOSversion } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
-import LoaderOverlay from "./LoaderOverlay.tsx";
 import { OverheatIndicator } from "./OverheatIndicator.tsx";
 import { Ship } from "./Ship.tsx";
 import { TapCounter } from "./TapCounter.tsx";
@@ -39,7 +38,7 @@ export function TapWar() {
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
   const [isPinging, setIsPinging] = useState(false);
-  const [hideLoader, setHideLoader] = useState(false);
+  const [_hideLoader, setHideLoader] = useState(false);
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
@@ -211,9 +210,9 @@ export function TapWar() {
         },
       )}
     >
-      {!hideLoader && address && (
+      {/* {!hideLoader && address && (
         <div className="z-30">{address && <LoaderOverlay />}</div>
-      )}
+      )} */}
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
         <TapWarHeader
           playerInfo={playerInfo}
