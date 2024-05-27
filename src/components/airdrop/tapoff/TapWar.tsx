@@ -7,6 +7,7 @@ import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
+import { useToast } from "../../../hooks/useToast.tsx";
 import { cn, iOSversion } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
@@ -30,6 +31,8 @@ export function TapWar() {
   const [tapIncrement, setTapIncrement] = useState(0);
   const [lastTapTime, setLastTapTime] = useState(0);
   const tapCountRef = useRef<any>();
+  const { simpleSuccess } = useToast();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
   const shipRef = useRef<any>();
   const [gunCount, setGunCount] = useState(1);
   const [firedCoins, setFiredCoins] = useState<ReactNode[]>([]);
@@ -99,6 +102,10 @@ export function TapWar() {
               (result.overheatLvl / result.maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
             setOverheatLevel(result.overheatLvl);
+
+            if (isTelegramBot) {
+              simpleSuccess(`A_Overheat Lvl: ${overheatLevelPct}`);
+            }
           }
         })
         .catch((e) => {
@@ -122,6 +129,9 @@ export function TapWar() {
             const overheatLevelPct = (overheatLvl / maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
             setOverheatLevel(result.overheatLvl);
+            if (isTelegramBot) {
+              simpleSuccess(`B_Overheat Lvl: ${overheatLevelPct}`);
+            }
           }
         })
         .catch(() => {
