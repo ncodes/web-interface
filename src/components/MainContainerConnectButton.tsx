@@ -150,39 +150,47 @@ function AccountSignIn({
   });
 
   useEffect(() => {
+    console.log("READY", "TOKEN", token, ready);
     if (token || !ready) return;
+    console.log("GET HERE");
     if (Date.now() / 1000 - connectedAt > 2) return;
     doAuth();
   }, [ready]);
 
   async function doAuth() {
     setLoading(true);
+    console.log("A");
     const msg = createSignatureMessage(address, undefined, "24 hours");
-    console.log("Request");
+    console.log("B");
     const sig = await sign(msg.toString("utf-8")).catch((e) => {
+      console.log("C");
       simpleError(e.message, { position: "top-center", duration: 5000 });
       setLoading(false);
     });
-    console.log("Response");
+    console.log("D");
 
     if (!sig) {
+      console.log("E");
       setLoading(false);
       return;
     }
 
     try {
+      console.log("F");
       const refCode = localStorage.getItem(RefCodeKey);
-      console.log("Ref Code", refCode);
+      console.log("G");
       const data = await authMutation.mutateAsync({
         msg: msg.toString("hex"),
         sig,
         refCode,
       });
-      console.log("Auth Data", data);
+      console.log("H");
 
       setAccessToken(address, data.token as string);
       setLoading(false);
+      console.log("I");
     } catch (error) {
+      console.log("J");
       simpleError("Auth failed", { position: "top-center", duration: 5000 });
       logError(error);
       setLoading(false);
