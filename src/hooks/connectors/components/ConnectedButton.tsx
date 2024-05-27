@@ -5,13 +5,19 @@ import { IconSettingsOutline } from "../../../components/icons/IconSettingsOutli
 import { SettingsSheet } from "../../../components/settings/SettingsSheet.tsx";
 import { cn, shortenAddress, shortenAddress2 } from "../../../libs/helpers.ts";
 import useStore from "../../store/useStore.ts";
+import { useConnectorContext } from "../useConnectorContext.tsx";
 
-interface ConnectedProps {
+export const ConnectedButton = ({
+  openWalletModal,
+  virtual,
+}: {
   openWalletModal?: () => void;
-}
+  virtual?: boolean;
+}) => {
+  const acct = useAccount();
+  const connectCtx = useConnectorContext();
+  const address = (virtual ? connectCtx.address : acct?.address) || "";
 
-export const ConnectedButton = (props: ConnectedProps) => {
-  const { address } = useAccount();
   const toggleOpenState = useStore((state) => state.toggleOpenState);
 
   return (
@@ -19,7 +25,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
       <div
         className="flex [&>*]:cursor-pointer justify-between items-center h-[37px]  bg-chinese-green rounded-full hover:shadow-[0px_11px_24px_-6px_rgba(131,164,34,1)] gap-1 pr-1 transition-all duration-500 hover:scale-x-105"
         onClick={() => {
-          toggleOpenState && toggleOpenState("settingsSheet");
+          !virtual && toggleOpenState && toggleOpenState("settingsSheet");
         }}
       >
         <p
@@ -29,13 +35,26 @@ export const ConnectedButton = (props: ConnectedProps) => {
         >
           <IconSettingsOutline width="17" />
         </p>
-        <p className="hidden address lg:inline-block font-normal text-[18px] text-black font-jersey20 tracking-wider">
-          <span className="hidden lg:inline-block">
-            {shortenAddress(address as string)}
-          </span>
-          <span className="lg:hidden">
-            {shortenAddress2(address as string)}
-          </span>
+        <p
+          className={cn(
+            "hidden address lg:inline-block font-normal text-[18px] text-black font-jersey20 tracking-wider",
+            {
+              "!inline pl-3": virtual,
+            },
+          )}
+        >
+          {!virtual && (
+            <>
+              <span className="hidden lg:inline-block">
+                {shortenAddress(address as string)}
+              </span>
+              <span className="lg:hidden">
+                {shortenAddress2(address as string)}
+              </span>
+            </>
+          )}
+
+          {virtual && <>{shortenAddress(address as string)}</>}
         </p>
 
         <div className="pl-1 md:pl-2">
@@ -43,7 +62,7 @@ export const ConnectedButton = (props: ConnectedProps) => {
         </div>
       </div>
       <div className="absolute">
-        <SettingsSheet openWalletManager={props.openWalletModal} />
+        <SettingsSheet openWalletManager={openWalletModal} />
       </div>
     </div>
   );

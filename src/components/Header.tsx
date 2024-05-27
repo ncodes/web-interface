@@ -2,7 +2,10 @@ import { useLocation } from "react-router-dom";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../hooks/store/useStore.ts";
 import { cn } from "../libs/utils.ts";
-import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
+import {
+  ConnectWalletButton,
+  VirtualWalletConnected,
+} from "./ConnectWalletButton.tsx";
 import { LanguageSelector } from "./LanguageSelector.tsx";
 import { MobileMenuActivator } from "./MobileMenuActivator.tsx";
 import { NavHelpButton } from "./NavHelpButton.tsx";
@@ -40,6 +43,7 @@ export function Header(props: { onClick: () => void; height?: string }) {
             <ConnectWalletButton className="lg:hidden" label="Connect" />
           </>
         )}
+        {isVirtualWallet && <VirtualWalletConnected />}
       </div>
     </header>
   );

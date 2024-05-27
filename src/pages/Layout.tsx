@@ -75,9 +75,11 @@ export default function Layout({
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { linkTGUser } = useTGBotService();
   const mounted = useMounted(1000);
+  // const setIsVirtualWallet = useStore((state) => state.setIsVirtualWallet);
 
   setIsTelegramBot(isTelegramWebApp);
   // setIsTelegramBot(true);
+  // setIsVirtualWallet(true);
 
   const linkTGUserMut = useMutation({
     mutationFn: linkTGUser,

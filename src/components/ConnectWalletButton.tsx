@@ -29,6 +29,14 @@ function Connected({ show }: ConnectedProps) {
   );
 }
 
+export function VirtualWalletConnected() {
+  return (
+    <div>
+      <ConnectedButton virtual />
+    </div>
+  );
+}
+
 export function ConnectWalletButton(props: {
   showIcon?: boolean;
   className?: string;
