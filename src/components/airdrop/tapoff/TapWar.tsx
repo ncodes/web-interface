@@ -102,10 +102,6 @@ export function TapWar() {
               (result.overheatLvl / result.maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
             setOverheatLevel(result.overheatLvl);
-
-            if (isTelegramBot) {
-              simpleSuccess(`A_Overheat Lvl: ${overheatLevelPct}`);
-            }
           }
         })
         .catch((e) => {
@@ -129,9 +125,6 @@ export function TapWar() {
             const overheatLevelPct = (overheatLvl / maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
             setOverheatLevel(result.overheatLvl);
-            if (isTelegramBot) {
-              simpleSuccess(`B_Overheat Lvl: ${overheatLevelPct}`);
-            }
           }
         })
         .catch(() => {
@@ -142,7 +135,7 @@ export function TapWar() {
   );
 
   function isFiring() {
-    return moment().unix() - lastTapTime < 2;
+    return moment().unix() - lastTapTime < 1;
   }
 
   function fire() {
@@ -256,11 +249,11 @@ export function TapWar() {
             />
 
             <div className="h-[100px] flex flex-col justify-end">
-              <div className=" mt-16">
+              <div className="mt-16">
                 <OverheatIndicator
                   overheatLevel={overheatLevel}
                   overheatLevelPct={overheatLevelPct}
-                  playerInfo={playerInfo}
+                  maxOverheatLvl={playerInfo?.maxOverheatLvl}
                 />
               </div>
             </div>
