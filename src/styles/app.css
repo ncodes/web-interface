@@ -183,3 +183,15 @@
 .badge-chinese-green {
   @apply bg-chinese-green text-gray-900 px-1 rounded;
 }
+
+#ship {
+  /* transition: all 10s; */
+}
+
+#coin-anim {
+  /* transition: all 0.1s; */
+}
+
+#incr-anim {
+  /* transition: all 0.5s; */
+}

@@ -44,6 +44,7 @@ export function FiredCoin({
   return (
     <div className="absolute">
       <motion.div
+        id="coin-anim"
         initial={false}
         style={{ opacity }}
         animate={{
@@ -53,7 +54,6 @@ export function FiredCoin({
         }}
         transition={{
           ease: "easeOut",
-          duration: 1,
         }}
       >
         <img src={`/images/${random.choice(coinImages)}`} width="30px" />

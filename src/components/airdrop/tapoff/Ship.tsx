@@ -53,15 +53,16 @@ export function Ship({
         <div key={i}>{indicator}</div>
       ))}
       <motion.div
+        id="ship-container"
         className="w-[180px] md:w-[200px] mx-auto"
         animate={{
           x: [null, 20, 0],
           rotate: [null, -5, 0, 5, 0, null] as any,
         }}
         transition={{
-          duration: 2,
           ease: "easeInOut",
           repeat: Infinity,
+          duration: 2,
         }}
         onClick={renderTapIncrementIndicator}
       >
@@ -115,6 +116,7 @@ function IncrIndicator({
 
   return (
     <motion.div
+      id="incr-anim"
       initial={{ left: left, top: top }}
       animate={{
         left: random.choice([
@@ -128,10 +130,11 @@ function IncrIndicator({
         opacity: [1, 0.5, 0],
         zIndex: 0,
         transition: {
-          duration: 2,
+          duration: random.choice([0, 2]),
+          delay: random.choice([0, 0.2]),
         },
       }}
-      className="fixed break w-10 h-10 pointer-events-none text-2xl text-gray-200 font-jersey20 rounded-full flex justify-center items-center"
+      className="fixed break w-10 h-10 duration-200 pointer-events-none text-2xl text-gray-200 font-jersey20 rounded-full flex justify-center items-center"
     >
       +{tapIncrement}
     </motion.div>
