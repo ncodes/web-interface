@@ -43,9 +43,9 @@ export function CreateVirtualAccount({
         setReady(true);
         setAccessToken(result.user.address, result.token);
 
-        setTimeout(() => {
-          setShowLoader(false);
-        }, 3000);
+        // setTimeout(() => {
+        //   setShowLoader(false);
+        // }, 3000);
       } catch (error) {
         setShowLoader(false);
         notifyError((error as Error).message);
