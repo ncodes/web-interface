@@ -51,6 +51,7 @@ export function MainContainerConnectButton({
       {mounted && !ready && !address && (
         <WalletConnect
           variant={variant}
+          loaderIcon={loaderIcon}
           className={className}
           onConnect={() => {
             connectedAt.current = Math.round(Date.now() / 1000);
@@ -72,10 +73,12 @@ function WalletConnect({
   variant,
   onConnect,
   className,
+  loaderIcon,
 }: {
   variant?: string;
   onConnect?: () => void;
   className?: string;
+  loaderIcon?: ReactNode;
 }) {
   const { ready } = useConnectorContext();
   const isTelegramBot = useStore((state) => state.isTelegramBot);
@@ -117,7 +120,7 @@ function WalletConnect({
           </ConnectWalletButton>
         </EmptyBodyCard>
 
-        <CreateVirtualAccount />
+        <CreateVirtualAccount loaderIcon />
       </>
     </div>
   );

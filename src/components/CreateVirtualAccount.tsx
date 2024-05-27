@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { InfoIcon } from "lucide-react";
+import { ReactNode, useState } from "react";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useTGBotService } from "../hooks/services/backend/useTGBotService.ts";
 import useStore from "../hooks/store/useStore.ts";
@@ -7,9 +8,14 @@ import { useSession } from "../hooks/useSession.ts";
 import { useToast } from "../hooks/useToast.tsx";
 import { logError } from "../libs/helpers.ts";
 import { ToolTip } from "./ToolTip.tsx";
+import LoaderOverlay from "./airdrop/tapoff/LoaderOverlay.tsx";
 import { Button } from "./ui/Button.tsx";
 
-export function CreateVirtualAccount() {
+export function CreateVirtualAccount({
+  loaderIcon,
+}: {
+  loaderIcon?: ReactNode;
+}) {
   const isTelegramBot = useStore((state) => state.isTelegramBot);
   const { createLinkedUser } = useTGBotService();
   const setUser = useStore((state) => state.setUser);
@@ -17,6 +23,7 @@ export function CreateVirtualAccount() {
   const { setAddress, setReady } = useConnectorContext();
   const { setAccessToken } = useSession();
   const { notifyError } = useToast();
+  const [showLoader, setShowLoader] = useState(false);
 
   const createLinkedUserMut = useMutation({
     mutationFn: createLinkedUser,
@@ -25,6 +32,7 @@ export function CreateVirtualAccount() {
   function createAccount() {
     async function doTGLinkUser() {
       try {
+        setShowLoader(true);
         const result = await createLinkedUserMut.mutateAsync({
           initData: (window as any).Telegram.WebApp.initData,
           initDataUnsafe: (window as any).Telegram.WebApp.initDataUnsafe,
@@ -34,7 +42,9 @@ export function CreateVirtualAccount() {
         setAddress(result.user.address);
         setReady(true);
         setAccessToken(result.user.address, result.token);
+        setShowLoader(false);
       } catch (error) {
+        setShowLoader(false);
         notifyError((error as Error).message);
         logError(error);
       }
@@ -46,6 +56,7 @@ export function CreateVirtualAccount() {
 
   return (
     <div className="mt-5 text-center items-center flex flex-col">
+      {showLoader && <LoaderOverlay icon={loaderIcon} />}
       <span className="text-gray-400 flex items-center gap-2">
         <span>Unable to connect?</span>
         <ToolTip tip="Virtual account is linked to your telegram account.">
