@@ -102,8 +102,8 @@ function WalletConnect({
                     </div>
                     {isTelegramBot && (
                       <div className="text-sm text-gray-300 tracking-wide my-2">
-                        Hey Player 😎, It looks like you haven't connected a
-                        wallet. Connect one to start the game.
+                        Hey 😎, it looks like you haven't connected a wallet.
+                        Connect one to start the game.
                       </div>
                     )}
                   </>
