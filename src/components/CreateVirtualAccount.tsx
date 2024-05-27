@@ -58,7 +58,10 @@ export function CreateVirtualAccount({
     <div className="mt-5 text-center items-center flex flex-col">
       {showLoader && <LoaderOverlay icon={loaderIcon} />}
       <span className="text-gray-400 flex items-center gap-2">
-        <span>Unable to connect?</span>
+        {(window as any).Telegram.WebApp.platform == "ios" && (
+          <span>Unable to connect?</span>
+        )}
+
         <ToolTip tip="A Virtual Wallet is created online and linked to your Telegram ID. The private key will be sent you and deleted from our system.">
           <InfoIcon className="w-4" />
         </ToolTip>
