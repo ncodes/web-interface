@@ -120,7 +120,7 @@ function WalletConnect({
           </ConnectWalletButton>
         </EmptyBodyCard>
 
-        <CreateVirtualAccount loaderIcon />
+        <CreateVirtualAccount loaderIcon={loaderIcon} />
       </>
     </div>
   );
