@@ -7,6 +7,7 @@ import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
+import { useToast } from "../../../hooks/useToast.tsx";
 import { cn, iOSversion } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
@@ -39,6 +40,8 @@ export function TapWar() {
   const [overheatLevelPct, setOverheatLevelPct] = useState(0);
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
   const [isPinging, setIsPinging] = useState(false);
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
+  const { simpleSuccess } = useToast();
   const [hideLoader, setHideLoader] = useState(false);
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
@@ -48,6 +51,10 @@ export function TapWar() {
 
   useEffect(() => {
     return () => {
+      if (isTelegramBot) {
+        simpleSuccess("Platform: " + (window as any).Telegram.WebApp.platform);
+      }
+
       pauseAudio(audioBgPath);
       pauseAudio(audioFirePath);
     };
