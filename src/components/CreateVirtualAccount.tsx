@@ -62,7 +62,7 @@ export function CreateVirtualAccount({
           <span>Unable to connect?</span>
         )}
 
-        <ToolTip tip="A Virtual Wallet is created online and linked to your Telegram ID. The private key will be sent you and deleted from our system. If you already have a virtual account, the existing one is used.">
+        <ToolTip tip="A Virtual Wallet is created online and linked to your Telegram ID. The private key will be sent to you and deleted from our system. If you already created a virtual account, it will be used instead.">
           <InfoIcon className="w-4" />
         </ToolTip>
       </span>
