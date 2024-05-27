@@ -211,7 +211,7 @@ export function TapWar() {
         },
       )}
     >
-      {!hideLoader && address && (
+      {!!address && !!token && !hideLoader && (
         <div className="z-30">{address && <LoaderOverlay />}</div>
       )}
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
