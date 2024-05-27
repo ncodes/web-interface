@@ -89,12 +89,12 @@ export function Header({
                   } else {
                     if (
                       confirm(`
-Virtual wallet cannot directly purchase multipliers on Telegram. 
+Virtual Wallet cannot directly purchase bonds on Telegram. 
 We will open the market in an external browser.
 
 Once open, connect your wallet and buy $BOND. 
 
-If a Virtual Wallet private key was sent to you by the bot, please connect with it. 
+If you received a Virtual Wallet key from the bot, import it into your wallet.  
 
 Do you want to proceed?`)
                     ) {
@@ -123,11 +123,12 @@ Do you want to proceed?`)
                 } else {
                   if (
                     confirm(`
-Virtual wallet cannot directly purchase multipliers on Telegram. 
+Virtual Wallet cannot directly purchase bonds on Telegram. 
 We will open the market in an external browser.
 
-Once open, connect your wallet and buy $BOND from the liquidity. 
-If a Virtual Wallet private key was sent to you by the bot, please connect with it. 
+Once open, connect your wallet and buy $BOND. 
+
+If you received a key from the TapWar bot, import it into your wallet.  
 
 Do you want to proceed?`)
                   ) {

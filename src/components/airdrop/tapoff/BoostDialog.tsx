@@ -849,12 +849,12 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                         } else {
                           if (
                             confirm(`
-Virtual wallet cannot directly purchase multipliers on Telegram. 
+Virtual Wallet cannot directly purchase multipliers on Telegram. 
 We will open the market in an external browser.
 
 Once open, connect your wallet and buy $MULTI. 
 
-If a Virtual Wallet private key was sent to you by the bot, please connect with it. 
+If you received a key from the TapWar bot, import it into your wallet.  
 
 Do you want to proceed?`)
                           ) {
