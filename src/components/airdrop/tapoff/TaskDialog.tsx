@@ -72,6 +72,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
   const [clicked, setClicked] = useState({ ...defaultState });
   const [selectedTab, setSelectedTab] = useState("socials");
   const isTelegramBot = useStore((state) => state.isTelegramBot);
+  const user = useStore((state) => state.user);
 
   useEffect(() => {
     if (!open) {
@@ -317,7 +318,8 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     </div>
                   </div>
                   <div className="px-3 md:px-5 pt-4 pb-0 flex flex-col gap-3">
-                    {!isTelegramBot && (
+                    {(!isTelegramBot ||
+                      (isTelegramBot && user?.role != "tg_user")) && (
                       <div className="flex gap-2 items-center border rounded-full px-1 pl-0.5  border-gray-800">
                         <Button
                           variant="ghost"
