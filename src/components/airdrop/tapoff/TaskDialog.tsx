@@ -1,6 +1,7 @@
 import { CheckCircle, Globe, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { XIcon } from "react-share";
+import useStore from "../../../hooks/store/useStore";
 import { useToast } from "../../../hooks/useToast";
 import { cn, formatToMoney, toDec } from "../../../libs/helpers";
 import ScrollOverflowIndicator from "../../ScrollOverflowIndicator";
@@ -70,6 +71,7 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
   const [webVistVerified, setWebVisitVerified] = useState(false);
   const [clicked, setClicked] = useState({ ...defaultState });
   const [selectedTab, setSelectedTab] = useState("socials");
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   useEffect(() => {
     if (!open) {
@@ -315,56 +317,60 @@ export function TaskDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     </div>
                   </div>
                   <div className="px-3 md:px-5 pt-4 pb-0 flex flex-col gap-3">
-                    <div className="flex gap-2 items-center border rounded-full px-1 pl-0.5  border-gray-800">
-                      <Button
-                        variant="ghost"
-                        disabled={playerInfo.isDiscordConnected}
-                        className="flex border-none flex-1 gap-2 text-left justify-start p-0 hover:bg-transparent hover:text-gray-100 hover:scale-[1.02]"
-                        onClick={() => {
-                          window.open(
-                            "https://jntl.ink/joint-discord",
-                            "_blank",
-                          );
-                        }}
-                      >
-                        <div className="rounded-full pl-2">
-                          <IconDiscord className="h-[25px] w-[25px]" />
-                        </div>
-                        <div className="text-xs xs:text-md font-medium tracking-wider">
-                          <div>
-                            Join our Discord{" "}
-                            <span className="hidden xxs:inline">Community</span>
-                          </div>
-                        </div>
-                      </Button>
-                      <div className="text-right font-light text-xs text-gray-400">
+                    {!isTelegramBot && (
+                      <div className="flex gap-2 items-center border rounded-full px-1 pl-0.5  border-gray-800">
                         <Button
-                          variant="default"
-                          size="sm"
+                          variant="ghost"
                           disabled={playerInfo.isDiscordConnected}
-                          className={cn(
-                            "xs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
-                            {
-                              "from-green-400 to-green-600":
-                                !playerInfo.isDiscordConnected,
-                              "bg-transparent text-gray-400":
-                                playerInfo.isDiscordConnected,
-                            },
-                          )}
+                          className="flex border-none flex-1 gap-2 text-left justify-start p-0 hover:bg-transparent hover:text-gray-100 hover:scale-[1.02]"
                           onClick={() => {
-                            window.open(connectDiscordLink, "_blank");
+                            window.open(
+                              "https://jntl.ink/joint-discord",
+                              "_blank",
+                            );
                           }}
                         >
-                          {playerInfo.isDiscordConnected ? (
-                            <>
-                              <CheckCircle size="20" />
-                            </>
-                          ) : (
-                            "Verify"
-                          )}
+                          <div className="rounded-full pl-2">
+                            <IconDiscord className="h-[25px] w-[25px]" />
+                          </div>
+                          <div className="text-xs xs:text-md font-medium tracking-wider">
+                            <div>
+                              Join our Discord{" "}
+                              <span className="hidden xxs:inline">
+                                Community
+                              </span>
+                            </div>
+                          </div>
                         </Button>
+                        <div className="text-right font-light text-xs text-gray-400">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            disabled={playerInfo.isDiscordConnected}
+                            className={cn(
+                              "xs:pr-3 bg-gradient-to-b border-none transition-all duration-300 hover:scale-[1.02]",
+                              {
+                                "from-green-400 to-green-600":
+                                  !playerInfo.isDiscordConnected,
+                                "bg-transparent text-gray-400":
+                                  playerInfo.isDiscordConnected,
+                              },
+                            )}
+                            onClick={() => {
+                              window.open(connectDiscordLink, "_blank");
+                            }}
+                          >
+                            {playerInfo.isDiscordConnected ? (
+                              <>
+                                <CheckCircle size="20" />
+                              </>
+                            ) : (
+                              "Verify"
+                            )}
+                          </Button>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="flex gap-2 items-center border rounded-full px-1 pl-2 border-gray-800">
                       <div className="flex flex-1 gap-2 items-center">
