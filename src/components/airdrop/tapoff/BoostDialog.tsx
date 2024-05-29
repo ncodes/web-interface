@@ -489,7 +489,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                   <div className="flex justify-center items-center mt-6 md:mt-10 mb-5 w-24 p-2 rounded-2xl bg-yellow-900/30 mx-auto">
                     <IconConflict className="fill-yellow-500 w-[50px] md:w-[70px]" />
                   </div>
-                  <div className="text-center text-sm md:text-lg p-4 md:p-10 font-extralight tracking-wider">
+                  <div className="text-center text-sm md:text-[17px] p-4 md:p-10 font-extralight tracking-wider">
                     For 20 seconds, multiply each TAP you get from one tap by
                     5x.
                   </div>
