@@ -7,6 +7,7 @@ import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
+import { useToast } from "../../../hooks/useToast.tsx";
 import { cn, iOSversion } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
@@ -40,6 +41,7 @@ export function TapWar() {
   const { info, countTaps, ping, isReady, tap } = useTapSocketService();
   const [isPinging, setIsPinging] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
+  const { simpleError } = useToast();
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
@@ -151,16 +153,16 @@ export function TapWar() {
     }
 
     const doFire = async () => {
+      setLastTapTime(moment().unix());
+
+      const iosVersion = iOSversion();
+      if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
+        setTimeout(() => {
+          playAudio(audioFirePath, false, true);
+        }, 100);
+      }
+
       try {
-        setLastTapTime(moment().unix());
-
-        const iosVersion = iOSversion();
-        if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
-          setTimeout(() => {
-            playAudio(audioFirePath, false, true);
-          }, 100);
-        }
-
         const result = await tap();
         setTaps(result.tapCount);
         setTapIncrement(result.tapIncrement);
@@ -170,8 +172,8 @@ export function TapWar() {
         const overheatLevel = (overheatLvl / maxOverheatLvl) * 100;
         setOverheatLevelPct(overheatLevel);
         setOverheatLevel(result.overheatLvl);
-      } catch (error) {
-        // do nothing
+      } catch (error: any) {
+        simpleError(error.message, { duration: 1000 });
       }
     };
 
