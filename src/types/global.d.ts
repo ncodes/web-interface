@@ -18,6 +18,7 @@ declare global {
 
     totalUnclaimedAlloc: string;
 
+    rank: number;
     points: number;
     pointsAllocs: number;
     pointsAllocsClaimed: boolean;
