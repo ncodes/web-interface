@@ -21,9 +21,11 @@ export function AirdropHeader() {
           <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
             <span>
               {user?.points ?? "0"}{" "}
-              <span className="text-gray-400">
-                ({numberToOrdinal(user?.rank)})
-              </span>
+              {user && (
+                <span className="text-gray-400">
+                  ({numberToOrdinal(user?.rank)})
+                </span>
+              )}
             </span>
             <span className="text-gray-500">
               <ToolTip tip="Your total points and rank">
