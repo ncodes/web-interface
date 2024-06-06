@@ -38,6 +38,13 @@ export function pow10(decimals: number) {
   return BigNumber.from(10).pow(decimals);
 }
 
+// numberToOrdinal returns the ordinal of a number
+export function numberToOrdinal(n) {
+  const s = ["th", "st", "nd", "rd"],
+    v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
 // pow10D returns 10^decimals as a Decimal object
 export function pow10D(decimals: number) {
   return toDec(10).pow(decimals);
