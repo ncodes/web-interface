@@ -8,7 +8,7 @@ import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { useToast } from "../../../hooks/useToast.tsx";
-import { cn, iOSversion } from "../../../libs/helpers.ts";
+import { cn, iOSversion, toDec } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { FiredCoin } from "./FiredCoin.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
@@ -92,7 +92,11 @@ export function TapWar() {
         .then((result) => {
           if (!taps) setTaps(result.tapCount);
           if (!tapIncrement) setTapIncrement(parseInt(result.tapIncrement));
-          setTaps(result.tapCount);
+
+          if (toDec(result.tapCount).gte(taps)) {
+            setTaps(result.tapCount);
+          }
+
           setPlayerInfo(result);
           setGunCount(result.rapidFire.active ? 5 : 1);
 
