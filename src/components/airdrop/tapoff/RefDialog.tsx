@@ -112,7 +112,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
             <DialogDescription className="text-gray-500 font-light px-2 py-2 text-center flex justify-center items-center gap-1">
               <IconFriends className="text-gray-100" width="20" />
               <span className="text-xl font-jersey25 text-gray-200 flex gap-2 items-center">
-                <span>{playerInfo.claimableReferrals} Unsed</span>
+                <span>{playerInfo.claimableReferrals} Unused</span>
                 <ToolTip tip="Number of your referrals that can be used to claim bonus TAPs">
                   <InfoIcon className="w-4" />
                 </ToolTip>
