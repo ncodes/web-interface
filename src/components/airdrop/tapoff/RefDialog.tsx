@@ -1,5 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, Copy, Link, Share, Share2, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Copy,
+  InfoIcon,
+  Link,
+  Share,
+  Share2,
+  X,
+} from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
@@ -10,6 +18,7 @@ import { useReferralService } from "../../../hooks/services/backend/useReferralS
 import useStore from "../../../hooks/store/useStore";
 import { useToast } from "../../../hooks/useToast";
 import { cn } from "../../../libs/helpers";
+import { ToolTip } from "../../ToolTip";
 import EmojiAvatar from "../../avatar/EmojiAvatar";
 import { AvatarSize } from "../../avatar/useAvatar";
 import IconFriends from "../../icons/IconFriends";
@@ -102,8 +111,11 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
             </DialogTitle>
             <DialogDescription className="text-gray-500 font-light px-2 py-2 text-center flex justify-center items-center gap-1">
               <IconFriends className="text-gray-100" width="20" />
-              <span className="text-xl font-jersey25 text-gray-200">
-                {getReferredInfo.data?.numReferred} Referrals
+              <span className="text-xl font-jersey25 text-gray-200 flex gap-2 items-center">
+                <span>{playerInfo.claimableReferrals} Unsed</span>
+                <ToolTip tip="Number of your referrals that can be used to claim bonus TAPs">
+                  <InfoIcon className="w-4" />
+                </ToolTip>
               </span>
             </DialogDescription>
           </DialogHeader>
@@ -218,7 +230,7 @@ export function RefDialog({ playerInfo }: { playerInfo: InfoResult }) {
               <>
                 <div className="px-5 pt-2 pb-0">
                   <Label className="text-gray-400 font-jersey25 text-xl tracking-wider">
-                    My Referrals
+                    My Referrals ({getReferredInfo.data?.numReferred})
                   </Label>
                 </div>
 
