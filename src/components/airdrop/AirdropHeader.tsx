@@ -1,7 +1,7 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
-import { formatToHighDenom, numberToOrdinal } from "../../libs/helpers.ts";
+import { formatToHighDenom } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
 
 export function AirdropHeader() {
@@ -21,11 +21,11 @@ export function AirdropHeader() {
           <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
             <span>
               {user?.points ?? "0"}{" "}
-              {user && (
+              {/* {user && (
                 <span className="text-gray-400">
                   ({numberToOrdinal(user?.rank)})
                 </span>
-              )}
+              )} */}
             </span>
             <span className="text-gray-500">
               <ToolTip tip="Your total points and rank">
