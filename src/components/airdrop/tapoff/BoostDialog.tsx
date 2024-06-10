@@ -320,7 +320,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
             <ScrollOverflowIndicator side="bottom">
               <ScrollArea
                 type="scroll"
-                className="h-[300px] xxs:h-[310px] md:h-[300px]"
+                className="h-[300px] xxs:h-[310px] md:h-[240px]"
               >
                 <div className="[&_button]:w-full space-y-2  p-1 m-2 mt-1 overflow-auto">
                   <Button
