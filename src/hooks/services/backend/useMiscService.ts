@@ -21,6 +21,10 @@ export interface GetProtocolFeesParams {
   network: string;
 }
 
+export interface GetPointParams {
+  name: string;
+}
+
 export interface GetTokenInfoParams {
   network?: string;
   address: string;
@@ -93,6 +97,32 @@ export function useMiscService() {
       const resp = await axios({
         method: "get",
         url: `${apiUrl}/v1/misc/${network}/protocol-fees`,
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
+   * Get point value
+   * @param ctx The query function context
+   * @returns
+   */
+  async function getPoint(
+    ctx: QueryFunctionContext<[string, GetPointParams]>,
+  ): Promise<number> {
+    try {
+      const [, params] = ctx.queryKey;
+      const { name } = params;
+      const headers = {};
+
+      const apiUrl = getChainInfo().apiUrl;
+      const resp = await axios({
+        method: "get",
+        url: `${apiUrl}/v1/misc/point/${name}`,
         headers,
       });
 
@@ -186,6 +216,7 @@ export function useMiscService() {
     getCryptoRate,
     getSynthRate,
     getProtocolFees,
+    getPoint,
     getTokenInfo,
     getPointsPerEnergon,
     getContractParams,
