@@ -7,8 +7,6 @@ import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
 import { TapWarTabContent } from "../components/airdrop/tapoff/TapWarTabContent.tsx";
 import { imageList } from "../components/airdrop/tapoff/contants.ts";
-import { WarBondTabContent } from "../components/airdrop/warbond/WarBondTabContent.tsx";
-import IconBattle from "../components/icons/IconBattle.tsx";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
 import IconSpaceship from "../components/icons/IconSpaceship.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
@@ -79,7 +77,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 <IconSpaceship width="25" className="text-yellow-500" />
                 <span>TapWar</span>
               </TabsTrigger>
-              <TabsTrigger
+              {/* <TabsTrigger
                 value="warbond"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
@@ -88,7 +86,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
               >
                 <IconBattle width="25" className="text-yellow-500" />
                 <span>WarBond</span>
-              </TabsTrigger>
+              </TabsTrigger> */}
             </div>
             <div className="flex shrink-0 items-center justify-end">
               {loc.pathname != "/energon" &&
@@ -107,7 +105,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
       </ScrollOverflowIndicator>
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
       {currentTab == "tap" && <TapWarTabContent />}
-      {currentTab == "warbond" && <WarBondTabContent />}
+      {/* {currentTab == "warbond" && <WarBondTabContent />} */}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
       {/* {currentTab == "energon" && <EnergonConversionTabContent />} */}
       {/* {currentTab == "nft" && <NFTConverstionTabContent />} */}

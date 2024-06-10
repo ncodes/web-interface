@@ -9,7 +9,6 @@ import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx
 import useStore from "../hooks/store/useStore.ts";
 import { useSession } from "../hooks/useSession.ts";
 import { NavPageLink } from "./NavPageLink.tsx";
-import IconBattle from "./icons/IconBattle.tsx";
 import IconCoinGold from "./icons/IconCoinGold.tsx";
 import IconCoinStack2 from "./icons/IconCoinStack2.tsx";
 import IconDispute from "./icons/IconDispute.tsx";
@@ -144,7 +143,7 @@ export function Navigation() {
             to="/tapwar"
           />
         </li>
-        <li>
+        {/* <li>
           <NavPageLink
             icon={<IconBattle width="25" className="text-yellow-500" />}
             iconClassName="w-[25px]"
@@ -157,7 +156,7 @@ export function Navigation() {
             activeIconClassName="text-yellow-500"
             to="/warbond"
           />
-        </li>
+        </li> */}
       </ul>
       <div className="hidden mt-[30px] w-[240px] ">
         {!connected && <ConnectWalletButton />}
