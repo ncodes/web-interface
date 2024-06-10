@@ -149,10 +149,10 @@ export function InfoDialog({ type }: { type: string }) {
                         <li>
                           <b>Hyper Cool:</b> Recover from overheat faster
                         </li>
-                        <li>
+                        {/* <li>
                           <b>Tap Multiplier:</b> Buy multipliers to increase
                           your overall TAPs.
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </li>
