@@ -12,7 +12,7 @@ export function AirdropDashboard() {
   const { hasAccessToken } = useSession();
 
   return (
-    <div className="w-full flex flex-col flex-1 relative bg-black/80 ">
+    <div className="w-full flex flex-col flex-1 relative bg-black/80 rounded-b-3xl">
       <AirdropHeader />
 
       {address && hasAccessToken(address) && (
