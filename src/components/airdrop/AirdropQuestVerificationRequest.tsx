@@ -5,6 +5,7 @@ import { ReactNode, useState } from "react";
 import countryList from "react-select-country-list";
 import { useAirdropService } from "../../hooks/services/backend/useAirdropService.ts";
 import { useToast } from "../../hooks/useToast.tsx";
+import { formatToMoney } from "../../libs/helpers.ts";
 import Input2 from "../Input2.tsx";
 import Select2 from "../Select2.tsx";
 import IconSpinner from "../icons/IconSpinner.tsx";
@@ -430,8 +431,8 @@ export function AirdropQuestVerificationRequest({
               Complete {quest.count} Swap{quest.count > 1 ? "s" : ""}
             </DialogTitle>
             <DialogDescription className="text-gray-400 font-light">
-              Receive <b>{quest.engagePoints}</b> points when you complete{" "}
-              {quest.count} swap{quest.count > 1 ? "s" : ""} on the{" "}
+              Receive <b>{formatToMoney(quest.engagePoints)}</b> points when you
+              complete {quest.count} swap{quest.count > 1 ? "s" : ""} on the{" "}
               {quest.market.base}/{quest.market.quote} liquidity.
             </DialogDescription>
           </DialogHeader>

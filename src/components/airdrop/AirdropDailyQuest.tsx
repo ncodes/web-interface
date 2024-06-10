@@ -3,6 +3,7 @@ import { AlertTriangle } from "lucide-react";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
 import { useAirdropService } from "../../hooks/services/backend/useAirdropService";
 import useStore from "../../hooks/store/useStore";
+import { formatToMoney } from "../../libs/helpers";
 import { Button } from "../ui/Button";
 import { AirdropApplyLuckyCode } from "./AirdropApplyLuckyCode";
 import { AirdropQuestVerificationRequest } from "./AirdropQuestVerificationRequest";
@@ -59,7 +60,7 @@ export function AirdropDailyQuest() {
                             </a>
                           </span>
                           <span className="font-light text-sm text-green-400">
-                            +{quest.engagePoints} pts
+                            +{formatToMoney(quest.engagePoints)} pts
                           </span>
                         </div>
                       </div>
@@ -102,7 +103,7 @@ export function AirdropDailyQuest() {
                             )}
                           </div>
                           <span className="font-light text-sm text-green-400">
-                            +{quest.engagePoints} pts
+                            +{formatToMoney(quest.engagePoints)} pts
                           </span>
                         </div>
                       </div>
@@ -129,7 +130,7 @@ export function AirdropDailyQuest() {
                             </div>
                           </div>
                           <span className="font-light text-sm text-green-400">
-                            +{quest.engagePoints} pts
+                            +{formatToMoney(quest.engagePoints)} pts
                           </span>
                         </div>
                       </div>
@@ -156,7 +157,7 @@ export function AirdropDailyQuest() {
                             </div>
                           </div>
                           <span className="font-light text-sm text-green-400">
-                            +{quest.engagePoints} pts
+                            +{formatToMoney(quest.engagePoints)} pts
                           </span>
                         </div>
                       </div>
@@ -180,7 +181,7 @@ export function AirdropDailyQuest() {
                             <div>Register for Joint Private Sale</div>
                           </div>
                           <span className="font-light text-sm text-green-400">
-                            +{quest.engagePoints} pts
+                            +{formatToMoney(quest.engagePoints)} pts
                           </span>
                         </div>
                       </div>
@@ -215,7 +216,7 @@ export function AirdropDailyQuest() {
                             </div>
                           </div>
                           <span className="font-light text-sm text-green-400">
-                            +{quest.engagePoints} pts
+                            +{formatToMoney(quest.engagePoints)} pts
                           </span>
                         </div>
                       </div>
