@@ -431,7 +431,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                     </div>
                   </Button>
 
-                  <Button
+                  {/* <Button
                     variant="ghost"
                     className="flex-1 block p-0 m-0 h-auto hover:bg-transparent border-none rounded-none"
                     onClick={() => {
@@ -459,7 +459,7 @@ export function BoostDialog({ playerInfo }: { playerInfo: InfoResult }) {
                         </span>
                       </div>
                     </div>
-                  </Button>
+                  </Button> */}
                 </div>
               </ScrollArea>
             </ScrollOverflowIndicator>
