@@ -25,12 +25,11 @@ import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { useLiquidityService } from "../hooks/services/backend/useLiquidityService.ts";
 import { useMarketService } from "../hooks/services/backend/useMarketService.ts";
-import { useMiscService } from "../hooks/services/backend/useMiscService.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useMounted from "../hooks/useMounted.ts";
 import { RequestError } from "../libs/RequestError.ts";
 import { getPaginationInfo } from "../libs/api_utils.ts";
-import { formatToMoney, isEqlStr } from "../libs/helpers.ts";
+import { isEqlStr } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
 import Layout from "./Layout.tsx";
 
@@ -42,7 +41,7 @@ function MarketTabs() {
   const { getChainInfo, address } = useConnectorContext();
   const { getMarket } = useMarketService();
   const { listLiquidities } = useLiquidityService();
-  const { getPoint } = useMiscService();
+  // const { getPoint } = useMiscService();
   const { id } = useParams();
   const [offset, setOffset] = useState(0);
   const [limit] = useState(10);
@@ -79,17 +78,17 @@ function MarketTabs() {
     refetchInterval: 10000,
   });
 
-  const liqPointQuery = useQuery({
-    queryKey: ["getPoint", { name: `liq:${market.data?.address}` }],
-    queryFn: getPoint,
-    enabled: market.data != undefined,
-  });
-
-  const swapPointQuery = useQuery({
-    queryKey: ["getPoint", { name: `swap:${market.data?.address}` }],
-    queryFn: getPoint,
-    enabled: market.data != undefined,
-  });
+  // const liqPointQuery = useQuery({
+  //   queryKey: ["getPoint", { name: `liq:${market.data?.address}` }],
+  //   queryFn: getPoint,
+  //   enabled: market.data != undefined,
+  // });
+  //
+  // const swapPointQuery = useQuery({
+  //   queryKey: ["getPoint", { name: `swap:${market.data?.address}` }],
+  //   queryFn: getPoint,
+  //   enabled: market.data != undefined,
+  // });
 
   useEffect(() => {
     if (market.isLoading || market.isRefetching)
@@ -142,30 +141,30 @@ function MarketTabs() {
         value="markets"
         className="relative p-3 px-0 mt-0 pt-0 pb-0 gap-3 flex flex-col flex-1"
       >
-        {liqPointQuery.data && swapPointQuery.data && (
-          <div className="flex flex-col md:flex-row m-3 gap-2 animate-pulse hover:animate-none">
-            <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">
-              <span className="relative top-0.5">🎁</span>
-              <span>
-                Add liquidity to earn{" "}
-                <b className="text-yellow-300">
-                  {formatToMoney(liqPointQuery?.data)}
-                </b>{" "}
-                points / {market.data?.base}
-              </span>
-            </div>
-            <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">
-              <span className="relative top-0.5">🎁</span>
-              <span>
-                Swap to earn{" "}
-                <b className="text-yellow-300">
-                  {formatToMoney(swapPointQuery?.data)}
-                </b>{" "}
-                points / {market.data?.base}
-              </span>
-            </div>
-          </div>
-        )}
+        {/*{liqPointQuery.data && swapPointQuery.data && (*/}
+        {/*  <div className="flex flex-col md:flex-row m-3 gap-2 animate-pulse hover:animate-none">*/}
+        {/*    <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">*/}
+        {/*      <span className="relative top-0.5">🎁</span>*/}
+        {/*      <span>*/}
+        {/*        Add liquidity to earn{" "}*/}
+        {/*        <b className="text-yellow-300">*/}
+        {/*          {formatToMoney(liqPointQuery?.data)}*/}
+        {/*        </b>{" "}*/}
+        {/*        points / {market.data?.base}*/}
+        {/*      </span>*/}
+        {/*    </div>*/}
+        {/*    <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">*/}
+        {/*      <span className="relative top-0.5">🎁</span>*/}
+        {/*      <span>*/}
+        {/*        Swap to earn{" "}*/}
+        {/*        <b className="text-yellow-300">*/}
+        {/*          {formatToMoney(swapPointQuery?.data)}*/}
+        {/*        </b>{" "}*/}
+        {/*        points / {market.data?.base}*/}
+        {/*      </span>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*)}*/}
 
         {market.data && (
           <Helmet>

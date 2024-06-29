@@ -18,11 +18,9 @@ import {
 } from "../components/ui/dropdown-menu.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
-import { useMiscService } from "../hooks/services/backend/useMiscService.ts";
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useMounted from "../hooks/useMounted.ts";
-import { formatToMoney } from "../libs/helpers.ts";
 import { CreateOfferWrapper } from "./CreateOfferWrapper.tsx";
 import Layout from "./Layout.tsx";
 import { SwapSheetWrapper } from "./SwapSheetWrapper.tsx";
@@ -45,7 +43,7 @@ function LiquidityPage({
   const { address, getChainInfo } = useConnectorContext();
   const user = useStore((state) => state.user);
   const { countUnread } = useOfferService();
-  const { getPoint } = useMiscService();
+  // const { getPoint } = useMiscService();
   const mounted = useMounted(1000);
   const isVirtualWallet = useStore((state) => state.isVirtualWallet);
   const restricted = useStore((state) => state.restricted);
@@ -64,11 +62,11 @@ function LiquidityPage({
     enabled: mounted && !!address && !!user,
   });
 
-  const swapPointQuery = useQuery({
-    queryKey: ["getPoint", { name: `swap:${liquidity?.market?.address}` }],
-    queryFn: getPoint,
-    enabled: liquidity?.market != undefined,
-  });
+  // const swapPointQuery = useQuery({
+  //   queryKey: ["getPoint", { name: `swap:${liquidity?.market?.address}` }],
+  //   queryFn: getPoint,
+  //   enabled: liquidity?.market != undefined,
+  // });
 
   return (
     <Tabs
@@ -151,20 +149,20 @@ function LiquidityPage({
       </TabsList>
       {currentTab == "liquidity" && (
         <>
-          {swapPointQuery.data && (
-            <div className="flex flex-col md:flex-row m-3 gap-2 mb-1 animate-pulse hover:animate-none">
-              <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">
-                <span className="relative top-0.5">🎁</span>
-                <span>
-                  Swap to earn{" "}
-                  <b className="text-yellow-300">
-                    {formatToMoney(swapPointQuery?.data)}
-                  </b>{" "}
-                  points / {liquidity?.market?.base}
-                </span>
-              </div>
-            </div>
-          )}
+          {/*{swapPointQuery.data && (*/}
+          {/*  <div className="flex flex-col md:flex-row m-3 gap-2 mb-1 animate-pulse hover:animate-none">*/}
+          {/*    <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">*/}
+          {/*      <span className="relative top-0.5">🎁</span>*/}
+          {/*      <span>*/}
+          {/*        Swap to earn{" "}*/}
+          {/*        <b className="text-yellow-300">*/}
+          {/*          {formatToMoney(swapPointQuery?.data)}*/}
+          {/*        </b>{" "}*/}
+          {/*        points / {liquidity?.market?.base}*/}
+          {/*      </span>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*)}*/}
           <LiquidityTabContent setLiquidity={setLiquidity} />
         </>
       )}
