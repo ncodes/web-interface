@@ -42,7 +42,7 @@ export default function RestrictedLocationBlocker() {
       network: string,
       marketAddress: string,
       countryCode: string,
-      scope = RestrictScope.MARKET,
+      scope = RestrictScope.MARKET
     ) => {
       isDisallowedForMarket(network, marketAddress, countryCode).then(
         (restricted) => {
@@ -53,7 +53,7 @@ export default function RestrictedLocationBlocker() {
             isDisallowedForInteractiveMarket(
               network,
               marketAddress,
-              countryCode,
+              countryCode
             ).then((restricted) => {
               setRestricted(restricted);
               setRestrictedScope(RestrictScope.MARKET);
@@ -63,12 +63,12 @@ export default function RestrictedLocationBlocker() {
                   (allowed) => {
                     setRestricted(!allowed);
                     setRestrictedScope(RestrictScope.MARKET_PERM);
-                  },
+                  }
                 );
               }
             });
           }
-        },
+        }
       );
     };
 
@@ -141,9 +141,16 @@ export function RestrictedLocationNotice({
         {restrictedScope === RestrictScope.MARKET && (
           <>
             <span>
-              On this Interface, this market is not available to people or
-              organizations who are residents of, or are located, incorporated
-              or have a registered agent in the U.S or a restricted territory.
+              This market is not available to people or organizations who are
+              residents of, or are located, incorporated or have a registered
+              agent in the U.S or a{" "}
+              <a
+                href="https://docs.joint.exchange/others/prohibited-jurisdictions"
+                target="_blank"
+              >
+                restricted territory
+              </a>
+              .
             </span>
           </>
         )}

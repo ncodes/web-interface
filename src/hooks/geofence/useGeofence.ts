@@ -24,7 +24,7 @@ export function useGeofence() {
   async function isDisallowedForInteractiveMarket(
     network: string,
     marketAddress: string,
-    countryCode: string,
+    countryCode: string
   ) {
     const disallowedCountries = import.meta.env
       .VITE_GF_DISALLOW_INTERACTIVE_MKT;
@@ -49,7 +49,7 @@ export function useGeofence() {
   async function isDisallowedForMarket(
     network: string,
     marketAddress: string,
-    countryCode: string,
+    countryCode: string
   ) {
     const disallowedCountries: string =
       import.meta.env.VITE_GF_DISALLOW_MKT || "";
@@ -81,14 +81,14 @@ export function useGeofence() {
   async function isAllowedForMarket(
     network: string,
     marketAddress: string,
-    userAddress: string,
+    userAddress: string
   ) {
     const allowList = MarketsAllowlist;
     const marketKey = `${network}_${marketAddress}`;
     if (!allowList || !allowList[marketKey]) return true;
     return (
       (allowList[marketKey] as string[]).find(
-        (addr) => addr.toLowerCase() === userAddress.toLowerCase(),
+        (addr) => addr.toLowerCase() === userAddress.toLowerCase()
       ) != null
     );
   }
