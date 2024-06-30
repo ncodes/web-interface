@@ -52,7 +52,7 @@ export function GeneralTab(props: { address: string }) {
     if (!netInfo || !netInfo.wrappedTokenInfo.address) return;
     const bal = await getTokenBalance(
       netInfo.wrappedTokenInfo.address,
-      address,
+      address
     );
     setWrappedBalance(bal);
   }
@@ -84,7 +84,9 @@ export function GeneralTab(props: { address: string }) {
                     balance={formatToHighDenom(nativeBalance)}
                   >
                     <NativeTokenWrapper
-                      title={`Wrap to ${getChainInfo().wrappedTokenInfo?.symbol}`}
+                      title={`Wrap to ${
+                        getChainInfo().wrappedTokenInfo?.symbol
+                      }`}
                       curBalance={nativeBalance}
                       onDone={() => {
                         fetchNativeBalance();
@@ -108,7 +110,7 @@ export function GeneralTab(props: { address: string }) {
                     />
                   </BalanceCard>
                   <BalanceCard
-                    symbol="JOIN"
+                    symbol="tJOIN"
                     balance={formatToHighDenom(p2pBalance)}
                   />
                 </div>
