@@ -1,7 +1,7 @@
 export function IDORoundAdvert() {
   return (
     <div className="hidden md:block">
-      <a href="">
+      <a href="https://jntl.ink/ido-info">
         <img
           alt="IDO Round 1"
           src="/images/upcoming-ido.png"
