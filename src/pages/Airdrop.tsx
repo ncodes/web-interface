@@ -15,6 +15,7 @@ import useStore from "../hooks/store/useStore.ts";
 import useImagePreloader from "../hooks/useImagePreloader.ts";
 import { cn } from "../libs/helpers.ts";
 import Layout from "./Layout.tsx";
+import { IDORoundAdvert } from "@/pages/IDORoundAdvert.tsx";
 
 function AirdropPage({ defaultTab }: { defaultTab?: string }) {
   useImagePreloader(imageList);
@@ -53,7 +54,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
           <TabsList
             className={cn(
               "bg-card-background flex justify-start w-full items-center border-b border-modal-border",
-              { "rounded-t-3xl": !isTelegramBot },
+              { "rounded-t-3xl": !isTelegramBot }
             )}
           >
             <div className="flex flex-1 gap-4 w-full items-center px-1 py-2 pt-0">
@@ -103,6 +104,9 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
           </TabsList>
         </ScrollAreaHorizontal>
       </ScrollOverflowIndicator>
+
+      {currentTab != "tap" && <IDORoundAdvert />}
+
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
       {currentTab == "tap" && <TapWarTabContent />}
       {/* {currentTab == "warbond" && <WarBondTabContent />} */}
