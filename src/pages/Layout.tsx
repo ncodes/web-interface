@@ -257,9 +257,9 @@ export default function Layout({
 
   // Determine duration to wait before reporting online status.
   function determineOnlineStatusReportDelay() {
-    if (location.pathname.match(/\/swap\/([0-9]+)/)) return 30000;
-    if (location.pathname.match(/\/offer\/([0-9]+)/)) return 30000;
-    return 60000;
+    if (location.pathname.match(/\/swap\/([0-9]+)/)) return 60000;
+    if (location.pathname.match(/\/offer\/([0-9]+)/)) return 60000;
+    return 120_000;
   }
 
   // Check native NFT ownership.
