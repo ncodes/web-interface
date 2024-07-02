@@ -37,7 +37,7 @@ export function UnreadMessageCount({
     ],
     queryFn: countNotifications,
     enabled: !!address && hasAccessToken(address) && !!user,
-    refetchInterval: 10000,
+    refetchInterval: 120_000,
   });
 
   const markAsReadMutation = useMutation({
