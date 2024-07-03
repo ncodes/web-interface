@@ -203,7 +203,7 @@ function MarketTabs() {
             hidden: !market.data,
           })}
         >
-          <h1 className="p-5 py-3 pb-0 text-xl">Liquidity</h1>
+          <h1 className="p-5 py-3 pb-0 text-xl">Liquidities</h1>
           {!liquidities?.isLoading &&
             liquidities.data?.liquidities &&
             liquidities.data?.liquidities?.length > 0 && (
