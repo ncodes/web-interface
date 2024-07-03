@@ -16,7 +16,6 @@ import {
   approxNumber,
   cleanBadgeName,
   formatToHighDenom,
-  humanizeDur,
   isMerchant,
   shortenAddress,
 } from "../../libs/helpers.ts";
@@ -147,7 +146,7 @@ export function LiquidityRow({
         const canTrigger = e.target.getAttribute("data-click-trigger");
         if (canTrigger && canTrigger == "1" && !noFocus) {
           navigate(
-            `/liquidity/${liquidity.marketAddress}/${liquidity.provider}/${liquidity.lid}`,
+            `/liquidity/${liquidity.marketAddress}/${liquidity.provider}/${liquidity.lid}`
           );
         }
       }}
@@ -159,7 +158,7 @@ export function LiquidityRow({
           {
             "hover:border-chinese-green cursor-pointer": !noFocus,
           },
-          className,
+          className
         )}
       >
         <div className="flex flex-col md:flex-row" data-click-trigger="1">
@@ -237,7 +236,9 @@ export function LiquidityRow({
                       )}
                       {!liquidity.online && (
                         <ToolTip
-                          tip={`Last Seen: ${moment(liquidity.lastTimeOnline).fromNow()}`}
+                          tip={`Last Seen: ${moment(
+                            liquidity.lastTimeOnline
+                          ).fromNow()}`}
                         >
                           <span className="flex items-center gap-1 text-gray-400">
                             <span className="h-2 w-2 rounded-full bg-gray-400"></span>
@@ -260,7 +261,7 @@ export function LiquidityRow({
                           toggleOpenState(
                             "reviewSheet",
                             undefined,
-                            liquidity.provider,
+                            liquidity.provider
                           );
                         }}
                         className="text-blue-200 p-0 h-auto text-xs font-light hover:text-chinese-green/80 hover:underline decoration-dashed decoration-1 underline-offset-4 -mt-1"
@@ -371,7 +372,7 @@ export function LiquidityRow({
                           liquidity.market.quoteDecimals,
                           undefined,
                           undefined,
-                          99999999,
+                          99999999
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.priceUsd} />
@@ -389,10 +390,24 @@ export function LiquidityRow({
                           liquidity.market.baseDecimals,
                           undefined,
                           undefined,
-                          99999999,
+                          99999999
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.amountUsd} />
+                    </span>
+                  </InfoCard>
+                  <InfoCard
+                    title={`Swapped (${liquidity.base})`}
+                    tip={`Total ${liquidity.base} swapped`}
+                  >
+                    <span
+                      className="text-gray-200 text-sm"
+                      data-click-trigger="1"
+                    >
+                      {formatToHighDenom(
+                        liquidity.amountSwapped,
+                        liquidity.market.baseDecimals
+                      )}
                     </span>
                   </InfoCard>
                   <InfoCard
@@ -404,7 +419,7 @@ export function LiquidityRow({
                       <span className="text-gray-200">
                         {formatToHighDenom(
                           liquidity.minSwap,
-                          liquidity.market.baseDecimals,
+                          liquidity.market.baseDecimals
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.minSwapUsd} />
@@ -420,31 +435,31 @@ export function LiquidityRow({
                       <span className="text-gray-200">
                         {formatToHighDenom(
                           liquidity.maxSwap,
-                          liquidity.market.baseDecimals,
+                          liquidity.market.baseDecimals
                         )}
                       </span>
                       <USDAmountToolTip v={liquidity.maxSwapUsd} />
                     </span>
                   </InfoCard>
-                  <InfoCard
-                    title={`Payment Time`}
-                    tip={`The duration payment is expected to be made`}
-                  >
-                    <span
-                      className="text-gray-200 text-sm"
-                      data-click-trigger="1"
-                    >
-                      {humanizeDur(liquidity.timeToPay)}
-                    </span>
-                  </InfoCard>
-                  <InfoCard
-                    title={`24hrs Volume`}
-                    tip={`The volume of ${liquidity.base} traded in the last 24hrs`}
-                  >
-                    <span className="text-gray-200">
-                      ${approxNumber(parseFloat(liquidity.volume24h), 3)}
-                    </span>
-                  </InfoCard>
+                  {/*<InfoCard*/}
+                  {/*  title={`Payment Time`}*/}
+                  {/*  tip={`The duration payment is expected to be made`}*/}
+                  {/*>*/}
+                  {/*  <span*/}
+                  {/*    className="text-gray-200 text-sm"*/}
+                  {/*    data-click-trigger="1"*/}
+                  {/*  >*/}
+                  {/*    {humanizeDur(liquidity.timeToPay)}*/}
+                  {/*  </span>*/}
+                  {/*</InfoCard>*/}
+                  {/*<InfoCard*/}
+                  {/*  title={`24hrs Volume`}*/}
+                  {/*  tip={`The volume of ${liquidity.base} traded in the last 24hrs`}*/}
+                  {/*>*/}
+                  {/*  <span className="text-gray-200">*/}
+                  {/*    ${approxNumber(parseFloat(liquidity.volume24h), 3)}*/}
+                  {/*  </span>*/}
+                  {/*</InfoCard>*/}
                   <InfoCard
                     title={`Total Swaps`}
                     tip={`The total number of swaps this liquidity has completed`}
@@ -453,22 +468,26 @@ export function LiquidityRow({
                       {liquidity.totalSwaps}
                     </span>
                   </InfoCard>
-                  <InfoCard
-                    title={`Open Disputes`}
-                    tip={`The number of open disputes for this liquidity`}
-                  >
-                    <span className="text-gray-200" data-click-trigger="1">
-                      {liquidity.openDisputes}
-                    </span>
-                  </InfoCard>
-                  <InfoCard
-                    title={`Total Disputes`}
-                    tip={`The total number of disputes started for this liquidity`}
-                  >
-                    <span className="text-gray-200" data-click-trigger="1">
-                      {liquidity.totalDisputes}
-                    </span>
-                  </InfoCard>
+                  {!liquidity.market.instant && (
+                    <>
+                      <InfoCard
+                        title={`Open Disputes`}
+                        tip={`The number of open disputes for this liquidity`}
+                      >
+                        <span className="text-gray-200" data-click-trigger="1">
+                          {liquidity.openDisputes}
+                        </span>
+                      </InfoCard>
+                      <InfoCard
+                        title={`Total Disputes`}
+                        tip={`The total number of disputes started for this liquidity`}
+                      >
+                        <span className="text-gray-200" data-click-trigger="1">
+                          {liquidity.totalDisputes}
+                        </span>
+                      </InfoCard>
+                    </>
+                  )}
                 </div>
               </ScrollAreaHorizontal>
             </ScrollOverflowIndicator>
@@ -720,7 +739,7 @@ export function LiquidityRow({
                   <span
                     className={cn(
                       "px-2 py-3 outline-0 ring-0 flex gap-1  items-center hover:scale-x-105 transition-all duration-100 hover:bg-transparent hover:text-chinese-green",
-                      { "scale-x-105 text-chinese-green": moreMenuOpen },
+                      { "scale-x-105 text-chinese-green": moreMenuOpen }
                     )}
                   >
                     <DotsVerticalIcon />
