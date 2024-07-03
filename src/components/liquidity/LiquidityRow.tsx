@@ -154,7 +154,7 @@ export function LiquidityRow({
       <div
         data-click-trigger="1"
         className={cn(
-          "border bg-card-background border-card-border transition-all duration-300 border-b-gray-600 rounded-xl",
+          "border bg-card-background xborder-card-border border-chinese-green  transition-all duration-300 xborder-b-gray-600 rounded-xl",
           {
             "hover:border-chinese-green cursor-pointer": !noFocus,
           },
@@ -721,7 +721,7 @@ export function LiquidityRow({
                   variant="link"
                   rounded="lg"
                   scale="sm"
-                  className="text-sm px-4 text-gray-900 flex items-center gap-1 bg-chinese-green  h-8 mx-1 lg:rounded-br-lg"
+                  className="text-sm animate-pulse hover:animate-none duration-3000 px-4 text-gray-900 flex items-center gap-1 bg-chinese-green  h-8 mx-1 lg:rounded-br-lg"
                   onClick={() => setOpenSwapSheet(true)}
                 >
                   Swap
