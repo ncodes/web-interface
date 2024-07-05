@@ -32,7 +32,6 @@ import { getPaginationInfo } from "../libs/api_utils.ts";
 import { isEqlStr } from "../libs/helpers.ts";
 import { cn } from "../libs/utils.ts";
 import Layout from "./Layout.tsx";
-import { IDORoundAdvert } from "@/pages/IDORoundAdvert.tsx";
 
 function MarketTabs() {
   const [openFilterSheet, setOpenFilterSheet] = useState(false);
@@ -141,8 +140,6 @@ function MarketTabs() {
           )}
         </div>
       </TabsList>
-
-      <IDORoundAdvert />
 
       {/* Tab Content */}
       <TabsContent

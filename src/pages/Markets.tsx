@@ -22,7 +22,6 @@ import {
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import Layout from "./Layout.tsx";
-import { IDORoundAdvert } from "@/pages/IDORoundAdvert.tsx";
 
 function MarketTabs({ defaultTab }: { defaultTab?: string }) {
   const { address } = useConnectorContext();
@@ -131,7 +130,6 @@ function MarketTabs({ defaultTab }: { defaultTab?: string }) {
           )}
         </div>
       </TabsList>
-      <IDORoundAdvert />
       {currentTab == "markets" && <MarketsTabContent />}
       {currentTab == "my-markets" && <MyMarketsTabContent />}
       {currentTab == "watched-markets" && <WatchedMarketContent />}

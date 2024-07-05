@@ -24,7 +24,6 @@ import useMounted from "../hooks/useMounted.ts";
 import { CreateOfferWrapper } from "./CreateOfferWrapper.tsx";
 import Layout from "./Layout.tsx";
 import { SwapSheetWrapper } from "./SwapSheetWrapper.tsx";
-import { IDORoundAdvert } from "@/pages/IDORoundAdvert.tsx";
 
 function LiquidityPage({
   defaultTab,
@@ -148,8 +147,6 @@ function LiquidityPage({
           </DropdownMenu>
         </div>
       </TabsList>
-
-      <IDORoundAdvert />
 
       {currentTab == "liquidity" && (
         <>

@@ -15,7 +15,6 @@ import useStore from "../hooks/store/useStore.ts";
 import useImagePreloader from "../hooks/useImagePreloader.ts";
 import { cn } from "../libs/helpers.ts";
 import Layout from "./Layout.tsx";
-import { IDORoundAdvert } from "@/pages/IDORoundAdvert.tsx";
 
 function AirdropPage({ defaultTab }: { defaultTab?: string }) {
   useImagePreloader(imageList);
@@ -104,8 +103,6 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
           </TabsList>
         </ScrollAreaHorizontal>
       </ScrollOverflowIndicator>
-
-      {currentTab != "tap" && <IDORoundAdvert />}
 
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
       {currentTab == "tap" && <TapWarTabContent />}
