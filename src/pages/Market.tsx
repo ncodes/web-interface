@@ -58,11 +58,6 @@ function MarketTabs() {
     enabled: mounted && !!id,
   });
 
-  const disableAddLiq = isEqlStr(
-    import.meta.env.VITE_DISABLE_ADD_LIQ || "",
-    market.data?.address
-  );
-
   const liquidities = useQuery({
     queryKey: [
       "getLiquidities",
@@ -126,7 +121,7 @@ function MarketTabs() {
           </ScrollOverflowIndicator>
         </ScrollAreaHorizontal>
         <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
-          {!restricted && !isVirtualWallet && !disableAddLiq && (
+          {!restricted && !isVirtualWallet && (
             <Button
               size="sm"
               className="flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
