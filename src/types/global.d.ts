@@ -17,6 +17,7 @@ declare global {
     presaleApproved: boolean;
 
     totalUnclaimedAlloc: string;
+    tapScore: string;
 
     rank: number;
     points: number;

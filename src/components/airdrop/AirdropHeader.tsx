@@ -1,8 +1,9 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
-import { formatToHighDenom } from "../../libs/helpers.ts";
+import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
+import IconSpaceship from "../icons/IconSpaceship.tsx";
 
 export function AirdropHeader() {
   const user = useStore((store) => store.user);
@@ -29,6 +30,18 @@ export function AirdropHeader() {
             </span>
             <span className="text-gray-500">
               <ToolTip tip="Your total points and rank">
+                <InfoCircledIcon width="20px" />
+              </ToolTip>
+            </span>
+          </span>
+        </li>
+
+        <li className="flex gap-2 items-center font-light tracking-wider">
+          <IconSpaceship width="25" className="text-yellow-500" />
+          <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
+            <span>{formatToMoney(user?.tapScore || "0")}</span>
+            <span className="text-gray-500">
+              <ToolTip tip="Your TAP score">
                 <InfoCircledIcon width="20px" />
               </ToolTip>
             </span>
