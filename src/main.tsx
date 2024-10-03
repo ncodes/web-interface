@@ -120,16 +120,16 @@ const routes = [
     element: <App page={<Airdrop defaultTab="leaderboard" />} />,
     errorElement: <RootErrorBoundary />,
   },
-  {
-    path: makePath("/tapwar"),
-    element: <App page={<Airdrop defaultTab="tap" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
-  {
-    path: makePath("/warbond"),
-    element: <App page={<Airdrop defaultTab="warbond" />} />,
-    errorElement: <RootErrorBoundary />,
-  },
+  // {
+  //   path: makePath("/tapwar"),
+  //   element: <App page={<Airdrop defaultTab="tap" />} />,
+  //   errorElement: <RootErrorBoundary />,
+  // },
+  // {
+  //   path: makePath("/warbond"),
+  //   element: <App page={<Airdrop defaultTab="warbond" />} />,
+  //   errorElement: <RootErrorBoundary />,
+  // },
   // {
   //   path: makePath("/energon"),
   //   element: <App page={<Airdrop defaultTab="energon" />} />,

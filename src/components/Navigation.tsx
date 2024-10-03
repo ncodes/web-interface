@@ -14,7 +14,6 @@ import IconCoinStack2 from "./icons/IconCoinStack2.tsx";
 import IconDispute from "./icons/IconDispute.tsx";
 import IconMarketCoin from "./icons/IconMarketCoin.tsx";
 import IconMediation from "./icons/IconMediation.tsx";
-import IconSpaceship from "./icons/IconSpaceship.tsx";
 
 export function Navigation() {
   const { connected, address, getChainInfo } = useConnectorContext();
@@ -129,7 +128,7 @@ export function Navigation() {
             to="/airdrop"
           />
         </li>
-        <li>
+        {/* <li>
           <NavPageLink
             icon={<IconSpaceship width="25" className="text-yellow-500" />}
             iconClassName="w-[25px]"
@@ -142,7 +141,7 @@ export function Navigation() {
             activeIconClassName="text-yellow-500"
             to="/tapwar"
           />
-        </li>
+        </li> */}
         {/* <li>
           <NavPageLink
             icon={<IconBattle width="25" className="text-yellow-500" />}

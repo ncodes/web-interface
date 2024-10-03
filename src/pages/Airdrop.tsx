@@ -5,10 +5,8 @@ import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
 import PointStream from "../components/airdrop/PointStream.tsx";
-import { TapWarTabContent } from "../components/airdrop/tapoff/TapWarTabContent.tsx";
 import { imageList } from "../components/airdrop/tapoff/contants.ts";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
-import IconSpaceship from "../components/icons/IconSpaceship.tsx";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/Tabs.tsx";
 import { ScrollAreaHorizontal } from "../components/ui/scroll-area.tsx";
 import useStore from "../hooks/store/useStore.ts";
@@ -53,7 +51,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
           <TabsList
             className={cn(
               "bg-card-background flex justify-start w-full items-center border-b border-modal-border",
-              { "rounded-t-3xl": !isTelegramBot }
+              { "rounded-t-3xl": !isTelegramBot },
             )}
           >
             <div className="flex flex-1 gap-4 w-full items-center px-1 py-2 pt-0">
@@ -67,7 +65,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 <IconCoinGold width="25" />
                 <span>Home</span>
               </TabsTrigger>
-              <TabsTrigger
+              {/* <TabsTrigger
                 value="tap"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
@@ -76,7 +74,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
               >
                 <IconSpaceship width="25" className="text-yellow-500" />
                 <span>TapWar</span>
-              </TabsTrigger>
+              </TabsTrigger> */}
               {/* <TabsTrigger
                 value="warbond"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
@@ -105,7 +103,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
       </ScrollOverflowIndicator>
 
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
-      {currentTab == "tap" && <TapWarTabContent />}
+      {/* {currentTab == "tap" && <TapWarTabContent />} */}
       {/* {currentTab == "warbond" && <WarBondTabContent />} */}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
       {/* {currentTab == "energon" && <EnergonConversionTabContent />} */}
