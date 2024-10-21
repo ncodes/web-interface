@@ -219,6 +219,7 @@ export function TapWar() {
 
   function isTransferDisabled() {
     return (
+      transferScoresMut.isPending ||
       !transferAddress ||
       !isAddress(transferAddress) ||
       (toDec(user?.tapScore || "0").lte(0) && toDec(user?.points || "0").lte(0))
@@ -327,6 +328,7 @@ export function TapWar() {
                   placeholder="Enter Ethereum wallet address"
                   className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
                   value={transferAddress}
+                  disabled={transferScoresMut.isPending}
                   onChange={(e) => {
                     setTransferAddress(e.target.value);
                   }}
@@ -334,10 +336,10 @@ export function TapWar() {
                 <Button
                   disabled={isTransferDisabled()}
                   onClick={doTransferScores}
-                  className="mt-2"
+                  className="mt-2 gap-1"
                 >
                   {transferScoresMut.isPending && (
-                    <Loader2 className="animate-spin ml-2" />
+                    <Loader2 className="animate-spin ml-2 w-4 h-4" />
                   )}
                   {transferScoresMut.isPending ? "Transferring..." : "Transfer"}
                 </Button>
