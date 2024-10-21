@@ -221,8 +221,7 @@ export function TapWar() {
     return (
       !transferAddress ||
       !isAddress(transferAddress) ||
-      toDec(user?.tapScore || "0").lte(0) ||
-      toDec(user?.points || "0").lte(0)
+      (toDec(user?.tapScore || "0").lte(0) && toDec(user?.points || "0").lte(0))
     );
   }
 
