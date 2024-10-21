@@ -1,16 +1,13 @@
 import moment from "moment";
-import randomstring from "randomstring";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
-import { useToast } from "../../../hooks/useToast.tsx";
-import { cn, iOSversion, toDec } from "../../../libs/helpers.ts";
+import { cn, toDec } from "../../../libs/helpers.ts";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
-import { FiredCoin } from "./FiredCoin.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
 import LoaderOverlay from "./LoaderOverlay.tsx";
 import { shipImages } from "./contants.ts";
@@ -25,23 +22,23 @@ export function TapWar() {
   const { token } = useSession();
   const [taps, setTaps] = useState("");
   const [tapIncrement, setTapIncrement] = useState(0);
-  const [lastTapTime, setLastTapTime] = useState(0);
-  const tapCountRef = useRef<any>();
-  const shipRef = useRef<any>();
-  const [gunCount, setGunCount] = useState(1);
-  const [firedCoins, setFiredCoins] = useState<ReactNode[]>([]);
+  const [lastTapTime, _setLastTapTime] = useState(0);
+  // const tapCountRef = useRef<any>();
+  // const shipRef = useRef<any>();
+  const [_gunCount, setGunCount] = useState(1);
+  const [_firedCoins, setFiredCoins] = useState<ReactNode[]>([]);
   const [playerInfo, setPlayerInfo] = useState<InfoResult>();
   const [showTapToFireNotice, setShowTapToFireNotice] = useState(true);
-  const [overheatLevel, setOverheatLevel] = useState(0);
-  const [overheatLevelPct, setOverheatLevelPct] = useState(0);
-  const { info, countTaps, ping, isReady, tap } = useTapSocketService();
+  const [ _setOverheatLevel] = useState(0);
+  const [_overheatLevelPct, setOverheatLevelPct] = useState(0);
+  const { info, countTaps, ping, isReady, } = useTapSocketService();
   const [isPinging, setIsPinging] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
-  const { simpleError } = useToast();
+  // const { _simpleError } = useToast();
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
-  const { playAudio, pauseAudio, playing, paused, isFirstPlay } =
+  const {  pauseAudio } =
     useGameAudioPlayer();
 
   useEffect(() => {
@@ -100,7 +97,7 @@ export function TapWar() {
             const overheatLevelPct =
               (result.overheatLvl / result.maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
-            setOverheatLevel(result.overheatLvl);
+            // setOverheatLevel(result.overheatLvl);
           }
         })
         .catch((e) => {
@@ -123,7 +120,7 @@ export function TapWar() {
           if (!isFiring()) {
             const overheatLevelPct = (overheatLvl / maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
-            setOverheatLevel(result.overheatLvl);
+            // setOverheatLevel(result.overheatLvl);
           }
         })
         .catch(() => {
@@ -137,72 +134,73 @@ export function TapWar() {
     return moment().unix() - lastTapTime < 1;
   }
 
-  function fire() {
-    setShowTapToFireNotice(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // function fire() {
+  //   setShowTapToFireNotice(false);
 
-    if (overheatLevelPct <= 0) return;
+  //   if (overheatLevelPct <= 0) return;
 
-    setFiredCoins(
-      firedCoins.length > 10000
-        ? [createCoinsToFire(gunCount)]
-        : [...firedCoins, ...createCoinsToFire(gunCount)],
-    );
+  //   setFiredCoins(
+  //     firedCoins.length > 10000
+  //       ? [createCoinsToFire(gunCount)]
+  //       : [...firedCoins, ...createCoinsToFire(gunCount)],
+  //   );
 
-    if (isFirstPlay(audioBgPath)) {
-      playAudio(audioBgPath, true, false);
-    }
+  //   if (isFirstPlay(audioBgPath)) {
+  //     playAudio(audioBgPath, true, false);
+  //   }
 
-    const doFire = async () => {
-      setLastTapTime(moment().unix());
+  //   const doFire = async () => {
+  //     setLastTapTime(moment().unix());
 
-      const iosVersion = iOSversion();
-      if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
-        setTimeout(() => {
-          playAudio(audioFirePath, false, true);
-        }, 100);
-      }
+  //     const iosVersion = iOSversion();
+  //     if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
+  //       setTimeout(() => {
+  //         playAudio(audioFirePath, false, true);
+  //       }, 100);
+  //     }
 
-      try {
-        const result = await tap();
-        setTaps(result.tapCount);
-        setTapIncrement(result.tapIncrement);
+  //     try {
+  //       const result = await tap();
+  //       setTaps(result.tapCount);
+  //       setTapIncrement(result.tapIncrement);
 
-        const { maxOverheatLvl } = playerInfo || { maxOverheatLvl: 0 };
-        const { overheatLvl } = result;
-        const overheatLevel = (overheatLvl / maxOverheatLvl) * 100;
-        setOverheatLevelPct(overheatLevel);
-        setOverheatLevel(result.overheatLvl);
-      } catch (error: any) {
-        simpleError(error.message, { duration: 1000 });
-      }
-    };
+  //       const { maxOverheatLvl } = playerInfo || { maxOverheatLvl: 0 };
+  //       const { overheatLvl } = result;
+  //       const overheatLevel = (overheatLvl / maxOverheatLvl) * 100;
+  //       setOverheatLevelPct(overheatLevel);
+  //       setOverheatLevel(result.overheatLvl);
+  //     } catch (error: any) {
+  //       simpleError(error.message, { duration: 1000 });
+  //     }
+  //   };
 
-    doFire();
-  }
+  //   doFire();
+  // }
 
-  function createCoinsToFire(count: number) {
-    const coins: ReactNode[] = [];
-    for (let i = 0; i < count; i++) {
-      coins.push(
-        <FiredCoin
-          key={randomstring.generate()}
-          ship={shipRef}
-          target={tapCountRef}
-          fire
-        />,
-      );
-    }
-    return coins;
-  }
+  // function createCoinsToFire(count: number) {
+  //   const coins: ReactNode[] = [];
+  //   for (let i = 0; i < count; i++) {
+  //     coins.push(
+  //       <FiredCoin
+  //         key={randomstring.generate()}
+  //         ship={shipRef}
+  //         target={tapCountRef}
+  //         fire
+  //       />,
+  //     );
+  //   }
+  //   return coins;
+  // }
 
-  function toggleAudioPause() {
-    if (playing) {
-      pauseAudio(audioBgPath);
-      pauseAudio(audioFirePath);
-    } else {
-      playAudio(audioBgPath);
-    }
-  }
+  // function toggleAudioPause() {
+  //   if (playing) {
+  //     pauseAudio(audioBgPath);
+  //     pauseAudio(audioFirePath);
+  //   } else {
+  //     playAudio(audioBgPath);
+  //   }
+  // }
 
   return (
     <div
