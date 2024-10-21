@@ -295,7 +295,7 @@ export function TapWar() {
                   placeholder="Enter Ethereum wallet address"
                   className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
                   value={""}
-                  onChange={(e) => {
+                  onChange={() => {
                     // setValues({ ...values, creator: e.target.value });
                   }}
                 />
