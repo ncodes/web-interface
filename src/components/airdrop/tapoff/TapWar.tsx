@@ -320,8 +320,8 @@ export function TapWar() {
                   </span>
                 </Label>
                 <span className="text-gray-500 text-xs font-light inline-block mb-1">
-                  Enter a valid Ethereum wallet address to transfer your TAP
-                  score. This action cannot be undone.
+                  Enter a valid Ethereum wallet address that will receive your
+                  TAP and Point scores. This action cannot be undone.
                 </span>
                 <Input2
                   type="text"
