@@ -1,52 +1,60 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2, Send } from "lucide-react";
 import moment from "moment";
-import randomstring from "randomstring";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
+import { isAddress } from "viem";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
+import { useUserService } from "../../../hooks/services/backend/useUserService.ts";
 import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { useToast } from "../../../hooks/useToast.tsx";
-import { cn, iOSversion, toDec } from "../../../libs/helpers.ts";
+import { cn, logError, toDec } from "../../../libs/helpers.ts";
+import Input2 from "../../Input2.tsx";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
-import { FiredCoin } from "./FiredCoin.tsx";
+import { Button } from "../../ui/Button.tsx";
+import { EmptyBodyCard } from "../../ui/EmptyBodyCard.tsx";
+import { Label } from "../../ui/label.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
 import LoaderOverlay from "./LoaderOverlay.tsx";
-import { OverheatIndicator } from "./OverheatIndicator.tsx";
-import { Ship } from "./Ship.tsx";
-import { TapCounter } from "./TapCounter.tsx";
-import { TapWarHeader } from "./TapWarHeader.tsx";
 import { shipImages } from "./contants.ts";
 import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 
-const audioBgPath = "/audio/bg_game_audio.mp3";
 const audioFirePath = "/audio/fire_audio.mp3";
+const audioBgPath = "/audio/bg_game_audio.mp3";
 
 export function TapWar() {
   useImagePreloader(shipImages);
   const { address } = useConnectorContext();
   const { token } = useSession();
+  const user = useStore((state) => state.user);
   const [taps, setTaps] = useState("");
   const [tapIncrement, setTapIncrement] = useState(0);
-  const [lastTapTime, setLastTapTime] = useState(0);
-  const tapCountRef = useRef<any>();
-  const shipRef = useRef<any>();
-  const [gunCount, setGunCount] = useState(1);
-  const [firedCoins, setFiredCoins] = useState<ReactNode[]>([]);
+  const [lastTapTime, _setLastTapTime] = useState(0);
+  // const tapCountRef = useRef<any>();
+  // const shipRef = useRef<any>();
+  const [_gunCount, setGunCount] = useState(1);
+  const [_firedCoins, setFiredCoins] = useState<ReactNode[]>([]);
   const [playerInfo, setPlayerInfo] = useState<InfoResult>();
   const [showTapToFireNotice, setShowTapToFireNotice] = useState(true);
-  const [overheatLevel, setOverheatLevel] = useState(0);
-  const [overheatLevelPct, setOverheatLevelPct] = useState(0);
-  const { info, countTaps, ping, isReady, tap } = useTapSocketService();
+  const [_setOverheatLevel] = useState(0);
+  const [_overheatLevelPct, setOverheatLevelPct] = useState(0);
+  const { info, countTaps, ping, isReady } = useTapSocketService();
   const [isPinging, setIsPinging] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
-  const { simpleError } = useToast();
+  const { transferScores } = useUserService();
+  const [transferAddress, setTransferAddress] = useState("");
+  const { notifyError, notifySuccess } = useToast();
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
-  const { playAudio, pauseAudio, playing, paused, isFirstPlay } =
-    useGameAudioPlayer();
+  const { pauseAudio } = useGameAudioPlayer();
+  const transferScoresMut = useMutation({
+    mutationFn: transferScores,
+  });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     return () => {
@@ -104,7 +112,7 @@ export function TapWar() {
             const overheatLevelPct =
               (result.overheatLvl / result.maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
-            setOverheatLevel(result.overheatLvl);
+            // setOverheatLevel(result.overheatLvl);
           }
         })
         .catch((e) => {
@@ -127,7 +135,7 @@ export function TapWar() {
           if (!isFiring()) {
             const overheatLevelPct = (overheatLvl / maxOverheatLvl) * 100;
             setOverheatLevelPct(overheatLevelPct);
-            setOverheatLevel(result.overheatLvl);
+            // setOverheatLevel(result.overheatLvl);
           }
         })
         .catch(() => {
@@ -141,70 +149,94 @@ export function TapWar() {
     return moment().unix() - lastTapTime < 1;
   }
 
-  function fire() {
-    setShowTapToFireNotice(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // function fire() {
+  //   setShowTapToFireNotice(false);
 
-    if (overheatLevelPct <= 0) return;
+  //   if (overheatLevelPct <= 0) return;
 
-    setFiredCoins(
-      firedCoins.length > 10000
-        ? [createCoinsToFire(gunCount)]
-        : [...firedCoins, ...createCoinsToFire(gunCount)],
+  //   setFiredCoins(
+  //     firedCoins.length > 10000
+  //       ? [createCoinsToFire(gunCount)]
+  //       : [...firedCoins, ...createCoinsToFire(gunCount)],
+  //   );
+
+  //   if (isFirstPlay(audioBgPath)) {
+  //     playAudio(audioBgPath, true, false);
+  //   }
+
+  //   const doFire = async () => {
+  //     setLastTapTime(moment().unix());
+
+  //     const iosVersion = iOSversion();
+  //     if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
+  //       setTimeout(() => {
+  //         playAudio(audioFirePath, false, true);
+  //       }, 100);
+  //     }
+
+  //     try {
+  //       const result = await tap();
+  //       setTaps(result.tapCount);
+  //       setTapIncrement(result.tapIncrement);
+
+  //       const { maxOverheatLvl } = playerInfo || { maxOverheatLvl: 0 };
+  //       const { overheatLvl } = result;
+  //       const overheatLevel = (overheatLvl / maxOverheatLvl) * 100;
+  //       setOverheatLevelPct(overheatLevel);
+  //       setOverheatLevel(result.overheatLvl);
+  //     } catch (error: any) {
+  //       simpleError(error.message, { duration: 1000 });
+  //     }
+  //   };
+
+  //   doFire();
+  // }
+
+  // function createCoinsToFire(count: number) {
+  //   const coins: ReactNode[] = [];
+  //   for (let i = 0; i < count; i++) {
+  //     coins.push(
+  //       <FiredCoin
+  //         key={randomstring.generate()}
+  //         ship={shipRef}
+  //         target={tapCountRef}
+  //         fire
+  //       />,
+  //     );
+  //   }
+  //   return coins;
+  // }
+
+  // function toggleAudioPause() {
+  //   if (playing) {
+  //     pauseAudio(audioBgPath);
+  //     pauseAudio(audioFirePath);
+  //   } else {
+  //     playAudio(audioBgPath);
+  //   }
+  // }
+
+  function isTransferDisabled() {
+    return (
+      transferScoresMut.isPending ||
+      !transferAddress ||
+      !isAddress(transferAddress) ||
+      (toDec(user?.tapScore || "0").lte(0) && toDec(user?.points || "0").lte(0))
     );
+  }
 
-    if (isFirstPlay(audioBgPath)) {
-      playAudio(audioBgPath, true, false);
-    }
-
-    const doFire = async () => {
-      setLastTapTime(moment().unix());
-
-      const iosVersion = iOSversion();
-      if (!paused && (!iosVersion || (iosVersion && iosVersion[0] > 16))) {
-        setTimeout(() => {
-          playAudio(audioFirePath, false, true);
-        }, 100);
-      }
-
+  async function doTransferScores() {
+    if (confirm("Are you sure you want to transfer your scores?")) {
       try {
-        const result = await tap();
-        setTaps(result.tapCount);
-        setTapIncrement(result.tapIncrement);
-
-        const { maxOverheatLvl } = playerInfo || { maxOverheatLvl: 0 };
-        const { overheatLvl } = result;
-        const overheatLevel = (overheatLvl / maxOverheatLvl) * 100;
-        setOverheatLevelPct(overheatLevel);
-        setOverheatLevel(result.overheatLvl);
-      } catch (error: any) {
-        simpleError(error.message, { duration: 1000 });
+        await transferScoresMut.mutateAsync({ address: transferAddress });
+        notifySuccess("Transfer was successfully");
+        setTransferAddress("");
+        queryClient.invalidateQueries({ queryKey: ["getUser"] });
+      } catch (error) {
+        logError(error);
+        notifyError((error as Error).message);
       }
-    };
-
-    doFire();
-  }
-
-  function createCoinsToFire(count: number) {
-    const coins: ReactNode[] = [];
-    for (let i = 0; i < count; i++) {
-      coins.push(
-        <FiredCoin
-          key={randomstring.generate()}
-          ship={shipRef}
-          target={tapCountRef}
-          fire
-        />,
-      );
-    }
-    return coins;
-  }
-
-  function toggleAudioPause() {
-    if (playing) {
-      pauseAudio(audioBgPath);
-      pauseAudio(audioFirePath);
-    } else {
-      playAudio(audioBgPath);
     }
   }
 
@@ -221,13 +253,13 @@ export function TapWar() {
         <div className="z-30">{address && <LoaderOverlay />}</div>
       )}
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
-        <TapWarHeader
+        {/* <TapWarHeader
           playerInfo={playerInfo}
           audioState={playing ? "playing" : "stopped"}
           toggleAudioPause={toggleAudioPause}
-        />
+        /> */}
 
-        {address && !!token && (
+        {/* {address && !!token && (
           <div className="flex flex-col justify-between flex-1">
             <div className="flex-1 flex justify-center py-5 lg:py-10">
               <TapCounter
@@ -257,11 +289,65 @@ export function TapWar() {
                   overheatLevel={overheatLevel}
                   overheatLevelPct={overheatLevelPct}
                   maxOverheatLvl={playerInfo?.maxOverheatLvl}
-                />
+                /> 
               </div>
             </div>
           </div>
+        )} */}
+
+        {address && !!token && (
+          <div className="flex justify-center items-center h-full">
+            <EmptyBodyCard
+              className={cn(
+                "min-h-[100px] px-1 items-start bg-black md:min-w-[400px] max-w-[300px] mt-12 md:mt-0 pt-0",
+              )}
+              label={
+                <div className="flex items-center gap-2 text-sm text-gray-300">
+                  <Send className="text-chinese-green" width="20" />
+                  <span className="font-jersey20 text-xl">Transfer Scores</span>
+                </div>
+              }
+            >
+              <div className="flex flex-col gap-2 px-2 w-full">
+                <Label className="tracking-wide bg-gray-800/70 p-2 rounded-xl">
+                  Points:{" "}
+                  <span className="text-chinese-green font-light">
+                    {user?.points}
+                  </span>{" "}
+                  | TAPs:{" "}
+                  <span className="text-chinese-green font-light">
+                    {user?.tapScore}
+                  </span>
+                </Label>
+                <span className="text-gray-500 text-xs font-light inline-block mb-1">
+                  Enter a valid Ethereum wallet address to transfer your TAP
+                  score. This action cannot be undone.
+                </span>
+                <Input2
+                  type="text"
+                  placeholder="Enter Ethereum wallet address"
+                  className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
+                  value={transferAddress}
+                  disabled={transferScoresMut.isPending}
+                  onChange={(e) => {
+                    setTransferAddress(e.target.value);
+                  }}
+                />
+                <Button
+                  disabled={isTransferDisabled()}
+                  onClick={doTransferScores}
+                  className="mt-2 gap-1"
+                >
+                  {transferScoresMut.isPending && (
+                    <Loader2 className="animate-spin ml-2 w-4 h-4" />
+                  )}
+                  {transferScoresMut.isPending ? "Transferring..." : "Transfer"}
+                </Button>
+              </div>
+            </EmptyBodyCard>
+          </div>
         )}
+
         <MainContainerConnectButton
           className="bg-black"
           authenticate

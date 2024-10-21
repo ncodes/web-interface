@@ -79,6 +79,29 @@ export function useUserService() {
   }
 
   /**
+   * Transfer point and tap scores to another address
+   * @param params The request params
+   * @returns
+   */
+  async function transferScores(params: { address: string }) {
+    try {
+      const headers = {};
+      const token = getAccessToken(address);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+
+      await axios({
+        url: `${getChainInfo().apiUrl}/v1/users/transfer-scores/${params.address}`,
+        method: "post",
+        headers,
+      });
+
+      return Promise.resolve(undefined);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
    * Register device
    * @returns
    */
@@ -180,5 +203,6 @@ export function useUserService() {
     getEnergonBalance,
     getNFTInfo,
     getGalxePoints,
+    transferScores,
   };
 }
