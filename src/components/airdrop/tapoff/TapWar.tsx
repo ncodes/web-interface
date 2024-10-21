@@ -1,13 +1,17 @@
-import { Send } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2, Send } from "lucide-react";
 import moment from "moment";
 import { ReactNode, useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
+import { isAddress } from "viem";
 import { useConnectorContext } from "../../../hooks/connectors/useConnectorContext.tsx";
+import { useUserService } from "../../../hooks/services/backend/useUserService.ts";
 import useStore from "../../../hooks/store/useStore.ts";
 import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
-import { cn, toDec } from "../../../libs/helpers.ts";
+import { useToast } from "../../../hooks/useToast.tsx";
+import { cn, logError, toDec } from "../../../libs/helpers.ts";
 import Input2 from "../../Input2.tsx";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
 import { Button } from "../../ui/Button.tsx";
@@ -40,11 +44,17 @@ export function TapWar() {
   const { info, countTaps, ping, isReady } = useTapSocketService();
   const [isPinging, setIsPinging] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
-  // const { _simpleError } = useToast();
+  const { transferScores } = useUserService();
+  const [transferAddress, setTransferAddress] = useState("");
+  const { notifyError, notifySuccess } = useToast();
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
   const { pauseAudio } = useGameAudioPlayer();
+  const transferScoresMut = useMutation({
+    mutationFn: transferScores,
+  });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     return () => {
@@ -207,6 +217,29 @@ export function TapWar() {
   //   }
   // }
 
+  function isTransferDisabled() {
+    return (
+      !transferAddress ||
+      !isAddress(transferAddress) ||
+      toDec(user?.tapScore || "0").lte(0) ||
+      toDec(user?.points || "0").lte(0)
+    );
+  }
+
+  async function doTransferScores() {
+    if (confirm("Are you sure you want to transfer your scores?")) {
+      try {
+        await transferScoresMut.mutateAsync({ address: transferAddress });
+        notifySuccess("Transfer was successfully");
+        setTransferAddress("");
+        queryClient.invalidateQueries({ queryKey: ["getUser"] });
+      } catch (error) {
+        logError(error);
+        notifyError((error as Error).message);
+      }
+    }
+  }
+
   return (
     <div
       className={cn(
@@ -294,12 +327,21 @@ export function TapWar() {
                   type="text"
                   placeholder="Enter Ethereum wallet address"
                   className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
-                  value={""}
-                  onChange={() => {
-                    // setValues({ ...values, creator: e.target.value });
+                  value={transferAddress}
+                  onChange={(e) => {
+                    setTransferAddress(e.target.value);
                   }}
                 />
-                <Button className="mt-2">Transfer</Button>
+                <Button
+                  disabled={isTransferDisabled()}
+                  onClick={doTransferScores}
+                  className="mt-2"
+                >
+                  {transferScoresMut.isPending && (
+                    <Loader2 className="animate-spin ml-2" />
+                  )}
+                  {transferScoresMut.isPending ? "Transferring..." : "Transfer"}
+                </Button>
               </div>
             </EmptyBodyCard>
           </div>
