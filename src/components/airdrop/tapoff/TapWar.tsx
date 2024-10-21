@@ -20,8 +20,8 @@ import { TapWarHeader } from "./TapWarHeader.tsx";
 import { shipImages } from "./contants.ts";
 import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 
-const audioBgPath = "/audio/bg_game_audio.mp3";
 const audioFirePath = "/audio/fire_audio.mp3";
+const audioBgPath = "/audio/bg_game_audio.mp3";
 
 export function TapWar() {
   useImagePreloader(shipImages);
