@@ -69,9 +69,6 @@ export function MainContainerConnectButton({
 }
 
 function WalletConnect({
-  variant,
-  onConnect,
-  className,
   loaderIcon,
 }: {
   variant?: string;
