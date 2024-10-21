@@ -17,7 +17,7 @@ export function EmptyBodyCard({
         className,
       )}
     >
-      <span className="p-2 font-light tracking-wider">{label}</span>
+      <div className="p-2 font-light tracking-wider">{label}</div>
       {children}
     </div>
   );

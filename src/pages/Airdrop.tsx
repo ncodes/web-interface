@@ -67,7 +67,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 <IconCoinGold width="25" />
                 <span>Home</span>
               </TabsTrigger>
-              <TabsTrigger
+              {isTelegramBot && (<TabsTrigger
                 value="tap"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
                 onClick={() => {
@@ -76,7 +76,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
               >
                 <IconSpaceship width="25" className="text-yellow-500" />
                 <span>TapWar</span>
-              </TabsTrigger>
+              </TabsTrigger>)}
               {/* <TabsTrigger
                 value="warbond"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
@@ -105,7 +105,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
       </ScrollOverflowIndicator>
 
       {currentTab == "airdrop" && <AirdropDashboardTabContent />}
-      {currentTab == "tap" && <TapWarTabContent />}
+      {currentTab == "tap" && isTelegramBot && <TapWarTabContent />}
       {/* {currentTab == "warbond" && <WarBondTabContent />} */}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
       {/* {currentTab == "energon" && <EnergonConversionTabContent />} */}

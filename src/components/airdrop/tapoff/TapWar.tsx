@@ -1,3 +1,4 @@
+import { Send } from "lucide-react";
 import moment from "moment";
 import { ReactNode, useEffect, useState } from "react";
 import { useInterval } from "usehooks-ts";
@@ -7,7 +8,11 @@ import { useGameAudioPlayer } from "../../../hooks/useGameAudioPlayer.ts";
 import useImagePreloader from "../../../hooks/useImagePreloader.ts";
 import { useSession } from "../../../hooks/useSession.ts";
 import { cn, toDec } from "../../../libs/helpers.ts";
+import Input2 from "../../Input2.tsx";
 import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx";
+import { Button } from "../../ui/Button.tsx";
+import { EmptyBodyCard } from "../../ui/EmptyBodyCard.tsx";
+import { Label } from "../../ui/label.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
 import LoaderOverlay from "./LoaderOverlay.tsx";
 import { shipImages } from "./contants.ts";
@@ -20,6 +25,7 @@ export function TapWar() {
   useImagePreloader(shipImages);
   const { address } = useConnectorContext();
   const { token } = useSession();
+  const user = useStore((state) => state.user);
   const [taps, setTaps] = useState("");
   const [tapIncrement, setTapIncrement] = useState(0);
   const [lastTapTime, _setLastTapTime] = useState(0);
@@ -29,17 +35,16 @@ export function TapWar() {
   const [_firedCoins, setFiredCoins] = useState<ReactNode[]>([]);
   const [playerInfo, setPlayerInfo] = useState<InfoResult>();
   const [showTapToFireNotice, setShowTapToFireNotice] = useState(true);
-  const [ _setOverheatLevel] = useState(0);
+  const [_setOverheatLevel] = useState(0);
   const [_overheatLevelPct, setOverheatLevelPct] = useState(0);
-  const { info, countTaps, ping, isReady, } = useTapSocketService();
+  const { info, countTaps, ping, isReady } = useTapSocketService();
   const [isPinging, setIsPinging] = useState(false);
   const [hideLoader, setHideLoader] = useState(false);
   // const { _simpleError } = useToast();
   const { gameMaximized } = useStore((state) => ({
     gameMaximized: state.gameMaximized,
   }));
-  const {  pauseAudio } =
-    useGameAudioPlayer();
+  const { pauseAudio } = useGameAudioPlayer();
 
   useEffect(() => {
     return () => {
@@ -251,11 +256,55 @@ export function TapWar() {
                   overheatLevel={overheatLevel}
                   overheatLevelPct={overheatLevelPct}
                   maxOverheatLvl={playerInfo?.maxOverheatLvl}
-                />
+                /> 
               </div>
             </div>
           </div>
         )} */}
+
+        {address && !!token && (
+          <div className="flex justify-center items-center h-full">
+            <EmptyBodyCard
+              className={cn(
+                "min-h-[100px] px-1 items-start bg-black md:min-w-[400px] max-w-[300px] mt-12 md:mt-0 pt-0",
+              )}
+              label={
+                <div className="flex items-center gap-2 text-sm text-gray-300">
+                  <Send className="text-chinese-green" width="20" />
+                  <span className="font-jersey20 text-xl">Transfer Scores</span>
+                </div>
+              }
+            >
+              <div className="flex flex-col gap-2 px-2 w-full">
+                <Label className="tracking-wide bg-gray-800/70 p-2 rounded-xl">
+                  Points:{" "}
+                  <span className="text-chinese-green font-light">
+                    {user?.points}
+                  </span>{" "}
+                  | TAPs:{" "}
+                  <span className="text-chinese-green font-light">
+                    {user?.tapScore}
+                  </span>
+                </Label>
+                <span className="text-gray-500 text-xs font-light inline-block mb-1">
+                  Enter a valid Ethereum wallet address to transfer your TAP
+                  score. This action cannot be undone.
+                </span>
+                <Input2
+                  type="text"
+                  placeholder="Enter Ethereum wallet address"
+                  className="pl-2 transition-all duration-500 hover:scale-x-[1.01] focus:scale-x-[1.01]"
+                  value={""}
+                  onChange={(e) => {
+                    // setValues({ ...values, creator: e.target.value });
+                  }}
+                />
+                <Button className="mt-2">Transfer</Button>
+              </div>
+            </EmptyBodyCard>
+          </div>
+        )}
+
         <MainContainerConnectButton
           className="bg-black"
           authenticate
