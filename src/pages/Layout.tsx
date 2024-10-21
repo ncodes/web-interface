@@ -336,7 +336,7 @@ export default function Layout({
                       className={cn(
                         "z-0 border border-gray-800 bg-vampire-black ",
                         { "rounded-3xl": !isTelegramBot },
-                        bodyContainerClassName
+                        bodyContainerClassName,
                       )}
                     >
                       {body}
@@ -361,7 +361,7 @@ export default function Layout({
                       }}
                       transition={{ ease: "linear", duration: 0.1 }}
                       className={cn(
-                        `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`
+                        `flex-1 w-[400px] px-5 pr-0 overflow-auto hidden xl:flex`,
                       )}
                     >
                       {rightSide}

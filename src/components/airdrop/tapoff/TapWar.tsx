@@ -13,10 +13,6 @@ import { MainContainerConnectButton } from "../../MainContainerConnectButton.tsx
 import { FiredCoin } from "./FiredCoin.tsx";
 import { GameBackgroundImage } from "./GameBackgroundImage.tsx";
 import LoaderOverlay from "./LoaderOverlay.tsx";
-import { OverheatIndicator } from "./OverheatIndicator.tsx";
-import { Ship } from "./Ship.tsx";
-import { TapCounter } from "./TapCounter.tsx";
-import { TapWarHeader } from "./TapWarHeader.tsx";
 import { shipImages } from "./contants.ts";
 import useTapSocketService, { InfoResult } from "./useTapSocketService.ts";
 
@@ -221,13 +217,13 @@ export function TapWar() {
         <div className="z-30">{address && <LoaderOverlay />}</div>
       )}
       <div className="flex flex-col z-20 w-full h-full absolute rounded-b-3xl">
-        <TapWarHeader
+        {/* <TapWarHeader
           playerInfo={playerInfo}
           audioState={playing ? "playing" : "stopped"}
           toggleAudioPause={toggleAudioPause}
-        />
+        /> */}
 
-        {address && !!token && (
+        {/* {address && !!token && (
           <div className="flex flex-col justify-between flex-1">
             <div className="flex-1 flex justify-center py-5 lg:py-10">
               <TapCounter
@@ -261,7 +257,7 @@ export function TapWar() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
         <MainContainerConnectButton
           className="bg-black"
           authenticate
