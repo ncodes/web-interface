@@ -193,14 +193,14 @@ export default function Layout({
   // Check native NFT Ownership on wallet change.
   useEffect(() => {
     if (!ready) return;
-    if (!getChainInfo().contracts?.nft.address) return;
-    checkNativeNFTOwnership();
+    // if (!getChainInfo().contracts?.nft.address) return;
+    // checkNativeNFTOwnership();
   }, [ready, address]);
 
   // Check native NFT Ownership every 5 minutes.
   useInterval(() => {
-    if (!getChainInfo().contracts?.nft.address) return;
-    checkNativeNFTOwnership();
+    // if (!getChainInfo().contracts?.nft.address) return;
+    // checkNativeNFTOwnership();
   }, 300 * 1000);
 
   useMotionValueEvent(scrollY, "change", (val) => {
