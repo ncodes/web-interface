@@ -19,7 +19,6 @@ import { useMiscService } from "../hooks/services/backend/useMiscService.ts";
 import { useNotificationService } from "../hooks/services/backend/useNotificationService.ts";
 import { useTGBotService } from "../hooks/services/backend/useTGBotService.ts";
 import { useUserService } from "../hooks/services/backend/useUserService.ts";
-import useNFTContract from "../hooks/services/contracts/useNFTContract.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useMounted from "../hooks/useMounted.ts";
 import { useSession } from "../hooks/useSession.ts";
@@ -53,7 +52,7 @@ export default function Layout({
   const isXl = useMediaQuery("(min-width: 1280px)");
   const { address, ready, getChainInfo } = useConnectorContext();
   const setContractsParams = useStore((state) => state.setContractsParams);
-  const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
+  // const setUserHasNativeNFT = useStore((state) => state.setUserHasNativeNFT);
   const setCountryCode = useStore((state) => state.setCountryCode);
   const windowFocus = useWindowFocus();
   const user = useStore((state) => state.user);
@@ -71,7 +70,7 @@ export default function Layout({
   const ref = useRef(null);
   const { scrollY } = useScroll();
   const [scrollYPos, setScrollYPos] = useState(0);
-  const { balanceOf: nativeNftBalance } = useNFTContract();
+  // const { balanceOf: nativeNftBalance } = useNFTContract();
   const setLoaderProgress = useStore((state) => state.setLoaderProgress);
   const { linkTGUser } = useTGBotService();
   const mounted = useMounted(1000);
@@ -263,14 +262,14 @@ export default function Layout({
   }
 
   // Check native NFT ownership.
-  async function checkNativeNFTOwnership() {
-    try {
-      const count = await nativeNftBalance(address);
-      setUserHasNativeNFT(count > 0);
-    } catch (error) {
-      logError("Failed to check native NFT ownership: ", error);
-    }
-  }
+  // async function checkNativeNFTOwnership() {
+  //   try {
+  //     const count = await nativeNftBalance(address);
+  //     setUserHasNativeNFT(count > 0);
+  //   } catch (error) {
+  //     logError("Failed to check native NFT ownership: ", error);
+  //   }
+  // }
 
   function doSetMousePos(e) {
     setMousePos(e.clientX, e.clientY);
