@@ -26,7 +26,7 @@ export function MobileMenuActivator(props: { onClick: () => void }) {
         />
       </span>
       <span className="shrink-0 ">
-        <img src="/images/logo-mark-w.svg" alt="logo" className="w-[25px]" />
+        <img src="/images/logo-mark-w-new.svg" alt="logo" className="w-[25px]" />
       </span>
     </div>
   );

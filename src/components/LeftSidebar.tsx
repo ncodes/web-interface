@@ -73,7 +73,7 @@ export function LeftSidebar(props: {
           <div className="flex-col py-[28px] pt-[18px] flex-1 flex ">
             <header className="flex gap-4 -ml-[5px] pl-8 -mt-[3px]">
               <a href="#" className="pt-[6px]">
-                <img src="/images/logo-mark-w.svg" alt="logo" />
+                <img src="/images/logo-mark-w-new.svg" width="30" alt="logo" />
               </a>
               <RegionSelector />
               <div
