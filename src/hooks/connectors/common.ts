@@ -1,4 +1,4 @@
-import { getChains } from "@jointlabs/chains-info";
+import { getChains } from "@jointlabs/meta";
 import moment from "moment";
 import { hardhat } from "viem/chains";
 import { isProd } from "../../libs/helpers";

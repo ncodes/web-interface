@@ -9,9 +9,9 @@ import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx
 import useStore from "../hooks/store/useStore.ts";
 import { useSession } from "../hooks/useSession.ts";
 import { NavPageLink } from "./NavPageLink.tsx";
-import IconCoinGold from "./icons/IconCoinGold.tsx";
 import IconCoinStack2 from "./icons/IconCoinStack2.tsx";
 import IconDispute from "./icons/IconDispute.tsx";
+import IconFreebros from "./icons/IconFreebros.tsx";
 import IconMarketCoin from "./icons/IconMarketCoin.tsx";
 import IconMediation from "./icons/IconMediation.tsx";
 
@@ -114,18 +114,19 @@ export function Navigation() {
         )}
         <li>
           <NavPageLink
-            icon={<IconCoinGold width="40" />}
+            icon={<IconFreebros width="40" />}
             iconClassName="w-[35px] relative -left-1"
-            label="Airdrop"
+            label="DexDrop"
             labelClassName="relative -left-2 font-jersey25 tracking-wider"
             active={
-              pathname.match("^/points|referrals|energon|airdrop") != null
+              pathname.match("^/points|referrals|energon|airdrop|dexdrop") !=
+              null
             }
             inactiveIconClassName=""
             inactiveClassName=" hover:text-yellow-500"
             activeClassName="text-gray-100 text-white"
             activeIconClassName="text-yellow-500"
-            to="/airdrop"
+            to="/dexdrop/claim"
           />
         </li>
         {/* <li>

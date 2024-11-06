@@ -2,6 +2,16 @@ import { Address } from "viem";
 import { AssetType, Events, NotificationType } from "./enums.ts";
 
 declare global {
+  interface MerkleClaim {
+    id: string;
+    name: string;
+    address: string;
+    amount: string;
+    claimId: number;
+    proof: string;
+    claimedAt: string;
+  }
+
   interface User {
     id: string;
     email: string;

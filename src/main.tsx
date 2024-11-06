@@ -111,8 +111,18 @@ const routes = [
     errorElement: <RootErrorBoundary />,
   },
   {
-    path: makePath("/airdrop"),
+    path: makePath("/dexdrop"),
     element: <App page={<Airdrop defaultTab="airdrop" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/dexdrop/claim"),
+    element: <App page={<Airdrop defaultTab="claim" />} />,
+    errorElement: <RootErrorBoundary />,
+  },
+  {
+    path: makePath("/dexdrop/buy"),
+    element: <App page={<Airdrop defaultTab="trade" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {

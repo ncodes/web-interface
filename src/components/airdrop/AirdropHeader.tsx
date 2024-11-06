@@ -1,67 +1,64 @@
-import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
-import useStore from "../../hooks/store/useStore.ts";
-import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
-import { ToolTip } from "../ToolTip.tsx";
-import IconSpaceship from "../icons/IconSpaceship.tsx";
+import { cn } from "../../libs/utils.ts";
+import { Button } from "../ui/Button.tsx";
 
-export function AirdropHeader() {
-  const user = useStore((store) => store.user);
+export function AirdropHeader({
+  onViewChanged,
+  defaultView,
+}: {
+  onViewChanged?: (string) => void;
+  defaultView?: "trade" | "claim";
+}) {
+  const navigate = useNavigate();
   const { address } = useConnectorContext();
+  const [activeView, setActiveView] = useState<"trade" | "claim">(
+    defaultView || "trade",
+  );
+
+  useEffect(() => {
+    onViewChanged?.(activeView);
+  }, [activeView]);
+
+  useEffect(() => {
+    setActiveView(defaultView || "trade");
+  }, [defaultView]);
 
   if (!address) return null;
 
   return (
-    <div className="border-b bg-airdropHeader2 md:bg-airdropHeader3 bg-right-bottom lg:bg-right lg:bg-airdropHeader bg-cover border-gray-900 flex flex-col md:flex-row justify-between items-center md:items-start p-5">
-      <span className="text-3xl tracking-wider font-semibold font-jersey10 inline-block ml-2">
-        Dashboard
-      </span>
-      <ul className="flex justify-center items-center flex-col md:flex-row gap-2 md:gap-7 mt-2 md:mt-1">
-        <li className="flex gap-2 items-center font-light tracking-wider">
-          <img src="/images/airdrop-icons/point-star.svg" className="w-6" />
-          <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
-            <span>
-              {user?.points ?? "0"}{" "}
-              {/* {user && (
-                <span className="text-gray-400">
-                  ({numberToOrdinal(user?.rank)})
-                </span>
-              )} */}
-            </span>
-            <span className="text-gray-500">
-              <ToolTip tip="Your total points and rank">
-                <InfoCircledIcon width="20px" />
-              </ToolTip>
-            </span>
-          </span>
-        </li>
-
-        <li className="flex gap-2 items-center font-light tracking-wider">
-          <IconSpaceship width="25" className="text-yellow-500" />
-          <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
-            <span>{formatToMoney(user?.tapScore || "0")}</span>
-            <span className="text-gray-500">
-              <ToolTip tip="Your TAP score">
-                <InfoCircledIcon width="20px" />
-              </ToolTip>
-            </span>
-          </span>
-        </li>
-
-        <li className="flex gap-2 items-center font-light tracking-wider">
-          <img src="/images/airdrop-icons/coin.svg" className="w-6" />
-          <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
-            <span>
-              {formatToHighDenom(user?.totalUnclaimedAlloc || "0", 18)}
-            </span>
-            <span className="text-gray-500">
-              <ToolTip tip="Your total $JOIN allocation">
-                <InfoCircledIcon width="20px" />
-              </ToolTip>
-            </span>
-          </span>
-        </li>
-      </ul>
+    <div className="border-y h-full rounded-t-3xl border-gray-900 flex justify-between items-center p-3 pl-5 ">
+      <div className="flex flex-col items-center">
+        <img
+          src="/images/dexdrop.png"
+          className="w-[100px] xxs:w-[120px] xs:w-[150px] md:w-[200px]"
+        />
+      </div>
+      <div className="flex gap-1 px-1 py-1 bg-gray-800 rounded-xl">
+        <Button
+          className={cn(
+            "rounded-xl text-white bg-gray-900/70 hover:text-gray-800",
+            activeView === "claim" && "bg-chinese-green text-black",
+          )}
+          onClick={() => {
+            navigate("/dexdrop/claim");
+          }}
+        >
+          Claim
+        </Button>
+        <Button
+          className={cn(
+            "rounded-xl text-white bg-gray-900/70 hover:text-gray-800",
+            activeView === "trade" && "bg-chinese-green text-black",
+          )}
+          onClick={() => {
+            navigate("/dexdrop/buy");
+          }}
+        >
+          Buy
+        </Button>
+      </div>
     </div>
   );
 }

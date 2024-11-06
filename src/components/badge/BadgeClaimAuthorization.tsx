@@ -2,7 +2,7 @@ import {
   BadgeManifest,
   BadgeManifests,
   ChainBadgeManifest,
-} from "@jointlabs/chains-info";
+} from "@jointlabs/meta";
 import DOMPurify from "dompurify";
 import { ChevronRight } from "lucide-react";
 import { marked } from "marked";

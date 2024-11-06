@@ -1,4 +1,4 @@
-import { MediatorPools } from "@jointlabs/chains-info";
+import { MediatorPools } from "@jointlabs/meta";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, ChevronDown } from "lucide-react";

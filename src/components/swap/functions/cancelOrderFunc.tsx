@@ -1,9 +1,9 @@
-import { ChainInfo } from '@jointlabs/chains-info';
-import { QueryClient } from '@tanstack/react-query';
-import { ReactNode } from 'react';
-import { Location } from 'react-router-dom';
-import { Options } from '../../../hooks/useToast.tsx';
-import { delay, logError } from '../../../libs/helpers.ts';
+import { ChainInfo } from "@jointlabs/meta";
+import { QueryClient } from "@tanstack/react-query";
+import { ReactNode } from "react";
+import { Location } from "react-router-dom";
+import { Options } from "../../../hooks/useToast.tsx";
+import { delay, logError } from "../../../libs/helpers.ts";
 
 /**
  * Order cancelling function
@@ -20,39 +20,39 @@ import { delay, logError } from '../../../libs/helpers.ts';
  * @param notifyError The function for notifying errors
  */
 export async function cancelOrderFunc(
-	swap: Swap,
-	cancelOrder: (orderId: bigint) => Promise<`0x${string}`>,
-	getChainInfo: () => ChainInfo,
-	queryClient: QueryClient,
-	location: Location,
-	loading: LoadingState,
-	setLoading: (id: string, loading: LoadingState) => void,
-	humanizeErrors: (error: { message: string } | unknown) => string,
-	notifySuccess: (msg: ReactNode, options?: Options) => void,
-	notifyError: (msg: ReactNode, options?: Options) => void,
+  swap: Swap,
+  cancelOrder: (orderId: bigint) => Promise<`0x${string}`>,
+  getChainInfo: () => ChainInfo,
+  queryClient: QueryClient,
+  location: Location,
+  loading: LoadingState,
+  setLoading: (id: string, loading: LoadingState) => void,
+  humanizeErrors: (error: { message: string } | unknown) => string,
+  notifySuccess: (msg: ReactNode, options?: Options) => void,
+  notifyError: (msg: ReactNode, options?: Options) => void,
 ) {
-	try {
-		setLoading(swap.orderId.toFixed(), { ...loading, cancelOrder: true });
+  try {
+    setLoading(swap.orderId.toFixed(), { ...loading, cancelOrder: true });
 
-		const [txHash] = await cancelOrder(BigInt(swap.orderId));
-		await delay(5000);
+    const [txHash] = await cancelOrder(BigInt(swap.orderId));
+    await delay(5000);
 
-		const explorer = getChainInfo().blockExplorer;
-		notifySuccess(`Swap was successfully cancelled`, {
-			duration: 5000,
-			links: [{ label: 'View Transaction', href: `${explorer}/tx/${txHash}` }],
-		});
+    const explorer = getChainInfo().blockExplorer;
+    notifySuccess(`Swap was successfully cancelled`, {
+      duration: 5000,
+      links: [{ label: "View Transaction", href: `${explorer}/tx/${txHash}` }],
+    });
 
-		if (location.pathname.includes('my/swaps')) {
-			await queryClient.refetchQueries({ queryKey: ['getSwapsAsParticipant'] });
-		} else if (location.pathname.includes('swap/')) {
-			await queryClient.refetchQueries({ queryKey: ['getSwap'] });
-		}
-	} catch (error) {
-		const msg = humanizeErrors(error);
-		notifyError(msg);
-		logError(error);
-	} finally {
-		setLoading(swap.orderId.toFixed(), { ...loading, cancelOrder: false });
-	}
+    if (location.pathname.includes("my/swaps")) {
+      await queryClient.refetchQueries({ queryKey: ["getSwapsAsParticipant"] });
+    } else if (location.pathname.includes("swap/")) {
+      await queryClient.refetchQueries({ queryKey: ["getSwap"] });
+    }
+  } catch (error) {
+    const msg = humanizeErrors(error);
+    notifyError(msg);
+    logError(error);
+  } finally {
+    setLoading(swap.orderId.toFixed(), { ...loading, cancelOrder: false });
+  }
 }

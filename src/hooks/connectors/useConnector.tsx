@@ -1,4 +1,4 @@
-import { ChainInfo, ContractNames, getChain } from "@jointlabs/chains-info";
+import { ChainInfo, ContractNames, getChain } from "@jointlabs/meta";
 import { useEffect, useState } from "react";
 import {
   Address,
@@ -9,7 +9,7 @@ import {
   erc20Abi,
   http,
 } from "viem";
-import { arbitrum } from "viem/chains";
+import { base } from "viem/chains";
 import {
   useAccount,
   useChainId,
@@ -28,7 +28,7 @@ import { IConnector } from "./interface.ts";
  */
 export default function useConnector() {
   const defaultNetwork = (
-    getChain(import.meta.env.VITE_DEFAULT_NETWORK) ?? getChain(arbitrum.id)
+    getChain(import.meta.env.VITE_DEFAULT_NETWORK) ?? getChain(base.id)
   )?.chainId;
   const [connected, setConnected] = useState<boolean | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
@@ -54,7 +54,7 @@ export default function useConnector() {
 
   useEffect(() => {
     if (!chainId) return;
-    setChain(getChain(chainId)?.chain);
+    setChain(getChain(chainId)?.chain as Chain);
     setNetwork(getChain(chainId)?.queryName);
     localStorage.setItem("lastChainId", chainId.toString());
   }, [connected, chainId]);
@@ -339,8 +339,8 @@ export default function useConnector() {
     const netInfo = getChain(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     return client.readContract({
-      address: netInfo.contracts[name].address as Address,
-      abi: netInfo.contracts[name].abi,
+      address: netInfo.contracts[name]?.address as Address,
+      abi: netInfo.contracts[name]?.abi,
       functionName: targetFunc as never,
       args: args,
     }) as Promise<T>;
@@ -362,8 +362,8 @@ export default function useConnector() {
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const [address] = await walletClient.getAddresses();
     return walletClient.writeContract({
-      address: netInfo.contracts[name].address as Address,
-      abi: netInfo.contracts[name].abi,
+      address: netInfo.contracts[name]?.address as Address,
+      abi: netInfo.contracts[name]?.abi,
       functionName: targetFunc,
       args: args,
       account: address,
@@ -377,6 +377,7 @@ export default function useConnector() {
    * @param args - The arguments to be passed to the target function
    * @param noWait - If true, the function will not wait for the transaction to be mined
    * @param confirmations - The number of confirmations to wait for
+   * @param value - The value to be sent with the transaction
    */
   async function simulateAndWriteContract(
     name: ContractNames,
@@ -384,19 +385,22 @@ export default function useConnector() {
     args: unknown[] = [],
     noWait = false,
     _confirmations = 1,
+    value?: bigint,
   ): Promise<[Address, TransactionReceipt]> {
     if (!publicClient) throw new Error("no provider found");
     if (!walletClient) throw new Error("wallet not connected");
 
     const netInfo = getChain(chainId as number);
+    console.log(netInfo?.contracts);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const [address] = await walletClient.getAddresses();
     const { request } = await publicClient.simulateContract({
-      address: netInfo.contracts[name].address as Address,
-      abi: netInfo.contracts[name].abi,
+      address: netInfo.contracts[name]?.address as Address,
+      abi: netInfo.contracts[name]?.abi,
       functionName: targetFunc,
       args: args,
       account: address,
+      value: value,
     });
 
     const txHash = await walletClient.writeContract(request);
@@ -509,6 +513,5 @@ export default function useConnector() {
     chain,
     network,
     getChainInfo,
-
   } as IConnector;
 }

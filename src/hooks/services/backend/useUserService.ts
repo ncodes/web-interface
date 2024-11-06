@@ -196,6 +196,31 @@ export function useUserService() {
     }
   }
 
+  
+  /**
+   * Get allocation claims
+   * @param ctx The query function context
+   * @returns
+   */
+  async function getClaims(
+    ctx: QueryFunctionContext<[string, { address: string }]>,
+  ): Promise<MerkleClaim[]> {
+    try {
+      const [, params] = ctx.queryKey;
+      const headers = {};
+
+      const resp = await axios({
+        url: `${getChainInfo().apiUrl}/v1/users/claims/${params.address}`,
+        method: "get",
+        headers,
+      });
+
+      return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
   return {
     getUser,
     logOnlineStatus,
@@ -204,5 +229,6 @@ export function useUserService() {
     getNFTInfo,
     getGalxePoints,
     transferScores,
+    getClaims,
   };
 }

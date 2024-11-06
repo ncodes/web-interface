@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { Chain, http } from "viem";
-import { arbitrum, hardhat } from "viem/chains";
+import { arbitrum, base, hardhat } from "viem/chains";
 import { WagmiProvider, createConfig } from "wagmi";
 import {
   AppIcon,
@@ -35,6 +35,7 @@ if (isLocal()) {
   transports[arbitrum.id] = http(
     `https://arbitrum-mainnet.infura.io/v3/${infuraId}`,
   );
+  transports[base.id] = http(`https://base-mainnet.infura.io/v3/${infuraId}`);
 }
 
 const config = createConfig(

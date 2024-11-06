@@ -1,15 +1,17 @@
-import { Helmet } from "react-helmet";
 import { TabsContent } from "../ui/Tabs.tsx";
 import { AirdropDashboard } from "./AirdropDashboard.tsx";
 
-export function AirdropDashboardTabContent() {
+export function AirdropDashboardTabContent({
+  currentTab,
+}: {
+  currentTab: "claim" | "trade";
+}) {
   return (
-    <TabsContent value="airdrop" className="p-0 m-0 flex flex-1 flex-col gap-3">
-      <Helmet>
-        <title>Airdrop - Joint</title>
-      </Helmet>
-
-      <AirdropDashboard />
+    <TabsContent
+      value={currentTab}
+      className="p-0 m-0 rounded-t-3xl flex flex-1 flex-col gap-3"
+    >
+      <AirdropDashboard currentTab={currentTab} />
     </TabsContent>
   );
 }

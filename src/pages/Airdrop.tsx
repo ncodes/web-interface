@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
 import ScrollOverflowIndicator from "../components/ScrollOverflowIndicator.tsx";
 import { PointSearchBar } from "../components/airdrop/PointSearchBar.tsx";
-import PointStream from "../components/airdrop/PointStream.tsx";
 import { TapWarTabContent } from "../components/airdrop/tapoff/TapWarTabContent.tsx";
 import { imageList } from "../components/airdrop/tapoff/contants.ts";
 import IconCoinGold from "../components/icons/IconCoinGold.tsx";
@@ -19,7 +18,7 @@ import Layout from "./Layout.tsx";
 function AirdropPage({ defaultTab }: { defaultTab?: string }) {
   useImagePreloader(imageList);
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState(defaultTab || "leaderboard");
+  const [currentTab, setCurrentTab] = useState(defaultTab);
   const loc = useLocation();
   const isTelegramBot = useStore((state) => state.isTelegramBot);
 
@@ -52,7 +51,7 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
         >
           <TabsList
             className={cn(
-              "bg-card-background flex justify-start w-full items-center border-b border-modal-border",
+              "bg-card-background hidden justify-start w-full items-center border-b border-modal-border",
               { "rounded-t-3xl": !isTelegramBot },
             )}
           >
@@ -67,16 +66,18 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 <IconCoinGold width="25" />
                 <span>Home</span>
               </TabsTrigger>
-              {isTelegramBot && (<TabsTrigger
-                value="tap"
-                className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
-                onClick={() => {
-                  navigate("/tapwar");
-                }}
-              >
-                <IconSpaceship width="25" className="text-yellow-500" />
-                <span>TapWar</span>
-              </TabsTrigger>)}
+              {isTelegramBot && (
+                <TabsTrigger
+                  value="tap"
+                  className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
+                  onClick={() => {
+                    navigate("/tapwar");
+                  }}
+                >
+                  <IconSpaceship width="25" className="text-yellow-500" />
+                  <span>TapWar</span>
+                </TabsTrigger>
+              )}
               {/* <TabsTrigger
                 value="warbond"
                 className="flex font-jersey25 items-center gap-2 px-3 font-light relative top-2 text-[18px] bg-transparent data-[state=active]:text-chinese-green h-[0] py-[14px] pb-5  data-[state=active]:font-medium"
@@ -94,6 +95,9 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
                 loc.pathname != "/nft" &&
                 loc.pathname != "/tapwar" &&
                 loc.pathname != "/warbond" &&
+                loc.pathname != "/dexdrop" &&
+                loc.pathname != "/dexdrop/claim" &&
+                loc.pathname != "/dexdrop/buy" &&
                 loc.pathname != "/galxe" && (
                   <div className="hidden lg:block">
                     <PointSearchBar />
@@ -104,7 +108,11 @@ function AirdropPage({ defaultTab }: { defaultTab?: string }) {
         </ScrollAreaHorizontal>
       </ScrollOverflowIndicator>
 
-      {currentTab == "airdrop" && <AirdropDashboardTabContent />}
+      {["airdrop", "claim", "trade"].includes(currentTab || "") && (
+        <AirdropDashboardTabContent
+          currentTab={currentTab as "claim" | "trade"}
+        />
+      )}
       {currentTab == "tap" && isTelegramBot && <TapWarTabContent />}
       {/* {currentTab == "warbond" && <WarBondTabContent />} */}
       {/* {currentTab == "referrals" && <ReferralsTabContent />} */}
@@ -121,7 +129,7 @@ export default function Airdrop({ defaultTab }: { defaultTab?: string }) {
 
   return (
     <Layout
-      title="My Points - Joint"
+      title="DexDrop"
       bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
       body={<AirdropPage defaultTab={defaultTab} />}
       rightSide={
@@ -131,8 +139,8 @@ export default function Airdrop({ defaultTab }: { defaultTab?: string }) {
         loc.pathname != "/tapwar" &&
         loc.pathname != "/warbond" &&
         loc.pathname != "/galxe" && (
-          <div className="flex w-full justify-between flex-col pt-3">
-            <PointStream />
+          <div className=" w-full justify-between flex-col pt-3 hidden">
+            <div className="flex-1"></div>
             <div className="relative">
               <div className="text-gray-200 bottom-0 w-full">
                 <Footer />

@@ -1,4 +1,4 @@
-import { BadgeManifest } from "@jointlabs/chains-info";
+import { BadgeManifest } from "@jointlabs/meta";
 import { useState } from "react";
 import { BadgeClaimAuthorization } from "./BadgeClaimAuthorization.tsx";
 import { BadgeIssuerAppBrowser } from "./BadgeIssuerAppBrowser.tsx";

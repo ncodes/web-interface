@@ -18,6 +18,7 @@ export default function Input2(props: {
   onFocus?: (e: FocusEvent<HTMLInputElement, Element>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  step?: number;
   afterInput?: ReactNode;
   beforeInput?: ReactNode;
   after?: ReactNode;
@@ -51,6 +52,7 @@ export default function Input2(props: {
             disabled={props.disabled}
             autoFocus={props.autoFocus}
             spellCheck={props.spellCheck}
+            step={props.step}
             className={cn(
               "bg-transparent border-transparent px-3 outline-none focus-visible:!ring-0",
               props.className,

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { LogInIcon } from "lucide-react";
+import { LogInIcon, Wallet2 } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { RefCodeKey } from "../constants.ts";
 import { createSignatureMessage } from "../hooks/connectors/common.ts";
@@ -10,6 +10,7 @@ import useMounted from "../hooks/useMounted.ts";
 import { useSession } from "../hooks/useSession.ts";
 import { useToast } from "../hooks/useToast.tsx";
 import { cn, logError } from "../libs/helpers.ts";
+import { ConnectWalletButton } from "./ConnectWalletButton.tsx";
 import { CreateVirtualAccount } from "./CreateVirtualAccount.tsx";
 import LoaderOverlay from "./airdrop/tapoff/LoaderOverlay.tsx";
 import IconSpinner from "./icons/IconSpinner.tsx";
@@ -70,20 +71,22 @@ export function MainContainerConnectButton({
 
 function WalletConnect({
   loaderIcon,
+  className,
+  onConnect,
+  variant,
 }: {
   variant?: string;
   onConnect?: () => void;
   className?: string;
   loaderIcon?: ReactNode;
 }) {
-  // const { ready } = useConnectorContext();
-  // const isTelegramBot = useStore((state) => state.isTelegramBot);
+  const { ready } = useConnectorContext();
+  const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   return (
     <div className="animate-i sslide-in-from-top-10 flex flex-col select-none items-center gap-2 text-gray-200 justify-center font-light h-[200px] xl:h-[610px]">
       <>
-        {/* {(!isTelegramBot ||
-          (window as any).Telegram.WebApp.platform != "android") && (
+        {!isTelegramBot && (
           <EmptyBodyCard
             className={cn("max-w-[350px] mt-[30px] md:mt-0 pt-0", className)}
             label={
@@ -117,7 +120,7 @@ function WalletConnect({
               </Button>
             </ConnectWalletButton>
           </EmptyBodyCard>
-        )} */}
+        )}
 
         <CreateVirtualAccount loaderIcon={loaderIcon} />
       </>

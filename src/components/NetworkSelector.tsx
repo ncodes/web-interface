@@ -1,4 +1,4 @@
-import { ChainInfo, getChain, getChainsID } from "@jointlabs/chains-info";
+import { ChainInfo, getChain, getChainsID } from "@jointlabs/meta";
 import { ChevronDown } from "lucide-react";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { cn } from "../libs/utils.ts";
