@@ -32,13 +32,14 @@ export function AirdropDashboard({
     setActiveView(currentTab);
   }, [currentTab]);
 
-  const hideDexDropComponents = !isDev() && chain && chain.id != base.id;
+  const hideDexDropComponents =
+    !address || (!isDev() && chain && chain.id != base.id);
 
   return (
     <div className="w-full rounded-t-3xl rounded-b-3xl flex flex-col flex-1 relative bg-black/80">
       <AirdropHeader onViewChanged={setActiveView} defaultView={currentTab} />
 
-      {hideDexDropComponents && (
+      {!!address && hideDexDropComponents && (
         <EmptyBodyCard
           className={cn("max-w-[350px] mx-auto mt-[25%] pt-0", "")}
           label="Chain not supported"
