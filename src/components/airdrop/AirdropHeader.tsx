@@ -28,7 +28,7 @@ export function AirdropHeader({
   if (!address) return null;
 
   return (
-    <div className="border-y h-full rounded-t-3xl border-gray-900 flex justify-between items-center p-3 pl-5 ">
+    <div className="border-y h-full rounded-t-3xl border-gray-900 flex flex-col md:flex-row gap-3 justify-between items-center p-3 pl-5 ">
       <div className="flex flex-col items-center">
         <img
           src="/images/dexdrop.png"
