@@ -45,7 +45,7 @@ export function MainContainerConnectButton({
   if (address && !!token) return null;
 
   return (
-    <div className="h-full flex justify-center items-center flex-1">
+    <div className="h-full flex justify-center flex-1">
       {!mounted && showLoader && <LoaderOverlay icon={loaderIcon} />}
 
       {mounted && !ready && !address && (
