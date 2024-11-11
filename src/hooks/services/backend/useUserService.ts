@@ -125,6 +125,24 @@ export function useUserService() {
   }
 
   /**
+   * Check DEX claim
+   * @returns
+   */
+  async function checkDexClaim(params: { address: string }) {
+    try {
+      await axios({
+        url: `${getChainInfo().apiUrl}/v1/users/check-dex-claim/${params.address}`,
+        method: "post",
+        data: {},
+      });
+
+      return Promise.resolve(undefined);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
    * Get energon balance
    * @param ctx The query function context
    * @returns
@@ -196,7 +214,6 @@ export function useUserService() {
     }
   }
 
-  
   /**
    * Get allocation claims
    * @param ctx The query function context
@@ -229,6 +246,7 @@ export function useUserService() {
     getNFTInfo,
     getGalxePoints,
     transferScores,
+    checkDexClaim,
     getClaims,
   };
 }

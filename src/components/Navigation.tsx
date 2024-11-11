@@ -45,7 +45,7 @@ export function Navigation() {
               <NavPageLink
                 iconClassName="w-[25px]"
                 label="Markets"
-                labelClassName="font-jersey25 tracking-wider"
+                labelClassName="font-silkscreen tracking-wider"
                 icon={<IconMarketCoin width="25" />}
                 active={pathname.match("^(/(my/)?market)|(/$)") != null}
                 to="/"
@@ -55,7 +55,7 @@ export function Navigation() {
               <NavPageLink
                 iconClassName="w-[25px]"
                 label="Liquidity"
-                labelClassName="font-jersey25 tracking-wider"
+                labelClassName="font-silkscreen tracking-wider"
                 active={pathname.match("^/(my/)?liquidit(y|ies)") != null}
                 icon={<IconCoinStack2 width="25" />}
                 to="/my/liquidity"
@@ -66,7 +66,7 @@ export function Navigation() {
                 iconClassName="w-[25px]"
                 icon={<IconExchange width="25" />}
                 label="Swaps"
-                labelClassName="font-jersey25 tracking-wider"
+                labelClassName="font-silkscreen tracking-wider"
                 active={pathname.match("^/(my/)?swap(s|)") != null}
                 to="/my/swaps"
               />
@@ -76,7 +76,7 @@ export function Navigation() {
                 iconClassName="w-[25px]"
                 icon={<IconOffer width="25" />}
                 label="Offers"
-                labelClassName="font-jersey25 tracking-wider"
+                labelClassName="font-silkscreen tracking-wider"
                 active={pathname.match("^/(my/)?offer(s|)") != null}
                 to="/my/offers"
                 countBadge={
@@ -95,7 +95,7 @@ export function Navigation() {
                 iconClassName="relative w-[25px] left-1"
                 icon={<IconDispute width="40" />}
                 label="Disputes"
-                labelClassName="font-jersey25 tracking-wider"
+                labelClassName="font-silkscreen tracking-wider"
                 active={pathname.match("^/my/dispute") != null}
                 to="/my/disputes"
               />
@@ -104,7 +104,7 @@ export function Navigation() {
               <NavPageLink
                 icon={<IconMediation width="40" />}
                 iconClassName="w-[25px]"
-                labelClassName="font-jersey25 tracking-wider"
+                labelClassName="font-silkscreen tracking-wider"
                 label="Mediation"
                 active={pathname.match("^/(my/)?tickets") != null}
                 to="/my/tickets"
@@ -117,7 +117,7 @@ export function Navigation() {
             icon={<IconFreebros width="40" />}
             iconClassName="w-[35px] relative -left-1"
             label="DexDrop"
-            labelClassName="relative -left-2 font-jersey25 tracking-wider"
+            labelClassName="relative -left-2 font-silkscreen tracking-wider"
             active={
               pathname.match("^/points|referrals|energon|airdrop|dexdrop") !=
               null
@@ -133,7 +133,7 @@ export function Navigation() {
           <NavPageLink
             icon={<IconSpaceship width="25" className="text-yellow-500" />}
             iconClassName="w-[25px]"
-            labelClassName="font-jersey25 tracking-wider"
+            labelClassName="font-silkscreen tracking-wider"
             label="TapWar"
             active={pathname.match("^/tapwar") != null}
             inactiveIconClassName="text-yellow-500"
@@ -147,7 +147,7 @@ export function Navigation() {
           <NavPageLink
             icon={<IconBattle width="25" className="text-yellow-500" />}
             iconClassName="w-[25px]"
-            labelClassName="font-jersey25 tracking-wider"
+            labelClassName="font-silkscreen tracking-wider"
             label="WarBond"
             active={pathname.match("^/warbond") != null}
             inactiveIconClassName="text-yellow-500"

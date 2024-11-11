@@ -33,7 +33,7 @@ export function MainContainerConnectButton({
   const connectedAt = useRef<number>(0);
   const { address, ready } = useConnectorContext();
   const { token } = useSession();
-  const mounted = useMounted(3000);
+  const mounted = useMounted(0);
   const isTelegramBot = useStore((state) => state.isTelegramBot);
 
   useEffect(() => {

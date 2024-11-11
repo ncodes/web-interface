@@ -269,7 +269,7 @@ export function SwapOfferCreatorContent({
       const amt = toDec(amount);
       const feePct = totalFeeBp / 100 / 100;
       const newQuoteAmt = amt.div(1 - feePct).mul(priceHD);
-      console.log(amt.toFixed(), priceHD, newQuoteAmt.toFixed());
+      (amt.toFixed(), priceHD, newQuoteAmt.toFixed());
       setQuoteAmount(trimZeros(newQuoteAmt.toFixed(8)));
     })();
   }, [amount, priceHD]);

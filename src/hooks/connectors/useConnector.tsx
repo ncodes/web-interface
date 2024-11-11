@@ -391,7 +391,6 @@ export default function useConnector() {
     if (!walletClient) throw new Error("wallet not connected");
 
     const netInfo = getChain(chainId as number);
-    console.log(netInfo?.contracts);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const [address] = await walletClient.getAddresses();
     const { request } = await publicClient.simulateContract({

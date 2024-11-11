@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle, Loader2, ShoppingCart, Twitter } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import useBondCurveTokenContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
+import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import {
   approxNumber,
@@ -32,7 +32,7 @@ export function ClaimView({
     withdrawClaim,
     getTotalClaimed,
     humanizeErrors,
-  } = useBondCurveTokenContract();
+  } = useBondCurveDistroContract();
   const { notifyError, notifySuccess } = useToast();
   const [loading, setLoading] = useState(false);
   const [withdrawing, setWithdrawing] = useState(false);
@@ -42,7 +42,8 @@ export function ClaimView({
     return !claim.claimedAt;
   });
 
-  const proofs = claims.map((claim) => JSON.parse(claim.proof || "[]"));
+  const sigs = claims.map((claim) => claim.signature || "");
+  const nonces = claims.map((claim) => BigInt(claim.nonce));
   const claimIds = claims.map((claim) => BigInt(claim.claimId));
   const amounts = claims.map((claim) => BigInt(claim.amount));
   const queryClient = useQueryClient();
@@ -61,7 +62,7 @@ export function ClaimView({
   async function handleClaim() {
     try {
       setLoading(true);
-      await claimMulti(proofs, address, claimIds, amounts);
+      await claimMulti(sigs, claimIds, nonces, amounts);
       await queryClient.refetchQueries({ queryKey: ["getClaims"] });
       await delay(5000);
       notifySuccess("Claim successful");
@@ -121,21 +122,26 @@ export function ClaimView({
                 <QuestionMarkCircledIcon className="w-4 h-4" />
               </ToolTip>
             </span>
-            <span className="text-3xl md:text-4xl text-chinese-green select-text">
+            <span className="text-3xl md:text-4xl text-chinese-green select-text font-silkscreen -tracking-widest">
               {formatToHighDenom(amounts.reduce((a, b) => a + b, BigInt(0)))}
             </span>
           </div>
 
-          <div className="w-full md:w-8/12 lg:w-6/12 min-h-[300px] flex flex-col justify-between bg-card-background border border-gray-900 rounded-xl mx-auto">
+          <div className="w-full md:w-8/12 lg:w-6/12 min-h-[300px] flex flex-col justify-between bg-gray-900 border border-gray-900 rounded-xl mx-auto">
             <div className="p-2 space-y-2 ">
               {(originalClaims || []).map((claim) => (
                 <div
                   key={claim.id}
-                  className="flex bg-vampire-black/30 border border-gray-800/40 pb-2 flex-col rounded-xl"
+                  className="flex bg-vampire-black/90 border border-gray-800/40 pb-2 flex-col rounded-xl"
                 >
                   <div className="flex justify-between p-3 pb-3 gap-4">
-                    <span className="font-light text-lg font-jersey25">
-                      {getClaimName(claim)}
+                    <span className="font-light text-lg">
+                      <span className="font-silkscreen -tracking-widest">
+                        {getClaimName(claim)}
+                      </span>
+                      <span className="flex font-mitr items-center gap-1 text-xs text-muted/60 flex-wrap">
+                        {getClaimDescription(claim)}
+                      </span>
 
                       {!!claim.claimedAt && (
                         <span className="flex font-mitr items-center gap-1 text-xs mt-2 text-green-300 flex-wrap">
@@ -145,7 +151,7 @@ export function ClaimView({
                       )}
                     </span>
                     <ToolTip tip={formatToHighDenom(claim.amount)}>
-                      <span className="text-chinese-green uppercase">
+                      <span className="text-chinese-green uppercase font-silkscreen -tracking-widest">
                         {approxAmount(toHD(claim.amount))}
                       </span>
                     </ToolTip>
@@ -182,7 +188,9 @@ export function ClaimView({
               </Button>
 
               {hasClaimed() && (
-                <Link to="https://twitter.com/intent/tweet?url=https%3A%2F%2Fjntl.ink%2Fdexdrop&via=0xJoint&text=I%20just%20claimed%20100%20JOIN%20tokens%20from%20Joint%27s%20DexDrop.%20Have%20you%20used%20Uniswap%20on%20Ethereum%20recently%3F%20Check%20and%20claim%20your%20allocation.%20&hashtags=DexDrop%2CAirdrop%2CJoint%2CDEX">
+                <Link
+                  to={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fjntl.ink%2Fdexdrop&via=0xJoint&text=I%20just%20claimed%20${formatToHighDenom(totalClaimedQry.data || BigInt(0))}%20JOIN%20tokens%20from%20Joint%27s%20DexDrop.%20Have%20you%20used%20Uniswap%20on%20Ethereum%20recently%3F%20Check%20and%20claim%20your%20allocation.%20&hashtags=DexDrop%2CAirdrop%2CJoint%2CDEX`}
+                >
                   <Button size="full" className="!bg-blue-400">
                     <span className="flex items-center gap-1">
                       <Twitter className="w-5 h-5" />
@@ -209,7 +217,7 @@ export function ClaimView({
                 </Button>
                 <span className="text-xs text-gray-500 font-extralight block text-center">
                   Withdrawable:{" "}
-                  <span className="font-medium text-gray-200 select-text">
+                  <span className="font-medium text-gray-200 select-text font-silkscreen -tracking-widest">
                     {formatToHighDenom(unclaimedBalQry.data || BigInt(0))}
                   </span>
                 </span>
@@ -224,7 +232,9 @@ export function ClaimView({
             <span className="text-xs text-gray-400 tracking-wide block text-center">
               Total Claimed
             </span>
-            <span>{formatToHighDenom(totalClaimedQry.data || BigInt(0))}</span>
+            <span className="font-silkscreen -tracking-widest">
+              {formatToHighDenom(totalClaimedQry.data || BigInt(0))}
+            </span>
           </div>
         </div>
       </div>
@@ -232,15 +242,31 @@ export function ClaimView({
   );
 }
 
-function getClaimName(claim: { claimId: number; name: string }) {
+function getClaimName(claim: { claimId: number }) {
   switch (claim.claimId) {
     case 0:
-      if (claim.name.includes("uni_user")) return "Uniswap User";
-      return "Testnet, Trialnet and TapWar participation";
+      return "DEX User";
     case 1:
-      return "TJOIN holder";
+      return "Point Holder";
     case 2:
+      return "TJOIN Holder";
+    case 3:
       return "Community Partner";
+    default:
+      return "Unknown";
+  }
+}
+
+function getClaimDescription(claim: { claimId: number }) {
+  switch (claim.claimId) {
+    case 0:
+      return "Users of Uniswap between Jan 1st - Nov 10th 2024";
+    case 1:
+      return "Joint's points program participantion";
+    case 2:
+      return "Early TJOIN purchaser";
+    case 3:
+      return "Joint's community partner";
     default:
       return "Unknown";
   }

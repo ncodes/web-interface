@@ -958,10 +958,10 @@
   resolved "https://registry.yarnpkg.com/@ioredis/commands/-/commands-1.2.0.tgz#6d61b3097470af1fdbbe622795b8921d42018e11"
   integrity sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==
 
-"@jointlabs/meta@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@jointlabs/meta/-/meta-0.0.6.tgz#13a5fa5b791a40d85cf15ec80721764861fa5704"
-  integrity sha512-I+k2J2wjYGd99TNCMk2EGN1Xu8Kx+T6jSmS/cbDEo6GAIeiGIMnZmdrWy9bXJh62R/Evjgqg+PhXnyZhovGxWg==
+"@jointlabs/meta@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@jointlabs/meta/-/meta-0.0.7.tgz#9331cbaba980282efebe72766feb01c2585f7260"
+  integrity sha512-qqt2P9Ydj8BEB/AKwyFo43dG65INzBDiQ+4h1iykzkGWP6QxlkMVMZAPImxKsU0mPdnlqrlJhxjaJJ8qZL9z+A==
   dependencies:
     "@typechain/ethers-v6" "^0.5.1"
     lodash "^4.17.21"

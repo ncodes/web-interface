@@ -8,7 +8,8 @@ declare global {
     address: string;
     amount: string;
     claimId: number;
-    proof: string;
+    nonce: number;
+    signature: string;
     claimedAt: string;
   }
 

@@ -4,7 +4,7 @@ import { SettingsIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
-import useBondCurveTokenContract from "../../hooks/services/contracts/useBondCurveTokenContract";
+import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract";
 import { useToast } from "../../hooks/useToast";
 import {
   delay,
@@ -38,7 +38,7 @@ export function BondingCurveSwapper() {
     getBondCurveAllocation,
     getTotalBought,
     humanizeErrors,
-  } = useBondCurveTokenContract();
+  } = useBondCurveDistroContract();
   const [buyPrice, setBuyPrice] = useState<bigint>(0n);
   const [amount, setAmount] = useState<string>("");
   const [bondCurveAllocation, setBondCurveAllocation] = useState<bigint>(0n);
@@ -102,13 +102,15 @@ export function BondingCurveSwapper() {
     <>
       <div className="w-[300px] xs:w-[350px] mt-10 lg:mt-20 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
         <header className="flex gap-2 border-b border-card-border/30">
-          <div className="rounded-lg text-center rounded-b-none w-full p-2 ">
+          <div className="rounded-lg text-center rounded-b-none w-full p-2 font-silkscreen">
             Liquidity Market
           </div>
         </header>
 
         <div className="flex flex-col m-1 rounded-lg bg-yellow-400 text-gray-900 font-light text-xs p-2">
-          <span className="font-medium text-sm">Swap ETH for JOIN</span>
+          <span className="font-medium text-sm font-silkscreen ">
+            Swap ETH for JOIN
+          </span>
           <span>
             You get more JOIN, resets your DexDrop allocation and you contribute
             to DEX liquidity.
@@ -267,13 +269,15 @@ export function BondingCurveSwapper() {
           </div>
         </section>
       </div>
-      <div className="pt-0">
+      <div className="pt-0 mb-5">
         <div className="w-[300px] p-3 xs:w-[350px] mt-5 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
           <div className="flex flex-col items-center justify-center">
             <span className="text-xs text-gray-400 tracking-wide block text-center">
               Total Swapped (JOIN)
             </span>
-            {formatToHighDenom(getTotalBoughtQry.data || BigInt(0))}
+            <span className="font-silkscreen -tracking-widest">
+              {formatToHighDenom(getTotalBoughtQry.data || BigInt(0))}
+            </span>
           </div>
         </div>
       </div>

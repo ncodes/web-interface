@@ -130,7 +130,7 @@ export default function Airdrop({ defaultTab }: { defaultTab?: string }) {
   return (
     <Layout
       title="DexDrop"
-      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col"
+      bodyContainerClassName="min-h-[97%] xl:min-h-full flex flex-col "
       body={<AirdropPage defaultTab={defaultTab} />}
       rightSide={
         !isTelegramBot &&
