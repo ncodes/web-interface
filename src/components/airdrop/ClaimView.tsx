@@ -127,7 +127,7 @@ export function ClaimView({
             </span>
           </div>
 
-          <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[300px] flex flex-col justify-between bg-gray-900 border border-gray-900 rounded-xl mx-auto">
+          <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[300px] flex flex-col justify-between bg-card-background border border-gray-900 rounded-xl mx-auto">
             <div className="p-2 space-y-2 w-full min-h-[100px]  lg:min-h-[300px]">
               {originalClaims.length == 0 && (
                 <div className="flex items-center justify-center min-h-[100px]  lg:min-h-[300px] font-silkscreen text-xl">
