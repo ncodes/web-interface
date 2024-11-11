@@ -6,10 +6,8 @@ import { Link } from "react-router-dom";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import {
-  approxNumber,
   delay,
   formatToHighDenom,
-  formatToMoney,
   logError,
   toDec,
   toHD,
@@ -127,8 +125,14 @@ export function ClaimView({
             </span>
           </div>
 
-          <div className="w-full md:w-8/12 lg:w-6/12 min-h-[300px] flex flex-col justify-between bg-gray-900 border border-gray-900 rounded-xl mx-auto">
-            <div className="p-2 space-y-2 ">
+          <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[300px] flex flex-col justify-between bg-gray-900 border border-gray-900 rounded-xl mx-auto">
+            <div className="p-2 space-y-2 absolute w-full  h-full">
+              {originalClaims.length == 0 && (
+                <div className="flex items-center justify-center h-full font-silkscreen text-xl">
+                  <span>No Allocation Found</span>
+                </div>
+              )}
+
               {(originalClaims || []).map((claim) => (
                 <div
                   key={claim.id}
@@ -179,58 +183,68 @@ export function ClaimView({
                 </div>
               ))}
             </div>
-            <div className="p-2 flex flex-col gap-2">
-              <Button size="full" onClick={handleClaim} disabled={!canClaim()}>
-                {!loading && "Claim"}
-                {loading && (
-                  <Loader2 className="animate-spin text-black w-5 h-5" />
-                )}
-              </Button>
 
-              {hasClaimed() && (
-                <Link
-                  to={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fjntl.ink%2Fdexdrop&via=0xJoint&text=I%20just%20claimed%20${formatToHighDenom(totalClaimedQry.data || BigInt(0))}%20JOIN%20tokens%20from%20Joint%27s%20DexDrop.%20Have%20you%20used%20Uniswap%20on%20Ethereum%20recently%3F%20Check%20and%20claim%20your%20allocation.%20&hashtags=DexDrop%2CAirdrop%2CJoint%2CDEX`}
-                >
-                  <Button size="full" className="!bg-blue-400">
-                    <span className="flex items-center gap-1">
-                      <Twitter className="w-5 h-5" />
-                      <span>Share</span>
-                    </span>
-                  </Button>
-                </Link>
-              )}
-
-              <div className="flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
-                <span className="text-xs text-gray-400 font-extralight block text-center">
-                  Available after the liquidity market closes.
-                </span>
+            {originalClaims.length > 0 && (
+              <div className="p-2 flex flex-col gap-2">
                 <Button
-                  variant="secondary"
-                  disabled={!canWithdraw()}
                   size="full"
-                  onClick={handleWithdraw}
+                  onClick={handleClaim}
+                  disabled={!canClaim()}
                 >
-                  {!withdrawing && "Withdraw"}
-                  {withdrawing && (
+                  {!loading && "Claim"}
+                  {loading && (
                     <Loader2 className="animate-spin text-black w-5 h-5" />
                   )}
                 </Button>
-                <span className="text-xs text-gray-500 font-extralight block text-center">
-                  Withdrawable:{" "}
-                  <span className="font-medium text-gray-200 select-text font-silkscreen -tracking-widest">
-                    {formatToHighDenom(unclaimedBalQry.data || BigInt(0))}
+
+                {hasClaimed() && (
+                  <Link
+                    to={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fjntl.ink%2Fdexdrop&via=0xJoint&text=I%20just%20claimed%20${formatToHighDenom(totalClaimedQry.data || BigInt(0))}%20JOIN%20tokens%20from%20Joint%27s%20DexDrop.%20Have%20you%20used%20Uniswap%20on%20Ethereum%20recently%3F%20Check%20and%20claim%20your%20allocation.%20&hashtags=DexDrop%2CAirdrop%2CJoint%2CDEX`}
+                  >
+                    <Button size="full" className="!bg-blue-400">
+                      <span className="flex items-center gap-1">
+                        <Twitter className="w-5 h-5" />
+                        <span>Share</span>
+                      </span>
+                    </Button>
+                  </Link>
+                )}
+
+                <div className="flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
+                  <span className="text-xs text-gray-400 font-extralight block text-center">
+                    Available after the liquidity market closes.
                   </span>
-                </span>
+                  <Button
+                    variant="secondary"
+                    disabled={!canWithdraw()}
+                    size="full"
+                    onClick={handleWithdraw}
+                  >
+                    {!withdrawing && "Withdraw"}
+                    {withdrawing && (
+                      <Loader2 className="animate-spin text-black w-5 h-5" />
+                    )}
+                  </Button>
+                  <span className="text-xs text-gray-500 font-extralight block text-center">
+                    Withdrawable:{" "}
+                    <span className="font-medium text-gray-200 select-text font-silkscreen -tracking-widest">
+                      {formatToHighDenom(unclaimedBalQry.data || BigInt(0))}
+                    </span>
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
       <div className="p-5 pt-0">
         <div className="w-full p-7 md:w-8/12 lg:w-6/12 h-[40px] bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
           <div className="flex flex-col items-center justify-center">
-            <span className="text-xs text-gray-400 tracking-wide block text-center">
-              Total Claimed
+            <span className="flex items-center gap-1 text-xs text-gray-400 tracking-wide text-center">
+              <span>Total Claimed</span>
+              <ToolTip tip="Total amount of JOIN claimed">
+                <QuestionMarkCircledIcon className="w-4 h-4 text-gray-500" />
+              </ToolTip>
             </span>
             <span className="font-silkscreen -tracking-widest">
               {formatToHighDenom(totalClaimedQry.data || BigInt(0))}
