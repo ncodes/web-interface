@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import {
+  approxNumber,
   delay,
   formatToHighDenom,
+  formatToMoney,
   logError,
   toDec,
   toHD,
@@ -126,9 +128,9 @@ export function ClaimView({
           </div>
 
           <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[300px] flex flex-col justify-between bg-gray-900 border border-gray-900 rounded-xl mx-auto">
-            <div className="p-2 space-y-2 absolute w-full  h-full">
+            <div className="p-2 space-y-2 w-full min-h-[100px]  lg:min-h-[300px]">
               {originalClaims.length == 0 && (
-                <div className="flex items-center justify-center h-full font-silkscreen text-xl">
+                <div className="flex items-center justify-center min-h-[100px]  lg:min-h-[300px] font-silkscreen text-xl">
                   <span>No Allocation Found</span>
                 </div>
               )}
