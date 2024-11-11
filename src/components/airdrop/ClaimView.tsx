@@ -17,7 +17,7 @@ import {
 import { ToolTip } from "../ToolTip.tsx";
 import { Button } from "../ui/Button.tsx";
 
-const AllowWithdraw = true;
+const AllowWithdraw = false;
 
 export function ClaimView({
   claims,
@@ -127,10 +127,10 @@ export function ClaimView({
             </span>
           </div>
 
-          <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[300px] flex flex-col justify-between bg-card-background border border-gray-900 rounded-xl mx-auto">
-            <div className="p-2 space-y-2 w-full min-h-[100px]  lg:min-h-[300px]">
+          <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[200px] flex flex-col justify-between bg-card-background border border-gray-900 rounded-xl mx-auto">
+            <div className="p-2 space-y-2 w-full min-h-[100px]  lg:min-h-[200px]">
               {originalClaims.length == 0 && (
-                <div className="flex items-center justify-center min-h-[100px]  lg:min-h-[300px] font-silkscreen text-xl">
+                <div className="flex items-center justify-center min-h-[100px]  lg:min-h-[200px] font-silkscreen text-xl">
                   <span>No Allocation Found</span>
                 </div>
               )}
@@ -150,7 +150,7 @@ export function ClaimView({
                       </span>
 
                       {!!claim.claimedAt && (
-                        <span className="flex font-mitr items-center gap-1 text-xs mt-2 text-green-300 flex-wrap">
+                        <span className="flex items-center gap-1 text-xs mt-2 text-green-300 flex-wrap font-silkscreen">
                           <CheckCircle size="15" />
                           <span>Claimed</span>
                         </span>
