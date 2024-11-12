@@ -95,7 +95,7 @@ export function NetworkSelector() {
         >
           <div
             className={cn(
-              "font-jersey20 tracking-wider text-lg md:w-[180px] flex gap-2 justify-between border items-center transition-all duration-500 hover:cursor-pointer hover:bg-gray-800 hover:scale-x-105 hover:border-chinese-green p-2 px-2 pr-1 rounded-full border-gray-600",
+              "font-jersey20 tracking-wider text-lg flex gap-2 justify-between border items-center transition-all duration-500 hover:cursor-pointer hover:bg-gray-800 hover:scale-x-105 hover:border-chinese-green p-2 px-2 pr-1 rounded-full border-gray-600",
               {
                 "scale-105 border-chinese-green bg-gray-800": open,
               },
@@ -105,7 +105,7 @@ export function NetworkSelector() {
               width: 25,
               height: 25,
             })}
-            <span className="hidden md:inline">
+            <span className="hidden md:inline px-1">
               {curChain?.altDisplayName || curChain?.displayName}
             </span>
 
