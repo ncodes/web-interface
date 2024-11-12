@@ -38,7 +38,7 @@ export function AirdropHeader({
       <div className="flex gap-1 px-1 py-1 bg-gray-800 rounded-xl">
         <Button
           className={cn(
-            "rounded-xl text-white bg-gray-900/70 hover:text-gray-800",
+            "rounded-xl text-white bg-gray-900/70 hover:text-gray-800 font-silkscreen",
             activeView === "claim" && "bg-chinese-green text-black",
           )}
           onClick={() => {
@@ -49,7 +49,7 @@ export function AirdropHeader({
         </Button>
         <Button
           className={cn(
-            "rounded-xl text-white bg-gray-900/70 hover:text-gray-800",
+            "rounded-xl text-white bg-gray-900/70 hover:text-gray-800 font-silkscreen",
             activeView === "trade" && "bg-chinese-green text-black",
           )}
           onClick={() => {
