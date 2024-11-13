@@ -115,6 +115,9 @@ export default function useBondCurveDistroContract() {
 
       if (error.message.includes("CLAIM_NOT_ALLOWED"))
         return "Claiming is not currently allowed";
+
+      if (error.message.includes("TRADE_NOT_ALLOWED"))
+        return "Market is not currently open";
     }
 
     return "Transaction failed";
