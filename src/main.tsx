@@ -112,7 +112,7 @@ const routes = [
   },
   {
     path: makePath("/dexdrop"),
-    element: <App page={<Airdrop defaultTab="airdrop" />} />,
+    element: <App page={<Airdrop defaultTab="claim" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {
