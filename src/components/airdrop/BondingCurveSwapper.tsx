@@ -108,13 +108,11 @@ export function BondingCurveSwapper() {
         </header>
 
         <div className="flex flex-col m-1 rounded-lg bg-yellow-400 text-gray-900 font-light text-xs p-2">
-          <span className="font-medium text-sm font-silkscreen ">
-            Swap ETH for JOIN
-          </span>
-          <span>
-            You get more JOIN, resets your DexDrop allocation and you contribute
-            to DEX liquidity.
-          </span>
+          <span className="text-sm font-silkscreen">Swap ETH for JOIN</span>
+          <ul className="list-outside list-disc pl-3.5 text-yellow-950">
+            <li>You get more JOIN and contribute to liquidity.</li>
+            <li>Buy up to 0.03 ETH to reset DexDrop allocation.</li>
+          </ul>
         </div>
 
         <section className="p-2">
