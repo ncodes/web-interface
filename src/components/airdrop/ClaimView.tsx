@@ -206,7 +206,7 @@ export function ClaimView({
 
                 {hasClaimed() && (
                   <Link
-                    to={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fjntl.ink%2Fdexdrop&via=0xJoint&text=I%20just%20claimed%20${formatToHighDenom(totalClaimedQry.data || BigInt(0))}%20JOIN%20tokens%20from%20Joint%27s%20DexDrop.%20Have%20you%20used%20Uniswap%20recently%3F%20Check%20eligibility%20and%20claim%20your%20allocation.%20&hashtags=DexDrop%2CAirdrop%2CJoint%2CDEX`}
+                    to={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fjntl.ink%2Fdexdrop&via=0xJoint&text=I%20just%20claimed%20${formatToHighDenom(totalClaimedQry.data || BigInt(0))}%20JOIN%20tokens%20from%20Joint%27s%20DexDrop.%20Have%20you%20used%20Uniswap%20or%20PancakeSwap%20recently%3F%20Check%20eligibility%20to%20claim%20yours.%20&hashtags=DexDrop%2CAirdrop%2CJoint%2CDEX`}
                   >
                     <Button size="full" className="!bg-blue-400">
                       <span className="flex items-center gap-1">
