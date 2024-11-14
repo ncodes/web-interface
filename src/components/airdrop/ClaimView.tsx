@@ -1,6 +1,6 @@
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle, Loader2, ShoppingCart, Twitter } from "lucide-react";
+import { CheckCircle, Loader2, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
@@ -15,6 +15,7 @@ import {
   toHD,
 } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
+import { IconX } from "../icons/IconX.tsx";
 import { Button } from "../ui/Button.tsx";
 
 const AllowWithdraw = false;
@@ -208,9 +209,12 @@ export function ClaimView({
                   <Link
                     to={`https://twitter.com/intent/tweet?url=https%3A%2F%2Fjntl.ink%2Fdexdrop&via=0xJoint&text=I%20just%20claimed%20${formatToHighDenom(totalClaimedQry.data || BigInt(0))}%20JOIN%20tokens%20from%20Joint%27s%20DexDrop.%20Have%20you%20used%20Uniswap%20or%20PancakeSwap%20recently%3F%20Check%20eligibility%20to%20claim%20yours.%20&hashtags=DexDrop%2CAirdrop%2CJoint%2CDEX`}
                   >
-                    <Button size="full" className="!bg-blue-400">
+                    <Button
+                      size="full"
+                      className="bg-blue-400/90 hover:bg-blue-400"
+                    >
                       <span className="flex items-center gap-1">
-                        <Twitter className="w-5 h-5" />
+                        <IconX className="w-5 h-5" />
                         <span>Share</span>
                       </span>
                     </Button>
