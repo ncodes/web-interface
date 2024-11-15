@@ -118,6 +118,9 @@ export default function useBondCurveDistroContract() {
 
       if (error.message.includes("TRADE_NOT_ALLOWED"))
         return "Market is not currently open";
+
+      if (error.message.includes("INVALID_SIG"))
+        return "Invalid claim signature";
     }
 
     return "Transaction failed";
