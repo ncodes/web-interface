@@ -53,7 +53,7 @@ export function AirdropDashboard({
   const isLoading = checkDexClaimMut.isPending || isGetClaimsLoading;
 
   return (
-    <div className="w-full rounded-t-3xl rounded-b-3xl flex flex-col flex-1 relative bg-black/80">
+    <div className="w-full rounded-t-3xl rounded-b-3xl flex flex-col flex-1 relative bg-black/80 bg-[url('/public/images/dexdrop-cover.png')] bg-contain bg-no-repeat xl:bg-bottom">
       <AirdropHeader onViewChanged={setActiveView} defaultView={currentTab} />
 
       {!!address && hideDexDropComponents && (

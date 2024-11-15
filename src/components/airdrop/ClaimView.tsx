@@ -113,7 +113,7 @@ export function ClaimView({
     <>
       {address && (
         <div className="px-5 pb-5 pt-4 space-y-4 tracking-wider">
-          <div className="w-full md:w-8/12 lg:w-6/12 h-[100px] bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
+          <div className="w-full md:w-8/12 lg:w-6/12 py-2 bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
             <span className="flex items-center gap-1 md:text-xl tracking-wider text-gray-100">
               <span className="text-md">JOIN</span>
               <ToolTip

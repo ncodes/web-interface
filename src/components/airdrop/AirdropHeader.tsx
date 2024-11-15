@@ -31,14 +31,14 @@ export function AirdropHeader({
   if (!address) return null;
 
   return (
-    <div className="border-y h-full rounded-t-3xl border-gray-900 flex flex-col md:flex-row gap-3 justify-between items-center p-3 pl-5 ">
-      <div className="flex flex-col items-center">
+    <div className="border-y h-full rounded-t-3xl border-gray-900 flex flex-col md:flex-row gap-3 justify-between items-center p-3 pl-5">
+      <div className="flex flex-col items-center mt-3 md:mt-0">
         <img
           src="/images/dexdrop.png"
-          className="w-[100px] xxs:w-[120px] xs:w-[150px] md:w-[200px]"
+          className="w-[100px] xxs:w-[120px] xs:w-[150px] md:w-[150px]"
         />
       </div>
-      <div className="flex items-center gap-1.5 font-silkscreen">
+      <div className="flex items-center gap-1.5 text-lg font-silkscreen">
         <img src="/images/airdrop-icons/point-star.svg" className="w-4 h-4" />
         <ToolTip tip="Points">
           <span>{user?.points}</span>

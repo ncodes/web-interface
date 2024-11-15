@@ -333,7 +333,7 @@ export default function Layout({
                   <div className="absolute w-full h-full">
                     <div
                       className={cn(
-                        "z-0 border border-gray-800 bg-vampire-black ",
+                        "z-0 border border-gray-800 bg-vampire-black",
                         { "rounded-3xl": !isTelegramBot },
                         bodyContainerClassName,
                       )}
