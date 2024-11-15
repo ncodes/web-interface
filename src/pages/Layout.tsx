@@ -1,4 +1,3 @@
-import RestrictedLocationBlocker from "@/components/RestrictedLocationBlocker.tsx";
 import * as Sentry from "@sentry/browser";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
@@ -291,7 +290,7 @@ export default function Layout({
         <body className="bg-background" />
       </Helmet>
 
-      <RestrictedLocationBlocker />
+      {/* <RestrictedLocationBlocker /> */}
       {/* <AuditStatusNotice /> */}
 
       <div
