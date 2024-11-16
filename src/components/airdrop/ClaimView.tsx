@@ -53,11 +53,13 @@ export function ClaimView({
     queryKey: ["getUnclaimedBalance", { address }],
     queryFn: () => claimsBalanceOf(address),
     enabled: !!address,
+    refetchInterval: 30000,
   });
 
   const totalClaimedQry = useQuery({
     queryKey: ["getTotalClaimed"],
     queryFn: () => getTotalClaimed(),
+    refetchInterval: 30000,
   });
 
   async function handleClaim() {
@@ -65,6 +67,8 @@ export function ClaimView({
       setLoading(true);
       await claimMulti(sigs, claimIds, nonces, amounts);
       await queryClient.refetchQueries({ queryKey: ["getClaims"] });
+      await queryClient.refetchQueries({ queryKey: ["getUnclaimedBalance"] });
+      await queryClient.refetchQueries({ queryKey: ["getTotalClaimed"] });
       await delay(5000);
       notifySuccess("Claim successful");
       setLoading(false);
@@ -82,6 +86,7 @@ export function ClaimView({
       await withdrawClaim();
       await queryClient.refetchQueries({ queryKey: ["getClaims"] });
       await queryClient.refetchQueries({ queryKey: ["getUnclaimedBalance"] });
+      await queryClient.refetchQueries({ queryKey: ["getTotalClaimed"] });
       await delay(5000);
       setWithdrawing(false);
       notifySuccess("Withdraw successful");
@@ -169,19 +174,16 @@ export function ClaimView({
                     </ToolTip>
                   </div>
                   {!!claim.claimedAt && claim.claimId == 0 && (
-                    <span className="flex items-center justify-between gap-1 mx-2 mr-0 font-bold text-sm text-gray-300 font-jersey20 bg-gray-800/50 p-1 px-2 rounded-lg">
-                      <span className="flex items-center gap-1">
-                        <ShoppingCart
-                          size="14"
-                          className="text-chinese-green"
-                        />{" "}
+                    <span className="flex items-center justify-between gap-1 mx-2 mr-0 font-bold text-sm text-gray-800 font-jersey20 bg-green-400 p-1 px-1 pl-2 rounded-lg">
+                      <span className="flex items-center gap-2">
+                        <ShoppingCart size="14" className="text-green-800" />{" "}
                         Buy from the liquidity market to reset
                       </span>
 
                       <Link to="/dexdrop/buy">
                         <Button
                           variant="link"
-                          className="h-auto py-0 text-white bg-gray-600 hover:bg-gray-700"
+                          className="h-auto py-0 text-white bg-green-600 rounded-md hover:bg-green-800"
                         >
                           Buy
                         </Button>

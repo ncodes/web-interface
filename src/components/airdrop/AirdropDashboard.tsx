@@ -32,7 +32,7 @@ export function AirdropDashboard({
     queryKey: ["getClaims", { address }],
     queryFn: getClaims,
     enabled: !!address && dexClaimChecked,
-    refetchInterval: 60000,
+    refetchInterval: 30000,
   });
 
   useEffect(() => {
