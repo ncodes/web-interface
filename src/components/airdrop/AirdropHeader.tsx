@@ -23,7 +23,7 @@ export function AirdropHeader() {
               tip={
                 <>
                   Total Points (including Taps:{" "}
-                  {formatToMoney(user?.tapScore || "0")}
+                  {formatToMoney(user?.tapScore || "0")})
                 </>
               }
             >
