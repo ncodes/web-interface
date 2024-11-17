@@ -37,7 +37,14 @@ export function AirdropHeader() {
               </span>
             </ToolTip>
             <span className="text-gray-500">
-              <ToolTip tip="Your total points and rank">
+              <ToolTip
+                tip={
+                  <>
+                    Total Points (including{" "}
+                    {formatToMoney(user?.tapScore || "0")} TAPs)
+                  </>
+                }
+              >
                 <InfoCircledIcon width="20px" />
               </ToolTip>
             </span>
