@@ -339,8 +339,8 @@ export default function useConnector() {
     const netInfo = getChain(chainId as number);
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     return client.readContract({
-      address: netInfo.contracts[name].address as Address,
-      abi: netInfo.contracts[name].abi,
+      address: netInfo.contracts[name]?.address as Address,
+      abi: netInfo.contracts[name]?.abi,
       functionName: targetFunc as never,
       args: args,
     }) as Promise<T>;
@@ -362,8 +362,8 @@ export default function useConnector() {
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const [address] = await walletClient.getAddresses();
     return walletClient.writeContract({
-      address: netInfo.contracts[name].address as Address,
-      abi: netInfo.contracts[name].abi,
+      address: netInfo.contracts[name]?.address as Address,
+      abi: netInfo.contracts[name]?.abi,
       functionName: targetFunc,
       args: args,
       account: address,
@@ -392,8 +392,8 @@ export default function useConnector() {
     if (!netInfo || !netInfo.contracts) throw new Error("unknown contract");
     const [address] = await walletClient.getAddresses();
     const { request } = await publicClient.simulateContract({
-      address: netInfo.contracts[name].address as Address,
-      abi: netInfo.contracts[name].abi,
+      address: netInfo.contracts[name]?.address as Address,
+      abi: netInfo.contracts[name]?.abi,
       functionName: targetFunc,
       args: args,
       account: address,
@@ -509,6 +509,5 @@ export default function useConnector() {
     chain,
     network,
     getChainInfo,
-
   } as IConnector;
 }

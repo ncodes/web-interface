@@ -341,7 +341,7 @@ export function SwapOfferCreatorContent({
       if (isZero(maxQuoteAmount)) return setHasAllowance(false);
       if (!isERC20(market.quoteType)) return setHasAllowance(true);
 
-      const tokenAddr = getChainInfo().contracts?.core.address;
+      const tokenAddr = getChainInfo().contracts?.core?.address;
       if (!tokenAddr) throw new Error("token address not found");
 
       const allowance = await getTokenAllowance(
@@ -454,7 +454,7 @@ export function SwapOfferCreatorContent({
       setApproveLoading(true);
       await approveAllowance(
         market.quoteAddress as Address,
-        getChainInfo().contracts?.core.address as Address,
+        getChainInfo().contracts?.core?.address as Address,
         await getTokenSupply(market.quoteAddress as Address),
       );
       await delay(5000);
@@ -502,7 +502,7 @@ export function SwapOfferCreatorContent({
       // For interactive swap, redirect to swap page
       if (!market.instant) {
         const event = decodeEventLog({
-          abi: getChainInfo().contracts?.core.abi,
+          abi: getChainInfo().contracts?.core?.abi,
           data: txReceipt.logs[txReceipt.logs.length - 1].data,
           topics: txReceipt.logs[txReceipt.logs.length - 1].topics,
         }) as { args: { numTypeInfo: bigint[] } };
@@ -559,7 +559,7 @@ export function SwapOfferCreatorContent({
 
       // For interactive swap, redirect to swap page
       const event = decodeEventLog({
-        abi: getChainInfo().contracts?.core.abi,
+        abi: getChainInfo().contracts?.core?.abi,
         data: txReceipt.logs[0].data,
         topics: txReceipt.logs[0].topics,
       }) as { args: { offerId: bigint } };
@@ -598,7 +598,7 @@ export function SwapOfferCreatorContent({
       // For interactive swap, redirect to swap page
       if (!market.instant) {
         const event = decodeEventLog({
-          abi: getChainInfo().contracts?.core.abi,
+          abi: getChainInfo().contracts?.core?.abi,
           data: txReceipt.logs[txReceipt.logs.length - 1].data,
           topics: txReceipt.logs[txReceipt.logs.length - 1].topics,
         }) as { args: { numTypeInfo: bigint[] } };
