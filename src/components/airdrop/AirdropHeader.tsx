@@ -22,8 +22,8 @@ export function AirdropHeader() {
             <ToolTip
               tip={
                 <>
-                  Total Points (including Taps:{" "}
-                  {formatToMoney(user?.tapScore || "0")})
+                  Total Points (including {formatToMoney(user?.tapScore || "0")}{" "}
+                  TAPs)
                 </>
               }
             >
