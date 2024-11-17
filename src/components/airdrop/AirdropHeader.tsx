@@ -1,9 +1,7 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
-import { formatToHighDenom, formatToMoney } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
-import IconSpaceship from "../icons/IconSpaceship.tsx";
 
 export function AirdropHeader() {
   const user = useStore((store) => store.user);
@@ -36,7 +34,7 @@ export function AirdropHeader() {
           </span>
         </li>
 
-        <li className="flex gap-2 items-center font-light tracking-wider">
+        {/* <li className="flex gap-2 items-center font-light tracking-wider">
           <IconSpaceship width="25" className="text-yellow-500" />
           <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
             <span>{formatToMoney(user?.tapScore || "0")}</span>
@@ -46,9 +44,9 @@ export function AirdropHeader() {
               </ToolTip>
             </span>
           </span>
-        </li>
+        </li> */}
 
-        <li className="flex gap-2 items-center font-light tracking-wider">
+        {/* <li className="flex gap-2 items-center font-light tracking-wider">
           <img src="/images/airdrop-icons/coin.svg" className="w-6" />
           <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
             <span>
@@ -60,7 +58,7 @@ export function AirdropHeader() {
               </ToolTip>
             </span>
           </span>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

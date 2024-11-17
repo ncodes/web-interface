@@ -953,11 +953,12 @@
   resolved "https://registry.npmjs.org/@ioredis/commands/-/commands-1.2.0.tgz"
   integrity sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==
 
-"@jointlabs/chains-info@^0.0.55":
-  version "0.0.55"
-  resolved "https://registry.yarnpkg.com/@jointlabs/chains-info/-/chains-info-0.0.55.tgz#95bd2d60f4566580d10ded46bdf06b0db53c9ca4"
-  integrity sha512-bx9pttoON7L4ZDnxR4PZlcubzG1g4dXtxNIXqoQN4u7OveoqezuOqg7g4thd+3YS6rUn7rs9VWCLneSR4goZmw==
+"@jointlabs/chains-info@^0.0.60":
+  version "0.0.60"
+  resolved "https://registry.yarnpkg.com/@jointlabs/chains-info/-/chains-info-0.0.60.tgz#d4abc070e1e29ad4d50dd4caca35ac9406e5104b"
+  integrity sha512-qAybG4yN+4QvZN9XQe6JuXBh/5L+QDOvMDyxT7scCjZwAktlwleJyrS71wgIPmGsL+F1JbrufJ3oHF99jABJng==
   dependencies:
+    "@typechain/ethers-v6" "^0.5.1"
     lodash "^4.17.21"
     react "^18.2.0"
     viem "^2.7.6"
@@ -2742,6 +2743,14 @@
   version "11.1.1"
   resolved "https://registry.npmjs.org/@typechain/ethers-v5/-/ethers-v5-11.1.1.tgz"
   integrity sha512-D9WyUrCJ4Z5Gg8T00HWLpuqn1CqSDXlCiUOOpLaWoCbnZrE2jSIOUwR9blBZNo6LE5058e3niVu6xk205Et7tg==
+  dependencies:
+    lodash "^4.17.15"
+    ts-essentials "^7.0.1"
+
+"@typechain/ethers-v6@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@typechain/ethers-v6/-/ethers-v6-0.5.1.tgz#42fe214a19a8b687086c93189b301e2b878797ea"
+  integrity sha512-F+GklO8jBWlsaVV+9oHaPh5NJdd6rAKN4tklGfInX1Q7h0xPgVLP39Jl3eCulPB5qexI71ZFHwbljx4ZXNfouA==
   dependencies:
     lodash "^4.17.15"
     ts-essentials "^7.0.1"
