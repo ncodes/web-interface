@@ -1,6 +1,7 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import useStore from "../../hooks/store/useStore.ts";
+import { formatToMoney } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
 
 export function AirdropHeader() {
@@ -18,14 +19,23 @@ export function AirdropHeader() {
         <li className="flex gap-2 items-center font-light tracking-wider">
           <img src="/images/airdrop-icons/point-star.svg" className="w-6" />
           <span className="flex items-center text-lg md:text-2xl gap-0.5 font-jersey25">
-            <span>
-              {user?.points ?? "0"}{" "}
-              {/* {user && (
+            <ToolTip
+              tip={
+                <>
+                  Total Points (including Taps:{" "}
+                  {formatToMoney(user?.tapScore || "0")}
+                </>
+              }
+            >
+              <span>
+                {user?.points ?? "0"}{" "}
+                {/* {user && (
                 <span className="text-gray-400">
                   ({numberToOrdinal(user?.rank)})
                 </span>
               )} */}
-            </span>
+              </span>
+            </ToolTip>
             <span className="text-gray-500">
               <ToolTip tip="Your total points and rank">
                 <InfoCircledIcon width="20px" />
