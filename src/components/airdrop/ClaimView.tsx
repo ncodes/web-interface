@@ -289,7 +289,7 @@ function getClaimDescription(claim: { claimId: number }) {
     case 0:
       return "Users of Uniswap between Jan 1st - Nov 10th 2024";
     case 1:
-      return "Joint's points program participantion";
+      return "Joint's points program participation";
     case 2:
       return "Early TJOIN purchaser";
     case 3:
