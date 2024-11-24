@@ -4,7 +4,6 @@ import { CheckCircle, Loader2, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
-import useStore from "../../hooks/store/useStore.ts";
 import { useSession } from "../../hooks/useSession.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import {
