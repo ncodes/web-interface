@@ -95,7 +95,7 @@ function WalletConnect({
                   <>
                     <div className="flex items-center gap-2">
                       <Wallet2 className="text-chinese-green" width="20" />
-                      <span className="font-jersey20 text-lg xs:text-xl block">
+                      <span className="font-silkscreen text-xs block">
                         You need to connect a wallet
                       </span>
                     </div>
@@ -114,7 +114,7 @@ function WalletConnect({
               <Button
                 variant={(variant || "default") as any}
                 rounded="xl"
-                className="w-full flex gap-2 hover:scale-[1.02] duration-500 font-jersey10 text-2xl"
+                className="w-full flex gap-2 hover:scale-[1.02] duration-500 font-silkscreen text-lg"
               >
                 <Wallet2 width="20" className="" /> Connect
               </Button>
@@ -197,13 +197,14 @@ function AccountSignIn({
         label={
           <div className="flex items-center gap-2 text-sm text-gray-300">
             <LogInIcon className="text-chinese-green" width="20" />
-            <span className="font-jersey20 text-xl">Log In</span>
+            <span className="font-silkscreen text-lg">LINK WALLET</span>
           </div>
         }
       >
         <>
-          <div className="text-sm mx-5 mb-3 text-center text-gray-400 tracking-wide">
-            You will be asked to sign a message to verify your wallet.
+          <div className="text-sm mx-5 mb-3 font-silkscreen text-xs text-center text-gray-400 tracking-wide">
+            You will be asked to sign a message to verify your wallet ownership
+            and to create a session. No blockchain transaction will be made.
           </div>
           <Button
             variant="default"

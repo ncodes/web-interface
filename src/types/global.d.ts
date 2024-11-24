@@ -38,6 +38,7 @@ declare global {
     twitterUserId: string;
     twitterUsername: string;
     twitterLinkedAt: string;
+    claimActivatedAt: string;
 
     discordId: string;
     discordLinkedAt: string;

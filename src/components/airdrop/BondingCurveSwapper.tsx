@@ -28,6 +28,7 @@ import {
   DialogTrigger,
 } from "../ui/Dialog";
 import { Label } from "../ui/label";
+import { BuyBanner } from "./BuyBanner";
 
 export function BondingCurveSwapper() {
   const { address } = useConnectorContext();
@@ -100,6 +101,7 @@ export function BondingCurveSwapper() {
 
   return (
     <>
+      <BuyBanner />
       <div className="w-[300px] xs:w-[350px] mt-10 lg:mt-20 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
         <header className="flex gap-2 border-b border-card-border/30">
           <div className="rounded-lg text-center rounded-b-none w-full p-2 font-silkscreen">
@@ -111,7 +113,7 @@ export function BondingCurveSwapper() {
           <span className="text-sm font-silkscreen">Swap ETH for JOIN</span>
           <ul className="list-outside list-disc pl-3.5 text-yellow-950">
             <li>You get more JOIN and contribute to liquidity.</li>
-            <li>Buy up to 0.003 ETH to reset DexDrop allocation.</li>
+            <li>Buy up to 0.03 ETH to reset DexDrop allocation.</li>
           </ul>
         </div>
 

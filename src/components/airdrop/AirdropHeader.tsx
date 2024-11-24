@@ -67,6 +67,16 @@ export function AirdropHeader({
         >
           Buy
         </Button>
+        <ToolTip tip="Coming soon">
+          <Button
+            disabled
+            className={cn(
+              "rounded-xl text-white bg-gray-900/70 hover:text-gray-800 font-silkscreen",
+            )}
+          >
+            Stake
+          </Button>
+        </ToolTip>
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import { CheckCircle, Loader2, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { useSession } from "../../hooks/useSession.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import {
   approxNumber,
@@ -17,6 +19,7 @@ import {
 import { ToolTip } from "../ToolTip.tsx";
 import { IconX } from "../icons/IconX.tsx";
 import { Button } from "../ui/Button.tsx";
+import { BuyBanner } from "./BuyBanner.tsx";
 
 const AllowWithdraw = false;
 
@@ -38,6 +41,7 @@ export function ClaimView({
   const [loading, setLoading] = useState(false);
   const [withdrawing, setWithdrawing] = useState(false);
   const originalClaims = [...claims];
+  const token = useSession();
 
   claims = claims.filter((claim) => {
     return !claim.claimedAt;
@@ -116,11 +120,14 @@ export function ClaimView({
 
   return (
     <>
-      {address && (
+      <BuyBanner />
+      {!!address && !!token && (
         <div className="px-5 pb-5 pt-4 space-y-4 tracking-wider">
           <div className="w-full md:w-8/12 lg:w-6/12 py-2 bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
             <span className="flex items-center gap-1 md:text-xl tracking-wider text-gray-100">
-              <span className="text-md">JOIN</span>
+              <span className="text-md font-silkscreen -tracking-widest">
+                YOUR ALLOCATION
+              </span>
               <ToolTip
                 tip="Total unclaimed JOIN tokens"
                 className="text-gray-400"
@@ -213,7 +220,7 @@ export function ClaimView({
                   >
                     <Button
                       size="full"
-                      className="bg-blue-400/90 hover:bg-blue-400"
+                      className="bg-[#1DA1F2]/90 hover:bg-[#1DA1F2]"
                     >
                       <span className="flex items-center gap-1">
                         <IconX className="w-5 h-5" />
@@ -287,7 +294,7 @@ function getClaimName(claim: { claimId: number }) {
 function getClaimDescription(claim: { claimId: number }) {
   switch (claim.claimId) {
     case 0:
-      return "Users of Uniswap between Jan 1st - Nov 10th 2024";
+      return "Users of Uniswap between Jan 1st - Nov 22nd 2024";
     case 1:
       return "Joint's points program participation";
     case 2:

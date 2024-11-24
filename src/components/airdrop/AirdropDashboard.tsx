@@ -1,8 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { base } from "viem/chains";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
+import useStore from "../../hooks/store/useStore.ts";
+import { useSession } from "../../hooks/useSession.ts";
 import { isDev } from "../../libs/helpers.ts";
 import { cn } from "../../libs/utils.ts";
 import { MainContainerConnectButton } from "../MainContainerConnectButton.tsx";
@@ -11,6 +14,7 @@ import IconSpinner from "../icons/IconSpinner.tsx";
 import { EmptyBodyCard } from "../ui/EmptyBodyCard.tsx";
 import { AirdropHeader } from "./AirdropHeader.tsx";
 import { ClaimView } from "./ClaimView.tsx";
+import { FollowRequest } from "./FollowRequest.tsx";
 import TradeView from "./TradeView.tsx";
 
 export function AirdropDashboard({
@@ -21,6 +25,8 @@ export function AirdropDashboard({
   const { address, chain } = useConnectorContext();
   const { getClaims } = useUserService();
   const { checkDexClaim } = useUserService();
+  const user = useStore((state) => state.user);
+  const { token } = useSession();
   const [activeView, setActiveView] = useState<"trade" | "claim">(currentTab);
   const [dexClaimChecked, setDexClaimChecked] = useState(false);
 
@@ -31,7 +37,7 @@ export function AirdropDashboard({
   const { data: claims, isLoading: isGetClaimsLoading } = useQuery({
     queryKey: ["getClaims", { address }],
     queryFn: getClaims,
-    enabled: !!address && dexClaimChecked,
+    enabled: !!address && dexClaimChecked && !!token,
     refetchInterval: 30000,
   });
 
@@ -47,10 +53,26 @@ export function AirdropDashboard({
     setActiveView(currentTab);
   }, [currentTab]);
 
+  const unclaimedClaims = (claims || []).filter((claim) => {
+    return !claim.claimedAt;
+  });
+
+  const unclaimedClaimsAmt = unclaimedClaims
+    .map((claim) => BigInt(claim.amount))
+    .reduce((a, b) => a + b, BigInt(0));
+
   const hideDexDropComponents =
     !address || (!isDev() && chain && chain.id != base.id);
 
   const isLoading = checkDexClaimMut.isPending || isGetClaimsLoading;
+
+  function isClaimActivated() {
+    return (
+      unclaimedClaimsAmt == 0n ||
+      (!!user?.claimActivatedAt &&
+        moment(user?.claimActivatedAt).isBefore(moment()))
+    );
+  }
 
   return (
     <div className="w-full rounded-t-3xl rounded-b-3xl flex flex-col flex-1 relative bg-black/80 bg-[url('/public/images/dexdrop-cover.png')] bg-contain bg-no-repeat xl:bg-bottom">
@@ -67,17 +89,26 @@ export function AirdropDashboard({
         </EmptyBodyCard>
       )}
 
-      {!hideDexDropComponents && !isLoading && (
-        <>
-          {activeView === "claim" && (
-            <ClaimView claims={claims || []} address={address} />
-          )}
+      {!!token &&
+        !hideDexDropComponents &&
+        !isLoading &&
+        !!user &&
+        isClaimActivated() && (
+          <>
+            {activeView === "claim" && (
+              <ClaimView claims={claims || []} address={address} />
+            )}
 
-          {activeView === "trade" && <TradeView />}
-        </>
-      )}
+            {activeView === "trade" && <TradeView />}
+          </>
+        )}
 
-      {isLoading && (
+      {!hideDexDropComponents &&
+        !isLoading &&
+        !!user &&
+        !isClaimActivated() && <FollowRequest claims={claims || []} />}
+
+      {!!token && isLoading && (
         <div className="flex justify-center items-center h-full">
           <span className="flex items-center gap-2 mt-[25%] text-gray-400">
             <IconSpinner className="text-chinese-green w-10 h-10 animate-spin" />{" "}
@@ -88,6 +119,8 @@ export function AirdropDashboard({
 
       <MainContainerConnectButton
         showLoader
+        authenticate
+        className="bg-black/50"
         loaderIcon={
           <IconCoinGold width="30" className="text-yellow-400 animate-spin" />
         }

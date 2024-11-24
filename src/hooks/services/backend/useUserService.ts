@@ -225,6 +225,8 @@ export function useUserService() {
     try {
       const [, params] = ctx.queryKey;
       const headers = {};
+      const token = getAccessToken(address);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
 
       const resp = await axios({
         url: `${getChainInfo().apiUrl}/v1/users/claims/${params.address}`,
@@ -233,6 +235,29 @@ export function useUserService() {
       });
 
       return Promise.resolve(resp.data.data);
+    } catch (e) {
+      return Promise.reject(handleAxiosError(e as never));
+    }
+  }
+
+  /**
+   * Activate claims
+   * @returns
+   */
+  async function activateClaims() {
+    try {
+      const headers = {};
+      const token = getAccessToken(address);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+
+      await axios({
+        url: `${getChainInfo().apiUrl}/v1/users/activate-claims`,
+        method: "post",
+        data: {},
+        headers,
+      });
+
+      return Promise.resolve(undefined);
     } catch (e) {
       return Promise.reject(handleAxiosError(e as never));
     }
@@ -248,5 +273,6 @@ export function useUserService() {
     transferScores,
     checkDexClaim,
     getClaims,
+    activateClaims,
   };
 }
