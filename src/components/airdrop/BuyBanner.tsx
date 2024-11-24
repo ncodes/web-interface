@@ -4,7 +4,7 @@ export function BuyBanner() {
   return (
     <Link
       to="/dexdrop/buy"
-      className="cursor-pointer hover:scale-[1.005] duration-[5000ms] transition-all animate-pulse hover:animate-none"
+      className="hidden cursor-pointer hover:scale-[1.005] duration-[5000ms] transition-all animate-pulse hover:animate-none"
     >
       <button className="flex items-center justify-center">
         <img

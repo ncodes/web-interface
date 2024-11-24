@@ -30,6 +30,8 @@ import {
 import { Label } from "../ui/label";
 import { BuyBanner } from "./BuyBanner";
 
+const AllowSwap = false;
+
 export function BondingCurveSwapper() {
   const { address } = useConnectorContext();
   const [slippage, setSlippage] = useState<number>(1);
@@ -64,6 +66,7 @@ export function BondingCurveSwapper() {
   }, [loading, amount]);
 
   function canSwap() {
+    if (!AllowSwap) return false;
     const amt = toDec(amount || "0");
     const output = amt.mul(10 ** 18).div(toDec(buyPrice));
     return (
@@ -192,7 +195,7 @@ export function BondingCurveSwapper() {
             type="number"
             value={amount}
             step={0.01}
-            disabled={loading}
+            disabled={loading || !AllowSwap}
             onChange={(e) => {
               setAmount(e.target.value || "");
             }}
@@ -218,6 +221,7 @@ export function BondingCurveSwapper() {
               className="font-light border-none text-xs bg-gray-800 px-2 py-0.5 h-auto rounded-lg"
               variant="outline"
               onClick={() => setAmount("0.1")}
+              disabled={!AllowSwap}
             >
               0.1 ETH
             </Button>
@@ -225,6 +229,7 @@ export function BondingCurveSwapper() {
               className="font-light border-none text-xs bg-gray-800 px-2 py-0.5 h-auto rounded-lg"
               variant="outline"
               onClick={() => setAmount("0.5")}
+              disabled={!AllowSwap}
             >
               0.5 ETH
             </Button>
@@ -232,11 +237,12 @@ export function BondingCurveSwapper() {
               className="font-light border-none text-xs bg-gray-800 px-2 py-0.5 h-auto rounded-lg"
               variant="outline"
               onClick={() => setAmount("1")}
+              disabled={!AllowSwap}
             >
               1 ETH
             </Button>
           </div>
-          <div className="flex font-light text-xs gap-2 mt-2 pt-2">
+          <div className="hidden flex font-light text-xs gap-2 mt-2 pt-2">
             <span className="text-gray-500">Price: </span>
             <span className="text-gray-400 select-text">
               {toDec(buyPrice || "0")
@@ -255,6 +261,10 @@ export function BondingCurveSwapper() {
             </div>
           )}
           <div className="mt-4">
+            <span className="text-xs text-gray-400 font-extralight block text-center mb-2">
+              Opens on Dec 2nd, 2024.
+            </span>
+
             <Button
               size="full"
               className="rounded-lg bg-green-500/90 text-white hover:bg-green-500 gap-1"
@@ -269,8 +279,8 @@ export function BondingCurveSwapper() {
           </div>
         </section>
       </div>
-      <div className="pt-0 mb-5">
-        <div className="w-[300px] p-3 xs:w-[350px] mt-5 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
+      <div className="hidden pt-0 mb-5">
+        <div className="w-[300px] p-3 xs:w-[350px] mt-3 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
           <div className="flex flex-col items-center justify-center">
             <span className="text-xs text-gray-400 tracking-wide block text-center">
               Total Swapped (JOIN)
@@ -280,6 +290,16 @@ export function BondingCurveSwapper() {
             </span>
           </div>
         </div>
+        <span className="block text-xs text-center mt-2 text-gray-500 font-light tracking-wider">
+          By clicking Swap, you agree to our{" "}
+          <a
+            href="https://jointlabs.notion.site/Terms-of-Service-3e470a80a33b4c76aa50bbb95801a82e?pvs=4"
+            className="text-xs text-gray-400  hover:text-gray-300"
+          >
+            Terms
+          </a>
+          .
+        </span>
       </div>
     </>
   );

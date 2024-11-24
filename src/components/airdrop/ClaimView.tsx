@@ -21,6 +21,7 @@ import { Button } from "../ui/Button.tsx";
 import { BuyBanner } from "./BuyBanner.tsx";
 
 const AllowWithdraw = false;
+const AllowClaim = false;
 
 export function ClaimView({
   claims,
@@ -102,7 +103,7 @@ export function ClaimView({
   }
 
   function canClaim() {
-    if (loading) return false;
+    if (loading || !AllowClaim) return false;
     if (claims.length === 0) return false;
     if (toDec(amounts.reduce((a, b) => a + b, BigInt(0))).eq(0)) return false;
     return true;
@@ -202,6 +203,9 @@ export function ClaimView({
 
             {originalClaims.length > 0 && (
               <div className="p-2 flex flex-col gap-2">
+                <span className="text-xs text-gray-400 font-extralight block text-center">
+                  Claiming opens Dec 2nd, 2024.
+                </span>
                 <Button
                   size="full"
                   onClick={handleClaim}
@@ -229,7 +233,7 @@ export function ClaimView({
                   </Link>
                 )}
 
-                <div className="flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
+                <div className="hidden flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
                   <span className="text-xs text-gray-400 font-extralight block text-center">
                     Available after the liquidity market closes.
                   </span>
@@ -256,7 +260,7 @@ export function ClaimView({
           </div>
         </div>
       )}
-      <div className="p-5 pt-0">
+      <div className="hidden p-5 pt-0">
         <div className="w-full p-7 md:w-8/12 lg:w-6/12 h-[40px] bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
           <div className="flex flex-col items-center justify-center">
             <span className="flex items-center gap-1 text-xs text-gray-400 tracking-wide text-center">
