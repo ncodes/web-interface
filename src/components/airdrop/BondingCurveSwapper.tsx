@@ -30,7 +30,7 @@ import {
 import { Label } from "../ui/label";
 import { BuyBanner } from "./BuyBanner";
 
-const AllowSwap = true;
+const AllowSwap = false;
 
 export function BondingCurveSwapper() {
   const { address } = useConnectorContext();
@@ -242,7 +242,7 @@ export function BondingCurveSwapper() {
               1 ETH
             </Button>
           </div>
-          <div className=" flex font-light text-xs gap-2 mt-2 pt-2">
+          <div className="hidden  font-light text-xs gap-2 mt-2 pt-2">
             <span className="text-gray-500">Price: </span>
             <span className="text-gray-400 select-text">
               {toDec(buyPrice || "0")
@@ -279,7 +279,7 @@ export function BondingCurveSwapper() {
           </div>
         </section>
       </div>
-      <div className=" pt-0 mb-5">
+      <div className="hidden pt-0 mb-5">
         <div className="w-[300px] p-3 xs:w-[350px] mt-3 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
           <div className="flex flex-col items-center justify-center">
             <span className="text-xs text-gray-400 tracking-wide block text-center">
