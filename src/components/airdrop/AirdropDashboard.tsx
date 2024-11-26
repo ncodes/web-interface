@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useInterval } from "usehooks-ts";
 import { base } from "viem/chains";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext.tsx";
 import { useUserService } from "../../hooks/services/backend/useUserService.ts";
@@ -29,6 +30,7 @@ export function AirdropDashboard({
   const { token } = useSession();
   const [activeView, setActiveView] = useState<"trade" | "claim">(currentTab);
   const [dexClaimChecked, setDexClaimChecked] = useState(false);
+  const [isClaimActivated, setIsClaimActivated] = useState(false);
 
   const checkDexClaimMut = useMutation({
     mutationFn: checkDexClaim,
@@ -53,6 +55,13 @@ export function AirdropDashboard({
     setActiveView(currentTab);
   }, [currentTab]);
 
+  useInterval(
+    () => {
+      setIsClaimActivated(checkClaimActivated());
+    },
+    !isClaimActivated ? 2000 : 0,
+  );
+
   const unclaimedClaims = (claims || []).filter((claim) => {
     return !claim.claimedAt;
   });
@@ -66,12 +75,11 @@ export function AirdropDashboard({
 
   const isLoading = checkDexClaimMut.isPending || isGetClaimsLoading;
 
-  function isClaimActivated() {
-    return (
-      unclaimedClaimsAmt == 0n ||
-      (!!user?.claimActivatedAt &&
-        moment(user?.claimActivatedAt).isBefore(moment()))
-    );
+  function checkClaimActivated() {
+    if (!user) return false;
+    if (unclaimedClaimsAmt == 0n) return true;
+    if (!user.claimActivatedAt) return false;
+    return moment(user.claimActivatedAt).isBefore(moment());
   }
 
   return (
@@ -93,7 +101,7 @@ export function AirdropDashboard({
         !hideDexDropComponents &&
         !isLoading &&
         !!user &&
-        isClaimActivated() && (
+        isClaimActivated && (
           <>
             {activeView === "claim" && (
               <ClaimView claims={claims || []} address={address} />
@@ -103,10 +111,11 @@ export function AirdropDashboard({
           </>
         )}
 
-      {!hideDexDropComponents &&
-        !isLoading &&
-        !!user &&
-        !isClaimActivated() && <FollowRequest claims={claims || []} />}
+      {!hideDexDropComponents && !isLoading && !!user && !isClaimActivated && (
+        <>
+          <FollowRequest claims={claims || []} />
+        </>
+      )}
 
       {!!token && isLoading && (
         <div className="flex justify-center items-center h-full">

@@ -4,6 +4,7 @@ import { CheckCircle, Loader2, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
+import useStore from "../../hooks/store/useStore.ts";
 import { useSession } from "../../hooks/useSession.ts";
 import { useToast } from "../../hooks/useToast.tsx";
 import {
@@ -16,6 +17,7 @@ import {
   toHD,
 } from "../../libs/helpers.ts";
 import { ToolTip } from "../ToolTip.tsx";
+import IconTask from "../icons/IconTask.tsx";
 import { IconX } from "../icons/IconX.tsx";
 import { Button } from "../ui/Button.tsx";
 import { BuyBanner } from "./BuyBanner.tsx";
@@ -38,13 +40,14 @@ export function ClaimView({
     humanizeErrors,
   } = useBondCurveDistroContract();
   const { notifyError, notifySuccess } = useToast();
+  const user = useStore((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [withdrawing, setWithdrawing] = useState(false);
   const originalClaims = [...claims];
   const token = useSession();
 
   claims = claims.filter((claim) => {
-    return !claim.claimedAt;
+    return !claim.claimedAt && !!claim.signature;
   });
 
   const sigs = claims.map((claim) => claim.signature || "");
@@ -156,7 +159,7 @@ export function ClaimView({
               {(originalClaims || []).map((claim) => (
                 <div
                   key={claim.id}
-                  className="flex bg-vampire-black/90 border border-gray-800/40 pb-2 flex-col rounded-xl"
+                  className="flex bg-vampire-black/90 border border-gray-800 flex-col rounded-xl mb-3"
                 >
                   <div className="flex justify-between p-3 pb-3 gap-4">
                     <span className="font-light text-lg">
@@ -180,6 +183,7 @@ export function ClaimView({
                       </span>
                     </ToolTip>
                   </div>
+
                   {!!claim.claimedAt && claim.claimId == 0 && (
                     <span className="flex items-center justify-between gap-1 mx-2 mr-0 font-bold text-sm text-gray-800 font-jersey20 bg-green-400 p-1 px-1 pl-2 rounded-lg">
                       <span className="flex items-center gap-2">
@@ -197,6 +201,18 @@ export function ClaimView({
                       </Link>
                     </span>
                   )}
+
+                  {(claim.name.startsWith("dex_user") ||
+                    claim.name.startsWith("point")) &&
+                    !user?.hasSwapped &&
+                    !claim.claimedAt && (
+                      <div className="px-2 border-t flex items-center gap-1 border-gray-800/50 py-1 text-xs text-yellow-500 bg-gray-900 rounded-b-xl">
+                        <IconTask className="w-4 h-4" />
+                        <span className="font-silkscreen">
+                          Complete at least one swap to claim
+                        </span>
+                      </div>
+                    )}
                 </div>
               ))}
             </div>

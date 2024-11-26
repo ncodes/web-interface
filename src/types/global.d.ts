@@ -66,6 +66,8 @@ declare global {
     lastActiveAt: string;
 
     notificationSettings: NotificationSettings;
+
+    hasSwapped: boolean;
   }
 
   interface NotificationSettings {
