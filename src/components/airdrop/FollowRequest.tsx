@@ -40,7 +40,7 @@ export function FollowRequest({ claims }: { claims: MerkleClaim[] }) {
         <span className="flex items-center gap-1 md:text-xl tracking-wider text-gray-100">
           <span className="text-md font-silkscreen">Allocation</span>
           <ToolTip
-            tip="Total JOIN tokens claimable after task completion"
+            tip="Total tokens claimable after tasks completion."
             className="text-gray-400"
           >
             <QuestionMarkCircledIcon className="w-4 h-4" />

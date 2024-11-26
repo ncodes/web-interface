@@ -209,7 +209,13 @@ export function ClaimView({
                       <div className="px-2 border-t flex items-center gap-1 border-gray-800/50 py-1 text-xs text-yellow-500 bg-gray-900 rounded-b-xl">
                         <IconTask className="w-4 h-4" />
                         <span className="font-silkscreen">
-                          Complete at least one swap to claim
+                          Complete one swap to claim:{" "}
+                          <a
+                            href="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0"
+                            className="text-chinese-green/90 hover:text-chinese-green"
+                          >
+                            [SWAP NOW]
+                          </a>
                         </span>
                       </div>
                     )}
