@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu.tsx";
 
-import { hardhat, sepolia } from "viem/chains";
+import { arbitrum, hardhat, sepolia } from "viem/chains";
 import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx";
 import { isLocal, isProd } from "../libs/helpers.ts";
 
@@ -73,7 +73,7 @@ export function NetworkSelector() {
     const chains = getChainsID(
       false,
       true,
-      curChain?.chainId ? [curChain?.chainId] : [],
+      curChain?.chainId ? [arbitrum.id, curChain?.chainId] : [arbitrum.id],
     );
 
     setMainChainsID(chains);
