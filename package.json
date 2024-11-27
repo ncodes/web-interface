@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
-    "@jointlabs/meta": "^0.0.14",
+    "@jointlabs/meta": "^0.0.15",
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-avatar": "^1.0.3",
