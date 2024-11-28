@@ -202,8 +202,7 @@ export function ClaimView({
                     </span>
                   )}
 
-                  {(claim.name.startsWith("dex_user") ||
-                    claim.name.startsWith("point")) &&
+                  {claim.name.startsWith("dex_user") &&
                     !user?.hasSwapped &&
                     !claim.claimedAt && (
                       <div className="px-2 border-t flex items-center gap-1 border-gray-800/50 py-1 text-xs text-yellow-500 bg-gray-900 rounded-b-xl">
