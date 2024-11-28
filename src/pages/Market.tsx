@@ -120,11 +120,18 @@ function MarketTabs() {
             </div>
           </ScrollOverflowIndicator>
         </ScrollAreaHorizontal>
-        <div className="flex shrink-0 pr-2 gap-2 items-center justify-end">
+        <div
+          className={cn("flex shrink-0 pr-2 gap-2 items-center justify-end", {
+            hidden: isEqlStr(
+              market.data?.address,
+              "0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97",
+            ),
+          })}
+        >
           {!restricted && !isVirtualWallet && (
             <Button
               size="sm"
-              className="flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
+              className="hidden flex gap-1 items-center transition-all duration-500 hover:scale-x-105"
               onClick={() => {
                 setOpenAddLiquiditySheet(true);
               }}
@@ -141,31 +148,6 @@ function MarketTabs() {
         value="markets"
         className="relative p-3 px-0 mt-0 pt-0 pb-0 gap-3 flex flex-col flex-1"
       >
-        {/*{liqPointQuery.data && swapPointQuery.data && (*/}
-        {/*  <div className="flex flex-col md:flex-row m-3 gap-2 animate-pulse hover:animate-none">*/}
-        {/*    <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">*/}
-        {/*      <span className="relative top-0.5">🎁</span>*/}
-        {/*      <span>*/}
-        {/*        Add liquidity to earn{" "}*/}
-        {/*        <b className="text-yellow-300">*/}
-        {/*          {formatToMoney(liqPointQuery?.data)}*/}
-        {/*        </b>{" "}*/}
-        {/*        points / {market.data?.base}*/}
-        {/*      </span>*/}
-        {/*    </div>*/}
-        {/*    <div className="p-3 rounded-xl border border-gray-700 border-dashed py-2 flex gap-2 tracking-wider font-jersey10 text-lg lg:text-xl items-center">*/}
-        {/*      <span className="relative top-0.5">🎁</span>*/}
-        {/*      <span>*/}
-        {/*        Swap to earn{" "}*/}
-        {/*        <b className="text-yellow-300">*/}
-        {/*          {formatToMoney(swapPointQuery?.data)}*/}
-        {/*        </b>{" "}*/}
-        {/*        points / {market.data?.base}*/}
-        {/*      </span>*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*)}*/}
-
         {market.data && (
           <Helmet>
             <title>{`${market?.data?.base} - ${market?.data?.quote} Market - Joint`}</title>
