@@ -8,7 +8,6 @@ import {
   AppName,
   AppUrl,
   WalletConnectId,
-  infuraId,
 } from "../../../constants.ts";
 import { isLocal } from "../../../libs/helpers.ts";
 import { getSupportedChains } from "../common.ts";
@@ -28,14 +27,14 @@ function ConnectorContextWrapper({ children }) {
   );
 }
 
+console.log(import.meta.env.VITE_LOCALHOST_RPC_URL);
+
 const transports = {};
 if (isLocal()) {
   transports[hardhat.id] = http(hardhat.rpcUrls.default.http[0]);
 } else {
-  transports[arbitrum.id] = http(
-    `https://arbitrum-mainnet.infura.io/v3/${infuraId}`,
-  );
-  transports[base.id] = http(`https://base-mainnet.infura.io/v3/${infuraId}`);
+  transports[arbitrum.id] = http(import.meta.env.VITE_ARBITRUM_RPC_URL);
+  transports[base.id] = http(import.meta.env.VITE_BASE_RPC_URL);
 }
 
 const config = createConfig(
