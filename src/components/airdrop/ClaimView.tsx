@@ -257,7 +257,7 @@ export function ClaimView({
 
                 <div className="hidden flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
                   <span className="text-xs text-gray-400 font-extralight block text-center">
-                    Available after the liquidity market closes.
+                    Withdrawal will start soon
                   </span>
                   <Button
                     variant="secondary"
@@ -291,7 +291,7 @@ export function ClaimView({
                 <QuestionMarkCircledIcon className="w-4 h-4 text-gray-500" />
               </ToolTip>
             </span>
-            <span className="font-silkscreen -tracking-widest">
+            <span className="font-silkscreen -tracking-widest select-all">
               {formatToHighDenom(totalClaimedQry.data || BigInt(0))}
             </span>
           </div>
@@ -311,6 +311,8 @@ function getClaimName(claim: { claimId: number }) {
       return "TJOIN Holder";
     case 3:
       return "Community Partner";
+    case 4:
+      return "DroidPD Holders";
     default:
       return "Unknown";
   }
@@ -326,6 +328,8 @@ function getClaimDescription(claim: { claimId: number }) {
       return "Early TJOIN purchaser";
     case 3:
       return "Joint's community partner";
+    case 4:
+      return "DroidPD holders before July 2024";
     default:
       return "Unknown";
   }
