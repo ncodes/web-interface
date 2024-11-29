@@ -27,8 +27,6 @@ function ConnectorContextWrapper({ children }) {
   );
 }
 
-console.log(import.meta.env.VITE_LOCALHOST_RPC_URL);
-
 const transports = {};
 if (isLocal()) {
   transports[hardhat.id] = http(hardhat.rpcUrls.default.http[0]);
