@@ -46,6 +46,8 @@ export function ClaimView({
   const originalClaims = [...claims];
   const token = useSession();
 
+  const unclaimedClaims = claims.filter((claim) => !claim.claimedAt);
+
   claims = claims.filter((claim) => {
     return !claim.claimedAt && !!claim.signature;
   });
@@ -53,7 +55,7 @@ export function ClaimView({
   const sigs = claims.map((claim) => claim.signature || "");
   const nonces = claims.map((claim) => BigInt(claim.nonce));
   const claimIds = claims.map((claim) => BigInt(claim.claimId));
-  const amounts = claims.map((claim) => BigInt(claim.amount));
+  const amounts = unclaimedClaims.map((claim) => BigInt(claim.amount));
   const queryClient = useQueryClient();
 
   const unclaimedBalQry = useQuery({
@@ -121,6 +123,16 @@ export function ClaimView({
     return originalClaims.some((claim) => !!claim.claimedAt);
   }
 
+  const hasDexUserClaim = originalClaims.some(
+    (claim) => claim.name.startsWith("dex_user") && !claim.claimedAt,
+  );
+
+  const hasPointClaim = originalClaims.some(
+    (claim) => claim.name.startsWith("point") && !claim.claimedAt,
+  );
+
+  const requireSwap = (hasDexUserClaim || hasPointClaim) && !user?.hasSwapped;
+
   return (
     <>
       <BuyBanner />
@@ -141,6 +153,19 @@ export function ClaimView({
             <span className="text-3xl md:text-4xl text-chinese-green select-text font-silkscreen -tracking-widest">
               {formatToHighDenom(amounts.reduce((a, b) => a + b, BigInt(0)))}
             </span>
+
+            {requireSwap && (
+              <div className="flex border-t border-gray-800/80 pt-2 w-full justify-center items-center gap-1 text-xs mt-4 text-yellow-500 flex-wrap font-silkscreen">
+                <IconTask className="w-4 h-4" />
+                <span>Complete one swap to claim</span>:{" "}
+                <a
+                  href="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0"
+                  className="text-chinese-green/90 hover:text-chinese-green"
+                >
+                  [SWAP NOW]
+                </a>
+              </div>
+            )}
           </div>
 
           <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[200px] flex flex-col justify-between bg-card-background border border-gray-900 rounded-xl mx-auto">
