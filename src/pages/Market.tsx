@@ -144,7 +144,7 @@ function MarketTabs() {
         </div>
       </TabsList>
 
-      {!!market &&
+      {!!market.data &&
         !isEqlStr(
           market.data?.address,
           "0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97",
