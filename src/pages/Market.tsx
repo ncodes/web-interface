@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { AlertOctagonIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { ErrorIcon } from "react-hot-toast";
@@ -142,6 +143,16 @@ function MarketTabs() {
           )}
         </div>
       </TabsList>
+
+      {!isEqlStr(
+        market.data?.address,
+        "0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97",
+      ) && (
+        <span className="w-full h-[30px] animate-pulse bg-chinese-green hover:animate-none font-silkscreen flex items-center text-sm justify-center text-gray-900 gap-2">
+          <AlertOctagonIcon className="w-[15px] text-red-500 h-[15px]" />
+          <span>ALERT!! This is not the Official DexDrop market.</span>
+        </span>
+      )}
 
       {/* Tab Content */}
       <TabsContent

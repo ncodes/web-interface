@@ -1,5 +1,6 @@
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
+import { AlertOctagonIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Footer } from "../components/Footer.tsx";
@@ -21,6 +22,7 @@ import { useConnectorContext } from "../hooks/connectors/useConnectorContext.tsx
 import { useOfferService } from "../hooks/services/backend/useOfferService.ts";
 import useStore from "../hooks/store/useStore.ts";
 import useMounted from "../hooks/useMounted.ts";
+import { isEqlStr } from "../libs/helpers.ts";
 import { CreateOfferWrapper } from "./CreateOfferWrapper.tsx";
 import Layout from "./Layout.tsx";
 import { SwapSheetWrapper } from "./SwapSheetWrapper.tsx";
@@ -147,6 +149,16 @@ function LiquidityPage({
           </DropdownMenu>
         </div>
       </TabsList>
+
+      {!isEqlStr(
+        liquidity?.market?.address,
+        "0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97",
+      ) && (
+        <span className="w-full h-[30px] animate-pulse bg-chinese-green hover:animate-none font-silkscreen flex items-center text-sm justify-center text-gray-900 gap-2">
+          <AlertOctagonIcon className="w-[15px] text-red-500 h-[15px]" />
+          <span>ALERT!! This is not the Official DexDrop liquidity.</span>
+        </span>
+      )}
 
       {currentTab == "liquidity" && (
         <>
