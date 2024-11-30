@@ -108,7 +108,7 @@ export default function useBondCurveDistroContract() {
         error.message.includes("CLAIM_USED") ||
         error.message.includes("NONCE_USED")
       )
-        return "One or more of the claims have already been used. Buy more tokens from the liquidity market to reset claim.";
+        return "One or more of the claims have already been used";
 
       if (error.message.includes("WITHDRAW_NOT_ALLOWED"))
         return "Withdrawal is currently not allowed";
