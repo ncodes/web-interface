@@ -44,7 +44,12 @@ export function FollowRequest({ claims }: { claims: MerkleClaim[] }) {
     (claim) => claim.name.startsWith("point") && !claim.claimedAt,
   );
 
-  const requireSwap = (hasDexUserClaim || hasPointClaim) && !user?.hasSwapped;
+  const hasNftClaim = originalClaims.some(
+    (claim) => claim.name.startsWith("nft") && !claim.claimedAt,
+  );
+
+  const requireSwap =
+    (hasDexUserClaim || hasPointClaim || hasNftClaim) && !user?.hasSwapped;
 
   return (
     <div className="px-5 pb-5 py-4 space-y-4 tracking-wider">

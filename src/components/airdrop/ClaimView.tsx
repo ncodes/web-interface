@@ -131,7 +131,12 @@ export function ClaimView({
     (claim) => claim.name.startsWith("point") && !claim.claimedAt,
   );
 
-  const requireSwap = (hasDexUserClaim || hasPointClaim) && !user?.hasSwapped;
+  const hasNftClaim = originalClaims.some(
+    (claim) => claim.name.startsWith("nft") && !claim.claimedAt,
+  );
+
+  const requireSwap =
+    (hasDexUserClaim || hasPointClaim || hasNftClaim) && !user?.hasSwapped;
 
   return (
     <>
@@ -228,7 +233,8 @@ export function ClaimView({
                   )}
 
                   {(claim.name.startsWith("dex_user") ||
-                    claim.name.startsWith("point")) &&
+                    claim.name.startsWith("point") ||
+                    claim.name.startsWith("nft")) &&
                     !user?.hasSwapped &&
                     !claim.claimedAt && (
                       <div className="px-2 border-t flex items-center gap-1 border-gray-800/50 py-1 text-xs text-yellow-500 bg-gray-900 rounded-b-xl">
