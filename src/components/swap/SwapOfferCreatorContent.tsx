@@ -269,7 +269,6 @@ export function SwapOfferCreatorContent({
       const amt = toDec(amount);
       const feePct = totalFeeBp / 100 / 100;
       const newQuoteAmt = amt.div(1 - feePct).mul(priceHD);
-      (amt.toFixed(), priceHD, newQuoteAmt.toFixed());
       setQuoteAmount(trimZeros(newQuoteAmt.toFixed(8)));
     })();
   }, [amount, priceHD]);
@@ -351,6 +350,7 @@ export function SwapOfferCreatorContent({
       );
 
       const maxQuoteAmtLD = toLD(maxQuoteAmount, market.quoteDecimals);
+
       setHasAllowance(toDec(allowance).gte(maxQuoteAmtLD));
     })();
   }, [maxQuoteAmount, approveLoading]);
@@ -452,10 +452,11 @@ export function SwapOfferCreatorContent({
   async function doRequestAllowance() {
     try {
       setApproveLoading(true);
+      const maxQuoteAmtLD = toLD(maxQuoteAmount, market.quoteDecimals);
       await approveAllowance(
         market.quoteAddress as Address,
         getChainInfo().contracts?.core?.address as Address,
-        await getTokenSupply(market.quoteAddress as Address),
+        BigInt(maxQuoteAmtLD),
       );
       await delay(5000);
       notifySuccess("Allowance successfully approved", { duration: 5000 });
