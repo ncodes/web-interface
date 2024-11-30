@@ -121,6 +121,14 @@ export default function useBondCurveDistroContract() {
 
       if (error.message.includes("INVALID_SIG"))
         return "Invalid claim signature";
+
+      if (error.message.includes("PRICE_TOO_HIGH"))
+        return "Price exceeded maximum buy price";
+
+      if (error.message.includes("INSUFFICIENT_ALLOC"))
+        return "Insufficient allocation";
+
+      if (error.message.includes("INVALID_AMOUNT")) return "Amount is invalid";
     }
 
     return "Transaction failed";
