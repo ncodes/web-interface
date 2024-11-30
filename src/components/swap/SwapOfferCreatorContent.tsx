@@ -88,7 +88,6 @@ export function SwapOfferCreatorContent({
     getChainInfo,
     getTokenBalance,
     approveAllowance,
-    getTokenSupply,
     humanizeErc20Errors,
     address,
     ready,
