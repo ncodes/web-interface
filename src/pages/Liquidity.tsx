@@ -66,7 +66,7 @@ function LiquidityPage({
 
   // const swapPointQuery = useQuery({
   //   queryKey: ["getPoint", { name: `swap:${liquidity?.market?.address}` }],
-  //   queryFn: getPoint,
+  ///   queryFn: getPoint,
   //   enabled: liquidity?.market != undefined,
   // });
 
