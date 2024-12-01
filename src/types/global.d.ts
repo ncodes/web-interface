@@ -68,6 +68,7 @@ declare global {
     notificationSettings: NotificationSettings;
 
     hasSwapped: boolean;
+    liqMktVolume: string;
   }
 
   interface NotificationSettings {

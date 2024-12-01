@@ -23,7 +23,7 @@ import { Button } from "../ui/Button.tsx";
 import { BuyBanner } from "./BuyBanner.tsx";
 
 const AllowWithdraw = false;
-const AllowClaim = false;
+const AllowClaim = true;
 
 export function ClaimView({
   claims,
@@ -256,9 +256,6 @@ export function ClaimView({
 
             {originalClaims.length > 0 && (
               <div className="p-2 flex flex-col gap-2">
-                <span className="text-xs text-gray-400 font-extralight block text-center">
-                  Claiming opens Dec 2nd, 2024.
-                </span>
                 <Button
                   size="full"
                   onClick={handleClaim}
@@ -286,7 +283,7 @@ export function ClaimView({
                   </Link>
                 )}
 
-                <div className="hidden flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
+                <div className=" flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
                   <span className="text-xs text-gray-400 font-extralight block text-center">
                     Withdrawal will start soon
                   </span>
@@ -301,7 +298,7 @@ export function ClaimView({
                       <Loader2 className="animate-spin text-black w-5 h-5" />
                     )}
                   </Button>
-                  <span className="text-xs text-gray-500 font-extralight block text-center">
+                  <span className="text-sm font-silkscreen text-gray-400 font-extralight block text-center">
                     Withdrawable:{" "}
                     <span className="font-medium text-gray-200 select-text font-silkscreen -tracking-widest">
                       {formatToHighDenom(unclaimedBalQry.data || BigInt(0))}
@@ -313,11 +310,11 @@ export function ClaimView({
           </div>
         </div>
       )}
-      <div className="hidden p-5 pt-0">
+      <div className=" p-5 pt-0">
         <div className="w-full p-7 md:w-8/12 lg:w-6/12 h-[40px] bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
           <div className="flex flex-col items-center justify-center">
             <span className="flex items-center gap-1 text-xs text-gray-400 tracking-wide text-center">
-              <span>Total Claimed</span>
+              <span className="font-silkscreen">Total Claimed</span>
               <ToolTip tip="Total amount of JOIN claimed">
                 <QuestionMarkCircledIcon className="w-4 h-4 text-gray-500" />
               </ToolTip>
