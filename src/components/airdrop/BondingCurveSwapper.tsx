@@ -121,7 +121,7 @@ export function BondingCurveSwapper() {
           <ul className="list-outside list-disc pl-3.5 text-yellow-950">
             <li>You get more JOIN and contribute to liquidity.</li>
             <li>Single 0.03 ETH swap resets "DEX USER" allocation.</li>
-            <li>Price is determined by a bonding curve.</li>
+            <li>Price is determined by a bonding curve model.</li>
           </ul>
         </div>
 
