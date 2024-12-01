@@ -1,10 +1,11 @@
 import { Dialog, DialogClose } from "@radix-ui/react-dialog";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SettingsIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useBalance } from "wagmi";
 import { useConnectorContext } from "../../hooks/connectors/useConnectorContext";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract";
+import useStore from "../../hooks/store/useStore";
 import { useToast } from "../../hooks/useToast";
 import {
   delay,
@@ -30,7 +31,7 @@ import {
 import { Label } from "../ui/label";
 import { BuyBanner } from "./BuyBanner";
 
-const AllowSwap = false;
+const AllowSwap = true;
 
 export function BondingCurveSwapper() {
   const { address } = useConnectorContext();
@@ -44,9 +45,11 @@ export function BondingCurveSwapper() {
   } = useBondCurveDistroContract();
   const [buyPrice, setBuyPrice] = useState<bigint>(0n);
   const [amount, setAmount] = useState<string>("");
+  const user = useStore((state) => state.user);
   const [bondCurveAllocation, setBondCurveAllocation] = useState<bigint>(0n);
   const { notifyError, notifySuccess } = useToast();
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const balance = useBalance({
     address: address as `0x${string}`,
   });
@@ -86,6 +89,7 @@ export function BondingCurveSwapper() {
       );
 
       await buy(BigInt(toLD(amount)), BigInt(actualBuyPrice.toFixed(0)));
+      queryClient.invalidateQueries({ queryKey: ["getUser"] });
       await delay(5000);
       notifySuccess("Swap was successful");
       setLoading(false);
@@ -116,7 +120,8 @@ export function BondingCurveSwapper() {
           <span className="text-sm font-silkscreen">Swap ETH for JOIN</span>
           <ul className="list-outside list-disc pl-3.5 text-yellow-950">
             <li>You get more JOIN and contribute to liquidity.</li>
-            <li>Buy up to 0.03 ETH to reset DexDrop allocation.</li>
+            <li>Single 0.03 ETH swap resets "DEX USER" allocation.</li>
+            <li>Price is determined by a bonding curve.</li>
           </ul>
         </div>
 
@@ -242,7 +247,7 @@ export function BondingCurveSwapper() {
               1 ETH
             </Button>
           </div>
-          <div className="hidden  font-light text-xs gap-2 mt-2 pt-2">
+          <div className="font-light text-xs gap-2 mt-2 pt-2">
             <span className="text-gray-500">Price: </span>
             <span className="text-gray-400 select-text">
               {toDec(buyPrice || "0")
@@ -261,10 +266,6 @@ export function BondingCurveSwapper() {
             </div>
           )}
           <div className="mt-4">
-            <span className="text-xs text-gray-400 font-extralight block text-center mb-2">
-              Opens on Dec 2nd, 2024.
-            </span>
-
             <Button
               size="full"
               className="rounded-lg bg-green-500/90 text-white hover:bg-green-500 gap-1"
@@ -279,13 +280,21 @@ export function BondingCurveSwapper() {
           </div>
         </section>
       </div>
-      <div className="hidden pt-0 mb-5">
+      <div className="pt-0 mb-5">
         <div className="w-[300px] p-3 xs:w-[350px] mt-3 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
           <div className="flex flex-col items-center justify-center">
-            <span className="text-xs text-gray-400 tracking-wide block text-center">
+            <span className="text-xs font-silkscreen text-gray-400 tracking-wide block text-center">
+              Your Total Swapped (JOIN)
+            </span>
+            <span className="font-silkscreen -tracking-widest select-all">
+              {formatToHighDenom(user?.liqMktVolume || BigInt(0))}
+            </span>
+          </div>
+          <div className="flex mt-3 flex-col items-center justify-center">
+            <span className="text-xs font-silkscreen text-gray-400 tracking-wide block text-center">
               Total Swapped (JOIN)
             </span>
-            <span className="font-silkscreen -tracking-widest">
+            <span className="font-silkscreen -tracking-widest select-all">
               {formatToHighDenom(getTotalBoughtQry.data || BigInt(0))}
             </span>
           </div>
