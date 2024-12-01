@@ -284,7 +284,7 @@ export function BondingCurveSwapper() {
         <div className="w-[300px] p-3 xs:w-[350px] mt-3 h-auto bg-card-background bg-gradient-to-t from-card-background to-card-background/30 rounded-xl border border-card-border/20">
           <div className="flex flex-col items-center justify-center">
             <span className="text-xs font-silkscreen text-gray-400 tracking-wide block text-center">
-              Your Total Swapped (JOIN)
+              Your Swap Volume (JOIN)
             </span>
             <span className="font-silkscreen -tracking-widest select-all">
               {formatToHighDenom(user?.liqMktVolume || BigInt(0))}
@@ -292,7 +292,7 @@ export function BondingCurveSwapper() {
           </div>
           <div className="flex mt-3 flex-col items-center justify-center">
             <span className="text-xs font-silkscreen text-gray-400 tracking-wide block text-center">
-              Total Swapped (JOIN)
+              Total Swap Volume (JOIN)
             </span>
             <span className="font-silkscreen -tracking-widest select-all">
               {formatToHighDenom(getTotalBoughtQry.data || BigInt(0))}
