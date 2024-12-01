@@ -304,6 +304,7 @@ export function BondingCurveSwapper() {
           <a
             href="https://jointlabs.notion.site/Terms-of-Service-3e470a80a33b4c76aa50bbb95801a82e?pvs=4"
             className="text-xs text-gray-400  hover:text-gray-300"
+            target="_blank"
           >
             Terms
           </a>
