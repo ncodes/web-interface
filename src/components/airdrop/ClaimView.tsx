@@ -22,7 +22,7 @@ import { IconX } from "../icons/IconX.tsx";
 import { Button } from "../ui/Button.tsx";
 import { BuyBanner } from "./BuyBanner.tsx";
 
-const AllowWithdraw = false;
+// const AllowWithdraw = false;
 const AllowClaim = true;
 
 export function ClaimView({
@@ -35,14 +35,13 @@ export function ClaimView({
   const {
     claimMulti,
     claims: claimsBalanceOf,
-    withdrawClaim,
     getTotalClaimed,
     humanizeErrors,
   } = useBondCurveDistroContract();
   const { notifyError, notifySuccess } = useToast();
   const user = useStore((state) => state.user);
   const [loading, setLoading] = useState(false);
-  const [withdrawing, setWithdrawing] = useState(false);
+  // const [_withdrawing, setWithdrawing] = useState(false);
   const originalClaims = [...claims];
   const token = useSession();
 
@@ -90,23 +89,23 @@ export function ClaimView({
     }
   }
 
-  async function handleWithdraw() {
-    try {
-      setWithdrawing(true);
-      await withdrawClaim();
-      await queryClient.refetchQueries({ queryKey: ["getClaims"] });
-      await queryClient.refetchQueries({ queryKey: ["getUnclaimedBalance"] });
-      await queryClient.refetchQueries({ queryKey: ["getTotalClaimed"] });
-      await delay(5000);
-      setWithdrawing(false);
-      notifySuccess("Withdraw successful");
-    } catch (error) {
-      setWithdrawing(false);
-      const msg = humanizeErrors(error);
-      notifyError(msg, { duration: 5000 });
-      logError(error);
-    }
-  }
+  // async function handleWithdraw() {
+  //   try {
+  //     setWithdrawing(true);
+  //     await withdrawClaim();
+  //     await queryClient.refetchQueries({ queryKey: ["getClaims"] });
+  //     await queryClient.refetchQueries({ queryKey: ["getUnclaimedBalance"] });
+  //     await queryClient.refetchQueries({ queryKey: ["getTotalClaimed"] });
+  //     await delay(5000);
+  //     setWithdrawing(false);
+  //     notifySuccess("Withdraw successful");
+  //   } catch (error) {
+  //     setWithdrawing(false);
+  //     const msg = humanizeErrors(error);
+  //     notifyError(msg, { duration: 5000 });
+  //     logError(error);
+  //   }
+  // }
 
   function canClaim() {
     if (loading || !AllowClaim) return false;
@@ -115,10 +114,10 @@ export function ClaimView({
     return true;
   }
 
-  function canWithdraw() {
-    if (withdrawing) return false;
-    return toDec(unclaimedBalQry.data || BigInt(0)).gt(0) && AllowWithdraw;
-  }
+  // function canWithdraw() {
+  // if (withdrawing) return false;
+  // return toDec(unclaimedBalQry.data || BigInt(0)).gt(0) && AllowWithdraw;
+  // }
 
   function hasClaimed() {
     return originalClaims.some((claim) => !!claim.claimedAt);
