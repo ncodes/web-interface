@@ -1,6 +1,6 @@
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle, Loader2, ShoppingCart } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useBondCurveDistroContract from "../../hooks/services/contracts/useBondCurveTokenContract.ts";
@@ -224,7 +224,7 @@ export function ClaimView({
                     </ToolTip>
                   </div>
 
-                  {!!claim.claimedAt && claim.claimId == 0 && (
+                  {/* {!!claim.claimedAt && claim.claimId == 0 && (
                     <span className="flex items-center justify-between gap-1 mx-2 mr-0 font-bold text-sm text-gray-800 font-jersey20 bg-green-400 p-1 px-1 pl-2 rounded-lg">
                       <span className="flex items-center gap-2">
                         <ShoppingCart size="14" className="text-green-800" />{" "}
@@ -239,8 +239,8 @@ export function ClaimView({
                           Buy
                         </Button>
                       </Link>
-                    </span>
-                  )}
+                    </span> */}
+                  {/* )} */}
 
                   {(claim.name.startsWith("dex_user") ||
                     claim.name.startsWith("point") ||
