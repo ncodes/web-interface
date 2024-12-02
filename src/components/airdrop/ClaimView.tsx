@@ -139,40 +139,50 @@ export function ClaimView({
   const requireSwap =
     (hasDexUserClaim || hasPointClaim || hasNftClaim) && !user?.hasSwapped;
 
+  const hasClaimedAll =
+    originalClaims.length > 0 &&
+    originalClaims.every((claim) => !!claim.claimedAt);
+
   return (
     <>
       <BuyBanner />
       {!!address && !!token && (
         <div className="px-5 pb-5 pt-4 space-y-4 tracking-wider">
-          <div className="w-full md:w-8/12 lg:w-6/12 py-2 bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
-            <span className="flex items-center gap-1 md:text-xl tracking-wider text-gray-100">
-              <span className="text-md font-silkscreen -tracking-widest">
-                YOUR ALLOCATION
-              </span>
-              <ToolTip
-                tip="Total unclaimed JOIN tokens"
-                className="text-gray-400"
-              >
-                <QuestionMarkCircledIcon className="w-4 h-4" />
-              </ToolTip>
-            </span>
-            <span className="text-3xl md:text-4xl text-chinese-green select-text font-silkscreen -tracking-widest">
-              {formatToHighDenom(amounts.reduce((a, b) => a + b, BigInt(0)))}
-            </span>
+          {!hasClaimedAll && (
+            <>
+              <div className="w-full md:w-8/12 lg:w-6/12 py-2 bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
+                <span className="flex items-center gap-1 md:text-xl tracking-wider text-gray-100">
+                  <span className="text-md font-silkscreen -tracking-widest">
+                    YOUR ALLOCATION
+                  </span>
+                  <ToolTip
+                    tip="Total unclaimed JOIN tokens"
+                    className="text-gray-400"
+                  >
+                    <QuestionMarkCircledIcon className="w-4 h-4" />
+                  </ToolTip>
+                </span>
+                <span className="text-3xl md:text-4xl text-chinese-green select-text font-silkscreen -tracking-widest">
+                  {formatToHighDenom(
+                    amounts.reduce((a, b) => a + b, BigInt(0)),
+                  )}
+                </span>
 
-            {requireSwap && (
-              <div className="flex border-t border-gray-800/80 pt-2 w-full justify-center items-center gap-1 text-xs mt-4 text-yellow-500 flex-wrap font-silkscreen">
-                <IconTask className="w-4 h-4" />
-                <span>Complete one swap to claim</span>:{" "}
-                <a
-                  href="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0"
-                  className="text-chinese-green/90 hover:text-chinese-green"
-                >
-                  [SWAP NOW]
-                </a>
+                {requireSwap && (
+                  <div className="flex border-t border-gray-800/80 pt-2 w-full justify-center items-center gap-1 text-xs mt-4 text-yellow-500 flex-wrap font-silkscreen">
+                    <IconTask className="w-4 h-4" />
+                    <span>Complete one swap to claim</span>:{" "}
+                    <a
+                      href="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0"
+                      className="text-chinese-green/90 hover:text-chinese-green"
+                    >
+                      [SWAP NOW]
+                    </a>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
 
           <div className="w-full relative md:w-8/12 lg:w-6/12 min-h-[100px]  lg:min-h-[200px] flex flex-col justify-between bg-card-background border border-gray-900 rounded-xl mx-auto">
             <div className="p-2 space-y-2 w-full min-h-[100px]  lg:min-h-[200px]">
@@ -190,7 +200,7 @@ export function ClaimView({
               {(originalClaims || []).map((claim) => (
                 <div
                   key={claim.id}
-                  className="flex bg-vampire-black/90 border border-gray-800 flex-col rounded-xl mb-3"
+                  className="flex bg-vampire-black/90 border border-gray-800/50 flex-col rounded-xl mb-3"
                 >
                   <div className="flex justify-between p-3 pb-3 gap-4">
                     <span className="font-light text-lg">
@@ -257,16 +267,18 @@ export function ClaimView({
 
             {originalClaims.length > 0 && (
               <div className="p-2 flex flex-col gap-2">
-                <Button
-                  size="full"
-                  onClick={handleClaim}
-                  disabled={!canClaim()}
-                >
-                  {!loading && "Claim"}
-                  {loading && (
-                    <Loader2 className="animate-spin text-black w-5 h-5" />
-                  )}
-                </Button>
+                {claimIds.length > 0 && (
+                  <Button
+                    size="full"
+                    onClick={handleClaim}
+                    disabled={!canClaim()}
+                  >
+                    {!loading && "Claim"}
+                    {loading && (
+                      <Loader2 className="animate-spin text-black w-5 h-5" />
+                    )}
+                  </Button>
+                )}
 
                 {hasClaimed() && (
                   <Link
@@ -284,11 +296,11 @@ export function ClaimView({
                   </Link>
                 )}
 
-                <div className=" flex flex-col gap-2 border-t border-gray-800/80 pt-1 mt-2">
-                  <span className="text-xs text-gray-400 font-extralight block text-center">
+                <div className=" flex flex-col gap-2 border-t border-gray-800/80 py-5 mt">
+                  {/* <span className="text-xs text-gray-400 font-extralight block text-center">
                     Withdrawal will start soon
-                  </span>
-                  <Button
+                  </span> */}
+                  {/* <Button
                     variant="secondary"
                     disabled={!canWithdraw()}
                     size="full"
@@ -298,10 +310,29 @@ export function ClaimView({
                     {withdrawing && (
                       <Loader2 className="animate-spin text-black w-5 h-5" />
                     )}
-                  </Button>
-                  <span className="text-sm font-silkscreen text-gray-400 font-extralight block text-center">
-                    Withdrawable:{" "}
-                    <span className="font-medium text-gray-200 select-text font-silkscreen -tracking-widest">
+                  </Button> */}
+                  <span className="text-sm flex flex-col  font-silkscreen text-gray-400 font-extralight text-center">
+                    <span className="flex items-center gap-1 justify-center">
+                      <span className="text-xl">Withdrawable</span>
+                      <ToolTip
+                        tip={
+                          <>
+                            You will receive this amount of JOIN when the
+                            withdrawal phase starts.
+                            <br />
+                            <br />
+                            <span className="text-xs text-muted/60">
+                              Allocations are managed by our Claim System. We
+                              have not issued an official ERC20 token for JOIN
+                              at this time.
+                            </span>
+                          </>
+                        }
+                      >
+                        <QuestionMarkCircledIcon className="w-4 h-4 text-gray-500" />
+                      </ToolTip>
+                    </span>
+                    <span className="font-medium text-lg text-gray-200 select-text font-silkscreen -tracking-widest">
                       {formatToHighDenom(unclaimedBalQry.data || BigInt(0))}
                     </span>
                   </span>
