@@ -56,6 +56,7 @@ export function ClaimView({
   const nonces = claims.map((claim) => BigInt(claim.nonce));
   const claimIds = claims.map((claim) => BigInt(claim.claimId));
   const amounts = unclaimedClaims.map((claim) => BigInt(claim.amount));
+  const amountsWithSig = claims.map((claim) => BigInt(claim.amount));
   const queryClient = useQueryClient();
 
   const unclaimedBalQry = useQuery({
@@ -74,7 +75,7 @@ export function ClaimView({
   async function handleClaim() {
     try {
       setLoading(true);
-      await claimMulti(sigs, claimIds, nonces, amounts);
+      await claimMulti(sigs, claimIds, nonces, amountsWithSig);
       await queryClient.refetchQueries({ queryKey: ["getClaims"] });
       await queryClient.refetchQueries({ queryKey: ["getUnclaimedBalance"] });
       await queryClient.refetchQueries({ queryKey: ["getTotalClaimed"] });
