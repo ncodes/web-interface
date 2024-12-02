@@ -265,7 +265,7 @@ export function ClaimView({
             </div>
 
             {originalClaims.length > 0 && (
-              <div className="p-2 flex flex-col gap-2">
+              <div className="p-2 pt-0 flex flex-col gap-2">
                 {claimIds.length > 0 && (
                   <Button
                     size="full"
