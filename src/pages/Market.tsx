@@ -132,7 +132,7 @@ function MarketTabs() {
           {!restricted && !isVirtualWallet && (
             <Button
               size="sm"
-              className="hidden gap-1 items-center transition-all duration-500 hover:scale-x-105"
+              className="gap-1 items-center transition-all duration-500 hover:scale-x-105"
               onClick={() => {
                 setOpenAddLiquiditySheet(true);
               }}
