@@ -145,10 +145,11 @@ function MarketTabs() {
       </TabsList>
 
       {!!market.data &&
-        !isEqlStr(
-          market.data?.address,
-          "0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97",
-        ) && (
+        ![
+          "0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97".toLowerCase(),
+          "0x42Bb5450bf6b9754D40e928a2733DcF412021749".toLowerCase(),
+          "0xC98b5eB14B155E97A1F820a90a176942334678E0".toLowerCase(),
+        ].includes(market.data?.address.toLowerCase()) && (
           <span className="w-full h-[30px] animate-pulse bg-chinese-green hover:animate-none font-silkscreen flex items-center text-sm justify-center text-gray-900 gap-2">
             <AlertOctagonIcon className="w-[15px] text-red-500 h-[15px]" />
             <span>ALERT!! This is not the Official DexDrop market.</span>
