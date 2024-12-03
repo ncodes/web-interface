@@ -266,18 +266,16 @@ export function ClaimView({
 
             {originalClaims.length > 0 && (
               <div className="p-2 pt-0 flex flex-col gap-2">
-                {claimIds.length > 0 && (
-                  <Button
-                    size="full"
-                    onClick={handleClaim}
-                    disabled={!canClaim()}
-                  >
-                    {!loading && "Claim"}
-                    {loading && (
-                      <Loader2 className="animate-spin text-black w-5 h-5" />
-                    )}
-                  </Button>
-                )}
+                <Button
+                  size="full"
+                  onClick={handleClaim}
+                  disabled={!canClaim()}
+                >
+                  {!loading && "Claim"}
+                  {loading && (
+                    <Loader2 className="animate-spin text-black w-5 h-5" />
+                  )}
+                </Button>
 
                 {hasClaimed() && (
                   <Link
