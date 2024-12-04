@@ -56,17 +56,6 @@ export function AirdropHeader({
         >
           Claim
         </Button>
-        <Button
-          className={cn(
-            "rounded-xl text-white bg-gray-900/70 hover:text-gray-800 font-silkscreen",
-            activeView === "trade" && "bg-chinese-green text-black",
-          )}
-          onClick={() => {
-            navigate("/dexdrop/buy");
-          }}
-        >
-          Buy
-        </Button>
         <ToolTip tip="Coming soon">
           <Button
             disabled
