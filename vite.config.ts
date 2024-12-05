@@ -4,6 +4,7 @@ import "dotenv/config";
 import { resolve } from "path";
 import replaceInFile from "replace-in-file";
 import { defineConfig } from "vite";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 function replaceWorkerEnv() {
   return {
@@ -57,6 +58,11 @@ export default defineConfig(({ command }) => {
         org: "joint-labs",
         project: "web-interface",
       },
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: "joint-labs",
+        project: "web-interface",
+      })
     ],
   };
 });
