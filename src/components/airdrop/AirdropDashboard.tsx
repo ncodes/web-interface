@@ -45,9 +45,14 @@ export function AirdropDashboard({
 
   useEffect(() => {
     if (address) {
-      checkDexClaimMut.mutateAsync({ address }).finally(() => {
-        setDexClaimChecked(true);
-      });
+      checkDexClaimMut
+        .mutateAsync({ address })
+        .finally(() => {
+          setDexClaimChecked(true);
+        })
+        .catch((e) => {
+          console.log("CheckDexClaim Error", e);
+        });
     }
   }, [address]);
 

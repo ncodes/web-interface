@@ -122,7 +122,7 @@ const routes = [
   },
   {
     path: makePath("/dexdrop/buy"),
-    element: <App page={<Airdrop defaultTab="trade" />} />,
+    element: <App page={<Airdrop defaultTab="claim" />} />,
     errorElement: <RootErrorBoundary />,
   },
   {

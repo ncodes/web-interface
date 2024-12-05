@@ -1,16 +1,28 @@
 import * as Sentry from "@sentry/react";
+import { useEffect } from "react";
+import {
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType,
+} from "react-router-dom";
 import { isLocal } from "./libs/helpers";
 
 Sentry.init({
   enabled: !isLocal(),
   dsn: "https://e58314a261e90f717ede3add86ae842b@o4506660089823232.ingest.sentry.io/4506660095459328",
   integrations: [
-    new Sentry.BrowserTracing({}),
-    Sentry.replayIntegration({
-      maskAllText: false,
-      maskAllInputs: false,
-      blockAllMedia: false,
+    Sentry.reactRouterV6BrowserTracingIntegration({
+      useEffect,
+      useLocation,
+      useNavigationType,
+      createRoutesFromChildren,
+      matchRoutes,
     }),
+    Sentry.captureConsoleIntegration({
+      levels: ["log", "error"],
+    }),
+    Sentry.replayIntegration(),
   ],
   tracePropagationTargets: ["localhost", "https://dev.joint.exchange"],
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
