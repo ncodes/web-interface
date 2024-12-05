@@ -50,11 +50,16 @@ export function GeneralTab(props: { address: string }) {
   async function fetchWrappedBalance() {
     const netInfo = getChainInfo();
     if (!netInfo || !netInfo.wrappedTokenInfo.address) return;
-    const bal = await getTokenBalance(
-      netInfo.wrappedTokenInfo.address,
-      address
-    );
-    setWrappedBalance(bal);
+    try {
+      const bal = await getTokenBalance(
+        netInfo.wrappedTokenInfo.address,
+        address,
+      );
+      setWrappedBalance(bal);
+    } catch (e) {
+      console.error(e);
+      console.error(netInfo.wrappedTokenInfo.address, address);
+    }
   }
 
   async function fetchP2pBalance() {

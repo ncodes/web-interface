@@ -62,22 +62,26 @@ export function ClaimView({
     queryKey: ["getUnclaimedBalance", { address }],
     queryFn: () => claimsBalanceOf(address),
     enabled: !!address,
-    refetchInterval: 30000,
+    refetchInterval: 60000,
   });
 
   const totalClaimedQry = useQuery({
     queryKey: ["getTotalClaimed"],
     queryFn: () => getTotalClaimed(),
-    refetchInterval: 30000,
+    refetchInterval: 60000,
   });
 
   async function handleClaim() {
     try {
       setLoading(true);
       await claimMulti(sigs, claimIds, nonces, amountsWithSig);
-      await queryClient.refetchQueries({ queryKey: ["getClaims"] });
-      await queryClient.refetchQueries({ queryKey: ["getUnclaimedBalance"] });
-      await queryClient.refetchQueries({ queryKey: ["getTotalClaimed"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["getClaims", { address }],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["getUnclaimedBalance"],
+      });
+      await queryClient.invalidateQueries({ queryKey: ["getTotalClaimed"] });
       await delay(5000);
       notifySuccess("Claim successful");
       setLoading(false);
@@ -370,6 +374,8 @@ function getClaimName(claim: { claimId: number }) {
       return "Community Partner";
     case 4:
       return "DroidPD Holders";
+    case 5:
+      return "Swap-a-thon";
     default:
       return "Unknown";
   }
@@ -387,6 +393,8 @@ function getClaimDescription(claim: { claimId: number }) {
       return "Joint's community partner";
     case 4:
       return "DroidPD holders before July 2024";
+    case 5:
+      return "Swap-a-thon participant";
     default:
       return "Unknown";
   }
