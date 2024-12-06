@@ -217,9 +217,9 @@ export function ClaimView({
               {(originalClaims || []).map((claim) => (
                 <div
                   key={claim.id}
-                  className="flex bg-vampire-black/90 border border-gray-800/50 flex-col rounded-xl mb-3"
+                  className="flex bg-vampire-black/90 border border-gray-800/50 flex-col rounded-xl mb-3 pb-1"
                 >
-                  <div className="flex justify-between p-3 pb-3 gap-4">
+                  <div className="flex justify-between p-3 pb-1.5 gap-4">
                     <span className="font-light text-lg">
                       <span className="font-silkscreen -tracking-widest">
                         {getClaimName(claim)}
@@ -227,19 +227,29 @@ export function ClaimView({
                       <span className="flex font-mitr items-center gap-1 text-xs text-muted/60 flex-wrap">
                         {getClaimDescription(claim)}
                       </span>
-
-                      {!!claim.claimedAt && (
-                        <span className="flex items-center gap-1 text-xs mt-2 text-green-300 flex-wrap font-silkscreen">
-                          <CheckCircle size="15" />
-                          <span>Claimed</span>
-                        </span>
-                      )}
                     </span>
                     <ToolTip tip={formatToHighDenom(claim.amount)}>
                       <span className="text-chinese-green uppercase font-silkscreen -tracking-widest">
                         {approxAmount(toHD(claim.amount))}
                       </span>
                     </ToolTip>
+                  </div>
+                  <div className="flex items-center justify-between p-2 px-3 pt-0">
+                    {!!claim.claimedAt && (
+                      <span className="flex items-center gap-1 text-xs text-green-300 flex-wrap font-silkscreen">
+                        <CheckCircle size="15" />
+                        <span>Claimed</span>
+                      </span>
+                    )}
+
+                    {!!claim.claimedAt && claim.claimId == 5 && (
+                      <span className="flex items-center gap-1 font-silkscreen text-xs text-gray-500">
+                        <span>Resettable</span>
+                        <ToolTip tip="This allocation resets if you swap again">
+                          <QuestionMarkCircledIcon className="w-3 h-3 text-gray-500" />
+                        </ToolTip>
+                      </span>
+                    )}
                   </div>
 
                   {/* {!!claim.claimedAt && claim.claimId == 0 && (
@@ -408,7 +418,7 @@ function getClaimDescription(claim: { claimId: number }) {
     case 4:
       return "DroidPD holders before July 2024";
     case 5:
-      return "Swap-A-Thon participant";
+      return "Swap for JOIN allocations";
     default:
       return "Unknown";
   }
