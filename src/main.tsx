@@ -6,6 +6,7 @@ import ConnectorProvider from "./hooks/connectors/components/ConnectorProvider.t
 import "./hooks/store/useStore.ts";
 import "./i18n/i18n.ts";
 import { isLocal } from "./libs/helpers.ts";
+import "./local_assets.ts";
 import Airdrop from "./pages/Airdrop.tsx";
 import Disputes from "./pages/Disputes.tsx";
 import Liquidities from "./pages/Liquidities.tsx";
