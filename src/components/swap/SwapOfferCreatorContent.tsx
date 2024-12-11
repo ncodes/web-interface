@@ -138,6 +138,8 @@ export function SwapOfferCreatorContent({
 
       // Compute fee
       let amount = toHDD(offer.amount, market.baseDecimals);
+      if (amount.lte(0)) return;
+
       const feeInfo = await computeFeeInfo(amount.toFixed());
       setFeeInfo(feeInfo);
 
@@ -239,6 +241,7 @@ export function SwapOfferCreatorContent({
       if (quoteAmount == "") return setAmount("");
 
       let amount = toDec(quoteAmount).div(priceHD);
+      if (amount.lte(0)) return;
       const feeInfo = await computeFeeInfo(amount.toFixed());
       setFeeInfo(feeInfo);
 
@@ -255,12 +258,13 @@ export function SwapOfferCreatorContent({
     (async () => {
       if (!(offer && amount && !quoteAmount) && !amountInputFocused) return;
       if (amount == "") return setQuoteAmount("");
-      let totalFeeBp = 0;
+      if (toDec(amount).lte(0)) return;
 
       const feeInfo = await computeFeeInfo(amount);
       setFeeInfo(feeInfo);
 
       // Add up fees only when base asset is ERC20 (taker pays fees)
+      let totalFeeBp = 0;
       if (isERC20(market.baseType)) {
         totalFeeBp = feeInfo.protoFeeBps + market.commission;
       }
@@ -321,6 +325,7 @@ export function SwapOfferCreatorContent({
       // compute output amount
       const { quoteDecimals } = market;
       const newAmount = toDec(quoteAmount).div(toHD(maxPrice, quoteDecimals));
+      if (newAmount.lte(0)) return;
       let totalFees = "0";
 
       // Add up fees only when base asset is ERC20 (taker pays fees)
@@ -376,6 +381,7 @@ export function SwapOfferCreatorContent({
 
     const { provider, lid } = liquidity;
     const amt = toLD(amount, market.baseDecimals);
+
     const fee = await computeSwapFee(
       market.address,
       provider,

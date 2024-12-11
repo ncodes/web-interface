@@ -130,10 +130,15 @@ export function useUserService() {
    */
   async function checkDexClaim(params: { address: string }) {
     try {
+      const headers = {};
+      const token = getAccessToken(address);
+      headers["authorization"] = token ? `Bearer ${token}` : undefined;
+
       await axios({
         url: `${getChainInfo().apiUrl}/v1/users/check-dex-claim/${params.address}`,
         method: "post",
         data: {},
+        headers,
       });
 
       return Promise.resolve(undefined);

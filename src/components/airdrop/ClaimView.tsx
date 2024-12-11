@@ -62,22 +62,26 @@ export function ClaimView({
     queryKey: ["getUnclaimedBalance", { address }],
     queryFn: () => claimsBalanceOf(address),
     enabled: !!address,
-    refetchInterval: 30000,
+    refetchInterval: 60000,
   });
 
   const totalClaimedQry = useQuery({
     queryKey: ["getTotalClaimed"],
     queryFn: () => getTotalClaimed(),
-    refetchInterval: 30000,
+    refetchInterval: 60000,
   });
 
   async function handleClaim() {
     try {
       setLoading(true);
       await claimMulti(sigs, claimIds, nonces, amountsWithSig);
-      await queryClient.refetchQueries({ queryKey: ["getClaims"] });
-      await queryClient.refetchQueries({ queryKey: ["getUnclaimedBalance"] });
-      await queryClient.refetchQueries({ queryKey: ["getTotalClaimed"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["getClaims", { address }],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["getUnclaimedBalance"],
+      });
+      await queryClient.invalidateQueries({ queryKey: ["getTotalClaimed"] });
       await delay(5000);
       notifySuccess("Claim successful");
       setLoading(false);
@@ -155,7 +159,7 @@ export function ClaimView({
                     YOUR ALLOCATION
                   </span>
                   <ToolTip
-                    tip="Total unclaimed JOIN tokens"
+                    tip="Total unclaimed JOIN allocations"
                     className="text-gray-400"
                   >
                     <QuestionMarkCircledIcon className="w-4 h-4" />
@@ -187,21 +191,35 @@ export function ClaimView({
             <div className="p-2 space-y-2 w-full min-h-[100px]  lg:min-h-[200px]">
               {originalClaims.length == 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[100px]  lg:min-h-[200px] font-silkscreen text-xl">
-                  <span>No Allocation Found</span>
-                  <Link to="/dexdrop/buy">
+                  <span className="text-xs w-full flex justify-center items-center gap-1.5">
+                    <span>JOIN The</span> <b className="text-lg">Swap-A-Thon</b>
+                  </span>
+                  <Link to="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0">
                     <Button variant="link" className="text-chinese-green">
-                      [Buy]
+                      [1 Swap = 1,500 JOIN]
                     </Button>
                   </Link>
+                  <span className="flex flex-col items-center gap-1 font-satoshi text-xs text-gray-400">
+                    <span>More swaps = more JOIN</span>
+                    <span>High swap value = more JOIN</span>
+                    <span className="font-silkscreen mt-1">
+                      <Link
+                        to="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0"
+                        className="text-chinese-green/90 hover:text-chinese-green"
+                      >
+                        [SWAP NOW]
+                      </Link>
+                    </span>
+                  </span>
                 </div>
               )}
 
               {(originalClaims || []).map((claim) => (
                 <div
                   key={claim.id}
-                  className="flex bg-vampire-black/90 border border-gray-800/50 flex-col rounded-xl mb-3"
+                  className="flex bg-vampire-black/90 border border-gray-800/50 flex-col rounded-xl mb-3 pb-1"
                 >
-                  <div className="flex justify-between p-3 pb-3 gap-4">
+                  <div className="flex justify-between p-3 pb-1.5 gap-4">
                     <span className="font-light text-lg">
                       <span className="font-silkscreen -tracking-widest">
                         {getClaimName(claim)}
@@ -209,19 +227,29 @@ export function ClaimView({
                       <span className="flex font-mitr items-center gap-1 text-xs text-muted/60 flex-wrap">
                         {getClaimDescription(claim)}
                       </span>
-
-                      {!!claim.claimedAt && (
-                        <span className="flex items-center gap-1 text-xs mt-2 text-green-300 flex-wrap font-silkscreen">
-                          <CheckCircle size="15" />
-                          <span>Claimed</span>
-                        </span>
-                      )}
                     </span>
                     <ToolTip tip={formatToHighDenom(claim.amount)}>
                       <span className="text-chinese-green uppercase font-silkscreen -tracking-widest">
                         {approxAmount(toHD(claim.amount))}
                       </span>
                     </ToolTip>
+                  </div>
+                  <div className="flex items-center justify-between p-2 px-3 pt-0">
+                    {!!claim.claimedAt && (
+                      <span className="flex items-center gap-1 text-xs text-green-300 flex-wrap font-silkscreen">
+                        <CheckCircle size="15" />
+                        <span>Claimed</span>
+                      </span>
+                    )}
+
+                    {!!claim.claimedAt && claim.claimId == 5 && (
+                      <span className="flex items-center gap-1 font-silkscreen text-xs text-gray-500">
+                        <span>Resettable</span>
+                        <ToolTip tip="This allocation resets if you swap again">
+                          <QuestionMarkCircledIcon className="w-3 h-3 text-gray-500" />
+                        </ToolTip>
+                      </span>
+                    )}
                   </div>
 
                   {/* {!!claim.claimedAt && claim.claimId == 0 && (
@@ -370,6 +398,8 @@ function getClaimName(claim: { claimId: number }) {
       return "Community Partner";
     case 4:
       return "DroidPD Holders";
+    case 5:
+      return "Swap-A-Thon";
     default:
       return "Unknown";
   }
@@ -387,6 +417,8 @@ function getClaimDescription(claim: { claimId: number }) {
       return "Joint's community partner";
     case 4:
       return "DroidPD holders before July 2024";
+    case 5:
+      return "Swap for JOIN allocations";
     default:
       return "Unknown";
   }

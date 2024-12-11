@@ -45,8 +45,13 @@ export default function useBondCurveDistroContract() {
   }
 
   async function getBuyPrice(): Promise<bigint> {
-    const supply = await getCirculatingSupply();
-    return readContract("bondCurveDistro", "buyPrice", [supply]);
+    try {
+      const supply = await getCirculatingSupply();
+      return readContract("bondCurveDistro", "buyPrice", [supply]);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 
   async function getBondCurveAllocation(): Promise<bigint> {
