@@ -379,8 +379,8 @@ export function ClaimView({
         <div className="w-full p-7 md:w-8/12 lg:w-6/12 h-[40px] bg-card-background border border-gray-900 rounded-xl mx-auto flex flex-col items-center justify-center">
           <div className="flex flex-col items-center justify-center">
             <span className="flex items-center gap-1 text-xs text-gray-400 tracking-wide text-center">
-              <span className="font-silkscreen">Total Claimed</span>
-              <ToolTip tip="Total amount of JOIN claimed">
+              <span className="font-silkscreen">Total ALLOCATED</span>
+              <ToolTip tip="Total amount of JOIN allocated to users">
                 <QuestionMarkCircledIcon className="w-4 h-4 text-gray-500" />
               </ToolTip>
             </span>
