@@ -196,7 +196,7 @@ export function ClaimView({
                     JOIN allocation by swapping on Joint. More swaps = more
                     JOIN. <br />
                     <span className="text-xs text-muted/60">
-                      (TGE IN WEEKS)
+                      (TGE COMING SOON)
                     </span>
                   </span>
                   {/* <span className="text-xs w-full flex justify-center items-center gap-1.5"> */}
