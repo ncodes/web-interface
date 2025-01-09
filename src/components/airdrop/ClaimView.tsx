@@ -191,23 +191,31 @@ export function ClaimView({
             <div className="p-2 space-y-2 w-full min-h-[100px]  lg:min-h-[200px]">
               {originalClaims.length == 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[100px]  lg:min-h-[200px] font-silkscreen text-xl">
-                  <span className="text-xs w-full flex justify-center items-center gap-1.5">
-                    <span>JOIN The</span> <b className="text-lg">Swap-A-Thon</b>
+                  <span className="text-xs px-10 text-center w-full gap-1.5 mb-3">
+                    You currently do not have a DEXDROP allocation. You can get
+                    JOIN allocation by swapping on Joint. More swaps = more
+                    JOIN. <br />
+                    <span className="text-xs text-muted/60">
+                      (TGE IN WEEKS)
+                    </span>
                   </span>
-                  <Link to="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0">
+                  {/* <span className="text-xs w-full flex justify-center items-center gap-1.5"> */}
+                  {/* <span>JOIN The</span> <b className="">Swap-A-Thon</b> */}
+                  {/* </span> */}
+                  {/* <Link to="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0">
                     <Button variant="link" className="text-chinese-green">
-                      [1 Swap = 1,500 JOIN]
+                      [1 Swap {">="} 1,500 JOIN]
                     </Button>
-                  </Link>
-                  <span className="flex flex-col items-center gap-1 font-satoshi text-xs text-gray-400">
-                    <span>More swaps = more JOIN</span>
-                    <span>High swap value = more JOIN</span>
-                    <span className="font-silkscreen mt-1">
+                  </Link> */}
+                  <span className="flex flex-col mt-2 items-center gap-1 font-satoshi text-xs text-gray-400">
+                    {/* <span>More swaps = more JOIN</span>
+                    <span>High swap value = more JOIN</span> */}
+                    <span className="font-silkscreen mt-1 text-lg">
                       <Link
                         to="/liquidity/0xEc2b7C1C114c5e74176E53c27156BCf6f09efF97/0xAEA70653A241c7a02BB3624935c51f052390A077/0"
                         className="text-chinese-green/90 hover:text-chinese-green"
                       >
-                        [SWAP NOW]
+                        {">>"} SWAP NOW {"<<"}
                       </Link>
                     </span>
                   </span>
