@@ -192,9 +192,9 @@ export function ClaimView({
               {originalClaims.length == 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[100px]  lg:min-h-[200px] font-silkscreen text-xl">
                   <span className="text-xs px-10 text-center w-full gap-1.5 mb-3">
-                    You currently do not have a DEXDROP allocation. You can get
-                    JOIN allocation by swapping on Joint. More swaps = more
-                    JOIN. <br />
+                    LOOKS like you don't have a DEXDROP allocation. You can get
+                    $JOIN allocation by swapping on Joint. More swaps = more
+                    $JOIN. <br />
                     <span className="text-xs text-muted/60">
                       (TGE COMING SOON)
                     </span>
